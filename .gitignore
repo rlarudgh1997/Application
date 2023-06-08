@@ -1,3 +1,39 @@
+# Add Ignore
+
+# Custom ADD >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+release
+debug
+Tractor/release/
+Tractor/debug/
+deploy_target
+deploy_x86
+.vscode
+.qmake.stash
+
+*.m4a
+*.mkv
+*.SMI
+*.smi
+*.mp3
+*.avi
+*.mp4
+
+
+# Source Insight File
+*_SI
+*.IAB
+*.IAD
+*.IMB
+*.IMD
+*.PFI
+*.PO
+*.PR
+*.PRI
+*.PS
+*.SearchResults
+*.WK3
+# Custom ADD <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 # C++ objects and libs
 *.slo
 *.lo
