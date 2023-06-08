@@ -12,15 +12,8 @@
 #define CONFIG_NAME "Application.ini"
 #define CONFIG_FILE (QString("%1/%2").arg(CONFIG_PATH).arg(CONFIG_NAME))
 
+#define GROUP_NAME_COMMON "Common"
 #define GROUP_NAME_GENERAL "Gernal"
-#define GROUP_NAME_HOME "Home"
-#define GROUP_NAME_RADIO "Radio"
-#define GROUP_NAME_MEDIA "Media"
-#define GROUP_NAME_PHONE "Phone"
-#define GROUP_NAME_CAMERA "Camera"
-#define GROUP_NAME_TRACTOR "Tractor"
-#define GROUP_NAME_SETTING "Setting"
-
 
 
 
@@ -83,10 +76,6 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
         mMutex.unlock();
 
         emit signalConfigChanged(configType, configValue);
-    } else {
-        if ((configType == ConfigInfo::ConfigTypeSettingVolume) || (configType == ConfigInfo::ConfigTypeSettingVolumeCalling)) {
-            emit signalConfigChanged(configType, configValue);
-        }
     }
 }
 
@@ -95,20 +84,8 @@ void ConfigSetting::readConfig() {
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
 
-        if (configType >= ConfigInfo::ConfigTypeSetting) {
-            mSetting->beginGroup(GROUP_NAME_SETTING);
-        } else if (configType >= ConfigInfo::ConfigTypeTractor) {
-            mSetting->beginGroup(GROUP_NAME_TRACTOR);
-        } else if (configType >= ConfigInfo::ConfigTypeCamera) {
-            mSetting->beginGroup(GROUP_NAME_CAMERA);
-        } else if (configType >= ConfigInfo::ConfigTypePhone) {
-            mSetting->beginGroup(GROUP_NAME_PHONE);
-        } else if (configType >= ConfigInfo::ConfigTypeMedia) {
-            mSetting->beginGroup(GROUP_NAME_MEDIA);
-        } else if (configType >= ConfigInfo::ConfigTypeRadio) {
-            mSetting->beginGroup(GROUP_NAME_RADIO);
-        } else if (configType >= ConfigInfo::ConfigTypeHome) {
-            mSetting->beginGroup(GROUP_NAME_HOME);
+        if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
+            mSetting->beginGroup(GROUP_NAME_COMMON);
         } else {
             mSetting->beginGroup(GROUP_NAME_GENERAL);
         }
@@ -127,20 +104,8 @@ void ConfigSetting::writeConfig() {
             QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
-            if (configType >= ConfigInfo::ConfigTypeSetting) {
-                mSetting->beginGroup(GROUP_NAME_SETTING);
-            } else if (configType >= ConfigInfo::ConfigTypeTractor) {
-                mSetting->beginGroup(GROUP_NAME_TRACTOR);
-            } else if (configType >= ConfigInfo::ConfigTypeCamera) {
-                mSetting->beginGroup(GROUP_NAME_CAMERA);
-            } else if (configType >= ConfigInfo::ConfigTypePhone) {
-                mSetting->beginGroup(GROUP_NAME_PHONE);
-            } else if (configType >= ConfigInfo::ConfigTypeMedia) {
-                mSetting->beginGroup(GROUP_NAME_MEDIA);
-            } else if (configType >= ConfigInfo::ConfigTypeRadio) {
-                mSetting->beginGroup(GROUP_NAME_RADIO);
-            } else if (configType >= ConfigInfo::ConfigTypeHome) {
-                mSetting->beginGroup(GROUP_NAME_HOME);
+            if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
+                mSetting->beginGroup(GROUP_NAME_COMMON);
             } else {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             }
@@ -159,13 +124,11 @@ void ConfigSetting::writeConfig() {
 
 void ConfigSetting::resetConfig() {
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        if ((configType != ConfigInfo::ConfigTypeUsbConnect)) {
-            QVariant configValue = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
-                                                                ConfigInfo::ConfigGetTypeValue);
-            mMutex.lock();
-            mConfigData[configType] = configValue;
-            mMutex.unlock();
-        }
+        QVariant configValue = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
+                                                            ConfigInfo::ConfigGetTypeValue);
+        mMutex.lock();
+        mConfigData[configType] = configValue;
+        mMutex.unlock();
     }
     writeConfig();
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);

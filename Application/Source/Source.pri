@@ -1,6 +1,9 @@
+include($$PWD/Abstract/Abstract.pri)
 include($$PWD/Common/Common.pri)
+include($$PWD/Screen/Screen.pri)
 include($$PWD/Config/Config.pri)
-#include($$PWD/Main/Main.pri)
+include($$PWD/Manager/Manager.pri)
+include($$PWD/Main/Main.pri)
 
 
 INCLUDEPATH+=\

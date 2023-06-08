@@ -4,20 +4,20 @@
 #include "MainWindow.h"
 #include "CommonDefine.h"
 
+#if defined(OS_LINUX)
 #include <execinfo.h>
 #include <csignal>
 #include <fstream>
 #include <unistd.h>
-
+#endif
 
 void sigHandler(int32_t sig) {
-    char** backTraceMsg;
-    void *array[20];
-    int32_t size;
-
-    size = backtrace(array, 20);
     qDebug() << "Error : signal " << sig;
-    backTraceMsg = backtrace_symbols(array, size);
+
+#if defined(OS_LINUX)
+    void *array[20];
+    int32_t size = backtrace(array, 20);
+    char** backTraceMsg = backtrace_symbols(array, size);
 
     time_t rawtime;
     time(&rawtime);
@@ -45,13 +45,12 @@ void sigHandler(int32_t sig) {
     free(backTraceMsg);
 
     exit(1);
+#endif
 }
 
 int main(int argc, char *argv[]) {
     signal(SIGABRT, sigHandler);
     signal(SIGSEGV, sigHandler);
-
-    // Q_INIT_RESOURCE(application);
 
     QApplication app(argc, argv);
 
@@ -59,3 +58,12 @@ int main(int argc, char *argv[]) {
 
     return app.exec();
 }
+
+
+
+
+
+
+
+
+

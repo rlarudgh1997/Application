@@ -13,7 +13,6 @@ public:
     explicit MainWindow();
     ~MainWindow();
 
-
 protected:
     void mousePressEvent(QMouseEvent* mouseEvent) override;
     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
@@ -22,9 +21,8 @@ protected:
     void closeEvent(QCloseEvent *closeEvent) override;
     void resizeEvent(QResizeEvent * resizeEvent) override;
 
-
-public slots:
-    void slotPowerOff(bool reboot);
+private:
+    int isConvertKey(const QKeyEvent& keyEvent);
 };
 
 

@@ -3,10 +3,10 @@ INCLUDEPATH += \
 
 
 HEADERS += \
-    $$PWD/GuiHandlerMain.h\
+    $$PWD/HandlerMain.h\
     $$PWD/ControlMain.h\
 
 
 SOURCES += \
-    $$PWD/GuiHandlerMain.cpp\
+    $$PWD/HandlerMain.cpp\
     $$PWD/ControlMain.cpp\

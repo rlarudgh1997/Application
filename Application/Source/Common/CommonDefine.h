@@ -1,6 +1,7 @@
 #ifndef COMMON_DEFINE_H
 #define COMMON_DEFINE_H
 
+#include <QDebug>
 
 #if defined(__BUILD_TYPE_TARGET__)
 #define PLATFORM_TARGET
@@ -8,7 +9,11 @@
 #define PLATFORM_X86
 #endif
 
-
+#if defined(__LINUX__)
+#define OS_LINUX
+#else
+#define OS_X86
+#endif
 
 
 
