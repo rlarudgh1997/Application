@@ -14,13 +14,16 @@ private:
 
 public:
     static QSharedPointer<HandlerMain> instance();
-    void drawSubItem();
 
 
 private:
     explicit HandlerMain();
-     virtual void timerFunc(const int& timerId);
-     virtual void initPropertyInfo();
+
+    virtual void timerFunc(const int& timerId);
+    virtual void initPropertyInfo();
+    virtual void drawDisplayMain();
+    virtual void drawDisplayDepth1();
+    virtual void drawDisplayDepth2();
 };
 
 #endif    // HANDLER_MAIN_H

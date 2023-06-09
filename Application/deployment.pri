@@ -15,7 +15,7 @@ QMAKE_CXXFLAGS += -Wno-unused-variable -Wno-unused-parameter -Wno-unused-result
 
 # Compile Warning 삭제 : 추후 확인 필요
 QMAKE_CXXFLAGS += -Wno-deprecated -Wno-missing-field-initializers -Wno-deprecated-declarations -Wno-implicit-fallthrough
-
+#QMAKE_CXXFLAGS += -Wall-Wextra-Wpadded
 
 
 

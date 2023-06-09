@@ -22,38 +22,39 @@ ScreenInfo::ScreenInfo() {
 }
 
 void ScreenInfo::updateRootItem(QWidget *rootItem) {
-    if (mRoot == nullptr) {
-        mRoot = rootItem;
-        mRoot->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    if (mRootScreen == nullptr) {
+        mRootScreen = rootItem;
+        mRootScreen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     }
 }
 
 void ScreenInfo::controlDisplay(const int& displayType, const bool& show) {
-    if (mWidgets[displayType]) {
-        (show) ? (mWidgets[displayType]->show()) : (mWidgets[displayType]->hide());
+    if (mSubScreens[displayType]) {
+        (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
     }
 }
 
-QWidget* ScreenInfo::drawDisplay(const int& displayType, const QString& objectName, const bool& show) {
+QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectName, const bool& show) {
     QWindowList windowList = qApp->allWindows();
 
     qDebug("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    qDebug("ScreenInfo::drawDisplay(%d, %s, %d)->WindowList=%d", displayType, objectName.toLatin1().data(), show, windowList.count());
+    qDebug("ScreenInfo::drawScreen(%d, %s, %d)", displayType, objectName.toLatin1().data(), show);
 
      if (windowList.count() > 0) {
-        if (mWidgets[displayType] == nullptr) {
-            mWidgets[displayType] = new QWidget(mRoot);
-            mWidgets[displayType]->setGeometry(0, 0, mRoot->geometry().width(), mRoot->geometry().height());
-            mWidgets[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            mWidgets[displayType]->setStyleSheet("background-color: rgb(50, 50, 100)");
-            mWidgets[displayType]->setObjectName(objectName);
-            (show) ? (mWidgets[displayType]->show()) : (mWidgets[displayType]->hide());
+        if (mSubScreens[displayType] == nullptr) {
+            mSubScreens[displayType] = new QWidget(mRootScreen);
+            mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
+            mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            // mSubScreens[displayType]->setStyleSheet("background-color: rgb(50, 50, 100)");
+            mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
+            mSubScreens[displayType]->setObjectName(objectName);
+            (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
         }
      }
 
-    qDebug() << "Widget[" << displayType << "] :" << mWidgets[displayType];
+    qDebug() << "Widget[" << displayType << "] :" << mSubScreens[displayType];
 
-    return mWidgets[displayType];
+    return mSubScreens[displayType];
 }
 
 void ScreenInfo::captureScreen(const QRect& rect) {
@@ -67,7 +68,7 @@ void ScreenInfo::captureScreen(const QRect& rect) {
     #define FILE_EXTENSION_BMP ".bmp"
 
     // QWindowList windowList = qApp->allWindows();
-    QRect screenRect = (rect.isNull()) ? (mRoot->geometry()) : (rect);
+    QRect screenRect = (rect.isNull()) ? (mRootScreen->geometry()) : (rect);
     QScreen* screen = QGuiApplication::screens()[0];
     QPixmap pixmap = screen->grabWindow(0,
                                         screenRect.x(), screenRect.y(),
@@ -125,7 +126,7 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
 #include <QResizeEvent>
 void ScreenInfo::resizeEvent(QResizeEvent * resizeEvent) {
 //    qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
-    for (auto widget : mWidgets) {
+    for (auto widget : mSubScreens) {
         widget->setGeometry(0, 0, resizeEvent->size().width(), resizeEvent->size().height());
     }
 }

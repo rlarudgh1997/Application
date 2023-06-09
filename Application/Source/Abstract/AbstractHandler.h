@@ -14,27 +14,34 @@ class AbstractHandler : public QObject {
 public:
     enum {
         AbstractTimerTypeInvalid = 0,
-        AbstractTimerStart ,
+        AbstractTimerStart,
+    };
+    enum {
+        AbstractdrawDisplayMain = 0,
+        AbstractdrawDisplayDepth1,
+        AbstractdrawDisplayDepth2,
     };
 
 
 public:
     AbstractHandler(const int& displayType, const QString& objcetName, const bool& show);
     bool init();
-    QWidget* getComponent();
-    qint32 controlTimer(const qint32& timerType, const bool& start = false, const qint32& interval = 0);
-    qint32 getTimerId(const qint32& timerType);
-    void registerProperty(const qint32& propertyType, const QVariant& value);
-    QVariant getProperty(const qint32& propertyType);
-    Q_INVOKABLE void setProperty(const qint32& propertyType, const QVariant& value);
-
+    QWidget* getScreen();
+    int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
+    int getTimerId(const int& timerType);
+    void registerProperty(const int& propertyType, const QVariant& value);
+    QVariant getProperty(const int& propertyType);
+    Q_INVOKABLE void setProperty(const int& propertyType, const QVariant& value);
+    void drawDisplay(const int& drawType = AbstractdrawDisplayMain);
 
 private:
     void controlConnect(const bool& state = true);
 
     virtual void timerFunc(const int& timerId) = 0;
     virtual void initPropertyInfo() = 0;
-
+    virtual void drawDisplayMain() = 0;
+    virtual void drawDisplayDepth1() = 0;
+    virtual void drawDisplayDepth2() = 0;
 
 protected:
     void timerEvent(QTimerEvent *event);
@@ -51,9 +58,9 @@ private slots:
 
 
 private:
-    QWidget* mWidget = nullptr;
-    QMap<qint32, QVariant> mProperty = QMap<qint32, QVariant>();
-    QMap<qint32, qint32> mTimer = QMap<qint32, qint32>();
+    QWidget* mScreen = nullptr;
+    QMap<int, QVariant> mProperty = QMap<int, QVariant>();
+    QMap<int, int> mTimer = QMap<int, int>();
     bool mUpdateState = false;
 };
 

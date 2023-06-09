@@ -28,18 +28,19 @@ void HandlerMain::initPropertyInfo() {
 }
 
 
-#include <QPushButton>
-#include <QMainWindow>
-#include <QMenu>
-#include <QMenuBar>
-#include <QToolBar>
-#include <QTableWidget>
+ #include <QMainWindow>
+ #include <QMenu>
+ #include <QMenuBar>
+ #include <QToolBar>
+ #include <QTableWidget>
+ #include <QPushButton>
 
-void HandlerMain::drawSubItem() {
+void HandlerMain::drawDisplayMain() {
+#if 1
     QMainWindow* main = new QMainWindow();
 
-    main->setGeometry(getComponent()->geometry());
-    main->setParent(getComponent());
+    main->setGeometry(getScreen()->geometry());
+    main->setParent(getScreen());
 
 
     QMenu* menu = main->menuBar()->addMenu(QString("File"));
@@ -91,7 +92,7 @@ void HandlerMain::drawSubItem() {
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto seetTitle, seetTitles) {
         int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, getComponent());
+        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, getScreen());
         mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
         tabWidget->addTab(mTableWidgets[index], seetTitle);
 
@@ -136,7 +137,7 @@ void HandlerMain::drawSubItem() {
 
 
 
-    QPushButton* button = new QPushButton(getComponent());
+    QPushButton* button = new QPushButton(getScreen());
     button->setGeometry(300, 300, 300, 100);
     button->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
     button->setText("Button 2");
@@ -144,8 +145,15 @@ void HandlerMain::drawSubItem() {
     connect(button, &QPushButton::clicked, [=]() {
         qDebug() << "clicked";
     });
+    button->setStyleSheet("color: rgb(50, 50, 100)");
 
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+#endif
+}
 
+void HandlerMain::drawDisplayDepth1() {
+}
+
+void HandlerMain::drawDisplayDepth2() {
 }
 

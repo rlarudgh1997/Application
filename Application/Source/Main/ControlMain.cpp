@@ -23,8 +23,6 @@ void ControlMain::initControl(const int& currentMode) {
 
         initDataCommon(currentMode, ScreenEnum::DisplayTypeMain);
         initDataModule();
-
-        HandlerMain::instance().data()->drawSubItem();
     }
 }
 

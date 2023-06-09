@@ -24,8 +24,8 @@ public:
     explicit AbstractControl();
     bool init(const int& currentMode);
     bool isInitComplete();
-    qint32 controlTimer(const qint32& timerType, const bool& start = false, const qint32& interval = 0);
-    qint32 getTimerId(const qint32& timerType);
+    int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
+    int getTimerId(const int& timerType);
     const QVariant getData(const int& propertyType);
     bool setData(const int& propertyType, const QVariant& value);
 
@@ -55,7 +55,7 @@ private slots:
 
 
 private:
-    QMap<qint32, qint32> mTimer = QMap<qint32, qint32>();
+    QMap<int, int> mTimer = QMap<int, int>();
     QMap<int, QVariant> mData = QMap<int, QVariant>();
     bool mInit = false;
 };

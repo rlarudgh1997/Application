@@ -63,3 +63,6 @@ message("INSTALLS=$$INSTALLS")
 
 
 message("PWD=$$PWD")
+
+FORMS += \
+    test.ui

@@ -20,7 +20,7 @@ void AbstractControl::timerEvent(QTimerEvent *event) {
     timerFunc(event->timerId());
 }
 
-qint32 AbstractControl::controlTimer(const qint32 &timerType, const bool &start, const qint32 &interval) {
+int AbstractControl::controlTimer(const int &timerType, const bool &start, const int &interval) {
     if (mTimer[timerType]) {
         killTimer(mTimer[timerType]);
         mTimer[timerType] = 0;
@@ -33,7 +33,7 @@ qint32 AbstractControl::controlTimer(const qint32 &timerType, const bool &start,
     return mTimer[timerType];
 }
 
-qint32 AbstractControl::getTimerId(const qint32 &timerType) {
+int AbstractControl::getTimerId(const int &timerType) {
     return mTimer[timerType];
 }
 
