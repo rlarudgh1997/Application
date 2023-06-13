@@ -13,8 +13,8 @@ class ControlManager : public QObject {
 
 public:
     static QSharedPointer<ControlManager> instance();
-    void keyInput(const int& inputType, const int& inputValue);
-    void mouseInput(const int& inputType, const int& inputValue);
+    void keyEvent(const int& inputType, const int& inputValue);
+    void mouseEvent(const int& inputType, const int& inputValue);
     void createControl(const int& displayType);
 
 private:

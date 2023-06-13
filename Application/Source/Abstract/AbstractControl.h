@@ -12,10 +12,6 @@ class AbstractControl : public QObject {
 
 public:
     enum {
-        AbstractDataInvalid = 9999,
-        AbstractDataStart,
-    };
-    enum {
         AbstractTimerTypeInvalid = 0,
         AbstractTimerStart ,
     };
@@ -29,7 +25,7 @@ public:
     const QVariant getData(const int& propertyType);
     bool setData(const int& propertyType, const QVariant& value);
 
-    virtual void keyInput(const int& inputType, const int& inputValue) = 0;
+    virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
 
 
 protected:
@@ -44,9 +40,7 @@ private:
     virtual void resetControl(const bool& reset) = 0;
     virtual void timerFunc(const int& timerId) = 0;
     virtual void updateDataHandler(const int& propertyType, const QVariant& value) = 0;
-
-
-signals:
+    virtual void updateDataHandler(const int& propertyType, const QVariantList& value) = 0;
 
 
 private slots:

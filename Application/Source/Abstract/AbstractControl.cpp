@@ -42,17 +42,12 @@ const QVariant AbstractControl::getData(const int& propertyType) {
 }
 
 bool AbstractControl::setData(const int& propertyType, const QVariant& value) {
-    bool save = (mData[propertyType] != value);
-
-    if (save) {
+    if ((mData[propertyType] != value)) {
         mData[propertyType] = value;
+        return true;
     }
 
-    if (propertyType >= AbstractDataStart) {
-        save = false;
-    }
-
-    return save;
+    return false;
 }
 
 

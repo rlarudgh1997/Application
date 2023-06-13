@@ -4,13 +4,16 @@
 
 #include "AbstractControl.h"
 
+class AbstractHandler;
+
+
 
 class ControlMain : public AbstractControl {
     Q_OBJECT
 
 public:
     static QSharedPointer<ControlMain> instance();
-    virtual void keyInput(const int& inputType, const int& inputValue);
+    virtual void keyEvent(const int& inputType, const int& inputValue);
 
 
 private:
@@ -25,11 +28,15 @@ protected:
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
     virtual void updateDataHandler(const int& propertyType, const QVariant& value);
+    virtual void updateDataHandler(const int& propertyType, const QVariantList& value);
 
 
 public slots:
     virtual void slotHandlerEvent(const int& propertyType, const int& touchType);
     virtual void slotConfigChanged(const int& type, const QVariant& value);
+
+private:
+    AbstractHandler* mHandler = nullptr;
 };
 
 

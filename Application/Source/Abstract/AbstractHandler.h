@@ -32,26 +32,20 @@ public:
     void registerProperty(const int& propertyType, const QVariant& value);
     QVariant getProperty(const int& propertyType);
     Q_INVOKABLE void setProperty(const int& propertyType, const QVariant& value);
-    void drawDisplay(const int& drawType = AbstractdrawDisplayMain);
 
 private:
-    void controlConnect(const bool& state = true);
-
+    virtual void controlConnect(const bool& state = true);
     virtual void timerFunc(const int& timerId) = 0;
     virtual void initPropertyInfo() = 0;
-    virtual void drawDisplayMain() = 0;
-    virtual void drawDisplayDepth1() = 0;
-    virtual void drawDisplayDepth2() = 0;
 
 protected:
     void timerEvent(QTimerEvent *event);
 
 
 signals:
-    // [Control -> Handler -> QML(dataModel)]
     void signalUpdateDataModel(const int& dataType, const QVariant& value);
-    // [Handler -> Control]
     void signalHandlerEvent(const int& propertyType, const int& touchType);
+    void signalPropertyChanged(const int& dataType, const QVariant& value);
 
 private slots:
     void slotUpdateDataModel(const int& propertyType, const QVariant& value);

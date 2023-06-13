@@ -4,8 +4,6 @@
 #include <QScreen>
 #include <QDateTime>
 #include <QDebug>
-//#include <QGridLayout>
-//#include <QSizePolicy>
 
 
 QSharedPointer<ScreenInfo> ScreenInfo::instance() {
@@ -52,8 +50,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
         }
      }
 
-    qDebug() << "Widget[" << displayType << "] :" << mSubScreens[displayType];
-
+    qDebug() << "Widget :" << mSubScreens[displayType];
     return mSubScreens[displayType];
 }
 

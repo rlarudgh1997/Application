@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "CommonEnum.h"
 #include "ScreenInfo.h"
+#include "ConfigSetting.h"
 #include "ControlManager.h"
 
 #include <QApplication>
@@ -9,7 +10,7 @@
 MainWindow::MainWindow() {
     qDebug() << "\n\n\n================================================================================================";
     qDebug() << "[ Application : Path=" << QApplication::applicationDirPath().toLatin1().data() << "]";
-    qDebug() << "QT_VERSION_STR : " << QT_VERSION_STR << "\n\n";
+    qDebug() << "- QT_VERSION : " << QT_VERSION_STR << "\n\n";
 
     this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
@@ -19,6 +20,7 @@ MainWindow::MainWindow() {
     this->show();
 
     ScreenInfo::instance().data()->updateRootItem(this);
+    ConfigSetting::instance();
     ControlManager::instance();
 }
 
@@ -26,9 +28,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
+    // ControlManager::instance().data()->mouseEvent(0, mouseEvent);
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent* mouseEvent) {
+    // ControlManager::instance().data()->mouseEvent(1, mouseEvent);
 }
 
 int MainWindow::isConvertKey(const QKeyEvent& keyEvent) {
@@ -48,11 +52,11 @@ int MainWindow::isConvertKey(const QKeyEvent& keyEvent) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyInput(KeyTypeEnum::KeyInputTypePress, isConvertKey(*keyEvent));
+    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypePress, isConvertKey(*keyEvent));
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyInput(KeyTypeEnum::KeyInputTypeRelease, isConvertKey(*keyEvent));
+    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypeRelease, isConvertKey(*keyEvent));
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {

@@ -20,9 +20,14 @@
 #define PROPETRY_START_NORMAL            1000
 
 
+
+
+
+
 class ScreenEnum : public QObject {
     Q_OBJECT
     Q_ENUMS(DisplayType)
+    Q_ENUMS(DisplayDepth)
 
 public:
     enum DisplayType {
@@ -47,6 +52,12 @@ public:
 
         DisplayTypeAll                 = 0xFFFFFF,
     };
+    enum DisplayDepth {
+        DisplayDepthInvalid = 0,
+        DisplayDepthMain,
+        DisplayDepthDepth1,
+        DisplayDepthDepth2,
+    };
 };
 
 class PropertyTypeEnum : public QObject {
@@ -57,9 +68,11 @@ public:
     enum PropertyType {
         PropertyTypeDisplay = 0,
         PropertyTypeMode,
-        PropertyTypePreviouMode,
+        PropertyTypeDepth,
 
-        PropertyTypeStart = PROPETRY_START_NORMAL,
+        PropertyTypeNormal = PROPETRY_START_NORMAL,
+        PropertyTypeListTest1,
+        PropertyTypeListTest2,
     };
 };
 

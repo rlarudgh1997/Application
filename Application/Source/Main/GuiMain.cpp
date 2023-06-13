@@ -1,58 +1,46 @@
-#include "HandlerMain.h"
+#include "GuiMain.h"
 #include "CommonEnum.h"
 
 
+#if defined(USE_GUI_INSTANCE_SINGTONE)
+QSharedPointer<GuiMain> GuiMain::instance(QWidget* parent) {
+    static QSharedPointer<GuiMain> gGui;
 
-QSharedPointer<HandlerMain> HandlerMain::instance() {
-    static QSharedPointer<HandlerMain> gHandler;
-
-    if (gHandler.isNull()) {
-        gHandler = QSharedPointer<HandlerMain>(new HandlerMain());
+    if (gGui.isNull()) {
+        gGui = QSharedPointer<GuiMain>(new GuiMain(parent));
     }
 
-    return gHandler;
+    return gGui;
+}
+#else
+GuiMain::GuiMain(QWidget* parent) : mGuiScreen(parent) {
+     qDebug() << "GuiMain::GuiMain :" << mGuiScreen;
 }
 
-HandlerMain::HandlerMain() : AbstractHandler(ScreenEnum::DisplayTypeMain, QString("HandlerMain"), true) {
+GuiMain::~GuiMain() {
+    delete mGuiScreen;
+}
+#endif
+
+void GuiMain::updateGuiScreen(QWidget* parent) {
+    mGuiScreen = parent;
 }
 
-void HandlerMain::timerFunc(const int& timerId) {
-    Q_UNUSED(timerId)
-    if (timerId == getTimerId(HandlerMainTimerStart)) {
-        // do nothing
-    }
-}
+void GuiMain::updateGui(const int& dataType, const QVariant& value) {
+    qDebug() << "GuiMain::updateGui :" << dataType << ", " << value;
 
-void HandlerMain::initPropertyInfo() {
-    registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                   QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeMode,                      QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeDepth,                     QVariant(-1));
-}
-
-void HandlerMain::controlConnect(const bool& state) {
-    if (state) {
-        connect(this, &HandlerMain::signalPropertyChanged, [=](const int& dataType, const QVariant& value) {
-            // mGui->updateGui(dataType, value);
-
-            // qDebug() << "signalPropertyChanged :" << dataType << ", " << value;
-            switch (dataType) {
-                case PropertyTypeEnum::PropertyTypeDepth : {
-                    if (value.toInt() == ScreenEnum::DisplayDepthMain) {
-                        drawDisplayMain();
-                    }
-                    break;
-                }
-                default : {
-                    break;
-                }
+    switch (dataType) {
+        case PropertyTypeEnum::PropertyTypeDepth : {
+            if (value.toInt() == ScreenEnum::DisplayDepthMain) {
+                drawDisplayMain();
             }
-        });
-    } else {
-        disconnect(this);
+            break;
+        }
+        default : {
+            break;
+        }
     }
 }
-
-
 
  #include <QMainWindow>
  #include <QMenu>
@@ -60,18 +48,19 @@ void HandlerMain::controlConnect(const bool& state) {
  #include <QToolBar>
  #include <QTableWidget>
  #include <QPushButton>
-void HandlerMain::drawDisplayMain() {
+
+void GuiMain::drawDisplayMain() {
 #if 1
     QMainWindow* main = new QMainWindow();
 
-    main->setGeometry(getScreen()->geometry());
-    main->setParent(getScreen());
+    main->setGeometry(mGuiScreen->geometry());
+    main->setParent(mGuiScreen);
 
 
     QMenu* menu = main->menuBar()->addMenu(QString("File"));
     QToolBar* toolBar = main->addToolBar(QString("File"));
 
-    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/images/new.png")), QString("New"), getScreen());
+    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/images/new.png")), QString("New"), this);
     if (actionNew) {
         actionNew->setShortcuts(QKeySequence::New);
         actionNew->setStatusTip(QString("Create a new file"));
@@ -117,7 +106,7 @@ void HandlerMain::drawDisplayMain() {
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto seetTitle, seetTitles) {
         int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, getScreen());
+        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, mGuiScreen);
         mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
         tabWidget->addTab(mTableWidgets[index], seetTitle);
 
@@ -159,7 +148,10 @@ void HandlerMain::drawDisplayMain() {
     }
 
 
-    QPushButton* button = new QPushButton(getScreen());
+
+
+
+    QPushButton* button = new QPushButton(mGuiScreen);
     button->setGeometry(300, 300, 300, 100);
     button->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
     button->setText("Button 2");
@@ -172,4 +164,3 @@ void HandlerMain::drawDisplayMain() {
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 #endif
 }
-

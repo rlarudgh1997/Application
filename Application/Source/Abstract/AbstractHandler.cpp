@@ -1,6 +1,7 @@
 #include "AbstractHandler.h"
 #include "ScreenInfo.h"
 
+#include <QDebug>
 
 AbstractHandler::AbstractHandler(const int& displayType, const QString& objcetName, const bool& show) {
     mScreen = ScreenInfo::instance().data()->drawScreen(displayType, objcetName, show);
@@ -8,9 +9,10 @@ AbstractHandler::AbstractHandler(const int& displayType, const QString& objcetNa
 
 bool AbstractHandler::init() {
     if (mUpdateState == false) {
+        AbstractHandler::controlConnect(true);
         mUpdateState = true;
+
         initPropertyInfo();
-        drawDisplay(AbstractdrawDisplayMain);
         controlConnect(true);
     }
     return mUpdateState;
@@ -27,32 +29,9 @@ void AbstractHandler::controlConnect(const bool& state) {
 }
 
 QWidget* AbstractHandler::getScreen() {
-    // qDebug("AbstractHandler::getScreen()->Screen : 0x%X", mScreen);
+    // qDebug() << "AbstractHandler::getScreen :" << mScreen;
     return mScreen;
 }
-
-
-void AbstractHandler::drawDisplay(const int& drawType) {
-    qDebug("AbstractHandler::drawDisplay(%d)", drawType);
-    switch (drawType) {
-        case AbstractdrawDisplayMain : {
-            drawDisplayMain();
-            break;
-        }
-        case AbstractdrawDisplayDepth1 : {
-            drawDisplayDepth1();
-            break;
-        }
-        case AbstractdrawDisplayDepth2 : {
-            drawDisplayDepth2();
-            break;
-        }
-        default : {
-            break;
-        }
-    }
-}
-
 
 void AbstractHandler::timerEvent(QTimerEvent *event) {
     timerFunc(event->timerId());
@@ -87,16 +66,15 @@ void AbstractHandler::setProperty(const int& propertyType, const QVariant& value
     if (mUpdateState) {
         if (mProperty[propertyType] != value) {
             mProperty[propertyType] = value;
+            emit signalPropertyChanged(propertyType, value);
         }
     }
 }
 
-
-
 // Function - SLOT
 void AbstractHandler::slotUpdateDataModel(const int& propertyType, const QVariant& value) {
-    qDebug("AbstractHandler::slotUpdateDataModel(%d, %s)", propertyType, value.toString().toLatin1().data());
     QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, propertyType), Q_ARG(QVariant, value));
+    // qDebug() << "Property :" << getProperty(propertyType);
 }
 
 
