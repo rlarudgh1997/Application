@@ -27,7 +27,8 @@
 
 
 
-
+#define USE_INTANCE_SINGLETON
+#define USE_GUI_MODULE
 
 
 

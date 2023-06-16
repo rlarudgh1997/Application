@@ -5,6 +5,7 @@
 #include "ControlManager.h"
 
 #include <QApplication>
+#include "CommonFile.h"
 
 
 MainWindow::MainWindow() {
@@ -22,6 +23,12 @@ MainWindow::MainWindow() {
     ScreenInfo::instance().data()->updateRootItem(this);
     ConfigSetting::instance();
     ControlManager::instance();
+
+    qDebug() << "================================================================================================";
+    qDebug() << "================================================================================================";
+    qDebug() << "================================================================================================";
+
+    FileInfo::isFileListInfo("");
 }
 
 MainWindow::~MainWindow() {
