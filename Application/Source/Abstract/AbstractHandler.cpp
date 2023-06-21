@@ -9,11 +9,10 @@ AbstractHandler::AbstractHandler(const int& displayType, const QString& objcetNa
 
 bool AbstractHandler::init() {
     if (mUpdateState == false) {
-        AbstractHandler::controlConnect(true);
         mUpdateState = true;
 
         initPropertyInfo();
-        controlConnect(true);
+        AbstractHandler::controlConnect(true);
     }
     return mUpdateState;
 }
@@ -26,6 +25,7 @@ void AbstractHandler::controlConnect(const bool& state) {
     } else {
         disconnect(this);
     }
+    controlConnect(true);
 }
 
 QWidget* AbstractHandler::getScreen() {

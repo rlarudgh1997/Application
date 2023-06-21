@@ -41,15 +41,15 @@ public:
 
 private:
     void initConfigInfo() {
-        mConfigInfoData.clear();
-
         QVariantList value = QVariantList();
 
-        value.clear();
+        mConfigInfoData.clear();
+
+        mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", false);
+
+        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", "/SFC");
         value = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", value);
-
-        value.clear();
         value = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
                  "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
         mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", value);

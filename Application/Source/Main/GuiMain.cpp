@@ -2,7 +2,7 @@
 #include "CommonEnum.h"
 
 
-#if defined(USE_GUI_INSTANCE_SINGTONE)
+#if defined(USE_INTANCE_SINGLETON_GUI)
 QSharedPointer<GuiMain> GuiMain::instance(QWidget* parent) {
     static QSharedPointer<GuiMain> gGui;
 
@@ -26,8 +26,8 @@ void GuiMain::updateGuiScreen(QWidget* parent) {
     mGuiScreen = parent;
 }
 
-void GuiMain::updateGui(const int& dataType, const QVariant& value) {
-    qDebug() << "GuiMain::updateGui :" << dataType << ", " << value;
+void GuiMain::updateGuiProperty(const int& dataType, const QVariant& value) {
+    qDebug() << "GuiMain::updateGuiProperty :" << dataType << ", " << value;
 
     switch (dataType) {
         case PropertyTypeEnum::PropertyTypeDepth : {

@@ -2,12 +2,15 @@
 #define GUI_MAIN_H
 
 #include <QWidget>
-// #include <QSharedPointer>
+#if defined(USE_INTANCE_SINGLETON_GUI)
+#include <QSharedPointer>
+#endif
 
+#include "CommonDefine.h"
 
 class GuiMain : public QWidget {
 public:
-#if defined(USE_GUI_INSTANCE_SINGTONE)
+#if defined(USE_INTANCE_SINGLETON_GUI)
     static QSharedPointer<HandlerMain> instance(QWidget* parent);
 
 private:
@@ -18,7 +21,7 @@ private:
 #endif
 
     void updateGuiScreen(QWidget* parent);
-    void updateGui(const int& dataType, const QVariant& value);
+    void updateGuiProperty(const int& dataType, const QVariant& value);
     void drawDisplayMain();
 
 private:

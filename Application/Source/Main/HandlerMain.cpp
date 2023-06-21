@@ -14,6 +14,13 @@ QSharedPointer<HandlerMain> HandlerMain::instance() {
 }
 
 HandlerMain::HandlerMain() : AbstractHandler(ScreenEnum::DisplayTypeMain, QString("HandlerMain"), true) {
+#if defined(USE_INTANCE_SINGLETON_GUI)
+#if defined(USE_GUI_MODULE)
+    mGui->updateGuiProperty(dataType, value);
+#else
+    GuiMain::instance(QWidget* parent) {
+#endif
+#endif
 }
 
 void HandlerMain::timerFunc(const int& timerId) {
@@ -32,8 +39,9 @@ void HandlerMain::initPropertyInfo() {
 void HandlerMain::controlConnect(const bool& state) {
     if (state) {
         connect(this, &HandlerMain::signalPropertyChanged, [=](const int& dataType, const QVariant& value) {
-            // mGui->updateGui(dataType, value);
-
+#if defined(USE_GUI_MODULE)
+            mGui->updateGuiProperty(dataType, value);
+#else
             // qDebug() << "signalPropertyChanged :" << dataType << ", " << value;
             switch (dataType) {
                 case PropertyTypeEnum::PropertyTypeDepth : {
@@ -47,6 +55,7 @@ void HandlerMain::controlConnect(const bool& state) {
                 }
             }
         });
+#endif
     } else {
         disconnect(this);
     }

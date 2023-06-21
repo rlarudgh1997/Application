@@ -32,7 +32,7 @@ echo
 #/opt/fsl-imx-xwayland/4.19-warrior
 function setEnvironments(){
 	unset LD_LIBRARY_PATH
-	
+
 	if [ "$1" = target ] || [ "$1" = t ]; then
 		source $SDK_ENVIROMENT_PATH
 	elif [ "$1" = host ] || [ "$1" = h ]; then
@@ -43,7 +43,7 @@ function setEnvironments(){
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit
 	fi
-	
+
 	SET_DEPLOY=deploy_$SET_PLATFORM
 	SET_INSTALL_PATH=$PROJECT_DIR/$SET_DEPLOY
 
@@ -57,29 +57,29 @@ function setEnvironments(){
 	echo "   SDK_ENVIROMENT_PATH=$SDK_ENVIROMENT_PATH"
 	echo "==================================================================================================================="
 	echo
-
 }
 
 function platformClean(){
-    if [ -f "Makefile" ]; then
-        make distclean
-    fi
-	
-    find -name "debug" -type d -exec rm -rfv {} \;
-    find -name "release" -type d -exec rm -rfv {} \;
-    find -name "build" -type d -exec rm -rfv {} \;
+	if [ -f "Makefile" ]; then
+		make distclean
+	fi
+
+	COMPILE_PATH_ARR=("debug" "release" "build" "Build")
+	for COMPILE_PATH in "${COMPILE_PATH_ARR[@]}"; do
+		find -name $COMPILE_PATH -type d -exec rm -rfv {} \;
+	done
 }
 
 function cleanAll(){
-    #find -name "deploy_target" -type d -exec rm -rfv {} \;
-    #find -name "deploy_x86" -type d -exec rm -rfv {} \;	
+	#find -name "deploy_target" -type d -exec rm -rfv {} \;
+	#find -name "deploy_x86" -type d -exec rm -rfv {} \;	
 
 	#find -name $PROJECT_DIR/deploy_target -type d -exec rm -rfv {} \;
 	#find -name $PROJECT_DIR/deploy_x86 -type d -exec rm -rfv {} \;
 
 	rm -rf $PROJECT_DIR/deploy_target
 	rm -rf $PROJECT_DIR/deploy_x86
-	
+
 
 	platformClean
 }
@@ -104,7 +104,7 @@ function buildAll(){
 	$CMD_TEXT
 	make -j8
 	make install
-	
+
 }
 
 
@@ -115,35 +115,33 @@ function build(){
 			cleanAll
 		else
 			setEnvironments $1
+			CMD=$2
 
-			case "$2" in
-				#clean
-				c)
-					platformClean
-					;;
+			if [ "$2" = c ]; then
+				CMD=clean
+			elif [ "$2" = d ]; then
+				CMD=debug
+			elif [ "$2" = r ]; then
+				CMD=release
+			else
+				CMD=$2
+			fi
+
+			case "$CMD" in
 				clean)
 					platformClean
 					;;
-				#debug
-				d)
-					buildAll $2 $3
-					;;
 				debug)
-					buildAll $2 $3
-					;;
-				#relrese
-				r)
-					buildAll $2 $3
+					buildAll $CMD
 					;;
 				release)
-					buildAll $2 $3
+					buildAll $CMD
 					;;
-				#default
-				*)
+				*)	#default
 					echo
 					echo "==================================================================================================================="
 					echo "[Command Error]"
-					echo "   INPUT_CMD=$0 $1 $2 $3"
+					echo "   INPUT_CMD=$0 $1 $2"
 					echo "==================================================================================================================="
 					echo
 					;;

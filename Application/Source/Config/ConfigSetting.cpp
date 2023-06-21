@@ -1,12 +1,13 @@
 #include "ConfigSetting.h"
 
+#include "CommonDefine.h"
 
 #include <QApplication>
 #include <QDir>
 #include <QFile>
 
+#include <QDebug>
 
-#include "CommonDefine.h"
 
 #define CONFIG_PATH QApplication::applicationDirPath().toLatin1().data()
 #define CONFIG_NAME "Application.ini"
@@ -42,7 +43,7 @@ void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
     bool fileExists = configSettingFile.exists();
 
-    // qDebug() << "\t ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
+    // qDebug() << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
 
     if ((fileExists == false) && (configSettingFile.open(QIODevice::WriteOnly|QIODevice::Text))) {
         resetConfig();
@@ -80,14 +81,14 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 }
 
 void ConfigSetting::readConfig() {
-    for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
+    for (int configType = ConfigInfo::ConfigTypeInvalid+1; configType < ConfigInfo::ConfigTypeMax; configType++) {
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
 
         if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
-            mSetting->beginGroup(GROUP_NAME_COMMON);
-        } else {
             mSetting->beginGroup(GROUP_NAME_GENERAL);
+        } else {
+            mSetting->beginGroup(GROUP_NAME_COMMON);
         }
 
         QVariant configValue = mSetting->value(configName);
@@ -105,9 +106,9 @@ void ConfigSetting::writeConfig() {
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
             if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
-                mSetting->beginGroup(GROUP_NAME_COMMON);
-            } else {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
+            } else {
+                mSetting->beginGroup(GROUP_NAME_COMMON);
             }
 
             QVariant configValue = mConfigData[configType];

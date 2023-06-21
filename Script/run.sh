@@ -13,14 +13,14 @@ echo "==========================================================================
 function setWayland(){
 	usleep 60000
 	while ! [ -f /tmp/wayland-0.lock ]; do
-	  echo "waiting for initializing weston..."
-	  usleep 10000
+		echo "waiting for initializing weston..."
+		usleep 10000
 	done
-	
+
 	export XDG_RUNTIME_DIR=/tmp
 	export $(cat /tmp/dbus_session)
 	export QT_QPA_PLATFORM=wayland
-	
+
 	echo "setWayland : $setWayland"
 	echo
 }
@@ -49,9 +49,9 @@ function setEnvironments(){
 		echo "[Host PC]"
 		APP_PATH=$APP_PATH/deploy_x86
 	fi
-	
+
 	export LD_LIBRARY_PATH=/usr/lib:/opt/GENIVI/lib/:$APP_PATH/lib:$LD_LIBRARY_PATH
-	
+
 	echo "GSTREAMER=$QT_GSTREAMER_CAMERABIN_VIDEOSRC"
 	echo "APP_PATH=$APP_PATH"
 	echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
@@ -70,7 +70,7 @@ function runProcess(){
 		FULL_PATH=""$2"/"$SERVICE""
 
 		echo "FULL_PATH_01=$FULL_PATH"
-		
+
 		if pgrep -x $SERVICE > /dev/null
 		then
 			echo "$SERVICE is already running"
@@ -92,7 +92,7 @@ function runProcess(){
 			echo "$FULL_PATH not FOUND!!"
 		fi
 	fi
-	
+
 
 	echo
 	echo "=========================================================================================================="
@@ -105,7 +105,7 @@ function runProcess2(){
 
 	SERVICE="$1"
 	FULL_PATH=""$2"/"$SERVICE""
-	
+
 	echo "FULL_PATH_02=$FULL_PATH"
 
 	killall -9 "$SERVICE"
@@ -137,8 +137,17 @@ setAuth
 #Application Exec
 
 
+CMD=$1
 
-case "$1" in
+if [ "$1" = h ] || [ "$1" = "" ]; then
+	CMD=host
+elif [ "$2" = t ]; then
+	CMD=target
+else
+	CMD=$1
+fi
+
+case "$CMD" in
 	eth)
 		setEthernet
 		;;
@@ -147,18 +156,8 @@ case "$1" in
 		killProcess
 		runProcess $BIN_NAME $APP_PATH $2 $3
 		;;
-	h)
-		setEnvironments
-		killProcess
-		runProcess $BIN_NAME $APP_PATH $2 $3
-		;;
 	host)
 		setEnvironments
-		killProcess
-		runProcess $BIN_NAME $APP_PATH $2 $3
-		;;
-	t)
-		setEnvironments target
 		killProcess
 		runProcess $BIN_NAME $APP_PATH $2 $3
 		;;
