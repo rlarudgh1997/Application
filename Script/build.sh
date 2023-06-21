@@ -114,14 +114,24 @@ function build(){
 		if [ "$1" = "c" ] || [ "$1" = "clean" ]; then
 			cleanAll
 		else
-			setEnvironments $1
+			# 환경 설정
+			ENV=$1
+
+			if [ "$ENV" = "" ]; then
+				ENV=host
+			fi
+
+			setEnvironments $ENV
+
+
+			# 빌드 설정
 			CMD=$2
 
 			if [ "$2" = c ]; then
 				CMD=clean
 			elif [ "$2" = d ]; then
 				CMD=debug
-			elif [ "$2" = r ]; then
+			elif [ "$2" = r ] || [ "$1" = "" ]; then
 				CMD=release
 			else
 				CMD=$2
