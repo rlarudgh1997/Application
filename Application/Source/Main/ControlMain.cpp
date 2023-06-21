@@ -12,7 +12,8 @@ QSharedPointer<ControlMain> ControlMain::instance() {
     return gControl;
 }
 
-ControlMain::ControlMain() : mHandler(static_cast<AbstractHandler*>(HandlerMain::instance().data())) {
+ControlMain::ControlMain() {
+    isHandler();
 }
 
 AbstractHandler* ControlMain::isHandler() {

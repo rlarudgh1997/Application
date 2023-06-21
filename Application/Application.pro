@@ -28,8 +28,7 @@ include($$PWD/Source/Source.pri)
 
 # Resource
 RESOURCES += \
-#    $$PWD/Resource/Image.qrc\
-#    $$PWD/Gui/Gui.qrc\
+    $$PWD/Resource/Image.qrc\
 #    $$PWD/Resource/Font.qrc\
 #    $$PWD/Resource/Language.qrc\
 

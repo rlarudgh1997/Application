@@ -42,7 +42,7 @@ void GuiMain::drawDisplayMain() {
     QMenu* menu = main->menuBar()->addMenu(QString("File"));
     QToolBar* toolBar = main->addToolBar(QString("File"));
 
-    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/images/new.png")), QString("New"), mScreen);
+    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/Image/Main/Copy.png")), QString("New"), mScreen);
     if (actionNew) {
         actionNew->setShortcuts(QKeySequence::New);
         actionNew->setStatusTip(QString("Create a new file"));
