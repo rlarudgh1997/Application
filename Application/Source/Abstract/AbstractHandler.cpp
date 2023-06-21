@@ -19,9 +19,9 @@ bool AbstractHandler::init() {
 
 void AbstractHandler::controlConnect(const bool& state) {
     if (state) {
-        connect(this, SIGNAL(signalUpdateDataModel(const int&, const QVariant&)),
-                this, SLOT(slotUpdateDataModel(const int&, const QVariant&)),
-                Qt::UniqueConnection);
+        connect(this, &AbstractHandler::signalUpdateDataModel, [=](const int& type, const QVariant& value) {
+            QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, type), Q_ARG(QVariant, value));
+        });
     } else {
         disconnect(this);
     }
@@ -29,7 +29,7 @@ void AbstractHandler::controlConnect(const bool& state) {
 }
 
 QWidget* AbstractHandler::getScreen() {
-    // qDebug() << "AbstractHandler::getScreen :" << mScreen;
+    qDebug() << "AbstractHandler::getScreen :" << mScreen << ", this :" << this;
     return mScreen;
 }
 
@@ -54,27 +54,21 @@ int AbstractHandler::getTimerId(const int& timerType) {
     return mTimer[timerType];
 }
 
-void AbstractHandler::registerProperty(const int& propertyType, const QVariant& value) {
-    setProperty(propertyType, value);
+void AbstractHandler::registerProperty(const int& type, const QVariant& value) {
+    setProperty(type, value);
 }
 
-QVariant AbstractHandler::getProperty(const int& propertyType) {
-    return mProperty[propertyType];
+QVariant AbstractHandler::getProperty(const int& type) {
+    return mProperty[type];
 }
 
-void AbstractHandler::setProperty(const int& propertyType, const QVariant& value) {
+void AbstractHandler::setProperty(const int& type, const QVariant& value) {
     if (mUpdateState) {
-        if (mProperty[propertyType] != value) {
-            mProperty[propertyType] = value;
-            emit signalPropertyChanged(propertyType, value);
+        if (mProperty[type] != value) {
+            mProperty[type] = value;
+            emit signalPropertyChanged(type, value);
         }
     }
-}
-
-// Function - SLOT
-void AbstractHandler::slotUpdateDataModel(const int& propertyType, const QVariant& value) {
-    QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, propertyType), Q_ARG(QVariant, value));
-    // qDebug() << "Property :" << getProperty(propertyType);
 }
 
 

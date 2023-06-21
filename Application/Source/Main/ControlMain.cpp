@@ -6,20 +6,25 @@
 
 QSharedPointer<ControlMain> ControlMain::instance() {
     static QSharedPointer<ControlMain> gControl;
-
     if (gControl.isNull()) {
         gControl = QSharedPointer<ControlMain>(new ControlMain());
     }
-
     return gControl;
 }
 
 ControlMain::ControlMain() : mHandler(static_cast<AbstractHandler*>(HandlerMain::instance().data())) {
 }
 
+AbstractHandler* ControlMain::isHandler() {
+    if (mHandler == nullptr) {
+        mHandler = static_cast<AbstractHandler*>(HandlerMain::instance().data());
+    }
+    return mHandler;
+}
+
 void ControlMain::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
-        mHandler->init();
+        isHandler()->init();
 
         controlConnect(true);
         initDataCommon(currentMode, ScreenEnum::DisplayTypeMain);
@@ -37,8 +42,8 @@ void ControlMain::initDataCommon(const int& currentMode, const int& displayType)
 
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
     QStringList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toStringList();
-    qDebug() << "sheetName :" << sheetName;
-    qDebug() << "contextName :" << contextName;
+    // qDebug() << "sheetName :" << sheetName;
+    // qDebug() << "contextName :" << contextName;
 }
 
 void ControlMain::initDataModule() {
@@ -51,11 +56,11 @@ void ControlMain::resetControl(const bool& reset) {
 
 void ControlMain::controlConnect(const bool& state) {
     if (state) {
-        connect(mHandler, &HandlerMain::signalHandlerEvent,
-                this,     &ControlMain::slotHandlerEvent,
+        connect(isHandler(), &HandlerMain::signalHandlerEvent,
+                this,        &ControlMain::slotHandlerEvent,
                 Qt::UniqueConnection);
     } else {
-        disconnect(mHandler);
+        disconnect(isHandler());
     }
 }
 
@@ -68,27 +73,31 @@ void ControlMain::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputValue)
 }
 
-void ControlMain::updateDataHandler(const int& propertyType, const QVariant& value) {
-    if (setData(propertyType, value)) {
-        emit mHandler->signalUpdateDataModel(propertyType, value);
+void ControlMain::updateDataHandler(const int& type, const QVariant& value) {
+    if (setData(type, value)) {
+        emit isHandler()->signalUpdateDataModel(type, value);
     }
 }
 
-void ControlMain::updateDataHandler(const int& propertyType, const QVariantList& value) {
-    if (setData(propertyType, value)) {
-        emit mHandler->signalUpdateDataModel(propertyType, getData(propertyType));
+void ControlMain::updateDataHandler(const int& type, const QVariantList& value) {
+    if (setData(type, value)) {
+        emit isHandler()->signalUpdateDataModel(type, getData(type));
     }
 }
 
-void ControlMain::slotHandlerEvent(const int& propertyType, const int& touchType) {
-    qDebug("\nControlMain::slotHandlerEvent(%d, %d)", propertyType, touchType);
+void ControlMain::slotConfigChanged(const int& type, const QVariant& value) {
+}
 
-    switch (propertyType) {
+void ControlMain::slotHandlerEvent(const int& type, const QVariant& value) {
+    qDebug() << "ControlMain::slotHandlerEvent(" << type << ", " << value << ")";
+
+    switch (type) {
         default : {
             break;
         }
     }
 }
 
-void ControlMain::slotConfigChanged(const int& type, const QVariant& value) {
-}
+
+
+

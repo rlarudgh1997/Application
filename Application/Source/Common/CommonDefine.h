@@ -25,13 +25,15 @@
 
 
 
+#define USE_GUI_MODULE
+
 
 
 #define USE_INTANCE_SINGLETON
 #if defined(USE_INTANCE_SINGLETON)
 #define USE_INTANCE_SINGLETON_GUI
 #endif
-// #define USE_GUI_MODULE
+
 
 
 

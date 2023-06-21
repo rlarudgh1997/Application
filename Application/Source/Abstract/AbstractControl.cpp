@@ -37,13 +37,13 @@ int AbstractControl::getTimerId(const int &timerType) {
     return mTimer[timerType];
 }
 
-const QVariant AbstractControl::getData(const int& propertyType) {
-    return mData[propertyType];
+const QVariant AbstractControl::getData(const int& type) {
+    return mData[type];
 }
 
-bool AbstractControl::setData(const int& propertyType, const QVariant& value) {
-    if ((mData[propertyType] != value)) {
-        mData[propertyType] = value;
+bool AbstractControl::setData(const int& type, const QVariant& value) {
+    if ((mData[type] != value)) {
+        mData[type] = value;
         return true;
     }
 

@@ -18,14 +18,10 @@ public:
 
 private:
     explicit HandlerMain();
-    void drawDisplayMain();
 
     virtual void controlConnect(const bool& state = true);
-    virtual void timerFunc(const int& timerId);
     virtual void initPropertyInfo();
-
-
-private:
+    virtual void timerFunc(const int& timerId);
 };
 
 #endif    // HANDLER_MAIN_H

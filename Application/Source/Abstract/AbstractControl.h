@@ -2,10 +2,16 @@
 #define ABSTRACT_CONTROL_H
 
 #include <QObject>
+#include <QSharedPointer>
 #include <QTimerEvent>
 #include <QKeyEvent>
 
 #include "CommonDefine.h"
+
+
+class AbstractHandler;
+
+
 
 class AbstractControl : public QObject {
     Q_OBJECT
@@ -22,8 +28,8 @@ public:
     bool isInitComplete();
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
     int getTimerId(const int& timerType);
-    const QVariant getData(const int& propertyType);
-    bool setData(const int& propertyType, const QVariant& value);
+    const QVariant getData(const int& type);
+    bool setData(const int& type, const QVariant& value);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
 
@@ -33,19 +39,20 @@ protected:
 
 
 private:
+    virtual AbstractHandler* isHandler() = 0;
     virtual void initControl(const int& currentMode) = 0;
     virtual void controlConnect(const bool& state = true) = 0;
     virtual void initDataCommon(const int& currentMode, const int& displayType) = 0;
     virtual void initDataModule() = 0;
     virtual void resetControl(const bool& reset) = 0;
     virtual void timerFunc(const int& timerId) = 0;
-    virtual void updateDataHandler(const int& propertyType, const QVariant& value) = 0;
-    virtual void updateDataHandler(const int& propertyType, const QVariantList& value) = 0;
+    virtual void updateDataHandler(const int& type, const QVariant& value) = 0;
+    virtual void updateDataHandler(const int& type, const QVariantList& value) = 0;
 
 
 private slots:
-    virtual void slotHandlerEvent(const int& propertyType, const int& touchType) = 0;
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
+    virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
 
 
 private:

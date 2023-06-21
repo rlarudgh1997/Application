@@ -2,9 +2,9 @@
 #define CONTROL_MAIN_H
 
 
+
 #include "AbstractControl.h"
 
-class AbstractHandler;
 
 
 
@@ -19,21 +19,22 @@ public:
 private:
     explicit ControlMain();
 
-
 protected:
+    virtual AbstractHandler* isHandler();
     virtual void initControl(const int& currentMode);
     virtual void controlConnect(const bool& state = true);
     virtual void initDataCommon(const int& currentMode, const int& displayType);
     virtual void initDataModule();
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
-    virtual void updateDataHandler(const int& propertyType, const QVariant& value);
-    virtual void updateDataHandler(const int& propertyType, const QVariantList& value);
+    virtual void updateDataHandler(const int& type, const QVariant& value);
+    virtual void updateDataHandler(const int& type, const QVariantList& value);
 
 
 public slots:
-    virtual void slotHandlerEvent(const int& propertyType, const int& touchType);
     virtual void slotConfigChanged(const int& type, const QVariant& value);
+    virtual void slotHandlerEvent(const int& type, const QVariant& value);
+
 
 private:
     AbstractHandler* mHandler = nullptr;

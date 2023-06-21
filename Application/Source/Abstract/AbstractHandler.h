@@ -29,27 +29,25 @@ public:
     QWidget* getScreen();
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
     int getTimerId(const int& timerType);
-    void registerProperty(const int& propertyType, const QVariant& value);
-    QVariant getProperty(const int& propertyType);
-    Q_INVOKABLE void setProperty(const int& propertyType, const QVariant& value);
+    void registerProperty(const int& type, const QVariant& value);
+    QVariant getProperty(const int& type);
+    Q_INVOKABLE void setProperty(const int& type, const QVariant& value);
+
 
 private:
     virtual void controlConnect(const bool& state = true);
     virtual void timerFunc(const int& timerId) = 0;
     virtual void initPropertyInfo() = 0;
 
+
 protected:
     void timerEvent(QTimerEvent *event);
 
 
 signals:
-    void signalUpdateDataModel(const int& dataType, const QVariant& value);
-    void signalHandlerEvent(const int& propertyType, const int& touchType);
-    void signalPropertyChanged(const int& dataType, const QVariant& value);
-
-private slots:
-    void slotUpdateDataModel(const int& propertyType, const QVariant& value);
-
+    void signalUpdateDataModel(const int& type, const QVariant& value);
+    void signalPropertyChanged(const int& type, const QVariant& value);
+    void signalHandlerEvent(const int& type, const QVariant& value);
 
 private:
     QWidget* mScreen = nullptr;

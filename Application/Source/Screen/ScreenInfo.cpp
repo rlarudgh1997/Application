@@ -50,7 +50,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
         }
      }
 
-    qDebug() << "Widget :" << mSubScreens[displayType];
+    qDebug() << "Widget :" << mSubScreens[displayType] << "\n\n";
     return mSubScreens[displayType];
 }
 

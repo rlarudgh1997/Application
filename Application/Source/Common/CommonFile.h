@@ -43,6 +43,7 @@ private:
         directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         fileList = directory.entryInfoList();
 
+        qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         qDebug() << "path :" << path << ", length :" << fileList.size();
         foreach(const QFileInfo& file, fileList) {
             qDebug() << "--------------------------------------------------------------------------------------------";
@@ -50,6 +51,7 @@ private:
             qDebug() << "File Path :" << file.filePath();
             // qDebug() << "File Created: " << file.created().toString();
         }
+        qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
         return fileList;
     }
 };

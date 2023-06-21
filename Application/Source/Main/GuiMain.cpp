@@ -1,66 +1,48 @@
 #include "GuiMain.h"
+#include "AbstractHandler.h"
+
 #include "CommonEnum.h"
 
 
-#if defined(USE_INTANCE_SINGLETON_GUI)
-QSharedPointer<GuiMain> GuiMain::instance(QWidget* parent) {
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QTableWidget>
+#include <QPushButton>
+
+
+QSharedPointer<GuiMain> GuiMain::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiMain> gGui;
-
     if (gGui.isNull()) {
-        gGui = QSharedPointer<GuiMain>(new GuiMain(parent));
+        gGui = QSharedPointer<GuiMain>(new GuiMain(handler));
     }
-
     return gGui;
 }
-#else
-GuiMain::GuiMain(QWidget* parent) : mGuiScreen(parent) {
-     qDebug() << "GuiMain::GuiMain :" << mGuiScreen;
+
+GuiMain::GuiMain(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
 }
 
-GuiMain::~GuiMain() {
-    delete mGuiScreen;
-}
-#endif
-
-void GuiMain::updateGuiScreen(QWidget* parent) {
-    mGuiScreen = parent;
-}
-
-void GuiMain::updateGuiProperty(const int& dataType, const QVariant& value) {
-    qDebug() << "GuiMain::updateGuiProperty :" << dataType << ", " << value;
-
-    switch (dataType) {
-        case PropertyTypeEnum::PropertyTypeDepth : {
-            if (value.toInt() == ScreenEnum::DisplayDepthMain) {
-                drawDisplayMain();
-            }
-            break;
-        }
-        default : {
-            break;
-        }
+bool GuiMain::createSignal(const int& type, const QVariant& value) {
+    if (mHandler) {
+        emit mHandler->signalHandlerEvent(type, value);
+        return true;
     }
-}
 
- #include <QMainWindow>
- #include <QMenu>
- #include <QMenuBar>
- #include <QToolBar>
- #include <QTableWidget>
- #include <QPushButton>
+    qDebug() << "Fail to create signal - handler :" << mHandler;
+    return false;
+}
 
 void GuiMain::drawDisplayMain() {
-#if 1
     QMainWindow* main = new QMainWindow();
 
-    main->setGeometry(mGuiScreen->geometry());
-    main->setParent(mGuiScreen);
-
+    main->setGeometry(mScreen->geometry());
+    main->setParent(mScreen);
 
     QMenu* menu = main->menuBar()->addMenu(QString("File"));
     QToolBar* toolBar = main->addToolBar(QString("File"));
 
-    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/images/new.png")), QString("New"), this);
+    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew", QIcon(":/images/new.png")), QString("New"), mScreen);
     if (actionNew) {
         actionNew->setShortcuts(QKeySequence::New);
         actionNew->setStatusTip(QString("Create a new file"));
@@ -106,7 +88,7 @@ void GuiMain::drawDisplayMain() {
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto seetTitle, seetTitles) {
         int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, mGuiScreen);
+        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, mScreen);
         mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
         tabWidget->addTab(mTableWidgets[index], seetTitle);
 
@@ -135,8 +117,8 @@ void GuiMain::drawDisplayMain() {
             qDebug() << "cellClicked : " << row << ", " << column;
         });
 
-        qDebug() << "Table[" << seetTitle << "] : " << mTableWidgets[index]->rowCount()
-                << ", " << mTableWidgets[index]->columnCount();
+        // qDebug() << "Table[" << seetTitle << "] : " << mTableWidgets[index]->rowCount()
+        //         << ", " << mTableWidgets[index]->columnCount();
 
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnTitles.size(); column++) {
@@ -151,7 +133,7 @@ void GuiMain::drawDisplayMain() {
 
 
 
-    QPushButton* button = new QPushButton(mGuiScreen);
+    QPushButton* button = new QPushButton(mScreen);
     button->setGeometry(300, 300, 300, 100);
     button->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
     button->setText("Button 2");
@@ -162,5 +144,26 @@ void GuiMain::drawDisplayMain() {
     button->setStyleSheet("color: rgb(50, 50, 100)");
 
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-#endif
 }
+
+
+
+void GuiMain::slotPropertyChanged(const int& type, const QVariant& value) {
+    // qDebug() << "GuiMain::slotPropertyChanged :" << type << ", " << value;
+
+    switch (type) {
+        case PropertyTypeEnum::PropertyTypeDepth : {
+            if (value == QVariant(ScreenEnum::DisplayDepthMain)) {
+                drawDisplayMain();
+            }
+            break;
+        }
+        default : {
+            break;
+        }
+    }
+
+    createSignal(type, value);
+}
+
+
