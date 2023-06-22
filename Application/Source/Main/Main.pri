@@ -2,6 +2,9 @@ INCLUDEPATH += \
     $$PWD\
 
 
+DEFINES += __MAIN_MODULE__
+
+
 HEADERS += \
     $$PWD/GuiMain.h\
     $$PWD/HandlerMain.h\

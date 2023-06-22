@@ -29,7 +29,7 @@ void AbstractHandler::controlConnect(const bool& state) {
 }
 
 QWidget* AbstractHandler::getScreen() {
-    qDebug() << "AbstractHandler::getScreen :" << mScreen << ", this :" << this;
+    // qDebug() << "AbstractHandler -> this :" << this << ", Screen :" << mScreen;
     return mScreen;
 }
 

@@ -16,9 +16,15 @@ public:
     void keyEvent(const int& inputType, const int& inputValue);
     void mouseEvent(const int& inputType, const int& inputValue);
     void createControl(const int& displayType);
+    void exitProgram();
 
 private:
     explicit ControlManager();
+
+
+signals:
+    void signalExitProgram();
+
 
 private:
     QMap<int, AbstractControl*> mControlInfo = QMap<int, AbstractControl*>();

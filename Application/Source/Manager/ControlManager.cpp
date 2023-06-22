@@ -57,3 +57,7 @@ void ControlManager::createControl(const int& displayType) {
     }
 }
 
+void ControlManager::exitProgram() {
+    emit signalExitProgram();
+}
+

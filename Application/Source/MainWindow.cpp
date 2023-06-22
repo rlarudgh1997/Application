@@ -23,12 +23,17 @@ MainWindow::MainWindow() {
     ScreenInfo::instance().data()->updateRootItem(this);
     ConfigSetting::instance();
 
-    FileInfo::isFileListInfo("");
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, [=]() {
+        QWidget::close();
+    });
 
-    ControlManager::instance();
+
+    // TEST CODE
+    FileInfo::isFileListInfo("");
 }
 
 MainWindow::~MainWindow() {
+    qDebug() << "\n\n[Complete] Exit Program !!!!!!!!";
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
@@ -64,6 +69,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+    if (true) {
+        closeEvent->accept();
+    } else {
+        closeEvent->ignore();
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent * resizeEvent) {

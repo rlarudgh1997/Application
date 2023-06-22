@@ -1,7 +1,13 @@
 #include "ControlMain.h"
 #include "HandlerMain.h"
+
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
+#include "ControlManager.h"
+
+#include <QApplication>
+#include <QMessageBox>
+#include <QFileDialog>
 
 
 QSharedPointer<ControlMain> ControlMain::instance() {
@@ -34,21 +40,25 @@ void ControlMain::initControl(const int& currentMode) {
 }
 
 void ControlMain::initDataCommon(const int& currentMode, const int& displayType) {
-    updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay,           displayType);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeMode,              currentMode);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeDepth,             ScreenEnum::DisplayDepthMain);
-
-    updateDataHandler(PropertyTypeEnum::PropertyTypeListTest1,         {0, 1, 2, 3, 4});
-    updateDataHandler(PropertyTypeEnum::PropertyTypeListTest2,         {"5", "6", "7", "8", "9"});
-
-    QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
-    QStringList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toStringList();
-    // qDebug() << "sheetName :" << sheetName;
-    // qDebug() << "contextName :" << contextName;
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthMain);
 }
 
 void ControlMain::initDataModule() {
     resetControl(false);
+
+    QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+    QStringList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toStringList();
+    QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeContextName, contextName);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
+
+    // qDebug() << "sheetName :" << getData(PropertyTypeEnum::PropertyTypeSheetName);
+    // qDebug() << "sheetName :" << getData(PropertyTypeEnum::PropertyTypeContextName);
+    // qDebug() << "DefaultPath :" << getData(PropertyTypeEnum::PropertyTypeDefaultPath);
 }
 
 void ControlMain::resetControl(const bool& reset) {
@@ -90,9 +100,84 @@ void ControlMain::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
 void ControlMain::slotHandlerEvent(const int& type, const QVariant& value) {
-    qDebug() << "ControlMain::slotHandlerEvent(" << type << ", " << value << ")";
-
     switch (type) {
+        case EventTypeEnum::PropertyTypeExitProgram : {
+            // QApplication::closeAllWindows();
+            ControlManager::instance().data()->exitProgram();
+            break;
+        }
+        case EventTypeEnum::PropertyTypeChangeDepth : {
+            QVariant changeDepth = (getData(PropertyTypeEnum::PropertyTypeDepth) == ScreenEnum::DisplayDepthMain) ?
+                                                            (ScreenEnum::DisplayDepthDepth1) : (ScreenEnum::DisplayDepthMain);
+            qDebug() << "Depth :"<< getData(PropertyTypeEnum::PropertyTypeDepth) << " ->" << changeDepth;
+            updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, changeDepth);
+            break;
+        }
+        case EventTypeEnum::PropertyTypeFileNew : {
+            qDebug() << "File - New";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeFileOpen : {
+            qDebug() << "File - Open";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeFileSave : {
+            qDebug() << "File - Save";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeFileSaveAs : {
+            qDebug() << "File - Save As";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeEditCut : {
+            qDebug() << "Edit - Cut";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeEditCopy : {
+            qDebug() << "Edit - Copy";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeEditPaste : {
+            qDebug() << "Edit - Paste";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeSettingDevPath : {
+            QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(isHandler()),
+                                            tr("Default Path"),
+                                            getData(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
+                                            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+            if (defaultPath.size() == 0) {
+                defaultPath = QApplication::applicationDirPath();
+            }
+
+            qDebug() << "Default Path :" << defaultPath;
+
+            updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
+            break;
+        }
+        case EventTypeEnum::PropertyTypeSettingTestReport : {
+            qDebug() << "Setting - Test Report";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeSettingTestResult : {
+            qDebug() << "Setting - Test Result";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeSettingTestCoverage : {
+            qDebug() << "Setting - Test Coverage";
+            break;
+        }
+        case EventTypeEnum::PropertyTypeHelpAbout : {
+            QMessageBox::about(qobject_cast<QWidget*>(isHandler()),
+                            tr("About Application"),
+                            tr("This <b>Application</b> is a program for <b>SFC Test</b> (Excel conversion, parsing, etc.)"));
+            break;
+        }
+        case EventTypeEnum::PropertyTypeHelpAboutQt : {
+            QApplication::aboutQt();
+            break;
+        }
         default : {
             break;
         }

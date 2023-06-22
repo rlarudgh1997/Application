@@ -24,11 +24,7 @@
 
 
 
-class ScreenEnum : public QObject {
-    Q_OBJECT
-    Q_ENUMS(DisplayType)
-    Q_ENUMS(DisplayDepth)
-
+class ScreenEnum {
 public:
     enum DisplayType {
         DisplayTypeInvalid             = 0x000000,
@@ -53,34 +49,13 @@ public:
         DisplayTypeAll                 = 0xFFFFFF,
     };
     enum DisplayDepth {
-        DisplayDepthInvalid = 0,
-        DisplayDepthMain,
+        DisplayDepthMain = 0,
         DisplayDepthDepth1,
         DisplayDepthDepth2,
     };
 };
 
-class PropertyTypeEnum : public QObject {
-    Q_OBJECT
-    Q_ENUMS(PropertyType)
-
-public:
-    enum PropertyType {
-        PropertyTypeDisplay = 0,
-        PropertyTypeMode,
-        PropertyTypeDepth,
-
-        PropertyTypeNormal = PROPETRY_START_NORMAL,
-        PropertyTypeListTest1,
-        PropertyTypeListTest2,
-    };
-};
-
-class KeyTypeEnum : public QObject {
-    Q_OBJECT
-    Q_ENUMS(KeyInputType)
-    Q_ENUMS(KeyInputValue)
-
+class KeyTypeEnum {
 public:
     enum KeyInputType {
         KeyInputTypeInvalid = 0,
@@ -106,6 +81,41 @@ public:
         KeyInputValueNumOK            = Qt::Key_Return,      // KeyInputValueOK
         KeyInputValueNumOK2           = Qt::Key_Alt,         // KeyInputValueOK
 #endif
+    };
+};
+
+class PropertyTypeEnum {
+public:
+    enum PropertyType {
+        PropertyTypeDisplay = 0,
+        PropertyTypeMode,
+        PropertyTypeDepth,
+
+        PropertyTypeNormal = PROPETRY_START_NORMAL,
+        PropertyTypeDefaultPath,
+        PropertyTypeSheetName,
+        PropertyTypeContextName,
+    };
+};
+
+class EventTypeEnum {
+public:
+    enum EventType {
+        PropertyTypeExitProgram = 0,
+        PropertyTypeChangeDepth,
+        PropertyTypeFileNew,
+        PropertyTypeFileOpen,
+        PropertyTypeFileSave,
+        PropertyTypeFileSaveAs,
+        PropertyTypeEditCut,
+        PropertyTypeEditCopy,
+        PropertyTypeEditPaste,
+        PropertyTypeSettingDevPath,
+        PropertyTypeSettingTestReport,
+        PropertyTypeSettingTestResult,
+        PropertyTypeSettingTestCoverage,
+        PropertyTypeHelpAbout,
+        PropertyTypeHelpAboutQt,
     };
 };
 

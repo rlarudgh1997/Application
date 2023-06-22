@@ -1,13 +1,12 @@
 #ifndef CONFIG_INFO_H
 #define CONFIG_INFO_H
 
+#include "CommonDefine.h"
+
+#include <QApplication>
 #include <QVariant>
 #include <QMap>
 
-#include "CommonDefine.h"
-
-
-#define DEFAULT_RADIO_FM 9430
 
 class ConfigInfo {
 public:
@@ -22,41 +21,48 @@ public:
         ConfigTypeContextName,
 
         ConfigTypeMax,
-    } eConfigType;
+    } ConfigType;
 
     typedef enum {
         ConfigGetTypeName = 0,
         ConfigGetTypeValue,
-    } eConfigGetType;
+    } ConfigGetType;
+
 
 public:
     ConfigInfo() {
         initConfigInfo();
     }
 
-    QVariant getConfigInfo(const eConfigType& configType, const eConfigGetType& getType) const {
+    QVariant getConfigInfo(const ConfigType& configType, const ConfigGetType& getType) const {
         return ((getType == ConfigGetTypeName) ? (QVariant(mConfigInfoData[configType].first))
                                                 : (QVariant(mConfigInfoData[configType].second)));
     }
 
+
 private:
     void initConfigInfo() {
-        QVariantList value = QVariantList();
-
         mConfigInfoData.clear();
 
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", false);
 
-        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", "/SFC");
-        value = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
-        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", value);
-        value = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
-                 "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
-        mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", value);
+        QString defaultPath = QString("%1%2").arg(QApplication::applicationDirPath()).arg("/SFC");
+        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", defaultPath);
+
+
+        QVariantList listValue = QVariantList();
+
+        listValue = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
+        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", listValue);
+
+        listValue = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
+                    "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
+        mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", listValue);
     }
 
+
 private:
-    QMap<eConfigType, QPair<QString, QVariant>> mConfigInfoData;
+    QMap<ConfigType, QPair<QString, QVariant>> mConfigInfoData;
 };
 
 #endif    // CONFIG_INFO_H

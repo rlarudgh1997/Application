@@ -82,7 +82,7 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 
 void ConfigSetting::readConfig() {
     for (int configType = ConfigInfo::ConfigTypeInvalid+1; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
+        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
 
         if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
@@ -102,7 +102,7 @@ void ConfigSetting::writeConfig() {
     mMutex.lock();
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
         if (mConfigData[configType] != mConfigTemp[configType]) {
-            QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
+            QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
             if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
@@ -125,7 +125,7 @@ void ConfigSetting::writeConfig() {
 
 void ConfigSetting::resetConfig() {
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QVariant configValue = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::eConfigType>(configType),
+        QVariant configValue = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeValue);
         mMutex.lock();
         mConfigData[configType] = configValue;
