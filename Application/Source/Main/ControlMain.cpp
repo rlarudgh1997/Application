@@ -34,18 +34,18 @@ void ControlMain::initControl(const int& currentMode) {
         isHandler()->init();
 
         controlConnect(true);
-        initDataModule();
-        initDataCommon(currentMode, ScreenEnum::DisplayTypeMain);
+        initBaseData();
+        initCommonData(currentMode, ScreenEnum::DisplayTypeMain);
     }
 }
 
-void ControlMain::initDataCommon(const int& currentMode, const int& displayType) {
+void ControlMain::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
 }
 
-void ControlMain::initDataModule() {
+void ControlMain::initBaseData() {
     resetControl(false);
 
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();

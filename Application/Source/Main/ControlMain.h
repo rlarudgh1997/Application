@@ -23,8 +23,8 @@ protected:
     virtual AbstractHandler* isHandler();
     virtual void initControl(const int& currentMode);
     virtual void controlConnect(const bool& state = true);
-    virtual void initDataCommon(const int& currentMode, const int& displayType);
-    virtual void initDataModule();
+    virtual void initCommonData(const int& currentMode, const int& displayType);
+    virtual void initBaseData();
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
     virtual void updateDataHandler(const int& type, const QVariant& value);
