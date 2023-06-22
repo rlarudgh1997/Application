@@ -48,8 +48,15 @@ void GuiMain::drawDisplayMain() {
     }
 
     // =================================================================================================================
-    // Depth Change
+    // ETC Info
     // =================================================================================================================
+    QLineEdit* defaultPath = new QLineEdit(mScreen);
+    defaultPath->setGeometry(QRect(500, 25, 550, 30));
+    defaultPath->setAlignment(Qt::AlignCenter);
+    defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
+    defaultPath->setDisabled(true);
+    defaultPath->show();
+
     QPushButton* depthChange = new QPushButton(mScreen);
     depthChange->setGeometry(1150, 25, 100, 30);
     depthChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
@@ -118,7 +125,7 @@ void GuiMain::drawDisplayMain() {
             actionSaveAs->setShortcuts(QKeySequence::SaveAs);
             actionSaveAs->setStatusTip(QString("Save the document under a new name"));
             mMenu[MainType::File]->addAction(actionSaveAs);
-            mToolBar[MainType::File]->addAction(actionSaveAs);
+            // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
                 createSignal(EventTypeEnum::PropertyTypeFileSaveAs, 0);
             });
@@ -380,7 +387,7 @@ void GuiMain::drawDisplayDepth2() {
 void GuiMain::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case PropertyTypeEnum::PropertyTypeDepth : {
-            if (value == QVariant(ScreenEnum::DisplayDepthMain)) {
+            if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
                 drawDisplayMain();
             } else if (value == QVariant(ScreenEnum::DisplayDepthDepth1)) {
                 drawDisplayDepth1();
@@ -388,27 +395,6 @@ void GuiMain::slotPropertyChanged(const int& type, const QVariant& value) {
                 drawDisplayDepth1();
             } else {
             }
-            break;
-        }
-        case PropertyTypeEnum::PropertyTypeDefaultPath : {
-            QString defaultPathString = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString();
-            QLineEdit* defaultPath = new QLineEdit(mScreen);
-            defaultPath->setGeometry(QRect(500, 25, 550, 30));
-            defaultPath->setAlignment(Qt::AlignCenter);
-            defaultPath->setText(QString("Path=%1").arg(defaultPathString));
-            defaultPath->setDisabled(true);
-            defaultPath->show();
-
-//            defaultPath->setProperty("geometry", QRect(500, 25, 550, 30));
-//            defaultPath->setProperty("alignment", Qt::AlignCenter);
-//            defaultPath->setProperty("enabled", false);
-//            defaultPath->setProperty("text", QString("Path=%1").arg(defaultPathString));
-//            defaultPath->setProperty("visible", true);
-//            SET_PROPERTY(defaultPath, "geometry", QRect(500, 25, 550, 30));
-//            SET_PROPERTY(defaultPath, "alignment", Qt::AlignCenter);
-//            SET_PROPERTY(defaultPath, "enabled", false);
-//            SET_PROPERTY(defaultPath, "text", QString("Path=%1").arg(defaultPathString));
-//            SET_PROPERTY(defaultPath, "visible", true);
             break;
         }
         default : {

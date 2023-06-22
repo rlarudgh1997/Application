@@ -34,15 +34,15 @@ void ControlMain::initControl(const int& currentMode) {
         isHandler()->init();
 
         controlConnect(true);
-        initDataCommon(currentMode, ScreenEnum::DisplayTypeMain);
         initDataModule();
+        initDataCommon(currentMode, ScreenEnum::DisplayTypeMain);
     }
 }
 
 void ControlMain::initDataCommon(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthMain);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
 }
 
 void ControlMain::initDataModule() {
@@ -107,8 +107,8 @@ void ControlMain::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::PropertyTypeChangeDepth : {
-            QVariant changeDepth = (getData(PropertyTypeEnum::PropertyTypeDepth) == ScreenEnum::DisplayDepthMain) ?
-                                                            (ScreenEnum::DisplayDepthDepth1) : (ScreenEnum::DisplayDepthMain);
+            QVariant changeDepth = (getData(PropertyTypeEnum::PropertyTypeDepth) == ScreenEnum::DisplayDepthDepth0) ?
+                                                            (ScreenEnum::DisplayDepthDepth1) : (ScreenEnum::DisplayDepthDepth0);
             qDebug() << "Depth :"<< getData(PropertyTypeEnum::PropertyTypeDepth) << " ->" << changeDepth;
             updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, changeDepth);
             break;

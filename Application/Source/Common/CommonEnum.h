@@ -49,7 +49,7 @@ public:
         DisplayTypeAll                 = 0xFFFFFF,
     };
     enum DisplayDepth {
-        DisplayDepthMain = 0,
+        DisplayDepthDepth0 = 0,
         DisplayDepthDepth1,
         DisplayDepthDepth2,
     };
