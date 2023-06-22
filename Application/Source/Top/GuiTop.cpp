@@ -1,8 +1,7 @@
-#include "GuiMain.h"
+#include "GuiTop.h"
 #include "AbstractHandler.h"
 
 #include "CommonEnum.h"
-//#include "CommonUtil.h"
 
 
 #include <QToolBar>
@@ -12,24 +11,24 @@
 #include <QLineEdit>
 
 
-QSharedPointer<GuiMain> GuiMain::instance(AbstractHandler* handler) {
-    static QSharedPointer<GuiMain> gGui;
+QSharedPointer<GuiTop> GuiTop::instance(AbstractHandler* handler) {
+    static QSharedPointer<GuiTop> gGui;
     if (gGui.isNull()) {
-        gGui = QSharedPointer<GuiMain>(new GuiMain(handler));
+        gGui = QSharedPointer<GuiTop>(new GuiTop(handler));
     }
     return gGui;
 }
 
-GuiMain::GuiMain(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
+GuiTop::GuiTop(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
     mMainWindow = new QMainWindow();
     mMainWindow->setGeometry(mScreen->geometry());
     mMainWindow->setParent(mScreen);
-    mTabWidget = new QTabWidget();
-    mMainWindow->setCentralWidget(mTabWidget);
+    // mTabWidget = new QTabWidget();
+    // mMainWindow->setCentralWidget(mTabWidget);
     mMainWindow->show();
 }
 
-bool GuiMain::createSignal(const int& type, const QVariant& value) {
+bool GuiTop::createSignal(const int& type, const QVariant& value) {
     if (mHandler) {
         emit mHandler->signalHandlerEvent(type, value);
         return true;
@@ -39,11 +38,10 @@ bool GuiMain::createSignal(const int& type, const QVariant& value) {
     return false;
 }
 
-void GuiMain::drawDisplayMain() {
-    mMainWindow->centralWidget()->hide();
-
+void GuiTop::drawDisplayDepth0() {
+    // mMainWindow->centralWidget()->hide();
     if ((mMenu.size() > 0) && (mToolBar.size() > 0)) {
-        qDebug() << "Skip - drawDisplayMain";
+        qDebug() << "Skip - drawDisplayDepth0";
         return;
     }
 
@@ -57,15 +55,15 @@ void GuiMain::drawDisplayMain() {
     defaultPath->setDisabled(true);
     defaultPath->show();
 
-    QPushButton* depthChange = new QPushButton(mScreen);
-    depthChange->setGeometry(1150, 25, 100, 30);
-    depthChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-    depthChange->setText("Change Depth");
-    depthChange->setStyleSheet("color: rgb(50, 50, 100)");
-    depthChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    depthChange->show();
-    connect(depthChange, &QPushButton::clicked, [=]() {
-        createSignal(EventTypeEnum::PropertyTypeChangeDepth, 0);
+    QPushButton* dispalyChange = new QPushButton(mScreen);
+    dispalyChange->setGeometry(1100, 25, 150, 30);
+    dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+    dispalyChange->setText("Center - Show/Hide");
+    dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
+    dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    dispalyChange->show();
+    connect(dispalyChange, &QPushButton::clicked, [=]() {
+        createSignal(EventTypeEnum::PropertyTypeDisplayChange, 0);
     });
 
 
@@ -308,91 +306,21 @@ void GuiMain::drawDisplayMain() {
     }
 }
 
-void GuiMain::drawDisplayDepth1() {
-    mMainWindow->centralWidget()->show();
-
-    QStringList columnTitles = QStringList();
-    columnTitles.push_back("TCName");
-    columnTitles.push_back("VehicleType");
-    columnTitles.push_back("Result");
-    columnTitles.push_back("Case");
-    columnTitles.push_back("Input_Signal");
-    columnTitles.push_back("Input_Data");
-    columnTitles.push_back("Output_Signal");
-    columnTitles.push_back("isInitialize");
-    columnTitles.push_back("Output_Value");
-    columnTitles.push_back("Config_Signal");
-    columnTitles.push_back("Data");
-    columnTitles.push_back("Negative");
-    columnTitles.push_back("Test");
-
-    QStringList seetTitles = QStringList();
-    seetTitles.push_back("Privates");
-    seetTitles.push_back("Telltales");
-    seetTitles.push_back("Constants");
-    seetTitles.push_back("Events");
-    seetTitles.push_back("Sounds");
-    seetTitles.push_back("Inters");
-    seetTitles.push_back("Outputs");
-
-    int rowCount = 5;
-    QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
-    foreach(auto seetTitle, seetTitles) {
-        int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, mScreen);
-        mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
-        mTabWidget->addTab(mTableWidgets[index], seetTitle);
-
-        mTableWidgets[index]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-
-        connect(mTableWidgets[index], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
-            qDebug() << "customContextMenuRequested : " << pos;
-        });
-        connect(mTableWidgets[index], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-            qDebug() << "itemPressed : " << item;
-        });
-        connect(mTableWidgets[index], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << "itemClicked : " << item;
-        });
-        connect(mTableWidgets[index], &QTableWidget::currentItemChanged,
-                                    [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-            qDebug() << "currentItemChanged : " << previous << " -> " << current;
-        });
-        connect(mTableWidgets[index], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << "itemSelectionChanged";
-        });
-        connect(mTableWidgets[index], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-            qDebug() << "cellPressed : " << row << ", " << column;
-        });
-        connect(mTableWidgets[index], &QTableWidget::cellClicked, [=](int row, int column) {
-            qDebug() << "cellClicked : " << row << ", " << column;
-        });
-
-        // qDebug() << "Table[" << seetTitle << "] : " << mTableWidgets[index]->rowCount()
-        //         << ", " << mTableWidgets[index]->columnCount();
-
-        for (int row = 0; row < rowCount; row++) {
-            for (int column = 0; column < columnTitles.size(); column++) {
-                QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1[%2, %3]").arg(seetTitle).arg(row+1).arg(column+1));
-                newItem->setTextAlignment(Qt::AlignCenter);
-                mTableWidgets[index]->setItem(row, column, newItem);
-            }
-        }
-    }
+void GuiTop::drawDisplayDepth1() {
 }
 
-void GuiMain::drawDisplayDepth2() {
+void GuiTop::drawDisplayDepth2() {
 }
 
-void GuiMain::slotPropertyChanged(const int& type, const QVariant& value) {
+void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case PropertyTypeEnum::PropertyTypeDepth : {
             if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
-                drawDisplayMain();
+                drawDisplayDepth0();
             } else if (value == QVariant(ScreenEnum::DisplayDepthDepth1)) {
                 drawDisplayDepth1();
-            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth1)) {
-                drawDisplayDepth1();
+            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth2)) {
+                drawDisplayDepth2();
             } else {
             }
             break;

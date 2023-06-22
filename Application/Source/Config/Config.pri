@@ -2,6 +2,9 @@ INCLUDEPATH += \
     $$PWD\
 
 
+DEFINES += __CONFIG_SETTING__
+
+
 HEADERS += \
     $$PWD/ConfigInfo.h\
 #    $$PWD/AbstractConfig.h\

@@ -1,116 +1,106 @@
-#include "ControlMain.h"
-#include "HandlerMain.h"
+#include "ControlTop.h"
+#include "HandlerTop.h"
 
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
 #include "ControlManager.h"
 
-#include <QApplication>
 #include <QMessageBox>
 #include <QFileDialog>
 
 
-QSharedPointer<ControlMain> ControlMain::instance() {
-    static QSharedPointer<ControlMain> gControl;
+QSharedPointer<ControlTop> ControlTop::instance() {
+    static QSharedPointer<ControlTop> gControl;
     if (gControl.isNull()) {
-        gControl = QSharedPointer<ControlMain>(new ControlMain());
+        gControl = QSharedPointer<ControlTop>(new ControlTop());
     }
     return gControl;
 }
 
-ControlMain::ControlMain() {
+ControlTop::ControlTop() {
     isHandler();
 }
 
-AbstractHandler* ControlMain::isHandler() {
+AbstractHandler* ControlTop::isHandler() {
     if (mHandler == nullptr) {
-        mHandler = static_cast<AbstractHandler*>(HandlerMain::instance().data());
+        mHandler = static_cast<AbstractHandler*>(HandlerTop::instance().data());
     }
     return mHandler;
 }
 
-void ControlMain::initControl(const int& currentMode) {
+void ControlTop::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
 
         controlConnect(true);
         initBaseData();
-        initCommonData(currentMode, ScreenEnum::DisplayTypeMain);
+        initCommonData(currentMode, ScreenEnum::DisplayTypeTop);
     }
 }
 
-void ControlMain::initCommonData(const int& currentMode, const int& displayType) {
+void ControlTop::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
 }
 
-void ControlMain::initBaseData() {
+void ControlTop::initBaseData() {
     resetControl(false);
 
-    QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
-    QStringList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toStringList();
-    QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-
-    updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeContextName, contextName);
+    QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-
-    // qDebug() << "sheetName :" << getData(PropertyTypeEnum::PropertyTypeSheetName);
-    // qDebug() << "sheetName :" << getData(PropertyTypeEnum::PropertyTypeContextName);
-    // qDebug() << "DefaultPath :" << getData(PropertyTypeEnum::PropertyTypeDefaultPath);
 }
 
-void ControlMain::resetControl(const bool& reset) {
+void ControlTop::resetControl(const bool& reset) {
     Q_UNUSED(reset)
 }
 
-void ControlMain::controlConnect(const bool& state) {
+void ControlTop::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerMain::signalHandlerEvent,
-                this,        &ControlMain::slotHandlerEvent,
+        connect(isHandler(), &HandlerTop::signalHandlerEvent,
+                this,        &ControlTop::slotHandlerEvent,
                 Qt::UniqueConnection);
+        // connect(ControlManager::instance().data(), &ControlManager::signalDisplayChange, [=](const int& displayType) {
+        //     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
+        // });
     } else {
         disconnect(isHandler());
+        disconnect(ControlManager::instance().data());
     }
 }
 
-void ControlMain::timerFunc(const int& timerId) {
+void ControlTop::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
 }
 
-void ControlMain::keyEvent(const int& inputType, const int& inputValue) {
+void ControlTop::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
 }
 
-void ControlMain::updateDataHandler(const int& type, const QVariant& value) {
+void ControlTop::updateDataHandler(const int& type, const QVariant& value) {
     if (setData(type, value)) {
         emit isHandler()->signalUpdateDataModel(type, value);
     }
 }
 
-void ControlMain::updateDataHandler(const int& type, const QVariantList& value) {
+void ControlTop::updateDataHandler(const int& type, const QVariantList& value) {
     if (setData(type, value)) {
         emit isHandler()->signalUpdateDataModel(type, getData(type));
     }
 }
 
-void ControlMain::slotConfigChanged(const int& type, const QVariant& value) {
+void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
-void ControlMain::slotHandlerEvent(const int& type, const QVariant& value) {
+void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case EventTypeEnum::PropertyTypeExitProgram : {
-            // QApplication::closeAllWindows();
             ControlManager::instance().data()->exitProgram();
             break;
         }
-        case EventTypeEnum::PropertyTypeChangeDepth : {
-            QVariant changeDepth = (getData(PropertyTypeEnum::PropertyTypeDepth) == ScreenEnum::DisplayDepthDepth0) ?
-                                                            (ScreenEnum::DisplayDepthDepth1) : (ScreenEnum::DisplayDepthDepth0);
-            qDebug() << "Depth :"<< getData(PropertyTypeEnum::PropertyTypeDepth) << " ->" << changeDepth;
-            updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, changeDepth);
+        case EventTypeEnum::PropertyTypeDisplayChange : {
+            ControlManager::instance().data()->changeDisplay(ScreenEnum::DisplayTypeCenter);
             break;
         }
         case EventTypeEnum::PropertyTypeFileNew : {
@@ -149,9 +139,6 @@ void ControlMain::slotHandlerEvent(const int& type, const QVariant& value) {
             if (defaultPath.size() == 0) {
                 defaultPath = QApplication::applicationDirPath();
             }
-
-            qDebug() << "Default Path :" << defaultPath;
-
             updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
             break;

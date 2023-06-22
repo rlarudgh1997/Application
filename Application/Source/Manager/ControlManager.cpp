@@ -3,7 +3,8 @@
 #include "CommonEnum.h"
 
 #include "ScreenInfo.h"
-#include "ControlMain.h"
+#include "ControlTop.h"
+#include "ControlCenter.h"
 
 
 QSharedPointer<ControlManager> ControlManager::instance() {
@@ -17,7 +18,7 @@ QSharedPointer<ControlManager> ControlManager::instance() {
 }
 
 ControlManager::ControlManager() {
-    createControl(ScreenEnum::DisplayTypeMain);
+    createControl(ScreenEnum::DisplayTypeTop);
 }
 
 void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
@@ -30,7 +31,7 @@ void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
 #endif
 
 #if defined(USE_KEY_EVENT)
-    int displayType = ScreenEnum::DisplayTypeMain;  // getCurrentMode();
+    int displayType = getCurrentMode();
     if (mControlInfo[displayType]) {
         mControlInfo[displayType]->keyEvent(inputType, inputValue);
     }
@@ -42,22 +43,52 @@ void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
 
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType]) {
-        // nothing to do
+        qDebug() << "ControlManager::createControl -> Skip !!!!!!";
     } else {
         switch (displayType) {
-            case ScreenEnum::DisplayTypeMain : {
-                ControlMain::instance().data()->init(displayType);
-                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlMain::instance().data());
+            case ScreenEnum::DisplayTypeTop : {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTop::instance().data());
+                break;
+            }
+            case ScreenEnum::DisplayTypeCenter : {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlCenter::instance().data());
                 break;
             }
             default : {
                 break;
             }
         }
+
+        if (mControlInfo[displayType]) {
+            qDebug() << "ControlManager::createControl : " << displayType;
+            mCurrentMode = displayType;
+            mControlInfo[displayType]->init(displayType);
+        }
     }
+}
+
+int ControlManager::getCurrentMode() {
+    return mCurrentMode;
 }
 
 void ControlManager::exitProgram() {
     emit signalExitProgram();
 }
+
+void ControlManager::changeDisplay(const int& displayType) {
+    if (mControlInfo[displayType]) {
+        createControl(displayType);
+    }
+    emit signalDisplayChange(displayType);
+}
+
+
+
+
+
+
+
+
+
+
 

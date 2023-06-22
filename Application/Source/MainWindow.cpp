@@ -23,17 +23,22 @@ MainWindow::MainWindow() {
     ScreenInfo::instance().data()->updateRootItem(this);
     ConfigSetting::instance();
 
+#if 1
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);
+#else
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, [=]() {
-        QWidget::close();
+        // QWidget::close();
+        // QApplication::closeAllWindows();
+        QApplication::quit();
     });
-
+#endif
 
     // TEST CODE
     FileInfo::isFileListInfo("");
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << "\n\n[Complete] Exit Program !!!!!!!!";
+    qDebug() << "\n\n[Complete] Exit Application !!!!!!!! \n\n";
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {

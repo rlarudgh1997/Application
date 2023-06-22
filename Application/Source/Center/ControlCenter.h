@@ -1,5 +1,5 @@
-#ifndef CONTROL_MAIN_H
-#define CONTROL_MAIN_H
+#ifndef CONTROL_CENTER_H
+#define CONTROL_CENTER_H
 
 
 
@@ -8,16 +8,16 @@
 
 
 
-class ControlMain : public AbstractControl {
+class ControlCenter : public AbstractControl {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlMain> instance();
+    static QSharedPointer<ControlCenter> instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
 
 
 private:
-    explicit ControlMain();
+    explicit ControlCenter();
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -41,4 +41,4 @@ private:
 };
 
 
-#endif    // CONTROL_MAIN_H
+#endif    // CONTROL_CENTER_H

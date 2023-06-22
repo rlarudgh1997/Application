@@ -1,5 +1,5 @@
-#ifndef GUI_MAIN_H
-#define GUI_MAIN_H
+#ifndef GUI_CENTER_H
+#define GUI_CENTER_H
 
 #include <QWidget>
 #include <QMainWindow>
@@ -11,7 +11,7 @@
 class AbstractHandler;
 
 
-class GuiMain : public QWidget {
+class GuiCenter : public QWidget {
 private:
     enum class MainType {
         File = 0,
@@ -22,13 +22,13 @@ private:
     };
 
 public:
-    static QSharedPointer<GuiMain> instance(AbstractHandler* handler = nullptr);
+    static QSharedPointer<GuiCenter> instance(AbstractHandler* handler = nullptr);
 
 
 private:
-    explicit GuiMain(AbstractHandler* handler = nullptr);
+    explicit GuiCenter(AbstractHandler* handler = nullptr);
     bool createSignal(const int& type, const QVariant& value);
-    void drawDisplayMain();
+    void drawDisplayDepth0();
     void drawDisplayDepth1();
     void drawDisplayDepth2();
 
@@ -46,4 +46,4 @@ private:
     QMap<MainType, QToolBar*> mToolBar = QMap<MainType, QToolBar*>();
 };
 
-#endif    // GUI_MAIN_H
+#endif    // GUI_CENTER_H

@@ -16,7 +16,10 @@ public:
     void keyEvent(const int& inputType, const int& inputValue);
     void mouseEvent(const int& inputType, const int& inputValue);
     void createControl(const int& displayType);
+    int getCurrentMode();
     void exitProgram();
+    void changeDisplay(const int& displayType);
+
 
 private:
     explicit ControlManager();
@@ -24,10 +27,12 @@ private:
 
 signals:
     void signalExitProgram();
+    void signalDisplayChange(const int& displayType);
 
 
 private:
     QMap<int, AbstractControl*> mControlInfo = QMap<int, AbstractControl*>();
+    int mCurrentMode = 0;
 };
 
 

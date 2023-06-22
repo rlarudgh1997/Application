@@ -28,22 +28,12 @@ class ScreenEnum {
 public:
     enum DisplayType {
         DisplayTypeInvalid             = 0x000000,
-        DisplayTypeMain                = 0x000001,
-        DisplayTypeRadio               = 0x000002,
-        DisplayTypePhone               = 0x000004,
-        DisplayTypeMedia               = 0x000008,
-        DisplayTypeCamera              = 0x000010,
-        DisplayTypeTractor             = 0x000020,
-        DisplayTypeAutonomousDriving   = 0x000040,
-        DisplayTypeSetup               = 0x000080,
-        DisplayTypeContent             = 0x000100,
+        DisplayTypeTop                 = 0x000001,
+        DisplayTypeCenter              = 0x000002,
+        DisplayTypeBottom              = 0x000004,
+        DisplayTypeLeft                = 0x000008,
+        DisplayTypeRight               = 0x000010,
 
-        DisplayTypeModeMax             = 0x100000,
-        DisplayTypeTop                 = DisplayTypeModeMax,
-#if defined(USE_SHORTCUTS)
-        DisplayTypeShortcuts           = 0x200000,
-#endif
-        DisplayTypeToastPopup          = 0x400000,
         DisplayTypePopup               = 0x800000,
 
         DisplayTypeAll                 = 0xFFFFFF,
@@ -102,7 +92,9 @@ class EventTypeEnum {
 public:
     enum EventType {
         PropertyTypeExitProgram = 0,
-        PropertyTypeChangeDepth,
+        PropertyTypeDisplayChange,
+
+        PropertyTypeTopStart = 1000,
         PropertyTypeFileNew,
         PropertyTypeFileOpen,
         PropertyTypeFileSave,
@@ -116,6 +108,9 @@ public:
         PropertyTypeSettingTestCoverage,
         PropertyTypeHelpAbout,
         PropertyTypeHelpAboutQt,
+
+        PropertyTypeCenterStart = 2000,
+        PropertyTypeItemChange,
     };
 };
 

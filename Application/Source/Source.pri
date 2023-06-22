@@ -3,7 +3,8 @@ include($$PWD/Common/Common.pri)
 include($$PWD/Screen/Screen.pri)
 include($$PWD/Config/Config.pri)
 include($$PWD/Manager/Manager.pri)
-include($$PWD/Main/Main.pri)
+include($$PWD/Top/Top.pri)
+include($$PWD/Center/Center.pri)
 
 
 INCLUDEPATH+=\

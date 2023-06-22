@@ -17,7 +17,7 @@ public:
         AbstractTimerStart,
     };
     enum {
-        AbstractdrawDisplayMain = 0,
+        AbstractdrawDisplayDepth0 = 0,
         AbstractdrawDisplayDepth1,
         AbstractdrawDisplayDepth2,
     };
