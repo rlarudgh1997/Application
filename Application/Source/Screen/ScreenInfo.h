@@ -21,8 +21,8 @@ public:
 public:
     static QSharedPointer<ScreenInfo> instance();
     void updateRootItem(QWidget *rootItem);
-    void controlDisplay(const int& displayType, const bool& show);
     QWidget* drawScreen(const int& displayType, const QString& objectName = QString(), const bool& show = true);
+    void controlScreen(const int& displayType, const bool& show);
     Q_INVOKABLE void captureScreen(const QRect& rect = QRect());
     bool updateLanguage(const int& changeLanguage, QString languageFileName = QString());
     Q_INVOKABLE void loadComplete(const int& displayType);

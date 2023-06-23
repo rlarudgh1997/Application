@@ -41,6 +41,7 @@ void ControlTop::initControl(const int& currentMode) {
 void ControlTop::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
 }
 
@@ -60,9 +61,12 @@ void ControlTop::controlConnect(const bool& state) {
         connect(isHandler(), &HandlerTop::signalHandlerEvent,
                 this,        &ControlTop::slotHandlerEvent,
                 Qt::UniqueConnection);
-        // connect(ControlManager::instance().data(), &ControlManager::signalDisplayChange, [=](const int& displayType) {
-        //     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
-        // });
+
+        qDebug() << "controlConnect :" << state;
+        connect(ControlManager::instance().data(), &ControlManager::signalDisplayChanged, [=](const int& displayType) {
+            qDebug() << "signalDisplayChanged :" << displayType;
+            updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
+        });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -100,7 +104,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::PropertyTypeDisplayChange : {
-            ControlManager::instance().data()->changeDisplay(ScreenEnum::DisplayTypeCenter);
+            ControlManager::instance().data()->requestDisplayChange(ScreenEnum::DisplayTypeCenter);
             break;
         }
         case EventTypeEnum::PropertyTypeFileNew : {

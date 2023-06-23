@@ -21,10 +21,12 @@ MainWindow::MainWindow() {
     this->show();
 
     ScreenInfo::instance().data()->updateRootItem(this);
-    ConfigSetting::instance();
+    ConfigSetting::instance().data();
+    ControlManager::instance().data()->requestDisplayChange(ScreenEnum::DisplayTypeTop);
 
 #if 1
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);
+    // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QWidget::close);
 #else
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, [=]() {
         // QWidget::close();
@@ -74,6 +76,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+    // qDebug() << "MainWindow::closeEvent()\n\n";
     if (true) {
         closeEvent->accept();
     } else {

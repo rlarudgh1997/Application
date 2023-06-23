@@ -23,6 +23,7 @@ HandlerTop::HandlerTop() : AbstractHandler(ScreenEnum::DisplayTypeTop, QString("
 void HandlerTop::initPropertyInfo() {
     registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                   QVariant(-1));
     registerProperty(PropertyTypeEnum::PropertyTypeMode,                      QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeVisible,                   QVariant(false));
     registerProperty(PropertyTypeEnum::PropertyTypeDepth,                     QVariant(-1));
 }
 

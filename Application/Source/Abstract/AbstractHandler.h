@@ -24,7 +24,7 @@ public:
 
 
 public:
-    AbstractHandler(const int& displayType, const QString& objcetName, const bool& show);
+    explicit AbstractHandler(const int& displayType, const QString& objcetName, const bool& show);
     bool init();
     QWidget* getScreen();
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);

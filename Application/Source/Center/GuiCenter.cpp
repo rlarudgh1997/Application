@@ -20,15 +20,36 @@ QSharedPointer<GuiCenter> GuiCenter::instance(AbstractHandler* handler) {
     return gGui;
 }
 
-GuiCenter::GuiCenter(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
-    mMainWindow = new QMainWindow();
-    QRect rect = mScreen->geometry();
-    rect.setY(60);
-    mMainWindow->setGeometry(rect);
-    mMainWindow->setParent(mScreen);
-    mTabWidget = new QTabWidget();
-    mMainWindow->setCentralWidget(mTabWidget);
-    mMainWindow->show();
+GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
+    mItem = QSharedPointer<QMap<ItemType, QWidget*>>::create(QMap<ItemType, QWidget*>{
+                {ItemType::Screen, qobject_cast<QWidget*>(handler->getScreen())},
+                {ItemType::MainWindow, qobject_cast<QWidget*>(new QMainWindow())},
+                {ItemType::TabeWidget, qobject_cast<QWidget*>(new QTabWidget())},
+            });
+
+    qDebug() << "temp :" << Q_CAST(QWidget(), handler->getScreen()) << ", " << Q_CAST(QWidget(), isItem(ItemType::MainWindow));
+
+    int marginHeight = 60;
+    QRect rect = isItem(ItemType::Screen)->geometry();
+    rect.setY(marginHeight);
+    rect.setHeight(rect.height()-marginHeight);
+    isItem(ItemType::MainWindow)->setGeometry(rect);
+    isItem(ItemType::MainWindow)->setParent(isItem(ItemType::Screen));
+//    qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->setCentralWidget(isItem(ItemType::TabeWidget));
+    Q_CAST(QMainWindow(), isItem(ItemType::MainWindow))->setCentralWidget(isItem(ItemType::TabeWidget));
+    isItem(ItemType::MainWindow)->show();
+}
+
+AbstractHandler* GuiCenter::isHandler() {
+    return mHandler;
+}
+
+QWidget* GuiCenter::isItem(const int& type) {
+    if (static_cast<int>(type) < mItem.data()->size()) {
+        return mItem.data()->value(static_cast<ItemType>(type));
+    }
+    qDebug() << "Fail to item is nullptr - type :" << static_cast<int>(type) << ", size :" << mItem.data()->size();
+    return nullptr;
 }
 
 bool GuiCenter::createSignal(const int& type, const QVariant& value) {
@@ -36,13 +57,19 @@ bool GuiCenter::createSignal(const int& type, const QVariant& value) {
         emit mHandler->signalHandlerEvent(type, value);
         return true;
     }
-
-    qDebug() << "Fail to create signal - handler :" << mHandler;
+    qDebug() << "Fail to create signal - handler is nullptr";
     return false;
 }
 
+void GuiCenter::drawDisplay(const int& depth) {
+}
+
 void GuiCenter::drawDisplayDepth0() {
-    mMainWindow->centralWidget()->show();
+    if (mHandler->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->show();
+    } else {
+        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->hide();
+    }
 
     QStringList columnTitles = mHandler->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
     QStringList seetTitles = mHandler->getProperty(PropertyTypeEnum::PropertyTypeContextName).toStringList();
@@ -50,9 +77,9 @@ void GuiCenter::drawDisplayDepth0() {
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto seetTitle, seetTitles) {
         int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, mScreen);
+        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, isItem(ItemType::Screen));
         mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
-        mTabWidget->addTab(mTableWidgets[index], seetTitle);
+        qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[index], seetTitle);
 
         mTableWidgets[index]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
@@ -97,6 +124,9 @@ void GuiCenter::drawDisplayDepth2() {
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
+        case PropertyTypeEnum::PropertyTypeVisible : {
+            break;
+        }
         case PropertyTypeEnum::PropertyTypeDepth : {
             if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
                 drawDisplayDepth0();

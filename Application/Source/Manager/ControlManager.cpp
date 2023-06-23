@@ -9,16 +9,14 @@
 
 QSharedPointer<ControlManager> ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
-
     if (gControl.isNull()) {
         gControl = QSharedPointer<ControlManager>(new ControlManager());
     }
-
     return gControl;
 }
 
 ControlManager::ControlManager() {
-    createControl(ScreenEnum::DisplayTypeTop);
+    qDebug() << "ControlManager";
 }
 
 void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
@@ -42,9 +40,7 @@ void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
 }
 
 void ControlManager::createControl(const int& displayType) {
-    if (mControlInfo[displayType]) {
-        qDebug() << "ControlManager::createControl -> Skip !!!!!!";
-    } else {
+    if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
             case ScreenEnum::DisplayTypeTop : {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTop::instance().data());
@@ -67,19 +63,20 @@ void ControlManager::createControl(const int& displayType) {
     }
 }
 
+void ControlManager::requestDisplayChange(const int& displayType) {
+    qDebug() << "ControlManager::requestDisplayChange : " << displayType << ", " << mControlInfo[displayType];
+    if (mControlInfo[displayType] == nullptr) {
+        createControl(displayType);
+    }
+    emit signalDisplayChanged(displayType);
+}
+
 int ControlManager::getCurrentMode() {
     return mCurrentMode;
 }
 
 void ControlManager::exitProgram() {
     emit signalExitProgram();
-}
-
-void ControlManager::changeDisplay(const int& displayType) {
-    if (mControlInfo[displayType]) {
-        createControl(displayType);
-    }
-    emit signalDisplayChange(displayType);
 }
 
 

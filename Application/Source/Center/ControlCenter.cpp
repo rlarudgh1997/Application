@@ -39,6 +39,7 @@ void ControlCenter::initControl(const int& currentMode) {
 void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
 }
 
@@ -46,7 +47,7 @@ void ControlCenter::initBaseData() {
     resetControl(false);
 
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
-    QStringList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toStringList();
+    QVariantList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContextName).toList();
 
     updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
     updateDataHandler(PropertyTypeEnum::PropertyTypeContextName, contextName);
@@ -61,9 +62,9 @@ void ControlCenter::controlConnect(const bool& state) {
         connect(isHandler(), &HandlerCenter::signalHandlerEvent,
                 this,        &ControlCenter::slotHandlerEvent,
                 Qt::UniqueConnection);
-        // connect(ControlManager::instance().data(), &ControlManager::signalDisplayChange, [=](const int& displayType) {
-        //     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
-        // });
+        connect(ControlManager::instance().data(), &ControlManager::signalDisplayChanged, [=](const int& displayType) {
+            updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
+        });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());

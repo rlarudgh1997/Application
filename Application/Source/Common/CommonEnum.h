@@ -79,6 +79,7 @@ public:
     enum PropertyType {
         PropertyTypeDisplay = 0,
         PropertyTypeMode,
+        PropertyTypeVisible,
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,

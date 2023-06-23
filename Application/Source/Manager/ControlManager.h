@@ -15,19 +15,18 @@ public:
     static QSharedPointer<ControlManager> instance();
     void keyEvent(const int& inputType, const int& inputValue);
     void mouseEvent(const int& inputType, const int& inputValue);
-    void createControl(const int& displayType);
-    int getCurrentMode();
+    void requestDisplayChange(const int& displayType);
     void exitProgram();
-    void changeDisplay(const int& displayType);
-
 
 private:
     explicit ControlManager();
+    void createControl(const int& displayType);
+    int getCurrentMode();
 
 
 signals:
     void signalExitProgram();
-    void signalDisplayChange(const int& displayType);
+    void signalDisplayChanged(const int& displayType);
 
 
 private:

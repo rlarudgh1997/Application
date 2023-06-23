@@ -26,12 +26,6 @@ void ScreenInfo::updateRootItem(QWidget *rootItem) {
     }
 }
 
-void ScreenInfo::controlDisplay(const int& displayType, const bool& show) {
-    if (mSubScreens[displayType]) {
-        (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
-    }
-}
-
 QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectName, const bool& show) {
     QWindowList windowList = qApp->allWindows();
 
@@ -52,6 +46,12 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 
     qDebug() << "Widget :" << mSubScreens[displayType] << "\n\n";
     return mSubScreens[displayType];
+}
+
+void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
+    if (mSubScreens[displayType]) {
+        (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
+    }
 }
 
 void ScreenInfo::captureScreen(const QRect& rect) {
