@@ -25,6 +25,11 @@
         "fstream": "cpp",
         "sstream": "cpp",
         "stdexcept": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "chrono": "cpp",
+        "list": "cpp",
+        "iterator": "cpp",
+        "future": "cpp",
+        "new": "cpp"
     }
 }
