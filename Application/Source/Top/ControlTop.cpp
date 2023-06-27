@@ -99,43 +99,43 @@ void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
-        case EventTypeEnum::PropertyTypeExitProgram : {
+        case EventTypeEnum::EventTypeExitProgram : {
             ControlManager::instance().data()->exitProgram();
             break;
         }
-        case EventTypeEnum::PropertyTypeDisplayChange : {
+        case EventTypeEnum::EventTypeDisplayChange : {
             ControlManager::instance().data()->requestDisplayChange(ScreenEnum::DisplayTypeCenter);
             break;
         }
-        case EventTypeEnum::PropertyTypeFileNew : {
+        case EventTypeEnum::EventTypeFileNew : {
             qDebug() << "File - New";
             break;
         }
-        case EventTypeEnum::PropertyTypeFileOpen : {
+        case EventTypeEnum::EventTypeFileOpen : {
             qDebug() << "File - Open";
             break;
         }
-        case EventTypeEnum::PropertyTypeFileSave : {
+        case EventTypeEnum::EventTypeFileSave : {
             qDebug() << "File - Save";
             break;
         }
-        case EventTypeEnum::PropertyTypeFileSaveAs : {
+        case EventTypeEnum::EventTypeFileSaveAs : {
             qDebug() << "File - Save As";
             break;
         }
-        case EventTypeEnum::PropertyTypeEditCut : {
+        case EventTypeEnum::EventTypeEditCut : {
             qDebug() << "Edit - Cut";
             break;
         }
-        case EventTypeEnum::PropertyTypeEditCopy : {
+        case EventTypeEnum::EventTypeEditCopy : {
             qDebug() << "Edit - Copy";
             break;
         }
-        case EventTypeEnum::PropertyTypeEditPaste : {
+        case EventTypeEnum::EventTypeEditPaste : {
             qDebug() << "Edit - Paste";
             break;
         }
-        case EventTypeEnum::PropertyTypeSettingDevPath : {
+        case EventTypeEnum::EventTypeSettingDevPath : {
             QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(isHandler()),
                                             tr("Default Path"),
                                             getData(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
@@ -147,25 +147,25 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
             break;
         }
-        case EventTypeEnum::PropertyTypeSettingTestReport : {
+        case EventTypeEnum::EventTypeSettingTestReport : {
             qDebug() << "Setting - Test Report";
             break;
         }
-        case EventTypeEnum::PropertyTypeSettingTestResult : {
+        case EventTypeEnum::EventTypeSettingTestResult : {
             qDebug() << "Setting - Test Result";
             break;
         }
-        case EventTypeEnum::PropertyTypeSettingTestCoverage : {
+        case EventTypeEnum::EventTypeSettingTestCoverage : {
             qDebug() << "Setting - Test Coverage";
             break;
         }
-        case EventTypeEnum::PropertyTypeHelpAbout : {
+        case EventTypeEnum::EventTypeHelpAbout : {
             QMessageBox::about(qobject_cast<QWidget*>(isHandler()),
                             tr("About Application"),
                             tr("This <b>Application</b> is a program for <b>SFC Test</b> (Excel conversion, parsing, etc.)"));
             break;
         }
-        case EventTypeEnum::PropertyTypeHelpAboutQt : {
+        case EventTypeEnum::EventTypeHelpAboutQt : {
             QApplication::aboutQt();
             break;
         }

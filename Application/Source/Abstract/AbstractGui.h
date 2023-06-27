@@ -2,13 +2,14 @@
 #define ABSTRACT_GUI_H
 
 #include <QWidget>
-#include <QSharedPointer>
-#include <QMap>
-#include <QDebug>
 
 
 class AbstractHandler;
 
+template <typename T1, typename T2>
+inline T1* Q_CAST(T1, T2 base) {
+    return qobject_cast<T1*>(base);
+}
 
 class AbstractGui : public QWidget {
 public:
@@ -16,6 +17,8 @@ public:
     AbstractHandler* isHandler() {
         return mHandler;
     }
+
+private:
     virtual void initItem() = 0;
     virtual QWidget* isItem(const int& type) = 0;
     virtual bool createSignal(const int& type, const QVariant& value) = 0;
@@ -27,7 +30,7 @@ public:
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value) = 0;
 
-public:
+private:
     AbstractHandler* mHandler = nullptr;
 };
 

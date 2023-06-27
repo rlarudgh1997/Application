@@ -63,7 +63,7 @@ void GuiTop::drawDisplayDepth0() {
     dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     dispalyChange->show();
     connect(dispalyChange, &QPushButton::clicked, [=]() {
-        createSignal(EventTypeEnum::PropertyTypeDisplayChange, 0);
+        createSignal(EventTypeEnum::EventTypeDisplayChange, 0);
     });
 
 
@@ -84,7 +84,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionNew);
             mToolBar[MainType::File]->addAction(actionNew);
             connect(actionNew, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeFileNew, 0);
+                createSignal(EventTypeEnum::EventTypeFileNew, 0);
             });
         }
 
@@ -98,7 +98,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeFileOpen, 0);
+                createSignal(EventTypeEnum::EventTypeFileOpen, 0);
             });
         }
 
@@ -112,7 +112,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionSave);
             mToolBar[MainType::File]->addAction(actionSave);
             connect(actionSave, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeFileSave, 0);
+                createSignal(EventTypeEnum::EventTypeFileSave, 0);
             });
         }
 
@@ -125,7 +125,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionSaveAs);
             // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeFileSaveAs, 0);
+                createSignal(EventTypeEnum::EventTypeFileSaveAs, 0);
             });
         }
 
@@ -139,7 +139,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionExit);
             // mToolBar[MainType::File]->addAction(actionExit);
             connect(actionExit, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeExitProgram, 0);
+                createSignal(EventTypeEnum::EventTypeExitProgram, 0);
             });
         }
     }
@@ -162,7 +162,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionCut);
             mToolBar[MainType::Edit]->addAction(actionCut);
             connect(actionCut, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeEditCut, 0);
+                createSignal(EventTypeEnum::EventTypeEditCut, 0);
             });
         }
 
@@ -176,7 +176,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionCopy);
             mToolBar[MainType::Edit]->addAction(actionCopy);
             connect(actionCopy, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeEditCopy, 0);
+                createSignal(EventTypeEnum::EventTypeEditCopy, 0);
             });
         }
 
@@ -190,7 +190,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionPaste);
             mToolBar[MainType::Edit]->addAction(actionPaste);
             connect(actionPaste, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeEditPaste, 0);
+                createSignal(EventTypeEnum::EventTypeEditPaste, 0);
             });
         }
 
@@ -214,7 +214,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeSettingDevPath, 0);
+                createSignal(EventTypeEnum::EventTypeSettingDevPath, 0);
             });
         }
 
@@ -225,7 +225,7 @@ void GuiTop::drawDisplayDepth0() {
             actionTestReport->setStatusTip(QString("Setting SFC test result info"));
             mToolBar[MainType::Setting]->addAction(actionTestReport);
             connect(actionTestReport, &QAction::triggered, this, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeSettingTestReport, 0);
+                createSignal(EventTypeEnum::EventTypeSettingTestReport, 0);
             });
 
             QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(QString("Test Report"));
@@ -237,7 +237,7 @@ void GuiTop::drawDisplayDepth0() {
                     actionTestResult->setStatusTip(QString("Test Result Tip - ADD"));
                     mSubMenu->addAction(actionTestResult);
                     connect(actionTestResult, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::PropertyTypeSettingTestResult, 0);
+                        createSignal(EventTypeEnum::EventTypeSettingTestResult, 0);
                     });
                 }
 
@@ -248,7 +248,7 @@ void GuiTop::drawDisplayDepth0() {
                     actionTestCoverage->setStatusTip(QString("Test Coverage Tip - ADD"));
                     mSubMenu->addAction(actionTestCoverage);
                     connect(actionTestCoverage, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::PropertyTypeSettingTestCoverage, 0);
+                        createSignal(EventTypeEnum::EventTypeSettingTestCoverage, 0);
                     });
                 }
             }
@@ -289,7 +289,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAbout->setStatusTip(QString("Show the application's About box"));
             mMenu[MainType::Help]->addAction(actionAbout);
             connect(actionAbout, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeHelpAbout, 0);
+                createSignal(EventTypeEnum::EventTypeHelpAbout, 0);
             });
         }
 
@@ -300,7 +300,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAboutQt->setStatusTip(QString("Show the Qt library's About box"));
             mMenu[MainType::Help]->addAction(actionAboutQt);
             connect(actionAboutQt, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::PropertyTypeHelpAboutQt, 0);
+                createSignal(EventTypeEnum::EventTypeHelpAboutQt, 0);
             });
         }
     }

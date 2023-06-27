@@ -19,6 +19,7 @@ public:
 private:
     explicit ControlCenter();
 
+
 protected:
     virtual AbstractHandler* isHandler();
     virtual void initControl(const int& currentMode);

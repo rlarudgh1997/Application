@@ -31,7 +31,6 @@ void HandlerCenter::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
 #if 1
-        GuiCenter::instance().data()->drawDisplayDepth2();
         connect(this,                         &HandlerCenter::signalPropertyChanged,
                 GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
                 Qt::UniqueConnection);

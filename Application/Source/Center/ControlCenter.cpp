@@ -97,7 +97,7 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
-        case EventTypeEnum::PropertyTypeItemChange : {
+        case EventTypeEnum::EventTypeItemChange : {
             break;
         }
         default : {

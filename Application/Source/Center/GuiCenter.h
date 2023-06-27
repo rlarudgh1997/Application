@@ -8,13 +8,7 @@
 #include "AbstractGui.h"
 
 
-class AbstractHandler;
-
-
-template <typename T1, typename T2>
-inline T1* Q_CAST(T1, T2 base) {
-    return qobject_cast<T1*>(base);
-}
+class ItemTypeEnum;
 
 class GuiCenter : public AbstractGui {
 private:
@@ -27,6 +21,9 @@ private:
 
 public:
     static QSharedPointer<GuiCenter> instance(AbstractHandler* handler = nullptr);
+
+
+protected:
     virtual void initItem();
     virtual QWidget* isItem(const int& type);
     virtual bool createSignal(const int& type, const QVariant& value);
@@ -46,6 +43,7 @@ public slots:
 
 private:
     QSharedPointer<QMap<ItemType, QWidget*>> mItem = QSharedPointer<QMap<ItemType, QWidget*>>();
+    // ItemTypeEnum::ItemType mItemType;
 };
 
 #endif    // GUI_CENTER_H

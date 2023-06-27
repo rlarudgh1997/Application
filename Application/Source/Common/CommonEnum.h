@@ -92,30 +92,40 @@ public:
 class EventTypeEnum {
 public:
     enum EventType {
-        PropertyTypeExitProgram = 0,
-        PropertyTypeDisplayChange,
+        EventTypeExitProgram = 0,
+        EventTypeDisplayChange,
 
-        PropertyTypeTopStart = 1000,
-        PropertyTypeFileNew,
-        PropertyTypeFileOpen,
-        PropertyTypeFileSave,
-        PropertyTypeFileSaveAs,
-        PropertyTypeEditCut,
-        PropertyTypeEditCopy,
-        PropertyTypeEditPaste,
-        PropertyTypeSettingDevPath,
-        PropertyTypeSettingTestReport,
-        PropertyTypeSettingTestResult,
-        PropertyTypeSettingTestCoverage,
-        PropertyTypeHelpAbout,
-        PropertyTypeHelpAboutQt,
+        EventTypeTopStart = 1000,
+        EventTypeFileNew,
+        EventTypeFileOpen,
+        EventTypeFileSave,
+        EventTypeFileSaveAs,
+        EventTypeEditCut,
+        EventTypeEditCopy,
+        EventTypeEditPaste,
+        EventTypeSettingDevPath,
+        EventTypeSettingTestReport,
+        EventTypeSettingTestResult,
+        EventTypeSettingTestCoverage,
+        EventTypeHelpAbout,
+        EventTypeHelpAboutQt,
 
-        PropertyTypeCenterStart = 2000,
-        PropertyTypeItemChange,
+        EventTypeCenterStart = 2000,
+        EventTypeItemChange,
     };
 };
 
 
+class ItemTypeEnum {
+public:
+    enum ItemType {
+        Widget = 0,
+        MainWindow,
+        Menu,
+        ToolBar,
+        TabeWidget,
+    };
+};
 
 
 
