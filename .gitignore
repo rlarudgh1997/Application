@@ -7,7 +7,7 @@ Tractor/release/
 Tractor/debug/
 deploy_target
 deploy_x86
-.vscode
+#.vscode
 .qmake.stash
 
 *.m4a
