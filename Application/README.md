@@ -2,7 +2,17 @@
 # [Repo 정보]
 
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
+
+
 =====================================================================
+# [Python 관련 설정]
+- lib 설치
+	pip install xlrd
+	pip install openpyxl
+	pip install pandas
+
+
+
 
 =====================================================================
 # [프로젝트 진행 사항]
@@ -25,7 +35,7 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 				: int currentScreen
 			DataModelMain.h
 		ControlMain.cpp
-=====================================================================
+
 
 =====================================================================
 # ToDo
@@ -45,11 +55,11 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 		: 로컬서버 사용 가능성 검토
 		: 다수의 사람이 동시 작업이 필요한 경우 서버 구성 필요
 	: 이슈
-		: 해당 언어에 대하 지식 부족 -> 구현 가능성은 높으나 시간이 걸릴듯		
+		: 해당 언어에 대하 지식 부족 -> 구현 가능성은 높으나 시간이 걸릴듯
 		: 특정 요구사항에 대한 대응이 가능한지 검토 필요
 			: 엑셀 로딩, 편집, 저장 등의 기능
 			: sfc test 스크립트와의 연동 기능
-			: 스크립트 연동 
+			: 스크립트 연동
 
 
 - Kick-off 회의에서 T/C Creator 관련하여 논의한 내용 공유
@@ -75,28 +85,3 @@ Copy & Past
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
 
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
-
-=====================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

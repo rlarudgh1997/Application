@@ -199,7 +199,14 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingDevPath, QVariant());
+                QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(mHandler),
+                                                STRING_DEFAULT_PATH,
+                                                mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
+                                                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+                if (defaultPath.size() == 0) {
+                    defaultPath = QApplication::applicationDirPath();
+                }
+                createSignal(EventTypeEnum::EventTypeSettingDevPath, defaultPath);
             });
         }
 
@@ -345,5 +352,3 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
         }
     }
 }
-
-

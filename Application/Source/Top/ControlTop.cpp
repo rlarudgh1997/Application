@@ -5,9 +5,6 @@
 #include "ControlManager.h"
 #include "ConfigSetting.h"
 
-#include <QMessageBox>
-#include <QFileDialog>
-
 
 QSharedPointer<ControlTop> ControlTop::instance() {
     static QSharedPointer<ControlTop> gControl;
@@ -131,6 +128,8 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeCenterVisible : {
             ControlManager::instance().data()->sendEventInfo(type, QVariant());
+            int result = system("python ../Example/excel_parsing.py");
+            qDebug() << "system call" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
@@ -162,15 +161,8 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
-            QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(isHandler()),
-                                            tr("Default Path"),
-                                            getData(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
-                                            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-            if (defaultPath.size() == 0) {
-                defaultPath = QApplication::applicationDirPath();
-            }
-            updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
+            updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, value);
             break;
         }
         case EventTypeEnum::EventTypeSettingTestReport : {
@@ -190,7 +182,3 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
     }
 }
-
-
-
-
