@@ -34,6 +34,7 @@ protected:
 
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
+    virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
 
 

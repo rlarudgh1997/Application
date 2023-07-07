@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/CommonDefine.h\
     $$PWD/CommonEnum.h\
     $$PWD/CommonUtil.h\
+    $$PWD/CommonResource.h\
 
 
 SOURCES += \

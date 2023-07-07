@@ -22,7 +22,7 @@ MainWindow::MainWindow() {
 
     ScreenInfo::instance().data()->updateRootItem(this);
     ConfigSetting::instance().data();
-    ControlManager::instance().data()->requestDisplayChange(ScreenEnum::DisplayTypeTop);
+    ControlManager::instance().data()->init();
 
 #if 1
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);

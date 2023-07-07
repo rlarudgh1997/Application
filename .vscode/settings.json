@@ -30,6 +30,8 @@
         "list": "cpp",
         "iterator": "cpp",
         "future": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "ratio": "cpp",
+        "variant": "cpp"
     }
 }

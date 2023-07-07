@@ -2,13 +2,11 @@
 #define GUI_CENTER_H
 
 #include <QWidget>
-#include <QMainWindow>
-#include <QTabWidget>
 
 #include "AbstractGui.h"
 
 
-class ItemTypeEnum;
+//class ItemTypeEnum;
 
 class GuiCenter : public AbstractGui {
 private:
@@ -30,6 +28,7 @@ protected:
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
     virtual void drawDisplayDepth2();
+    virtual void updateDisplay(const bool& first);
 
 
 private:

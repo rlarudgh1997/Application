@@ -2,14 +2,16 @@
 #include "AbstractHandler.h"
 
 #include "CommonEnum.h"
-//#include "CommonUtil.h"
+#include "CommonResource.h"
 
 
-#include <QToolBar>
+// #include <QToolBar>
+// #include <QPushButton>
+// #include <QLineEdit>
+#include <QMainWindow>
+#include <QTabWidget>
 #include <QTableWidget>
 
-#include <QPushButton>
-#include <QLineEdit>
 
 
 QSharedPointer<GuiCenter> GuiCenter::instance(AbstractHandler* handler) {
@@ -63,52 +65,69 @@ bool GuiCenter::createSignal(const int& type, const QVariant& value) {
 }
 
 void GuiCenter::drawDisplayDepth0() {
-    if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->show();
-    } else {
-        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->hide();
-    }
+    updateDisplay(true);
 
-    QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
-    QStringList seetTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContextName).toStringList();
+    QStringList sheetTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
+    QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContextName).toStringList();
     int rowCount = 5;
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
-    foreach(auto seetTitle, seetTitles) {
-        int index = mTableWidgets.size();
-        mTableWidgets[index] = new QTableWidget(rowCount, columnTitles.size()-1, isItem(ItemType::Widget));
-        mTableWidgets[index]->setHorizontalHeaderLabels(columnTitles);
-        qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[index], seetTitle);
+    foreach(auto sheetTitle, sheetTitles) {
+        int currentSheet = mTableWidgets.size();
+        mTableWidgets[currentSheet] = new QTableWidget(rowCount, columnTitles.size()-1, isItem(ItemType::Widget));
+        mTableWidgets[currentSheet]->setObjectName(QString("tableWidget_%1").arg(currentSheet));
+        qDebug() << "objectName :" << mTableWidgets[currentSheet]->objectName();
+        mTableWidgets[currentSheet]->setHorizontalHeaderLabels(columnTitles);
+        qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[currentSheet], sheetTitle);
 
-        mTableWidgets[index]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mTableWidgets[currentSheet]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
-        connect(mTableWidgets[index], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
-            qDebug() << "customContextMenuRequested : " << pos;
+        connect(mTableWidgets[currentSheet], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
+            QModelIndexList modelIndexs = mTableWidgets[currentSheet]->selectionModel()->selectedIndexes();
+            qDebug() << currentSheet << ". customContextMenuRequested : " << pos;
+            qDebug() << "[Info]\n" << modelIndexs << "\nSize :" << modelIndexs.size();
+
+            static bool span = false;
+            if (modelIndexs.size() >= 2) {
+                if (span) {
+                    span = false;
+                    mTableWidgets[currentSheet]->clearSpans();
+                } else {
+                    span = true;
+                    std::sort(modelIndexs.begin(), modelIndexs.end());
+                    auto row = modelIndexs.at(currentSheet).row();
+                    auto col = modelIndexs.at(currentSheet).column();
+                    auto rowSpan = modelIndexs.last().row() - row + 1;
+                    auto colSpan = modelIndexs.last().column() - col + 1;
+                    qDebug() << "Info :" << row << "," << col << "," << rowSpan << "," << colSpan;
+                    mTableWidgets[currentSheet]->setSpan(row, col, rowSpan, colSpan);
+                }
+            }
         });
-        connect(mTableWidgets[index], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-            qDebug() << "itemPressed : " << item;
+        connect(mTableWidgets[currentSheet], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
+            qDebug() << currentSheet << ". itemPressed : " << item;
         });
-        connect(mTableWidgets[index], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << "itemClicked : " << item;
+        connect(mTableWidgets[currentSheet], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
+            qDebug() << currentSheet << ". itemClicked : " << item;
         });
-        connect(mTableWidgets[index], &QTableWidget::currentItemChanged,
+        connect(mTableWidgets[currentSheet], &QTableWidget::currentItemChanged,
                                     [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-            qDebug() << "currentItemChanged : " << previous << " -> " << current;
+            qDebug() << currentSheet << ". currentItemChanged : " << previous << " -> " << current;
         });
-        connect(mTableWidgets[index], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << "itemSelectionChanged";
+        connect(mTableWidgets[currentSheet], &QTableWidget::itemSelectionChanged, [=]() {
+            qDebug() << currentSheet << ". itemSelectionChanged";
         });
-        connect(mTableWidgets[index], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-            qDebug() << "cellPressed : " << row << ", " << column;
+        connect(mTableWidgets[currentSheet], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
+            qDebug() << currentSheet << ". cellPressed : " << row << ", " << column;
         });
-        connect(mTableWidgets[index], &QTableWidget::cellClicked, [=](int row, int column) {
-            qDebug() << "cellClicked : " << row << ", " << column;
+        connect(mTableWidgets[currentSheet], &QTableWidget::cellClicked, [=](int row, int column) {
+            qDebug() << currentSheet << ". cellClicked : " << row << ", " << column;
         });
 
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnTitles.size(); column++) {
-                QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1[%2, %3]").arg(seetTitle).arg(row+1).arg(column+1));
+                QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1[%2, %3]").arg(sheetTitle).arg(row+1).arg(column+1));
                 newItem->setTextAlignment(Qt::AlignCenter);
-                mTableWidgets[index]->setItem(row, column, newItem);
+                mTableWidgets[currentSheet]->setItem(row, column, newItem);
             }
         }
     }
@@ -122,9 +141,22 @@ void GuiCenter::drawDisplayDepth2() {
     qDebug() << "GuiCenter::drawDisplayDepth2()";
 }
 
+void GuiCenter::updateDisplay(const bool& first) {
+    if (first) {
+    } else {
+    }
+
+    if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->show();
+    } else {
+        qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->hide();
+    }
+}
+
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case PropertyTypeEnum::PropertyTypeVisible : {
+            updateDisplay(false);
             break;
         }
         case PropertyTypeEnum::PropertyTypeDepth : {

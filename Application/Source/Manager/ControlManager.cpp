@@ -1,8 +1,8 @@
 #include "ControlManager.h"
 
 #include "CommonEnum.h"
-
 #include "ScreenInfo.h"
+#include "ConfigSetting.h"
 #include "ControlTop.h"
 #include "ControlCenter.h"
 
@@ -16,12 +16,21 @@ QSharedPointer<ControlManager> ControlManager::instance() {
 }
 
 ControlManager::ControlManager() {
-    qDebug() << "ControlManager";
+}
+
+void ControlManager::init() {
+    createControl(ScreenEnum::DisplayTypeTop);
+}
+
+void ControlManager::sendEventInfo(const int& eventType, const QVariant& eventValue) {
+    int displayType = isDisplay(eventType);
+    if (displayType != ScreenEnum::DisplayTypeInvalid) {
+        createControl(isDisplay(eventType));
+        emit signalEventInfoChanged(displayType, eventType, eventValue);
+    }
 }
 
 void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
-    qDebug() << "ControlManager::keyEvent : " << inputType << ", " << inputValue;
-
 #if defined(USE_SCREEN_CAPTURE)
     if ((inputType == KeyTypeEnum::KeyInputTypeRelease) && (inputValue == KeyTypeEnum::KeyInputValueCapture)) {
         ScreenInfo::instance().data()->captureScreen();
@@ -29,7 +38,8 @@ void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
 #endif
 
 #if defined(USE_KEY_EVENT)
-    int displayType = getCurrentMode();
+    int displayType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeMode).toInt();
+    qDebug() << "ControlManager::keyEvent(" << inputType << "," << inputValue << ") :" << displayType;
     if (mControlInfo[displayType]) {
         mControlInfo[displayType]->keyEvent(inputType, inputValue);
     }
@@ -37,6 +47,16 @@ void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
 }
 
 void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
+}
+
+int ControlManager::isDisplay(const int& eventType) {
+    if (eventType >= EventTypeEnum::EventTypeCenterStart) {
+        return ScreenEnum::DisplayTypeCenter;
+    } else if (eventType >= EventTypeEnum::EventTypeTopStart) {
+        return ScreenEnum::DisplayTypeTop;
+    } else {
+        return ScreenEnum::DisplayTypeInvalid;
+    }
 }
 
 void ControlManager::createControl(const int& displayType) {
@@ -57,18 +77,15 @@ void ControlManager::createControl(const int& displayType) {
 
         if (mControlInfo[displayType]) {
             qDebug() << "ControlManager::createControl : " << displayType;
-            mCurrentMode = displayType;
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
             mControlInfo[displayType]->init(displayType);
+            setCurrentMode(displayType);
         }
     }
 }
 
-void ControlManager::requestDisplayChange(const int& displayType) {
-    qDebug() << "ControlManager::requestDisplayChange : " << displayType << ", " << mControlInfo[displayType];
-    if (mControlInfo[displayType] == nullptr) {
-        createControl(displayType);
-    }
-    emit signalDisplayChanged(displayType);
+void ControlManager::setCurrentMode(const int& displayType) {
+    mCurrentMode = displayType;
 }
 
 int ControlManager::getCurrentMode() {

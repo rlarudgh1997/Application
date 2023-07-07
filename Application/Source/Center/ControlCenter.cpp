@@ -2,8 +2,8 @@
 #include "HandlerCenter.h"
 
 #include "CommonEnum.h"
-#include "ConfigSetting.h"
 #include "ControlManager.h"
+#include "ConfigSetting.h"
 
 
 
@@ -32,15 +32,17 @@ void ControlCenter::initControl(const int& currentMode) {
 
         controlConnect(true);
         initBaseData();
-        initCommonData(currentMode, ScreenEnum::DisplayTypeTop);
+        initCommonData(currentMode, ScreenEnum::DisplayTypeCenter);
     }
 }
 
 void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(PropertyTypeEnum::PropertyTypeMode, currentMode);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDepth, ScreenEnum::DisplayDepthDepth0);
+    qDebug() << "mode :" << getData(PropertyTypeEnum::PropertyTypeMode)
+            << "displayType :" << getData(PropertyTypeEnum::PropertyTypeDisplay);
 }
 
 void ControlCenter::initBaseData() {
@@ -59,15 +61,19 @@ void ControlCenter::resetControl(const bool& reset) {
 
 void ControlCenter::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerCenter::signalHandlerEvent,
-                this,        &ControlCenter::slotHandlerEvent,
+        connect(isHandler(),                       &HandlerCenter::signalHandlerEvent,
+                this,                              &ControlCenter::slotHandlerEvent,
                 Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalDisplayChanged, [=](const int& displayType) {
-            updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
-        });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                this,                              &ControlCenter::slotEventInfoChanged,
+                Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
+                this,                              &ControlCenter::slotConfigChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
+        disconnect(ConfigSetting::instance().data());
     }
 }
 
@@ -93,6 +99,34 @@ void ControlCenter::updateDataHandler(const int& type, const QVariantList& value
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
+    // qDebug() << "ControlCenter::slotConfigChanged() ->" << type << "," << value;
+    // switch (type) {
+    //     case ConfigInfo::ConfigTypeDefaultPath : {
+    //         break;
+    //     }
+    //     default : {
+    //         break;
+    //     }
+    // }
+}
+
+void ControlCenter::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
+    if (getData(PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
+        return;
+    }
+
+    qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+
+    switch (eventType) {
+        case EventTypeEnum::EventTypeCenterVisible : {
+            bool visible = (getData(PropertyTypeEnum::PropertyTypeVisible).toBool()) ? (false) : (true);
+            updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, visible);
+            break;
+        }
+        default : {
+            break;
+        }
+    }
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
@@ -105,7 +139,3 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
     }
 }
-
-
-
-

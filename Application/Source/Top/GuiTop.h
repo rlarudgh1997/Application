@@ -31,6 +31,7 @@ private:
     void drawDisplayDepth0();
     void drawDisplayDepth1();
     void drawDisplayDepth2();
+    void updateDisplay(const bool& first);
 
 
 public slots:

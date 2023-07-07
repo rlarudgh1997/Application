@@ -107,10 +107,9 @@ public:
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
-        EventTypeHelpAbout,
-        EventTypeHelpAboutQt,
 
         EventTypeCenterStart = 2000,
+        EventTypeCenterVisible,
         EventTypeItemChange,
     };
 };

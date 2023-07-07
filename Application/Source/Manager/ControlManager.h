@@ -13,20 +13,23 @@ class ControlManager : public QObject {
 
 public:
     static QSharedPointer<ControlManager> instance();
+    void init();
+    void sendEventInfo(const int& eventType, const QVariant& eventValue);
     void keyEvent(const int& inputType, const int& inputValue);
     void mouseEvent(const int& inputType, const int& inputValue);
-    void requestDisplayChange(const int& displayType);
     void exitProgram();
 
 private:
     explicit ControlManager();
+    int isDisplay(const int& eventType);
     void createControl(const int& displayType);
+    void setCurrentMode(const int& displayType);
     int getCurrentMode();
 
 
 signals:
     void signalExitProgram();
-    void signalDisplayChanged(const int& displayType);
+    void signalEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
 
 
 private:

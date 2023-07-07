@@ -2,10 +2,14 @@
 #include "AbstractHandler.h"
 
 #include "CommonEnum.h"
+#include "CommonResource.h"
 
 
 #include <QToolBar>
 #include <QTableWidget>
+#include <QApplication>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include <QPushButton>
 #include <QLineEdit>
@@ -45,101 +49,82 @@ void GuiTop::drawDisplayDepth0() {
         return;
     }
 
-    // =================================================================================================================
-    // ETC Info
-    // =================================================================================================================
-    QLineEdit* defaultPath = new QLineEdit(mScreen);
-    defaultPath->setGeometry(QRect(500, 25, 550, 30));
-    defaultPath->setAlignment(Qt::AlignCenter);
-    defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
-    defaultPath->setDisabled(true);
-    defaultPath->show();
-
-    QPushButton* dispalyChange = new QPushButton(mScreen);
-    dispalyChange->setGeometry(1100, 25, 150, 30);
-    dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-    dispalyChange->setText("Center - Show/Hide");
-    dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
-    dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    dispalyChange->show();
-    connect(dispalyChange, &QPushButton::clicked, [=]() {
-        createSignal(EventTypeEnum::EventTypeDisplayChange, 0);
-    });
+    updateDisplay(true);
 
 
     // =================================================================================================================
     // FILE
     // =================================================================================================================
     if (true) {
-        mMenu[MainType::File] = mMainWindow->menuBar()->addMenu(QString("File"));
-        mToolBar[MainType::File] = mMainWindow->addToolBar(QString("File"));
+        mMenu[MainType::File] = mMainWindow->menuBar()->addMenu(STRING_FILE);
+        mToolBar[MainType::File] = mMainWindow->addToolBar(STRING_FILE);
 
         QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
-                                                            QIcon(":/Image/Main/Copy.png")),
+                                                            QIcon(IAMGE_COPY)),
                                                             QString("New"),
                                                             this);
         if (actionNew) {
             actionNew->setShortcuts(QKeySequence::New);
-            actionNew->setStatusTip(QString("Create a new file"));
+            actionNew->setStatusTip(STRING_NEW_TIP);
             mMenu[MainType::File]->addAction(actionNew);
             mToolBar[MainType::File]->addAction(actionNew);
             connect(actionNew, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileNew, 0);
+                createSignal(EventTypeEnum::EventTypeFileNew, QVariant());
             });
         }
 
         QAction *actionOpen = new QAction(QIcon::fromTheme("actionOpen",
-                                                            QIcon(":/Image/Main/Open.png")),
-                                                            QString("Open"),
+                                                            QIcon(IAMGE_OPEN)),
+                                                            STRING_OPEN,
                                                             this);
         if (actionOpen) {
             actionOpen->setShortcuts(QKeySequence::Open);
-            actionOpen->setStatusTip(QString("Open an existing file"));
+            actionOpen->setStatusTip(STRING_OPEN_TIP);
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileOpen, 0);
+                createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
             });
         }
 
         QAction *actionSave = new QAction(QIcon::fromTheme("actionSave",
-                                                            QIcon(":/Image/Main/Save.png")),
-                                                            QString("Save"),
+                                                            QIcon(IAMGE_SAVE)),
+                                                            STRING_SAVE,
                                                             this);
         if (actionSave) {
             actionSave->setShortcuts(QKeySequence::Save);
-            actionSave->setStatusTip(QString("Save the document to disk"));
+            actionSave->setStatusTip(STRING_SAVE_TIP);
             mMenu[MainType::File]->addAction(actionSave);
             mToolBar[MainType::File]->addAction(actionSave);
             connect(actionSave, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileSave, 0);
+                createSignal(EventTypeEnum::EventTypeFileSave, QVariant());
             });
         }
 
         QAction *actionSaveAs = new QAction(QIcon::fromTheme("actionSaveAs"),
-                                                            QString("Save As"),
+                                                            STRING_SAVE_AS,
                                                             this);
         if (actionSaveAs) {
             actionSaveAs->setShortcuts(QKeySequence::SaveAs);
-            actionSaveAs->setStatusTip(QString("Save the document under a new name"));
+            actionSaveAs->setStatusTip(STRING_SAVE_AS_TIP);
             mMenu[MainType::File]->addAction(actionSaveAs);
             // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileSaveAs, 0);
+                createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
             });
         }
 
         mMenu[MainType::File]->addSeparator();
         QAction *actionExit = new QAction(QIcon::fromTheme("actionExit"),
-                                                            QString("Exit"),
+                                                            STRING_SAVE_EXIT,
                                                             this);
         if (actionExit) {
             actionExit->setShortcuts(QKeySequence::Quit);
-            actionExit->setStatusTip(QString("Exit the application"));
+            actionExit->setStatusTip(STRING_SAVE_EXIT_TIP);
             mMenu[MainType::File]->addAction(actionExit);
             // mToolBar[MainType::File]->addAction(actionExit);
             connect(actionExit, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeExitProgram, 0);
+                createSignal(EventTypeEnum::EventTypeExitProgram, QVariant());
             });
         }
     }
@@ -148,49 +133,49 @@ void GuiTop::drawDisplayDepth0() {
     // EDIT
     // =================================================================================================================
     if (true) {
-        mMenu[MainType::Edit] = mMainWindow->menuBar()->addMenu(QString("Edit"));
-        mToolBar[MainType::Edit] = mMainWindow->addToolBar(QString("Edit"));
+        mMenu[MainType::Edit] = mMainWindow->menuBar()->addMenu(STRING_EDIT);
+        mToolBar[MainType::Edit] = mMainWindow->addToolBar(STRING_EDIT);
 
 #ifndef QT_NO_CLIPBOARD
         QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
-                                                            QIcon(":/Image/Main/Cut.png")),
-                                                            QString("Cut"),
+                                                            QIcon(IAMGE_CUT)),
+                                                            STRING_CUT,
                                                             this);
         if (actionCut) {
             actionCut->setShortcuts(QKeySequence::Cut);
-            actionCut->setStatusTip(QString("Cut the current selection's contents to the clipboard"));
+            actionCut->setStatusTip(STRING_CUT_TIP);
             mMenu[MainType::Edit]->addAction(actionCut);
             mToolBar[MainType::Edit]->addAction(actionCut);
             connect(actionCut, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditCut, 0);
+                createSignal(EventTypeEnum::EventTypeEditCut, QVariant());
             });
         }
 
         QAction *actionCopy = new QAction(QIcon::fromTheme("actionCopy",
-                                                            QIcon(":/Image/Main/Copy.png")),
-                                                            QString("Copy"),
+                                                            QIcon(IAMGE_COPY)),
+                                                            STRING_COPY,
                                                             this);
         if (actionCopy) {
             actionCopy->setShortcuts(QKeySequence::Copy);
-            actionCopy->setStatusTip(QString("Copy the current selection's contents to the clipboard"));
+            actionCopy->setStatusTip(STRING_COPY_TIP);
             mMenu[MainType::Edit]->addAction(actionCopy);
             mToolBar[MainType::Edit]->addAction(actionCopy);
             connect(actionCopy, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditCopy, 0);
+                createSignal(EventTypeEnum::EventTypeEditCopy, QVariant());
             });
         }
 
         QAction *actionPaste = new QAction(QIcon::fromTheme("actionPaste",
-                                                            QIcon(":/Image/Main/Paste.png")),
-                                                            QString("Paste"),
+                                                            QIcon(IAMGE_PASTE)),
+                                                            STRING_PASTE,
                                                             this);
         if (actionPaste) {
             actionPaste->setShortcuts(QKeySequence::Paste);
-            actionPaste->setStatusTip(QString("Paste the clipboard's contents into the current selection"));
+            actionPaste->setStatusTip(STRING_PASTE_TIP);
             mMenu[MainType::Edit]->addAction(actionPaste);
             mToolBar[MainType::Edit]->addAction(actionPaste);
             connect(actionPaste, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditPaste, 0);
+                createSignal(EventTypeEnum::EventTypeEditPaste, QVariant());
             });
         }
 
@@ -202,53 +187,53 @@ void GuiTop::drawDisplayDepth0() {
     // Setting
     // =================================================================================================================
     if (true) {
-        mMenu[MainType::Setting] = mMainWindow->menuBar()->addMenu(QString("Setting"));
-        mToolBar[MainType::Setting] = mMainWindow->addToolBar(QString("Setting"));
+        mMenu[MainType::Setting] = mMainWindow->menuBar()->addMenu(STRING_SETTING);
+        mToolBar[MainType::Setting] = mMainWindow->addToolBar(STRING_SETTING);
 
 
         QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
-                                                            QString("Path"),
+                                                            STRING_PATH,
                                                             this);
         if (actionDevPath) {
-            actionDevPath->setStatusTip(QString("Setting default SFC test output foler"));
+            actionDevPath->setStatusTip(STRING_PATH_TIP);
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingDevPath, 0);
+                createSignal(EventTypeEnum::EventTypeSettingDevPath, QVariant());
             });
         }
 
         QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
-                                                            QString("Report"),
+                                                            STRING_REPORT,
                                                             this);
         if (actionTestReport) {
-            actionTestReport->setStatusTip(QString("Setting SFC test result info"));
+            actionTestReport->setStatusTip(STRING_REPORT_TIP);
             mToolBar[MainType::Setting]->addAction(actionTestReport);
             connect(actionTestReport, &QAction::triggered, this, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingTestReport, 0);
+                createSignal(EventTypeEnum::EventTypeSettingTestReport, QVariant());
             });
 
-            QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(QString("Test Report"));
+            QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(STRING_TEST_REPORT);
             if (mSubMenu) {
                 QAction *actionTestResult = new QAction(QIcon::fromTheme("actionTestResult"),
-                                                                QString("Test Result"),
+                                                                STRING_TEST_RESULT,
                                                                 this);
                 if (actionTestResult) {
-                    actionTestResult->setStatusTip(QString("Test Result Tip - ADD"));
+                    actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
                     mSubMenu->addAction(actionTestResult);
                     connect(actionTestResult, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::EventTypeSettingTestResult, 0);
+                        createSignal(EventTypeEnum::EventTypeSettingTestResult, QVariant());
                     });
                 }
 
                 QAction *actionTestCoverage = new QAction(QIcon::fromTheme("actionTestCoverage"),
-                                                                QString("Test Coverage"),
+                                                                STRING_TEST_RESULT_COVERAGE,
                                                                 mSubMenu);
                 if (actionTestCoverage) {
-                    actionTestCoverage->setStatusTip(QString("Test Coverage Tip - ADD"));
+                    actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
                     mSubMenu->addAction(actionTestCoverage);
                     connect(actionTestCoverage, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::EventTypeSettingTestCoverage, 0);
+                        createSignal(EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
                     });
                 }
             }
@@ -280,27 +265,29 @@ void GuiTop::drawDisplayDepth0() {
     // Help
     // =================================================================================================================
     if (true) {
-        mMenu[MainType::Help] = mMainWindow->menuBar()->addMenu(QString("Help"));
+        mMenu[MainType::Help] = mMainWindow->menuBar()->addMenu(STRING_HELP);
 
         QAction *actionAbout = new QAction(QIcon::fromTheme("actionAbout"),
-                                                            QString("About"),
+                                                            STRING_ABOUT,
                                                             this);
         if (actionAbout) {
-            actionAbout->setStatusTip(QString("Show the application's About box"));
+            actionAbout->setStatusTip(STRING_ABOUT_TIP);
             mMenu[MainType::Help]->addAction(actionAbout);
             connect(actionAbout, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeHelpAbout, 0);
+                QMessageBox::about(qobject_cast<QWidget*>(mHandler),
+                                STRING_POPUP_ABOUT,
+                                STRING_POPUP_ABOUT_TIP);
             });
         }
 
         QAction *actionAboutQt = new QAction(QIcon::fromTheme("actionAboutQt"),
-                                                            QString("About Qt"),
+                                                            STRING_ABOUT_QT,
                                                             this);
         if (actionAboutQt) {
-            actionAboutQt->setStatusTip(QString("Show the Qt library's About box"));
+            actionAboutQt->setStatusTip(STRING_ABOUT_QT_TIP);
             mMenu[MainType::Help]->addAction(actionAboutQt);
             connect(actionAboutQt, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeHelpAboutQt, 0);
+                QApplication::aboutQt();
             });
         }
     }
@@ -310,6 +297,30 @@ void GuiTop::drawDisplayDepth1() {
 }
 
 void GuiTop::drawDisplayDepth2() {
+}
+
+void GuiTop::updateDisplay(const bool& first) {
+    static QLineEdit* defaultPath = new QLineEdit(mScreen);
+    static QPushButton* dispalyChange = new QPushButton(mScreen);
+
+    if (first) {
+        defaultPath->setGeometry(QRect(500, 25, 550, 30));
+        defaultPath->setAlignment(Qt::AlignCenter);
+        defaultPath->setDisabled(true);
+        defaultPath->show();
+
+        dispalyChange->setGeometry(1100, 25, 150, 30);
+        dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        dispalyChange->setText("Center - Show/Hide");
+        dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
+        dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        dispalyChange->show();
+        connect(dispalyChange, &QPushButton::clicked, [=]() {
+            createSignal(EventTypeEnum::EventTypeCenterVisible, QVariant());
+        });
+    }
+
+    defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
 }
 
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -323,6 +334,10 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
                 drawDisplayDepth2();
             } else {
             }
+            break;
+        }
+        case PropertyTypeEnum::PropertyTypeDefaultPath : {
+            updateDisplay(false);
             break;
         }
         default : {

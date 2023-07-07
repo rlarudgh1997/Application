@@ -60,20 +60,20 @@ void ConfigSetting::init() {
 }
 
 QVariant ConfigSetting::readConfig(const int& configType) {
-    QVariant value = QVariant(0);
-
     if (configType < ConfigInfo::ConfigTypeMax) {
-        value = mConfigData[configType];
+        return mConfigData[configType];
+    } else {
+        return QVariant();
     }
-
-    return value;
 }
 
 void ConfigSetting::writeConfig(const int& configType, const QVariant& configValue) {
     if (mConfigData[configType] != configValue) {
         mMutex.lock();
         mConfigData[configType] = configValue;
-        mThreadDataSave = true;
+        if (configType > ConfigInfo::ConfigTypeStartSaveFile) {
+            mThreadDataSave = true;
+        }
         mMutex.unlock();
 
         emit signalConfigChanged(configType, configValue);

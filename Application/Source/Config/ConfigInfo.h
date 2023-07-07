@@ -11,9 +11,12 @@
 class ConfigInfo {
 public:
     typedef enum {
-        // Common
+        // Common : The setting information is not saved as a file.
         ConfigTypeInvalid = 0,
         ConfigTypeInit,
+        ConfigTypeMode,
+
+        ConfigTypeStartSaveFile,
 
         // General
         ConfigTypeDefaultPath,
@@ -44,7 +47,9 @@ private:
     void initConfigInfo() {
         mConfigInfoData.clear();
 
-        mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", false);
+        mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
+        mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant("Invalid"));
+        mConfigInfoData[ConfigTypeStartSaveFile] = QPair<QString, QVariant>("ConfigTypeStartSaveFile", QVariant("Invalid"));
 
         QString defaultPath = QString("%1%2").arg(QApplication::applicationDirPath()).arg("/SFC");
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", defaultPath);
@@ -53,11 +58,11 @@ private:
         QVariantList listValue = QVariantList();
 
         listValue = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
-        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", listValue);
+        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", QVariant(listValue));
 
         listValue = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
                     "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
-        mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", listValue);
+        mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", QVariant(listValue));
     }
 
 

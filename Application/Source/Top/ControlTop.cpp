@@ -2,8 +2,8 @@
 #include "HandlerTop.h"
 
 #include "CommonEnum.h"
-#include "ConfigSetting.h"
 #include "ControlManager.h"
+#include "ConfigSetting.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -58,18 +58,19 @@ void ControlTop::resetControl(const bool& reset) {
 
 void ControlTop::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerTop::signalHandlerEvent,
-                this,        &ControlTop::slotHandlerEvent,
+        connect(isHandler(),                       &HandlerTop::signalHandlerEvent,
+                this,                              &ControlTop::slotHandlerEvent,
                 Qt::UniqueConnection);
-
-        qDebug() << "controlConnect :" << state;
-        connect(ControlManager::instance().data(), &ControlManager::signalDisplayChanged, [=](const int& displayType) {
-            qDebug() << "signalDisplayChanged :" << displayType;
-            updateDataHandler(PropertyTypeEnum::PropertyTypeDisplay, displayType);
-        });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                this,                              &ControlTop::slotEventInfoChanged,
+                Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
+                this,                              &ControlTop::slotConfigChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
+        disconnect(ConfigSetting::instance().data());
     }
 }
 
@@ -95,6 +96,31 @@ void ControlTop::updateDataHandler(const int& type, const QVariantList& value) {
 }
 
 void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
+    // qDebug() << "ControlTop::slotConfigChanged() ->" << type << "," << value;
+    // switch (type) {
+    //     case ConfigInfo::ConfigTypeDefaultPath : {
+    //         updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
+    //         break;
+    //     }
+    //     default : {
+    //         break;
+    //     }
+    // }
+}
+
+
+void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
+    if (getData(PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
+        return;
+    }
+
+    qDebug() << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+
+    switch (eventType) {
+        default : {
+            break;
+        }
+    }
 }
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
@@ -103,8 +129,8 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             ControlManager::instance().data()->exitProgram();
             break;
         }
-        case EventTypeEnum::EventTypeDisplayChange : {
-            ControlManager::instance().data()->requestDisplayChange(ScreenEnum::DisplayTypeCenter);
+        case EventTypeEnum::EventTypeCenterVisible : {
+            ControlManager::instance().data()->sendEventInfo(type, QVariant());
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
@@ -157,16 +183,6 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeSettingTestCoverage : {
             qDebug() << "Setting - Test Coverage";
-            break;
-        }
-        case EventTypeEnum::EventTypeHelpAbout : {
-            QMessageBox::about(qobject_cast<QWidget*>(isHandler()),
-                            tr("About Application"),
-                            tr("This <b>Application</b> is a program for <b>SFC Test</b> (Excel conversion, parsing, etc.)"));
-            break;
-        }
-        case EventTypeEnum::EventTypeHelpAboutQt : {
-            QApplication::aboutQt();
             break;
         }
         default : {
