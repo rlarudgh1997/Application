@@ -41,6 +41,61 @@
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>340</y>
+     <width>391</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>item 1</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 3</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 4</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 5</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 6</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>item 7</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QKeySequenceEdit" name="keySequenceEdit">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>590</y>
+     <width>113</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

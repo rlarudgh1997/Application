@@ -3,10 +3,11 @@
 # Custom ADD >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 release
 debug
-Tractor/release/
-Tractor/debug/
+*/release/
+*/debug/
 deploy_target
 deploy_x86
+SFC
 #.vscode
 .qmake.stash
 

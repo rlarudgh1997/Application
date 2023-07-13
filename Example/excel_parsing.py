@@ -1,66 +1,126 @@
 import pandas as pd
+from openpyxl import Workbook, load_workbook
 from pandas import DataFrame
+# 하위 경로 import 방법 3가지
+# import source.def_functon as func
+# from source import def_functon as func
+from source.def_functon import func_name, func_name1, isFuntionName
 
-# 파일명
-file_name = "../Example/test.xlsx"
-
-# Daraframe형식으로 엑셀 파일 읽기
-df = pd.read_excel(file_name, sheet_name=["Sheet1", "Sheet2", "Sheet3"])
-
-sheet1 = df["Sheet1"]
-sheet1 = sheet1.fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
-
-sheet2 = df["Sheet2"]
-sheet2 = sheet2.fillna("")
-
-sheet3 = df["Sheet3"]
-sheet3 = sheet3.fillna("")
-
-print("\n\n\n=====================================================================================================")
-print("\t엑셀 파싱 시작 :", file_name)
-print("=====================================================================================================")
-print(sheet1)
+# from operator import length_hint
 
 
-
-convert_sheet1 = pd.DataFrame(sheet1)
-print(convert_sheet1)
-write_sheet1 = convert_sheet1.to_csv("../Example/sheet1.txt", sep="	", index = False)
-
-
+# 상위 경로 import 방법
+# import sys, os
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+# from parent_folder import module_name
 
 
+# 파일명, 시트명
+fileName = "../Example/test1.xlsx"
+sheetName = ["Sheet1", "Sheet2", "Sheet3"]
+# sheetInfo = []
+sheetInfo = list()
+excelInfo = dict()
+
+excelInfo["sheetName"] = ["Sheet1", "Sheet2", "Sheet3"]
+excelInfo["sheetInfo"] = list()
 
 
-print("\n\n=====================================================================================================")
-print(sheet2)
+def excel_parsing(fileName, sheetName, state) :
+    # Daraframe형식으로 엑셀 파일 읽기
+    # df = pd.read_excel(file_name, header = None, sheet_name=["Sheet1", "Sheet2", "Sheet3"])
+    df = pd.read_excel(fileName, sheet_name=sheetName)
 
+    print("\n\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("\t Parsing Start :", fileName, ", ", sheetName, ", ", len(sheetInfo), ", ", type(sheetInfo))
 
-print("\n\n=====================================================================================================")
-print(sheet3)
-
-
-print("=====================================================================================================")
-print("\t엑셀 파싱 완료")
-print("\n\n")
-
-
-print("=====================================================================================================")
-print("\t데이터 변경")
-print("=====================================================================================================")
-sheet1.loc[6] =["KKH1", "", "", "KKH4", "KKH5"]
-print(sheet1)
-print("\n\n")
-
-
-# test_list = ['one', 'two', 'three']
-# for i in sheet1.loc[0]:
-#     # print("len :", len(i), ", ", i)
-#     print(i)
+    index = 0
+    if (state) :
+        for sheet in sheetName:
+            sheetInfo.append(df[sheetName[index]])
+            sheetInfo[index] = sheetInfo[index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
+            print("\n==================================================================================")
+            print(sheetInfo[index])
+            index += 1
+    else :
+        for sheet in excelInfo["sheetName"]:
+            excelInfo["sheetInfo"].append(df[excelInfo["sheetName"][index]])
+            excelInfo["sheetInfo"][index] = excelInfo["sheetInfo"][index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
+            print("\n==================================================================================")
+            print(excelInfo["sheetInfo"][index])
+            index += 1
+    print("\n\t Parsing Complete")
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
 
 
 
-with pd.ExcelWriter("../Example/test_convert.xlsx") as w:
-    sheet1.to_excel(w, sheet_name='Sheet1', index=False)
-    sheet2.to_excel(w, sheet_name='Sheet2', index=False)
-    sheet3.to_excel(w, sheet_name='Sheet3', index=False)
+
+
+def excel_edit() :
+    if (len(sheetInfo[0])) > 0 :
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print("\t Edit Start")
+        print("\n==================================================================================")
+        sheetInfo[0].loc[6] =["KKH1", "", "", "KKH4", "KKH5"]
+        print(sheetInfo[0])
+        print("\n\t Edit Complete")
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
+    else :
+        print("Fail to sheetInfo len :", len(excelInfo["sheetInfo"]))
+
+
+
+
+def excel_save(state) :
+    if (state) :
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print("\t Save Start :../Example/sheet1.txt")
+        print("\n==================================================================================")
+        convert_sheet1 = pd.DataFrame(sheetInfo[0])
+        print(convert_sheet1)
+        write_sheet1 = convert_sheet1.to_csv("../Example/sheet1.txt", sep="	", index = False)
+        print("==================================================================================")
+        print("\n\t Save Complete")
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
+        # test_list = ['one', 'two', 'three']
+        # for i in sheet1.loc[0]:
+        #     # print("len :", len(i), ", ", i)
+        #     print(i)
+    else :
+        print("")
+
+
+    index = 0
+    with pd.ExcelWriter("../Example/test_convert.xlsx") as w:
+        sheetInfo[index].to_excel(w, sheet_name = sheetName[index], index = False)
+        index += 1
+
+    # 셀 병합
+    # wb = Workbook()
+    # ws = wb.active
+    # ws.merge_cells("A1:C1")
+    # wb.save("../Example/kkh.xlsx")
+
+    wb = load_workbook("../Example/test_convert.xlsx")
+    ws = wb[sheetName[0]]
+    ws.merge_cells("A2:B3")
+    wb.save("../Example/kkh.xlsx")
+
+
+
+
+excel_parsing(fileName, sheetName, True)
+excel_edit()
+excel_save(True)
+
+
+# func.isFuntionName()
+# print("FuncName :", func.func_name)
+
+isFuntionName()
+print("0 FuncName :", func_name)
+print("1 FuncName :", func_name1)
+
+print("excelInfo :", excelInfo, ", len :", len(excelInfo["sheetName"]), ", ", len(excelInfo["sheetInfo"]))
+print("sheetName :", excelInfo["sheetName"])
+print("sheetInfo :", excelInfo["sheetInfo"])

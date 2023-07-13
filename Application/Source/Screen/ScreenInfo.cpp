@@ -8,11 +8,9 @@
 
 QSharedPointer<ScreenInfo> ScreenInfo::instance() {
     static QSharedPointer<ScreenInfo> gScreenInfo;
-
     if (gScreenInfo.isNull()) {
         gScreenInfo = QSharedPointer<ScreenInfo>(new ScreenInfo());
     }
-
     return gScreenInfo;
 }
 
@@ -133,10 +131,3 @@ void ScreenInfo::loadComplete(const int& displayType) {
     qDebug("ScreenInfo::loadComplete(%d)", displayType);
     emit signalLoadComplete(displayType);
 }
-
-
-
-
-
-
-

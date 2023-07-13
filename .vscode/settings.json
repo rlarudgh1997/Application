@@ -32,6 +32,8 @@
         "future": "cpp",
         "new": "cpp",
         "ratio": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     }
 }

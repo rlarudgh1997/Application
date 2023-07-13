@@ -13,18 +13,16 @@
 #define CONFIG_NAME "Application.ini"
 #define CONFIG_FILE (QString("%1/%2").arg(CONFIG_PATH).arg(CONFIG_NAME))
 
-#define GROUP_NAME_COMMON "Common"
-#define GROUP_NAME_GENERAL "Gernal"
-
+#define GROUP_NAME_COMMON    "Common"
+#define GROUP_NAME_GENERAL   "Gernal"
+#define GROUP_NAME_PYTHON    "Python"
 
 
 QSharedPointer<ConfigSetting> ConfigSetting::instance() {
     static QSharedPointer<ConfigSetting> gConfigSetting;
-
     if (gConfigSetting.isNull()) {
         gConfigSetting = QSharedPointer<ConfigSetting>(new ConfigSetting());
     }
-
     return gConfigSetting.constCast<ConfigSetting>();
 }
 
@@ -36,6 +34,7 @@ ConfigSetting::ConfigSetting()
 
 ConfigSetting::~ConfigSetting() {
     mThreadRun = false;
+    qDebug() << "~ConfigSetting";
     delete mSetting;
 }
 
@@ -71,9 +70,7 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
     if (mConfigData[configType] != configValue) {
         mMutex.lock();
         mConfigData[configType] = configValue;
-        if (configType > ConfigInfo::ConfigTypeStartSaveFile) {
-            mThreadDataSave = true;
-        }
+        mThreadDataSave = (configType > ConfigInfo::ConfigTypeStartSaveFile);
         mMutex.unlock();
 
         emit signalConfigChanged(configType, configValue);
@@ -87,6 +84,8 @@ void ConfigSetting::readConfig() {
 
         if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
             mSetting->beginGroup(GROUP_NAME_GENERAL);
+        } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
+            mSetting->beginGroup(GROUP_NAME_PYTHON);
         } else {
             mSetting->beginGroup(GROUP_NAME_COMMON);
         }
@@ -107,6 +106,8 @@ void ConfigSetting::writeConfig() {
 
             if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
+            } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
+                mSetting->beginGroup(GROUP_NAME_PYTHON);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
@@ -148,6 +149,3 @@ void ConfigSetting::threadFunc() {
     QThread::currentThread()->quit();
     QThread::currentThread()->wait();
 }
-
-
-

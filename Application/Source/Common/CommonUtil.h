@@ -127,43 +127,57 @@ class FileInfo : public QObject {
     Q_OBJECT
 
 public:
-    static QFileInfoList isFileListInfo(const QString& path = QString()) {
-        QFileInfoList fileList;
-        if (path.size() == 0) {
-            readFileInfo(fileList, "/SFC");
-        } else {
-            readFileInfo(fileList, path);
+    static QStringList isFileListInfo(const QString& path, QFileInfoList fileList = QFileInfoList()) {
+        QString currentPath = path;
+        if (currentPath.size() == 0) {
+            currentPath.append(QApplication::applicationDirPath());
+            currentPath.append("/SFC");
         }
-        return fileList;
+        return readFileInfo(currentPath, fileList);
     }
-    static void isFileListInfo(QFileInfoList& fileList, const QString& path = QString()) {
-        if (path.size() == 0) {
-            readFileInfo(fileList, "/SFC");
-        } else {
-            readFileInfo(fileList, path);
-        }
-    }
-    static void parsingFile() {
+    static QStringList parsingFile(const QString& filePath) {
+        return readFile(filePath);
     }
 
 private:
-    static QFileInfoList readFileInfo(QFileInfoList& fileList, QString path) {
-        path.push_front(QApplication::applicationDirPath());
-
+    static QStringList readFileInfo(const QString& path, QFileInfoList& fileList) {
+        QStringList fileNames = QStringList();
         QDir directory(path);
         directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         fileList = directory.entryInfoList();
 
         qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-        qDebug() << "path :" << path << ", length :" << fileList.size();
+        qDebug() << "path :" << path << ", Count :" << fileList.size();
         foreach(const QFileInfo& file, fileList) {
+            fileNames.append(file.fileName());
             qDebug() << "--------------------------------------------------------------------------------------------";
             qDebug() << "File Name :" << file.fileName() << ", Size :" << file.size() << "byte";
             qDebug() << "File Path :" << file.filePath();
             // qDebug() << "File Created: " << file.created().toString();
         }
         qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
-        return fileList;
+        return fileNames;
+    }
+    static QStringList readFile(const QString& filePath) {
+        QStringList fileContent = QStringList();
+        QFile file(filePath);
+        qDebug() << "filePath :" << filePath;
+        if (file.open(QFile::ReadOnly|QFile::Text)) {
+            QTextStream readFile(&file);
+            while (!readFile.atEnd()) {
+                QString data = readFile.readLine();
+                fileContent.append(data);
+                // qDebug() << "Data :" << data;
+            }
+            file.close();
+        } else {
+            if (file.exists()) {
+                qDebug() << "Fail to open no exist file";
+            } else {
+                qDebug() << "Fail to open error";
+            }
+        }
+        return fileContent;
     }
 };
 

@@ -25,7 +25,7 @@ void ControlManager::init() {
 void ControlManager::sendEventInfo(const int& eventType, const QVariant& eventValue) {
     int displayType = isDisplay(eventType);
     if (displayType != ScreenEnum::DisplayTypeInvalid) {
-        createControl(isDisplay(eventType));
+        createControl(displayType);
         emit signalEventInfoChanged(displayType, eventType, eventValue);
     }
 }
@@ -50,13 +50,19 @@ void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
 }
 
 int ControlManager::isDisplay(const int& eventType) {
-    if (eventType >= EventTypeEnum::EventTypeCenterStart) {
-        return ScreenEnum::DisplayTypeCenter;
-    } else if (eventType >= EventTypeEnum::EventTypeTopStart) {
-        return ScreenEnum::DisplayTypeTop;
-    } else {
-        return ScreenEnum::DisplayTypeInvalid;
+    int displayType = ScreenEnum::DisplayTypeInvalid;
+    switch (eventType) {
+        case EventTypeEnum::EventTypeFileNew :
+        case EventTypeEnum::EventTypeCenterVisible : {
+            displayType = ScreenEnum::DisplayTypeCenter;
+            break;
+        }
+        default : {
+            displayType = ScreenEnum::DisplayTypeInvalid;
+            break;
+        }
     }
+    return displayType;
 }
 
 void ControlManager::createControl(const int& displayType) {
@@ -95,14 +101,3 @@ int ControlManager::getCurrentMode() {
 void ControlManager::exitProgram() {
     emit signalExitProgram();
 }
-
-
-
-
-
-
-
-
-
-
-

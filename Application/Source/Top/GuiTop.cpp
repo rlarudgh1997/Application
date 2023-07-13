@@ -10,9 +10,18 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QProcess>
+
 
 #include <QPushButton>
 #include <QLineEdit>
+#include <QComboBox>
+#include <QCompleter>
+#include <QFileSystemModel>
+#include <QTreeView>
+#include <QListView>
+
+
 
 
 QSharedPointer<GuiTop> GuiTop::instance(AbstractHandler* handler) {
@@ -51,6 +60,9 @@ void GuiTop::drawDisplayDepth0() {
 
     updateDisplay(true);
 
+    mActionInfo[ActionType::FileNew] = ActionInfo(EventTypeEnum::EventTypeFileNew,
+                                                    "actionNew", QIcon(IAMGE_COPY),
+                                                    STRING_NEW, STRING_NEW_TIP, QKeySequence::New, this);
 
     // =================================================================================================================
     // FILE
@@ -61,7 +73,7 @@ void GuiTop::drawDisplayDepth0() {
 
         QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
                                                             QIcon(IAMGE_COPY)),
-                                                            QString("New"),
+                                                            STRING_NEW,
                                                             this);
         if (actionNew) {
             actionNew->setShortcuts(QKeySequence::New);
@@ -306,28 +318,103 @@ void GuiTop::drawDisplayDepth1() {
 void GuiTop::drawDisplayDepth2() {
 }
 
-void GuiTop::updateDisplay(const bool& first) {
+void GuiTop::updateDisplay(const bool& first, const int& type) {
     static QLineEdit* defaultPath = new QLineEdit(mScreen);
     static QPushButton* dispalyChange = new QPushButton(mScreen);
+    static QPushButton* checkLib = new QPushButton(mScreen);
+    static QLineEdit *lineEdit = new QLineEdit(mScreen);
 
     if (first) {
-        defaultPath->setGeometry(QRect(500, 25, 550, 30));
-        defaultPath->setAlignment(Qt::AlignCenter);
+        defaultPath->setGeometry(QRect(350, 25, 450, 30));
+        // defaultPath->setAlignment(Qt::AlignCenter);
+        defaultPath->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
         defaultPath->setDisabled(true);
         defaultPath->show();
 
-        dispalyChange->setGeometry(1100, 25, 150, 30);
+        dispalyChange->setGeometry(810, 25, 50, 30);
         dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        dispalyChange->setText("Center - Show/Hide");
+        dispalyChange->setText("Center");
         dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
         dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         dispalyChange->show();
         connect(dispalyChange, &QPushButton::clicked, [=]() {
             createSignal(EventTypeEnum::EventTypeCenterVisible, QVariant());
         });
+
+        checkLib->setGeometry(870, 25, 50, 30);
+        checkLib->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        checkLib->setText("LIB");
+        checkLib->setStyleSheet("color: rgb(50, 50, 100)");
+        checkLib->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        checkLib->show();
+        connect(checkLib, &QPushButton::clicked, [=]() {
+            qDebug() << "Check Lib !!!!!!!!!!!!";
+            // QProcess* process = new QProcess(this);
+            // connect(process, &QProcess::readyReadStandardOutput, [=]() {
+            //     QByteArray data = process->readAllStandardOutput();
+            //     qDebug() << "Data :" << data;
+            // });
+            // process->start("pip list |", QStringList("grep openpyxl"));
+        });
+
+        // lineEdit->setGeometry(930, 25, 250, 30);
+        lineEdit->setGeometry(10, 80, 1280-20, 30);
+        lineEdit->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        lineEdit->setStyleSheet("color: rgb(50, 50, 100)");
+        lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        lineEdit->show();
+        // connect(lineEdit, &QLineEdit::cursorPositionChanged, [=](int oldPos, int newPos) {
+        //     qDebug() << "cursorPositionChanged :" << oldPos << "->" << newPos;
+        // });
+        // connect(lineEdit, &QLineEdit::selectionChanged, [=]() {
+        //     qDebug() << "selectionChanged";
+        // });
     }
 
-    defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
+    if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
+#if 1
+        QStringList fileNames = mHandler->getProperty(PropertyTypeEnum::PropertyTypeSignalListSFC).toStringList();
+        static QCompleter *completer = new QCompleter(fileNames, mScreen);
+        completer->setCaseSensitivity(Qt::CaseInsensitive);
+        completer->setFilterMode(Qt::MatchContains);
+        completer->setWrapAround(false);
+        // completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+        lineEdit->setCompleter(completer);
+#else
+#if 1
+        static QCompleter *completerFile = new QCompleter(mScreen);
+        static QFileSystemModel *model = new QFileSystemModel(completerFile);
+    //        model->setRootPath(QDir::currentPath());
+            model->setRootPath(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+        model->setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
+        model->sort(0, Qt::SortOrder::AscendingOrder);
+        completerFile->setModel(model);
+        completerFile->setFilterMode(Qt::MatchContains);
+        lineEdit->setCompleter(completerFile);
+#endif
+
+
+#if 0
+        static QCompleter *completerFile = new QCompleter(mScreen);
+        completerFile->setModel(new QFileSystemModel(completerFile));
+        lineEdit->setCompleter(completerFile);
+#endif
+
+
+
+#if 0
+        QTreeView *tree = new QTreeView(mScreen);
+        tree->setModel(model);
+        tree->setGeometry(0, 50, 1200, 400);
+        tree->show();
+#endif
+#endif
+    }
+
+
+    if (type == PropertyTypeEnum::PropertyTypeDefaultPath) {
+        defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
+    }
 }
 
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -343,8 +430,10 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
             }
             break;
         }
-        case PropertyTypeEnum::PropertyTypeDefaultPath : {
-            updateDisplay(false);
+        case PropertyTypeEnum::PropertyTypeDefaultPath :
+        case PropertyTypeEnum::PropertyTypeSignalListSFC :
+        case PropertyTypeEnum::PropertyTypeSignalListVSM : {
+            updateDisplay(false, type);
             break;
         }
         default : {

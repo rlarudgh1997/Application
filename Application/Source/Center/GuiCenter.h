@@ -28,7 +28,7 @@ protected:
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
     virtual void drawDisplayDepth2();
-    virtual void updateDisplay(const bool& first);
+    virtual void updateDisplay(const bool& first, const int& type = 0);
 
 
 private:

@@ -33,7 +33,7 @@ void GuiCenter::initItem() {
                 {ItemType::TabeWidget, qobject_cast<QWidget*>(new QTabWidget())},
             });
 
-    qDebug() << "temp :" << Q_CAST(QWidget(), isHandler()->getScreen())
+    qDebug() << "Item :" << Q_CAST(QWidget(), isHandler()->getScreen())
                 << ", " << Q_CAST(QWidget(), isItem(ItemType::MainWindow));
 
     int marginHeight = 60;
@@ -68,7 +68,7 @@ void GuiCenter::drawDisplayDepth0() {
     updateDisplay(true);
 
     QStringList sheetTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
-    QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContextName).toStringList();
+    QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContentTitle).toStringList();
     int rowCount = 5;
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto sheetTitle, sheetTitles) {
@@ -103,25 +103,32 @@ void GuiCenter::drawDisplayDepth0() {
                 }
             }
         });
-        connect(mTableWidgets[currentSheet], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-            qDebug() << currentSheet << ". itemPressed : " << item;
+//        connect(mTableWidgets[currentSheet], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
+//            qDebug() << currentSheet << ". itemPressed : " << item;
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
+//            qDebug() << currentSheet << ". itemClicked : " << item;
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::currentItemChanged,
+//                                    [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
+//            qDebug() << currentSheet << ". currentItemChanged : " << previous << " -> " << current;
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::itemSelectionChanged, [=]() {
+//            qDebug() << currentSheet << ". itemSelectionChanged";
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
+//            qDebug() << currentSheet << ". cellPressed : " << row << ", " << column;
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::cellClicked, [=](int row, int column) {
+//            qDebug() << currentSheet << ". cellClicked : " << row << ", " << column;
+//        });
+//        connect(mTableWidgets[currentSheet], &QTableWidget::cellEntered, [=](int row, int column) {
+//            qDebug() << currentSheet << ". cellEntered : " << row << ", " << column;
+//        });
+        connect(mTableWidgets[currentSheet], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
+            qDebug() << currentSheet << ". cellDoubleClicked : " << row << ", " << column;
         });
-        connect(mTableWidgets[currentSheet], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << currentSheet << ". itemClicked : " << item;
-        });
-        connect(mTableWidgets[currentSheet], &QTableWidget::currentItemChanged,
-                                    [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-            qDebug() << currentSheet << ". currentItemChanged : " << previous << " -> " << current;
-        });
-        connect(mTableWidgets[currentSheet], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << currentSheet << ". itemSelectionChanged";
-        });
-        connect(mTableWidgets[currentSheet], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-            qDebug() << currentSheet << ". cellPressed : " << row << ", " << column;
-        });
-        connect(mTableWidgets[currentSheet], &QTableWidget::cellClicked, [=](int row, int column) {
-            qDebug() << currentSheet << ". cellClicked : " << row << ", " << column;
-        });
+
 
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnTitles.size(); column++) {
@@ -141,7 +148,7 @@ void GuiCenter::drawDisplayDepth2() {
     qDebug() << "GuiCenter::drawDisplayDepth2()";
 }
 
-void GuiCenter::updateDisplay(const bool& first) {
+void GuiCenter::updateDisplay(const bool& first, const int& type) {
     if (first) {
     } else {
     }
@@ -156,7 +163,7 @@ void GuiCenter::updateDisplay(const bool& first) {
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case PropertyTypeEnum::PropertyTypeVisible : {
-            updateDisplay(false);
+            updateDisplay(false, type);
             break;
         }
         case PropertyTypeEnum::PropertyTypeDepth : {
@@ -175,5 +182,3 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
         }
     }
 }
-
-

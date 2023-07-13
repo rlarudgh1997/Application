@@ -85,18 +85,30 @@ public:
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeDefaultPath,
         PropertyTypeSheetName,
-        PropertyTypeContextName,
+        PropertyTypeContentTitle,
+        PropertyTypeSignalListSFC,
+        PropertyTypeSignalListVSM,
+        PropertyTypeContentItemSheet0,
+        PropertyTypeContentItemSheet1,
+        PropertyTypeContentItemSheet2,
+        PropertyTypeContentItemSheet3,
+        PropertyTypeContentItemSheet4,
+        PropertyTypeContentItemSheet5,
+        PropertyTypeContentItemSheet6,
+        PropertyTypeContentItemSheet7,
+        PropertyTypeContentItemSheet8,
+        PropertyTypeContentItemSheet9,
     };
 };
 
 class EventTypeEnum {
 public:
     enum EventType {
-        EventTypeExitProgram = 0,
+        EventTypeInvalid = 0,
+        EventTypeExitProgram,
         EventTypeDisplayChange,
 
-        EventTypeTopStart = 1000,
-        EventTypeFileNew,
+        EventTypeNormal = 1000,
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
@@ -107,10 +119,11 @@ public:
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
+        EventTypeTest1,
 
-        EventTypeCenterStart = 2000,
+        EventTypeSendOtherControl = 2000,
+        EventTypeFileNew,
         EventTypeCenterVisible,
-        EventTypeItemChange,
     };
 };
 

@@ -4,6 +4,8 @@
 #include "CommonEnum.h"
 #include "ControlManager.h"
 #include "ConfigSetting.h"
+#include "CommonUtil.h"
+
 
 
 QSharedPointer<ControlTop> ControlTop::instance() {
@@ -47,6 +49,13 @@ void ControlTop::initBaseData() {
 
     QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
     updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
+
+    // QStringList list = FileInfo::isFileListInfo(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+    QString filePath = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString() + "/NodeAddressSFC.info";
+    QStringList list = FileInfo::parsingFile(filePath);
+    qDebug() << "list :" << list.size();
+
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, list);
 }
 
 void ControlTop::resetControl(const bool& reset) {
@@ -128,12 +137,10 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeCenterVisible : {
             ControlManager::instance().data()->sendEventInfo(type, QVariant());
-            int result = system("python ../Example/excel_parsing.py");
-            qDebug() << "system call" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
-            qDebug() << "File - New";
+            ControlManager::instance().data()->sendEventInfo(type, QVariant());
             break;
         }
         case EventTypeEnum::EventTypeFileOpen : {

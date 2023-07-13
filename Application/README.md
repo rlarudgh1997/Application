@@ -6,16 +6,33 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 # [Python 관련 설정]
+
 - lib 설치
 	pip install xlrd
 	pip install openpyxl
 	pip install pandas
 
+- lib 설치 확인
+	pip list | grep "openpyxl" >> ~/check_python_lib_state.txt
 
+- gen_sfc.sh / gen_vsm.sh
+	: sfc / vsm 관련 h 파일 생성
+	: 생성 경로
+		/home/ivis/900_Code/102_SFC_Test/ccos.core.sfc/ccos.core.sfc/model/ssfs/include/generated
+		Y:\900_Code\102_SFC_Test\ccos.core.sfc\ccos.core.sfc\model\ssfs\include\generated
 
 
 =====================================================================
 # [프로젝트 진행 사항]
+
+- New 선택시 : count 만큼 sheet 생성
+- 셀 선택후 자동완성 기능 동작확인
+
+- TableView (Copy & Past)
+	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
+
+	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
+
 
 - SFC 테스트 파일 로딩 하여 정부 수정 및 테스트 진행
 	: 엑셀 파일 로딩 (파이썬 이용)
@@ -79,9 +96,3 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 			- client(javascript/php 등), server(Apache 등) 을 사용하여 개발
 			- 필요한 개발 언어에 대한 경험 부족으로 초기 개발 진척이 느릴것으로 예상됨
 	: 상세 기능은 협의 후 진행 예정.
-
-
-Copy & Past
-	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
-
-	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3

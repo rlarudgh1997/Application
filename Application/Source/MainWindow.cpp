@@ -5,13 +5,12 @@
 #include "ControlManager.h"
 
 #include <QApplication>
-#include "CommonUtil.h"
 
 
 MainWindow::MainWindow() {
     qDebug() << "\n\n\n================================================================================================";
-    qDebug() << "[ Application : Path=" << QApplication::applicationDirPath().toLatin1().data() << "]";
-    qDebug() << "- QT_VERSION : " << QT_VERSION_STR << "\n\n";
+    qDebug() << "[ Application - Path :" << QApplication::applicationDirPath().toLatin1().data() << "]";
+    qDebug() << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
 
     this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
@@ -34,9 +33,6 @@ MainWindow::MainWindow() {
         QApplication::quit();
     });
 #endif
-
-    // TEST CODE
-    FileInfo::isFileListInfo("");
 }
 
 MainWindow::~MainWindow() {
@@ -87,6 +83,3 @@ void MainWindow::closeEvent(QCloseEvent *closeEvent) {
 void MainWindow::resizeEvent(QResizeEvent * resizeEvent) {
     ScreenInfo::instance().data()->resizeEvent(resizeEvent);
 }
-
-
-

@@ -21,7 +21,14 @@ public:
         // General
         ConfigTypeDefaultPath,
         ConfigTypeSheetName,
-        ConfigTypeContextName,
+        ConfigTypeContentTitle,
+        ConfigTypeNewSheetRowCount,
+
+        // Python
+        ConfigTypePythonRequiredLib1,
+        ConfigTypePythonRequiredLib2,
+        ConfigTypePythonRequiredLib3,
+
 
         ConfigTypeMax,
     } ConfigType;
@@ -47,22 +54,26 @@ private:
     void initConfigInfo() {
         mConfigInfoData.clear();
 
+        // Common : The setting information is not saved as a file.
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant("Invalid"));
         mConfigInfoData[ConfigTypeStartSaveFile] = QPair<QString, QVariant>("ConfigTypeStartSaveFile", QVariant("Invalid"));
 
+        // General
         QString defaultPath = QString("%1%2").arg(QApplication::applicationDirPath()).arg("/SFC");
-        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", defaultPath);
+        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", QVariant(defaultPath));
 
-
-        QVariantList listValue = QVariantList();
-
-        listValue = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
+        QVariantList listValue = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", QVariant(listValue));
-
         listValue = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
                     "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
-        mConfigInfoData[ConfigTypeContextName] = QPair<QString, QVariant>("ConfigTypeContextName", QVariant(listValue));
+        mConfigInfoData[ConfigTypeContentTitle] = QPair<QString, QVariant>("ConfigTypeContentTitle", QVariant(listValue));
+        mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
+
+        // Python
+        mConfigInfoData[ConfigTypePythonRequiredLib1] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib1", QVariant(false));
+        mConfigInfoData[ConfigTypePythonRequiredLib2] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib2", QVariant(false));
+        mConfigInfoData[ConfigTypePythonRequiredLib3] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib3", QVariant(false));
     }
 
 
