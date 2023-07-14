@@ -372,8 +372,12 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
     }
 
     if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
+        // add
+    } else if (type == PropertyTypeEnum::PropertyTypeSignalListVSM) {
+        // add
+    } else if (type == PropertyTypeEnum::PropertyTypeSignalListAll) {
 #if 1
-        QStringList fileNames = mHandler->getProperty(PropertyTypeEnum::PropertyTypeSignalListSFC).toStringList();
+        QStringList fileNames = mHandler->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
         static QCompleter *completer = new QCompleter(fileNames, mScreen);
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setFilterMode(Qt::MatchContains);
@@ -431,6 +435,7 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case PropertyTypeEnum::PropertyTypeDefaultPath :
+        case PropertyTypeEnum::PropertyTypeSignalListAll :
         case PropertyTypeEnum::PropertyTypeSignalListSFC :
         case PropertyTypeEnum::PropertyTypeSignalListVSM : {
             updateDisplay(false, type);

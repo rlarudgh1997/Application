@@ -7,7 +7,7 @@
 #include "ControlCenter.h"
 
 
-QSharedPointer<ControlManager> ControlManager::instance() {
+QSharedPointer<ControlManager>& ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
     if (gControl.isNull()) {
         gControl = QSharedPointer<ControlManager>(new ControlManager());

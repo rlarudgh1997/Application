@@ -4,9 +4,10 @@
 #include <QScreen>
 #include <QDateTime>
 #include <QDebug>
+#include <QResizeEvent>
 
 
-QSharedPointer<ScreenInfo> ScreenInfo::instance() {
+QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
     static QSharedPointer<ScreenInfo> gScreenInfo;
     if (gScreenInfo.isNull()) {
         gScreenInfo = QSharedPointer<ScreenInfo>(new ScreenInfo());
@@ -27,7 +28,7 @@ void ScreenInfo::updateRootItem(QWidget *rootItem) {
 QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectName, const bool& show) {
     QWindowList windowList = qApp->allWindows();
 
-    qDebug("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    qDebug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     qDebug("ScreenInfo::drawScreen(%d, %s, %d)", displayType, objectName.toLatin1().data(), show);
 
      if (windowList.count() > 0) {
@@ -118,7 +119,6 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
     return result;
 }
 
-#include <QResizeEvent>
 void ScreenInfo::resizeEvent(QResizeEvent * resizeEvent) {
 //    qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
     for (auto widget : mSubScreens) {

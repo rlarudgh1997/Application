@@ -9,12 +9,10 @@
 // #include <QPushButton>
 // #include <QLineEdit>
 #include <QMainWindow>
-#include <QTabWidget>
-#include <QTableWidget>
 
 
 
-QSharedPointer<GuiCenter> GuiCenter::instance(AbstractHandler* handler) {
+QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiCenter> gGui;
     if (gGui.isNull()) {
         gGui = QSharedPointer<GuiCenter>(new GuiCenter(handler));
@@ -70,7 +68,6 @@ void GuiCenter::drawDisplayDepth0() {
     QStringList sheetTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
     QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContentTitle).toStringList();
     int rowCount = 5;
-    QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     foreach(auto sheetTitle, sheetTitles) {
         int currentSheet = mTableWidgets.size();
         mTableWidgets[currentSheet] = new QTableWidget(rowCount, columnTitles.size()-1, isItem(ItemType::Widget));
@@ -137,6 +134,8 @@ void GuiCenter::drawDisplayDepth0() {
                 mTableWidgets[currentSheet]->setItem(row, column, newItem);
             }
         }
+        mTableWidgets[currentSheet]->resizeColumnsToContents();
+        mTableWidgets[currentSheet]->resizeRowsToContents();
     }
 }
 
@@ -158,11 +157,41 @@ void GuiCenter::updateDisplay(const bool& first, const int& type) {
     } else {
         qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->hide();
     }
+
+
+
+    if (type == PropertyTypeEnum::PropertyTypeContentNew) {
+        QStringList sheetTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSheetName).toStringList();
+        QStringList columnTitles = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContentTitle).toStringList();
+        QStringList sheetInfo = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeContentNew).toStringList();
+        int rowCount = sheetInfo.size();
+        mTableWidgets.clear();
+
+        foreach(auto sheetTitle, sheetTitles) {
+            int currentSheet = mTableWidgets.size();
+            mTableWidgets[currentSheet] = new QTableWidget(rowCount, columnTitles.size()-1, isItem(ItemType::Widget));
+            mTableWidgets[currentSheet]->setHorizontalHeaderLabels(columnTitles);
+            qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[currentSheet], sheetTitle);
+
+            mTableWidgets[currentSheet]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        }
+
+        for (int row = 0; row < rowCount; row++) {
+            for (int column = 0; column < columnTitles.size(); column++) {
+                QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1[%2, %3]").arg(sheetTitle).arg(row+1).arg(column+1));
+                newItem->setTextAlignment(Qt::AlignCenter);
+                mTableWidgets[currentSheet]->setItem(row, column, newItem);
+            }
+        }
+        mTableWidgets[currentSheet]->resizeColumnsToContents();
+        mTableWidgets[currentSheet]->resizeRowsToContents();
+    }
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case PropertyTypeEnum::PropertyTypeVisible : {
+        case PropertyTypeEnum::PropertyTypeVisible :
+        case PropertyTypeEnum::PropertyTypeContentNew : {
             updateDisplay(false, type);
             break;
         }

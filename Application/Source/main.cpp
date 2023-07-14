@@ -52,18 +52,21 @@ int main(int argc, char *argv[]) {
     signal(SIGABRT, sigHandler);
     signal(SIGSEGV, sigHandler);
 
+    QString messagPattern = QString("%1 %2%3%4%5%6 %7")
+                                    .arg("[%{time yyyyMMdd h:mm:ss.zzz}]")    // .arg("[%{time yyyyMMdd h:mm:ss.zzz t}")
+                                    .arg("[%{if-debug}D%{endif}")
+                                    .arg("%{if-info}I%{endif}")
+                                    .arg("%{if-warning}W%{endif}")
+                                    .arg("%{if-critical}C%{endif}")
+                                    .arg("%{if-fatal}F%{endif}]")
+                                    .arg("%{message}");   // .arg("[%{category}] %{message}");
+    qSetMessagePattern(messagPattern);
+
     QApplication app(argc, argv);
+
+    qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");
 
     MainWindow mainWindow;
 
     return app.exec();
 }
-
-
-
-
-
-
-
-
-

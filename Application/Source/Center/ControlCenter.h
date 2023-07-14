@@ -12,7 +12,7 @@ class ControlCenter : public AbstractControl {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlCenter> instance();
+    static QSharedPointer<ControlCenter>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
 
 

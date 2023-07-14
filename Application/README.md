@@ -18,8 +18,8 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 - gen_sfc.sh / gen_vsm.sh
 	: sfc / vsm 관련 h 파일 생성
 	: 생성 경로
-		/home/ivis/900_Code/102_SFC_Test/ccos.core.sfc/ccos.core.sfc/model/ssfs/include/generated
-		Y:\900_Code\102_SFC_Test\ccos.core.sfc\ccos.core.sfc\model\ssfs\include\generated
+cd ~/900_Code/610_Application/SFC/model/ssfs/include/generated
+Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 =====================================================================

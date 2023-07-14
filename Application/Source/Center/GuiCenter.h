@@ -1,12 +1,14 @@
 #ifndef GUI_CENTER_H
 #define GUI_CENTER_H
 
-#include <QWidget>
-
 #include "AbstractGui.h"
 
+#include <QWidget>
+#include <QTabWidget>
+#include <QTableWidget>
 
-//class ItemTypeEnum;
+
+// class ItemTypeEnum;
 
 class GuiCenter : public AbstractGui {
 private:
@@ -18,7 +20,7 @@ private:
 
 
 public:
-    static QSharedPointer<GuiCenter> instance(AbstractHandler* handler = nullptr);
+    static QSharedPointer<GuiCenter>& instance(AbstractHandler* handler = nullptr);
 
 
 protected:
@@ -42,6 +44,7 @@ public slots:
 
 private:
     QSharedPointer<QMap<ItemType, QWidget*>> mItem = QSharedPointer<QMap<ItemType, QWidget*>>();
+    QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     // ItemTypeEnum::ItemType mItemType;
 };
 

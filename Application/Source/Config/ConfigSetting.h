@@ -1,15 +1,16 @@
 #ifndef CONFIG_SETTING_H
 #define CONFIG_SETTING_H
 
+#include "ConfigInfo.h"
+
 #include <QSharedPointer>
 #include <QVariant>
 #include <QSettings>
 #include <QMap>
 #include <QThread>
 #include <QMutex>
-
-
-#include "ConfigInfo.h"
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(CONFIG)
 
 
 class ConfigSetting : public QObject {
@@ -23,7 +24,7 @@ private:
     } ConfigDataType;
 
 public:
-    static QSharedPointer<ConfigSetting> instance();
+    static QSharedPointer<ConfigSetting>& instance();
     ~ConfigSetting();
     QVariant readConfig(const int& configType);
     void writeConfig(const int& configType, const QVariant& configValue);

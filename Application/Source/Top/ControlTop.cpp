@@ -6,9 +6,10 @@
 #include "ConfigSetting.h"
 #include "CommonUtil.h"
 
+Q_LOGGING_CATEGORY(C_TOP, "ControlTop")
 
 
-QSharedPointer<ControlTop> ControlTop::instance() {
+QSharedPointer<ControlTop>& ControlTop::instance() {
     static QSharedPointer<ControlTop> gControl;
     if (gControl.isNull()) {
         gControl = QSharedPointer<ControlTop>(new ControlTop());
@@ -47,15 +48,16 @@ void ControlTop::initCommonData(const int& currentMode, const int& displayType) 
 void ControlTop::initBaseData() {
     resetControl(false);
 
-    QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+    QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
-    // QStringList list = FileInfo::isFileListInfo(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
-    QString filePath = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString() + "/NodeAddressSFC.info";
-    QStringList list = FileInfo::parsingFile(filePath);
-    qDebug() << "list :" << list.size();
-
-    updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, list);
+    CheckTimer checkTimer;
+    QStringList sfcList = FileInfo::parsingFile(defaultPath + "/NodeAddressSFC.info");
+    QStringList vsmList = FileInfo::parsingFile(defaultPath + "/NodeAddressVSM.info");
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
+    checkTimer.check("NodeAddress");
 }
 
 void ControlTop::resetControl(const bool& reset) {
@@ -102,7 +104,7 @@ void ControlTop::updateDataHandler(const int& type, const QVariantList& value) {
 }
 
 void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlTop::slotConfigChanged() ->" << type << "," << value;
+    // qDebug(C_TOP) << "ControlTop::slotConfigChanged() ->" << type << "," << value;
     // switch (type) {
     //     case ConfigInfo::ConfigTypeDefaultPath : {
     //         updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
@@ -120,7 +122,7 @@ void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventTy
         return;
     }
 
-    qDebug() << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    qDebug(C_TOP) << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
 
     switch (eventType) {
         default : {
@@ -144,27 +146,27 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeFileOpen : {
-            qDebug() << "File - Open";
+            qDebug(C_TOP) << "File - Open";
             break;
         }
         case EventTypeEnum::EventTypeFileSave : {
-            qDebug() << "File - Save";
+            qDebug(C_TOP) << "File - Save";
             break;
         }
         case EventTypeEnum::EventTypeFileSaveAs : {
-            qDebug() << "File - Save As";
+            qDebug(C_TOP) << "File - Save As";
             break;
         }
         case EventTypeEnum::EventTypeEditCut : {
-            qDebug() << "Edit - Cut";
+            qDebug(C_TOP) << "Edit - Cut";
             break;
         }
         case EventTypeEnum::EventTypeEditCopy : {
-            qDebug() << "Edit - Copy";
+            qDebug(C_TOP) << "Edit - Copy";
             break;
         }
         case EventTypeEnum::EventTypeEditPaste : {
-            qDebug() << "Edit - Paste";
+            qDebug(C_TOP) << "Edit - Paste";
             break;
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
@@ -173,15 +175,15 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeSettingTestReport : {
-            qDebug() << "Setting - Test Report";
+            qDebug(C_TOP) << "Setting - Test Report";
             break;
         }
         case EventTypeEnum::EventTypeSettingTestResult : {
-            qDebug() << "Setting - Test Result";
+            qDebug(C_TOP) << "Setting - Test Result";
             break;
         }
         case EventTypeEnum::EventTypeSettingTestCoverage : {
-            qDebug() << "Setting - Test Coverage";
+            qDebug(C_TOP) << "Setting - Test Coverage";
             break;
         }
         default : {

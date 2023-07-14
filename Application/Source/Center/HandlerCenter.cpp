@@ -6,7 +6,7 @@
 #endif
 
 
-QSharedPointer<HandlerCenter> HandlerCenter::instance() {
+QSharedPointer<HandlerCenter>& HandlerCenter::instance() {
     static QSharedPointer<HandlerCenter> gHandler;
     if (gHandler.isNull()) {
         gHandler = QSharedPointer<HandlerCenter>(new HandlerCenter());

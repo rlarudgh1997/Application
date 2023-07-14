@@ -13,7 +13,7 @@ private:
 
 
 public:
-    static QSharedPointer<HandlerCenter> instance();
+    static QSharedPointer<HandlerCenter>& instance();
 
 
 private:

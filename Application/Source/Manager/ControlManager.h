@@ -12,7 +12,7 @@ class ControlManager : public QObject {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlManager> instance();
+    static QSharedPointer<ControlManager>& instance();
     void init();
     void sendEventInfo(const int& eventType, const QVariant& eventValue);
     void keyEvent(const int& inputType, const int& inputValue);

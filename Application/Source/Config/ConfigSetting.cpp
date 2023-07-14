@@ -8,6 +8,8 @@
 
 #include <QDebug>
 
+Q_LOGGING_CATEGORY(CONFIG, "ConfigSetting")
+
 
 #define CONFIG_PATH QApplication::applicationDirPath().toLatin1().data()
 #define CONFIG_NAME "Application.ini"
@@ -18,12 +20,12 @@
 #define GROUP_NAME_PYTHON    "Python"
 
 
-QSharedPointer<ConfigSetting> ConfigSetting::instance() {
+QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
     static QSharedPointer<ConfigSetting> gConfigSetting;
     if (gConfigSetting.isNull()) {
         gConfigSetting = QSharedPointer<ConfigSetting>(new ConfigSetting());
     }
-    return gConfigSetting.constCast<ConfigSetting>();
+    return gConfigSetting;
 }
 
 
@@ -34,7 +36,7 @@ ConfigSetting::ConfigSetting()
 
 ConfigSetting::~ConfigSetting() {
     mThreadRun = false;
-    qDebug() << "~ConfigSetting";
+    qDebug(CONFIG) << "~ConfigSetting";
     delete mSetting;
 }
 
@@ -42,7 +44,7 @@ void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
     bool fileExists = configSettingFile.exists();
 
-    // qDebug() << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
+    // qDebug(CONFIG) << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
 
     if ((fileExists == false) && (configSettingFile.open(QIODevice::WriteOnly|QIODevice::Text))) {
         resetConfig();

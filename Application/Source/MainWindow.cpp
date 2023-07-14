@@ -6,11 +6,15 @@
 
 #include <QApplication>
 
+#include "CommonUtil.h"
+
+Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
 MainWindow::MainWindow() {
-    qDebug() << "\n\n\n================================================================================================";
-    qDebug() << "[ Application - Path :" << QApplication::applicationDirPath().toLatin1().data() << "]";
-    qDebug() << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
+    qDebug(MAINWINDOW) << "================================================================================================";
+    qDebug(MAINWINDOW) << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
+    qDebug(MAINWINDOW) << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
+    CheckTimer checkTimer;
 
     this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
@@ -18,10 +22,16 @@ MainWindow::MainWindow() {
     this->setObjectName(QString("RootWidget"));
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->show();
+    checkTimer.check("MainWindow");
 
     ScreenInfo::instance().data()->updateRootItem(this);
+    checkTimer.check("ScreenInfo");
+
     ConfigSetting::instance().data();
+    checkTimer.check("ConfigSetting");
+
     ControlManager::instance().data()->init();
+    checkTimer.check("ControlManager");
 
 #if 1
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);
@@ -33,10 +43,12 @@ MainWindow::MainWindow() {
         QApplication::quit();
     });
 #endif
+
+    checkTimer.check("MainWindow");
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << "\n\n[Complete] Exit Application !!!!!!!! \n\n";
+    qDebug(MAINWINDOW) << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {

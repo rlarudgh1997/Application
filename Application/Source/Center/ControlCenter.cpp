@@ -4,11 +4,12 @@
 #include "CommonEnum.h"
 #include "ControlManager.h"
 #include "ConfigSetting.h"
+#include "CommonUtil.h"
 
 #include <QProcess>
 
 
-QSharedPointer<ControlCenter> ControlCenter::instance() {
+QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
     if (gControl.isNull()) {
         gControl = QSharedPointer<ControlCenter>(new ControlCenter());
@@ -117,6 +118,8 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
 
     switch (eventType) {
         case EventTypeEnum::EventTypeCenterVisible : {
+            CheckTimer checkTimer;
+
             updateDataHandler(PropertyTypeEnum::PropertyTypeVisible,
                                 (getData(PropertyTypeEnum::PropertyTypeVisible).toBool()) ? (false) : (true));
 #if 1
@@ -135,44 +138,53 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             // process->start("ping", QStringList() << "-c" << "4" << "google.com");
             process->start("python", QStringList("../Example/excel_parsing.py"));
 #endif
+            checkTimer.check("ExcelParsing");
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
             qDebug() << "File - New";
             QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
             QVariantList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle).toList();
+            QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+            QStringList sheetInfo = FileInfo::parsingFile(defaultPath + "/sheet1.txt");
 
-            QVariantList temp, temp2;
-            temp.append(contextName);
-            temp.append("\n");
-
-            int index = 0;
-            for (QVariant name : contextName) {
-                temp2.append(QString("item %1").arg(index));
-                index++;
+            foreach(const auto& info, sheetInfo) {
+                qDebug() << "Str:" << info;
             }
-            temp.append(temp2);
-//            qDebug() << "Sheet1 :" << temp;
+            updateDataHandler(PropertyTypeEnum::PropertyTypeContentNew, sheetInfo);
 
-            QString value;
-            foreach(const QVariant& t, temp) {
-                if (t.toString().compare("\n") == 0) {
-                    qDebug() << "NewLine :" << t;
-                } else {
-                    value.append(t.toString());
-                    value.append("/");
+//             QVariantList temp, temp2;
+//             temp.append(contextName);
+//             temp.append("\n");
 
-                    qDebug() << "Item :" << t;
-                }
-            }
+//             int index = 0;
+//             for (QVariant name : contextName) {
+//                 temp2.append(QString("item %1").arg(index));
+//                 index++;
+//             }
+//             temp.append(temp2);
+// //            qDebug() << "Sheet1 :" << temp;
+
+//             QString value;
+//             foreach(const QVariant& t, temp) {
+//                 if (t.toString().compare("\n") == 0) {
+//                     qDebug() << "NewLine :" << t;
+//                 } else {
+//                     value.append(t.toString());
+//                     value.append("/");
+
+//                     qDebug() << "Item :" << t;
+//                 }
+//             }
 
 
+            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentNew, sheetInfo);
 
 
-            updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
-            updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, QVariant());
-            updateDataHandler(PropertyTypeEnum::PropertyTypeContentItemSheet0, QVariant(temp));
-            updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
+            // updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
+            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, QVariant());
+            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentItemSheet0, QVariant(temp));
+            // updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
             break;
         }
         default : {

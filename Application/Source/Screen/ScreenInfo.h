@@ -19,7 +19,7 @@ public:
 
 
 public:
-    static QSharedPointer<ScreenInfo> instance();
+    static QSharedPointer<ScreenInfo>& instance();
     void updateRootItem(QWidget *rootItem);
     QWidget* drawScreen(const int& displayType, const QString& objectName = QString(), const bool& show = true);
     void controlScreen(const int& displayType, const bool& show);

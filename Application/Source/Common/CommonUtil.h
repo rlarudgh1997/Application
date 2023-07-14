@@ -11,6 +11,7 @@
 #include <QFileInfoList>
 #include <QDir>
 #include <QMap>
+#include <QElapsedTimer>
 
 #include <QDebug>
 
@@ -120,8 +121,29 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
 
 
 
+class CheckTimer : public QObject {
+    Q_OBJECT
 
+public:
+    CheckTimer() {
+        mElapsedTimer.start();
+        // qDebug() << "StartTime :" << mElapsedTimer.elapsed() << "ms";
+    }
+    void reset() {
+        mElapsedTimer.restart();
+        // qDebug() << "ReStartTime :" << mElapsedTimer.elapsed() << "ms";
+    }
+    void check(const QString& info = QString()) {
+        if (info.size()) {
+            qDebug() << "CheckTime[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms";
+        } else {
+            qDebug() << "CheckTime :" << mElapsedTimer.elapsed() << "ms";
+        }
+    }
 
+private:
+    QElapsedTimer mElapsedTimer;
+};
 
 class FileInfo : public QObject {
     Q_OBJECT

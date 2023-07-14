@@ -6,7 +6,7 @@
 #endif
 
 
-QSharedPointer<HandlerTop> HandlerTop::instance() {
+QSharedPointer<HandlerTop>& HandlerTop::instance() {
     static QSharedPointer<HandlerTop> gHandler;
     if (gHandler.isNull()) {
         gHandler = QSharedPointer<HandlerTop>(new HandlerTop());
@@ -51,4 +51,3 @@ void HandlerTop::timerFunc(const int& timerId) {
         // do nothing
     }
 }
-

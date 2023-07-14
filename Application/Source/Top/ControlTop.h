@@ -4,6 +4,8 @@
 
 
 #include "AbstractControl.h"
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(C_TOP)
 
 
 
@@ -12,7 +14,7 @@ class ControlTop : public AbstractControl {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlTop> instance();
+    static QSharedPointer<ControlTop>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
 
 
