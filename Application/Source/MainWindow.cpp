@@ -33,16 +33,9 @@ MainWindow::MainWindow() {
     ControlManager::instance().data()->init();
     checkTimer.check("ControlManager");
 
-#if 1
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);
     // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QWidget::close);
-#else
-    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, [=]() {
-        // QWidget::close();
-        // QApplication::closeAllWindows();
-        QApplication::quit();
-    });
-#endif
+    // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::closeAllWindows());
 
     checkTimer.check("MainWindow");
 }
@@ -59,31 +52,15 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* mouseEvent) {
     // ControlManager::instance().data()->mouseEvent(1, mouseEvent);
 }
 
-int MainWindow::isConvertKey(const QKeyEvent& keyEvent) {
-    int inputValue = keyEvent.key();
-#if defined(PLATFORM_X86)
-    switch (inputValue) {
-        case KeyTypeEnum::KeyInputValueNumUp    : { inputValue = KeyTypeEnum::KeyInputValueUp;    break; }
-        case KeyTypeEnum::KeyInputValueNumDown  : { inputValue = KeyTypeEnum::KeyInputValueDown;  break; }
-        case KeyTypeEnum::KeyInputValueNumLeft  : { inputValue = KeyTypeEnum::KeyInputValueLeft;  break; }
-        case KeyTypeEnum::KeyInputValueNumRight : { inputValue = KeyTypeEnum::KeyInputValueRight; break; }
-        case KeyTypeEnum::KeyInputValueNumOK    :
-        case KeyTypeEnum::KeyInputValueNumOK2   : { inputValue = KeyTypeEnum::KeyInputValueOK;    break; }
-        default :                                 {                                               break; }
-    }
-#endif
-    return inputValue;
-}
-
 void MainWindow::keyPressEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypePress, isConvertKey(*keyEvent));
+    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypePress, keyEvent);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypeRelease, isConvertKey(*keyEvent));
+    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypeRelease, keyEvent);
 }
 
-void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+void MainWindow::closeEvent(QCloseEvent* closeEvent) {
     // qDebug() << "MainWindow::closeEvent()\n\n";
     if (true) {
         closeEvent->accept();
@@ -92,6 +69,11 @@ void MainWindow::closeEvent(QCloseEvent *closeEvent) {
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent * resizeEvent) {
+void MainWindow::moveEvent(QMoveEvent* moveEvent) {
+    qDebug() << "MainWindow::moveEvent()->" << moveEvent;
+}
+
+void MainWindow::resizeEvent(QResizeEvent* resizeEvent) {
     ScreenInfo::instance().data()->resizeEvent(resizeEvent);
+    ControlManager::instance().data()->resizeEvent(resizeEvent);
 }

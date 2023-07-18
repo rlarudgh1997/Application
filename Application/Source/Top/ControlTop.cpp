@@ -69,12 +69,17 @@ void ControlTop::controlConnect(const bool& state) {
         connect(isHandler(),                       &HandlerTop::signalHandlerEvent,
                 this,                              &ControlTop::slotHandlerEvent,
                 Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlTop::slotEventInfoChanged,
-                Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
                 this,                              &ControlTop::slotConfigChanged,
                 Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                this,                              &ControlTop::slotEventInfoChanged,
+                Qt::UniqueConnection);
+#if defined(USE_RESIZE_SIGNAL)
+        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
+                updateDataHandler(PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+        });
+#endif
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -89,6 +94,15 @@ void ControlTop::timerFunc(const int& timerId) {
 void ControlTop::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
+}
+
+void ControlTop::resizeEvent(const int& width, const int& height) {
+#if defined(USE_RESIZE_SIGNAL)
+    Q_UNUSED(width)
+    Q_UNUSED(height)
+#else
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDisplaySize, QSize(width, height));
+#endif
 }
 
 void ControlTop::updateDataHandler(const int& type, const QVariant& value) {
@@ -137,16 +151,14 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             ControlManager::instance().data()->exitProgram();
             break;
         }
-        case EventTypeEnum::EventTypeCenterVisible : {
+        case EventTypeEnum::EventTypeCenterVisible :
+        case EventTypeEnum::EventTypeParsingExcel : {
             ControlManager::instance().data()->sendEventInfo(type, QVariant());
             break;
         }
-        case EventTypeEnum::EventTypeFileNew : {
-            ControlManager::instance().data()->sendEventInfo(type, QVariant());
-            break;
-        }
+        case EventTypeEnum::EventTypeFileNew :
         case EventTypeEnum::EventTypeFileOpen : {
-            qDebug(C_TOP) << "File - Open";
+            ControlManager::instance().data()->sendEventInfo(type, value);
             break;
         }
         case EventTypeEnum::EventTypeFileSave : {

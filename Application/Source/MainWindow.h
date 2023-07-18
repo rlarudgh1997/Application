@@ -20,11 +20,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
     void keyPressEvent(QKeyEvent* keyEvent) override;
     void keyReleaseEvent(QKeyEvent* keyEvent) override;
-    void closeEvent(QCloseEvent *closeEvent) override;
-    void resizeEvent(QResizeEvent * resizeEvent) override;
-
-private:
-    int isConvertKey(const QKeyEvent& keyEvent);
+    void closeEvent(QCloseEvent* closeEvent) override;
+    void moveEvent(QMoveEvent* moveEvent) override;
+    void resizeEvent(QResizeEvent* resizeEvent) override;
 };
 
 

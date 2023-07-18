@@ -37,6 +37,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
             mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
             mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             // mSubScreens[displayType]->setStyleSheet("background-color: rgb(50, 50, 100)");
+            // mSubScreens[displayType]->setStyleSheet("background-color: rgb(0, 0, 255)");
             mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
             mSubScreens[displayType]->setObjectName(objectName);
             (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
@@ -120,12 +121,13 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
 }
 
 void ScreenInfo::resizeEvent(QResizeEvent * resizeEvent) {
-//    qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
-    for (auto widget : mSubScreens) {
+    // qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
+    foreach(const auto& widget, mSubScreens) {
         widget->setGeometry(0, 0, resizeEvent->size().width(), resizeEvent->size().height());
+        // widget->update();
+        // qDebug() << "ScreenInfo::WidgetSize:" << widget->geometry();
     }
 }
-
 
 void ScreenInfo::loadComplete(const int& displayType) {
     qDebug("ScreenInfo::loadComplete(%d)", displayType);

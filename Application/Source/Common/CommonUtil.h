@@ -4,15 +4,13 @@
 #include <QObject>
 #include <QApplication>
 #include <QWidget>
-
-
-
 #include <QFile>
 #include <QFileInfoList>
 #include <QDir>
 #include <QMap>
 #include <QElapsedTimer>
-
+#include <QMutex>
+#include <QMutexLocker>
 #include <QDebug>
 
 
@@ -31,28 +29,28 @@
 #define BOOL_REVERSE(var) (var = (var) ? (false) : (true))
 
 
-
+// name : The first letter starts with an uppercase letter
 #define QML_WRITABLE_PROPERTY(type, name, notify) \
-    Q_PROPERTY(type name READ get_##name WRITE set_##name NOTIFY name##Changed) \
+    Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
     public: \
-        type get_##name() const { \
-            return m_##name ; \
+        type get##name() const { \
+            return m##name ; \
         } \
     public Q_SLOTS: \
-        void set_##name(const type& name) { \
-            QMutexLocker lock(&m_mutex_##name); \
-            if (m_##name != name) { \
-                m_##name = name; \
+        void set##name(const type& name) { \
+            QMutexLocker lock(&mMutex##name); \
+            if (m##name != name) { \
+                m##name = name; \
                 if (notify) { \
-                    emit name##Changed(m_##name); \
+                    emit signal##name##Changed(m##name); \
                 } \
             } \
         } \
     Q_SIGNALS: \
-        void name##Changed(type name); \
+        void signal##name##Changed(const type& name); \
     private: \
-        QMutex m_mutex_##name; \
-        type m_##name; \
+        QMutex mMutex##name; \
+        type m##name; \
 
 
 #define QML_ENUM_CLASS(name, ...) \
@@ -135,9 +133,9 @@ public:
     }
     void check(const QString& info = QString()) {
         if (info.size()) {
-            qDebug() << "CheckTime[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms";
+            qDebug() << "CheckTime[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms\n";
         } else {
-            qDebug() << "CheckTime :" << mElapsedTimer.elapsed() << "ms";
+            qDebug() << "CheckTime :" << mElapsedTimer.elapsed() << "ms\n";
         }
     }
 

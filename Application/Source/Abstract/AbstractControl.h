@@ -32,6 +32,7 @@ public:
     bool setData(const int& type, const QVariant& value);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
+    virtual void resizeEvent(const int& width, const int& height) = 0;
 
 
 protected:

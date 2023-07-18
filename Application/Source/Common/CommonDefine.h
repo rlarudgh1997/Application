@@ -22,7 +22,7 @@
 // ===================================================================================================
 #define USE_KEY_EVENT
 #define USE_SCREEN_CAPTURE
-
+#define USE_RESIZE_SIGNAL
 
 
 #define USE_GUI_MODULE

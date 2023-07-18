@@ -16,10 +16,12 @@ class ControlTop : public AbstractControl {
 public:
     static QSharedPointer<ControlTop>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
+    virtual void resizeEvent(const int& width, const int& height);
 
 
 private:
     explicit ControlTop();
+
 
 protected:
     virtual AbstractHandler* isHandler();

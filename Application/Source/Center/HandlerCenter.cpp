@@ -21,10 +21,18 @@ HandlerCenter::HandlerCenter() : AbstractHandler(ScreenEnum::DisplayTypeTop, QSt
 }
 
 void HandlerCenter::initPropertyInfo() {
-    registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                   QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeMode,                      QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeVisible,                   QVariant(false));
-    registerProperty(PropertyTypeEnum::PropertyTypeDepth,                     QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeDisplaySize,            QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeMode,                   QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeVisible,                QVariant(false));
+    registerProperty(PropertyTypeEnum::PropertyTypeDepth,                  QVariant(-1));
+
+
+    registerProperty(PropertyTypeEnum::PropertyTypeDefaultPath,            QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeSheetName,              QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeContentTitle,           QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDescTitle,              QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfo,        QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

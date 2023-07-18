@@ -22,6 +22,7 @@ public:
         ConfigTypeDefaultPath,
         ConfigTypeSheetName,
         ConfigTypeContentTitle,
+        ConfigTypeDescTitle,
         ConfigTypeNewSheetRowCount,
 
         // Python
@@ -63,12 +64,13 @@ private:
         QString defaultPath = QString("%1%2").arg(QApplication::applicationDirPath()).arg("/SFC");
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", QVariant(defaultPath));
 
-        QVariantList listValue = {"Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
+        QVariantList listValue = {"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", QVariant(listValue));
         listValue = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
                     "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
         mConfigInfoData[ConfigTypeContentTitle] = QPair<QString, QVariant>("ConfigTypeContentTitle", QVariant(listValue));
-        mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
+        listValue = {"test", "version", "description", "Config_Signal", "Data"};
+        mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>("ConfigTypeDescTitle", QVariant(listValue));
 
         // Python
         mConfigInfoData[ConfigTypePythonRequiredLib1] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib1", QVariant(false));

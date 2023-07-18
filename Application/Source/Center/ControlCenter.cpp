@@ -47,11 +47,14 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 void ControlCenter::initBaseData() {
     resetControl(false);
 
+    QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
+
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
-    QVariantList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle).toList();
+    QVariantList contentTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle).toList();
 
     updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, contextName);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, contentTitle);
 }
 
 void ControlCenter::resetControl(const bool& reset) {
@@ -63,12 +66,17 @@ void ControlCenter::controlConnect(const bool& state) {
         connect(isHandler(),                       &HandlerCenter::signalHandlerEvent,
                 this,                              &ControlCenter::slotHandlerEvent,
                 Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlCenter::slotEventInfoChanged,
-                Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
                 this,                              &ControlCenter::slotConfigChanged,
                 Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                this,                              &ControlCenter::slotEventInfoChanged,
+                Qt::UniqueConnection);
+#if defined(USE_RESIZE_SIGNAL)
+        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
+                updateDataHandler(PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+        });
+#endif
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -83,6 +91,15 @@ void ControlCenter::timerFunc(const int& timerId) {
 void ControlCenter::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
+}
+
+void ControlCenter::resizeEvent(const int& width, const int& height) {
+#if defined(USE_RESIZE_SIGNAL)
+    Q_UNUSED(width)
+    Q_UNUSED(height)
+#else
+    updateDataHandler(PropertyTypeEnum::PropertyTypeDisplaySize, QSize(width, height));
+#endif
 }
 
 void ControlCenter::updateDataHandler(const int& type, const QVariant& value) {
@@ -116,12 +133,91 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
 
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
 
+    CheckTimer checkTimer;
+
     switch (eventType) {
         case EventTypeEnum::EventTypeCenterVisible : {
-            CheckTimer checkTimer;
+            bool visible = (getData(PropertyTypeEnum::PropertyTypeVisible).toBool()) ? (false) : (true);
+            updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, visible);
+            checkTimer.check("Center - Visible");
+            break;
+        }
+        case EventTypeEnum::EventTypeFileNew :
+        case EventTypeEnum::EventTypeFileOpen : {
+            QStringList excelData = QStringList();
+            QVariantList sheetName = QVariantList();
+            QVariantList contentTitle = QVariantList();
 
-            updateDataHandler(PropertyTypeEnum::PropertyTypeVisible,
-                                (getData(PropertyTypeEnum::PropertyTypeVisible).toBool()) ? (false) : (true));
+            if (eventType == EventTypeEnum::EventTypeFileNew) {
+                sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+                contentTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle).toList();
+                int rowCount = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
+                foreach(const auto& name, sheetName) {
+                    qDebug() << "sheetName:" << name;
+                    excelData.append(QString("SheetName:%1").arg(name.toString()));
+                    for (int index = 0; index < rowCount; index++) {
+                        excelData.append("");
+                    }
+                }
+            } else {
+                QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+                qDebug() << "FilePath :" << eventValue;
+                QStringList readData = FileInfo::parsingFile(eventValue.toString());
+                if (readData.size() > 0) {
+                    sheetName = {"sheet1"};
+                    QStringList titleInfo = readData[0].split("\t");
+                    foreach(const auto& title, titleInfo) {
+                        contentTitle.append(title);
+                    }
+                    qDebug() << "Read :" << readData[0] << ", " << contentTitle;
+
+                    for (int index = 1; index < readData.size(); index++) {
+                        excelData.append(readData[index]);
+                    }
+                }
+            }
+#if 0
+             QVariantList temp, temp2;
+             temp.append(contentTitle);
+             temp.append("\n");
+
+             int index = 0;
+             for (QVariant name : contentTitle) {
+                 temp2.append(QString("item %1").arg(index));
+                 index++;
+             }
+             temp.append(temp2);
+             qDebug() << "Sheet1 :" << temp;
+
+             QString value;
+             foreach(const QVariant& t, temp) {
+                 if (t.toString().compare("\n") == 0) {
+                     qDebug() << "NewLine :" << t;
+                 } else {
+                     value.append(t.toString());
+                     value.append("/");
+
+                     qDebug() << "Item :" << t;
+                 }
+             }
+#endif
+            if (excelData.size() > 0) {
+                QVariantList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toList();
+                updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
+                updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, contentTitle);
+                updateDataHandler(PropertyTypeEnum::PropertyTypeDescTitle, descTitle);
+                updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfo, excelData);
+                updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
+
+                if (eventType == EventTypeEnum::EventTypeFileOpen) {
+                    checkTimer.check("Excel - Open");
+                } else {
+                    checkTimer.check("Excel - New");
+                }
+            }
+            break;
+        }
+        case EventTypeEnum::EventTypeParsingExcel : {
 #if 1
             int result = system("python ../Example/excel_parsing.py");
             qDebug() << "system call" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
@@ -138,53 +234,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             // process->start("ping", QStringList() << "-c" << "4" << "google.com");
             process->start("python", QStringList("../Example/excel_parsing.py"));
 #endif
-            checkTimer.check("ExcelParsing");
-            break;
-        }
-        case EventTypeEnum::EventTypeFileNew : {
-            qDebug() << "File - New";
-            QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
-            QVariantList contextName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle).toList();
-            QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-            QStringList sheetInfo = FileInfo::parsingFile(defaultPath + "/sheet1.txt");
-
-            foreach(const auto& info, sheetInfo) {
-                qDebug() << "Str:" << info;
-            }
-            updateDataHandler(PropertyTypeEnum::PropertyTypeContentNew, sheetInfo);
-
-//             QVariantList temp, temp2;
-//             temp.append(contextName);
-//             temp.append("\n");
-
-//             int index = 0;
-//             for (QVariant name : contextName) {
-//                 temp2.append(QString("item %1").arg(index));
-//                 index++;
-//             }
-//             temp.append(temp2);
-// //            qDebug() << "Sheet1 :" << temp;
-
-//             QString value;
-//             foreach(const QVariant& t, temp) {
-//                 if (t.toString().compare("\n") == 0) {
-//                     qDebug() << "NewLine :" << t;
-//                 } else {
-//                     value.append(t.toString());
-//                     value.append("/");
-
-//                     qDebug() << "Item :" << t;
-//                 }
-//             }
-
-
-            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentNew, sheetInfo);
-
-
-            // updateDataHandler(PropertyTypeEnum::PropertyTypeSheetName, sheetName);
-            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentTitle, QVariant());
-            // updateDataHandler(PropertyTypeEnum::PropertyTypeContentItemSheet0, QVariant(temp));
-            // updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
+            checkTimer.check("Excel - Parsing");
             break;
         }
         default : {

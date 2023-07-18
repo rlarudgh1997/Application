@@ -13,6 +13,7 @@ bool AbstractHandler::init() {
 
         initPropertyInfo();
         AbstractHandler::controlConnect(true);
+        controlConnect(true);
     }
     return mUpdateState;
 }
@@ -25,7 +26,6 @@ void AbstractHandler::controlConnect(const bool& state) {
     } else {
         disconnect(this);
     }
-    controlConnect(true);
 }
 
 QWidget* AbstractHandler::getScreen() {
@@ -55,7 +55,7 @@ int AbstractHandler::getTimerId(const int& timerType) {
 }
 
 void AbstractHandler::registerProperty(const int& type, const QVariant& value) {
-    setProperty(type, value);
+    mProperty[type] = value;
 }
 
 QVariant AbstractHandler::getProperty(const int& type) {
@@ -63,6 +63,11 @@ QVariant AbstractHandler::getProperty(const int& type) {
 }
 
 void AbstractHandler::setProperty(const int& type, const QVariant& value) {
+    if (mProperty.contains(type) == false) {
+        qDebug() << "Not register property - info :" << type << "," << value;
+        return;
+    }
+
     if (mUpdateState) {
         if (mProperty[type] != value) {
             mProperty[type] = value;
@@ -70,5 +75,3 @@ void AbstractHandler::setProperty(const int& type, const QVariant& value) {
         }
     }
 }
-
-

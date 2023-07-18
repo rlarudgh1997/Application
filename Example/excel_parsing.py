@@ -16,13 +16,15 @@ from source.def_functon import func_name, func_name1, isFuntionName
 
 
 # 파일명, 시트명
-fileName = "../Example/test1.xlsx"
-sheetName = ["Sheet1", "Sheet2", "Sheet3"]
+# fileName = "../Example/test1.xlsx"
+# sheetName = ["Sheet1", "Sheet2", "Sheet3"]
+fileName = "../Example/SOC_Gauge.xlsx"
+sheetName = ["Description", "Privates", "Telltales", "Constants", "Events", "Sounds", "Inters", "Outputs"]
 # sheetInfo = []
 sheetInfo = list()
 excelInfo = dict()
 
-excelInfo["sheetName"] = ["Sheet1", "Sheet2", "Sheet3"]
+excelInfo["sheetName"] = sheetName  # ["Sheet1", "Sheet2", "Sheet3"]
 excelInfo["sheetInfo"] = list()
 
 
@@ -76,9 +78,18 @@ def excel_save(state) :
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         print("\t Save Start :../Example/sheet1.txt")
         print("\n==================================================================================")
-        convert_sheet1 = pd.DataFrame(sheetInfo[0])
-        print(convert_sheet1)
-        write_sheet1 = convert_sheet1.to_csv("../Example/sheet1.txt", sep="	", index = False)
+        index = 0
+        for sheet in sheetInfo:
+            saveSheet = pd.DataFrame(sheet)
+            sheetFileName = "../deploy_x86/SFC/TC/" + str(index) + "_" + sheetName[index] + ".txt"
+            print("SaveInfo :", sheetFileName, ", ", saveSheet)
+            writeSheet = saveSheet.to_csv(sheetFileName, sep="	", index = False)
+            index += 1
+
+        # convert_sheet1 = pd.DataFrame(sheetInfo[0])
+        # print(convert_sheet1)
+        # # write_sheet1 = convert_sheet1.to_csv("../Example/sheet1.txt", sep="	", index = False)
+        # write_sheet1 = convert_sheet1.to_csv("../deploy_x86/SFC/sheet1.txt", sep="	", index = False)
         print("==================================================================================")
         print("\n\t Save Complete")
         print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
@@ -110,7 +121,7 @@ def excel_save(state) :
 
 
 excel_parsing(fileName, sheetName, True)
-excel_edit()
+# excel_edit()
 excel_save(True)
 
 

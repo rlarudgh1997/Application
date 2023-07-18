@@ -78,6 +78,7 @@ class PropertyTypeEnum {
 public:
     enum PropertyType {
         PropertyTypeDisplay = 0,
+        PropertyTypeDisplaySize,
         PropertyTypeMode,
         PropertyTypeVisible,
         PropertyTypeDepth,
@@ -86,10 +87,11 @@ public:
         PropertyTypeDefaultPath,
         PropertyTypeSheetName,
         PropertyTypeContentTitle,
+        PropertyTypeDescTitle,
         PropertyTypeSignalListAll,
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
-        PropertyTypeContentNew,
+        PropertyTypeUpdateSheetInfo,
         PropertyTypeContentItemSheet0,
         PropertyTypeContentItemSheet1,
         PropertyTypeContentItemSheet2,
@@ -111,7 +113,6 @@ public:
         EventTypeDisplayChange,
 
         EventTypeNormal = 1000,
-        EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
         EventTypeEditCut,
@@ -124,8 +125,10 @@ public:
         EventTypeTest1,
 
         EventTypeSendOtherControl = 2000,
-        EventTypeFileNew,
         EventTypeCenterVisible,
+        EventTypeParsingExcel,
+        EventTypeFileNew,
+        EventTypeFileOpen,
     };
 };
 

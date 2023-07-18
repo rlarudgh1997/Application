@@ -15,7 +15,6 @@ private:
 public:
     static QSharedPointer<HandlerTop>& instance();
 
-
 private:
     explicit HandlerTop();
 

@@ -46,6 +46,7 @@
 #define STRING_ABOUT_QT                    QString("About Qt")
 #define STRING_ABOUT_QT_TIP                QString("Show the Qt library's About box")
 #define STRING_DEFAULT_PATH                QString("Default Path")
+#define STRING_FILE_OPEN                   QString("File Open")
 
 
 

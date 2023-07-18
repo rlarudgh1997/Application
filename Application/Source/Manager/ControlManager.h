@@ -5,26 +5,28 @@
 #include <QSharedPointer>
 
 #include "AbstractControl.h"
-
+#include "CommonUtil.h"
 
 
 class ControlManager : public QObject {
     Q_OBJECT
 
+    QML_WRITABLE_PROPERTY(QSize, ScreenSize, true)
+    QML_WRITABLE_PROPERTY(int, CurrentMode, true)
+
 public:
     static QSharedPointer<ControlManager>& instance();
     void init();
     void sendEventInfo(const int& eventType, const QVariant& eventValue);
-    void keyEvent(const int& inputType, const int& inputValue);
+    void keyEvent(const int& inputType, QKeyEvent* keyEvent);
     void mouseEvent(const int& inputType, const int& inputValue);
+    void resizeEvent(QResizeEvent* resizeEvent);
     void exitProgram();
 
 private:
     explicit ControlManager();
     int isDisplay(const int& eventType);
     void createControl(const int& displayType);
-    void setCurrentMode(const int& displayType);
-    int getCurrentMode();
 
 
 signals:
@@ -34,7 +36,6 @@ signals:
 
 private:
     QMap<int, AbstractControl*> mControlInfo = QMap<int, AbstractControl*>();
-    int mCurrentMode = 0;
 };
 
 

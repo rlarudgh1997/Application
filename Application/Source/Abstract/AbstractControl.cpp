@@ -49,5 +49,3 @@ bool AbstractControl::setData(const int& type, const QVariant& value) {
 
     return false;
 }
-
-

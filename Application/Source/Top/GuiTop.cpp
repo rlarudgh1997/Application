@@ -95,7 +95,13 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+                QString filePath = QFileDialog::getOpenFileName(qobject_cast<QWidget*>(mHandler),
+                                            STRING_FILE_OPEN,
+                                            mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()+"/TC",
+                                            "Files (*.*)");
+                if (filePath.size() > 0) {
+                    createSignal(EventTypeEnum::EventTypeFileOpen, filePath);
+                }
             });
         }
 
@@ -321,7 +327,7 @@ void GuiTop::drawDisplayDepth2() {
 void GuiTop::updateDisplay(const bool& first, const int& type) {
     static QLineEdit* defaultPath = new QLineEdit(mScreen);
     static QPushButton* dispalyChange = new QPushButton(mScreen);
-    static QPushButton* checkLib = new QPushButton(mScreen);
+    static QPushButton* parsing = new QPushButton(mScreen);
     static QLineEdit *lineEdit = new QLineEdit(mScreen);
 
     if (first) {
@@ -333,7 +339,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
         dispalyChange->setGeometry(810, 25, 50, 30);
         dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        dispalyChange->setText("Center");
+        dispalyChange->setText("Visible");
         dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
         dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         dispalyChange->show();
@@ -341,20 +347,14 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
             createSignal(EventTypeEnum::EventTypeCenterVisible, QVariant());
         });
 
-        checkLib->setGeometry(870, 25, 50, 30);
-        checkLib->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        checkLib->setText("LIB");
-        checkLib->setStyleSheet("color: rgb(50, 50, 100)");
-        checkLib->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        checkLib->show();
-        connect(checkLib, &QPushButton::clicked, [=]() {
-            qDebug() << "Check Lib !!!!!!!!!!!!";
-            // QProcess* process = new QProcess(this);
-            // connect(process, &QProcess::readyReadStandardOutput, [=]() {
-            //     QByteArray data = process->readAllStandardOutput();
-            //     qDebug() << "Data :" << data;
-            // });
-            // process->start("pip list |", QStringList("grep openpyxl"));
+        parsing->setGeometry(870, 25, 50, 30);
+        parsing->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        parsing->setText("Parsing");
+        parsing->setStyleSheet("color: rgb(50, 50, 100)");
+        parsing->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        parsing->show();
+        connect(parsing, &QPushButton::clicked, [=]() {
+            createSignal(EventTypeEnum::EventTypeParsingExcel, QVariant());
         });
 
         // lineEdit->setGeometry(930, 25, 250, 30);
@@ -371,7 +371,13 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         // });
     }
 
-    if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
+    if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
+        QRect rect = mMainWindow->geometry();
+        QSize size = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
+        rect.setWidth(size.width());
+        rect.setHeight(size.height());
+        mMainWindow->setGeometry(rect);
+    } else if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
         // add
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListVSM) {
         // add
@@ -423,6 +429,14 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
+        case PropertyTypeEnum::PropertyTypeDisplaySize :
+        case PropertyTypeEnum::PropertyTypeDefaultPath :
+        case PropertyTypeEnum::PropertyTypeSignalListAll :
+        case PropertyTypeEnum::PropertyTypeSignalListSFC :
+        case PropertyTypeEnum::PropertyTypeSignalListVSM : {
+            updateDisplay(false, type);
+            break;
+        }
         case PropertyTypeEnum::PropertyTypeDepth : {
             if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
                 drawDisplayDepth0();
@@ -432,13 +446,6 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
                 drawDisplayDepth2();
             } else {
             }
-            break;
-        }
-        case PropertyTypeEnum::PropertyTypeDefaultPath :
-        case PropertyTypeEnum::PropertyTypeSignalListAll :
-        case PropertyTypeEnum::PropertyTypeSignalListSFC :
-        case PropertyTypeEnum::PropertyTypeSignalListVSM : {
-            updateDisplay(false, type);
             break;
         }
         default : {

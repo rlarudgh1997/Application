@@ -30,7 +30,20 @@ void ControlManager::sendEventInfo(const int& eventType, const QVariant& eventVa
     }
 }
 
-void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
+void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
+    int inputValue = keyEvent->key();
+#if defined(PLATFORM_X86)
+    switch (inputValue) {
+        case KeyTypeEnum::KeyInputValueNumUp    : { inputValue = KeyTypeEnum::KeyInputValueUp;    break; }
+        case KeyTypeEnum::KeyInputValueNumDown  : { inputValue = KeyTypeEnum::KeyInputValueDown;  break; }
+        case KeyTypeEnum::KeyInputValueNumLeft  : { inputValue = KeyTypeEnum::KeyInputValueLeft;  break; }
+        case KeyTypeEnum::KeyInputValueNumRight : { inputValue = KeyTypeEnum::KeyInputValueRight; break; }
+        case KeyTypeEnum::KeyInputValueNumOK    :
+        case KeyTypeEnum::KeyInputValueNumOK2   : { inputValue = KeyTypeEnum::KeyInputValueOK;    break; }
+        default :                                 {                                               break; }
+    }
+#endif
+
 #if defined(USE_SCREEN_CAPTURE)
     if ((inputType == KeyTypeEnum::KeyInputTypeRelease) && (inputValue == KeyTypeEnum::KeyInputValueCapture)) {
         ScreenInfo::instance().data()->captureScreen();
@@ -39,7 +52,7 @@ void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
 
 #if defined(USE_KEY_EVENT)
     int displayType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeMode).toInt();
-    qDebug() << "ControlManager::keyEvent(" << inputType << "," << inputValue << ") :" << displayType;
+    // qDebug() << "ControlManager::keyEvent(" << inputType << "," << inputValue << ") :" << displayType;
     if (mControlInfo[displayType]) {
         mControlInfo[displayType]->keyEvent(inputType, inputValue);
     }
@@ -49,10 +62,26 @@ void ControlManager::keyEvent(const int& inputType, const int& inputValue) {
 void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
 }
 
+void ControlManager::resizeEvent(QResizeEvent* resizeEvent) {
+#if defined(USE_RESIZE_SIGNAL)
+    setScreenSize(QSize(resizeEvent->size().width(), resizeEvent->size().height()));
+    // connect(this, &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
+    //     qDebug() << "ControlManager::ScreeSize:" << screenSize;
+    // });
+#else
+    int displayType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeMode).toInt();
+    if (mControlInfo[displayType]) {
+        mControlInfo[displayType]->resizeEvent(resizeEvent->size().width(), resizeEvent->size().height());
+    }
+#endif
+}
+
 int ControlManager::isDisplay(const int& eventType) {
     int displayType = ScreenEnum::DisplayTypeInvalid;
     switch (eventType) {
+        case EventTypeEnum::EventTypeParsingExcel :
         case EventTypeEnum::EventTypeFileNew :
+        case EventTypeEnum::EventTypeFileOpen :
         case EventTypeEnum::EventTypeCenterVisible : {
             displayType = ScreenEnum::DisplayTypeCenter;
             break;
@@ -85,17 +114,14 @@ void ControlManager::createControl(const int& displayType) {
             qDebug() << "ControlManager::createControl : " << displayType;
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
             mControlInfo[displayType]->init(displayType);
+#if defined(USE_RESIZE_SIGNAL)
+            emit signalScreenSizeChanged(getScreenSize());
+#else
+            mControlInfo[displayType]->resizeEvent(getScreenSize().width(), getScreenSize().height());
+#endif
             setCurrentMode(displayType);
         }
     }
-}
-
-void ControlManager::setCurrentMode(const int& displayType) {
-    mCurrentMode = displayType;
-}
-
-int ControlManager::getCurrentMode() {
-    return mCurrentMode;
 }
 
 void ControlManager::exitProgram() {
