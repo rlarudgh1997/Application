@@ -27,6 +27,15 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 - New 선택시 : count 만큼 sheet 생성
 - 셀 선택후 자동완성 기능 동작확인
+	: _MCAN / _CCAN 으로 된 시그널은 .**__MCAN 글자 전체를 삭제
+	: Output 으로 사용한 시그널은 별도 정리 List 로 제공
+
+	[각 시트별]
+		Input_Signal
+		Output_Signal
+		Config_Signal
+	[Private 시트]
+		TC_Name
 
 - TableView (Copy & Past)
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3

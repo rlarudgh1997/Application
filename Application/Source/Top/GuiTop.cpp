@@ -324,6 +324,18 @@ void GuiTop::drawDisplayDepth1() {
 void GuiTop::drawDisplayDepth2() {
 }
 
+void GuiTop::updateDisplaySize() {
+    QRect rect = mMainWindow->geometry();
+    QSize size = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
+    rect.setWidth(size.width());
+    rect.setHeight(size.height());
+    mMainWindow->setGeometry(rect);
+}
+
+void GuiTop::updateDisplayVisible() {
+}
+
+
 void GuiTop::updateDisplay(const bool& first, const int& type) {
     static QLineEdit* defaultPath = new QLineEdit(mScreen);
     static QPushButton* dispalyChange = new QPushButton(mScreen);
@@ -372,11 +384,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
     }
 
     if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
-        QRect rect = mMainWindow->geometry();
-        QSize size = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-        rect.setWidth(size.width());
-        rect.setHeight(size.height());
-        mMainWindow->setGeometry(rect);
+        updateDisplaySize();
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
         // add
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListVSM) {

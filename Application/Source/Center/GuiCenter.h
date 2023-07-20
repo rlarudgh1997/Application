@@ -62,6 +62,10 @@ private:
     virtual void drawDisplayDepth2();
     virtual void updateDisplay(const bool& first, const int& type = 0);
 
+    void updateDisplaySize();
+    void updateDisplayVisible();
+    void updateDisplaySheetInfo();
+
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

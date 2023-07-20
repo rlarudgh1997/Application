@@ -17,8 +17,9 @@
 
 
 
+#define PROPETRY_START_COMMON            0
 #define PROPETRY_START_NORMAL            1000
-
+#define PROPETRY_START_LIST              3000
 
 
 
@@ -77,31 +78,47 @@ public:
 class PropertyTypeEnum {
 public:
     enum PropertyType {
-        PropertyTypeDisplay = 0,
+        PropertyTypeCommon = PROPETRY_START_COMMON,
+        PropertyTypeDisplay,
         PropertyTypeDisplaySize,
         PropertyTypeMode,
         PropertyTypeVisible,
         PropertyTypeDepth,
+
+
+
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeDefaultPath,
         PropertyTypeSheetName,
         PropertyTypeContentTitle,
         PropertyTypeDescTitle,
-        PropertyTypeSignalListAll,
+        PropertyTypeSignalListAll,  // SFC + VSM
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
+        PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfo,
-        PropertyTypeContentItemSheet0,
-        PropertyTypeContentItemSheet1,
-        PropertyTypeContentItemSheet2,
-        PropertyTypeContentItemSheet3,
-        PropertyTypeContentItemSheet4,
-        PropertyTypeContentItemSheet5,
-        PropertyTypeContentItemSheet6,
-        PropertyTypeContentItemSheet7,
-        PropertyTypeContentItemSheet8,
-        PropertyTypeContentItemSheet9,
+
+
+
+
+
+        PropertyTypeList = PROPETRY_START_LIST,
+        PropertyTypeDetailInfoDescription,
+        PropertyTypeDetailInfoPrivates,
+        PropertyTypeDetailInfoTelltales,
+        PropertyTypeDetailInfoConstants,
+        PropertyTypeDetailInfoEvents,
+        PropertyTypeDetailInfoSounds,
+        PropertyTypeDetailInfoInters,
+        PropertyTypeDetailInfoOutputs,
+        PropertyTypeDetailInfoReserved1,
+        PropertyTypeDetailInfoReserved2,
+        PropertyTypeDetailInfoReserved3,
+        PropertyTypeDetailInfoReserved4,
+        PropertyTypeDetailInfoReserved5,
+        PropertyTypeDetailInfoReserved6,
+        PropertyTypeDetailInfoReserved7,
     };
 };
 
@@ -144,7 +161,15 @@ public:
     };
 };
 
-
+class ListInfoEnum {
+public:
+    enum ListInfoExcel {
+        Sheet = 0,
+        Count,  // row, column
+        Title,
+        Data,   // Data 1 ~ Data n-1
+    };
+};
 
 
 

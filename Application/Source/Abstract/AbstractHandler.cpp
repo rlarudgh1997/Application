@@ -64,7 +64,7 @@ QVariant AbstractHandler::getProperty(const int& type) {
 
 void AbstractHandler::setProperty(const int& type, const QVariant& value) {
     if (mProperty.contains(type) == false) {
-        qDebug() << "Not register property - info :" << type << "," << value;
+        qDebug() << "Not register property - info :" << type << "\n\n";
         return;
     }
 

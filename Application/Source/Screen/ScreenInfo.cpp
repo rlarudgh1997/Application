@@ -18,6 +18,15 @@ QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
 ScreenInfo::ScreenInfo() {
 }
 
+ScreenInfo::~ScreenInfo() {
+    delete mTranslator;
+    // foreach(const auto& screen, mSubScreens) {
+    //     delete screen;
+    // }
+    // delete mRootScreen;
+    qDebug() << "~ScreenInfo";
+}
+
 void ScreenInfo::updateRootItem(QWidget *rootItem) {
     if (mRootScreen == nullptr) {
         mRootScreen = rootItem;

@@ -33,6 +33,23 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(PropertyTypeEnum::PropertyTypeContentTitle,           QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeDescTitle,              QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfo,        QVariant(""));
+
+
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoDescription,  QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoPrivates,     QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoTelltales,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoConstants,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoEvents,       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoSounds,       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoInters,       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoOutputs,      QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved1,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved2,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved3,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved4,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved5,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved6,    QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDetailInfoReserved7,    QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

@@ -36,8 +36,8 @@ ConfigSetting::ConfigSetting()
 
 ConfigSetting::~ConfigSetting() {
     mThreadRun = false;
-    qDebug(CONFIG) << "~ConfigSetting";
     delete mSetting;
+    qDebug(CONFIG) << "~ConfigSetting";
 }
 
 void ConfigSetting::init() {
