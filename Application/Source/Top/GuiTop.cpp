@@ -33,12 +33,9 @@ QSharedPointer<GuiTop> GuiTop::instance(AbstractHandler* handler) {
 }
 
 GuiTop::GuiTop(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
-    mMainWindow = new QMainWindow();
-    mMainWindow->setGeometry(mScreen->geometry());
     mMainWindow->setParent(mScreen);
-    // mTabWidget = new QTabWidget();
-    // mMainWindow->setCentralWidget(mTabWidget);
     mMainWindow->show();
+    updateDisplaySize();
 }
 
 bool GuiTop::createSignal(const int& type, const QVariant& value) {
@@ -49,6 +46,17 @@ bool GuiTop::createSignal(const int& type, const QVariant& value) {
 
     qDebug() << "Fail to create signal - handler :" << mHandler;
     return false;
+}
+
+void GuiTop::drawDisplay(const QVariant& depth) {
+    if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
+        drawDisplayDepth0();
+    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
+        drawDisplayDepth1();
+    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
+        drawDisplayDepth2();
+    } else {
+    }
 }
 
 void GuiTop::drawDisplayDepth0() {
@@ -449,23 +457,16 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
+        case PropertyTypeEnum::PropertyTypeDepth : {
+            drawDisplay(value);
+            break;
+        }
         case PropertyTypeEnum::PropertyTypeDisplaySize :
         case PropertyTypeEnum::PropertyTypeDefaultPath :
         case PropertyTypeEnum::PropertyTypeSignalListAll :
         case PropertyTypeEnum::PropertyTypeSignalListSFC :
         case PropertyTypeEnum::PropertyTypeSignalListVSM : {
             updateDisplay(false, type);
-            break;
-        }
-        case PropertyTypeEnum::PropertyTypeDepth : {
-            if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
-                drawDisplayDepth0();
-            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth1)) {
-                drawDisplayDepth1();
-            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth2)) {
-                drawDisplayDepth2();
-            } else {
-            }
             break;
         }
         default : {

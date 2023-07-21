@@ -40,23 +40,14 @@ private:
 };
 
 class GuiCenter : public AbstractGui {
-private:
-    enum ItemType {
-        Widget = 0,
-        MainWindow,
-        TabeWidget,
-    };
-
-
 public:
     static QSharedPointer<GuiCenter>& instance(AbstractHandler* handler = nullptr);
 
 
 private:
     explicit GuiCenter(AbstractHandler* handler = nullptr);
-    virtual void initItem();
-    virtual QWidget* isItem(const int& type);
     virtual bool createSignal(const int& type, const QVariant& value);
+    virtual void drawDisplay(const QVariant& depth);
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
     virtual void drawDisplayDepth2();
@@ -72,10 +63,10 @@ public slots:
 
 
 private:
-    QSharedPointer<QMap<ItemType, QWidget*>> mItem = QSharedPointer<QMap<ItemType, QWidget*>>();
+    QTabWidget* mTabWidget = nullptr;
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     const int mMarginPosY = 120;
-    // ItemTypeEnum::ItemType mItemType;
+
 };
 
 #endif    // GUI_CENTER_H

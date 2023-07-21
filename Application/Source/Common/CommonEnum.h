@@ -85,9 +85,6 @@ public:
         PropertyTypeVisible,
         PropertyTypeDepth,
 
-
-
-
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeDefaultPath,
         PropertyTypeSheetName,
@@ -98,10 +95,6 @@ public:
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfo,
-
-
-
-
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -146,18 +139,6 @@ public:
         EventTypeParsingExcel,
         EventTypeFileNew,
         EventTypeFileOpen,
-    };
-};
-
-
-class ItemTypeEnum {
-public:
-    enum ItemType {
-        Widget = 0,
-        MainWindow,
-        Menu,
-        ToolBar,
-        TabeWidget,
     };
 };
 

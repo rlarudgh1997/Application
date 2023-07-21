@@ -21,35 +21,22 @@ QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
 }
 
 GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
-    initItem();
-}
+    mTabWidget = new QTabWidget(isHandler()->getScreen());
+    updateDisplaySize();
 
-void GuiCenter::initItem() {
+#if 0   // QSharedPointer<QMap<>> : 사용법
+    enum ItemType {
+        Widget = 0,
+        MainWindow,
+        TabeWidget,
+    };
+    QSharedPointer<QMap<ItemType, QWidget*>> mItem = QSharedPointer<QMap<ItemType, QWidget*>>();
     mItem = QSharedPointer<QMap<ItemType, QWidget*>>::create(QMap<ItemType, QWidget*>{
-                {ItemType::Widget, qobject_cast<QWidget*>(isHandler()->getScreen())},
+                {ItemType::Widget,     qobject_cast<QWidget*>(isHandler()->getScreen())},
                 {ItemType::MainWindow, qobject_cast<QWidget*>(new QMainWindow())},
                 {ItemType::TabeWidget, qobject_cast<QWidget*>(new QTabWidget())},
             });
-
-    qDebug() << "Item :" << Q_CAST(QWidget(), isHandler()->getScreen())
-                << ", " << Q_CAST(QWidget(), isItem(ItemType::MainWindow));
-
-    QRect rect = isItem(ItemType::Widget)->geometry();
-    rect.setY(mMarginPosY);
-    rect.setHeight(rect.height()-mMarginPosY);
-    isItem(ItemType::MainWindow)->setGeometry(rect);
-    isItem(ItemType::MainWindow)->setParent(isItem(ItemType::Widget));
-    Q_CAST(QMainWindow(), isItem(ItemType::MainWindow))->setCentralWidget(isItem(ItemType::TabeWidget));
-    // qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->setCentralWidget(isItem(ItemType::TabeWidget));
-    // isItem(ItemType::MainWindow)->show();
-}
-
-QWidget* GuiCenter::isItem(const int& type) {
-    if (static_cast<int>(type) < mItem.data()->size()) {
-        return mItem.data()->value(static_cast<ItemType>(type));
-    }
-    qDebug() << "Fail to item is nullptr - type :" << static_cast<int>(type) << ", size :" << mItem.data()->size();
-    return nullptr;
+#endif
 }
 
 bool GuiCenter::createSignal(const int& type, const QVariant& value) {
@@ -59,6 +46,17 @@ bool GuiCenter::createSignal(const int& type, const QVariant& value) {
     }
     qDebug() << "Fail to create signal - handler is nullptr";
     return false;
+}
+
+void GuiCenter::drawDisplay(const QVariant& depth) {
+    if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
+        drawDisplayDepth0();
+    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
+        drawDisplayDepth1();
+    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
+        drawDisplayDepth2();
+    } else {
+    }
 }
 
 void GuiCenter::drawDisplayDepth0() {
@@ -74,21 +72,19 @@ void GuiCenter::drawDisplayDepth2() {
 }
 
 void GuiCenter::updateDisplaySize() {
-    QRect rect = isItem(ItemType::Widget)->geometry();
+    QRect rect = isHandler()->getScreen()->geometry();
     QSize size = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     rect.setY(mMarginPosY);
     rect.setWidth(size.width());
     rect.setHeight(size.height()-mMarginPosY);
-    isItem(ItemType::MainWindow)->setGeometry(rect);
+    mTabWidget->setGeometry(rect);
 }
 
 void GuiCenter::updateDisplayVisible() {
     if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        isItem(ItemType::MainWindow)->show();
-        // qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->show();
+        mTabWidget->show();
     } else {
-        isItem(ItemType::MainWindow)->hide();
-        // qobject_cast<QMainWindow*>(isItem(ItemType::MainWindow))->centralWidget()->hide();
+        mTabWidget->hide();
     }
 }
 
@@ -104,7 +100,7 @@ void GuiCenter::updateDisplaySheetInfo() {
     }
 
     // Clear - Previous Table Widget
-    qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->clear();
+    mTabWidget->clear();
     mTableWidgets.clear();
 
 
@@ -136,11 +132,10 @@ void GuiCenter::updateDisplaySheetInfo() {
         // Draw - Sheet/Title
         int rowCount = count.at(0).toInt();
         int columnCount = count.at(1).toInt();
-        mTableWidgets[sheetIndex] = new QTableWidget(rowCount, columnCount, isItem(ItemType::Widget));
+        mTableWidgets[sheetIndex] = new QTableWidget(rowCount, columnCount);
         mTableWidgets[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
         mTableWidgets[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[sheetIndex], sheetName);
-
+        mTabWidget->addTab(mTableWidgets[sheetIndex], sheetName);
         qDebug() << "Count :" << rowCount << "," << columnCount;
 
         // Draw - Detail List Data
@@ -346,21 +341,14 @@ void GuiCenter::updateDisplay(const bool& first, const int& type) {
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
+        case PropertyTypeEnum::PropertyTypeDepth : {
+            drawDisplay(value);
+            break;
+        }
         case PropertyTypeEnum::PropertyTypeDisplaySize :
         case PropertyTypeEnum::PropertyTypeVisible :
         case PropertyTypeEnum::PropertyTypeUpdateSheetInfo : {
             updateDisplay(false, type);
-            break;
-        }
-        case PropertyTypeEnum::PropertyTypeDepth : {
-            if (value == QVariant(ScreenEnum::DisplayDepthDepth0)) {
-                drawDisplayDepth0();
-            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth1)) {
-                drawDisplayDepth1();
-            } else if (value == QVariant(ScreenEnum::DisplayDepthDepth2)) {
-                drawDisplayDepth2();
-            } else {
-            }
             break;
         }
         default : {

@@ -64,6 +64,7 @@ public:
 private:
     explicit GuiTop(AbstractHandler* handler = nullptr);
     bool createSignal(const int& type, const QVariant& value);
+    void drawDisplay(const QVariant& depth);
     void drawDisplayDepth0();
     void drawDisplayDepth1();
     void drawDisplayDepth2();
@@ -80,8 +81,7 @@ public slots:
 private:
     AbstractHandler* mHandler = nullptr;
     QWidget* mScreen = nullptr;
-    QMainWindow* mMainWindow = nullptr;
-    QTabWidget* mTabWidget = nullptr;
+    QMainWindow* mMainWindow = new QMainWindow();
     QMap<MainType, QMenu*> mMenu = QMap<MainType, QMenu*>();
     QMap<MainType, QToolBar*> mToolBar = QMap<MainType, QToolBar*>();
     QMap<ActionType, ActionInfo> mActionInfo = QMap<ActionType, ActionInfo>();
