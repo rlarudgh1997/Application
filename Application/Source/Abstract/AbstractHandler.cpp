@@ -20,8 +20,9 @@ bool AbstractHandler::init() {
 
 void AbstractHandler::controlConnect(const bool& state) {
     if (state) {
-        connect(this, &AbstractHandler::signalUpdateDataModel, [=](const int& type, const QVariant& value) {
-            QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, type), Q_ARG(QVariant, value));
+        connect(this, &AbstractHandler::signalUpdateDataModel,
+                        [=](const int& type, const QVariant& value, const bool& alwaysUpdate) {
+            QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, type), Q_ARG(QVariant, value), Q_ARG(bool, alwaysUpdate));
         });
     } else {
         disconnect(this);
@@ -62,14 +63,15 @@ QVariant AbstractHandler::getProperty(const int& type) {
     return mProperty[type];
 }
 
-void AbstractHandler::setProperty(const int& type, const QVariant& value) {
+void AbstractHandler::setProperty(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (mProperty.contains(type) == false) {
-        qDebug() << "Not register property - info :" << type << "\n\n";
+        qDebug() << "[Not register property - info :" << type << "]\n\n";
         return;
     }
 
     if (mUpdateState) {
-        if (mProperty[type] != value) {
+        bool update = (alwaysUpdate) ? (true) : (mProperty[type] != value);
+        if (update) {
             mProperty[type] = value;
             emit signalPropertyChanged(type, value);
         }

@@ -181,7 +181,7 @@ private:
     static QStringList readFile(const QString& filePath) {
         QStringList fileContent = QStringList();
         QFile file(filePath);
-        qDebug() << "filePath :" << filePath;
+        // qDebug() << "filePath :" << filePath;
         if (file.open(QFile::ReadOnly|QFile::Text)) {
             QTextStream readFile(&file);
             while (!readFile.atEnd()) {

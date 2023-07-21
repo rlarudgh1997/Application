@@ -102,15 +102,15 @@ void ControlCenter::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlCenter::updateDataHandler(const int& type, const QVariant& value) {
-    if (setData(type, value)) {
-        emit isHandler()->signalUpdateDataModel(type, value);
+void ControlCenter::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+    if (setData(type, value, alwaysUpdate)) {
+        emit isHandler()->signalUpdateDataModel(type, value, alwaysUpdate);
     }
 }
 
-void ControlCenter::updateDataHandler(const int& type, const QVariantList& value) {
-    if (setData(type, value)) {
-        emit isHandler()->signalUpdateDataModel(type, getData(type));
+void ControlCenter::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
+    if (setData(type, value, alwaysUpdate)) {
+        emit isHandler()->signalUpdateDataModel(type, getData(type), alwaysUpdate);
     }
 }
 
@@ -148,38 +148,67 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         case EventTypeEnum::EventTypeFileOpen : {
             QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
             QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
+            int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
 
             if (eventType == EventTypeEnum::EventTypeFileNew) {
-                int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
                 int rowCount = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
 
                 foreach(const auto& sheet, sheetName) {
-                    QMap<int, QVariant> data = QMap<int, QVariant>();
+                    QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                     QVariant title = QVariant();
 
-                    data[ListInfoEnum::ListInfoExcel::Sheet] = sheet;
+                    dataInfo[ListInfoEnum::ListInfoExcel::Sheet] = sheet;
                     if (sheetIndex == PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
                         title = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
                     } else {
                         title = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeContentTitle);
                     }
-                    data[ListInfoEnum::ListInfoExcel::Count] = QVariant(QVariantList({rowCount, title.toList().count()}));
-                    data[ListInfoEnum::ListInfoExcel::Title] = title;
+                    dataInfo[ListInfoEnum::ListInfoExcel::Count] = QVariant(QVariantList({rowCount, title.toList().count()}));
+                    dataInfo[ListInfoEnum::ListInfoExcel::Title] = title;
 
                     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                        int columnCount = data[ListInfoEnum::ListInfoExcel::Title].toList().count();
+                        int columnCount = dataInfo[ListInfoEnum::ListInfoExcel::Title].toList().count();
                         QVariantList columnInfo = QVariantList();
                         for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-                            // columnInfo.append("");
-                            columnInfo.append(QString("%1_[%2, %3]").arg(sheet.toString()).arg(rowIndex).arg(columnIndex));
+                            columnInfo.append("");
+                            // columnInfo.append(QString("%1_[%2, %3]").arg(sheet.toString()).arg(rowIndex).arg(columnIndex));
                         }
-                        data[ListInfoEnum::ListInfoExcel::Data + rowIndex] = columnInfo;
+                        dataInfo[ListInfoEnum::ListInfoExcel::Data + rowIndex] = columnInfo;
                     }
-                    sheetDetailInfo[sheetIndex++] = data.values();
+                    sheetDetailInfo[sheetIndex] = dataInfo.values();
+                    sheetIndex++;
                 }
             } else {
-            }
+                foreach(const auto& sheet, sheetName) {
+                    int fileIndex = sheetIndex - PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+                    QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
+                    QVariant title = QVariant();
 
+                    QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+                    filePath.append(QString("/%1_%2.txt").arg(fileIndex).arg(sheet.toString()));
+                    QStringList readData = FileInfo::parsingFile(filePath);
+                    int rowCount = readData.size();
+
+                    if (rowCount == 0) {
+                        qDebug() << "Fail to read file path :" << filePath << ", length :" << rowCount;
+                        return;
+                    }
+
+                    dataInfo[ListInfoEnum::ListInfoExcel::Sheet] = sheet;
+                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                        QStringList columnInfo = readData[rowIndex].split("\t");
+                        if (rowIndex == 0) {
+                            dataInfo[ListInfoEnum::ListInfoExcel::Count] =
+                                                                QVariant(QVariantList({rowCount - 1, columnInfo.count()}));
+                            dataInfo[ListInfoEnum::ListInfoExcel::Title] = columnInfo;
+                        } else {
+                            dataInfo[ListInfoEnum::ListInfoExcel::Data + rowIndex - 1] = columnInfo;
+                        }
+                    }
+                    sheetDetailInfo[sheetIndex] = dataInfo.values();
+                    sheetIndex++;
+                }
+            }
             if (sheetDetailInfo.size() > 0) {
                     QMapIterator<int, QVariantList> iter(sheetDetailInfo);
                     while (iter.hasNext()) {
@@ -187,7 +216,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                         // qDebug() << "DetailInfo :" << iter.key() << "," << iter.value() << "\n\n";
                         updateDataHandler(iter.key(), iter.value());
                     }
-                    updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfo, sheetDetailInfo.size());
+                    updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfo, sheetDetailInfo.size(), true);
                     updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
             }
 
@@ -195,7 +224,8 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                 checkTimer.check("UpdateExcel - New");
             } else {
                 checkTimer.check("UpdateExcel - Open");
-            }            break;
+            }
+            break;
         }
         case EventTypeEnum::EventTypeParsingExcel : {
 #if 1

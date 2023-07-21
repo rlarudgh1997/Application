@@ -133,8 +133,13 @@ void ScreenInfo::resizeEvent(QResizeEvent * resizeEvent) {
     // qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
     foreach(const auto& widget, mSubScreens) {
         widget->setGeometry(0, 0, resizeEvent->size().width(), resizeEvent->size().height());
-        // widget->update();
-        // qDebug() << "ScreenInfo::WidgetSize:" << widget->geometry();
+    }
+    if (mRootScreen) {
+        // QRect rootScrren = mRootScreen->geometry();
+        // rootScrren.setWidth(resizeEvent->size().width());
+        // rootScrren.setHeight(resizeEvent->size().height());
+        // mRootScreen->setGeometry(rootScrren);
+        mRootScreen->resize(resizeEvent->size().width(), resizeEvent->size().height());
     }
 }
 

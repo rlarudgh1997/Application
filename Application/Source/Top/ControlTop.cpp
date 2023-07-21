@@ -105,15 +105,15 @@ void ControlTop::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlTop::updateDataHandler(const int& type, const QVariant& value) {
-    if (setData(type, value)) {
-        emit isHandler()->signalUpdateDataModel(type, value);
+void ControlTop::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+    if (setData(type, value, alwaysUpdate)) {
+        emit isHandler()->signalUpdateDataModel(type, value, alwaysUpdate);
     }
 }
 
-void ControlTop::updateDataHandler(const int& type, const QVariantList& value) {
-    if (setData(type, value)) {
-        emit isHandler()->signalUpdateDataModel(type, getData(type));
+void ControlTop::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
+    if (setData(type, value, alwaysUpdate)) {
+        emit isHandler()->signalUpdateDataModel(type, getData(type), alwaysUpdate);
     }
 }
 

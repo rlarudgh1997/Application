@@ -340,6 +340,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
     static QLineEdit* defaultPath = new QLineEdit(mScreen);
     static QPushButton* dispalyChange = new QPushButton(mScreen);
     static QPushButton* parsing = new QPushButton(mScreen);
+    static QPushButton* excelOpen = new QPushButton(mScreen);
     static QLineEdit *lineEdit = new QLineEdit(mScreen);
 
     if (first) {
@@ -368,6 +369,17 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         connect(parsing, &QPushButton::clicked, [=]() {
             createSignal(EventTypeEnum::EventTypeParsingExcel, QVariant());
         });
+
+        excelOpen->setGeometry(930, 25, 50, 30);
+        excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        excelOpen->setText("Open");
+        excelOpen->setStyleSheet("color: rgb(50, 50, 100)");
+        excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        excelOpen->show();
+        connect(excelOpen, &QPushButton::clicked, [=]() {
+            createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+        });
+
 
         // lineEdit->setGeometry(930, 25, 250, 30);
         lineEdit->setGeometry(10, 80, 1280-20, 30);

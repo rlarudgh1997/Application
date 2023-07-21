@@ -81,7 +81,7 @@ def excel_save(state) :
         index = 0
         for sheet in sheetInfo:
             saveSheet = pd.DataFrame(sheet)
-            sheetFileName = "../deploy_x86/SFC/TC/" + str(index) + "_" + sheetName[index] + ".txt"
+            sheetFileName = "../deploy_x86/SFC/" + str(index) + "_" + sheetName[index] + ".txt"
             print("SaveInfo :", sheetFileName, ", ", saveSheet)
             writeSheet = saveSheet.to_csv(sheetFileName, sep="	", index = False)
             index += 1

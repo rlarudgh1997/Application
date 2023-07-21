@@ -8,7 +8,6 @@ bool AbstractControl::init(const int& currentMode) {
         initControl(currentMode);
         mInit = true;
     }
-
     return mInit;
 }
 
@@ -41,11 +40,10 @@ const QVariant AbstractControl::getData(const int& type) {
     return mData[type];
 }
 
-bool AbstractControl::setData(const int& type, const QVariant& value) {
-    if ((mData[type] != value)) {
+bool AbstractControl::setData(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+    bool update = (alwaysUpdate) ? (true) : (mData[type] != value);
+    if (update) {
         mData[type] = value;
-        return true;
     }
-
-    return false;
+    return update;
 }

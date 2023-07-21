@@ -29,7 +29,7 @@ public:
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
     int getTimerId(const int& timerType);
     const QVariant getData(const int& type);
-    bool setData(const int& type, const QVariant& value);
+    bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
     virtual void resizeEvent(const int& width, const int& height) = 0;
@@ -47,8 +47,8 @@ private:
     virtual void initBaseData() = 0;
     virtual void resetControl(const bool& reset) = 0;
     virtual void timerFunc(const int& timerId) = 0;
-    virtual void updateDataHandler(const int& type, const QVariant& value) = 0;
-    virtual void updateDataHandler(const int& type, const QVariantList& value) = 0;
+    virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;
+    virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false) = 0;
 
 
 private slots:

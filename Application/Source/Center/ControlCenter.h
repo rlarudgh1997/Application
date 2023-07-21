@@ -29,8 +29,8 @@ protected:
     virtual void initBaseData();
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
-    virtual void updateDataHandler(const int& type, const QVariant& value);
-    virtual void updateDataHandler(const int& type, const QVariantList& value);
+    virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
+    virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false);
 
 
 public slots:

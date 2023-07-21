@@ -31,10 +31,11 @@ public:
     int getTimerId(const int& timerType);
     void registerProperty(const int& type, const QVariant& value);
     QVariant getProperty(const int& type);
-    Q_INVOKABLE void setProperty(const int& type, const QVariant& value);
 
 
 private:
+    Q_INVOKABLE void setProperty(const int& type, const QVariant& value, const bool& alwaysUpdate);
+
     virtual void controlConnect(const bool& state = true);
     virtual void timerFunc(const int& timerId) = 0;
     virtual void initPropertyInfo() = 0;
@@ -45,7 +46,7 @@ protected:
 
 
 signals:
-    void signalUpdateDataModel(const int& type, const QVariant& value);
+    void signalUpdateDataModel(const int& type, const QVariant& value, const bool& alwaysUpdate);
     void signalPropertyChanged(const int& type, const QVariant& value);
     void signalHandlerEvent(const int& type, const QVariant& value);
 

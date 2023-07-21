@@ -107,52 +107,71 @@ void GuiCenter::updateDisplaySheetInfo() {
     qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->clear();
     mTableWidgets.clear();
 
+
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
+    QMap<int, QList<CellInfo>> mCellInfo = QMap<int, QList<CellInfo>>();
 
     for (int index = 0; index < updateSheetInfo; index++) {
         int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription + index;
-        // qDebug() << "Info[" << sheetIndex << "] =" << isHandler()->getProperty(sheetIndex) << "\n\n";
         QVariantList detailInfo = isHandler()->getProperty(sheetIndex).toList();
+
+        // qDebug() << "Info[" << sheetIndex << "] =" << detailInfo << "\n\n";
 
         // Constructor - Detail List Info
         QString sheetName = detailInfo[ListInfoEnum::ListInfoExcel::Sheet].toString();
         QStringList contentTitle = detailInfo[ListInfoEnum::ListInfoExcel::Title].toStringList();
         QVariantList count = detailInfo[ListInfoEnum::ListInfoExcel::Count].toList();
 
-        if (count.size() < 2) {
-            qDebug() << "Fail to detail info data size :" << count.size();
+        if (count.size() != 2) {
+            if ((count.at(0).type() != QVariant::Type::Int) || (count.at(1).type() != QVariant::Type::Int)) {
+                qDebug() << "Fail to detail info data type(int) error";
+            } else {
+                qDebug() << "Fail to detail info data size :" << count.size();
+            }
             return;
         }
 
-        int rowCount = count.at(0).toInt();
-        int columnCount = count.at(1).toInt();
 
         // Draw - Sheet/Title
+        int rowCount = count.at(0).toInt();
+        int columnCount = count.at(1).toInt();
         mTableWidgets[sheetIndex] = new QTableWidget(rowCount, columnCount, isItem(ItemType::Widget));
         mTableWidgets[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
         mTableWidgets[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         qobject_cast<QTabWidget*>(isItem(ItemType::TabeWidget))->addTab(mTableWidgets[sheetIndex], sheetName);
 
+        qDebug() << "Count :" << rowCount << "," << columnCount;
+
         // Draw - Detail List Data
         for (int dataRowIndex = 0; dataRowIndex < rowCount; dataRowIndex++) {
             QStringList detailInfoData = detailInfo[ListInfoEnum::ListInfoExcel::Data + dataRowIndex].toStringList();
-            qDebug() << "Data[" << dataRowIndex << "] :" << detailInfoData;
-
+            // qDebug() << "Data[" << dataRowIndex << "] :" << detailInfoData.size() << "," << detailInfoData;
             int dataColumnIndex = 0;
             foreach(const auto& data, detailInfoData) {
+                // qDebug() << "Data :" << data;
+                if (dataColumnIndex < 4) {
+                    if (data.compare("") == false) {
+                        mCellInfo[sheetIndex].append(CellInfo(dataRowIndex, dataColumnIndex));
+                        qDebug() << "CellInfo[" << sheetIndex << "] :" << dataRowIndex << "," << dataColumnIndex;
+                    }
+                }
+
                 QTableWidgetItem *detailDataItem = new QTableWidgetItem(data);
                 detailDataItem->setTextAlignment(Qt::AlignCenter);
                 mTableWidgets[sheetIndex]->setItem(dataRowIndex, dataColumnIndex, detailDataItem);
                 dataColumnIndex++;
             }
+            qDebug() << "=======================================================================\n";
         }
 
+        // Draw - Cell Merge/Split
 
 
         // Draw - Cell Text Width/Height
         mTableWidgets[sheetIndex]->resizeColumnsToContents();
         mTableWidgets[sheetIndex]->resizeRowsToContents();
+
 
         // Connect - Signal
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
@@ -163,46 +182,155 @@ void GuiCenter::updateDisplaySheetInfo() {
             qDebug() << sheetIndex << ". customContextMenuRequested : " << pos;
             qDebug() << "[Info]\n" << modelIndexs << "\nSize :" << modelIndexs.size();
 
-            static bool span = false;
-            if (modelIndexs.size() >= 2) {
-                if (span) {
-                    span = false;
-                    mTableWidgets[sheetIndex]->clearSpans();
-                } else {
-                    span = true;
-                    std::sort(modelIndexs.begin(), modelIndexs.end());
-                    auto row = modelIndexs.at(sheetIndex).row();
-                    auto col = modelIndexs.at(sheetIndex).column();
-                    auto rowSpan = modelIndexs.last().row() - row + 1;
-                    auto colSpan = modelIndexs.last().column() - col + 1;
-                    qDebug() << "Info :" << row << "," << col << "," << rowSpan << "," << colSpan;
-                    mTableWidgets[sheetIndex]->setSpan(row, col, rowSpan, colSpan);
-                }
-            }
+            // static bool span = false;
+            // if (modelIndexs.size() >= 2) {
+            //     if (span) {
+            //         span = false;
+            //         mTableWidgets[sheetIndex]->clearSpans();
+            //     } else {
+            //         span = true;
+            //         std::sort(modelIndexs.begin(), modelIndexs.end());
+            //         auto row = modelIndexs.at(sheetIndex).row();
+            //         auto col = modelIndexs.at(sheetIndex).column();
+            //         auto rowSpan = modelIndexs.last().row() - row + 1;
+            //         auto colSpan = modelIndexs.last().column() - col + 1;
+            //         qDebug() << "Info :" << row << "," << col << "," << rowSpan << "," << colSpan;
+            //         mTableWidgets[sheetIndex]->setSpan(row, col, rowSpan, colSpan);
+            //     }
+            // }
         });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-        //     qDebug() << sheetIndex << ". itemPressed : " << item;
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-        //     qDebug() << sheetIndex << ". itemClicked : " << item;
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::currentItemChanged,
-        //                                     [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-        //     qDebug() << sheetIndex << ". currentItemChanged : " << previous << " -> " << current;
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
-        //     qDebug() << sheetIndex << ". itemSelectionChanged";
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-        //     qDebug() << sheetIndex << ". cellPressed : " << row << ", " << column;
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
-        //     qDebug() << sheetIndex << ". cellClicked : " << row << ", " << column;
-        // });
-        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
-        //     qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
-        // });
+#if 0
+        connect(mTableWidgets[sheetIndex], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
+            qDebug() << sheetIndex << ". itemPressed : " << item;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
+            qDebug() << sheetIndex << ". itemClicked : " << item;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::currentItemChanged,
+                                            [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
+            qDebug() << sheetIndex << ". currentItemChanged : " << previous << " -> " << current;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+            qDebug() << sheetIndex << ". itemSelectionChanged";
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
+            qDebug() << sheetIndex << ". cellPressed : " << row << ", " << column;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
+            qDebug() << sheetIndex << ". cellClicked : " << row << ", " << column;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
+            qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
+        });
+#endif
     }
+
+    qDebug() << "=======================================================================\n\n\n\n";
+
+    QMapIterator<int, QList<CellInfo>> iter(mCellInfo);
+    int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    while (iter.hasNext()) {
+        iter.next();
+        // qDebug() << "DetailInfo :" << iter.key() << "," << iter.value() << "\n\n";
+        QMap<int, QList<int>> mergeInfo = QMap<int, QList<int>>();
+        QMultiMap<int, int> mergeInfo1 = QMultiMap<int, int>();
+
+        foreach(const auto& info, iter.value()) {
+//            qDebug() << "CellInfo[" << iter.key() << "] :" << info.isCellInfoColumn() << "," << info.isCellInfoRow();
+            mergeInfo[info.isCellInfoColumn()].append(info.isCellInfoRow());
+            mergeInfo1.insert(info.isCellInfoColumn(), info.isCellInfoRow());
+//            qDebug() << "\t MergeInfo[" << info.isCellInfoColumn() << "] :" << mergeInfo[info.isCellInfoColumn()];
+        }
+
+//        foreach(const auto& merge, mergeInfo) {
+//            qDebug()  << "\t\t merge[" << iter.key() << "] :" << merge;
+//        }
+
+
+        QMap<int, int>::iterator iter1;
+        QMap<int, QPair<int, int>> mergerIndexInfo;
+
+        int min = 100;
+        int max = 0;
+        for (iter1 = mergeInfo1.begin(); iter1 != mergeInfo1.end(); ++iter1) {
+            sheetIndex = iter.key();
+            // qDebug() << "\t merge[" << iter.key() << "] :" << iter1.key() << "," << iter1.value();
+
+            min = qMin(min, iter1.value());
+            max = qMax(max, iter1.value());
+            qDebug() << "\t Range[" << iter.key() << "] :" << min << ", Max :" << max;
+            mergerIndexInfo[iter1.key()] = QPair<int, int>(min, max);
+
+            // qDebug() << "\t\t\t mergerIndexInfo :" << mergerIndexInfo;
+
+            if (sheetIndex == 3003) {
+                QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
+                // std::sort(modelIndexs.begin(), modelIndexs.end());
+                mTableWidgets[sheetIndex]->setSpan(0, 0, 7, 1);
+                qDebug() << "\t\t 1. Telltales - TCName";
+                mTableWidgets[sheetIndex]->setSpan(0, 1, 7, 1);
+                qDebug() << "\t\t 2. Telltales - VehicleType";
+                mTableWidgets[sheetIndex]->setSpan(0, 2, 3, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 2, 3, 1);
+                qDebug() << "\t\t 3. Telltales - Result";
+                mTableWidgets[sheetIndex]->setSpan(1, 3, 2, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 3, 3, 1);
+                qDebug() << "\t\t 4. Telltales - Case";
+            } else if (sheetIndex == 3004) {
+                mTableWidgets[sheetIndex]->setSpan(0, 0, 3, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 0, 6, 1);
+                qDebug() << "\t\t 1. Constants - TCName";
+                mTableWidgets[sheetIndex]->setSpan(0, 1, 3, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 1, 6, 1);
+                qDebug() << "\t\t 2. Constants - VehicleType";
+                mTableWidgets[sheetIndex]->setSpan(0, 2, 2, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 2, 2, 1);
+                mTableWidgets[sheetIndex]->setSpan(5, 2, 3, 1);
+                qDebug() << "\t\t 3. Constants - Result";
+                mTableWidgets[sheetIndex]->setSpan(0, 3, 2, 1);
+                mTableWidgets[sheetIndex]->setSpan(3, 3, 2, 1);
+                mTableWidgets[sheetIndex]->setSpan(5, 3, 3, 1);
+                qDebug() << "\t\t 4. Constants - Case";
+            } else if (sheetIndex == 3005) {
+                mTableWidgets[sheetIndex]->setSpan(0, 0, 15, 1);
+                qDebug() << "\t\t 1. Events - TCName";
+                mTableWidgets[sheetIndex]->setSpan(0, 1, 15, 1);
+                qDebug() << "\t\t 2. Events - VehicleType";
+                mTableWidgets[sheetIndex]->setSpan(0, 2, 5, 1);
+                mTableWidgets[sheetIndex]->setSpan(5, 2, 5, 1);
+                mTableWidgets[sheetIndex]->setSpan(10, 2, 5, 1);
+                qDebug() << "\t\t 3. Events - Result";
+                mTableWidgets[sheetIndex]->setSpan(0, 3, 5, 1);
+                mTableWidgets[sheetIndex]->setSpan(5, 3, 5, 1);
+                mTableWidgets[sheetIndex]->setSpan(10, 3, 5, 1);
+                qDebug() << "\t\t 4. Events - Case";
+            } else {
+            }
+        }
+        qDebug() << "-----------------------------------------------------------------------------\n\n";
+    }
+
+#if 0
+    QMultiMap<int, QString> myMaps;
+
+    myMaps.insert(1, "Autodesk Maya 2014");
+    myMaps.insert(1, "Autodesk Inventor 2014");
+    myMaps.insert(1, "Autodesk Alias 2014");
+    myMaps.insert(1, "Autodesk 3ds Max 2014");
+    myMaps.insert(1, "Autodesk Softimage 2014");
+    myMaps.insert(2, "Adobe Photoshop CS6");
+    myMaps.insert(2, "Adobe Illustrator CS6");
+    myMaps.insert(2, "Adobe InDesign CS6");
+    myMaps.insert(1, "Autodesk AutoCAD 2014");
+
+    QMap<int, QString>::iterator it;
+    QString output;
+
+    for (it = myMaps.begin(); it != myMaps.end(); ++it) {
+        // Format output here.
+        qDebug() << "Value :" << QString("%1 : %2").arg(it.key()).arg(it.value());
+    }
+#endif
 }
 
 void GuiCenter::updateDisplay(const bool& first, const int& type) {
