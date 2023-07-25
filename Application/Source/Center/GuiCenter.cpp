@@ -155,8 +155,9 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             qDebug() << sheetIndex << ". cellDoubleClicked : " << row << ", " << column;
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellChanged : " << row << ", " << column
-                        << ", Text" << mTableWidgets[sheetIndex]->item(row, column)->text();
+            QString text = mTableWidgets[sheetIndex]->item(row, column)->text();
+            // qDebug() << sheetIndex << ". cellChanged : " << row << ", " << column << ", Text" << text;
+            createSignal(EventTypeEnum::EventTypeUpdateSheetInfo, QVariant(QVariantList({sheetIndex, row, column, text})));
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
@@ -220,7 +221,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     if (type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew) {
         return;
     }
-
+        return;
     qDebug() << "\n\n\n";
     qDebug() << "=======================================================================";
     qDebug() << "Draw - Cell Merge/Split\n\n";

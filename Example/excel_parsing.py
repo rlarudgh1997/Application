@@ -6,6 +6,7 @@ import sys
 
 import pandas as pd
 from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
 from pandas import DataFrame
 # 하위 경로 import 방법 3가지
 # import source.def_functon as func
@@ -141,7 +142,14 @@ def writeToExcel(data, filePath) :
             data[count].to_excel(write, sheet_name = sheetName[count], index = False)
             print("Sheet[", count, "] : ", sheetName[count])
             count += 1
-        print("FilePath : ", filePath, "\n\n")
+        print("SaveFilePath : ", filePath, "\n\n")
+
+    ## [시트 row, column 높이, 너비 자동정렬 추가]
+    # wb = load_workbook(filePath)
+    # ws = wb.active
+    # for sheet in sheetInfo:
+    #     cellAutoFit = pd.DataFrame(sheet)
+
 
 
 def main(argv) :

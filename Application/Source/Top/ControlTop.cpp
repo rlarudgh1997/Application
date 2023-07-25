@@ -130,39 +130,6 @@ void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
     // }
 }
 
-
-void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if (getData(PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
-        return;
-    }
-
-    qDebug(C_TOP) << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
-
-    switch (eventType) {
-        case EventTypeEnum::EventTypeSaveExcel : {
-            QStringList fileInfo = eventValue.toString().split("/");
-            QString path = QString();
-            for (int index = 0; index < (fileInfo.size() - 1); index++) {
-                path.append(fileInfo[index]);
-                path.append("/");
-            }
-            QString file = fileInfo[fileInfo.size() - 1];
-            QString cmd = QString("python ../Example/excel_parsing.py %1 %2 write").arg(path).arg(file);
-            int result = system(cmd.toLatin1());
-
-            qDebug() << "\n\n";
-            qDebug() << "===========================================================";
-            qDebug() << "FilePath :" << eventValue;
-            qDebug() << "Commnad :" << cmd;
-            qDebug() << "System call -" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
-            break;
-        }
-        default : {
-            break;
-        }
-    }
-}
-
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     CheckTimer checkTimer;
 
@@ -211,6 +178,20 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug(C_TOP) << "Setting - Test Coverage";
             break;
         }
+        default : {
+            break;
+        }
+    }
+}
+
+void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
+    if (getData(PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
+        return;
+    }
+
+    qDebug(C_TOP) << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+
+    switch (eventType) {
         default : {
             break;
         }

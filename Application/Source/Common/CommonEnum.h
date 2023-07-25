@@ -141,6 +141,7 @@ public:
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
+        EventTypeUpdateSheetInfo,
     };
 };
 

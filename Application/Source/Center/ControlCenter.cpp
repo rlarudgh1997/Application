@@ -129,7 +129,52 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
+    qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
+
     switch (type) {
+        case EventTypeEnum::EventTypeUpdateSheetInfo : {
+            if (value.toList().size() < 4) {
+                return;
+            }
+
+            int sheetIndex = value.toList()[0].toInt();
+            int row = value.toList()[1].toInt() + ListInfoEnum::ListInfoExcel::Data;
+            int column = value.toList()[2].toInt();
+            QString text = value.toList()[3].toString();
+
+            qDebug() << "Sheet[" << sheetIndex << "] :" << row << "," << column << "," << text;
+
+            QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+            QVariantList detailInfo = getData(sheetIndex).toList();
+            qDebug() << "\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+            qDebug() << "detailInfo :" << detailInfo;
+            qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
+
+            int rowIndex = 0;
+            QVariantList updateData = QVariantList();
+            foreach(const auto& detail, detailInfo) {
+                int columnIndex = 0;
+                if (rowIndex < ListInfoEnum::ListInfoExcel::Data) {
+                    updateData.append(detail);
+                } else {
+                    QVariantList rowData = QVariantList();
+                    foreach(QVariant info, detail.toList()) {
+                        if ((row == rowIndex) && (column == columnIndex)) {
+                            rowData.append(text);
+                        } else {
+                            rowData.append(info.toString());
+                        }
+                        columnIndex++;
+                    }
+                    updateData.append(QVariant(rowData));
+                }
+                rowIndex++;
+                // qDebug() << "detail :" << detail;
+            }
+            updateDataHandler(sheetIndex, updateData);
+            qDebug() << "updateData :" << updateData;
+            break;
+        }
         default : {
             break;
         }

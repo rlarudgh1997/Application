@@ -6,7 +6,7 @@
 #include <QTimerEvent>
 #include <QKeyEvent>
 
-#include "CommonDefine.h"
+// #include "CommonDefine.h"
 
 
 class AbstractHandler;
