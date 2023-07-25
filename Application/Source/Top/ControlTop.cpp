@@ -52,8 +52,8 @@ void ControlTop::initBaseData() {
     updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
     CheckTimer checkTimer;
-    QStringList sfcList = FileInfo::parsingFile(defaultPath + "/NodeAddressSFC.info");
-    QStringList vsmList = FileInfo::parsingFile(defaultPath + "/NodeAddressVSM.info");
+    QStringList sfcList = FileInfo::readFile(defaultPath + "/NodeAddressSFC.info");
+    QStringList vsmList = FileInfo::readFile(defaultPath + "/NodeAddressVSM.info");
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
@@ -139,6 +139,24 @@ void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventTy
     qDebug(C_TOP) << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
 
     switch (eventType) {
+        case EventTypeEnum::EventTypeSaveExcel : {
+            QStringList fileInfo = eventValue.toString().split("/");
+            QString path = QString();
+            for (int index = 0; index < (fileInfo.size() - 1); index++) {
+                path.append(fileInfo[index]);
+                path.append("/");
+            }
+            QString file = fileInfo[fileInfo.size() - 1];
+            QString cmd = QString("python ../Example/excel_parsing.py %1 %2 write").arg(path).arg(file);
+            int result = system(cmd.toLatin1());
+
+            qDebug() << "\n\n";
+            qDebug() << "===========================================================";
+            qDebug() << "FilePath :" << eventValue;
+            qDebug() << "Commnad :" << cmd;
+            qDebug() << "System call -" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
+            break;
+        }
         default : {
             break;
         }
@@ -146,27 +164,22 @@ void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventTy
 }
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
+    CheckTimer checkTimer;
+
     switch (type) {
         case EventTypeEnum::EventTypeExitProgram : {
             ControlManager::instance().data()->exitProgram();
             break;
         }
         case EventTypeEnum::EventTypeCenterVisible :
-        case EventTypeEnum::EventTypeParsingExcel : {
-            ControlManager::instance().data()->sendEventInfo(type, QVariant());
-            break;
-        }
+        case EventTypeEnum::EventTypeOpenExcel :
         case EventTypeEnum::EventTypeFileNew :
-        case EventTypeEnum::EventTypeFileOpen : {
-            ControlManager::instance().data()->sendEventInfo(type, value);
-            break;
-        }
-        case EventTypeEnum::EventTypeFileSave : {
-            qDebug(C_TOP) << "File - Save";
-            break;
-        }
+        case EventTypeEnum::EventTypeFileSave :
         case EventTypeEnum::EventTypeFileSaveAs : {
-            qDebug(C_TOP) << "File - Save As";
+            ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                                                                ScreenEnum::DisplayTypeCenter,
+                                                                type,
+                                                                value);
             break;
         }
         case EventTypeEnum::EventTypeEditCut : {

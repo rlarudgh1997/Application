@@ -81,6 +81,7 @@ public:
         PropertyTypeCommon = PROPETRY_START_COMMON,
         PropertyTypeDisplay,
         PropertyTypeDisplaySize,
+        PropertyTypeDisplaySizeMargin,
         PropertyTypeMode,
         PropertyTypeVisible,
         PropertyTypeDepth,
@@ -94,7 +95,8 @@ public:
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
-        PropertyTypeUpdateSheetInfo,
+        PropertyTypeUpdateSheetInfoNew,
+        PropertyTypeUpdateSheetInfoOpen,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -123,8 +125,6 @@ public:
         EventTypeDisplayChange,
 
         EventTypeNormal = 1000,
-        EventTypeFileSave,
-        EventTypeFileSaveAs,
         EventTypeEditCut,
         EventTypeEditCopy,
         EventTypeEditPaste,
@@ -132,13 +132,15 @@ public:
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
-        EventTypeTest1,
 
         EventTypeSendOtherControl = 2000,
         EventTypeCenterVisible,
-        EventTypeParsingExcel,
         EventTypeFileNew,
+        EventTypeOpenExcel,
+        EventTypeSaveExcel,
         EventTypeFileOpen,
+        EventTypeFileSave,
+        EventTypeFileSaveAs,
     };
 };
 

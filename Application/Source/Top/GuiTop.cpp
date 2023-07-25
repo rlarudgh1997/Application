@@ -23,8 +23,7 @@
 
 
 
-
-QSharedPointer<GuiTop> GuiTop::instance(AbstractHandler* handler) {
+QSharedPointer<GuiTop>& GuiTop::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiTop> gGui;
     if (gGui.isNull()) {
         gGui = QSharedPointer<GuiTop>(new GuiTop(handler));
@@ -32,45 +31,14 @@ QSharedPointer<GuiTop> GuiTop::instance(AbstractHandler* handler) {
     return gGui;
 }
 
-GuiTop::GuiTop(AbstractHandler* handler) : mHandler(handler), mScreen(handler->getScreen()) {
-    mMainWindow->setParent(mScreen);
+GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
+    mMainWindow->setParent(isHandler()->getScreen());
     mMainWindow->show();
     updateDisplaySize();
 }
 
-bool GuiTop::createSignal(const int& type, const QVariant& value) {
-    if (mHandler) {
-        emit mHandler->signalHandlerEvent(type, value);
-        return true;
-    }
-
-    qDebug() << "Fail to create signal - handler :" << mHandler;
-    return false;
-}
-
-void GuiTop::drawDisplay(const QVariant& depth) {
-    if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
-        drawDisplayDepth0();
-    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
-        drawDisplayDepth1();
-    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
-        drawDisplayDepth2();
-    } else {
-    }
-}
-
 void GuiTop::drawDisplayDepth0() {
-    // mMainWindow->centralWidget()->hide();
-    if ((mMenu.size() > 0) && (mToolBar.size() > 0)) {
-        qDebug() << "Skip - drawDisplayDepth0";
-        return;
-    }
-
     updateDisplay(true);
-
-    mActionInfo[ActionType::FileNew] = ActionInfo(EventTypeEnum::EventTypeFileNew,
-                                                    "actionNew", QIcon(IAMGE_COPY),
-                                                    STRING_NEW, STRING_NEW_TIP, QKeySequence::New, this);
 
     // =================================================================================================================
     // FILE
@@ -103,12 +71,12 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                QString filePath = QFileDialog::getOpenFileName(qobject_cast<QWidget*>(mHandler),
+                QString filePath = QFileDialog::getOpenFileName(qobject_cast<QWidget*>(isHandler()),
                                             STRING_FILE_OPEN,
-                                            mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()+"/TC",
-                                            "Files (*.*)");
+                                            isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
+                                            QString("Excel (*.xls *.xlsx);;All files (*.*)"));
                 if (filePath.size() > 0) {
-                    createSignal(EventTypeEnum::EventTypeFileOpen, filePath);
+                    createSignal(EventTypeEnum::EventTypeOpenExcel, filePath);
                 }
             });
         }
@@ -131,12 +99,20 @@ void GuiTop::drawDisplayDepth0() {
                                                             STRING_SAVE_AS,
                                                             this);
         if (actionSaveAs) {
+            // actionSaveAs->setDisabled(true);
             actionSaveAs->setShortcuts(QKeySequence::SaveAs);
             actionSaveAs->setStatusTip(STRING_SAVE_AS_TIP);
             mMenu[MainType::File]->addAction(actionSaveAs);
+            // mMenu[MainType::File]->setStyleSheet(QString("QMenu::item{background-color : red; color : blue;);}"));
+            // qDebug() << "StyelSheet :" << mMenu[MainType::File]->styleSheet();
             // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
+                QFileDialog saveAsDialog(this);
+                saveAsDialog.setWindowModality(Qt::WindowModal);
+                saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
+                if (saveAsDialog.exec() == QDialog::Accepted) {
+                    createSignal(EventTypeEnum::EventTypeFileSaveAs, saveAsDialog.selectedFiles().first());
+                }
             });
         }
 
@@ -225,9 +201,9 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(mHandler),
+                QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(isHandler()),
                                                 STRING_DEFAULT_PATH,
-                                                mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
+                                                isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
                                                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
                 if (defaultPath.size() == 0) {
                     defaultPath = QApplication::applicationDirPath();
@@ -307,7 +283,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAbout->setStatusTip(STRING_ABOUT_TIP);
             mMenu[MainType::Help]->addAction(actionAbout);
             connect(actionAbout, &QAction::triggered, [=]() {
-                QMessageBox::about(qobject_cast<QWidget*>(mHandler),
+                QMessageBox::about(qobject_cast<QWidget*>(isHandler()),
                                 STRING_POPUP_ABOUT,
                                 STRING_POPUP_ABOUT_TIP);
             });
@@ -333,8 +309,9 @@ void GuiTop::drawDisplayDepth2() {
 }
 
 void GuiTop::updateDisplaySize() {
-    QRect rect = mMainWindow->geometry();
-    QSize size = mHandler->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
+    QRect rect = isHandler()->getScreen()->geometry();
+    // QRect rect = mMainWindow->geometry();
+    QSize size = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     rect.setWidth(size.width());
     rect.setHeight(size.height());
     mMainWindow->setGeometry(rect);
@@ -343,13 +320,13 @@ void GuiTop::updateDisplaySize() {
 void GuiTop::updateDisplayVisible() {
 }
 
-
 void GuiTop::updateDisplay(const bool& first, const int& type) {
-    static QLineEdit* defaultPath = new QLineEdit(mScreen);
-    static QPushButton* dispalyChange = new QPushButton(mScreen);
-    static QPushButton* parsing = new QPushButton(mScreen);
-    static QPushButton* excelOpen = new QPushButton(mScreen);
-    static QLineEdit *lineEdit = new QLineEdit(mScreen);
+    QWidget* screen = isHandler()->getScreen();
+    static QLineEdit* defaultPath = new QLineEdit(screen);
+    static QPushButton* dispalyChange = new QPushButton(screen);
+    static QPushButton* parsing = new QPushButton(screen);
+    static QPushButton* excelOpen = new QPushButton(screen);
+    static QLineEdit *lineEdit = new QLineEdit(screen);
 
     if (first) {
         defaultPath->setGeometry(QRect(350, 25, 450, 30));
@@ -375,17 +352,22 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         parsing->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         parsing->show();
         connect(parsing, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeParsingExcel, QVariant());
+            createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
         });
 
         excelOpen->setGeometry(930, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        excelOpen->setText("Open");
+        excelOpen->setText("Save As");
         excelOpen->setStyleSheet("color: rgb(50, 50, 100)");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+            QFileDialog saveAsDialog(this);
+            saveAsDialog.setWindowModality(Qt::WindowModal);
+            saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
+            if (saveAsDialog.exec() == QDialog::Accepted) {
+                createSignal(EventTypeEnum::EventTypeFileSaveAs, saveAsDialog.selectedFiles().first());
+            }
         });
 
 
@@ -411,8 +393,8 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         // add
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListAll) {
 #if 1
-        QStringList fileNames = mHandler->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
-        static QCompleter *completer = new QCompleter(fileNames, mScreen);
+        QStringList fileNames = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+        static QCompleter *completer = new QCompleter(fileNames, screen);
         completer->setCaseSensitivity(Qt::CaseInsensitive);
         completer->setFilterMode(Qt::MatchContains);
         completer->setWrapAround(false);
@@ -420,10 +402,10 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         lineEdit->setCompleter(completer);
 #else
 #if 1
-        static QCompleter *completerFile = new QCompleter(mScreen);
+        static QCompleter *completerFile = new QCompleter(screen);
         static QFileSystemModel *model = new QFileSystemModel(completerFile);
     //        model->setRootPath(QDir::currentPath());
-            model->setRootPath(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+            model->setRootPath(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
         model->setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
         model->sort(0, Qt::SortOrder::AscendingOrder);
         completerFile->setModel(model);
@@ -433,7 +415,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 
 #if 0
-        static QCompleter *completerFile = new QCompleter(mScreen);
+        static QCompleter *completerFile = new QCompleter(screen);
         completerFile->setModel(new QFileSystemModel(completerFile));
         lineEdit->setCompleter(completerFile);
 #endif
@@ -441,7 +423,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 
 #if 0
-        QTreeView *tree = new QTreeView(mScreen);
+        QTreeView *tree = new QTreeView(mScscreenreen);
         tree->setModel(model);
         tree->setGeometry(0, 50, 1200, 400);
         tree->show();
@@ -451,7 +433,9 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 
     if (type == PropertyTypeEnum::PropertyTypeDefaultPath) {
-        defaultPath->setText(QString("Path=%1").arg(mHandler->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString()));
+        QString pathString = QString("Path=");
+        pathString.append(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+        defaultPath->setText(pathString);
     }
 }
 

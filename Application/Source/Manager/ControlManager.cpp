@@ -22,11 +22,11 @@ void ControlManager::init() {
     createControl(ScreenEnum::DisplayTypeTop);
 }
 
-void ControlManager::sendEventInfo(const int& eventType, const QVariant& eventValue) {
-    int displayType = isDisplay(eventType);
-    if (displayType != ScreenEnum::DisplayTypeInvalid) {
-        createControl(displayType);
-        emit signalEventInfoChanged(displayType, eventType, eventValue);
+void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {
+    qDebug() << "[sendEventInfo] Direction :" << source << " -> " << destination << ", Type :" << eventType;
+    if (destination != ScreenEnum::DisplayTypeInvalid) {
+        createControl(destination);
+        emit signalEventInfoChanged(destination, eventType, eventValue);
     }
 }
 
@@ -74,24 +74,6 @@ void ControlManager::resizeEvent(QResizeEvent* resizeEvent) {
         mControlInfo[displayType]->resizeEvent(resizeEvent->size().width(), resizeEvent->size().height());
     }
 #endif
-}
-
-int ControlManager::isDisplay(const int& eventType) {
-    int displayType = ScreenEnum::DisplayTypeInvalid;
-    switch (eventType) {
-        case EventTypeEnum::EventTypeParsingExcel :
-        case EventTypeEnum::EventTypeFileNew :
-        case EventTypeEnum::EventTypeFileOpen :
-        case EventTypeEnum::EventTypeCenterVisible : {
-            displayType = ScreenEnum::DisplayTypeCenter;
-            break;
-        }
-        default : {
-            displayType = ScreenEnum::DisplayTypeInvalid;
-            break;
-        }
-    }
-    return displayType;
 }
 
 void ControlManager::createControl(const int& displayType) {

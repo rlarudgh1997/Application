@@ -8,7 +8,6 @@
 #include <QTableWidget>
 
 
-// class ItemTypeEnum;
 
 class CellInfo {
 public:
@@ -46,16 +45,15 @@ public:
 
 private:
     explicit GuiCenter(AbstractHandler* handler = nullptr);
-    virtual bool createSignal(const int& type, const QVariant& value);
-    virtual void drawDisplay(const QVariant& depth);
+
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
     virtual void drawDisplayDepth2();
     virtual void updateDisplay(const bool& first, const int& type = 0);
+    virtual void updateDisplaySize();
+    virtual void updateDisplayVisible();
 
-    void updateDisplaySize();
-    void updateDisplayVisible();
-    void updateDisplaySheetInfo();
+    void updateDisplaySheetInfo(const int& type);
 
 
 public slots:
@@ -65,8 +63,6 @@ public slots:
 private:
     QTabWidget* mTabWidget = nullptr;
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
-    const int mMarginPosY = 120;
-
 };
 
 #endif    // GUI_CENTER_H

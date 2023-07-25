@@ -2,9 +2,8 @@
 #define ABSTRACT_GUI_H
 
 #include <QWidget>
-
-
-class AbstractHandler;
+#include "AbstractHandler.h"
+#include "CommonEnum.h"
 
 
 class AbstractGui : public QWidget {
@@ -13,14 +12,33 @@ public:
     AbstractHandler* isHandler() {
         return mHandler;
     }
+    bool createSignal(const int& type, const QVariant& value) {
+        if (isHandler()) {
+            emit isHandler()->signalHandlerEvent(type, value);
+            return true;
+        }
+        qDebug("Fail to create signal - handler is nullptr");
+        return false;
+    }
+    void drawDisplay(const QVariant& depth) {
+        if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
+            drawDisplayDepth0();
+        } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
+            drawDisplayDepth1();
+        } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
+            drawDisplayDepth2();
+        } else {
+            // nothing to do
+        }
+    }
 
 private:
-    virtual bool createSignal(const int& type, const QVariant& value) = 0;
-    virtual void drawDisplay(const QVariant& depth) = 0;
     virtual void drawDisplayDepth0() = 0;
     virtual void drawDisplayDepth1() = 0;
     virtual void drawDisplayDepth2() = 0;
     virtual void updateDisplay(const bool& first, const int& type = 0) = 0;
+    virtual void updateDisplaySize() = 0;
+    virtual void updateDisplayVisible() = 0;
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value) = 0;

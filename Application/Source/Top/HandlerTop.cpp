@@ -21,17 +21,19 @@ HandlerTop::HandlerTop() : AbstractHandler(ScreenEnum::DisplayTypeTop, QString("
 }
 
 void HandlerTop::initPropertyInfo() {
-    registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                   QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeDisplaySize,               QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeMode,                      QVariant(-1));
-    registerProperty(PropertyTypeEnum::PropertyTypeVisible,                   QVariant(false));
-    registerProperty(PropertyTypeEnum::PropertyTypeDepth,                     QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeDisplay,                             QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeDisplaySize,                         QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                   QVariant(QSize(0, 0)));
+    registerProperty(PropertyTypeEnum::PropertyTypeMode,                                QVariant(-1));
+    registerProperty(PropertyTypeEnum::PropertyTypeVisible,                             QVariant(false));
+    registerProperty(PropertyTypeEnum::PropertyTypeDepth,                               QVariant(-1));
 
 
-    registerProperty(PropertyTypeEnum::PropertyTypeDefaultPath,               QVariant(""));
-    registerProperty(PropertyTypeEnum::PropertyTypeSignalListAll,             QVariant(""));
-    registerProperty(PropertyTypeEnum::PropertyTypeSignalListSFC,             QVariant(""));
-    registerProperty(PropertyTypeEnum::PropertyTypeSignalListVSM,             QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeDefaultPath,                         QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeSignalListAll,                       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeSignalListSFC,                       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeSignalListVSM,                       QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeSignalListToMicom,                   QVariant(""));
 }
 
 void HandlerTop::controlConnect(const bool& state) {
@@ -58,4 +60,3 @@ void HandlerTop::timerFunc(const int& timerId) {
         // do nothing
     }
 }
-

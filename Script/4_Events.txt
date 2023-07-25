@@ -1,0 +1,16 @@
+TCName	VehicleType	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
+E76301~3	EV, FCEV	E76301	EvLowSocWarnCVStatus==WARN1	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.ID	O	E76301			
+				Vehicle.CV.SOC_Gauge_CV.Input_EvLowSocWarnCVStatus	WARN1	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.Stat	O	0x2			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.ID	O	SND_PopUpWarn1			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.Type	O	0x1			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.RepeatCount		1			
+		E76302	EvLowSocWarnCVStatus==WARN2	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.ID	O	E76302			
+				Vehicle.CV.SOC_Gauge_CV.Input_EvLowSocWarnCVStatus	WARN2	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.Stat	O	0x2			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.ID	O	SND_PopUpWarn2			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.Type	O	0x1			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.RepeatCount		1			
+		E76303	EvLowSocWarnCVStatus==WARN3	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.ID	O	E76303			
+				Vehicle.CV.SOC_Gauge_CV.Input_EvLowSocWarnCVStatus	WARN3	SFC.SOC_Gauge_CV.Event.EvLowSocWarn.Stat	O	0x2			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.ID	O	SND_PopUpWarn2			
+						SFC.SOC_Gauge_CV.Event.EvLowSocWarn.LinkedSound.Type	O	0x5			
+		Event OFF	Others								

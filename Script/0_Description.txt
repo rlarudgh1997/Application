@@ -1,0 +1,2 @@
+test	version	description	Config_Signal	Data
+SOC_Gauge_CV	4.0.0	[CV630] SOC_Gauge_CV. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED	Vehicle.System.Config.Inter_ConfigVehicleType	EV, FCEV

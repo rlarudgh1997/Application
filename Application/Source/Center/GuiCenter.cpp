@@ -39,26 +39,6 @@ GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
 #endif
 }
 
-bool GuiCenter::createSignal(const int& type, const QVariant& value) {
-    if (isHandler()) {
-        emit isHandler()->signalHandlerEvent(type, value);
-        return true;
-    }
-    qDebug() << "Fail to create signal - handler is nullptr";
-    return false;
-}
-
-void GuiCenter::drawDisplay(const QVariant& depth) {
-    if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
-        drawDisplayDepth0();
-    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
-        drawDisplayDepth1();
-    } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
-        drawDisplayDepth2();
-    } else {
-    }
-}
-
 void GuiCenter::drawDisplayDepth0() {
     updateDisplay(true, PropertyTypeEnum::PropertyTypeVisible);
 }
@@ -74,9 +54,17 @@ void GuiCenter::drawDisplayDepth2() {
 void GuiCenter::updateDisplaySize() {
     QRect rect = isHandler()->getScreen()->geometry();
     QSize size = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-    rect.setY(mMarginPosY);
-    rect.setWidth(size.width());
-    rect.setHeight(size.height()-mMarginPosY);
+    QSize margin = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
+
+    if (margin.width() > 0) {
+        rect.setX(margin.width());
+        rect.setWidth(size.width() - margin.width());
+    }
+    if (margin.height() > 0) {
+        rect.setY(margin.height());
+        rect.setHeight(size.height() - margin.height());
+    }
+
     mTabWidget->setGeometry(rect);
 }
 
@@ -88,12 +76,12 @@ void GuiCenter::updateDisplayVisible() {
     }
 }
 
-void GuiCenter::updateDisplaySheetInfo() {
-    int updateSheetInfo = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfo).toInt();
+void GuiCenter::updateDisplaySheetInfo(const int& type) {
     qDebug() << "==============================================================================================";
+    int updateSheetInfo = isHandler()->getProperty(type).toInt();
 
     if (updateSheetInfo == 0) {
-        qDebug() << "Fail to update sheet info size : 0";
+        qDebug() << "Fail to update sheet info size : 0, type :" << type;
         return;
     } else {
         qDebug() << "UpdateSheetSize :" << updateSheetInfo;
@@ -141,14 +129,11 @@ void GuiCenter::updateDisplaySheetInfo() {
         // Draw - Detail List Data
         for (int dataRowIndex = 0; dataRowIndex < rowCount; dataRowIndex++) {
             QStringList detailInfoData = detailInfo[ListInfoEnum::ListInfoExcel::Data + dataRowIndex].toStringList();
-            // qDebug() << "Data[" << dataRowIndex << "] :" << detailInfoData.size() << "," << detailInfoData;
             int dataColumnIndex = 0;
             foreach(const auto& data, detailInfoData) {
-                // qDebug() << "Data :" << data;
-                if (dataColumnIndex < 4) {
+                if ((type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen) && (dataColumnIndex < 4)) {
                     if (data.compare("") == false) {
                         mCellInfo[sheetIndex].append(CellInfo(dataRowIndex, dataColumnIndex));
-                        qDebug() << "CellInfo[" << sheetIndex << "] :" << dataRowIndex << "," << dataColumnIndex;
                     }
                 }
 
@@ -157,10 +142,7 @@ void GuiCenter::updateDisplaySheetInfo() {
                 mTableWidgets[sheetIndex]->setItem(dataRowIndex, dataColumnIndex, detailDataItem);
                 dataColumnIndex++;
             }
-            qDebug() << "=======================================================================\n";
         }
-
-        // Draw - Cell Merge/Split
 
 
         // Draw - Cell Text Width/Height
@@ -171,6 +153,10 @@ void GuiCenter::updateDisplaySheetInfo() {
         // Connect - Signal
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
             qDebug() << sheetIndex << ". cellDoubleClicked : " << row << ", " << column;
+        });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
+            qDebug() << sheetIndex << ". cellChanged : " << row << ", " << column
+                        << ", Text" << mTableWidgets[sheetIndex]->item(row, column)->text();
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
@@ -195,32 +181,49 @@ void GuiCenter::updateDisplaySheetInfo() {
             // }
         });
 #if 0
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-            qDebug() << sheetIndex << ". itemPressed : " << item;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << sheetIndex << ". itemClicked : " << item;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::currentItemChanged,
-                                            [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-            qDebug() << sheetIndex << ". currentItemChanged : " << previous << " -> " << current;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << sheetIndex << ". itemSelectionChanged";
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-            qDebug() << sheetIndex << ". cellPressed : " << row << ", " << column;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellClicked : " << row << ", " << column;
+        connect(mTableWidgets[sheetIndex], &QTableWidget::cellActivated, [=](int row, int column) {
+            qDebug() << sheetIndex << ". cellActivated : " << row << ", " << column;
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
             qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
         });
+        connect(mTableWidgets[sheetIndex], &QTableWidget::currentCellChanged,
+                                            [=](int currentRow, int currentColumn, int previousRow, int previousColumn) {
+            qDebug() << sheetIndex << ". currentCellChanged : " << currentRow << ", " << currentColumn
+                        << ", " << previousRow << ", " << previousColumn;
+        });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::currentItemChanged,
+        //                                     [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
+        //     qDebug() << sheetIndex << ". currentItemChanged : " << previous << " -> " << current;
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
+        //     qDebug() << sheetIndex << ". itemPressed : " << item;
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
+        //     qDebug() << sheetIndex << ". itemClicked : " << item;
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+        //     qDebug() << sheetIndex << ". itemSelectionChanged";
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
+        //     qDebug() << sheetIndex << ". cellPressed : " << row << ", " << column;
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
+        //     qDebug() << sheetIndex << ". cellClicked : " << row << ", " << column;
+        // });
+        // connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
+        //     qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
+        // });
 #endif
     }
 
-    qDebug() << "=======================================================================\n\n\n\n";
+    if (type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew) {
+        return;
+    }
+
+    qDebug() << "\n\n\n";
+    qDebug() << "=======================================================================";
+    qDebug() << "Draw - Cell Merge/Split\n\n";
 
     QMapIterator<int, QList<CellInfo>> iter(mCellInfo);
     int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
@@ -333,8 +336,9 @@ void GuiCenter::updateDisplay(const bool& first, const int& type) {
         updateDisplaySize();
     } else if (type == PropertyTypeEnum::PropertyTypeVisible) {
         updateDisplayVisible();
-    } else if (type == PropertyTypeEnum::PropertyTypeUpdateSheetInfo) {
-        updateDisplaySheetInfo();
+    } else if ((type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew)
+        || (type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)) {
+        updateDisplaySheetInfo(type);
     } else {
     }
 }
@@ -347,7 +351,8 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case PropertyTypeEnum::PropertyTypeDisplaySize :
         case PropertyTypeEnum::PropertyTypeVisible :
-        case PropertyTypeEnum::PropertyTypeUpdateSheetInfo : {
+        case PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew :
+        case PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen : {
             updateDisplay(false, type);
             break;
         }

@@ -128,6 +128,14 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     // }
 }
 
+void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
+    switch (type) {
+        default : {
+            break;
+        }
+    }
+}
+
 void ControlCenter::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
     if (getData(PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
         return;
@@ -144,13 +152,61 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             checkTimer.check("Center - Visible");
             break;
         }
+        case EventTypeEnum::EventTypeOpenExcel :
+        case EventTypeEnum::EventTypeSaveExcel : {
+#if 1
+            QStringList fileInfo = eventValue.toString().split("/");
+            QString path = QString();
+            for (int index = 0; index < (fileInfo.size() - 1); index++) {
+                path.append(fileInfo[index]);
+                path.append("/");
+            }
+            QString file = fileInfo[fileInfo.size() - 1];
+            QString cmdType = ((eventType == EventTypeEnum::EventTypeOpenExcel) ? ("read") : ("write"));
+            QString cmd = QString("python ../Example/excel_parsing.py %1 %2 %3").arg(path).arg(file).arg(cmdType);
+            int result = system(cmd.toLatin1());
+
+            qDebug() << "\n\n";
+            qDebug() << "===========================================================";
+            qDebug() << "FilePath :" << eventValue;
+            qDebug() << "Commnad :" << cmd;
+            qDebug() << "System :" << ((result == 0) ? ("sucess[") : ("fail[")) << result << "]";
+
+            if ((eventType == EventTypeEnum::EventTypeOpenExcel) && (result == 0)) {
+                ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                                                                    ScreenEnum::DisplayTypeCenter,
+                                                                    EventTypeEnum::EventTypeFileOpen,
+                                                                    path);
+            }
+#else
+            QProcess* process = new QProcess(isHandler());
+            // QProcess* process = new QProcess(this);
+            // connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::handleOutput);
+            // connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            //     this, &MainWindow::handleFinished);
+            connect(process, &QProcess::readyReadStandardOutput, [=]() {
+                QByteArray data = process->readAllStandardOutput();
+                qDebug() << "Data :" << data;
+            });
+            // process->start("ping", QStringList() << "-c" << "4" << "google.com");
+            process->start("python", QStringList("../Example/excel_parsing.py"));
+#endif
+            if (eventType == EventTypeEnum::EventTypeOpenExcel) {
+                checkTimer.check("Read Excel");
+            } else {
+                checkTimer.check("Write Excel");
+            }
+            break;
+        }
         case EventTypeEnum::EventTypeFileNew :
         case EventTypeEnum::EventTypeFileOpen : {
             QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
             QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
             int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+            int updateSheetInfo = PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen;
 
             if (eventType == EventTypeEnum::EventTypeFileNew) {
+                updateSheetInfo = PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew;
                 int rowCount = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
 
                 foreach(const auto& sheet, sheetName) {
@@ -170,8 +226,8 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                         int columnCount = dataInfo[ListInfoEnum::ListInfoExcel::Title].toList().count();
                         QVariantList columnInfo = QVariantList();
                         for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-                            columnInfo.append("");
-                            // columnInfo.append(QString("%1_[%2, %3]").arg(sheet.toString()).arg(rowIndex).arg(columnIndex));
+                            // columnInfo.append("");
+                            columnInfo.append(QString("%1[%2_%3]").arg(sheet.toString()).arg(rowIndex).arg(columnIndex));
                         }
                         dataInfo[ListInfoEnum::ListInfoExcel::Data + rowIndex] = columnInfo;
                     }
@@ -179,19 +235,18 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                     sheetIndex++;
                 }
             } else {
+                updateSheetInfo = PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen;
                 foreach(const auto& sheet, sheetName) {
                     int fileIndex = sheetIndex - PropertyTypeEnum::PropertyTypeDetailInfoDescription;
                     QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                     QVariant title = QVariant();
-
-                    QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-                    filePath.append(QString("/%1_%2.txt").arg(fileIndex).arg(sheet.toString()));
-                    QStringList readData = FileInfo::parsingFile(filePath);
+                    QString filePath = QString("%1TC/%2_%3.txt").arg(eventValue.toString()).arg(fileIndex).arg(sheet.toString());
+                    QStringList readData = FileInfo::readFile(filePath);
                     int rowCount = readData.size();
 
                     if (rowCount == 0) {
-                        qDebug() << "Fail to read file path :" << filePath << ", length :" << rowCount;
-                        return;
+                        qDebug() << "Fail to read file length :" << rowCount << ", path :" << filePath;
+                        continue;
                     }
 
                     dataInfo[ListInfoEnum::ListInfoExcel::Sheet] = sheet;
@@ -216,46 +271,81 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                         // qDebug() << "DetailInfo :" << iter.key() << "," << iter.value() << "\n\n";
                         updateDataHandler(iter.key(), iter.value());
                     }
-                    updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfo, sheetDetailInfo.size(), true);
+
+                    updateDataHandler(updateSheetInfo, sheetDetailInfo.size(), true);
                     updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
             }
 
             if (eventType == EventTypeEnum::EventTypeFileNew) {
-                checkTimer.check("UpdateExcel - New");
+                checkTimer.check("Update Excel - New");
             } else {
-                checkTimer.check("UpdateExcel - Open");
+                checkTimer.check("Update Excel - Open");
             }
             break;
         }
-        case EventTypeEnum::EventTypeParsingExcel : {
-#if 1
-            int result = system("python ../Example/excel_parsing.py");
-            qDebug() << "system call" << ((result == 0) ? ("sucess :") : ("fail :")) << result;
-#else
-            QProcess* process = new QProcess(isHandler());
-            // QProcess* process = new QProcess(this);
-            // connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::handleOutput);
-            // connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            //     this, &MainWindow::handleFinished);
-            connect(process, &QProcess::readyReadStandardOutput, [=]() {
-                QByteArray data = process->readAllStandardOutput();
-                qDebug() << "Data :" << data;
-            });
-            // process->start("ping", QStringList() << "-c" << "4" << "google.com");
-            process->start("python", QStringList("../Example/excel_parsing.py"));
-#endif
-            checkTimer.check("Excel - Parsing");
+        case EventTypeEnum::EventTypeFileSave : {
             break;
         }
-        default : {
-            break;
-        }
-    }
-}
+        case EventTypeEnum::EventTypeFileSaveAs : {
+            QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+            QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
+            int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+            bool sendEvent = true;
 
-void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
-    switch (type) {
-        case EventTypeEnum::EventTypeTest1 : {
+            foreach(const auto& sheet, sheetName) {
+                sheetDetailInfo[sheetIndex++] = getData(sheetIndex).toList();
+            }
+
+            QString file = QString();
+            sheetIndex = 0;
+            foreach(const auto& detailInfo, sheetDetailInfo) {
+                int index = 0;
+                QString writeData = QString();
+                foreach(const auto& detail, detailInfo) {
+                    if (index == ListInfoEnum::ListInfoExcel::Sheet) {
+                        file = QString("%1_%2.ini").arg(sheetIndex++).arg(detail.toString());
+                    } else if (index >= ListInfoEnum::ListInfoExcel::Title) {
+                        QString infoData = QString();
+                        int count = 0;
+                        foreach(QVariant info, detail.toList()) {
+                            infoData.append(info.toString());
+                            if (count++ < (detail.toList().size() - 1)) {
+                                infoData.append("\t");
+                            }
+                        }
+                        infoData.append("\n");
+                        writeData.append(infoData);
+                        // qDebug() << "String :" << infoData;
+                    } else {
+                        // nothing to do
+                    }
+                    index++;
+                }
+
+                if (writeData.size() > 0) {
+                    QStringList fileInfo = eventValue.toString().split("/");
+                    QString path = QString();
+                    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+                        path.append(fileInfo[index]);
+                        path.append("/");
+                    }
+                    path.append("TC/");
+
+                    int writeSize = FileInfo::writeFile(QString("%1%2").arg(path).arg(file), writeData);
+                    if (writeSize == 0) {
+                        sendEvent = false;
+                        qDebug() << "Fail to write size 0, filePath :" << path << file;
+                    }
+                }
+                qDebug() << "\n\n";
+            }
+
+            if (sendEvent) {
+                ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                                                                    ScreenEnum::DisplayTypeCenter,
+                                                                    EventTypeEnum::EventTypeSaveExcel,
+                                                                    eventValue);
+            }
             break;
         }
         default : {

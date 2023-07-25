@@ -2,6 +2,8 @@
 #define COMMON_FILE_H
 
 #include <QObject>
+#include <QDebug>
+
 #include <QApplication>
 #include <QWidget>
 #include <QFile>
@@ -11,7 +13,7 @@
 #include <QElapsedTimer>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QDebug>
+#include <QMessageBox>
 
 
 #define APP_PWD QApplication::applicationDirPath().toLatin1().data()
@@ -155,8 +157,11 @@ public:
         }
         return readFileInfo(currentPath, fileList);
     }
-    static QStringList parsingFile(const QString& filePath) {
-        return readFile(filePath);
+    static QStringList readFile(const QString& filePath) {
+        return readFileData(filePath);
+    }
+    static int writeFile(const QString& filePath, const QString& str) {
+        return writeFileData(filePath, str);
     }
 
 private:
@@ -178,26 +183,40 @@ private:
         qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
         return fileNames;
     }
-    static QStringList readFile(const QString& filePath) {
+    static QStringList readFileData(const QString& filePath) {
         QStringList fileContent = QStringList();
         QFile file(filePath);
         // qDebug() << "filePath :" << filePath;
-        if (file.open(QFile::ReadOnly|QFile::Text)) {
-            QTextStream readFile(&file);
-            while (!readFile.atEnd()) {
-                QString data = readFile.readLine();
+        if (file.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream readData(&file);
+            while (!readData.atEnd()) {
+                QString data = readData.readLine();
                 fileContent.append(data);
                 // qDebug() << "Data :" << data;
             }
             file.close();
         } else {
             if (file.exists()) {
-                qDebug() << "Fail to open no exist file";
+                qDebug() << "Fail to open no exist file :" << filePath;
             } else {
-                qDebug() << "Fail to open error";
+                qDebug() << "Fail to open error :" << filePath;
             }
         }
         return fileContent;
+    }
+    static int writeFileData(const QString& filePath, const QString& str) {
+        qDebug() << "filePath :" << filePath;
+        QFile file(filePath);
+        if (file.open(QFile::WriteOnly | QFile::Text) == false) {
+            // QMessageBox::warning(this, tr("Application"),
+            //                     QString("Cannot write file %1:\n%2.")
+            //                             .arg(QDir::toNativeSeparators(filePath).arg(file.errorString())));
+            return 0;
+        }
+        QTextStream out(&file);
+        out << str;
+        file.close();
+        return str.size();
     }
 };
 
