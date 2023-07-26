@@ -4,23 +4,14 @@
 #include "CommonEnum.h"
 #include "CommonResource.h"
 
-
-#include <QToolBar>
-#include <QTableWidget>
-#include <QApplication>
+#include <QKeySequence>
+// #include <QApplication>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QProcess>
 
-
+#include <QCompleter>
 #include <QPushButton>
 #include <QLineEdit>
-#include <QComboBox>
-#include <QCompleter>
-#include <QFileSystemModel>
-#include <QTreeView>
-#include <QListView>
-
 
 
 QSharedPointer<GuiTop>& GuiTop::instance(AbstractHandler* handler) {
@@ -71,13 +62,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                QString filePath = QFileDialog::getOpenFileName(qobject_cast<QWidget*>(isHandler()),
-                                            STRING_FILE_OPEN,
-                                            isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
-                                            QString("Excel (*.xls *.xlsx);;All files (*.*)"));
-                if (filePath.size() > 0) {
-                    createSignal(EventTypeEnum::EventTypeOpenExcel, filePath);
-                }
+                createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
             });
         }
 
@@ -107,12 +92,7 @@ void GuiTop::drawDisplayDepth0() {
             // qDebug() << "StyelSheet :" << mMenu[MainType::File]->styleSheet();
             // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
-                QFileDialog saveAsDialog(this);
-                saveAsDialog.setWindowModality(Qt::WindowModal);
-                saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
-                if (saveAsDialog.exec() == QDialog::Accepted) {
-                    createSignal(EventTypeEnum::EventTypeFileSaveAs, saveAsDialog.selectedFiles().first());
-                }
+                createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
             });
         }
 
@@ -201,14 +181,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(isHandler()),
-                                                STRING_DEFAULT_PATH,
-                                                isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString(),
-                                                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-                if (defaultPath.size() == 0) {
-                    defaultPath = QApplication::applicationDirPath();
-                }
-                createSignal(EventTypeEnum::EventTypeSettingDevPath, defaultPath);
+                createSignal(EventTypeEnum::EventTypeSettingDevPath, QVariant());
             });
         }
 
@@ -283,9 +256,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAbout->setStatusTip(STRING_ABOUT_TIP);
             mMenu[MainType::Help]->addAction(actionAbout);
             connect(actionAbout, &QAction::triggered, [=]() {
-                QMessageBox::about(qobject_cast<QWidget*>(isHandler()),
-                                STRING_POPUP_ABOUT,
-                                STRING_POPUP_ABOUT_TIP);
+                createSignal(EventTypeEnum::EventTypeHelpAbout, QVariant());
             });
         }
 
@@ -296,7 +267,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAboutQt->setStatusTip(STRING_ABOUT_QT_TIP);
             mMenu[MainType::Help]->addAction(actionAboutQt);
             connect(actionAboutQt, &QAction::triggered, [=]() {
-                QApplication::aboutQt();
+                createSignal(EventTypeEnum::EventTypeHelpAboutQt, QVariant());
             });
         }
     }
@@ -362,12 +333,7 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            QFileDialog saveAsDialog(this);
-            saveAsDialog.setWindowModality(Qt::WindowModal);
-            saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
-            if (saveAsDialog.exec() == QDialog::Accepted) {
-                createSignal(EventTypeEnum::EventTypeFileSaveAs, saveAsDialog.selectedFiles().first());
-            }
+            createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
         });
 
 

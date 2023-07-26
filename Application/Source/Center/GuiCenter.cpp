@@ -5,12 +5,6 @@
 #include "CommonResource.h"
 
 
-// #include <QToolBar>
-// #include <QPushButton>
-// #include <QLineEdit>
-#include <QMainWindow>
-
-
 
 QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiCenter> gGui;
@@ -83,9 +77,8 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     if (updateSheetInfo == 0) {
         qDebug() << "Fail to update sheet info size : 0, type :" << type;
         return;
-    } else {
-        qDebug() << "UpdateSheetSize :" << updateSheetInfo;
     }
+    qDebug() << "UpdateSheetSize :" << updateSheetInfo;
 
     // Clear - Previous Table Widget
     mTabWidget->clear();

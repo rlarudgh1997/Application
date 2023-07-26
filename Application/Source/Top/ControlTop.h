@@ -1,11 +1,10 @@
 #ifndef CONTROL_TOP_H
 #define CONTROL_TOP_H
 
-
-
 #include "AbstractControl.h"
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(C_TOP)
+
+// #include <QLoggingCategory>
+// Q_DECLARE_LOGGING_CATEGORY(C_TOP)
 
 
 

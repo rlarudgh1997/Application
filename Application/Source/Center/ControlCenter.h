@@ -19,6 +19,10 @@ public:
 
 private:
     explicit ControlCenter();
+    void updateSheetInfo(const int& propertyType, const QVariant& value);
+    void editSheetInfo(const QVariant& value);
+    void writeSheetInfo(const QVariant& value);
+    QString sytemCall(const int& type, const QVariant& value);
 
 
 protected:

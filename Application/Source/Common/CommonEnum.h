@@ -88,15 +88,13 @@ public:
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeDefaultPath,
-        PropertyTypeSheetName,
-        PropertyTypeContentTitle,
-        PropertyTypeDescTitle,
         PropertyTypeSignalListAll,  // SFC + VSM
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
+        PropertyTypeSaveFilePath,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -132,16 +130,19 @@ public:
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
+        EventTypeHelpAbout,
+        EventTypeHelpAboutQt,
+        EventTypeOpenExcel,
+        EventTypeSaveExcel,
+        EventTypeUpdateDevPath,
+        EventTypeUpdateSheetInfo,
 
         EventTypeSendOtherControl = 2000,
         EventTypeCenterVisible,
         EventTypeFileNew,
-        EventTypeOpenExcel,
-        EventTypeSaveExcel,
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
-        EventTypeUpdateSheetInfo,
     };
 };
 

@@ -8,12 +8,12 @@
 
 #include "CommonUtil.h"
 
-Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
+// Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
 MainWindow::MainWindow() {
-    qDebug(MAINWINDOW) << "================================================================================================";
-    qDebug(MAINWINDOW) << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
-    qDebug(MAINWINDOW) << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
+    qDebug() << "================================================================================================";
+    qDebug() << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
+    qDebug() << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
     CheckTimer checkTimer;
 
     this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
@@ -41,7 +41,7 @@ MainWindow::MainWindow() {
 }
 
 MainWindow::~MainWindow() {
-    qDebug(MAINWINDOW) << "Complete - Exit Application !!!!!!!! \n\n";
+    qDebug() << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {

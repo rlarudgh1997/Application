@@ -4,8 +4,9 @@
 #include <QWidget>
 
 #include "CommonDefine.h"
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(MAINWINDOW)
+
+// #include <QLoggingCategory>
+// Q_DECLARE_LOGGING_CATEGORY(MAINWINDOW)
 
 
 class MainWindow : public QWidget {

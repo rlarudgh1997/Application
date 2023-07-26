@@ -5,8 +5,9 @@
 #include "ControlManager.h"
 #include "ConfigSetting.h"
 #include "CommonUtil.h"
+#include "CommonPopup.h"
 
-Q_LOGGING_CATEGORY(C_TOP, "ControlTop")
+// Q_LOGGING_CATEGORY(C_TOP, "ControlTop")
 
 
 QSharedPointer<ControlTop>& ControlTop::instance() {
@@ -107,18 +108,18 @@ void ControlTop::resizeEvent(const int& width, const int& height) {
 
 void ControlTop::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
-        emit isHandler()->signalUpdateDataModel(type, value, alwaysUpdate);
+        createSignal(type, value, alwaysUpdate);
     }
 }
 
 void ControlTop::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
-        emit isHandler()->signalUpdateDataModel(type, getData(type), alwaysUpdate);
+        createSignal(type, value, alwaysUpdate);
     }
 }
 
 void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug(C_TOP) << "ControlTop::slotConfigChanged() ->" << type << "," << value;
+    // qDebug() << "ControlTop::slotConfigChanged() ->" << type << "," << value;
     // switch (type) {
     //     case ConfigInfo::ConfigTypeDefaultPath : {
     //         updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
@@ -131,6 +132,7 @@ void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
+    qDebug() << "ControlTop::slotHandlerEvent() ->" << type << "," << value;
     CheckTimer checkTimer;
 
     switch (type) {
@@ -138,9 +140,17 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             ControlManager::instance().data()->exitProgram();
             break;
         }
+        case EventTypeEnum::EventTypeHelpAbout : {
+            Popup::drawPopupAbout(isHandler());
+            break;
+        }
+        case EventTypeEnum::EventTypeHelpAboutQt : {
+            Popup::drawPopupAboutQt(isHandler());
+            break;
+        }
         case EventTypeEnum::EventTypeCenterVisible :
-        case EventTypeEnum::EventTypeOpenExcel :
         case EventTypeEnum::EventTypeFileNew :
+        case EventTypeEnum::EventTypeFileOpen :
         case EventTypeEnum::EventTypeFileSave :
         case EventTypeEnum::EventTypeFileSaveAs : {
             ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
@@ -150,32 +160,37 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeEditCut : {
-            qDebug(C_TOP) << "Edit - Cut";
+            qDebug() << "Edit - Cut";
             break;
         }
         case EventTypeEnum::EventTypeEditCopy : {
-            qDebug(C_TOP) << "Edit - Copy";
+            qDebug() << "Edit - Copy";
             break;
         }
         case EventTypeEnum::EventTypeEditPaste : {
-            qDebug(C_TOP) << "Edit - Paste";
+            qDebug() << "Edit - Paste";
             break;
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
+            QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+            Popup::drawPopupDevPath(isHandler(), EventTypeEnum::EventTypeUpdateDevPath, defaultPath);
+            break;
+        }
+        case EventTypeEnum::EventTypeUpdateDevPath : {
             updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, value);
             break;
         }
         case EventTypeEnum::EventTypeSettingTestReport : {
-            qDebug(C_TOP) << "Setting - Test Report";
+            qDebug() << "Setting - Test Report";
             break;
         }
         case EventTypeEnum::EventTypeSettingTestResult : {
-            qDebug(C_TOP) << "Setting - Test Result";
+            qDebug() << "Setting - Test Result";
             break;
         }
         case EventTypeEnum::EventTypeSettingTestCoverage : {
-            qDebug(C_TOP) << "Setting - Test Coverage";
+            qDebug() << "Setting - Test Coverage";
             break;
         }
         default : {
@@ -189,7 +204,7 @@ void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventTy
         return;
     }
 
-    qDebug(C_TOP) << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    qDebug() << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
 
     switch (eventType) {
         default : {

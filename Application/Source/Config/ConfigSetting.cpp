@@ -8,7 +8,7 @@
 
 #include <QDebug>
 
-Q_LOGGING_CATEGORY(CONFIG, "ConfigSetting")
+// Q_LOGGING_CATEGORY(CONFIG, "ConfigSetting")
 
 
 #define CONFIG_PATH QApplication::applicationDirPath().toLatin1().data()
@@ -37,14 +37,14 @@ ConfigSetting::ConfigSetting()
 ConfigSetting::~ConfigSetting() {
     mThreadRun = false;
     delete mSetting;
-    qDebug(CONFIG) << "~ConfigSetting";
+    qDebug() << "~ConfigSetting";
 }
 
 void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
     bool fileExists = configSettingFile.exists();
 
-    // qDebug(CONFIG) << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
+    // qDebug() << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
 
     if ((fileExists == false) && (configSettingFile.open(QIODevice::WriteOnly|QIODevice::Text))) {
         resetConfig();

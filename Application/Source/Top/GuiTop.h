@@ -4,11 +4,10 @@
 #include "AbstractGui.h"
 
 #include <QWidget>
-#include <QWidget>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
-#include <QKeySequence>
+#include <QToolBar>
 
 
 class GuiTop : public AbstractGui {

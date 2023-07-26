@@ -6,10 +6,8 @@
 #include <QTimerEvent>
 #include <QKeyEvent>
 
-// #include "CommonDefine.h"
-
-
-class AbstractHandler;
+#include "AbstractHandler.h"
+// class AbstractHandler;
 
 
 
@@ -30,6 +28,7 @@ public:
     int getTimerId(const int& timerType);
     const QVariant getData(const int& type);
     bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate);
+    bool createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
     virtual void resizeEvent(const int& width, const int& height) = 0;

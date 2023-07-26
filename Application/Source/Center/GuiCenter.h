@@ -8,7 +8,6 @@
 #include <QTableWidget>
 
 
-
 class CellInfo {
 public:
     CellInfo() {}

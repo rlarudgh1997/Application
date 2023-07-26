@@ -154,7 +154,7 @@ def writeToExcel(data, filePath) :
 
 def main(argv) :
     print("\n=================================================================================================")
-    print("Start Python\n")
+    print("  [Start Python]\n")
     if len(argv) != 4 :
         print("input length error !!!!!!!!!!")
         return

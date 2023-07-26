@@ -5,6 +5,7 @@ INCLUDEPATH += \
 HEADERS += \
     $$PWD/CommonDefine.h\
     $$PWD/CommonEnum.h\
+    $$PWD/CommonPopup.h\
     $$PWD/CommonUtil.h\
     $$PWD/CommonResource.h\
 

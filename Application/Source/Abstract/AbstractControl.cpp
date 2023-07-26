@@ -47,3 +47,12 @@ bool AbstractControl::setData(const int& type, const QVariant& value, const bool
     }
     return update;
 }
+
+bool AbstractControl::createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+    if (isHandler()) {
+        emit isHandler()->signalUpdateDataModel(type, value, alwaysUpdate);
+        return true;
+    }
+    qDebug("Fail to create signal - handler is nullptr");
+    return false;
+}

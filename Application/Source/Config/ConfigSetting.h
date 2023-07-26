@@ -9,8 +9,10 @@
 #include <QMap>
 #include <QThread>
 #include <QMutex>
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(CONFIG)
+
+
+// #include <QLoggingCategory>
+// Q_DECLARE_LOGGING_CATEGORY(CONFIG)
 
 
 class ConfigSetting : public QObject {
