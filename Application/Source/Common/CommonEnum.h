@@ -87,6 +87,7 @@ public:
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
+        PropertyTypeAllConfigInfo,
         PropertyTypeDefaultPath,
         PropertyTypeSignalListAll,  // SFC + VSM
         PropertyTypeSignalListSFC,
@@ -126,6 +127,7 @@ public:
         EventTypeEditCut,
         EventTypeEditCopy,
         EventTypeEditPaste,
+        EventTypeSettingConfig,
         EventTypeSettingDevPath,
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
@@ -138,7 +140,7 @@ public:
         EventTypeUpdateSheetInfo,
 
         EventTypeSendOtherControl = 2000,
-        EventTypeCenterVisible,
+        EventTypeLastFile,
         EventTypeFileNew,
         EventTypeFileOpen,
         EventTypeFileSave,

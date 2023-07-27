@@ -8,6 +8,8 @@
 #include <QCompleter>
 
 #include <QPushButton>
+#include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QLineEdit>
 
 
@@ -26,7 +28,7 @@ GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
 }
 
 void GuiTop::drawDisplayDepth0() {
-    updateDisplay(true);
+    updateDisplay(true, PropertyTypeEnum::PropertyTypeVisible);
 
     // =================================================================================================================
     // FILE
@@ -170,6 +172,18 @@ void GuiTop::drawDisplayDepth0() {
         mToolBar[MainType::Setting] = mMainWindow->addToolBar(STRING_SETTING);
 
 
+        QAction *actionConfig = new QAction(QIcon::fromTheme("actionConfig"),
+                                                            STRING_CONFIG,
+                                                            this);
+        if (actionConfig) {
+            actionConfig->setStatusTip(STRING_CONFIG_TIP);
+            mMenu[MainType::Setting]->addAction(actionConfig);
+            mToolBar[MainType::Setting]->addAction(actionConfig);
+            connect(actionConfig, &QAction::triggered, [=]() {
+                createSignal(EventTypeEnum::EventTypeSettingConfig, QVariant());
+            });
+        }
+
         QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
                                                             STRING_PATH,
                                                             this);
@@ -286,54 +300,129 @@ void GuiTop::updateDisplaySize() {
 }
 
 void GuiTop::updateDisplayVisible() {
+    if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+        mMainWindow->show();
+    } else {
+        mMainWindow->hide();
+    }
 }
 
-void GuiTop::updateDisplay(const bool& first, const int& type) {
-    QWidget* screen = isHandler()->getScreen();
-    static QLineEdit* defaultPath = new QLineEdit(screen);
-    static QPushButton* dispalyChange = new QPushButton(screen);
-    static QPushButton* parsing = new QPushButton(screen);
-    static QPushButton* excelOpen = new QPushButton(screen);
-    static QLineEdit *lineEdit = new QLineEdit(screen);
+void GuiTop::updateDisplayAllConfig() {
+    QMap<QString, QVariant> allConfig = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeAllConfigInfo).toMap();
+    QMapIterator<QString, QVariant> iter(allConfig);
+    QString content = QString(" [Config Infomation]\n\n");
 
-    if (first) {
+    static QTextEdit* configContent = nullptr;
+    if (configContent == nullptr) {
+        QRect rect = isHandler()->getScreen()->rect();
+        rect.setX(0);
+        rect.setY(150);
+
+        QFont font;
+        font.setPixelSize(15);
+
+        configContent = new QTextEdit(isHandler()->getScreen());
+        configContent->setGeometry(rect);
+        configContent->setFont(font);
+        configContent->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        // configContent->setDisabled(true);
+    }
+    while (iter.hasNext()) {
+        iter.next();
+        if (iter.value().type() == QVariant::Type::StringList) {
+            QString temp = QString();
+            foreach(const auto& v, iter.value().toStringList()) {
+                temp.append(QString("%1, ").arg(v));
+            }
+            temp.resize(temp.size() - 2);
+            content.append(QString("  %1 = [%2]\n\n").arg(iter.key()).arg(temp));
+        } else {
+            content.append(QString("  %1 = %2\n\n").arg(iter.key()).arg(iter.value().toString()));
+        }
+    }
+    configContent->setPlainText(content);
+    configContent->show();
+
+
+    static QPushButton* lastFileExit = nullptr;
+    if (lastFileExit == nullptr) {
+        QRect rect = configContent->rect();
+        lastFileExit = new QPushButton(configContent);
+        rect.setX(rect.width() - 30);
+        rect.setY(0);
+        rect.setWidth(30);
+        rect.setHeight(20);
+        lastFileExit->setGeometry(rect);
+        lastFileExit->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        lastFileExit->setText("X");
+        lastFileExit->setStyleSheet("color: rgb(50, 50, 100)");
+        lastFileExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        lastFileExit->show();
+        connect(lastFileExit, &QPushButton::clicked, [=]() {
+            configContent->hide();
+        });
+    }
+}
+
+void GuiTop::updateDisplayDefaultPath() {
+    QString pathString = QString("Path : %1").arg(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+    static QLineEdit* defaultPath = nullptr;
+
+    if (defaultPath == nullptr) {
+        defaultPath = new QLineEdit(isHandler()->getScreen());
         defaultPath->setGeometry(QRect(350, 25, 450, 30));
-        // defaultPath->setAlignment(Qt::AlignCenter);
-        defaultPath->setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+        defaultPath->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         defaultPath->setDisabled(true);
         defaultPath->show();
+    }
+    defaultPath->setText(pathString);
+}
 
-        dispalyChange->setGeometry(810, 25, 50, 30);
-        dispalyChange->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        dispalyChange->setText("Visible");
-        dispalyChange->setStyleSheet("color: rgb(50, 50, 100)");
-        dispalyChange->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        dispalyChange->show();
-        connect(dispalyChange, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeCenterVisible, QVariant());
+void GuiTop::updateDisplayTempWidget(const int& type) {
+    QWidget* screen = isHandler()->getScreen();
+    static QPushButton* lastFile = nullptr;
+    static QPushButton* parsing = nullptr;
+    static QPushButton* excelOpen = nullptr;
+    static QLineEdit* lineEdit = nullptr;
+
+    if (lastFile == nullptr) {
+        lastFile = new QPushButton(screen);
+        lastFile->setGeometry(810, 25, 50, 30);
+        lastFile->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        lastFile->setText("Last");
+        lastFile->setStyleSheet("color: rgb(50, 50, 100)");
+        lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        lastFile->show();
+        connect(lastFile, &QPushButton::clicked, [=]() {
+            createSignal(EventTypeEnum::EventTypeLastFile, QVariant());
         });
-
+    }
+    if (parsing == nullptr) {
+        parsing = new QPushButton(screen);
         parsing->setGeometry(870, 25, 50, 30);
         parsing->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        parsing->setText("Parsing");
+        parsing->setText("[     ]");
         parsing->setStyleSheet("color: rgb(50, 50, 100)");
         parsing->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         parsing->show();
         connect(parsing, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+            // createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
         });
-
+    }
+    if (excelOpen == nullptr) {
+        excelOpen = new QPushButton(screen);
         excelOpen->setGeometry(930, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        excelOpen->setText("Save As");
+        excelOpen->setText("[     ]");
         excelOpen->setStyleSheet("color: rgb(50, 50, 100)");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
+            // createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
         });
-
-
+    }
+    if (lineEdit == nullptr) {
+        lineEdit = new QLineEdit(screen);
         // lineEdit->setGeometry(930, 25, 250, 30);
         lineEdit->setGeometry(10, 80, 1280-20, 30);
         lineEdit->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
@@ -348,57 +437,62 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
         // });
     }
 
-    if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
-        updateDisplaySize();
-    } else if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
+
+    if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
         // add
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListVSM) {
         // add
     } else if (type == PropertyTypeEnum::PropertyTypeSignalListAll) {
 #if 1
-        QStringList fileNames = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
-        static QCompleter *completer = new QCompleter(fileNames, screen);
-        completer->setCaseSensitivity(Qt::CaseInsensitive);
-        completer->setFilterMode(Qt::MatchContains);
-        completer->setWrapAround(false);
-        // completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
-        lineEdit->setCompleter(completer);
+        static QCompleter *completer = nullptr;
+        if (completer == nullptr) {
+            QStringList fileNames = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+            completer = new QCompleter(fileNames, screen);
+            completer->setCaseSensitivity(Qt::CaseInsensitive);
+            completer->setFilterMode(Qt::MatchContains);
+            completer->setWrapAround(false);
+            // completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+            lineEdit->setCompleter(completer);
 #else
 #if 1
-        static QCompleter *completerFile = new QCompleter(screen);
-        static QFileSystemModel *model = new QFileSystemModel(completerFile);
-    //        model->setRootPath(QDir::currentPath());
-            model->setRootPath(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
-        model->setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
-        model->sort(0, Qt::SortOrder::AscendingOrder);
-        completerFile->setModel(model);
-        completerFile->setFilterMode(Qt::MatchContains);
-        lineEdit->setCompleter(completerFile);
+            static QCompleter *completerFile = new QCompleter(screen);
+            static QFileSystemModel *model = new QFileSystemModel(completerFile);
+        //        model->setRootPath(QDir::currentPath());
+                model->setRootPath(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+            model->setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
+            model->sort(0, Qt::SortOrder::AscendingOrder);
+            completerFile->setModel(model);
+            completerFile->setFilterMode(Qt::MatchContains);
+            lineEdit->setCompleter(completerFile);
 #endif
-
-
 #if 0
-        static QCompleter *completerFile = new QCompleter(screen);
-        completerFile->setModel(new QFileSystemModel(completerFile));
-        lineEdit->setCompleter(completerFile);
+            static QCompleter *completerFile = new QCompleter(screen);
+            completerFile->setModel(new QFileSystemModel(completerFile));
+            lineEdit->setCompleter(completerFile);
 #endif
-
-
-
 #if 0
-        QTreeView *tree = new QTreeView(mScscreenreen);
-        tree->setModel(model);
-        tree->setGeometry(0, 50, 1200, 400);
-        tree->show();
+            QTreeView *tree = new QTreeView(mScscreenreen);
+            tree->setModel(model);
+            tree->setGeometry(0, 50, 1200, 400);
+            tree->show();
 #endif
 #endif
+        }
     }
+}
 
 
-    if (type == PropertyTypeEnum::PropertyTypeDefaultPath) {
-        QString pathString = QString("Path=");
-        pathString.append(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
-        defaultPath->setText(pathString);
+void GuiTop::updateDisplay(const bool& first, const int& type) {
+    if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
+        updateDisplaySize();
+    } else if (type == PropertyTypeEnum::PropertyTypeVisible) {
+        updateDisplayVisible();
+    } else if (type == PropertyTypeEnum::PropertyTypeAllConfigInfo) {
+        updateDisplayAllConfig();
+    } else if (type == PropertyTypeEnum::PropertyTypeDefaultPath) {
+        updateDisplayDefaultPath();
+    } else {
+        updateDisplayTempWidget(type);
     }
 }
 
@@ -409,6 +503,8 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case PropertyTypeEnum::PropertyTypeDisplaySize :
+        case PropertyTypeEnum::PropertyTypeVisible :
+        case PropertyTypeEnum::PropertyTypeAllConfigInfo :
         case PropertyTypeEnum::PropertyTypeDefaultPath :
         case PropertyTypeEnum::PropertyTypeSignalListAll :
         case PropertyTypeEnum::PropertyTypeSignalListSFC :

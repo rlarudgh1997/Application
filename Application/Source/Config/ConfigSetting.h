@@ -31,7 +31,7 @@ public:
     QVariant readConfig(const int& configType);
     void writeConfig(const int& configType, const QVariant& configValue);
     void resetConfig();
-
+    QVariant allConfig();
 
 private:
     explicit ConfigSetting();
@@ -51,7 +51,7 @@ private:
     QThread* mThread = new QThread();
     QMutex mMutex;
     QMap<int, QVariant> mConfigData = QMap<int, QVariant>();
-    QMap<int, QVariant> mConfigTemp = QMap<int, QVariant>();
+    QMap<int, QVariant> mConfigBackup = QMap<int, QVariant>();
     bool mThreadRun = true;
     bool mThreadDataSave = false;
 };

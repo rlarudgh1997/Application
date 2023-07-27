@@ -5,6 +5,7 @@
 #include "ControlManager.h"
 #include "ConfigSetting.h"
 #include "CommonUtil.h"
+#include "CommonResource.h"
 #include "CommonPopup.h"
 
 #include <QProcess>
@@ -337,6 +338,9 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& value) {
     qDebug() << "*************************************************************************************************\n";
 
     path.append("TC");
+    if (result != 0) {
+        path.clear();
+    }
 
     return path;
 }
@@ -362,13 +366,20 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case EventTypeEnum::EventTypeOpenExcel : {
             QString path = sytemCall(EventTypeEnum::EventTypeOpenExcel, value);
-            updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, path);
+            if (path.size() > 0) {
+                updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, path);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, value);
+            } else {
+                Popup::drawPopup(PopupType::OpenFail, isHandler(), 0, QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+
+            }
             checkTimer.check("Open Excel");
             break;
         }
         case EventTypeEnum::EventTypeSaveExcel : {
             writeSheetInfo(value);
             sytemCall(EventTypeEnum::EventTypeSaveExcel, value);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, value);
             checkTimer.check("Save Excel");
             break;
         }
@@ -389,9 +400,9 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
 
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        case EventTypeEnum::EventTypeCenterVisible : {
-            bool visible = (getData(PropertyTypeEnum::PropertyTypeVisible).toBool()) ? (false) : (true);
-            updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, visible);
+        case EventTypeEnum::EventTypeLastFile : {
+            QString lastFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
+            slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFile);
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
@@ -399,8 +410,9 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             break;
         }
         case EventTypeEnum::EventTypeFileOpen : {
-            QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-            Popup::drawPopup(PopupType::Open, isHandler(), EventTypeEnum::EventTypeOpenExcel, defaultPath);
+            QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+            Popup::drawPopup(PopupType::Open, isHandler(), EventTypeEnum::EventTypeOpenExcel,
+                                                            QVariantList({STRING_FILE_OPEN, defaultPath}));
             break;
         }
         case EventTypeEnum::EventTypeFileSave :

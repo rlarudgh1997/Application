@@ -10,7 +10,6 @@
 
 #include "AbstractHandler.h"
 #include "CommonEnum.h"
-#include "CommonResource.h"
 
 
 enum class PopupType {
@@ -19,19 +18,22 @@ enum class PopupType {
     Open,
     Save,
     DefaultPath,
+    OpenFail,
 };
 
 class Popup : public QObject {
     Q_OBJECT
 
 public:
-    static void drawPopup(const PopupType& popupType,
-                            AbstractHandler* handler,
-                            const int& eventType = 0,
-                            const QVariant& value = QVariant()) {
+    static void drawPopup(const PopupType& popupType, AbstractHandler* handler,
+                            const int& eventType = 0, const QVariant& value = QVariant()) {
         switch (popupType) {
-            case PopupType::About : {
-                drawPopupAbout(handler);
+            case PopupType::About :
+            case PopupType::OpenFail : {
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 2) {
+                    drawPopupNoraml(handler, infoData.at(0).toString(), infoData.at(1).toString());
+                }
                 break;
             }
             case PopupType::AboutQt : {
@@ -39,7 +41,10 @@ public:
                 break;
             }
             case PopupType::Open : {
-                drawPopupOpen(handler, eventType, value.toString());
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 2) {
+                    drawPopupOpen(handler, eventType, infoData.at(0).toString(), infoData.at(1).toString());
+                }
                 break;
             }
             case PopupType::Save : {
@@ -47,7 +52,10 @@ public:
                 break;
             }
             case PopupType::DefaultPath : {
-                drawPopupDevPath(handler, eventType, value.toString());
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 2) {
+                    drawPopupDevPath(handler, eventType, infoData.at(0).toString(), infoData.at(1).toString());
+                }
                 break;
             }
             default : {
@@ -63,11 +71,9 @@ private:
             emit handler->signalHandlerEvent(eventType, value);
         }
     }
-    static void drawPopupAbout(AbstractHandler* handler) {
+    static void drawPopupNoraml(AbstractHandler* handler, const QString& title, const QString& tip) {
         if (handler) {
-            QMessageBox::about(qobject_cast<QWidget*>(handler->getScreen()),
-                            STRING_POPUP_ABOUT,
-                            STRING_POPUP_ABOUT_TIP);
+            QMessageBox::about(qobject_cast<QWidget*>(handler->getScreen()), title, tip);
         }
     }
     static void drawPopupAboutQt(AbstractHandler* handler) {
@@ -76,10 +82,10 @@ private:
             QMessageBox::aboutQt(qobject_cast<QWidget*>(handler->getScreen()));
         }
     }
-    static void drawPopupOpen(AbstractHandler* handler, const int& eventType, const QString& path) {
+    static void drawPopupOpen(AbstractHandler* handler, const int& eventType, const QString& title, const QString& path) {
         if (handler) {
             QString filePath = QFileDialog::getOpenFileName(qobject_cast<QWidget*>(handler->getScreen()),
-                                        STRING_FILE_OPEN,
+                                        title,
                                         path,
                                         QString("Excel (*.xls *.xlsx);;All files (*.*)"));
             if (filePath.size() > 0) {
@@ -97,10 +103,10 @@ private:
             }
         }
     }
-    static void drawPopupDevPath(AbstractHandler* handler, const int& eventType, const QString& path) {
+    static void drawPopupDevPath(AbstractHandler* handler, const int& eventType, const QString& title, const QString& path) {
         if (handler) {
             QString defaultPath = QFileDialog::getExistingDirectory(qobject_cast<QWidget*>(handler->getScreen()),
-                                            STRING_DEFAULT_PATH,
+                                            title,
                                             path,
                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
             if (defaultPath.size() == 0) {

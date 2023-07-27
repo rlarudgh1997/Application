@@ -17,6 +17,7 @@
 
 #define GROUP_NAME_COMMON    "Common"
 #define GROUP_NAME_GENERAL   "Gernal"
+#define GROUP_NAME_FILE      "File"
 #define GROUP_NAME_PYTHON    "Python"
 
 
@@ -80,12 +81,14 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 }
 
 void ConfigSetting::readConfig() {
-    for (int configType = ConfigInfo::ConfigTypeInvalid+1; configType < ConfigInfo::ConfigTypeMax; configType++) {
+    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
 
         if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
             mSetting->beginGroup(GROUP_NAME_GENERAL);
+        } else if (configType >= ConfigInfo::ConfitTypeLastFileInfo) {
+            mSetting->beginGroup(GROUP_NAME_FILE);
         } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
             mSetting->beginGroup(GROUP_NAME_PYTHON);
         } else {
@@ -94,7 +97,7 @@ void ConfigSetting::readConfig() {
 
         QVariant configValue = mSetting->value(configName);
         mConfigData[configType] = configValue;
-        mConfigTemp[configType] = mConfigData[configType];
+        mConfigBackup[configType] = mConfigData[configType];
         mSetting->endGroup();
     }
 }
@@ -102,12 +105,14 @@ void ConfigSetting::readConfig() {
 void ConfigSetting::writeConfig() {
     mMutex.lock();
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        if (mConfigData[configType] != mConfigTemp[configType]) {
+        if (mConfigData[configType] != mConfigBackup[configType]) {
             QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
             if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
+            } else if (configType >= ConfigInfo::ConfitTypeLastFileInfo) {
+                mSetting->beginGroup(GROUP_NAME_FILE);
             } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
                 mSetting->beginGroup(GROUP_NAME_PYTHON);
             } else {
@@ -115,7 +120,7 @@ void ConfigSetting::writeConfig() {
             }
 
             QVariant configValue = mConfigData[configType];
-            mConfigTemp[configType] = configValue;
+            mConfigBackup[configType] = configValue;
             mSetting->setValue(configName, configValue);
             mSetting->endGroup();
         }
@@ -136,6 +141,18 @@ void ConfigSetting::resetConfig() {
     }
     writeConfig();
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
+}
+
+QVariant ConfigSetting::allConfig() {
+    QMap<QString, QVariant> allConfigInfo;
+    for (int configType = ConfigInfo::ConfigTypeStartSaveFile + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
+        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                                        ConfigInfo::ConfigGetTypeName).toString();
+        QVariant configValue = readConfig(configType);
+        allConfigInfo[configName] = configValue;
+        // qDebug() << "Config[" << configName << "] :" << allConfigInfo[configName];
+    }
+    return QVariant(allConfigInfo);
 }
 
 void ConfigSetting::threadFunc() {

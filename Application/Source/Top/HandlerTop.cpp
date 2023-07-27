@@ -29,6 +29,7 @@ void HandlerTop::initPropertyInfo() {
     registerProperty(PropertyTypeEnum::PropertyTypeDepth,                               QVariant(-1));
 
 
+    registerProperty(PropertyTypeEnum::PropertyTypeAllConfigInfo,                       QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeDefaultPath,                         QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeSignalListAll,                       QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeSignalListSFC,                       QVariant(""));

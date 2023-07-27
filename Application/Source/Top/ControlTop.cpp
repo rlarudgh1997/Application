@@ -5,6 +5,7 @@
 #include "ControlManager.h"
 #include "ConfigSetting.h"
 #include "CommonUtil.h"
+#include "CommonResource.h"
 #include "CommonPopup.h"
 
 // Q_LOGGING_CATEGORY(C_TOP, "ControlTop")
@@ -59,6 +60,8 @@ void ControlTop::initBaseData() {
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
     checkTimer.check("NodeAddress");
+
+    QVariant allConfig = ConfigSetting::instance().data()->allConfig();
 }
 
 void ControlTop::resetControl(const bool& reset) {
@@ -141,14 +144,15 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
-            Popup::drawPopup(PopupType::About, isHandler());
+            Popup::drawPopup(PopupType::About, isHandler(), 0,
+                                QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
             break;
         }
         case EventTypeEnum::EventTypeHelpAboutQt : {
             Popup::drawPopup(PopupType::AboutQt, isHandler());
             break;
         }
-        case EventTypeEnum::EventTypeCenterVisible :
+        case EventTypeEnum::EventTypeLastFile :
         case EventTypeEnum::EventTypeFileNew :
         case EventTypeEnum::EventTypeFileOpen :
         case EventTypeEnum::EventTypeFileSave :
@@ -171,9 +175,14 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "Edit - Paste";
             break;
         }
+        case EventTypeEnum::EventTypeSettingConfig : {
+            updateDataHandler(PropertyTypeEnum::PropertyTypeAllConfigInfo, ConfigSetting::instance().data()->allConfig(), true);
+            break;
+        }
         case EventTypeEnum::EventTypeSettingDevPath : {
-            QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-            Popup::drawPopup(PopupType::DefaultPath, isHandler(), EventTypeEnum::EventTypeUpdateDevPath, defaultPath);
+            QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+            Popup::drawPopup(PopupType::DefaultPath, isHandler(), EventTypeEnum::EventTypeUpdateDevPath,
+                                                            QVariantList({STRING_DEFAULT_PATH, defaultPath}));
             break;
         }
         case EventTypeEnum::EventTypeUpdateDevPath : {

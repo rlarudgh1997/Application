@@ -157,7 +157,7 @@ def main(argv) :
     print("  [Start Python]\n")
     if len(argv) != 4 :
         print("input length error !!!!!!!!!!")
-        return
+        raise
 
     print("Argv :", len(argv), ", ", argv)
     pathDir = argv[1] + "TC/"
@@ -189,6 +189,9 @@ def main(argv) :
             # print("excelInfo :", excelInfo, ", len :", len(excelInfo["sheetName"]), ", ", len(excelInfo["sheetInfo"]))
             # print("sheetName :", excelInfo["sheetName"])
             # print("sheetInfo :", excelInfo["sheetInfo"])
+        else :
+            print("Fail to fiel exists : ", pathFile)
+            raise
 
     else :
         print("File Write !!!!!")

@@ -84,7 +84,6 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     mTabWidget->clear();
     mTableWidgets.clear();
 
-
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
     QMap<int, QList<CellInfo>> mCellInfo = QMap<int, QList<CellInfo>>();

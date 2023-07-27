@@ -35,6 +35,10 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
+    void updateDisplayAllConfig();
+    void updateDisplayDefaultPath();
+    void updateDisplayTempWidget(const int& type);
+
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

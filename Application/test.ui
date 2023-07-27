@@ -279,6 +279,31 @@
     </widget>
    </widget>
   </widget>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>80</y>
+     <width>481</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="plainText">
+    <string>asdfasdf
+asdf
+</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>50</y>
+     <width>104</width>
+     <height>70</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

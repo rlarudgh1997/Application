@@ -30,6 +30,8 @@
 #define STRING_SETTING                     QString("Setting")
 #define STRING_PATH                        QString("Path")
 #define STRING_PATH_TIP                    QString("Setting default SFC test output foler")
+#define STRING_CONFIG                      QString("Config")
+#define STRING_CONFIG_TIP                  QString("Setting config infomation")
 #define STRING_REPORT                      QString("Report")
 #define STRING_REPORT_TIP                  QString("Setting SFC test result info")
 #define STRING_TEST_REPORT                 QString("Test Report")
@@ -47,7 +49,7 @@
 #define STRING_ABOUT_QT_TIP                QString("Show the Qt library's About box")
 #define STRING_DEFAULT_PATH                QString("Default Path")
 #define STRING_FILE_OPEN                   QString("File Open")
-
+#define STRING_FILE_OPEN_FAIL              QString("Fail to file open")
 
 
 
