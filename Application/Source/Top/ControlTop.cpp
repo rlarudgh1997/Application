@@ -141,11 +141,11 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
-            Popup::drawPopupAbout(isHandler());
+            Popup::drawPopup(PopupType::About, isHandler());
             break;
         }
         case EventTypeEnum::EventTypeHelpAboutQt : {
-            Popup::drawPopupAboutQt(isHandler());
+            Popup::drawPopup(PopupType::AboutQt, isHandler());
             break;
         }
         case EventTypeEnum::EventTypeCenterVisible :
@@ -173,7 +173,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
             QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-            Popup::drawPopupDevPath(isHandler(), EventTypeEnum::EventTypeUpdateDevPath, defaultPath);
+            Popup::drawPopup(PopupType::DefaultPath, isHandler(), EventTypeEnum::EventTypeUpdateDevPath, defaultPath);
             break;
         }
         case EventTypeEnum::EventTypeUpdateDevPath : {

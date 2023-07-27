@@ -5,11 +5,8 @@
 #include "CommonResource.h"
 
 #include <QKeySequence>
-// #include <QApplication>
-#include <QMessageBox>
-#include <QFileDialog>
-
 #include <QCompleter>
+
 #include <QPushButton>
 #include <QLineEdit>
 

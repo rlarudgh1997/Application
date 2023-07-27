@@ -400,7 +400,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case EventTypeEnum::EventTypeFileOpen : {
             QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-            Popup::drawPopupOpen(isHandler(), EventTypeEnum::EventTypeOpenExcel, defaultPath);
+            Popup::drawPopup(PopupType::Open, isHandler(), EventTypeEnum::EventTypeOpenExcel, defaultPath);
             break;
         }
         case EventTypeEnum::EventTypeFileSave :
@@ -414,7 +414,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             QString filePath = ((eventType == EventTypeEnum::EventTypeFileSaveAs) ?
                                      (QString()) : (getData(PropertyTypeEnum::PropertyTypeSaveFilePath).toString()));
             if (filePath.size() == 0) {
-                Popup::drawPopupSave(isHandler(), EventTypeEnum::EventTypeSaveExcel);
+                Popup::drawPopup(PopupType::Save, isHandler(), EventTypeEnum::EventTypeSaveExcel);
             } else {
                 slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, filePath);
             }
