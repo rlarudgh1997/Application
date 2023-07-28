@@ -48,6 +48,7 @@ private:
     virtual void timerFunc(const int& timerId) = 0;
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;
     virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false) = 0;
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) = 0;
 
 
 private slots:

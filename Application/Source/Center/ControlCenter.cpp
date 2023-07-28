@@ -48,6 +48,10 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 
 void ControlCenter::initBaseData() {
     resetControl(false);
+
+    updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, 0);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, 0);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, QVariant(""));
 }
 
 void ControlCenter::resetControl(const bool& reset) {
@@ -107,15 +111,23 @@ void ControlCenter::updateDataHandler(const int& type, const QVariantList& value
     }
 }
 
+void ControlCenter::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
+    ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                                                        destination, eventType, eventValue);
+}
+
 void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& value) {
     qDebug() << "ControlCenter::updateSheetInfo() ->" << propertyType << "," << value;
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
     QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
     int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    int initPropertyType = PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew;
+    int rowCount = 0;
 
     switch (propertyType) {
         case PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew : {
-            int rowCount = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
+            initPropertyType = PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen;
+            rowCount = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
             foreach(const auto& sheet, sheetName) {
                 QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                 QVariant title = QVariant();
@@ -144,13 +156,14 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& val
             break;
         }
         case PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen : {
+            initPropertyType = PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew;
             foreach(const auto& sheet, sheetName) {
                 int fileIndex = sheetIndex - PropertyTypeEnum::PropertyTypeDetailInfoDescription;
                 QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                 QVariant title = QVariant();
                 QString filePath = QString("%1/%2_%3.txt").arg(value.toString()).arg(fileIndex).arg(sheet.toString());
                 QStringList readData = FileInfo::readFile(filePath);
-                int rowCount = readData.size();
+                rowCount = readData.size();
 
                 if (rowCount == 0) {
                     qDebug() << "Fail to read file length :" << rowCount << ", path :" << filePath;
@@ -187,14 +200,16 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& val
         }
         QString filePath = value.toString();
         updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, filePath);
+        qDebug() << "UpdateSheetInfo - filePath :" << filePath;
+        updateDataHandler(initPropertyType, 0);
         updateDataHandler(propertyType, sheetDetailInfo.size(), true);
         updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
     }
 }
 
-void ControlCenter::editSheetInfo(const QVariant& value) {
+bool ControlCenter::editSheetInfo(const QVariant& value) {
     if (value.toList().size() < 4) {
-        return;
+        return false;
     }
 
     int sheetIndex = value.toList()[0].toInt();
@@ -233,6 +248,7 @@ void ControlCenter::editSheetInfo(const QVariant& value) {
     }
     updateDataHandler(sheetIndex, updateData);
     // qDebug() << "updateData :" << updateData;
+    return true;
 }
 
 void ControlCenter::writeSheetInfo(const QVariant& value) {
@@ -288,6 +304,7 @@ void ControlCenter::writeSheetInfo(const QVariant& value) {
     }
 
     if (writeSize > 0) {
+        qDebug() << "SaveFilePath :" << value << "\n\n\n\n";
         updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, value);
     }
 }
@@ -367,11 +384,10 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         case EventTypeEnum::EventTypeOpenExcel : {
             QString path = sytemCall(EventTypeEnum::EventTypeOpenExcel, value);
             if (path.size() > 0) {
-                updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, path);
+                updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, value);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, value);
             } else {
                 Popup::drawPopup(PopupType::OpenFail, isHandler(), 0, QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
-
             }
             checkTimer.check("Open Excel");
             break;
@@ -384,7 +400,12 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeUpdateSheetInfo : {
-            editSheetInfo(value);
+            if (editSheetInfo(value)) {
+                int fileSaveType = (getData(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen).toInt() > 0) ?
+                                    (EventTypeEnum::EventTypeFileSave) : (EventTypeEnum::EventTypeFileSaveAs);
+                sendEventInfo(ScreenEnum::DisplayTypeTop, EventTypeEnum::EventTypeFileSaveType, fileSaveType);
+            }
+            checkTimer.check("Update Sheet");
             break;
         }
         default : {
@@ -401,12 +422,13 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case EventTypeEnum::EventTypeLastFile : {
-            QString lastFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
-            slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFile);
+            QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
+            slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFilePath);
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
             updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
+            sendEventInfo(ScreenEnum::DisplayTypeTop, EventTypeEnum::EventTypeFileSaveType, true);
             break;
         }
         case EventTypeEnum::EventTypeFileOpen : {

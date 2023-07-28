@@ -205,7 +205,7 @@ private:
         return fileContent;
     }
     static int writeFileData(const QString& filePath, const QString& str) {
-        qDebug() << "filePath :" << filePath;
+        // qDebug() << "filePath :" << filePath;
         QFile file(filePath);
         if (file.open(QFile::WriteOnly | QFile::Text) == false) {
             // QMessageBox::warning(this, tr("Application"),

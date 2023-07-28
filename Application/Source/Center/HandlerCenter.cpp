@@ -29,8 +29,8 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(PropertyTypeEnum::PropertyTypeDepth,                               QVariant(-1));
 
 
-    registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                  QVariant(""));
-    registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,                 QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                  QVariant(0));
+    registerProperty(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,                 QVariant(0));
     registerProperty(PropertyTypeEnum::PropertyTypeSaveFilePath,                        QVariant(""));
 
 

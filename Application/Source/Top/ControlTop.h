@@ -32,6 +32,7 @@ protected:
     virtual void timerFunc(const int& timerId);
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false);
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue);
 
 
 public slots:

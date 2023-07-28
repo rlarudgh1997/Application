@@ -20,7 +20,7 @@ public:
 private:
     explicit ControlCenter();
     void updateSheetInfo(const int& propertyType, const QVariant& value);
-    void editSheetInfo(const QVariant& value);
+    bool editSheetInfo(const QVariant& value);
     void writeSheetInfo(const QVariant& value);
     QString sytemCall(const int& type, const QVariant& value);
 
@@ -35,6 +35,7 @@ protected:
     virtual void timerFunc(const int& timerId);
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false);
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue);
 
 
 public slots:

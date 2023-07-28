@@ -61,7 +61,7 @@ void ControlTop::initBaseData() {
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
     checkTimer.check("NodeAddress");
 
-    QVariant allConfig = ConfigSetting::instance().data()->allConfig();
+    updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, 0);
 }
 
 void ControlTop::resetControl(const bool& reset) {
@@ -121,6 +121,11 @@ void ControlTop::updateDataHandler(const int& type, const QVariantList& value, c
     }
 }
 
+void ControlTop::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
+    ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                                                        destination, eventType, eventValue);
+}
+
 void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
     // qDebug() << "ControlTop::slotConfigChanged() ->" << type << "," << value;
     // switch (type) {
@@ -140,7 +145,19 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
 
     switch (type) {
         case EventTypeEnum::EventTypeExitProgram : {
-            ControlManager::instance().data()->exitProgram();
+            PopupButton button = PopupButton::Discard;
+            int fileSaveType = getData(PropertyTypeEnum::PropertyTypeFileSaveType).toInt();
+
+            if (fileSaveType != 0) {
+                button = Popup::drawPopup(PopupType::Exit, isHandler());
+            }
+
+            if (button == PopupButton::OK) {
+                sendEventInfo(ScreenEnum::DisplayTypeCenter, fileSaveType, QVariant());
+            } else if (button == PopupButton::Discard) {
+                ControlManager::instance().data()->exitProgram();
+            } else {
+            }
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
@@ -157,10 +174,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         case EventTypeEnum::EventTypeFileOpen :
         case EventTypeEnum::EventTypeFileSave :
         case EventTypeEnum::EventTypeFileSaveAs : {
-            ControlManager::instance().data()->sendEventInfo(getData(PropertyTypeEnum::PropertyTypeDisplay).toInt(),
-                                                                ScreenEnum::DisplayTypeCenter,
-                                                                type,
-                                                                value);
+            sendEventInfo(ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
         case EventTypeEnum::EventTypeEditCut : {
@@ -214,8 +228,11 @@ void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventTy
     }
 
     qDebug() << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
-
     switch (eventType) {
+        case EventTypeEnum::EventTypeFileSaveType : {
+            updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, eventValue);
+            break;
+        }
         default : {
             break;
         }

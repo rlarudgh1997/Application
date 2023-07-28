@@ -78,7 +78,8 @@ public:
 class PropertyTypeEnum {
 public:
     enum PropertyType {
-        PropertyTypeCommon = PROPETRY_START_COMMON,
+        PropertyTypeInvalid = PROPETRY_START_COMMON,
+        PropertyTypeCommon = PropertyTypeInvalid,
         PropertyTypeDisplay,
         PropertyTypeDisplaySize,
         PropertyTypeDisplaySizeMargin,
@@ -96,6 +97,7 @@ public:
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
         PropertyTypeSaveFilePath,
+        PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -121,7 +123,6 @@ public:
     enum EventType {
         EventTypeInvalid = 0,
         EventTypeExitProgram,
-        EventTypeDisplayChange,
 
         EventTypeNormal = 1000,
         EventTypeEditCut,
@@ -145,6 +146,7 @@ public:
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
+        EventTypeFileSaveType,
     };
 };
 

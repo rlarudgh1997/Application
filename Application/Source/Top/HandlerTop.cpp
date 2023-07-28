@@ -35,6 +35,7 @@ void HandlerTop::initPropertyInfo() {
     registerProperty(PropertyTypeEnum::PropertyTypeSignalListSFC,                       QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeSignalListVSM,                       QVariant(""));
     registerProperty(PropertyTypeEnum::PropertyTypeSignalListToMicom,                   QVariant(""));
+    registerProperty(PropertyTypeEnum::PropertyTypeFileSaveType,                         QVariant(0));
 }
 
 void HandlerTop::controlConnect(const bool& state) {
