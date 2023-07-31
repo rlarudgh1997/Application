@@ -96,7 +96,6 @@ public:
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
-        PropertyTypeSaveFilePath,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,

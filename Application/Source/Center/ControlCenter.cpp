@@ -51,7 +51,6 @@ void ControlCenter::initBaseData() {
 
     updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, 0);
     updateDataHandler(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, 0);
-    updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, QVariant(""));
 }
 
 void ControlCenter::resetControl(const bool& reset) {
@@ -116,8 +115,8 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
                                                         destination, eventType, eventValue);
 }
 
-void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& value) {
-    qDebug() << "ControlCenter::updateSheetInfo() ->" << propertyType << "," << value;
+void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dirPath) {
+    qDebug() << "ControlCenter::updateSheetInfo() ->" << propertyType << "," << dirPath;
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
     QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
     int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
@@ -161,7 +160,7 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& val
                 int fileIndex = sheetIndex - PropertyTypeEnum::PropertyTypeDetailInfoDescription;
                 QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                 QVariant title = QVariant();
-                QString filePath = QString("%1/%2_%3.txt").arg(value.toString()).arg(fileIndex).arg(sheet.toString());
+                QString filePath = QString("%1/%2_%3.txt").arg(dirPath.toString()).arg(fileIndex).arg(sheet.toString());
                 QStringList readData = FileInfo::readFile(filePath);
                 rowCount = readData.size();
 
@@ -195,12 +194,8 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& val
         QMapIterator<int, QVariantList> iter(sheetDetailInfo);
         while (iter.hasNext()) {
             iter.next();
-            // qDebug() << "DetailInfo :" << iter.key() << "," << iter.value() << "\n\n";
             updateDataHandler(iter.key(), iter.value());
         }
-        QString filePath = value.toString();
-        updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, filePath);
-        qDebug() << "UpdateSheetInfo - filePath :" << filePath;
         updateDataHandler(initPropertyType, 0);
         updateDataHandler(propertyType, sheetDetailInfo.size(), true);
         updateDataHandler(PropertyTypeEnum::PropertyTypeVisible, true);
@@ -251,7 +246,7 @@ bool ControlCenter::editSheetInfo(const QVariant& value) {
     return true;
 }
 
-void ControlCenter::writeSheetInfo(const QVariant& value) {
+bool ControlCenter::writeSheetInfo(const QVariant& filePath) {
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
     QMap<int, QVariantList> sheetDetailInfo = QMap<int, QVariantList>();
     int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription;
@@ -288,7 +283,7 @@ void ControlCenter::writeSheetInfo(const QVariant& value) {
         }
 
         if (writeData.size() > 0) {
-            QStringList fileInfo = value.toString().split("/");
+            QStringList fileInfo = filePath.toString().split("/");
             QString path = QString();
             for (int index = 0; index < (fileInfo.size() - 1); index++) {
                 path.append(fileInfo[index]);
@@ -302,64 +297,57 @@ void ControlCenter::writeSheetInfo(const QVariant& value) {
             }
         }
     }
-
-    if (writeSize > 0) {
-        qDebug() << "SaveFilePath :" << value << "\n\n\n\n";
-        updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, value);
-    }
+    return (writeSize > 0);
 }
 
-QString ControlCenter::sytemCall(const int& type, const QVariant& value) {
-    qDebug() << "ControlCenter::sytemCall() ->" << type << "," << value;
-    QString path = QString();
-    QStringList fileInfo = value.toString().split("/");
-    QString file = fileInfo[fileInfo.size() - 1];
+QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
+    qDebug() << "ControlCenter::sytemCall() ->" << type << "," << filePath;
     QString cmdType = ((type == EventTypeEnum::EventTypeOpenExcel) ? ("read") : ("write"));
+    QStringList fileInfo = filePath.toString().split("/");
+    QString fileName = fileInfo[fileInfo.size() - 1];
+    QString dirPath = QString();
 
     for (int index = 0; index < (fileInfo.size() - 1); index++) {
-        path.append(fileInfo[index]);
-        path.append("/");
+        dirPath.append(fileInfo[index]);
+        dirPath.append("/");
     }
 
-    QString cmd = QString("python ../Example/excel_parsing.py %1 %2 %3").arg(path).arg(file).arg(cmdType);
     int result = 0;
-
-#if 1
-    result = system(cmd.toLatin1());
-#else
+    QString cmd = QString("python ../Example/excel_parsing.py %1 %2 %3").arg(dirPath).arg(fileName).arg(cmdType);
+#if defined(USE_EXTERNAL_PROGRAM_START_PROCESS)
     static QProcess* process = new QProcess(isHandler());
-    // connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::handleOutput);
-    // connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-    //     this, &MainWindow::handleFinished);
+    // process->start("ping", QStringList() << "-c" << "4" << "google.com");
+    // process->start("python", QStringList("../Example/excel_parsing.py"));
+    process->start(cmd);
     connect(process, &QProcess::readyReadStandardOutput, [=]() {
         QString readAllData = QString(process->readAllStandardOutput());
         QString logData = QString();
         foreach(const QString& data, readAllData) {
             if (data.compare("\n") == false) {
-                qDebug() << "Data :" << logData;
                 logData.clear();
-            } else {
+             } else {
                 logData.append(data);
-            }
+             }
         }
     });
-    // process->start("ping", QStringList() << "-c" << "4" << "google.com");
-    // process->start("python", QStringList("../Example/excel_parsing.py"));
-    process->start(cmd);
+    // connect(process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+    //     this, &ControlCenter::handleFinished);
+#else
+    result = system(cmd.toLatin1());
 #endif
 
-    qDebug() << "*************************************************************************************************";
-    qDebug() << "FilePath :" << value;
-    qDebug() << "Commnad :" << cmd;
-    qDebug() << "System :" << ((result == 0) ? ("sucess[") : ("fail[")) << result << "]";
-    qDebug() << "*************************************************************************************************\n";
-
-    path.append("TC");
+    dirPath.append("TC");
     if (result != 0) {
-        path.clear();
+        dirPath.clear();
     }
 
-    return path;
+    qDebug() << "*************************************************************************************************";
+    qDebug() << "System :" << ((result == 0) ? ("sucess[") : ("fail[")) << result << "] -" << cmd;
+    qDebug() << "FilePath :" << filePath;
+    qDebug() << "DirPath  :" << dirPath;
+    qDebug() << "*************************************************************************************************\n";
+
+    return dirPath;
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
@@ -382,10 +370,11 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
 
     switch (type) {
         case EventTypeEnum::EventTypeOpenExcel : {
-            QString path = sytemCall(EventTypeEnum::EventTypeOpenExcel, value);
-            if (path.size() > 0) {
-                updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, value);
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, value);
+            QVariant filePath = value;
+            QString dirPath = sytemCall(EventTypeEnum::EventTypeOpenExcel, filePath);
+            if (dirPath.size() > 0) {
+                updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
             } else {
                 Popup::drawPopup(PopupType::OpenFail, isHandler(), 0, QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
             }
@@ -393,9 +382,11 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeSaveExcel : {
-            writeSheetInfo(value);
-            sytemCall(EventTypeEnum::EventTypeSaveExcel, value);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, value);
+            QVariant filePath = value;
+            if (writeSheetInfo(filePath)) {
+                sytemCall(EventTypeEnum::EventTypeSaveExcel, filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
+            }
             checkTimer.check("Save Excel");
             break;
         }
@@ -428,6 +419,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case EventTypeEnum::EventTypeFileNew : {
             updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, QVariant());
             sendEventInfo(ScreenEnum::DisplayTypeTop, EventTypeEnum::EventTypeFileSaveType, true);
             break;
         }
@@ -445,8 +437,11 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                 return;
             }
 
-            QString filePath = ((eventType == EventTypeEnum::EventTypeFileSaveAs) ?
-                                     (QString()) : (getData(PropertyTypeEnum::PropertyTypeSaveFilePath).toString()));
+            QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
+            if (eventType == EventTypeEnum::EventTypeFileSaveAs) {
+                filePath.clear();
+            }
+
             if (filePath.size() == 0) {
                 Popup::drawPopup(PopupType::Save, isHandler(), EventTypeEnum::EventTypeSaveExcel);
             } else {
