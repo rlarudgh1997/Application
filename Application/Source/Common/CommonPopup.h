@@ -105,24 +105,30 @@ private:
         }
         return button;
     }
-    static PopupButton drawPopupSelect(AbstractHandler* handler, const QVariant& value = QVariant()) {
-        PopupButton button = PopupButton::Invalid;
+    static PopupButton drawPopupSelect(AbstractHandler* handler, const QVariant& textList) {
+        PopupButton buttypType = PopupButton::Invalid;
         QMessageBox selectBox(handler->getScreen());
-        QPushButton* save = selectBox.addButton(QString("저장"), QMessageBox::ActionRole);
-        QPushButton* discard = selectBox.addButton(QString("저장 안함"), QMessageBox::ActionRole);
-        QPushButton* cancel = selectBox.addButton(QString("취소"), QMessageBox::ActionRole);
-        selectBox.setText("파일 저장");
-        selectBox.setInformativeText("변경 내용을 저장하시겠습니까?");
-
+        QVariantList list = textList.toList();
+        QMap<PopupButton, QPushButton*> button = QMap<PopupButton, QPushButton*>();
+        if (list.size() == 5) {
+            selectBox.setText(list[0].toString());
+            selectBox.setInformativeText(list[1].toString());
+            button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+            button[PopupButton::Discard] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+            button[PopupButton::Cancel] = selectBox.addButton(list[4].toString(), QMessageBox::ActionRole);
+        } else {
+            return PopupButton::Invalid;
+        }
 #if 1
         selectBox.exec();
-        if (selectBox.clickedButton() == save) {
-            button = PopupButton::OK;
-        } else if (selectBox.clickedButton() == discard) {
-            button = PopupButton::Discard;
-        } else if (selectBox.clickedButton() == cancel) {
-            button = PopupButton::Cancel;
+        if (selectBox.clickedButton() == button[PopupButton::OK]) {
+            buttypType = PopupButton::OK;
+        } else if (selectBox.clickedButton() == button[PopupButton::Discard]) {
+            buttypType = PopupButton::Discard;
+        } else if (selectBox.clickedButton() == button[PopupButton::Cancel]) {
+            buttypType = PopupButton::Cancel;
         } else {
+            return PopupButton::Invalid;
         }
 #else
         selectBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
@@ -145,7 +151,7 @@ private:
             }
         }
 #endif
-        return button;
+        return buttypType;
     }
     static PopupButton drawPopupAboutQt(AbstractHandler* handler) {
         PopupButton button = PopupButton::Invalid;

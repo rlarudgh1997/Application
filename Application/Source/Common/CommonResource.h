@@ -51,6 +51,11 @@
 #define STRING_FILE_OPEN                   QString("File Open")
 #define STRING_FILE_OPEN_FAIL              QString("Fail to file open")
 
+#define STRING_POPUP_SAVE                  QString("저장")
+#define STRING_POPUP_DISCARD               QString("저장 안함")
+#define STRING_POPUP_CANCEL                QString("취소")
+#define STRING_POPUP_SAVE_FILE             QString("파일 저장")
+#define STRING_POPUP_SAVE_FILE_TIP         QString("변경 내용을 저장하시겠습니까?")
 
 
 

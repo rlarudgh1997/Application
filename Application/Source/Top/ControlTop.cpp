@@ -61,7 +61,7 @@ void ControlTop::initBaseData() {
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
     checkTimer.check("NodeAddress");
 
-    updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, 0);
+    updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, false);
 }
 
 void ControlTop::resetControl(const bool& reset) {
@@ -146,17 +146,19 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case EventTypeEnum::EventTypeExitProgram : {
             PopupButton button = PopupButton::Discard;
-            int fileSaveType = getData(PropertyTypeEnum::PropertyTypeFileSaveType).toInt();
-
-            if (fileSaveType != 0) {
-                button = Popup::drawPopup(PopupType::Exit, isHandler());
+            bool fileSaveType = getData(PropertyTypeEnum::PropertyTypeFileSaveType).toBool();
+            if (fileSaveType) {
+                QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
+                                                    STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
+                button = Popup::drawPopup(PopupType::Exit, isHandler(), 0, QVariant(text));
+                if (button == PopupButton::OK) {
+                    sendEventInfo(ScreenEnum::DisplayTypeCenter, EventTypeEnum::EventTypeFileSave, QVariant());
+                    updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, false);
+                }
             }
 
-            if (button == PopupButton::OK) {
-                sendEventInfo(ScreenEnum::DisplayTypeCenter, fileSaveType, QVariant());
-            } else if (button == PopupButton::Discard) {
+            if (button != PopupButton::Cancel) {
                 ControlManager::instance().data()->exitProgram();
-            } else {
             }
             break;
         }

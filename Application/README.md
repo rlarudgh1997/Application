@@ -42,8 +42,10 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 	: 함수 동작 수정
 	: new - edit - exit - ok --> save as
 	: open - edit- exit - ok --> save
-	
 
+- Popup::createSignal()
+	: 동작 수정
+	
 
 
 

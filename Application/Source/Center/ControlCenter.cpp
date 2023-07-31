@@ -392,9 +392,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeUpdateSheetInfo : {
             if (editSheetInfo(value)) {
-                int fileSaveType = (getData(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen).toInt() > 0) ?
-                                    (EventTypeEnum::EventTypeFileSave) : (EventTypeEnum::EventTypeFileSaveAs);
-                sendEventInfo(ScreenEnum::DisplayTypeTop, EventTypeEnum::EventTypeFileSaveType, fileSaveType);
+                sendEventInfo(ScreenEnum::DisplayTypeTop, EventTypeEnum::EventTypeFileSaveType, true);
             }
             checkTimer.check("Update Sheet");
             break;
