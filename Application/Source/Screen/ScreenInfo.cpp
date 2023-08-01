@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QResizeEvent>
+// #include "CommonUtil.h"
 
 
 QSharedPointer<ScreenInfo>& ScreenInfo::instance() {

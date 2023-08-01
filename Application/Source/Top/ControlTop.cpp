@@ -53,9 +53,9 @@ void ControlTop::initBaseData() {
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
-    CheckTimer checkTimer;
-    QStringList sfcList = FileInfo::readFile(defaultPath + "/NodeAddressSFC.info");
-    QStringList vsmList = FileInfo::readFile(defaultPath + "/NodeAddressVSM.info");
+    ivis::common::CheckTimer checkTimer;
+    QStringList sfcList = ivis::common::FileInfo::readFile(defaultPath + "/NodeAddressSFC.info");
+    QStringList vsmList = ivis::common::FileInfo::readFile(defaultPath + "/NodeAddressVSM.info");
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
     updateDataHandler(PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
@@ -141,33 +141,34 @@ void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     qDebug() << "ControlTop::slotHandlerEvent() ->" << type << "," << value;
-    CheckTimer checkTimer;
+    ivis::common::CheckTimer checkTimer;
 
     switch (type) {
         case EventTypeEnum::EventTypeExitProgram : {
-            PopupButton button = PopupButton::Discard;
+            ivis::common::PopupButton button = ivis::common::PopupButton::Discard;
             bool fileSaveType = getData(PropertyTypeEnum::PropertyTypeFileSaveType).toBool();
             if (fileSaveType) {
                 QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
                                                     STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
-                button = Popup::drawPopup(PopupType::Exit, isHandler(), QVariant(text));
-                if (button == PopupButton::OK) {
+                button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Exit, isHandler(), QVariant(text));
+                if (button == ivis::common::PopupButton::OK) {
                     sendEventInfo(ScreenEnum::DisplayTypeCenter, EventTypeEnum::EventTypeFileSave, QVariant());
                     updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, false);
                 }
             }
 
-            if (button != PopupButton::Cancel) {
+            if (button != ivis::common::PopupButton::Cancel) {
                 ControlManager::instance().data()->exitProgram();
             }
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
-            Popup::drawPopup(PopupType::About, isHandler(), QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::About, isHandler(),
+                                            QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
             break;
         }
         case EventTypeEnum::EventTypeHelpAboutQt : {
-            Popup::drawPopup(PopupType::AboutQt, isHandler());
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, isHandler());
             break;
         }
         case EventTypeEnum::EventTypeLastFile :
@@ -196,9 +197,9 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            if (Popup::drawPopup(PopupType::DefaultPath, isHandler(),
-                                    QVariantList({STRING_DEFAULT_PATH, defaultPath})) == PopupButton::OK) {
-                defaultPath = Popup::isPopupData();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DefaultPath, isHandler(),
+                                            QVariantList({STRING_DEFAULT_PATH, defaultPath})) == ivis::common::PopupButton::OK) {
+                defaultPath = ivis::common::Popup::isPopupData();
                 updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
             }

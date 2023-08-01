@@ -6,15 +6,15 @@
 
 #include <QApplication>
 
-#include "CommonUtil.h"
 
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
+// ivis::common::CheckLib mCheckLib = ivis::common::CheckLib(QStringList({"openpyxl", "pandas"}));
 MainWindow::MainWindow() {
     qDebug() << "================================================================================================";
     qDebug() << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
     qDebug() << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
-    CheckTimer checkTimer;
+    ivis::common::CheckTimer checkTimer;
 
     this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
@@ -37,7 +37,20 @@ MainWindow::MainWindow() {
     // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QWidget::close);
     // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::closeAllWindows());
 
-    checkTimer.check("MainWindow");
+    // ivis::common::CheckLib* checkLib = new ivis::common::CheckLib(QStringList({"openpyxl", "pandas"}));
+    // checkLib->check();
+
+    // ivis::common::CheckLib checkLib(QStringList({"openpyxl", "pandas"}));
+
+//    QStringList libInfo = {"openpyxl", "pandas"};
+//    mCheckLib = ivis::common::CheckLib(libInfo);
+
+    mCheckLib.data()->setLibInfo(QStringList({"openpyxl", "pandas"}));
+    mCheckLib.data()->check();
+    qDebug() << "1 CheckLib :" << mCheckLib.data();
+    mCheckLib.clear();
+    qDebug() << "2 CheckLib :" << mCheckLib.data();
+    checkTimer.check("CheckLib");
 }
 
 MainWindow::~MainWindow() {

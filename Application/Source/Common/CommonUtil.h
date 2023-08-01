@@ -1,5 +1,5 @@
-#ifndef COMMON_FILE_H
-#define COMMON_FILE_H
+#ifndef COMMON_UTIL_H
+#define COMMON_UTIL_H
 
 #include <QObject>
 #include <QDebug>
@@ -14,6 +14,11 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QMessageBox>
+#include <QProcess>
+#include <QThread>
+// #include <thread>
+
+
 
 
 #define APP_PWD QApplication::applicationDirPath().toLatin1().data()
@@ -119,11 +124,12 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
 
 
 
+namespace ivis {
+namespace common {
 
 
-class CheckTimer : public QObject {
-    Q_OBJECT
 
+class CheckTimer {
 public:
     CheckTimer() {
         mElapsedTimer.start();
@@ -145,9 +151,7 @@ private:
     QElapsedTimer mElapsedTimer;
 };
 
-class FileInfo : public QObject {
-    Q_OBJECT
-
+class FileInfo {
 public:
     static QStringList isFileListInfo(const QString& path, QFileInfoList fileList = QFileInfoList()) {
         QString currentPath = path;
@@ -170,7 +174,6 @@ private:
         QDir directory(path);
         directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         fileList = directory.entryInfoList();
-
         qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         qDebug() << "path :" << path << ", Count :" << fileList.size();
         foreach(const QFileInfo& file, fileList) {
@@ -192,7 +195,6 @@ private:
             while (!readData.atEnd()) {
                 QString data = readData.readLine();
                 fileContent.append(data);
-                // qDebug() << "Data :" << data;
             }
             file.close();
         } else {
@@ -208,9 +210,6 @@ private:
         // qDebug() << "filePath :" << filePath;
         QFile file(filePath);
         if (file.open(QFile::WriteOnly | QFile::Text) == false) {
-            // QMessageBox::warning(this, tr("Application"),
-            //                     QString("Cannot write file %1:\n%2.")
-            //                             .arg(QDir::toNativeSeparators(filePath).arg(file.errorString())));
             return 0;
         }
         QTextStream out(&file);
@@ -220,11 +219,108 @@ private:
     }
 };
 
+class ExcuteProgram {
+public:
+    ExcuteProgram() {
+        mUseProcess = false;
+    }
+    explicit ExcuteProgram(const bool& useProcess) {
+        mUseProcess = useProcess;
+    }
+    int start(const QString& cmd, QStringList& log) {
+        int result = 0;
+        log.clear();
+        if (mUseProcess) {
+            QProcess process;
+            QStringList splitCmd = cmd.split(" ");
+
+            if (splitCmd.size() == 0) {
+                 process.start(cmd);
+            } else {
+                QString command = splitCmd.at(0);
+                QStringList arguments = QStringList();
+                for (int index = 1; index < splitCmd.size(); index++) {
+                    arguments.append(splitCmd[index]);
+                }
+                process.start(command, arguments);
+            }
+
+            if (process.waitForStarted()) {    // if (process.waitForFinished()) {
+                while (process.waitForReadyRead()) {
+                    QString readAllData = process.readAll();
+                    QString logData = QString();
+                    foreach(const QString& data, readAllData) {
+                        if (data.compare("\n") == false) {
+                            // qDebug() << "Log :" << logData;
+                            log.append(logData);
+                            logData.clear();
+                        } else {
+                            logData.append(data);
+                        }
+                    }
+                }
+            } else {
+                result = (-1);
+            }
+        } else {
+            result = system(cmd.toLatin1());
+        }
+        qDebug() << "ExcuteProgram::start() ->" << result;
+        return result;
+    }
+
+private:
+    bool mUseProcess = true;
+};
+
+class CheckLib : public QObject {
+    Q_OBJECT
+
+public:
+    CheckLib() {}
+    void setLibInfo(const QStringList& libInfo) {
+        foreach(const auto& info, libInfo) {
+            mCheckLib[info] = false;
+        }
+    }
+    void check() {
+        this->moveToThread(mThread);
+        connect(mThread, &QThread::finished, this, &QObject::deleteLater);
+        connect(mThread, &QThread::started, this, &CheckLib::runThread);
+        mThread->start();
+        // this->moveToThread(&mThread);
+        // connect(&mThread, &QThread::finished, this, &QObject::deleteLater);
+        // connect(&mThread, &QThread::started, this, &CheckLib::runThread);
+        // mThread.start();
+    }
+
+private:
+    void join() {
+    }
+    void runThread() {
+        QMapIterator<QString, bool> iter(mCheckLib);
+        while (iter.hasNext()) {
+            iter.next();
+            ExcuteProgram process(false);
+            QString cmd = QString("pip list | grep ""%1"" >> %2/CheckLib.txt").arg(iter.key()).arg(APP_PWD);
+            QStringList log;
+            process.start(cmd, log);
+        }
+        // QThread::currentThread()->quit();
+        // QThread::currentThread()->wait();
+    }
+
+private:
+    QThread* mThread = new QThread();
+    // QThread mThread;
+    QMap<QString, bool> mCheckLib = QMap<QString, bool>();
+};
 
 
 
 
+}  // end of namespace common
+}  // end of namespace ivis
 
 
-
-#endif  // COMMON_FILE_H
+#endif  // COMMON_UTIL_H

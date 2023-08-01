@@ -13,7 +13,9 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	pip install pandas
 
 - lib 설치 확인
-	pip list | grep "openpyxl" >> ~/check_python_lib_state.txt
+	pip list | grep "openpyxl" >> ./CheckLib.txt
+	pip list | grep "pandas" >> ./CheckLib.txt
+	pip list | grep "xlrd" >> ./CheckLib.txt
 
 - gen_sfc.sh / gen_vsm.sh
 	: sfc / vsm 관련 h 파일 생성
@@ -34,17 +36,13 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 	: Exit
 		- 수정중인 경우 팝업 표시
 
-- parser.py 파일
+- parser.py 파일 유무 체크
+	: 파일이 없는 경우 default path 폴더에 parser.py 파일 생성(snippet 기능 제공) 및 파일 경로 지정(default path 상대 경로로 지정)
 	: read, write 시 파일 존재 체크
-	: snippet 기능 제공
 
-- updateDataHandler(PropertyTypeEnum::PropertyTypeSaveFilePath, filePath);
-	: 함수 동작 수정
-	: new - edit - exit - ok --> save as
-	: open - edit- exit - ok --> save
-
-- Popup::createSignal()
-	: 동작 수정
+- 필요 라이브러리 인스톨 상태 체크 화면 제공 & 인스톨 버튼 제공
+	: pip install openpyxl
+	: pip install pandas
 
 
 

@@ -2,8 +2,10 @@
 #define MAIN_WINDOW_H
 
 #include <QWidget>
+#include <QSharedPointer>
 
 #include "CommonDefine.h"
+#include "CommonUtil.h"
 
 // #include <QLoggingCategory>
 // Q_DECLARE_LOGGING_CATEGORY(MAINWINDOW)
@@ -24,6 +26,9 @@ protected:
     void closeEvent(QCloseEvent* closeEvent) override;
     void moveEvent(QMoveEvent* moveEvent) override;
     void resizeEvent(QResizeEvent* resizeEvent) override;
+
+private:
+    QSharedPointer<ivis::common::CheckLib> mCheckLib = QSharedPointer<ivis::common::CheckLib>(new ivis::common::CheckLib());
 };
 
 

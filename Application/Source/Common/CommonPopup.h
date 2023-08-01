@@ -13,6 +13,10 @@
 #include "CommonEnum.h"
 
 
+namespace ivis {
+namespace common {
+
+
 enum class PopupType {
     Invalid = 0,
     About,
@@ -35,9 +39,7 @@ enum class PopupButton {
 static PopupType gPopupType = PopupType::Invalid;
 static QVariant gPopupData = QVariant();
 
-class Popup : public QObject {
-    Q_OBJECT
-
+class Popup {
 public:
     static PopupType isPopupType() {
         return gPopupType;
@@ -87,7 +89,7 @@ public:
             }
         }
         setPopupType(popupType);
-        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
+        qDebug() << "opup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
         return button;
     }
 
@@ -212,6 +214,8 @@ private:
 
 
 
+}  // end of namespace common
+}  // end of namespace ivis
 
 
 
