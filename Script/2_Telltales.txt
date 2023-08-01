@@ -1,8 +1,0 @@
-TCName	VehicleType	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
-IMG_TelltaleLowSOC_stat	EV, FCEV	ON	Prewarning	SFC.Private.IGNElapsed.ElapsedOn500ms	D’	SFC.SOC_Gauge_CV.Telltale.LowSOC.Stat	O	0x2			
-			EvLowSocWarnCVStatus==WARN1	SFC.Private.IGNElapsed.ElapsedOn3500ms	D’						
-				Vehicle.CV.SOC_Gauge_CV.Input_EvLowSocWarnCVStatus	WARN1						
-		BLINK1(ON,OFF)	EvLowSocWarnCVStatus==WARN2,WARN3	SFC.Private.IGNElapsed.ElapsedOn3500ms	D’	SFC.SOC_Gauge_CV.Telltale.LowSOC.Stat	O	0xA1			
-				Vehicle.CV.SOC_Gauge_CV.Input_EvLowSocWarnCVStatus	WARN2, WARN3	SFC.SOC_Gauge_CV.Telltale.LowSOC.BlinkValueA		0x2			
-						SFC.SOC_Gauge_CV.Telltale.LowSOC.BlinkValueB		0x1			
-		OFF	Other			SFC.SOC_Gauge_CV.Telltale.LowSOC.Stat	O	0x1			

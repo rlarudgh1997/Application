@@ -256,6 +256,20 @@ bool ControlCenter::writeSheetInfo(const QVariant& filePath) {
         sheetDetailInfo[sheetIndex++] = getData(sheetIndex).toList();
     }
 
+    QStringList fileInfo = filePath.toString().split("/");
+    QString savePath = QString();
+    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+        savePath.append(fileInfo[index]);
+        savePath.append("/");
+    }
+    savePath.append("TC");
+
+    QDir dir(savePath);
+    if (dir.exists() == false) {
+        dir.mkdir(savePath);
+    }
+    qDebug() << "ControlCenter::writeSheetInfo() -> savePath :" << savePath;
+
     QString file = QString();
     sheetIndex = 0;
     foreach(const auto& detailInfo, sheetDetailInfo) {
@@ -283,17 +297,10 @@ bool ControlCenter::writeSheetInfo(const QVariant& filePath) {
         }
 
         if (writeData.size() > 0) {
-            QStringList fileInfo = filePath.toString().split("/");
-            QString path = QString();
-            for (int index = 0; index < (fileInfo.size() - 1); index++) {
-                path.append(fileInfo[index]);
-                path.append("/");
-            }
-            path.append("TC/");
-
-            writeSize = FileInfo::writeFile(QString("%1%2").arg(path).arg(file), writeData);
+            QString saveFilePaht = QString("%1/%2").arg(savePath).arg(file);
+            writeSize = FileInfo::writeFile(saveFilePaht, writeData);
             if (writeSize == 0) {
-                qDebug() << "Fail to write size : 0, filePath :" << path << file;
+                qDebug() << "Fail to write size : 0, filePath :" << saveFilePaht;
             }
         }
     }
@@ -304,12 +311,17 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
     qDebug() << "ControlCenter::sytemCall() ->" << type << "," << filePath;
     QString cmdType = ((type == EventTypeEnum::EventTypeOpenExcel) ? ("read") : ("write"));
     QStringList fileInfo = filePath.toString().split("/");
-    QString fileName = fileInfo[fileInfo.size() - 1];
-    QString dirPath = QString();
 
+    QString dirPath = QString();
     for (int index = 0; index < (fileInfo.size() - 1); index++) {
         dirPath.append(fileInfo[index]);
         dirPath.append("/");
+    }
+
+    QString fileName = fileInfo[fileInfo.size() - 1];
+    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false)
+        || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
+        fileName.append(".xlsx");
     }
 
     int result = 0;
@@ -376,7 +388,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
             } else {
-                Popup::drawPopup(PopupType::OpenFail, isHandler(), 0, QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+                Popup::drawPopup(PopupType::OpenFail, isHandler(), QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
             }
             checkTimer.check("Open Excel");
             break;
@@ -412,7 +424,15 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
     switch (eventType) {
         case EventTypeEnum::EventTypeLastFile : {
             QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
-            slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFilePath);
+            if (lastFilePath.size() == 0) {
+                QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+                if (Popup::drawPopup(PopupType::Open, isHandler(),
+                                        QVariantList({STRING_FILE_OPEN, defaultPath})) == PopupButton::OK) {
+                    slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, Popup::isPopupData());
+                }
+            } else {
+                slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFilePath);
+            }
             break;
         }
         case EventTypeEnum::EventTypeFileNew : {
@@ -423,8 +443,10 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case EventTypeEnum::EventTypeFileOpen : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            Popup::drawPopup(PopupType::Open, isHandler(), EventTypeEnum::EventTypeOpenExcel,
-                                                            QVariantList({STRING_FILE_OPEN, defaultPath}));
+            if (Popup::drawPopup(PopupType::Open, isHandler(),
+                                    QVariantList({STRING_FILE_OPEN, defaultPath})) == PopupButton::OK) {
+                slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, Popup::isPopupData());
+            }
             break;
         }
         case EventTypeEnum::EventTypeFileSave :
@@ -441,7 +463,9 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             }
 
             if (filePath.size() == 0) {
-                Popup::drawPopup(PopupType::Save, isHandler(), EventTypeEnum::EventTypeSaveExcel);
+                if (Popup::drawPopup(PopupType::Save, isHandler()) == PopupButton::OK) {
+                    slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, Popup::isPopupData());
+                }
             } else {
                 slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, filePath);
             }

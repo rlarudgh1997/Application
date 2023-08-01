@@ -136,7 +136,6 @@ public:
         EventTypeHelpAboutQt,
         EventTypeOpenExcel,
         EventTypeSaveExcel,
-        EventTypeUpdateDevPath,
         EventTypeUpdateSheetInfo,
 
         EventTypeSendOtherControl = 2000,

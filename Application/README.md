@@ -8,7 +8,7 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 # [Python 관련 설정]
 
 - lib 설치
-	pip install xlrd
+	# pip install xlrd
 	pip install openpyxl
 	pip install pandas
 
@@ -45,7 +45,7 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 - Popup::createSignal()
 	: 동작 수정
-	
+
 
 
 

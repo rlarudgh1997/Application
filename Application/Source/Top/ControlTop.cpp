@@ -150,7 +150,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             if (fileSaveType) {
                 QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
                                                     STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
-                button = Popup::drawPopup(PopupType::Exit, isHandler(), 0, QVariant(text));
+                button = Popup::drawPopup(PopupType::Exit, isHandler(), QVariant(text));
                 if (button == PopupButton::OK) {
                     sendEventInfo(ScreenEnum::DisplayTypeCenter, EventTypeEnum::EventTypeFileSave, QVariant());
                     updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, false);
@@ -163,8 +163,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
-            Popup::drawPopup(PopupType::About, isHandler(), 0,
-                                QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
+            Popup::drawPopup(PopupType::About, isHandler(), QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
             break;
         }
         case EventTypeEnum::EventTypeHelpAboutQt : {
@@ -197,13 +196,12 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            Popup::drawPopup(PopupType::DefaultPath, isHandler(), EventTypeEnum::EventTypeUpdateDevPath,
-                                                            QVariantList({STRING_DEFAULT_PATH, defaultPath}));
-            break;
-        }
-        case EventTypeEnum::EventTypeUpdateDevPath : {
-            updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, value);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, value);
+            if (Popup::drawPopup(PopupType::DefaultPath, isHandler(),
+                                    QVariantList({STRING_DEFAULT_PATH, defaultPath})) == PopupButton::OK) {
+                defaultPath = Popup::isPopupData();
+                updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
+            }
             break;
         }
         case EventTypeEnum::EventTypeSettingTestReport : {

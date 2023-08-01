@@ -31,7 +31,9 @@ enum class PopupButton {
     Cancel,
 };
 
+
 static PopupType gPopupType = PopupType::Invalid;
+static QVariant gPopupData = QVariant();
 
 class Popup : public QObject {
     Q_OBJECT
@@ -40,8 +42,10 @@ public:
     static PopupType isPopupType() {
         return gPopupType;
     }
-    static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler,
-                            const int& eventType = 0, const QVariant& value = QVariant()) {
+    static QVariant isPopupData() {
+        return gPopupData;
+    }
+    static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, const QVariant& value = QVariant()) {
         PopupButton button = PopupButton::Invalid;
         switch (popupType) {
             case PopupType::About :
@@ -63,18 +67,18 @@ public:
             case PopupType::Open : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
-                    button = drawPopupOpen(handler, eventType, infoData.at(0).toString(), infoData.at(1).toString());
+                    button = drawPopupOpen(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
             case PopupType::Save : {
-                button = drawPopupSave(handler, eventType);
+                button = drawPopupSave(handler);
                 break;
             }
             case PopupType::DefaultPath : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
-                    button = drawPopupDevPath(handler, eventType, infoData.at(0).toString(), infoData.at(1).toString());
+                    button = drawPopupDevPath(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
@@ -82,20 +86,18 @@ public:
                 break;
             }
         }
-        setPopuptype(popupType);
-        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button);
+        setPopupType(popupType);
+        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
         return button;
     }
 
 
 private:
-    static void setPopuptype(const PopupType& type) {
+    static void setPopupType(const PopupType& type) {
         gPopupType = type;
     }
-    static void createSignal(AbstractHandler* handler, const int& eventType, const QVariant& value) {
-        if (handler) {
-            emit handler->signalHandlerEvent(eventType, value);
-        }
+    static void setPopupData(const QVariant& data) {
+        gPopupData = data;
     }
     static PopupButton drawPopupNoraml(AbstractHandler* handler, const QString& title, const QString& tip) {
         PopupButton button = PopupButton::Invalid;
@@ -162,7 +164,7 @@ private:
         }
         return button;
     }
-    static PopupButton drawPopupOpen(AbstractHandler* handler, const int& eventType, const QString& title, const QString& path) {
+    static PopupButton drawPopupOpen(AbstractHandler* handler, const QString& title, const QString& path) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             QString filePath = QFileDialog::getOpenFileName(handler->getScreen(),
@@ -170,28 +172,26 @@ private:
                                         path,
                                         QString("Excel (*.xls *.xlsx);;All files (*.*)"));
             if (filePath.size() > 0) {
-                qDebug() << "Open :" << filePath << "\n\n";
-                createSignal(handler, eventType, filePath);
+                setPopupData(filePath);
                 button = PopupButton::OK;
             }
         }
         return button;
     }
-    static PopupButton drawPopupSave(AbstractHandler* handler, const int& eventType) {
+    static PopupButton drawPopupSave(AbstractHandler* handler) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             QFileDialog dialog(qobject_cast<QWidget*>(handler->getScreen()));
             dialog.setWindowModality(Qt::WindowModal);
             dialog.setAcceptMode(QFileDialog::AcceptSave);
             if (dialog.exec() == QDialog::Accepted) {
-                createSignal(handler, eventType, dialog.selectedFiles().first());
+                setPopupData(dialog.selectedFiles().first());
                 button = PopupButton::OK;
             }
         }
         return button;
     }
-    static PopupButton drawPopupDevPath(AbstractHandler* handler, const int& eventType,
-                                            const QString& title, const QString& path) {
+    static PopupButton drawPopupDevPath(AbstractHandler* handler, const QString& title, const QString& path) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             QString defaultPath = QFileDialog::getExistingDirectory(handler->getScreen(),
@@ -201,7 +201,7 @@ private:
             if (defaultPath.size() == 0) {
                 defaultPath = QApplication::applicationDirPath();
             }
-            createSignal(handler, eventType, defaultPath);
+            setPopupData(defaultPath);
             button = PopupButton::OK;
         }
         return button;
