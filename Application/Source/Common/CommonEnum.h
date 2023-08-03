@@ -6,10 +6,6 @@
 
 
 
-#define SCREEN_POSITION_X                50
-#define SCREEN_POSITION_Y                100
-#define SCREEN_SIZE_WIDTH                1440
-#define SCREEN_SIZE_HEIGHT               900
 #define SCREEN_MINIMUM_WIDTH             640
 #define SCREEN_MINIMUM_HEIGHT            480
 #define SCREEN_MAXIMUM_WIDTH             2100

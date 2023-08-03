@@ -18,6 +18,11 @@ public:
     explicit MainWindow();
     ~MainWindow();
 
+
+private:
+    void controlConnect();
+
+
 protected:
     void mousePressEvent(QMouseEvent* mouseEvent) override;
     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
@@ -27,8 +32,11 @@ protected:
     void moveEvent(QMoveEvent* moveEvent) override;
     void resizeEvent(QResizeEvent* resizeEvent) override;
 
+
 private:
-    QSharedPointer<ivis::common::CheckLib> mCheckLib = QSharedPointer<ivis::common::CheckLib>(new ivis::common::CheckLib());
+    QSharedPointer<ivis::common::CheckLib> mCheckLib =
+                                    QSharedPointer<ivis::common::CheckLib>(new ivis::common::CheckLib(), &QObject::deleteLater);
+    QRect mScreenInfo = QRect();
 };
 
 

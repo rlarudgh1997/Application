@@ -46,8 +46,8 @@ void HandlerTop::controlConnect(const bool& state) {
                 GuiTop::instance().data(), &GuiTop::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerTop::signalPropertyChanged, [=](const int& dataType, const QVariant& value) {
-            GuiTop::instance().data()->updateGuiProperty(dataType, value);
+        connect(this, &HandlerTop::signalPropertyChanged, [=](const int& type, const QVariant& value) {
+            GuiTop::instance().data()->slotPropertyChanged(type, value);
         });
 #endif
 #endif

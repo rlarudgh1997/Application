@@ -316,7 +316,7 @@ void GuiTop::updateDisplayAllConfig() {
     if (configContent == nullptr) {
         QRect rect = isHandler()->getScreen()->rect();
         rect.setX(0);
-        rect.setY(150);
+        rect.setY(120);
 
         QFont font;
         font.setPixelSize(15);
@@ -329,10 +329,20 @@ void GuiTop::updateDisplayAllConfig() {
     }
     while (iter.hasNext()) {
         iter.next();
-        if (iter.value().type() == QVariant::Type::StringList) {
+        QVariant::Type type = iter.value().type();
+        if ((type == QVariant::Type::List) || (type == QVariant::Type::StringList) || (type == QVariant::Type::Rect)) {
             QString temp = QString();
-            foreach(const auto& v, iter.value().toStringList()) {
-                temp.append(QString("%1, ").arg(v));
+            if (type == QVariant::Type::List) {
+                foreach(const auto& v, iter.value().toList()) {
+                    temp.append(QString("%1, ").arg(v.toString()));
+                }
+            } else if (type == QVariant::Type::StringList) {
+                foreach(const auto& v, iter.value().toStringList()) {
+                    temp.append(QString("%1, ").arg(v));
+                }
+            } else {
+                QRect rect = iter.value().toRect();
+                temp.append(QString("%1, %2, %3, %4, ").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
             }
             temp.resize(temp.size() - 2);
             content.append(QString("  %1 = [%2]\n\n").arg(iter.key()).arg(temp));

@@ -6,19 +6,22 @@
 #include <QApplication>
 #include <QVariant>
 #include <QMap>
+#include <QRect>
+
+
+#define SCREEN_POSITION_X                50
+#define SCREEN_POSITION_Y                100
+#define SCREEN_SIZE_WIDTH                1440
+#define SCREEN_SIZE_HEIGHT               900
 
 
 class ConfigInfo {
 public:
     typedef enum {
-        // Common : The setting information is not saved as a file.
         ConfigTypeInvalid = 0,
-        ConfigTypeInit,
-        ConfigTypeMode,
-
-        ConfigTypeStartSaveFile,
 
         // General
+        ConfigTypeScreenInfo,
         ConfigTypeDefaultPath,
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
@@ -28,13 +31,17 @@ public:
         // File
         ConfitTypeLastFileInfo,
 
-        // Python
-        ConfigTypePythonRequiredLib1,
-        ConfigTypePythonRequiredLib2,
-        ConfigTypePythonRequiredLib3,
-
-
         ConfigTypeMax,
+
+        // ==========================================================================
+        // Do not save config file : The setting information is not saved as a file.
+        // ==========================================================================
+        ConfigTypeInit,
+        ConfigTypeMode,
+        ConfigTypeCheckLibOpenpyxl,
+        ConfigTypeCheckLibPandas,
+
+        ConfigTypeMaxDoNotSave,
     } ConfigType;
     typedef enum {
         ConfigGetTypeName = 0,
@@ -56,38 +63,37 @@ private:
     void initConfigInfo() {
         mConfigInfoData.clear();
 
-
-        // Common : The setting information is not saved as a file.
-        mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
-        mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant("Invalid"));
-        mConfigInfoData[ConfigTypeStartSaveFile] = QPair<QString, QVariant>("ConfigTypeStartSaveFile", QVariant("Invalid"));
-
-
         // General
-        QString defaultPath = QString("%1%2").arg(QApplication::applicationDirPath()).arg("/SFC");
-        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath", QVariant(defaultPath));
-
+        mConfigInfoData[ConfigTypeScreenInfo] = QPair<QString, QVariant>("ConfigTypeScreenInfo",
+                                                        QVariant(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y,
+                                                                        SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
+        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath",
+                                                        QVariant(QApplication::applicationDirPath() + QString("/SFC")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
-
-        QVariantList listValue = {"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",  "Inters", "Outputs"};
-        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName", QVariant(listValue));
-
-        listValue = {"test", "version", "description", "Config_Signal", "Data"};
-        mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>("ConfigTypeDescTitle", QVariant(listValue));
-
-        listValue = {"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
-                    "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative", "Test"};
-        mConfigInfoData[ConfigTypeContentTitle] = QPair<QString, QVariant>("ConfigTypeContentTitle", QVariant(listValue));
+        mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName",
+                                                        QVariant(QVariantList({"Description", "Privates", "Telltales",
+                                                                        "Constants", "Events", "Sounds",  "Inters", "Outputs"})));
+        mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>("ConfigTypeDescTitle",
+                                                        QVariant(QVariantList({"test", "version", "description", "Config_Signal",
+                                                                        "Data"})));
+        mConfigInfoData[ConfigTypeContentTitle] = QPair<QString, QVariant>("ConfigTypeContentTitle",
+                                                        QVariant(QVariantList({"TCName", "VehicleType", "Result", "Case",
+                                                                        "Input_Signal", "Input_Data", "Output_Signal",
+                                                                        "isInitialize", "Output_Value", "Config_Signal",
+                                                                        "Data", "Negative", "Test"})));
 
 
         // File
-        mConfigInfoData[ConfitTypeLastFileInfo] = QPair<QString, QVariant>("ConfitTypeLastFileInfo", QVariant());
+        mConfigInfoData[ConfitTypeLastFileInfo] = QPair<QString, QVariant>("ConfitTypeLastFileInfo", QVariant(""));
 
 
-        // Python
-        mConfigInfoData[ConfigTypePythonRequiredLib1] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib1", QVariant(false));
-        mConfigInfoData[ConfigTypePythonRequiredLib2] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib2", QVariant(false));
-        mConfigInfoData[ConfigTypePythonRequiredLib3] = QPair<QString, QVariant>("ConfigTypePythonRequiredLib3", QVariant(false));
+
+
+        // Common : The setting information is not saved as a file. (Do not save config file)
+        mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
+        mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant("Invalid"));
+        mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
+        mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
     }
 
 

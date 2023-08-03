@@ -4,7 +4,7 @@
 
 
 #include "AbstractControl.h"
-
+#include "CommonUtil.h"
 
 
 
@@ -23,6 +23,7 @@ private:
     bool editSheetInfo(const QVariant& value);
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const int& type, const QVariant& filePath);
+    bool checkPythonLibrary();
 
 
 protected:
@@ -46,6 +47,9 @@ public slots:
 
 private:
     AbstractHandler* mHandler = nullptr;
+    QSharedPointer<ivis::common::ExcuteProgramThread> mProcess =
+            QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
+
 };
 
 

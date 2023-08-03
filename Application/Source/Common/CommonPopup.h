@@ -26,6 +26,9 @@ enum class PopupType {
     Save,
     DefaultPath,
     OpenFail,
+    NoInstallLib,
+    NowInstalling,
+    InstallComplete,
 };
 
 enum class PopupButton {
@@ -33,13 +36,17 @@ enum class PopupButton {
     OK,
     Discard,
     Cancel,
+    Confirm,
+    Install,
 };
 
 
 static PopupType gPopupType = PopupType::Invalid;
 static QVariant gPopupData = QVariant();
 
-class Popup {
+class Popup : public QObject {
+    Q_OBJECT
+
 public:
     static PopupType isPopupType() {
         return gPopupType;
@@ -51,15 +58,18 @@ public:
         PopupButton button = PopupButton::Invalid;
         switch (popupType) {
             case PopupType::About :
-            case PopupType::OpenFail : {
+            case PopupType::OpenFail :
+            case PopupType::NowInstalling :
+            case PopupType::InstallComplete : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
                     button = drawPopupNoraml(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
-            case PopupType::Exit : {
-                button = drawPopupSelect(handler, value);
+            case PopupType::Exit :
+            case PopupType::NoInstallLib : {
+                button = drawPopupSelect(popupType, handler, value);
                 break;
             }
             case PopupType::AboutQt : {
@@ -89,7 +99,7 @@ public:
             }
         }
         setPopupType(popupType);
-        qDebug() << "opup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
+        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
         return button;
     }
 
@@ -109,53 +119,47 @@ private:
         }
         return button;
     }
-    static PopupButton drawPopupSelect(AbstractHandler* handler, const QVariant& textList) {
-        PopupButton buttypType = PopupButton::Invalid;
+    static PopupButton drawPopupSelect(const PopupType& popupType, AbstractHandler* handler, const QVariant& textList) {
+        PopupButton buttonType = PopupButton::Invalid;
         QMessageBox selectBox(handler->getScreen());
         QVariantList list = textList.toList();
         QMap<PopupButton, QPushButton*> button = QMap<PopupButton, QPushButton*>();
-        if (list.size() == 5) {
+
+        if ((popupType == PopupType::Exit) && (list.size() == 5)) {
             selectBox.setText(list[0].toString());
             selectBox.setInformativeText(list[1].toString());
             button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
             button[PopupButton::Discard] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             button[PopupButton::Cancel] = selectBox.addButton(list[4].toString(), QMessageBox::ActionRole);
+            connect(button[PopupButton::OK], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::OK;
+            });
+            connect(button[PopupButton::Discard], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::Discard;
+            });
+            connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::Cancel;
+            });
+        } else if ((popupType == PopupType::NoInstallLib) && (list.size() == 4)) {
+            selectBox.setText(list[0].toString());
+            selectBox.setInformativeText(list[1].toString());
+            button[PopupButton::Install] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+            button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+            connect(button[PopupButton::Install], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::Install;
+            });
+            connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::Confirm;
+            });
         } else {
+        }
+
+        if (button.size() == 0) {
             return PopupButton::Invalid;
         }
-#if 1
+
         selectBox.exec();
-        if (selectBox.clickedButton() == button[PopupButton::OK]) {
-            buttypType = PopupButton::OK;
-        } else if (selectBox.clickedButton() == button[PopupButton::Discard]) {
-            buttypType = PopupButton::Discard;
-        } else if (selectBox.clickedButton() == button[PopupButton::Cancel]) {
-            buttypType = PopupButton::Cancel;
-        } else {
-            return PopupButton::Invalid;
-        }
-#else
-        selectBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        selectBox.setDefaultButton(QMessageBox::Save);
-        switch (selectBox.exec()) {
-            case QMessageBox::Save : {
-                qDebug() << "File Save";
-                break;
-            }
-            case QMessageBox::Discard : {
-                qDebug() << "Program Exit";
-                break;
-            }
-            case QMessageBox::Cancel : {
-                qDebug() << "Cancel";
-                break;
-            }
-            default : {
-                break;
-            }
-        }
-#endif
-        return buttypType;
+        return buttonType;
     }
     static PopupButton drawPopupAboutQt(AbstractHandler* handler) {
         PopupButton button = PopupButton::Invalid;
@@ -183,7 +187,7 @@ private:
     static PopupButton drawPopupSave(AbstractHandler* handler) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
-            QFileDialog dialog(qobject_cast<QWidget*>(handler->getScreen()));
+            QFileDialog dialog(handler->getScreen());
             dialog.setWindowModality(Qt::WindowModal);
             dialog.setAcceptMode(QFileDialog::AcceptSave);
             if (dialog.exec() == QDialog::Accepted) {

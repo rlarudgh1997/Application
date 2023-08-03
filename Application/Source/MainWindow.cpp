@@ -9,54 +9,56 @@
 
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
-// ivis::common::CheckLib mCheckLib = ivis::common::CheckLib(QStringList({"openpyxl", "pandas"}));
+
 MainWindow::MainWindow() {
     qDebug() << "================================================================================================";
     qDebug() << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
-    qDebug() << "- QT_VERSION :" << QT_VERSION_STR << "\n\n";
+    qDebug() << "- QT_VERSION :" << QT_VERSION_STR;
     ivis::common::CheckTimer checkTimer;
 
-    this->setGeometry(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT));
+    ConfigSetting::instance().data();
+    mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+    qDebug() << "- ScreenInfo :" << mScreenInfo << "\n\n";
+    checkTimer.check("ConfigSetting");
+
+    this->setGeometry(mScreenInfo);
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
     // this->setMaximumSize(QSize(SCREEN_MAXIMUM_WIDTH, SCREEN_MAXIMUM_HEIGHT));
     this->setObjectName(QString("RootWidget"));
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->show();
-    checkTimer.check("MainWindow");
 
     ScreenInfo::instance().data()->updateRootItem(this);
     checkTimer.check("ScreenInfo");
 
-    ConfigSetting::instance().data();
-    checkTimer.check("ConfigSetting");
-
     ControlManager::instance().data()->init();
     checkTimer.check("ControlManager");
 
-    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::quit);
-    // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QWidget::close);
-    // connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &QApplication::closeAllWindows());
-
-    // ivis::common::CheckLib* checkLib = new ivis::common::CheckLib(QStringList({"openpyxl", "pandas"}));
-    // checkLib->check();
-
-    // ivis::common::CheckLib checkLib(QStringList({"openpyxl", "pandas"}));
-
-//    QStringList libInfo = {"openpyxl", "pandas"};
-//    mCheckLib = ivis::common::CheckLib(libInfo);
-
     mCheckLib.data()->setLibInfo(QStringList({"openpyxl", "pandas"}));
     mCheckLib.data()->check();
-    qDebug() << "1 CheckLib :" << mCheckLib.data();
-    mCheckLib.clear();
-    qDebug() << "2 CheckLib :" << mCheckLib.data();
     checkTimer.check("CheckLib");
+
+    controlConnect();
 }
 
 MainWindow::~MainWindow() {
     qDebug() << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
+void MainWindow::controlConnect() {
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram,
+            this,                              &QApplication::quit,    // &QWidget::close, &QApplication::closeAllWindows()
+            Qt::UniqueConnection);
+    connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
+        if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, state);
+        } else  if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
+        } else {
+            mCheckLib.clear();
+        }
+    });
+}
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
     // ControlManager::instance().data()->mouseEvent(0, mouseEvent);
 }
@@ -83,10 +85,14 @@ void MainWindow::closeEvent(QCloseEvent* closeEvent) {
 }
 
 void MainWindow::moveEvent(QMoveEvent* moveEvent) {
-    qDebug() << "MainWindow::moveEvent()->" << moveEvent;
+    mScreenInfo = QRect(moveEvent->pos().x(), moveEvent->pos().y(), mScreenInfo.width(), mScreenInfo.height());
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeScreenInfo, mScreenInfo);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* resizeEvent) {
     ScreenInfo::instance().data()->resizeEvent(resizeEvent);
     ControlManager::instance().data()->resizeEvent(resizeEvent);
+
+    mScreenInfo = QRect(mScreenInfo.x(), mScreenInfo.y(), resizeEvent->size().width(), resizeEvent->size().height());
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeScreenInfo, mScreenInfo);
 }

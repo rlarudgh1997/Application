@@ -1,12 +1,9 @@
 =====================================================================
 # [Repo 정보]
-
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
-
 
 =====================================================================
 # [Python 관련 설정]
-
 - lib 설치
 	# pip install xlrd
 	pip install openpyxl
@@ -33,16 +30,19 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 		- Python Lib Install Check
 	: Edit
 		- Config : 수정 기능 제공
-	: Exit
-		- 수정중인 경우 팝업 표시
+
+- Config
+	: 마지막 위치, 크기 저장
+	: 앱 시작시 해당 정보로 화면 구성
+
 
 - parser.py 파일 유무 체크
 	: 파일이 없는 경우 default path 폴더에 parser.py 파일 생성(snippet 기능 제공) 및 파일 경로 지정(default path 상대 경로로 지정)
 	: read, write 시 파일 존재 체크
 
 - 필요 라이브러리 인스톨 상태 체크 화면 제공 & 인스톨 버튼 제공
-	: pip install openpyxl
-	: pip install pandas
+	pip install openpyxl pandas
+	pip uninstall openpyxl pandas
 
 
 
@@ -64,3 +64,68 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
 
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=====================================================================
+# Repo : 개인 저장소 및 설정 방법
+git clone git@github.com.rlarudgh1997:rlarudgh1997/IVIS.git
+git clone git@github.com.rlarudgh1997:rlarudgh1997/Personal.git
+git clone git@github.com.rlarudgh1997:rlarudgh1997/Tractor.git
+git clone git@github.com.rlarudgh1997:rlarudgh1997/Document.git
+
+
+- 추가 설정 사항
+	: 해당 주소 사용시 tractor 와 겹치는 관계로 ./ssh 파일 내용 수정
+		# git clone git@github.com:rlarudgh1997/IVIS.git
+		./ssh/config
+			Host github.com.rlarudgh1997
+			Port 22
+			HostName github.com
+			IdentityFile ~/.ssh/id_rsa_rlarudgh1997
+	: 인증키
+		./ssh/id_rsa_rlarudgh1997
+			- 개인 인증키
+		./ssh/id_rsa_rlarudgh1997.pub
+			- github 등록된 공용 인증키
+
+
+- 코드 추가 수정후 commit & push
+	git commit --amend
+	git push -f
+
+
+- 파일에서 특정 테스트 위치 찾아서 파일명, 라인 출력
+	grep -inr "TEXT"
+	grep -inr "TEXT" *

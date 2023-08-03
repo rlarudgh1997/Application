@@ -58,8 +58,8 @@ void HandlerCenter::controlConnect(const bool& state) {
                 GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerCenter::signalPropertyChanged, [=](const int& dataType, const QVariant& value) {
-            GuiCenter::instance().data()->updateGuiProperty(dataType, value);
+        connect(this, &HandlerCenter::signalPropertyChanged, [=](const int& type, const QVariant& value) {
+            GuiCenter::instance().data()->slotPropertyChanged(type, value);
         });
 #endif
 #endif

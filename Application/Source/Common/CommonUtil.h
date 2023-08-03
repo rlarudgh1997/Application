@@ -19,6 +19,9 @@
 // #include <thread>
 
 
+namespace ivis {
+namespace common {
+
 
 
 #define APP_PWD QApplication::applicationDirPath().toLatin1().data()
@@ -124,9 +127,6 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
 
 
 
-namespace ivis {
-namespace common {
-
 
 
 class CheckTimer {
@@ -227,7 +227,7 @@ public:
     explicit ExcuteProgram(const bool& useProcess) {
         mUseProcess = useProcess;
     }
-    int start(const QString& cmd, QStringList& log) {
+    bool start(const QString& cmd, QStringList& log) {
         int result = 0;
         log.clear();
         if (mUseProcess) {
@@ -266,11 +266,93 @@ public:
             result = system(cmd.toLatin1());
         }
         qDebug() << "ExcuteProgram::start() ->" << result;
-        return result;
+        return (result == 0);
     }
 
 private:
     bool mUseProcess = true;
+};
+
+class ExcuteProgramThread: public QObject {
+    Q_OBJECT
+
+public:
+    ExcuteProgramThread() {
+        mUseProcess = false;
+    }
+    explicit ExcuteProgramThread(const bool& useProcess) {
+        mUseProcess = useProcess;
+    }
+    ~ExcuteProgramThread() {
+        join();
+        qDebug() << "~ExcuteProgramThread()";
+    }
+    void setCommandInfo(const QString& cmd) {
+        mCommand = cmd;
+    }
+    void start() {
+        this->moveToThread(mThread);
+        connect(mThread, &QThread::finished, this, &QObject::deleteLater);
+        connect(mThread, &QThread::started, this, &ExcuteProgramThread::runThread);
+        mThread->start();
+    }
+
+private:
+    void join() {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
+        }
+    }
+    void runThread() {
+        int result = 0;
+        QStringList log = QStringList();
+        if (mUseProcess) {
+            QProcess process;
+            QStringList splitCmd = mCommand.split(" ");
+
+            if (splitCmd.size() == 0) {
+                 process.start(mCommand);
+            } else {
+                QString command = splitCmd.at(0);
+                QStringList arguments = QStringList();
+                for (int index = 1; index < splitCmd.size(); index++) {
+                    arguments.append(splitCmd[index]);
+                }
+                process.start(command, arguments);
+            }
+
+            if (process.waitForStarted()) {    // if (process.waitForFinished()) {
+                while (process.waitForReadyRead()) {
+                    QString readAllData = process.readAll();
+                    QString logData = QString();
+                    foreach(const QString& data, readAllData) {
+                        if (data.compare("\n") == false) {
+                            // qDebug() << "Log :" << logData;
+                            log.append(logData);
+                            logData.clear();
+                        } else {
+                            logData.append(data);
+                        }
+                    }
+                }
+            } else {
+                result = (-1);
+            }
+        } else {
+            result = system(mCommand.toLatin1());
+        }
+        qDebug() << "ExcuteProgramThread::start() ->" << result;
+        emit signalExcuteProgramCompleted(result == 0);
+    }
+
+signals:
+    void signalExcuteProgramCompleted(const bool& result);
+
+private:
+    QThread* mThread = new QThread();
+    bool mUseProcess = true;
+    QString mCommand = QString();
 };
 
 class CheckLib : public QObject {
@@ -278,9 +360,13 @@ class CheckLib : public QObject {
 
 public:
     CheckLib() {}
+    ~CheckLib() {
+        join();
+        qDebug() << "~CheckLib()";
+    }
     void setLibInfo(const QStringList& libInfo) {
-        foreach(const auto& info, libInfo) {
-            mCheckLib[info] = false;
+        foreach(const auto info, libInfo) {
+            mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false);
         }
     }
     void check() {
@@ -288,32 +374,44 @@ public:
         connect(mThread, &QThread::finished, this, &QObject::deleteLater);
         connect(mThread, &QThread::started, this, &CheckLib::runThread);
         mThread->start();
-        // this->moveToThread(&mThread);
-        // connect(&mThread, &QThread::finished, this, &QObject::deleteLater);
-        // connect(&mThread, &QThread::started, this, &CheckLib::runThread);
-        // mThread.start();
     }
 
 private:
     void join() {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
+        }
     }
     void runThread() {
-        QMapIterator<QString, bool> iter(mCheckLib);
-        while (iter.hasNext()) {
-            iter.next();
+        QString filePath = QString("%1/CheckLib.txt").arg(APP_PWD);
+        int count = 0;
+        foreach(const auto& info, mCheckInfo) {
             ExcuteProgram process(false);
-            QString cmd = QString("pip list | grep ""%1"" >> %2/CheckLib.txt").arg(iter.key()).arg(APP_PWD);
+            QString appendStr = QString((count == 0) ? (">") : (">>"));
+            QString cmd = QString("pip list | grep ""%1"" %2 %3").arg(info.first).arg(appendStr).arg(filePath);
             QStringList log;
-            process.start(cmd, log);
+            if (process.start(cmd, log)) {
+                count++;
+            }
         }
-        // QThread::currentThread()->quit();
-        // QThread::currentThread()->wait();
+        QStringList readDataList = FileInfo::readFile(filePath);
+        QString readData = QString();
+        foreach(const auto& data, readDataList) {
+            readData.append(data);
+        }
+        foreach(const auto& info, mCheckInfo) {
+            emit signalCheckLibResult(info.first, readData.contains(info.first, Qt::CaseInsensitive));
+        }
+        emit signalCheckLibResult("Completed", true);
     }
+
+signals:
+    void signalCheckLibResult(const QString& lib, const bool& state);
 
 private:
     QThread* mThread = new QThread();
-    // QThread mThread;
-    QMap<QString, bool> mCheckLib = QMap<QString, bool>();
+    QMap<int, QPair<QString, bool>> mCheckInfo = QMap<int, QPair<QString, bool>>();
 };
 
 

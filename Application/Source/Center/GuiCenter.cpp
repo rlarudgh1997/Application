@@ -153,7 +153,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 int end = mergeInfo.at(mergeIndex).second;
                 if (end != MERGEINFO_IVALID) {
                     mTableWidgets[sheetIndex]->setSpan(start, titleIndex, end, 1);
-                    qDebug() << "\t CellMergeInfo[" << titleIndex << "] :" << mergeInfo.at(mergeIndex);
+                    // qDebug() << "\t CellMergeInfo[" << titleIndex << "] :" << mergeInfo.at(mergeIndex);
                 }
             }
         }
@@ -184,7 +184,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             menu->addAction("Delete");
             QAction* selectAction = menu->exec(gpos);
             connect(selectAction, &QAction::triggered, [=]() {
-                qDebug() << "triggered :";// << menu;
+                qDebug() << "triggered :";
             });
             connect(menu, &QMenu::triggered, [=](QAction *action) {
                 qDebug() << "QMenu::triggered :" << action;

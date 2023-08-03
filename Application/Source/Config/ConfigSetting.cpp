@@ -18,7 +18,6 @@
 #define GROUP_NAME_COMMON    "Common"
 #define GROUP_NAME_GENERAL   "Gernal"
 #define GROUP_NAME_FILE      "File"
-#define GROUP_NAME_PYTHON    "Python"
 
 
 QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
@@ -62,10 +61,11 @@ void ConfigSetting::init() {
 }
 
 QVariant ConfigSetting::readConfig(const int& configType) {
-    if (configType < ConfigInfo::ConfigTypeMax) {
-        return mConfigData[configType];
-    } else {
+    if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMax)
+        ||(configType == ConfigInfo::ConfigTypeMaxDoNotSave)) {
         return QVariant();
+    } else {
+        return mConfigData[configType];
     }
 }
 
@@ -73,10 +73,14 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
     if (mConfigData[configType] != configValue) {
         mMutex.lock();
         mConfigData[configType] = configValue;
-        mThreadDataSave = (configType > ConfigInfo::ConfigTypeStartSaveFile);
+        mThreadDataSave = (configType < ConfigInfo::ConfigTypeMax);
         mMutex.unlock();
 
         emit signalConfigChanged(configType, configValue);
+    }
+
+    if ((configType == ConfigInfo::ConfigTypeCheckLibOpenpyxl) || (configType == ConfigInfo::ConfigTypeCheckLibPandas)) {
+        qDebug() << "Config[" << configType << "] :" << configValue << "," << mConfigData[configType];
     }
 }
 
@@ -85,12 +89,10 @@ void ConfigSetting::readConfig() {
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
 
-        if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
+        if (configType < ConfigInfo::ConfitTypeLastFileInfo) {
             mSetting->beginGroup(GROUP_NAME_GENERAL);
-        } else if (configType >= ConfigInfo::ConfitTypeLastFileInfo) {
+        } else if (configType < ConfigInfo::ConfigTypeMax) {
             mSetting->beginGroup(GROUP_NAME_FILE);
-        } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
-            mSetting->beginGroup(GROUP_NAME_PYTHON);
         } else {
             mSetting->beginGroup(GROUP_NAME_COMMON);
         }
@@ -109,12 +111,10 @@ void ConfigSetting::writeConfig() {
             QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
-            if (configType >= ConfigInfo::ConfigTypeDefaultPath) {
+            if (configType < ConfigInfo::ConfitTypeLastFileInfo) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType >= ConfigInfo::ConfitTypeLastFileInfo) {
+            } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
-            } else if (configType >= ConfigInfo::ConfigTypePythonRequiredLib1) {
-                mSetting->beginGroup(GROUP_NAME_PYTHON);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
@@ -127,16 +127,13 @@ void ConfigSetting::writeConfig() {
     }
     mMutex.unlock();
     mSetting->sync();
-    // FILE* file = fopen(filepath.c_str(), "wb");
-    // fsync(fileno(file));
 }
 
 void ConfigSetting::resetConfig() {
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QVariant configValue = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
-                                                            ConfigInfo::ConfigGetTypeValue);
         mMutex.lock();
-        mConfigData[configType] = configValue;
+        mConfigData[configType] = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                                            ConfigInfo::ConfigGetTypeValue);
         mMutex.unlock();
     }
     writeConfig();
@@ -144,15 +141,16 @@ void ConfigSetting::resetConfig() {
 }
 
 QVariant ConfigSetting::allConfig() {
-    QMap<QString, QVariant> allConfigInfo;
-    for (int configType = ConfigInfo::ConfigTypeStartSaveFile + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
-                                                        ConfigInfo::ConfigGetTypeName).toString();
-        QVariant configValue = readConfig(configType);
-        allConfigInfo[configName] = configValue;
-        // qDebug() << "Config[" << configName << "] :" << allConfigInfo[configName];
+    QMap<QString, QVariant> allConfig = QMap<QString, QVariant>();
+    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMaxDoNotSave; configType++) {
+        if (configType == ConfigInfo::ConfigTypeMax) {
+            continue;
+        }
+        allConfig[mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                            ConfigInfo::ConfigGetTypeName).toString()] = readConfig(configType);
     }
-    return QVariant(allConfigInfo);
+    // qDebug() << "allConfig :" << allConfig;
+    return QVariant(allConfig);
 }
 
 void ConfigSetting::threadFunc() {
