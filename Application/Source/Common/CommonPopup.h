@@ -48,13 +48,8 @@ class Popup : public QObject {
     Q_OBJECT
 
 public:
-    static PopupType isPopupType() {
-        return gPopupType;
-    }
-    static QVariant isPopupData() {
-        return gPopupData;
-    }
-    static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, const QVariant& value = QVariant()) {
+    static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, QVariant& popupData,
+                                    const QVariant& value = QVariant()) {
         PopupButton button = PopupButton::Invalid;
         switch (popupType) {
             case PopupType::About :
@@ -99,12 +94,20 @@ public:
             }
         }
         setPopupType(popupType);
+        popupData = isPopupData();
         qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
         return button;
     }
 
 
 private:
+    static PopupType isPopupType() {
+        return gPopupType;
+    }
+    static QVariant isPopupData() {
+        qDebug() << "Popup::isPopupData() ->" << gPopupData;
+        return gPopupData;
+    }
     static void setPopupType(const PopupType& type) {
         gPopupType = type;
     }

@@ -23,6 +23,9 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
+- Open, Save 동작 수정
+	: Save 동작시 - Open 한 경우에만 저장 하도록, Open 하지 않았으면 저장 하지 않도록
+
 - 메뉴 항목 추가
 	: View
 		- Config : 전체 표시, 수정 버튼 활성화
@@ -30,11 +33,6 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 		- Python Lib Install Check
 	: Edit
 		- Config : 수정 기능 제공
-
-- Config
-	: 마지막 위치, 크기 저장
-	: 앱 시작시 해당 정보로 화면 구성
-
 
 - parser.py 파일 유무 체크
 	: 파일이 없는 경우 default path 폴더에 parser.py 파일 생성(snippet 기능 제공) 및 파일 경로 지정(default path 상대 경로로 지정)

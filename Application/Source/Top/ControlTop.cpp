@@ -150,7 +150,8 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             if (fileSaveType) {
                 QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
                                                     STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
-                button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Exit, isHandler(), QVariant(text));
+                QVariant popupData = QVariant();
+                button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Exit, isHandler(), popupData, QVariant(text));
                 if (button == ivis::common::PopupButton::OK) {
                     sendEventInfo(ScreenEnum::DisplayTypeCenter, EventTypeEnum::EventTypeFileSave, QVariant());
                     updateDataHandler(PropertyTypeEnum::PropertyTypeFileSaveType, false);
@@ -163,12 +164,14 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeHelpAbout : {
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::About, isHandler(),
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::About, isHandler(), popupData,
                                             QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
             break;
         }
         case EventTypeEnum::EventTypeHelpAboutQt : {
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, isHandler());
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, isHandler(), popupData);
             break;
         }
         case EventTypeEnum::EventTypeLastFile :
@@ -192,16 +195,43 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case EventTypeEnum::EventTypeSettingConfig : {
-            updateDataHandler(PropertyTypeEnum::PropertyTypeAllConfigInfo, ConfigSetting::instance().data()->allConfig(), true);
+            QVariantList allConfig = QVariantList();
+            for (const auto& config : ConfigSetting::instance().data()->allConfig()) {
+                QString content = QString();
+                QString name = config.first;
+                QVariant value = config.second;
+                QVariant::Type type = value.type();
+                if ((type == QVariant::Type::List) || (type == QVariant::Type::StringList) || (type == QVariant::Type::Rect)) {
+                    QString temp = QString();
+                    if (type == QVariant::Type::List) {
+                        foreach(const auto& v, value.toList()) {
+                            temp.append(QString("%1, ").arg(v.toString()));
+                        }
+                    } else if (type == QVariant::Type::StringList) {
+                        foreach(const auto& v, value.toStringList()) {
+                            temp.append(QString("%1, ").arg(v));
+                        }
+                    } else {
+                        QRect rect = value.toRect();
+                        temp.append(QString("%1, %2, %3, %4, ").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
+                    }
+                    temp.resize(temp.size() - 2);
+                    content.append(QString("\t%1 = [%2]\n\n").arg(name).arg(temp));
+                } else {
+                    content.append(QString("\t%1 = %2\n\n").arg(name).arg(value.toString()));
+                }
+                allConfig.append(content);
+            }
+            updateDataHandler(PropertyTypeEnum::PropertyTypeAllConfigInfo, QVariant(allConfig), true);
             break;
         }
         case EventTypeEnum::EventTypeSettingDevPath : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DefaultPath, isHandler(),
+            QVariant popupData = QVariant();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DefaultPath, isHandler(), popupData,
                                             QVariantList({STRING_DEFAULT_PATH, defaultPath})) == ivis::common::PopupButton::OK) {
-                defaultPath = ivis::common::Popup::isPopupData();
-                updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, defaultPath);
+                updateDataHandler(PropertyTypeEnum::PropertyTypeDefaultPath, popupData);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, popupData);
             }
             break;
         }

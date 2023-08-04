@@ -26,38 +26,17 @@ from source.def_functon import func_name, func_name1, isFuntionName
 filePath = "../Example/SOC_Gauge.xlsx"
 sheetName = ["Description", "Privates", "Telltales", "Constants", "Events", "Sounds", "Inters", "Outputs"]
 sheetInfo = list()
-excelInfo = dict()
-
-excelInfo["sheetName"] = sheetName
-excelInfo["sheetInfo"] = list()
 
 
-def readFromExcel(fileName, sheetName, state) :
-    # Daraframe형식으로 엑셀 파일 읽기
-    # df = pd.read_excel(file_name, header = None, sheet_name=["Sheet1", "Sheet2", "Sheet3"])
 
-    # print("\n\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    # print("\t Parsing Start :", fileName, ", ", sheetName, ", ", len(sheetInfo), ", ", type(sheetInfo))
-
+def readFromExcel(fileName, sheetName) :
     df = pd.read_excel(fileName, sheet_name=sheetName)
-
     index = 0
-    if (state) :
-        for sheet in sheetName:
-            sheetInfo.append(df[sheetName[index]])
-            sheetInfo[index] = sheetInfo[index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
-            # print("\n==================================================================================")
-            print(sheetInfo[index])
-            index += 1
-    else :
-        for sheet in excelInfo["sheetName"]:
-            excelInfo["sheetInfo"].append(df[excelInfo["sheetName"][index]])
-            excelInfo["sheetInfo"][index] = excelInfo["sheetInfo"][index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
-            # print("\n==================================================================================")
-            # print(excelInfo["sheetInfo"][index])
-            index += 1
-    # print("\n\t Parsing Complete")
-    # print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
+    for sheet in sheetName:
+        sheetInfo.append(df[sheetName[index]])
+        sheetInfo[index] = sheetInfo[index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
+        print(sheetInfo[index])
+        index += 1
 
 
 
@@ -68,79 +47,91 @@ def editExcelData() :
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         print("\t Edit Start")
         print("\n==================================================================================")
-        sheetInfo[0].loc[6] =["KKH1", "", "", "KKH4", "KKH5"]
+        sheetInfo[0].loc[6] = ["KKH1", "", "", "KKH4", "KKH5"]
         print(sheetInfo[0])
         print("\n\t Edit Complete")
         print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
     else :
-        print("Fail to sheetInfo len :", len(excelInfo["sheetInfo"]))
+        print("Fail to sheetInfo len :", len(sheetName))
 
 
 
 
-def writeToText(state, path) :
-    if (state) :
-        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        # print("\t Write Start :", path)
-        # print("\n==================================================================================")
-        index = 0
-        for sheet in sheetInfo:
-            saveSheet = pd.DataFrame(sheet)
-            # sheetFileName = "../deploy_x86/SFC/" + str(index) + "_" + sheetName[index] + ".txt"
-            sheetFileName = path + str(index) + "_" + sheetName[index] + ".txt"
-            # print("SaveInfo :", sheetFileName)
-            writeSheet = saveSheet.to_csv(sheetFileName, sep="	", index = False)
-            index += 1
-
-        # convert_sheet1 = pd.DataFrame(sheetInfo[0])
-        # print(convert_sheet1)
-        # # write_sheet1 = convert_sheet1.to_csv("../Example/sheet1.txt", sep="	", index = False)
-        # write_sheet1 = convert_sheet1.to_csv("../deploy_x86/SFC/sheet1.txt", sep="	", index = False)
-        # print("==================================================================================")
-        # print("\n\t Save Complete")
-        # print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
-        # test_list = ['one', 'two', 'three']
-        # for i in sheet1.loc[0]:
-        #     # print("len :", len(i), ", ", i)
-        #     print(i)
-
-
+def writeToText(path) :
     index = 0
-    with pd.ExcelWriter("../Example/test_convert.xlsx") as w:
-        sheetInfo[index].to_excel(w, sheet_name = sheetName[index], index = False)
+    for sheet in sheetInfo:
+        saveSheet = pd.DataFrame(sheet)
+        sheetFileName = path + str(index) + "_" + sheetName[index] + ".txt"
+        # writeSheet = saveSheet.to_csv(sheetFileName, sep="\t", index = False)
+        saveSheet.to_csv(sheetFileName, sep="\t", index = False)
         index += 1
-
-    # 셀 병합
-    # wb = Workbook()
-    # ws = wb.active
-    # ws.merge_cells("A1:C1")
-    # wb.save("../Example/kkh.xlsx")
-
-    wb = load_workbook("../Example/test_convert.xlsx")
-    ws = wb[sheetName[0]]
-    ws.merge_cells("A2:B3")
-    wb.save("../Example/kkh.xlsx")
 
 
 
 def readFromText(path, saveFilePath) :
+    print("\n=================================================================================================")
+    print("path : ", path)
+
     index = 0
     readData = list()
-    for sheet in excelInfo["sheetName"]:
+    mergeInfoList = dict()
+
+    for sheet in sheetName:
         filePath = path + str(index) + "_" + sheet + ".ini"
-        readData.append(pd.read_csv(filePath, sep = "\t"))
+        read = pd.read_csv(filePath, sep = "\t")
+        print("*************************************************************************************************")
+        print("[", sheet, "] Row : ", len(read.index), ", Column : ", len(read.columns))
+
+        startIndexList = list()
+        tcNameList = list()
+        vehicleTypeList = list()
+        resultList = list()
+        caseList = list()
+
+        if sheet != "Description":
+            for rowIndex in range(0, len(read.index)):
+                for columnIndex in range(0, len(read.columns)):
+                    if columnIndex < 4:
+                        if pd.isna(read.iloc[rowIndex][columnIndex]) == False:
+                            startIndexList.append(dict({columnIndex: rowIndex}))
+
+            for info in startIndexList:
+                keys = list(info.keys())
+                for key in keys:
+                    if key == 0:
+                        tcNameList.append(info[key])
+                    elif key == 2:
+                        resultList.append(info[key])
+                    elif key == 3:
+                        caseList.append(info[key])
+                    else:
+                        vehicleTypeList.append(info[key])
+
+            sheetMergeInfoList = dict({"TCName": tcNameList, "Result": resultList, "Case": caseList})
+            print("    TCName : ", sheetMergeInfoList["TCName"])
+            print("    Result : ", sheetMergeInfoList["Result"])
+            print("    Case   : ", sheetMergeInfoList["Case"])
+
+            mergeInfoList[sheet] = sheetMergeInfoList
+            print("    SheetMergeInfo : ", sheetMergeInfoList, "\n")
+
+        # os.remove(filePath)
+        readData.append(read)
         index += 1
 
     writeToExcel(readData, saveFilePath)
+    mergeInfoToExcel(mergeInfoList, saveFilePath)
+
 
 
 
 def writeToExcel(data, filePath) :
+    print("\n=================================================================================================")
     with pd.ExcelWriter(filePath) as write:
         count = 0
-        for sheet in excelInfo["sheetName"]:
+        for sheet in sheetName:
             data[count].to_excel(write, sheet_name = sheetName[count], index = False)
-            print("Sheet[", count, "] : ", sheetName[count])
+            # print("Sheet[", count, "] : ", sheetName[count])
             count += 1
         print("SaveFilePath : ", filePath, "\n\n")
 
@@ -150,16 +141,36 @@ def writeToExcel(data, filePath) :
     # for sheet in sheetInfo:
     #     cellAutoFit = pd.DataFrame(sheet)
 
+def mergeInfoToExcel(mergeInfoList, filePath) :
+    print("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("[MergeInfo]")
+    for sheetKey in mergeInfoList:
+        # print("    [", sheetKey, "] : ", mergeInfoList[sheetKey])
+        for titleKey in mergeInfoList[sheetKey]:
+            titleList = mergeInfoList[sheetKey]
+            if len(titleList[titleKey]) > 0 :
+                print("        [", sheetKey, "-", titleKey, "] : ", titleList[titleKey])
+                # for rowKey in titleList[titleKey]:
+                #     rowList = titleList[titleKey]
+                #     print("      [", rowKey, "] : ", rowList[rowKey])
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
+    wb = load_workbook(filePath)
+    ws = wb[sheetName[0]]
+    ws.merge_cells("A2:B3")
+    wb.save("../Example/kkh.xlsx")
+
+
+
 
 
 def main(argv) :
     print("\n=================================================================================================")
-    print("  [Start Python]\n")
+    print("[Start Python]\n")
+    print("Argv :", len(argv), ", ", argv)
     if len(argv) != 4 :
         print("input length error !!!!!!!!!!")
         raise
 
-    print("Argv :", len(argv), ", ", argv)
     pathDir = argv[1] + "TC/"
     pathFile = argv[1] + argv[2]
     openState = (argv[3] == "read")
@@ -171,30 +182,16 @@ def main(argv) :
     print("File :", os.path.isfile(pathFile), ", ", pathFile)
 
     if openState :
-        print("File Open !!!!!")
+        print("File - Open !!!!!")
         if (os.path.isfile(pathFile)) :
-
-            # # excel_parsing(filePath, sheetName, True)
-            readFromExcel(pathFile, sheetName, True)
-            # # editExcelData()
-            writeToText(True, pathDir)
-
-            # # func.isFuntionName()
-            # # print("FuncName :", func.func_name)
-
-            # isFuntionName()
-            # print("0 FuncName :", func_name)
-            # print("1 FuncName :", func_name1)
-
-            # print("excelInfo :", excelInfo, ", len :", len(excelInfo["sheetName"]), ", ", len(excelInfo["sheetInfo"]))
-            # print("sheetName :", excelInfo["sheetName"])
-            # print("sheetInfo :", excelInfo["sheetInfo"])
+            readFromExcel(pathFile, sheetName)
+            writeToText(pathDir)
         else :
             print("Fail to fiel exists : ", pathFile)
             raise
 
     else :
-        print("File Write !!!!!")
+        print("File - Write !!!!!")
         readFromText(pathDir, pathFile)
 
 

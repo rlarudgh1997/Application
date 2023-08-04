@@ -140,17 +140,18 @@ void ConfigSetting::resetConfig() {
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
 }
 
-QVariant ConfigSetting::allConfig() {
-    QMap<QString, QVariant> allConfig = QMap<QString, QVariant>();
+QMap<int, QPair<QString, QVariant>> ConfigSetting::allConfig() {
+    QMap<int, QPair<QString, QVariant>> allConfig = QMap<int, QPair<QString, QVariant>>();
     for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMaxDoNotSave; configType++) {
         if (configType == ConfigInfo::ConfigTypeMax) {
             continue;
         }
-        allConfig[mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
-                                            ConfigInfo::ConfigGetTypeName).toString()] = readConfig(configType);
+        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                                        ConfigInfo::ConfigGetTypeName).toString();
+        allConfig[allConfig.size()] = QPair<QString, QVariant>(configName, readConfig(configType));
     }
     // qDebug() << "allConfig :" << allConfig;
-    return QVariant(allConfig);
+    return allConfig;
 }
 
 void ConfigSetting::threadFunc() {

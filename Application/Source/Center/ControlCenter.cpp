@@ -182,6 +182,15 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dir
                 }
                 sheetDetailInfo[sheetIndex] = dataInfo.values();
                 sheetIndex++;
+
+                qDebug() << "Delete Path Info :" << dirPath << ", " << filePath;
+            }
+
+            bool deleteFile = false;    // Read : Excel to Text file -> delete
+            if (deleteFile) {
+                ivis::common::ExcuteProgram process(false);
+                QStringList log;
+                process.start(QString("rm -rf %1/*").arg(dirPath.toString()), log);
             }
             break;
         }
@@ -314,12 +323,13 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
     }
 
     QString fileName = fileInfo[fileInfo.size() - 1];
-    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false) || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
+    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false)
+        || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
         fileName.append(".xlsx");
     }
 
     QString cmd = QString("python ../Example/excel_parsing.py %1 %2 %3").arg(dirPath).arg(fileName).arg(cmdType);
-    ivis::common::ExcuteProgram process(true);
+    ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
 
@@ -333,9 +343,9 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
     qDebug() << "System :" << ((result) ? ("sucess") : ("fail")) << "-" << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
-    // foreach(const auto& d, log) {
-    //     qDebug() << "LogData  :" << d;
-    // }
+    foreach(const auto& d, log) {
+        qDebug() << "LogData  :" << d;
+    }
     qDebug() << "*************************************************************************************************\n";
 
     return dirPath;
@@ -350,18 +360,19 @@ bool ControlCenter::checkPythonLibrary() {
         ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
         QVariantList text = QVariantList({STRING_POPUP_LIB, STRING_POPUP_CONFIRM,
                                             STRING_POPUP_INSTALL, STRING_POPUP_CONFIRM});
-        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), QVariant(text));
+        QVariant popupData = QVariant();
+        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), popupData, QVariant(text));
         if (button == ivis::common::PopupButton::Install) {
             mProcess.data()->setCommandInfo(QString("pip install openpyxl pandas"));
             mProcess.data()->start();
             connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted,
-                                                                                    [=](const bool& result) {
+                                                                                    [&](const bool& result) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, true);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, true);
-                ivis::common::Popup::drawPopup(ivis::common::PopupType::InstallComplete, isHandler(),
+                ivis::common::Popup::drawPopup(ivis::common::PopupType::InstallComplete, isHandler(), popupData,
                                             QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_NOW_INSTALLING_TIP})));
             });
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::NowInstalling, isHandler(),
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::NowInstalling, isHandler(), popupData,
                                             QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_INSTALL_COMPLETE_TIP})));
         }
     }
@@ -396,7 +407,8 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                     updateSheetInfo(PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
                 } else {
-                    ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(),
+                    QVariant popupData = QVariant();
+                    ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
                                                     QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
                 }
                 checkTimer.check("Open Excel");
@@ -438,9 +450,10 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
             if (lastFilePath.size() == 0) {
                 QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(),
+                QVariant popupData = QVariant();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), popupData,
                                         QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
-                    slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, ivis::common::Popup::isPopupData());
+                    slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, popupData);
                 }
             } else {
                 slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, lastFilePath);
@@ -455,9 +468,10 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case EventTypeEnum::EventTypeFileOpen : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(),
+            QVariant popupData = QVariant();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), popupData,
                                     QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
-                slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, ivis::common::Popup::isPopupData());
+                slotHandlerEvent(EventTypeEnum::EventTypeOpenExcel, popupData);
             }
             break;
         }
@@ -475,9 +489,10 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             }
 
             if (filePath.size() == 0) {
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler())
+                QVariant popupData = QVariant();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), popupData)
                     == ivis::common::PopupButton::OK) {
-                    slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, ivis::common::Popup::isPopupData());
+                    slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, popupData);
                 }
             } else {
                 slotHandlerEvent(EventTypeEnum::EventTypeSaveExcel, filePath);

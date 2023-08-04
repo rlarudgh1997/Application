@@ -265,7 +265,7 @@ public:
         } else {
             result = system(cmd.toLatin1());
         }
-        qDebug() << "ExcuteProgram::start() ->" << result;
+        qDebug() << "ExcuteProgram::start() ->" << ((result == 0) ? ("Sucess :") : ("Fail :")) << result;
         return (result == 0);
     }
 

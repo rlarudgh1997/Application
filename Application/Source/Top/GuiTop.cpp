@@ -308,10 +308,6 @@ void GuiTop::updateDisplayVisible() {
 }
 
 void GuiTop::updateDisplayAllConfig() {
-    QMap<QString, QVariant> allConfig = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeAllConfigInfo).toMap();
-    QMapIterator<QString, QVariant> iter(allConfig);
-    QString content = QString(" [Config Infomation]\n\n");
-
     static QTextEdit* configContent = nullptr;
     if (configContent == nullptr) {
         QRect rect = isHandler()->getScreen()->rect();
@@ -327,28 +323,11 @@ void GuiTop::updateDisplayAllConfig() {
         configContent->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         // configContent->setDisabled(true);
     }
-    while (iter.hasNext()) {
-        iter.next();
-        QVariant::Type type = iter.value().type();
-        if ((type == QVariant::Type::List) || (type == QVariant::Type::StringList) || (type == QVariant::Type::Rect)) {
-            QString temp = QString();
-            if (type == QVariant::Type::List) {
-                foreach(const auto& v, iter.value().toList()) {
-                    temp.append(QString("%1, ").arg(v.toString()));
-                }
-            } else if (type == QVariant::Type::StringList) {
-                foreach(const auto& v, iter.value().toStringList()) {
-                    temp.append(QString("%1, ").arg(v));
-                }
-            } else {
-                QRect rect = iter.value().toRect();
-                temp.append(QString("%1, %2, %3, %4, ").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
-            }
-            temp.resize(temp.size() - 2);
-            content.append(QString("  %1 = [%2]\n\n").arg(iter.key()).arg(temp));
-        } else {
-            content.append(QString("  %1 = %2\n\n").arg(iter.key()).arg(iter.value().toString()));
-        }
+
+    QString content = QString(" [Config Infomation]\n\n");
+    QVariantList allConfig = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeAllConfigInfo).toList();
+    foreach(const auto& config, allConfig) {
+        content.append(config.toString());
     }
     configContent->setPlainText(content);
     configContent->show();

@@ -31,7 +31,7 @@ public:
     QVariant readConfig(const int& configType);
     void writeConfig(const int& configType, const QVariant& configValue);
     void resetConfig();
-    QVariant allConfig();
+    QMap<int, QPair<QString, QVariant>> allConfig();
 
 private:
     explicit ConfigSetting();
