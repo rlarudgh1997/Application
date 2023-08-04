@@ -74,6 +74,7 @@ def readFromText(path, saveFilePath) :
 
     index = 0
     readData = list()
+    sheetRowCount = dict()
     mergeInfoList = dict()
 
     for sheet in sheetName:
@@ -88,9 +89,13 @@ def readFromText(path, saveFilePath) :
         resultList = list()
         caseList = list()
 
+        rowCount = len(read.index)
+        columnCount = len(read.columns)
+        sheetRowCount[sheet] = rowCount
+
         if sheet != "Description":
-            for rowIndex in range(0, len(read.index)):
-                for columnIndex in range(0, len(read.columns)):
+            for rowIndex in range(0, rowCount):
+                for columnIndex in range(0, columnCount):
                     if columnIndex < 4:
                         if pd.isna(read.iloc[rowIndex][columnIndex]) == False:
                             startIndexList.append(dict({columnIndex: rowIndex}))
@@ -107,10 +112,11 @@ def readFromText(path, saveFilePath) :
                     else:
                         vehicleTypeList.append(info[key])
 
-            sheetMergeInfoList = dict({"TCName": tcNameList, "Result": resultList, "Case": caseList})
-            print("    TCName : ", sheetMergeInfoList["TCName"])
-            print("    Result : ", sheetMergeInfoList["Result"])
-            print("    Case   : ", sheetMergeInfoList["Case"])
+            sheetMergeInfoList = dict({"TCName": tcNameList, "VehicleType": tcNameList, "Result": resultList, "Case": caseList})
+            print("    TCName      : ", sheetMergeInfoList["TCName"])
+            print("    VehicleType : ", sheetMergeInfoList["VehicleType"])
+            print("    Result      : ", sheetMergeInfoList["Result"])
+            print("    Case        : ", sheetMergeInfoList["Case"])
 
             mergeInfoList[sheet] = sheetMergeInfoList
             print("    SheetMergeInfo : ", sheetMergeInfoList, "\n")
@@ -120,7 +126,7 @@ def readFromText(path, saveFilePath) :
         index += 1
 
     writeToExcel(readData, saveFilePath)
-    mergeInfoToExcel(mergeInfoList, saveFilePath)
+    writeToMergeCell(sheetRowCount, mergeInfoList, saveFilePath)
 
 
 
@@ -141,23 +147,63 @@ def writeToExcel(data, filePath) :
     # for sheet in sheetInfo:
     #     cellAutoFit = pd.DataFrame(sheet)
 
-def mergeInfoToExcel(mergeInfoList, filePath) :
+def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
     print("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("[MergeInfo]")
-    for sheetKey in mergeInfoList:
-        # print("    [", sheetKey, "] : ", mergeInfoList[sheetKey])
-        for titleKey in mergeInfoList[sheetKey]:
-            titleList = mergeInfoList[sheetKey]
-            if len(titleList[titleKey]) > 0 :
-                print("        [", sheetKey, "-", titleKey, "] : ", titleList[titleKey])
-                # for rowKey in titleList[titleKey]:
-                #     rowList = titleList[titleKey]
+    wb = load_workbook(filePath)
+
+    for sheet in mergeInfoData:
+        print("    [", sheet, "] : ", mergeInfoData[sheet])
+        ws = wb[sheet]
+        rowCount = sheetRowData[sheet]
+
+        for tittle in mergeInfoData[sheet]:
+            titleList = mergeInfoData[sheet]
+            count = len(titleList[tittle])
+            if count > 0 :
+                startIndexList = titleList[tittle]
+                # print("        [", sheet, "-", tittle, "] : ", startIndexList)
+                print("        [", tittle, "] : ", startIndexList, ", count : ", count)
+                titleName = str(tittle)
+                cellMark = ""
+                if titleName == "TCName":
+                    cellMark = "A"
+                elif titleName == "VehicleType":
+                    cellMark = "B"
+                elif titleName == "Result":
+                    cellMark = "C"
+                else:   # Case
+                    cellMark = "D"
+
+
+                for index in range(0, count) :
+                    start = startIndexList[index]
+                    if count == 1:
+                        end = rowCount   # ROW 최대 값까지 병합
+                    elif index == (count - 1):
+                        end = rowCount
+                    else:
+                        end = startIndexList[index + 1]  # 리스트에 있는 다음 값까지 병합
+
+                    gap = end - start
+                    if gap > 1:
+                        mergeInfo = cellMark + str(start + 2) + ":" + cellMark + str(end -1 + 2)
+                        print("            MergeCell = ", mergeInfo)
+                        ws.merge_cells(mergeInfo)
+
+                # for rowKey in titleList[tittle]:
+                #     rowList = titleList[tittle]
                 #     print("      [", rowKey, "] : ", rowList[rowKey])
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
-    wb = load_workbook(filePath)
-    ws = wb[sheetName[0]]
-    ws.merge_cells("A2:B3")
-    wb.save("../Example/kkh.xlsx")
+
+    # ws = wb["Telltales"]
+    # ws.merge_cells("A2:A8")
+    # ws.merge_cells("B2:B8")
+    # ws.merge_cells("C2:C4")
+    # ws.merge_cells("C5:C7")
+    # ws.merge_cells("D3:D4")
+    # ws.merge_cells("D5:D7")
+    wb.save(filePath + ".MergeCell.xlsx")
 
 
 
