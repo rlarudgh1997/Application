@@ -21,11 +21,11 @@ public:
         return false;
     }
     void drawDisplay(const QVariant& depth) {
-        if (depth == QVariant(ScreenEnum::DisplayDepthDepth0)) {
+        if (depth == QVariant(ivis::common::ScreenEnum::DisplayDepthDepth0)) {
             drawDisplayDepth0();
-        } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth1)) {
+        } else if (depth == QVariant(ivis::common::ScreenEnum::DisplayDepthDepth1)) {
             drawDisplayDepth1();
-        } else if (depth == QVariant(ScreenEnum::DisplayDepthDepth2)) {
+        } else if (depth == QVariant(ivis::common::ScreenEnum::DisplayDepthDepth2)) {
             drawDisplayDepth2();
         } else {
             // nothing to do

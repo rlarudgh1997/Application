@@ -203,15 +203,18 @@ private:
     static PopupButton drawPopupDevPath(AbstractHandler* handler, const QString& title, const QString& path) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
+            QString showPath = path;
+            if (showPath.size() == 0) {
+                showPath = QApplication::applicationDirPath();
+            }
             QString defaultPath = QFileDialog::getExistingDirectory(handler->getScreen(),
                                             title,
-                                            path,
+                                            showPath,
                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-            if (defaultPath.size() == 0) {
-                defaultPath = QApplication::applicationDirPath();
+            if (defaultPath.size() > 0) {
+                setPopupData(defaultPath);
+                button = PopupButton::OK;
             }
-            setPopupData(defaultPath);
-            button = PopupButton::OK;
         }
         return button;
     }

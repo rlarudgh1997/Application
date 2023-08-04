@@ -49,7 +49,6 @@ private:
     AbstractHandler* mHandler = nullptr;
     QSharedPointer<ivis::common::ExcuteProgramThread> mProcess =
             QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
-
 };
 
 

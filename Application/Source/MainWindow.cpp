@@ -68,11 +68,11 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* mouseEvent) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypePress, keyEvent);
+    ControlManager::instance().data()->keyEvent(ivis::common::KeyTypeEnum::KeyInputTypePress, keyEvent);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
-    ControlManager::instance().data()->keyEvent(KeyTypeEnum::KeyInputTypeRelease, keyEvent);
+    ControlManager::instance().data()->keyEvent(ivis::common::KeyTypeEnum::KeyInputTypeRelease, keyEvent);
 }
 
 void MainWindow::closeEvent(QCloseEvent* closeEvent) {

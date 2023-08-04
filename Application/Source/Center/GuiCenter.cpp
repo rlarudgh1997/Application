@@ -36,7 +36,7 @@ GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
 }
 
 void GuiCenter::drawDisplayDepth0() {
-    updateDisplay(true, PropertyTypeEnum::PropertyTypeVisible);
+    updateDisplay(true, ivis::common::PropertyTypeEnum::PropertyTypeVisible);
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -49,8 +49,8 @@ void GuiCenter::drawDisplayDepth2() {
 
 void GuiCenter::updateDisplaySize() {
     QRect rect = isHandler()->getScreen()->geometry();
-    QSize size = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-    QSize margin = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
+    QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
+    QSize margin = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
 
     if (margin.width() > 0) {
         rect.setX(margin.width());
@@ -65,7 +65,7 @@ void GuiCenter::updateDisplaySize() {
 }
 
 void GuiCenter::updateDisplayVisible() {
-    if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
         mTabWidget->show();
     } else {
         mTabWidget->hide();
@@ -89,16 +89,17 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
 
-    updateSheetSize = (PropertyTypeEnum::PropertyTypeDetailInfoDescription + updateSheetSize);
+    updateSheetSize = (ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + updateSheetSize);
 
-    for (int sheetIndex = PropertyTypeEnum::PropertyTypeDetailInfoDescription; sheetIndex < updateSheetSize; sheetIndex++) {
+    for (int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+                    sheetIndex < updateSheetSize; sheetIndex++) {
         QVariantList detailInfo = isHandler()->getProperty(sheetIndex).toList();
         // qDebug() << "Info[" << sheetIndex << "] =" << detailInfo << "\n\n";
 
         // Constructor - Detail List Info
-        QString sheetName = detailInfo[ListInfoEnum::ListInfoExcel::Sheet].toString();
-        QStringList contentTitle = detailInfo[ListInfoEnum::ListInfoExcel::Title].toStringList();
-        QVariantList count = detailInfo[ListInfoEnum::ListInfoExcel::Count].toList();
+        QString sheetName = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Sheet].toString();
+        QStringList contentTitle = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Title].toStringList();
+        QVariantList count = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Count].toList();
 
         if (count.size() != 2) {
             qDebug() << "Fail to detail info data size :" << count.size();
@@ -121,11 +122,11 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         const int MERGEINFO_IVALID = (-1);
 
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            QStringList detailInfoData = detailInfo[ListInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
+            QStringList detailInfoData = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
             for (int columnIndex = 0; columnIndex < detailInfoData.size(); columnIndex++) {
                 QString data = detailInfoData[columnIndex];
-                if ((type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
-                    && (sheetIndex != PropertyTypeEnum::PropertyTypeDetailInfoDescription)
+                if ((type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
+                    && (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
                     && ((columnIndex < 4) && (columnIndex != 1))) {    // (0:TCName, 1:VehicleType, 2:Result, 3:Case)
                     if (data.compare("") == false) {
                         QList<QPair<int, int>> info = mergeInfos[columnIndex];
@@ -171,7 +172,8 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mTableWidgets[sheetIndex]->item(row, column)->text();
             // qDebug() << sheetIndex << ". cellChanged : " << row << ", " << column << ", Text" << text;
-            createSignal(EventTypeEnum::EventTypeUpdateSheetInfo, QVariant(QVariantList({sheetIndex, row, column, text})));
+            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
+                            QVariant(QVariantList({sheetIndex, row, column, text})));
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
@@ -250,12 +252,12 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
 }
 
 void GuiCenter::updateDisplay(const bool& first, const int& type) {
-    if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
+    if (type == ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize) {
         updateDisplaySize();
-    } else if (type == PropertyTypeEnum::PropertyTypeVisible) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeVisible) {
         updateDisplayVisible();
-    } else if ((type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew)
-        || (type == PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)) {
+    } else if ((type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew)
+        || (type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)) {
         updateDisplaySheetInfo(type);
     } else {
     }
@@ -263,14 +265,14 @@ void GuiCenter::updateDisplay(const bool& first, const int& type) {
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case PropertyTypeEnum::PropertyTypeDepth : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
             drawDisplay(value);
             break;
         }
-        case PropertyTypeEnum::PropertyTypeDisplaySize :
-        case PropertyTypeEnum::PropertyTypeVisible :
-        case PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew :
-        case PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize :
+        case ivis::common::PropertyTypeEnum::PropertyTypeVisible :
+        case ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew :
+        case ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen : {
             updateDisplay(false, type);
             break;
         }

@@ -19,12 +19,12 @@ ControlManager::ControlManager() {
 }
 
 void ControlManager::init() {
-    createControl(ScreenEnum::DisplayTypeTop);
+    createControl(ivis::common::ScreenEnum::DisplayTypeTop);
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {
     qDebug() << "[sendEventInfo] Direction :" << source << " -> " << destination << ", Type :" << eventType;
-    if (destination != ScreenEnum::DisplayTypeInvalid) {
+    if (destination != ivis::common::ScreenEnum::DisplayTypeInvalid) {
         createControl(destination);
         emit signalEventInfoChanged(destination, eventType, eventValue);
     }
@@ -34,18 +34,36 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
     int inputValue = keyEvent->key();
 #if defined(PLATFORM_X86)
     switch (inputValue) {
-        case KeyTypeEnum::KeyInputValueNumUp    : { inputValue = KeyTypeEnum::KeyInputValueUp;    break; }
-        case KeyTypeEnum::KeyInputValueNumDown  : { inputValue = KeyTypeEnum::KeyInputValueDown;  break; }
-        case KeyTypeEnum::KeyInputValueNumLeft  : { inputValue = KeyTypeEnum::KeyInputValueLeft;  break; }
-        case KeyTypeEnum::KeyInputValueNumRight : { inputValue = KeyTypeEnum::KeyInputValueRight; break; }
-        case KeyTypeEnum::KeyInputValueNumOK    :
-        case KeyTypeEnum::KeyInputValueNumOK2   : { inputValue = KeyTypeEnum::KeyInputValueOK;    break; }
-        default :                                 {                                               break; }
+        case ivis::common::KeyTypeEnum::KeyInputValueNumUp    : {
+            inputValue = ivis::common::KeyTypeEnum::KeyInputValueUp;
+            break;
+        }
+        case ivis::common::KeyTypeEnum::KeyInputValueNumDown  : {
+            inputValue = ivis::common::KeyTypeEnum::KeyInputValueDown;
+            break;
+        }
+        case ivis::common::KeyTypeEnum::KeyInputValueNumLeft  : {
+            inputValue = ivis::common::KeyTypeEnum::KeyInputValueLeft;
+            break;
+        }
+        case ivis::common::KeyTypeEnum::KeyInputValueNumRight : {
+            inputValue = ivis::common::KeyTypeEnum::KeyInputValueRight;
+            break;
+        }
+        case ivis::common::KeyTypeEnum::KeyInputValueNumOK    :
+        case ivis::common::KeyTypeEnum::KeyInputValueNumOK2   : {
+            inputValue = ivis::common::KeyTypeEnum::KeyInputValueOK;
+            break;
+        }
+        default : {
+            break;
+        }
     }
 #endif
 
 #if defined(USE_SCREEN_CAPTURE)
-    if ((inputType == KeyTypeEnum::KeyInputTypeRelease) && (inputValue == KeyTypeEnum::KeyInputValueCapture)) {
+    if ((inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease)
+        && (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCapture)) {
         ScreenInfo::instance().data()->captureScreen();
     }
 #endif
@@ -79,11 +97,11 @@ void ControlManager::resizeEvent(QResizeEvent* resizeEvent) {
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
-            case ScreenEnum::DisplayTypeTop : {
+            case ivis::common::ScreenEnum::DisplayTypeTop : {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTop::instance().data());
                 break;
             }
-            case ScreenEnum::DisplayTypeCenter : {
+            case ivis::common::ScreenEnum::DisplayTypeCenter : {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlCenter::instance().data());
                 break;
             }

@@ -5,6 +5,9 @@
 #include <QObject>
 
 
+namespace ivis {
+namespace common {
+
 
 #define SCREEN_MINIMUM_WIDTH             640
 #define SCREEN_MINIMUM_HEIGHT            480
@@ -176,6 +179,8 @@ public:
 
 
 
+}  // end of namespace common
+}  // end of namespace ivis
 
 
 

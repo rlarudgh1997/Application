@@ -28,7 +28,7 @@ GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
 }
 
 void GuiTop::drawDisplayDepth0() {
-    updateDisplay(true, PropertyTypeEnum::PropertyTypeVisible);
+    updateDisplay(true, ivis::common::PropertyTypeEnum::PropertyTypeVisible);
 
     // =================================================================================================================
     // FILE
@@ -47,7 +47,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionNew);
             mToolBar[MainType::File]->addAction(actionNew);
             connect(actionNew, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileNew, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeFileNew, QVariant());
             });
         }
 
@@ -61,7 +61,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionOpen);
             mToolBar[MainType::File]->addAction(actionOpen);
             connect(actionOpen, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeFileOpen, QVariant());
             });
         }
 
@@ -75,7 +75,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionSave);
             mToolBar[MainType::File]->addAction(actionSave);
             connect(actionSave, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileSave, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
             });
         }
 
@@ -91,7 +91,7 @@ void GuiTop::drawDisplayDepth0() {
             // qDebug() << "StyelSheet :" << mMenu[MainType::File]->styleSheet();
             // mToolBar[MainType::File]->addAction(actionSaveAs);
             connect(actionSaveAs, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
             });
         }
 
@@ -105,7 +105,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::File]->addAction(actionExit);
             // mToolBar[MainType::File]->addAction(actionExit);
             connect(actionExit, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeExitProgram, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
             });
         }
     }
@@ -128,7 +128,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionCut);
             mToolBar[MainType::Edit]->addAction(actionCut);
             connect(actionCut, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditCut, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCut, QVariant());
             });
         }
 
@@ -142,7 +142,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionCopy);
             mToolBar[MainType::Edit]->addAction(actionCopy);
             connect(actionCopy, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditCopy, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCopy, QVariant());
             });
         }
 
@@ -156,7 +156,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Edit]->addAction(actionPaste);
             mToolBar[MainType::Edit]->addAction(actionPaste);
             connect(actionPaste, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeEditPaste, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditPaste, QVariant());
             });
         }
 
@@ -180,7 +180,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionConfig);
             mToolBar[MainType::Setting]->addAction(actionConfig);
             connect(actionConfig, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingConfig, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeSettingConfig, QVariant());
             });
         }
 
@@ -192,7 +192,7 @@ void GuiTop::drawDisplayDepth0() {
             mMenu[MainType::Setting]->addAction(actionDevPath);
             mToolBar[MainType::Setting]->addAction(actionDevPath);
             connect(actionDevPath, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingDevPath, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
             });
         }
 
@@ -203,7 +203,7 @@ void GuiTop::drawDisplayDepth0() {
             actionTestReport->setStatusTip(STRING_REPORT_TIP);
             mToolBar[MainType::Setting]->addAction(actionTestReport);
             connect(actionTestReport, &QAction::triggered, this, [=]() {
-                createSignal(EventTypeEnum::EventTypeSettingTestReport, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
             });
 
             QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(STRING_TEST_REPORT);
@@ -215,7 +215,7 @@ void GuiTop::drawDisplayDepth0() {
                     actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
                     mSubMenu->addAction(actionTestResult);
                     connect(actionTestResult, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::EventTypeSettingTestResult, QVariant());
+                        createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestResult, QVariant());
                     });
                 }
 
@@ -226,7 +226,7 @@ void GuiTop::drawDisplayDepth0() {
                     actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
                     mSubMenu->addAction(actionTestCoverage);
                     connect(actionTestCoverage, &QAction::triggered, [=]() {
-                        createSignal(EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
+                        createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
                     });
                 }
             }
@@ -267,7 +267,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAbout->setStatusTip(STRING_ABOUT_TIP);
             mMenu[MainType::Help]->addAction(actionAbout);
             connect(actionAbout, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeHelpAbout, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeHelpAbout, QVariant());
             });
         }
 
@@ -278,7 +278,7 @@ void GuiTop::drawDisplayDepth0() {
             actionAboutQt->setStatusTip(STRING_ABOUT_QT_TIP);
             mMenu[MainType::Help]->addAction(actionAboutQt);
             connect(actionAboutQt, &QAction::triggered, [=]() {
-                createSignal(EventTypeEnum::EventTypeHelpAboutQt, QVariant());
+                createSignal(ivis::common::EventTypeEnum::EventTypeHelpAboutQt, QVariant());
             });
         }
     }
@@ -293,14 +293,14 @@ void GuiTop::drawDisplayDepth2() {
 void GuiTop::updateDisplaySize() {
     QRect rect = isHandler()->getScreen()->geometry();
     // QRect rect = mMainWindow->geometry();
-    QSize size = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
+    QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     rect.setWidth(size.width());
     rect.setHeight(size.height());
     mMainWindow->setGeometry(rect);
 }
 
 void GuiTop::updateDisplayVisible() {
-    if (isHandler()->getProperty(PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
         mMainWindow->show();
     } else {
         mMainWindow->hide();
@@ -325,7 +325,7 @@ void GuiTop::updateDisplayAllConfig() {
     }
 
     QString content = QString(" [Config Infomation]\n\n");
-    QVariantList allConfig = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeAllConfigInfo).toList();
+    QVariantList allConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllConfigInfo).toList();
     foreach(const auto& config, allConfig) {
         content.append(config.toString());
     }
@@ -354,7 +354,8 @@ void GuiTop::updateDisplayAllConfig() {
 }
 
 void GuiTop::updateDisplayDefaultPath() {
-    QString pathString = QString("Path : %1").arg(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+    QString pathString = QString("Path : %1")
+                        .arg(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath).toString());
     static QLineEdit* defaultPath = nullptr;
 
     if (defaultPath == nullptr) {
@@ -383,7 +384,7 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
         lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         lastFile->show();
         connect(lastFile, &QPushButton::clicked, [=]() {
-            createSignal(EventTypeEnum::EventTypeLastFile, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeLastFile, QVariant());
         });
     }
     if (parsing == nullptr) {
@@ -395,7 +396,7 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
         parsing->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         parsing->show();
         connect(parsing, &QPushButton::clicked, [=]() {
-            // createSignal(EventTypeEnum::EventTypeFileOpen, QVariant());
+            // createSignal(ivis::common::EventTypeEnum::EventTypeFileOpen, QVariant());
         });
     }
     if (excelOpen == nullptr) {
@@ -407,7 +408,7 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            // createSignal(EventTypeEnum::EventTypeFileSaveAs, QVariant());
+            // createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
         });
     }
     if (lineEdit == nullptr) {
@@ -427,15 +428,16 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
     }
 
 
-    if (type == PropertyTypeEnum::PropertyTypeSignalListSFC) {
+    if (type == ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC) {
         // add
-    } else if (type == PropertyTypeEnum::PropertyTypeSignalListVSM) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM) {
         // add
-    } else if (type == PropertyTypeEnum::PropertyTypeSignalListAll) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll) {
 #if 1
         static QCompleter *completer = nullptr;
         if (completer == nullptr) {
-            QStringList fileNames = isHandler()->getProperty(PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+            QStringList fileNames =
+                            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
             completer = new QCompleter(fileNames, screen);
             completer->setCaseSensitivity(Qt::CaseInsensitive);
             completer->setFilterMode(Qt::MatchContains);
@@ -447,7 +449,7 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
             static QCompleter *completerFile = new QCompleter(screen);
             static QFileSystemModel *model = new QFileSystemModel(completerFile);
         //        model->setRootPath(QDir::currentPath());
-                model->setRootPath(isHandler()->getProperty(PropertyTypeEnum::PropertyTypeDefaultPath).toString());
+                model->setRootPath(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath).toString());
             model->setFilter(QDir::Dirs|QDir::NoDotAndDotDot);
             model->sort(0, Qt::SortOrder::AscendingOrder);
             completerFile->setModel(model);
@@ -472,13 +474,13 @@ void GuiTop::updateDisplayTempWidget(const int& type) {
 
 
 void GuiTop::updateDisplay(const bool& first, const int& type) {
-    if (type == PropertyTypeEnum::PropertyTypeDisplaySize) {
+    if (type == ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize) {
         updateDisplaySize();
-    } else if (type == PropertyTypeEnum::PropertyTypeVisible) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeVisible) {
         updateDisplayVisible();
-    } else if (type == PropertyTypeEnum::PropertyTypeAllConfigInfo) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeAllConfigInfo) {
         updateDisplayAllConfig();
-    } else if (type == PropertyTypeEnum::PropertyTypeDefaultPath) {
+    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath) {
         updateDisplayDefaultPath();
     } else {
         updateDisplayTempWidget(type);
@@ -487,17 +489,17 @@ void GuiTop::updateDisplay(const bool& first, const int& type) {
 
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case PropertyTypeEnum::PropertyTypeDepth : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
             drawDisplay(value);
             break;
         }
-        case PropertyTypeEnum::PropertyTypeDisplaySize :
-        case PropertyTypeEnum::PropertyTypeVisible :
-        case PropertyTypeEnum::PropertyTypeAllConfigInfo :
-        case PropertyTypeEnum::PropertyTypeDefaultPath :
-        case PropertyTypeEnum::PropertyTypeSignalListAll :
-        case PropertyTypeEnum::PropertyTypeSignalListSFC :
-        case PropertyTypeEnum::PropertyTypeSignalListVSM : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize :
+        case ivis::common::PropertyTypeEnum::PropertyTypeVisible :
+        case ivis::common::PropertyTypeEnum::PropertyTypeAllConfigInfo :
+        case ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath :
+        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll :
+        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC :
+        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM : {
             updateDisplay(false, type);
             break;
         }
