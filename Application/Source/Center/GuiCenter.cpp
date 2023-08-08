@@ -5,6 +5,8 @@
 #include "CommonResource.h"
 
 #include <QMenu>
+#include <QLabel>
+#include <QTextEdit>
 
 
 
@@ -79,20 +81,28 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     if (updateSheetSize == 0) {
         qDebug() << "Fail to update sheet info[" << type << "] size : 0";
         return;
+    } else {
+        qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize
+                    << "CurrentSheetIndex :" << mCurrentSheetIndex << "," << mTabWidget->currentIndex();
     }
-    qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize;
+
+    // True : Update Cell Insert/Delete,  False : New, Open Update Sheet Info
+    mCurrentSheetIndex = (mCellInsertDelete) ? (mTabWidget->currentIndex()) : (0);
+    mCellInsertDelete = false;
 
     // Clear - Previous Table Widget
     mTabWidget->clear();
     mTableWidgets.clear();
+    mCellInfo.clear();
 
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
 
-    updateSheetSize = (ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + updateSheetSize);
 
-    for (int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
-                    sheetIndex < updateSheetSize; sheetIndex++) {
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    updateSheetSize = (updateSheetSize + ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription);
+
+    for ( ; sheetIndex < updateSheetSize; sheetIndex++) {
         QVariantList detailInfo = isHandler()->getProperty(sheetIndex).toList();
         // qDebug() << "Info[" << sheetIndex << "] =" << detailInfo << "\n\n";
 
@@ -106,7 +116,6 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             return;
         }
 
-
         // Draw - Sheet/Title
         int rowCount = count.at(0).toInt();
         int columnCount = count.at(1).toInt();
@@ -115,7 +124,6 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         mTableWidgets[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mTabWidget->addTab(mTableWidgets[sheetIndex], sheetName);
         qDebug() << "Sheet[" << sheetIndex << "] - Count :" << rowCount << "," << columnCount;
-
 
         // Draw - Detail List Data
         QMap<int, QList<QPair<int, int>>> mergeInfos;
@@ -145,7 +153,6 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             }
         }
         mergeInfos[1] = mergeInfos[0];  // VehicleType 공백인 경우 존재하여 TCName 값으로 대입함.
-
         // Draw - Merge Cell : (0:TCName, 1:VehicleType, 2:Result, 3:Case)
         for (int titleIndex = 0; titleIndex < mergeInfos.size(); titleIndex++) {
             QList<QPair<int, int>> mergeInfo = mergeInfos[titleIndex];
@@ -154,100 +161,114 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 int end = mergeInfo.at(mergeIndex).second;
                 if (end != MERGEINFO_IVALID) {
                     mTableWidgets[sheetIndex]->setSpan(start, titleIndex, end, 1);
-                    qDebug() << "\t CellMergeInfo[" << titleIndex << "] :" << mergeInfo.at(mergeIndex);
+                    mCellInfo[sheetIndex].append(CellInfo(start, titleIndex, end));
+                    // qDebug() << "\t CellMergeInfo[" << titleIndex << "] :" << mergeInfo.at(mergeIndex);
                 }
             }
         }
-
 
         // Draw - Cell Text Width/Height
         mTableWidgets[sheetIndex]->resizeColumnsToContents();
         mTableWidgets[sheetIndex]->resizeRowsToContents();
 
-
         // Connect - Signal
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellDoubleClicked : " << row << ", " << column;
-        });
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mTableWidgets[sheetIndex]->item(row, column)->text();
-            // qDebug() << sheetIndex << ". cellChanged : " << row << ", " << column << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
-                            QVariant(QVariantList({sheetIndex, row, column, text})));
+            // qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
+           createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
+                           QVariant(QVariantList({sheetIndex, row, column, text})));
+           mTableWidgets[sheetIndex]->resizeColumnsToContents();
+           mTableWidgets[sheetIndex]->resizeRowsToContents();
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
-            qDebug() << sheetIndex << ". customContextMenuRequested : " << pos;
-            qDebug() << "[Info]\n" << modelIndexs << "\nSize :" << modelIndexs.size();
+            qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
 
-            QPoint gpos = mTableWidgets[sheetIndex]->mapToGlobal(pos);
-            QMenu* menu = new QMenu(isHandler()->getScreen());
-            menu->addAction("Insert");
-            menu->addAction("Delete");
-            QAction* selectAction = menu->exec(gpos);
-            connect(selectAction, &QAction::triggered, [=]() {
-                qDebug() << "triggered :";
-            });
-            connect(menu, &QMenu::triggered, [=](QAction *action) {
-                qDebug() << "QMenu::triggered :" << action;
-            });
+            if (modelIndexs.size() == 0) {
+                qDebug() << "Fail to menu right click : modalindex size : 0";
+                return;
+            }
 
+            int rowStart = modelIndexs.at(0).row();
+            int columnStart = modelIndexs.at(0).column();
+            int rowEnd = modelIndexs.last().row() - rowStart + 1;
+            int columnEnd = modelIndexs.last().column() - columnStart + 1;
+            qDebug() << sheetIndex << ". cellSelected :" << rowStart << "," << columnStart << "," << rowEnd << "," << columnEnd;
 
+            QMenu* menuRight = new QMenu(isHandler()->getScreen());
+            QMap<MenuItemRight, QAction*> menuItem = QMap<MenuItemRight, QAction*>();
 
-            // static bool span = false;
-            // if (modelIndexs.size() >= 2) {
-            //     if (span) {
-            //         span = false;
-            //         mTableWidgets[sheetIndex]->clearSpans();
-            //     } else {
-            //         span = true;
-            //         std::sort(modelIndexs.begin(), modelIndexs.end());
-            //         auto row = modelIndexs.at(sheetIndex).row();
-            //         auto col = modelIndexs.at(sheetIndex).column();
-            //         auto rowSpan = modelIndexs.last().row() - row + 1;
-            //         auto colSpan = modelIndexs.last().column() - col + 1;
-            //         qDebug() << "Info :" << row << "," << col << "," << rowSpan << "," << colSpan;
-            //         mTableWidgets[sheetIndex]->setSpan(row, col, rowSpan, colSpan);
-            //     }
-            // }
+            menuItem[MenuItemRight::RowInsert] = menuRight->addAction("Insert");
+            menuItem[MenuItemRight::RowDelete] = menuRight->addAction("Delete");
+            menuItem[MenuItemRight::CellMergeSplit] = menuRight->addAction("Merge/Split");
+
+            QPoint newPos = pos;
+            newPos.setX(pos.x() + 20);
+            newPos.setY(pos.y() + 5);
+            QAction* selectAction = menuRight->exec(mTableWidgets[sheetIndex]->mapToGlobal(newPos));
+            MenuItemRight selectMenuItem = MenuItemRight::Invalid;
+
+            if (selectAction == menuItem[MenuItemRight::RowInsert]) {
+                selectMenuItem = MenuItemRight::RowInsert;
+            } else if (selectAction == menuItem[MenuItemRight::RowDelete]) {
+                selectMenuItem = MenuItemRight::RowDelete;
+            } else if (selectAction == menuItem[MenuItemRight::CellMergeSplit]) {
+                selectMenuItem = MenuItemRight::CellMergeSplit;
+            } else {
+                qDebug() << "Fail to select right menu item.";
+                return;
+            }
+
+            if (selectMenuItem == MenuItemRight::RowInsert) {
+                mCellInsertDelete = true;
+                createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowInsert,
+                                QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
+            } else if (selectMenuItem == MenuItemRight::RowDelete) {
+                mCellInsertDelete = true;
+                createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowDelete,
+                                QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
+            } else {
+                // std::sort(modelIndexs.begin(), modelIndexs.end());
+                if (columnEnd == 1) {
+                    bool mergeCell = true;
+                    if (mCellInfo[sheetIndex].size() > 0) {
+                        QList<CellInfo> newCellInfo = QList<CellInfo>();
+                        for (auto& cellInfo : mCellInfo[sheetIndex]) {
+                            if (cellInfo.isMergeCell(rowStart, columnStart, rowEnd)) {
+                                mergeCell = false;
+                            } else {
+                                newCellInfo.append(cellInfo);
+                            }
+                        }
+                        mCellInfo[sheetIndex] = newCellInfo;
+                    }
+
+                    if (mergeCell) {
+                        mCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
+                        mTableWidgets[sheetIndex]->setSpan(rowStart, columnStart, rowEnd, columnEnd);
+                    } else {
+                        mTableWidgets[sheetIndex]->clearSpans();
+                        for (auto& cellInfo : mCellInfo[sheetIndex]) {
+                            cellInfo.isCellInfo(rowStart, columnStart, rowEnd);
+                            mTableWidgets[sheetIndex]->setSpan(rowStart, columnStart, rowEnd, 1);
+                        }
+                    }
+                } else {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit, QVariant(columnEnd));
+                    qDebug() << "Fail to select column cell";
+                }
+            }
         });
-#if 0
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellActivated, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellActivated : " << row << ", " << column;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::currentCellChanged,
-                                            [=](int currentRow, int currentColumn, int previousRow, int previousColumn) {
-            qDebug() << sheetIndex << ". currentCellChanged : " << currentRow << ", " << currentColumn
-                        << ", " << previousRow << ", " << previousColumn;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::currentItemChanged,
-                                            [=](QTableWidgetItem *current, QTableWidgetItem *previous) {
-            qDebug() << sheetIndex << ". currentItemChanged : " << previous << " -> " << current;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemPressed, [=](QTableWidgetItem *item) {
-            qDebug() << sheetIndex << ". itemPressed : " << item;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << sheetIndex << ". itemClicked : " << item;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << sheetIndex << ". itemSelectionChanged";
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellPressed, [=](auto row, auto column) {  // c++14 > version
-            qDebug() << sheetIndex << ". cellPressed : " << row << ", " << column;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellClicked : " << row << ", " << column;
-        });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
-            qDebug() << sheetIndex << ". cellEntered : " << row << ", " << column;
-        });
-#endif
     }
 
+
+    // Set : Current Sheet Index
+    mTabWidget->setCurrentIndex(mCurrentSheetIndex);
+    connect(mTabWidget, &QTabWidget::currentChanged, [=](int index) {
+        if (index >= 0) {
+            mTabWidget->setCurrentIndex(index);
+        }
+    });
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 

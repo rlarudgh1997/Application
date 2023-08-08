@@ -96,20 +96,20 @@ def readFromText(path, saveFilePath) :
         if sheet != "Description":
             for rowIndex in range(0, rowCount):
                 for columnIndex in range(0, columnCount):
-                    if columnIndex < 4:
+                    if columnIndex < 4:    # 0:TCName, 1:VehicleType, 2:Result, 3:Case
                         if pd.isna(read.iloc[rowIndex][columnIndex]) == False:
                             startIndexList.append(dict({columnIndex: rowIndex}))
 
             for info in startIndexList:
                 keys = list(info.keys())
                 for key in keys:
-                    if key == 0:
+                    if key == 0:    # 0:TCName
                         tcNameList.append(info[key])
-                    elif key == 2:
+                    elif key == 2:    # 2:Result
                         resultList.append(info[key])
-                    elif key == 3:
+                    elif key == 3:    # 3:Case
                         caseList.append(info[key])
-                    else:
+                    else:    # 1:VehicleType
                         vehicleTypeList.append(info[key])
 
             sheetMergeInfoList = dict({"TCName": tcNameList, "VehicleType": tcNameList, "Result": resultList, "Case": caseList})
@@ -163,7 +163,7 @@ def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
             if count > 0 :
                 startIndexList = titleList[tittle]
                 # print("        [", sheet, "-", tittle, "] : ", startIndexList)
-                print("        [", tittle, "] : ", startIndexList, ", count : ", count)
+                # print("        [", tittle, "] : ", startIndexList, ", count : ", count)
                 titleName = str(tittle)
                 cellMark = ""
                 if titleName == "TCName":
@@ -188,23 +188,10 @@ def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
                     gap = end - start
                     if gap > 1:
                         mergeInfo = cellMark + str(start + 2) + ":" + cellMark + str(end -1 + 2)
-                        print("            MergeCell = ", mergeInfo)
+                        # print("            MergeCell = ", mergeInfo)
                         ws.merge_cells(mergeInfo)
-
-                # for rowKey in titleList[tittle]:
-                #     rowList = titleList[tittle]
-                #     print("      [", rowKey, "] : ", rowList[rowKey])
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
-
-    # ws = wb["Telltales"]
-    # ws.merge_cells("A2:A8")
-    # ws.merge_cells("B2:B8")
-    # ws.merge_cells("C2:C4")
-    # ws.merge_cells("C5:C7")
-    # ws.merge_cells("D3:D4")
-    # ws.merge_cells("D5:D7")
     wb.save(filePath + ".MergeCell.xlsx")
-
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
 
 
 

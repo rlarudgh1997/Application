@@ -206,21 +206,23 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dir
             iter.next();
             updateDataHandler(iter.key(), iter.value());
         }
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditCell, false);
         updateDataHandler(initPropertyType, 0);
         updateDataHandler(propertyType, sheetDetailInfo.size(), true);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     }
 }
 
-bool ControlCenter::editSheetInfo(const QVariant& value) {
-    if (value.toList().size() < 4) {
+bool ControlCenter::editSheetInfo(const QVariant& sheetInfo) {
+    if (sheetInfo.toList().size() < 4) {
+        qDebug() << "Fail to edit sheet info size : 0";
         return false;
     }
 
-    int sheetIndex = value.toList()[0].toInt();
-    int row = value.toList()[1].toInt() + ivis::common::ListInfoEnum::ListInfoExcel::Data;
-    int column = value.toList()[2].toInt();
-    QString text = value.toList()[3].toString();
+    int sheetIndex = sheetInfo.toList()[0].toInt();
+    int row = sheetInfo.toList()[1].toInt() + ivis::common::ListInfoEnum::ListInfoExcel::Data;
+    int column = sheetInfo.toList()[2].toInt();
+    QString text = sheetInfo.toList()[3].toString();
     QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
     QVariantList detailInfo = getData(sheetIndex).toList();
     int rowIndex = 0;
@@ -241,9 +243,89 @@ bool ControlCenter::editSheetInfo(const QVariant& value) {
             }
             updateData.append(QVariant(rowData));
         }
+        // qDebug() << "edit sheet info - index :" << sheetIndex << "," << rowIndex;
         rowIndex++;
     }
     updateDataHandler(sheetIndex, updateData);
+    return true;
+}
+
+bool ControlCenter::editCellInfo(const bool& insert, const QVariant& cellInfo) {
+    if (cellInfo.toList().size() < 3) {
+        qDebug() << "Fail to edit cell(insert, delete) info size : 0";
+        return false;
+    }
+
+    int initPropertyType = ivis::common::PropertyTypeEnum::PropertyTypeInvalid;
+    int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInvalid;
+
+    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew).toInt() > 0) {
+        initPropertyType = ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen;
+        propertyType = ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew;
+    } else if (getData(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen).toInt() > 0) {
+        initPropertyType = ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew;
+        propertyType = ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen;
+    } else {
+        qDebug() << "Fail to previous sheet info size : 0";
+        return false;
+    }
+
+
+    int sheetIndex = cellInfo.toList()[0].toInt();
+    int rowStart = cellInfo.toList()[1].toInt() + ivis::common::ListInfoEnum::ListInfoExcel::Data;
+    int rowEnd = cellInfo.toList()[2].toInt();
+
+    QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+    QVariantList detailInfo = getData(sheetIndex).toList();
+
+    int rowIndex = 0;
+    QVariantList updateData = QVariantList();
+
+    foreach(const auto& detail, detailInfo) {
+        if (rowIndex < ivis::common::ListInfoEnum::ListInfoExcel::Data) {
+            updateData.append(detail);
+        } else {
+            if (insert) {
+                if (rowIndex == rowStart) {
+                    for (int index = 0; index < rowEnd; index++) {
+                        int columnIndex = 0;
+                        QVariantList rowData = QVariantList();
+                        foreach(QVariant info, detail.toList()) {
+                            rowData.append(QVariant(QString("CellAdd[%1, %2]").arg(index).arg(columnIndex)));
+                            columnIndex++;
+                        }
+                        updateData.append(QVariant(rowData));
+                    }
+                }
+                updateData.append(detail);
+            } else {
+                if ((rowIndex < rowStart) || (rowIndex >= (rowStart + rowEnd))) {
+                    updateData.append(detail);
+                }
+            }
+        }
+        rowIndex++;
+    }
+
+    QVariantList count = updateData[ivis::common::ListInfoEnum::ListInfoExcel::Count].toList();
+    int rowCount = updateData.size() - ivis::common::ListInfoEnum::ListInfoExcel::Data;
+    int columnCount = count[1].toInt();
+    updateData[ivis::common::ListInfoEnum::ListInfoExcel::Count] = QVariant(QVariantList({rowCount, columnCount}));
+
+#if 0
+    qDebug() << "editCellInfo :" << sheetIndex << "," << rowStart << "," << rowEnd << "," << detailInfo.size();
+    int index = 0;
+    foreach(const auto& data, updateData) {
+        qDebug() << index++ << ". Data :" << data;
+    }
+    qDebug() << "editCellInfo - size :" << updateData.size();
+#endif
+
+    updateDataHandler(sheetIndex, updateData);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditCell, true);
+    updateDataHandler(initPropertyType, 0);
+    updateDataHandler(propertyType, getData(propertyType).toInt(), true);
+
     return true;
 }
 
@@ -396,7 +478,7 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
-    qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
+    // qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
     ivis::common::CheckTimer checkTimer;
 
     switch (type) {
@@ -432,6 +514,18 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
             checkTimer.check("Update Sheet");
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSheetRowInsert :
+        case ivis::common::EventTypeEnum::EventTypeSheetRowDelete : {
+            if (editCellInfo((type == ivis::common::EventTypeEnum::EventTypeSheetRowInsert), value)) {
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
+            }
+            checkTimer.check("Update Cell");
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeCellMergeSplit : {
+            checkTimer.check("Update Cell");
             break;
         }
         default : {

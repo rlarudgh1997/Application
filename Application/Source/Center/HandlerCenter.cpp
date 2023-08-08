@@ -21,16 +21,17 @@ HandlerCenter::HandlerCenter() : AbstractHandler(ivis::common::ScreenEnum::Displ
 }
 
 void HandlerCenter::initPropertyInfo() {
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay,                             QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize,                         QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                   QVariant(QSize(0, 120)));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                                QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                             QVariant(false));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                               QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay,                              QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize,                          QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                    QVariant(QSize(0, 120)));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                                 QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                              QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                                QVariant(-1));
 
 
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                  QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,                 QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                   QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,                  QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditCell,                       QVariant(false));
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,                QVariant(""));

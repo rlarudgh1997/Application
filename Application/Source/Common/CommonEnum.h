@@ -95,6 +95,7 @@ public:
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
+        PropertyTypeUpdateEditCell,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -136,6 +137,9 @@ public:
         EventTypeOpenExcel,
         EventTypeSaveExcel,
         EventTypeUpdateSheetInfo,
+        EventTypeSheetRowInsert,
+        EventTypeSheetRowDelete,
+        EventTypeCellMergeSplit,
 
         EventTypeSendOtherControl = 2000,
         EventTypeLastFile,

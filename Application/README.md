@@ -26,6 +26,19 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 - Open, Save 동작 수정
 	: Save 동작시 - Open 한 경우에만 저장 하도록, Open 하지 않았으면 저장 하지 않도록
 
+- column 선택 2개 이상인 경우
+	: 메뉴 항목중 : 병합/해제는 disable 처리
+	: 경고 팝업 : 컬럼을 2개 이상 선택 하였다
+
+- column 인덱스가 4이상인 경우
+	: 메뉴 항목중 : 병합/해제는 disable 처리
+
+
+
+
+병합셀이 있는 경우
+	- 중간 셀을 삭제하면 병합된 셀에 대한 정보 제구성
+	- sheet 정보 데이터 변경 내역 반영
 - 메뉴 항목 추가
 	: View
 		- Config : 전체 표시, 수정 버튼 활성화

@@ -29,6 +29,7 @@ enum class PopupType {
     NoInstallLib,
     NowInstalling,
     InstallComplete,
+    CellSelectError,
 };
 
 enum class PopupButton {
