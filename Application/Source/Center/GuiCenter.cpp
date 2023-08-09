@@ -183,24 +183,26 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
             qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
+            bool sheetInfoNull = (modelIndexs.size() == 0);
 
-            if (modelIndexs.size() == 0) {
-                qDebug() << "Fail to menu right click : modalindex size : 0";
-                return;
+            if (sheetInfoNull) {
+                qDebug() << "Fail to menu right click - modalindex size : 0 -> only display menu : insert";
             }
 
-            int rowStart = modelIndexs.at(0).row();
-            int columnStart = modelIndexs.at(0).column();
-            int rowEnd = modelIndexs.last().row() - rowStart + 1;
-            int columnEnd = modelIndexs.last().column() - columnStart + 1;
+            int rowStart = (sheetInfoNull) ? (0) : (modelIndexs.at(0).row());
+            int columnStart = (sheetInfoNull) ? (1) : (modelIndexs.at(0).column());
+            int rowEnd = (sheetInfoNull) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            int columnEnd = (sheetInfoNull) ? (1) : (modelIndexs.last().column() - columnStart + 1);
             qDebug() << sheetIndex << ". cellSelected :" << rowStart << "," << columnStart << "," << rowEnd << "," << columnEnd;
 
             QMenu* menuRight = new QMenu(isHandler()->getScreen());
             QMap<MenuItemRight, QAction*> menuItem = QMap<MenuItemRight, QAction*>();
 
             menuItem[MenuItemRight::RowInsert] = menuRight->addAction("Insert");
-            menuItem[MenuItemRight::RowDelete] = menuRight->addAction("Delete");
-            menuItem[MenuItemRight::CellMergeSplit] = menuRight->addAction("Merge/Split");
+            if (sheetInfoNull == false) {
+                menuItem[MenuItemRight::RowDelete] = menuRight->addAction("Delete");
+                menuItem[MenuItemRight::CellMergeSplit] = menuRight->addAction("Merge/Split");
+            }
 
             QPoint newPos = pos;
             newPos.setX(pos.x() + 20);
@@ -229,7 +231,8 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                                 QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
             } else {
                 // std::sort(modelIndexs.begin(), modelIndexs.end());
-                if (columnEnd == 1) {
+                bool validColumn = ((columnEnd == 1) && (columnStart < 4));
+                if (validColumn) {
                     bool mergeCell = true;
                     if (mCellInfo[sheetIndex].size() > 0) {
                         QList<CellInfo> newCellInfo = QList<CellInfo>();
@@ -254,7 +257,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         }
                     }
                 } else {
-                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit, QVariant(columnEnd));
+                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit, QVariant());
                     qDebug() << "Fail to select column cell";
                 }
             }

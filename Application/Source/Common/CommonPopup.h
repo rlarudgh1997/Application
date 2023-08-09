@@ -29,7 +29,7 @@ enum class PopupType {
     NoInstallLib,
     NowInstalling,
     InstallComplete,
-    CellSelectError,
+    SelectCellColumnError,
 };
 
 enum class PopupButton {
@@ -56,7 +56,8 @@ public:
             case PopupType::About :
             case PopupType::OpenFail :
             case PopupType::NowInstalling :
-            case PopupType::InstallComplete : {
+            case PopupType::InstallComplete :
+            case PopupType::SelectCellColumnError : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
                     button = drawPopupNoraml(handler, infoData.at(0).toString(), infoData.at(1).toString());
