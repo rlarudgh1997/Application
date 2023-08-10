@@ -52,10 +52,8 @@ public:
         KeyInputTypePress,
         KeyInputTypeRelease,
     };
-
     enum KeyInputValue {
         KeyInputValueInvalid          = 0,
-
         KeyInputValueUp               = Qt::Key_Up,
         KeyInputValueDown             = Qt::Key_Down,
         KeyInputValueLeft             = Qt::Key_Left,
@@ -95,7 +93,7 @@ public:
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
-        PropertyTypeUpdateEditCell,
+        // PropertyTypeUpdateEditCell,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -114,6 +112,12 @@ public:
         PropertyTypeDetailInfoReserved5,
         PropertyTypeDetailInfoReserved6,
         PropertyTypeDetailInfoReserved7,
+    };
+    enum PropertyValue{
+        PropertyValueInvalid = 0,
+        PropertyValueInt,
+        PropertyValueString,
+        PropertyValueList,
     };
 };
 
@@ -140,6 +144,7 @@ public:
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
         EventTypeCellMergeSplit,
+        EventTypeCellMergeSplitWarning,
 
         EventTypeSendOtherControl = 2000,
         EventTypeLastFile,
@@ -149,9 +154,15 @@ public:
         EventTypeFileSaveAs,
         EventTypeFileSaveType,
     };
+    enum EventValue{
+        EventValueInvalid = 0,
+        EventValueInt,
+        EventValueString,
+        EventValueList,
+    };
 };
 
-class ListInfoEnum {
+class CellInfoEnum {
 public:
     enum ListInfoExcel {
         Sheet = 0,
@@ -159,6 +170,22 @@ public:
         Title,
         Data,   // Data 1 ~ Data n-1
     };
+};
+
+class EditCellEnum {
+public:
+    enum EditCellInfo {
+        Invalid = 0,
+        Insert,
+        Delete,
+        MergeSplit,
+    };
+    // enum class MenuItemRight {
+    //     Invalid = 0,
+    //     RowInsert,
+    //     RowDelete,
+    //     CellMergeSplit,
+    // };
 };
 
 

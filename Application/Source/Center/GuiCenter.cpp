@@ -107,9 +107,9 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         // qDebug() << "Info[" << sheetIndex << "] =" << detailInfo << "\n\n";
 
         // Constructor - Detail List Info
-        QString sheetName = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Sheet].toString();
-        QStringList contentTitle = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Title].toStringList();
-        QVariantList count = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Count].toList();
+        QString sheetName = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Sheet].toString();
+        QStringList contentTitle = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Title].toStringList();
+        QVariantList count = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Count].toList();
 
         if (count.size() != 2) {
             qDebug() << "Fail to detail info data size :" << count.size();
@@ -130,7 +130,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         const int MERGEINFO_IVALID = (-1);
 
         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            QStringList detailInfoData = detailInfo[ivis::common::ListInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
+            QStringList detailInfoData = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
             for (int columnIndex = 0; columnIndex < detailInfoData.size(); columnIndex++) {
                 QString data = detailInfoData[columnIndex];
                 if ((type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
@@ -174,11 +174,11 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         // Connect - Signal
         connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mTableWidgets[sheetIndex]->item(row, column)->text();
-            // qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
-           createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
-                           QVariant(QVariantList({sheetIndex, row, column, text})));
-           mTableWidgets[sheetIndex]->resizeColumnsToContents();
-           mTableWidgets[sheetIndex]->resizeRowsToContents();
+            qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
+            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
+                            QVariant(QVariantList({sheetIndex, row, column, text})));
+            mTableWidgets[sheetIndex]->resizeColumnsToContents();
+            mTableWidgets[sheetIndex]->resizeRowsToContents();
         });
         connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
@@ -231,8 +231,8 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                                 QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
             } else {
                 // std::sort(modelIndexs.begin(), modelIndexs.end());
-                bool validColumn = ((columnEnd == 1) && (columnStart < 4));
-                if (validColumn) {
+                bool checkValidColumn = ((columnEnd == 1) && (columnStart < 4));
+                if (checkValidColumn) {
                     bool mergeCell = true;
                     if (mCellInfo[sheetIndex].size() > 0) {
                         QList<CellInfo> newCellInfo = QList<CellInfo>();
@@ -256,8 +256,10 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                             mTableWidgets[sheetIndex]->setSpan(rowStart, columnStart, rowEnd, 1);
                         }
                     }
+                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit,
+                                    QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd})));
                 } else {
-                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit, QVariant());
+                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
                     qDebug() << "Fail to select column cell";
                 }
             }

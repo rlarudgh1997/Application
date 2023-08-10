@@ -22,6 +22,7 @@ private:
     void updateSheetInfo(const int& propertyType, const QVariant& dirPath);
     bool editSheetInfo(const QVariant& sheetInfo);
     bool editCellInfo(const bool& insert, const QVariant& cellInfo);
+    bool editCellMergeSplitInfo(const QVariant& mergeSplitInfo);
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const int& type, const QVariant& filePath);
     bool checkPythonLibrary();

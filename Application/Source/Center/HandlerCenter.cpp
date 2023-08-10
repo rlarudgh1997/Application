@@ -31,7 +31,7 @@ void HandlerCenter::initPropertyInfo() {
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                   QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,                  QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditCell,                       QVariant(false));
+    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditCell,                       QVariant(false));
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,                QVariant(""));
