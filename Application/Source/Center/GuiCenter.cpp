@@ -83,13 +83,12 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         return;
     } else {
         qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize
-                    << "CurrentSheetIndex :" << mCurrentSheetIndex << "," << mTabWidget->currentIndex();
+                    << ", CurrentSheetIndex :" << mTabWidget->currentIndex();
     }
 
     // True : Update Cell Insert/Delete,  False : New, Open Update Sheet Info
-    mCurrentSheetIndex = (mCellInsertDelete) ? (mTabWidget->currentIndex()) : (0);
-    mCellInsertDelete = false;
-
+    bool editSheet = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet).toBool();
+    int currentSheetIndex = (editSheet) ? (mTabWidget->currentIndex()) : (0);
     // Clear - Previous Table Widget
     mTabWidget->clear();
     mTableWidgets.clear();
@@ -133,9 +132,10 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             QStringList detailInfoData = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
             for (int columnIndex = 0; columnIndex < detailInfoData.size(); columnIndex++) {
                 QString data = detailInfoData[columnIndex];
-                if ((type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
-                    && (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
-                    && ((columnIndex < 4) && (columnIndex != 1))) {    // (0:TCName, 1:VehicleType, 2:Result, 3:Case)
+                if (((columnIndex < 4) && (columnIndex != 1))    // (0:TCName, 1:VehicleType, 2:Result, 3:Case)
+                    // && (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
+                    // && (type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
+                    ) {
                     if (data.compare("") == false) {
                         QList<QPair<int, int>> info = mergeInfos[columnIndex];
                         if (info.size() > 0) {
@@ -221,12 +221,11 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 return;
             }
 
+
             if (selectMenuItem == MenuItemRight::RowInsert) {
-                mCellInsertDelete = true;
                 createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowInsert,
                                 QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
             } else if (selectMenuItem == MenuItemRight::RowDelete) {
-                mCellInsertDelete = true;
                 createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowDelete,
                                 QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
             } else {
@@ -257,7 +256,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         }
                     }
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit,
-                                    QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd})));
+                                    QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd, mergeCell})));
                 } else {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
                     qDebug() << "Fail to select column cell";
@@ -268,7 +267,10 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
 
 
     // Set : Current Sheet Index
-    mTabWidget->setCurrentIndex(mCurrentSheetIndex);
+    mTabWidget->setCurrentIndex(currentSheetIndex);
+    if (editSheet) {
+        mTableWidgets[sheetIndex]->setCurrentCell(20, 1);
+    }
     connect(mTabWidget, &QTabWidget::currentChanged, [=](int index) {
         if (index >= 0) {
             mTabWidget->setCurrentIndex(index);

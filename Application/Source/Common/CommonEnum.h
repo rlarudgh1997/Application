@@ -93,7 +93,7 @@ public:
         PropertyTypeSignalListToMicom,
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
-        // PropertyTypeUpdateEditCell,
+        PropertyTypeUpdateEditSheet,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,

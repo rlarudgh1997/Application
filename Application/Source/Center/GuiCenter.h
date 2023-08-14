@@ -67,8 +67,6 @@ private:
     QTabWidget* mTabWidget = nullptr;
     QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
     QMap<int, QList<CellInfo>> mCellInfo = QMap<int, QList<CellInfo>>();
-    int mCurrentSheetIndex = 0;
-    bool mCellInsertDelete = false;
 };
 
 #endif    // GUI_CENTER_H
