@@ -141,6 +141,7 @@ public:
         EventTypeOpenExcel,
         EventTypeSaveExcel,
         EventTypeUpdateSheetInfo,
+        EventTypeEditCell,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
         EventTypeCellMergeSplit,

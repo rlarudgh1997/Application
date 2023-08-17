@@ -61,6 +61,8 @@ private:
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
+    void slotCellTextChanged(int row, int column);
+    void slotMenuRightSelected(const QPoint &pos);
 
 
 private:

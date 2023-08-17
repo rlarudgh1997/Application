@@ -227,23 +227,20 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 return;
             }
 
-
             if (selectMenuItem == MenuItemRight::RowInsert) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowInsert,
-                                QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, 0,
+                                                    rowStart, rowEnd, ivis::common::EditCellEnum::EditCellInfo::Insert})));
             } else if (selectMenuItem == MenuItemRight::RowDelete) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeSheetRowDelete,
-                                QVariant(QVariantList({sheetIndex, rowStart, rowEnd})));
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, 0,
+                                                    rowStart, rowEnd, ivis::common::EditCellEnum::EditCellInfo::Delete})));
             } else {
-                // std::sort(modelIndexs.begin(), modelIndexs.end());
-                bool checkValidColumn = ((columnEnd == 1) && (columnStart < 4));
-                if (checkValidColumn) {
-                    bool mergeCell = true;
+                if (((columnEnd == 1) && (columnStart < 4))) {
+                    ivis::common::EditCellEnum::EditCellInfo editType = ivis::common::EditCellEnum::EditCellInfo::Merge;
                     if (mExcelCellInfo[sheetIndex].size() > 0) {
                         QList<CellInfo> newCellInfo = QList<CellInfo>();
                         for (auto& cellInfo : mExcelCellInfo[sheetIndex]) {
                             if (cellInfo.isMergeCell(rowStart, columnStart, rowEnd)) {
-                                mergeCell = false;
+                                editType = ivis::common::EditCellEnum::EditCellInfo::Split;
                             } else {
                                 newCellInfo.append(cellInfo);
                             }
@@ -253,12 +250,10 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         mExcelCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
                     }
 
-                    ivis::common::EditCellEnum::EditCellInfo editType = ivis::common::EditCellEnum::EditCellInfo::Invalid;
-                    createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit,
-                                    QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd, mergeCell})));
+                    createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, columnStart,
+                                                    rowStart, rowEnd, editType})));
                 } else {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
-                    qDebug() << "Fail to select column cell";
                 }
             }
         });
@@ -307,4 +302,10 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
     }
+}
+
+void GuiCenter::slotCellTextChanged(int row, int column) {
+}
+
+void GuiCenter::slotMenuRightSelected(const QPoint &pos) {
 }
