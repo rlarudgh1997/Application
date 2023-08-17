@@ -178,7 +178,8 @@ public:
         Invalid = 0,
         Insert,
         Delete,
-        MergeSplit,
+        Merge,
+        Split,
     };
     // enum class MenuItemRight {
     //     Invalid = 0,

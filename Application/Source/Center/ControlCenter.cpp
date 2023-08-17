@@ -376,31 +376,35 @@ bool ControlCenter::editCellMergeSplitInfo(const QVariant& mergeSplitInfo) {
 
     QVariantList detailInfo = getData(sheetIndex).toList();
     QVariantList updateData = QVariantList();
+    QVariantList updateRealData = QVariantList();
 
     int rowIndex = 0;
     foreach(const auto& detail, detailInfo) {
         if (rowIndex < ivis::common::CellInfoEnum::ListInfoExcel::Data) {
             updateData.append(detail);
+            updateRealData.append(detail);
         } else {
             if ((rowIndex > rowStart) && (rowIndex < rowEnd)) {
                 int columnIndex = 0;
                 QVariantList rowData = QVariantList();
+                QVariantList realData = QVariantList();
                 foreach(const auto& info, detail.toList()) {
-                    QString str = (merge) ? ("") : ("Split");
-                    qDebug() << "str :" << str;
+                    QString str = (merge) ? ("") : (STRING_EXCEL_SPLIT);
                     rowData.append((columnIndex == column) ? (str) : (info));
+                    realData.append((columnIndex == column) ? ("") : (info));
                     columnIndex++;
                 }
-                // qDebug() << "RowData :" << rowData;
                 updateData.append(QVariant(rowData));
+                updateRealData.append(QVariant(realData));
             } else {
                 updateData.append(detail);
+                updateRealData.append(detail);
             }
         }
         rowIndex++;
     }
 
-#if 1
+#if 0
     qDebug() << "editCellMergeSplitInfo :" << sheetIndex << "," << rowStart << "," << rowEnd << "," << detailInfo.size();
     int index = 0;
     foreach(const auto& data, updateData) {
@@ -413,6 +417,7 @@ bool ControlCenter::editCellMergeSplitInfo(const QVariant& mergeSplitInfo) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet, true);
     updateDataHandler(initPropertyType, 0);
     updateDataHandler(propertyType, getData(propertyType).toInt(), true);
+    // updateDataHandler(sheetIndex, updateRealData);
 
     return true;
 }

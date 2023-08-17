@@ -30,6 +30,7 @@ public:
 
         // File
         ConfitTypeLastFileInfo,
+        ConfitTypeDeleteTcFile,
 
         ConfigTypeMax,
 
@@ -85,6 +86,7 @@ private:
 
         // File
         mConfigInfoData[ConfitTypeLastFileInfo] = QPair<QString, QVariant>("ConfitTypeLastFileInfo", QVariant(""));
+        mConfigInfoData[ConfitTypeDeleteTcFile] = QPair<QString, QVariant>("ConfitTypeDeleteTcFile", QVariant(false));
 
 
 

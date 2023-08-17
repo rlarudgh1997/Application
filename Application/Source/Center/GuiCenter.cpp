@@ -19,7 +19,7 @@ QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
 }
 
 GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
-    mTabWidget = new QTabWidget(isHandler()->getScreen());
+    mExcelView = new QTabWidget(isHandler()->getScreen());
     updateDisplaySize();
 
 #if 0   // QSharedPointer<QMap<>> : 사용법
@@ -63,14 +63,14 @@ void GuiCenter::updateDisplaySize() {
         rect.setHeight(size.height() - margin.height());
     }
 
-    mTabWidget->setGeometry(rect);
+    mExcelView->setGeometry(rect);
 }
 
 void GuiCenter::updateDisplayVisible() {
     if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        mTabWidget->show();
+        mExcelView->show();
     } else {
-        mTabWidget->hide();
+        mExcelView->hide();
     }
 }
 
@@ -83,16 +83,17 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         return;
     } else {
         qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize
-                    << ", CurrentSheetIndex :" << mTabWidget->currentIndex();
+                    << ", CurrentSheetIndex :" << mExcelView->currentIndex();
     }
 
     // True : Update Cell Insert/Delete,  False : New, Open Update Sheet Info
     bool editSheet = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet).toBool();
-    int currentSheetIndex = (editSheet) ? (mTabWidget->currentIndex()) : (0);
+    int currentSheetIndex = (editSheet) ? (mExcelView->currentIndex()) : (0);
+
     // Clear - Previous Table Widget
-    mTabWidget->clear();
-    mTableWidgets.clear();
-    mCellInfo.clear();
+    mExcelView->clear();
+    mExcelSheet.clear();
+    mExcelCellInfo.clear();
 
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
@@ -118,11 +119,11 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         // Draw - Sheet/Title
         int rowCount = count.at(0).toInt();
         int columnCount = count.at(1).toInt();
-        mTableWidgets[sheetIndex] = new QTableWidget(rowCount, columnCount);
-        mTableWidgets[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
-        mTableWidgets[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        mTabWidget->addTab(mTableWidgets[sheetIndex], sheetName);
-        qDebug() << "Sheet[" << sheetIndex << "] - Count :" << rowCount << "," << columnCount;
+        mExcelSheet[sheetIndex] = new QTableWidget(rowCount, columnCount);
+        mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
+        mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mExcelView->addTab(mExcelSheet[sheetIndex], sheetName);
+        qDebug() << "Sheet[" << sheetIndex << mExcelSheet[sheetIndex] << "] - Count :" << rowCount << "," << columnCount;
 
         // Draw - Detail List Data
         QMap<int, QList<QPair<int, int>>> mergeInfos;
@@ -147,11 +148,16 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         mergeInfos[columnIndex].append(QPair<int, int>(rowIndex, MERGEINFO_IVALID));
                     }
                 }
+
+                if (data.compare(STRING_EXCEL_SPLIT) == false) {
+                    data.clear();
+                }
                 QTableWidgetItem *detailDataItem = new QTableWidgetItem(data);
                 // detailDataItem->setTextAlignment(Qt::AlignCenter);
-                mTableWidgets[sheetIndex]->setItem(rowIndex, columnIndex, detailDataItem);
+                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, detailDataItem);
             }
         }
+
         mergeInfos[1] = mergeInfos[0];  // VehicleType 공백인 경우 존재하여 TCName 값으로 대입함.
         // Draw - Merge Cell : (0:TCName, 1:VehicleType, 2:Result, 3:Case)
         for (int titleIndex = 0; titleIndex < mergeInfos.size(); titleIndex++) {
@@ -160,28 +166,28 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 int start = mergeInfo.at(mergeIndex).first;
                 int end = mergeInfo.at(mergeIndex).second;
                 if (end != MERGEINFO_IVALID) {
-                    mTableWidgets[sheetIndex]->setSpan(start, titleIndex, end, 1);
-                    mCellInfo[sheetIndex].append(CellInfo(start, titleIndex, end));
+                    mExcelSheet[sheetIndex]->setSpan(start, titleIndex, end, 1);
+                    mExcelCellInfo[sheetIndex].append(CellInfo(start, titleIndex, end));
                     // qDebug() << "\t CellMergeInfo[" << titleIndex << "] :" << mergeInfo.at(mergeIndex);
                 }
             }
         }
 
         // Draw - Cell Text Width/Height
-        mTableWidgets[sheetIndex]->resizeColumnsToContents();
-        mTableWidgets[sheetIndex]->resizeRowsToContents();
+        mExcelSheet[sheetIndex]->resizeColumnsToContents();
+        mExcelSheet[sheetIndex]->resizeRowsToContents();
 
         // Connect - Signal
-        connect(mTableWidgets[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
-            QString text = mTableWidgets[sheetIndex]->item(row, column)->text();
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
+            QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
             createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
                             QVariant(QVariantList({sheetIndex, row, column, text})));
-            mTableWidgets[sheetIndex]->resizeColumnsToContents();
-            mTableWidgets[sheetIndex]->resizeRowsToContents();
+            mExcelSheet[sheetIndex]->resizeColumnsToContents();
+            mExcelSheet[sheetIndex]->resizeRowsToContents();
         });
-        connect(mTableWidgets[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
-            QModelIndexList modelIndexs = mTableWidgets[sheetIndex]->selectionModel()->selectedIndexes();
+        connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
+            QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
             qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
             bool sheetInfoNull = (modelIndexs.size() == 0);
 
@@ -207,7 +213,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             QPoint newPos = pos;
             newPos.setX(pos.x() + 20);
             newPos.setY(pos.y() + 5);
-            QAction* selectAction = menuRight->exec(mTableWidgets[sheetIndex]->mapToGlobal(newPos));
+            QAction* selectAction = menuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(newPos));
             MenuItemRight selectMenuItem = MenuItemRight::Invalid;
 
             if (selectAction == menuItem[MenuItemRight::RowInsert]) {
@@ -233,28 +239,21 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                 bool checkValidColumn = ((columnEnd == 1) && (columnStart < 4));
                 if (checkValidColumn) {
                     bool mergeCell = true;
-                    if (mCellInfo[sheetIndex].size() > 0) {
+                    if (mExcelCellInfo[sheetIndex].size() > 0) {
                         QList<CellInfo> newCellInfo = QList<CellInfo>();
-                        for (auto& cellInfo : mCellInfo[sheetIndex]) {
+                        for (auto& cellInfo : mExcelCellInfo[sheetIndex]) {
                             if (cellInfo.isMergeCell(rowStart, columnStart, rowEnd)) {
                                 mergeCell = false;
                             } else {
                                 newCellInfo.append(cellInfo);
                             }
                         }
-                        mCellInfo[sheetIndex] = newCellInfo;
+                        mExcelCellInfo[sheetIndex] = newCellInfo;
+                    } else {
+                        mExcelCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
                     }
 
-                    if (mergeCell) {
-                        mCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
-                        mTableWidgets[sheetIndex]->setSpan(rowStart, columnStart, rowEnd, columnEnd);
-                    } else {
-                        mTableWidgets[sheetIndex]->clearSpans();
-                        for (auto& cellInfo : mCellInfo[sheetIndex]) {
-                            cellInfo.isCellInfo(rowStart, columnStart, rowEnd);
-                            mTableWidgets[sheetIndex]->setSpan(rowStart, columnStart, rowEnd, 1);
-                        }
-                    }
+                    ivis::common::EditCellEnum::EditCellInfo editType = ivis::common::EditCellEnum::EditCellInfo::Invalid;
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplit,
                                     QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd, mergeCell})));
                 } else {
@@ -267,13 +266,13 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
 
 
     // Set : Current Sheet Index
-    mTabWidget->setCurrentIndex(currentSheetIndex);
-    if (editSheet) {
-        mTableWidgets[sheetIndex]->setCurrentCell(20, 1);
-    }
-    connect(mTabWidget, &QTabWidget::currentChanged, [=](int index) {
+    mExcelView->setCurrentIndex(currentSheetIndex);
+    // if (editSheet) {
+    //     mExcelSheet[sheetIndex]->setCurrentCell(20, 1);
+    // }
+    connect(mExcelView, &QTabWidget::currentChanged, [=](int index) {
         if (index >= 0) {
-            mTabWidget->setCurrentIndex(index);
+            mExcelView->setCurrentIndex(index);
         }
     });
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";

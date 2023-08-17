@@ -23,6 +23,15 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
+- 병합셀 정보 구성 확인
+	: excel to txt
+		- NaN 값 공백으로 변환함 : 현재 주석 처리함
+		- NaN 값인 경우 특정 string 으로 변환
+		- app에서 화면 표시시 특정 string은 공백으로 표시(Gui 에서 처리)
+	: ini to excel
+		-
+
+
 - 병합셀인 경우
 	: 병합 해제시
 		- control 에 병합 상태 정보 전달
@@ -34,7 +43,7 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 - 임시 코드 적용
 	: Description 내부 병합/해제 되도록 코드 적용됨
-		- 해당 기능 필요한지 여부 확인 필요ㅕ
+		- 해당 기능 필요한지 여부 확인 필요
 
 - column 선택 2개 이상인 경우
 	: 메뉴 항목중 : 병합/해제는 disable 처리

@@ -72,7 +72,7 @@ function platformClean(){
 
 function cleanAll(){
 	#find -name "deploy_target" -type d -exec rm -rfv {} \;
-	#find -name "deploy_x86" -type d -exec rm -rfv {} \;	
+	#find -name "deploy_x86" -type d -exec rm -rfv {} \;
 
 	#find -name $PROJECT_DIR/deploy_target -type d -exec rm -rfv {} \;
 	#find -name $PROJECT_DIR/deploy_x86 -type d -exec rm -rfv {} \;
@@ -85,7 +85,9 @@ function cleanAll(){
 }
 
 function buildAll(){
-	echo 
+	START_TIME=`date +%s`
+
+	echo
 	echo "==================================================================================================================="
 	mkdir $PROJECT_DIR/$SET_DEPLOY
 
@@ -98,13 +100,26 @@ function buildAll(){
 	fi
 
 	echo CMD_TEXT=$CMD_TEXT
-	echo 
+	echo
 	echo "==================================================================================================================="
 
 	$CMD_TEXT
 	make -j8
 	make install
 
+	echo
+	echo
+	echo "==================================================================================================================="
+	END_TIME=`date +%s`
+	ELAPSED_TIME=`expr $END_TIME - $START_TIME`
+
+	echo "[Check Compile Time]"
+	echo "   START   = $START_TIME"
+	echo "   END     = $END_TIME"
+	echo "   ELAPSED = $ELAPSED_TIME""s"""
+	echo "==================================================================================================================="
+	echo
+	echo
 }
 
 

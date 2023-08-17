@@ -34,7 +34,7 @@ def readFromExcel(fileName, sheetName) :
     index = 0
     for sheet in sheetName:
         sheetInfo.append(df[sheetName[index]])
-        sheetInfo[index] = sheetInfo[index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
+        # sheetInfo[index] = sheetInfo[index].fillna("")  # 공백 문자(NaN)를 실제 공백으로 변경
         print(sheetInfo[index])
         index += 1
 
@@ -96,9 +96,14 @@ def readFromText(path, saveFilePath) :
         if sheet != "Description":
             for rowIndex in range(0, rowCount):
                 for columnIndex in range(0, columnCount):
+                    readStr = read.iloc[rowIndex][columnIndex]
                     if columnIndex < 4:    # 0:TCName, 1:VehicleType, 2:Result, 3:Case
                         if pd.isna(read.iloc[rowIndex][columnIndex]) == False:
                             startIndexList.append(dict({columnIndex: rowIndex}))
+                    if readStr == "ExcelSplit":
+                        read.iloc[rowIndex][columnIndex] = ""
+                        print("Read[", rowIndex, ",", columnIndex, "] : ", readStr, " -> ", read.iloc[rowIndex][columnIndex])
+
 
             for info in startIndexList:
                 keys = list(info.keys())
@@ -121,7 +126,11 @@ def readFromText(path, saveFilePath) :
             mergeInfoList[sheet] = sheetMergeInfoList
             print("    SheetMergeInfo : ", sheetMergeInfoList, "\n")
 
-        # os.remove(filePath)
+
+        # 특정 공백 스트링(ExcelSplit) -> 실제 공백으로 제거
+        read.replace("ExcelSplit", "")
+        # read.str.replace("ExcelSplit", "")
+        # read.replace(" ", "")
         readData.append(read)
         index += 1
 
@@ -147,7 +156,7 @@ def writeToExcel(data, filePath) :
     # for sheet in sheetInfo:
     #     cellAutoFit = pd.DataFrame(sheet)
 
-def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
+def writeToMergeCell(sheetRowCount, mergeInfoData, filePath) :
     print("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("[MergeInfo]")
     wb = load_workbook(filePath)
@@ -155,7 +164,7 @@ def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
     for sheet in mergeInfoData:
         print("    [", sheet, "] : ", mergeInfoData[sheet])
         ws = wb[sheet]
-        rowCount = sheetRowData[sheet]
+        rowCount = sheetRowCount[sheet]
 
         for tittle in mergeInfoData[sheet]:
             titleList = mergeInfoData[sheet]
@@ -190,7 +199,9 @@ def writeToMergeCell(sheetRowData, mergeInfoData, filePath) :
                         mergeInfo = cellMark + str(start + 2) + ":" + cellMark + str(end -1 + 2)
                         # print("            MergeCell = ", mergeInfo)
                         ws.merge_cells(mergeInfo)
-    wb.save(filePath + ".MergeCell.xlsx")
+
+    wb.save(filePath)
+    # wb.save(filePath + ".MergeCell.xlsx")
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n")
 
 

@@ -64,9 +64,9 @@ public slots:
 
 
 private:
-    QTabWidget* mTabWidget = nullptr;
-    QMap<int, QTableWidget*> mTableWidgets = QMap<int, QTableWidget*>();
-    QMap<int, QList<CellInfo>> mCellInfo = QMap<int, QList<CellInfo>>();
+    QTabWidget* mExcelView = nullptr;
+    QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
+    QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();
 };
 
 #endif    // GUI_CENTER_H
