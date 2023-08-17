@@ -140,7 +140,7 @@ public:
         EventTypeHelpAboutQt,
         EventTypeOpenExcel,
         EventTypeSaveExcel,
-        EventTypeUpdateSheetInfo,
+        EventTypeChangeCellText,
         EventTypeEditCell,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,

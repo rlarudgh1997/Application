@@ -213,20 +213,21 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dir
     }
 }
 
-bool ControlCenter::editSheetInfo(const QVariant& sheetInfo) {
-    if (sheetInfo.toList().size() != 4) {
-        qDebug() << "Fail to edit sheet info size :" << sheetInfo.toList().size();
+bool ControlCenter::changeCellText(const QVariant& textInfo) {
+    if (textInfo.toList().size() != 4) {
+        qDebug() << "Fail to edit sheet info size :" << textInfo.toList().size();
         return false;
     }
 
-    int sheetIndex = sheetInfo.toList()[0].toInt();
-    int row = sheetInfo.toList()[1].toInt() + ivis::common::CellInfoEnum::ListInfoExcel::Data;
-    int column = sheetInfo.toList()[2].toInt();
-    QString text = sheetInfo.toList()[3].toString();
-    QVariantList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toList();
+    int sheetIndex = textInfo.toList()[0].toInt();
+    int row = textInfo.toList()[1].toInt() + ivis::common::CellInfoEnum::ListInfoExcel::Data;
+    int column = textInfo.toList()[2].toInt();
+    QString text = textInfo.toList()[3].toString();
+
     QVariantList detailInfo = getData(sheetIndex).toList();
-    int rowIndex = 0;
     QVariantList updateData = QVariantList();
+    int rowIndex = 0;
+
     foreach(const auto& detail, detailInfo) {
         int columnIndex = 0;
         if (rowIndex < ivis::common::CellInfoEnum::ListInfoExcel::Data) {
@@ -243,10 +244,11 @@ bool ControlCenter::editSheetInfo(const QVariant& sheetInfo) {
             }
             updateData.append(QVariant(rowData));
         }
-        // qDebug() << "edit sheet info - index :" << sheetIndex << "," << rowIndex;
         rowIndex++;
     }
+
     updateDataHandler(sheetIndex, updateData);
+
     return true;
 }
 
@@ -567,18 +569,18 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo : {
-            if (editSheetInfo(value)) {
+        case ivis::common::EventTypeEnum::EventTypeChangeCellText : {
+            if (changeCellText(value)) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
-            checkTimer.check("Update Sheet");
+            checkTimer.check("Change Cell Text");
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEditCell : {
             if (editCellInfo(value)) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
-            checkTimer.check("Update Edit Cell");
+            checkTimer.check("Edit Cell");
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning : {

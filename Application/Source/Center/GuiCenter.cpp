@@ -181,7 +181,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetInfo,
+            createSignal(ivis::common::EventTypeEnum::EventTypeChangeCellText,
                             QVariant(QVariantList({sheetIndex, row, column, text})));
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
             mExcelSheet[sheetIndex]->resizeRowsToContents();
