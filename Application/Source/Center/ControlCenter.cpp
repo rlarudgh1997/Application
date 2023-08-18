@@ -187,7 +187,7 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dir
                 qDebug() << "Delete Path Info :" << dirPath << ", " << filePath;
             }
 
-            bool deleteFile = false;    // Read : Excel to Text file -> delete
+            bool deleteFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeDeleteFileTC).toBool();
             if (deleteFile) {
                 ivis::common::ExcuteProgram process(false);
                 QStringList log;
@@ -213,9 +213,9 @@ void ControlCenter::updateSheetInfo(const int& propertyType, const QVariant& dir
     }
 }
 
-bool ControlCenter::changeCellText(const QVariant& textInfo) {
+bool ControlCenter::updateSheetTextInfo(const QVariant& textInfo) {
     if (textInfo.toList().size() != 4) {
-        qDebug() << "Fail to edit sheet info size :" << textInfo.toList().size();
+        qDebug() << "Fail to update sheet text info size :" << textInfo.toList().size();
         return false;
     }
 
@@ -252,9 +252,9 @@ bool ControlCenter::changeCellText(const QVariant& textInfo) {
     return true;
 }
 
-bool ControlCenter::editCellInfo(const QVariant& cellInfo) {
+bool ControlCenter::updateSheetCellInfo(const QVariant& cellInfo) {
     if (cellInfo.toList().size() != 5) {
-        qDebug() << "Fail to edit cell info size :" << cellInfo.toList().size();
+        qDebug() << "Fail to update sheet cell info size :" << cellInfo.toList().size();
         return false;
     }
 
@@ -471,7 +471,7 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
         fileName.append(".xlsx");
     }
 
-    QString cmd = QString("python ../Example/excel_parsing.py %1 %2 %3").arg(dirPath).arg(fileName).arg(cmdType);
+    QString cmd = QString("python %1/excel_parsing.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
@@ -483,7 +483,8 @@ QString ControlCenter::sytemCall(const int& type, const QVariant& filePath) {
     }
 
     qDebug() << "*************************************************************************************************";
-    qDebug() << "System :" << ((result) ? ("sucess") : ("fail")) << "-" << cmd;
+    qDebug() << "PWD      :" << APP_PWD;
+    qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
     foreach(const auto& d, log) {
@@ -562,25 +563,28 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             if (checkPythonLibrary()) {
                 QVariant filePath = value;
                 if (writeSheetInfo(filePath)) {
-                    sytemCall(ivis::common::EventTypeEnum::EventTypeSaveExcel, filePath);
-                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
+                    if (sytemCall(ivis::common::EventTypeEnum::EventTypeSaveExcel, filePath) > 0) {
+                        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
+                        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop,
+                                        ivis::common::EventTypeEnum::EventTypeFileSaveType, false);
+                    }
                 }
                 checkTimer.check("Save Excel");
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeChangeCellText : {
-            if (changeCellText(value)) {
+        case ivis::common::EventTypeEnum::EventTypeUpdateSheetTextInfo : {
+            if (updateSheetTextInfo(value)) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
-            checkTimer.check("Change Cell Text");
+            checkTimer.check("Update Sheet Text");
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditCell : {
-            if (editCellInfo(value)) {
+        case ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo : {
+            if (updateSheetCellInfo(value)) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
-            checkTimer.check("Edit Cell");
+            checkTimer.check("Update Sheet Cell");
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning : {

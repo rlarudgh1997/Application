@@ -33,6 +33,8 @@ RESOURCES += \
 #    $$PWD/Resource/Language.qrc\
 
 
+FORMS += \
+    test.ui
 
 
 message("==================================")
@@ -50,18 +52,22 @@ message("INSTALL_PATH=$$INSTALL_PATH")
 
 !isEmpty(INSTALL_PATH) {
     target.path = $$INSTALL_PATH
+    python.path = $$INSTALL_PATH
+    python.files = $$PWD/../Example/excel_parsing.py
 } else {
-	target.path = $$PWD/Application
+	target.path = $$OUT_PWD
+    python.path = $$OUT_PWD
+    python.files = $$PWD/../Example/excel_parsing.py
 }
+
 
 message("DEFINES=$$DEFINES")
 message("target.path=$${target.path}")
+message("python.path=$${python.path}")
+message("python.files=$${python.files}")
 
 !isEmpty(target.path): INSTALLS += target
+!isEmpty(python.path): INSTALLS += python
+
 message("INSTALLS=$$INSTALLS")
-
-
 message("PWD=$$PWD")
-
-FORMS += \
-    test.ui

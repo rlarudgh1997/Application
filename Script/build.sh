@@ -48,13 +48,13 @@ function setEnvironments(){
 	SET_INSTALL_PATH=$PROJECT_DIR/$SET_DEPLOY
 
 	echo
-	echo "[setEnvironments]"
-	echo "   PROJECT_NAME=$SET_PROJECT_NAME"
-	echo "   PLATFORM=$SET_PLATFORM"
-	echo "   TARGET_BUILD=$SET_TARGET_BUILD"
-	echo "   INSTALL_PATH=$SET_INSTALL_PATH"
-	echo "   QT_PATH=$QT_PATH"
-	echo "   SDK_ENVIROMENT_PATH=$SDK_ENVIROMENT_PATH"
+	echo "[Set Environments]"
+	echo "   PROJECT_NAME        = $SET_PROJECT_NAME"
+	echo "   PLATFORM            = $SET_PLATFORM"
+	echo "   TARGET_BUILD        = $SET_TARGET_BUILD"
+	echo "   INSTALL_PATH        = $SET_INSTALL_PATH"
+	echo "   QT_PATH             = $QT_PATH"
+	echo "   SDK_ENVIROMENT_PATH = $SDK_ENVIROMENT_PATH"
 	echo "==================================================================================================================="
 	echo
 }
@@ -99,7 +99,7 @@ function buildAll(){
 		CMD_TEXT="qmake CONFIG+=$1 TARGET_BUILD=$SET_TARGET_BUILD INSTALL_PATH=$SET_INSTALL_PATH PLATFORM=$SET_PLATFORM  $SET_PROJECT_NAME.pro -recursive"
 	fi
 
-	echo CMD_TEXT=$CMD_TEXT
+	echo "CMD_TEXT = $CMD_TEXT"
 	echo
 	echo "==================================================================================================================="
 
@@ -113,7 +113,7 @@ function buildAll(){
 	END_TIME=`date +%s`
 	ELAPSED_TIME=`expr $END_TIME - $START_TIME`
 
-	echo "[Check Compile Time]"
+	echo "[Compile Time]"
 	echo "   START   = $START_TIME"
 	echo "   END     = $END_TIME"
 	echo "   ELAPSED = $ELAPSED_TIME""s"""

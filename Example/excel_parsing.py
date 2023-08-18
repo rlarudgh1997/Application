@@ -11,7 +11,7 @@ from pandas import DataFrame
 # 하위 경로 import 방법 3가지
 # import source.def_functon as func
 # from source import def_functon as func
-from source.def_functon import func_name, func_name1, isFuntionName
+# from source.def_functon import func_name, func_name1, isFuntionName
 
 # from operator import length_hint
 
@@ -23,9 +23,39 @@ from source.def_functon import func_name, func_name1, isFuntionName
 
 
 # 파일명, 시트명
-filePath = "../Example/SOC_Gauge.xlsx"
-sheetName = ["Description", "Privates", "Telltales", "Constants", "Events", "Sounds", "Inters", "Outputs"]
+# filePath = "../Example/SOC_Gauge.xlsx"
+sheetName = list()
 sheetInfo = list()
+configInfo = dict()
+
+
+def readConfigSetting() :
+    # print(__file__)
+    # print(os.path.realpath(__file__))
+    # print(os.getcwd())
+    currentPath = os.path.dirname(os.path.realpath(__file__))
+    configFile = currentPath + "/Application.ini"
+
+    file = open(configFile, "r")
+
+    print("\n==================================================================================")
+    datas = file.readlines()
+    for data in datas :
+        config = data.split("=")
+        if len(config) == 2 :
+            # print(config)
+            key = config[0]
+            value = config[1].split("\n")
+            configInfo[key] = ""
+            if len(value) == 2 :
+                configInfo[key] = value[0]
+
+    readSheetName = configInfo["ConfigTypeSheetName"].split(", ")
+    for name in readSheetName :
+        sheetName.append(name)
+
+    file.close()
+
 
 
 
@@ -131,6 +161,12 @@ def readFromText(path, saveFilePath) :
         read.replace("ExcelSplit", "")
         # read.str.replace("ExcelSplit", "")
         # read.replace(" ", "")
+
+
+        if configInfo["ConfitTypeDeleteFileTC"] == "true" :
+            print("Delete File :", filePath)
+            os.remove(filePath)
+
         readData.append(read)
         index += 1
 
@@ -224,6 +260,8 @@ def main(argv) :
 
     print("Dir  :", os.path.isdir(pathDir), ", ", pathDir)
     print("File :", os.path.isfile(pathFile), ", ", pathFile)
+
+    readConfigSetting()
 
     if openState :
         print("File - Open !!!!!")

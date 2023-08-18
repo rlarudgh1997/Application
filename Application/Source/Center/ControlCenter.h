@@ -20,8 +20,8 @@ public:
 private:
     explicit ControlCenter();
     void updateSheetInfo(const int& propertyType, const QVariant& dirPath);
-    bool changeCellText(const QVariant& textInfo);
-    bool editCellInfo(const QVariant& cellInfo);
+    bool updateSheetTextInfo(const QVariant& textInfo);
+    bool updateSheetCellInfo(const QVariant& cellInfo);
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const int& type, const QVariant& filePath);
     bool checkPythonLibrary();

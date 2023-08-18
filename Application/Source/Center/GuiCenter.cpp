@@ -181,7 +181,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             qDebug() << sheetIndex << ". cellChanged :" << row << "," << column << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeChangeCellText,
+            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetTextInfo,
                             QVariant(QVariantList({sheetIndex, row, column, text})));
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
             mExcelSheet[sheetIndex]->resizeRowsToContents();
@@ -228,10 +228,10 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
             }
 
             if (selectMenuItem == MenuItemRight::RowInsert) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, 0,
+                createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo, QVariant(QVariantList({sheetIndex, 0,
                                                     rowStart, rowEnd, ivis::common::EditCellEnum::EditCellInfo::Insert})));
             } else if (selectMenuItem == MenuItemRight::RowDelete) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, 0,
+                createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo, QVariant(QVariantList({sheetIndex, 0,
                                                     rowStart, rowEnd, ivis::common::EditCellEnum::EditCellInfo::Delete})));
             } else {
                 if (((columnEnd == 1) && (columnStart < 4))) {
@@ -250,7 +250,7 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         mExcelCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
                     }
 
-                    createSignal(ivis::common::EventTypeEnum::EventTypeEditCell, QVariant(QVariantList({sheetIndex, columnStart,
+                    createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo, QVariant(QVariantList({sheetIndex, columnStart,
                                                     rowStart, rowEnd, editType})));
                 } else {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
