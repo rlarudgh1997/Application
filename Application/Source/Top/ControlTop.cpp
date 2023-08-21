@@ -195,7 +195,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "Edit - Paste";
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSettingConfig : {
+        case ivis::common::EventTypeEnum::EventTypeViewConfig : {
             QVariantList allConfig = QVariantList();
             for (const auto& config : ConfigSetting::instance().data()->allConfig()) {
                 QString content = QString();

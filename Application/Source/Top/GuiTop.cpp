@@ -28,260 +28,11 @@ GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
 }
 
 void GuiTop::drawDisplayDepth0() {
-    updateDisplay(true, ivis::common::PropertyTypeEnum::PropertyTypeVisible);
-
-    // =================================================================================================================
-    // FILE
-    // =================================================================================================================
-    if (true) {
-        mMenu[MainType::File] = mMainWindow->menuBar()->addMenu(STRING_FILE);
-        mToolBar[MainType::File] = mMainWindow->addToolBar(STRING_FILE);
-
-        QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
-                                                            QIcon(IAMGE_COPY)),
-                                                            STRING_NEW,
-                                                            this);
-        if (actionNew) {
-            actionNew->setShortcuts(QKeySequence::New);
-            actionNew->setStatusTip(STRING_NEW_TIP);
-            mMenu[MainType::File]->addAction(actionNew);
-            mToolBar[MainType::File]->addAction(actionNew);
-            connect(actionNew, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeFileNew, QVariant());
-            });
-        }
-
-        QAction *actionOpen = new QAction(QIcon::fromTheme("actionOpen",
-                                                            QIcon(IAMGE_OPEN)),
-                                                            STRING_OPEN,
-                                                            this);
-        if (actionOpen) {
-            actionOpen->setShortcuts(QKeySequence::Open);
-            actionOpen->setStatusTip(STRING_OPEN_TIP);
-            mMenu[MainType::File]->addAction(actionOpen);
-            mToolBar[MainType::File]->addAction(actionOpen);
-            connect(actionOpen, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeFileOpen, QVariant());
-            });
-        }
-
-        QAction *actionSave = new QAction(QIcon::fromTheme("actionSave",
-                                                            QIcon(IAMGE_SAVE)),
-                                                            STRING_SAVE,
-                                                            this);
-        if (actionSave) {
-            actionSave->setShortcuts(QKeySequence::Save);
-            actionSave->setStatusTip(STRING_SAVE_TIP);
-            mMenu[MainType::File]->addAction(actionSave);
-            mToolBar[MainType::File]->addAction(actionSave);
-            connect(actionSave, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
-            });
-        }
-
-        QAction *actionSaveAs = new QAction(QIcon::fromTheme("actionSaveAs"),
-                                                            STRING_SAVE_AS,
-                                                            this);
-        if (actionSaveAs) {
-            // actionSaveAs->setDisabled(true);
-            actionSaveAs->setShortcuts(QKeySequence::SaveAs);
-            actionSaveAs->setStatusTip(STRING_SAVE_AS_TIP);
-            mMenu[MainType::File]->addAction(actionSaveAs);
-            // mMenu[MainType::File]->setStyleSheet(QString("QMenu::item{background-color : red; color : blue;);}"));
-            // qDebug() << "StyelSheet :" << mMenu[MainType::File]->styleSheet();
-            // mToolBar[MainType::File]->addAction(actionSaveAs);
-            connect(actionSaveAs, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
-            });
-        }
-
-        mMenu[MainType::File]->addSeparator();
-        QAction *actionExit = new QAction(QIcon::fromTheme("actionExit"),
-                                                            STRING_SAVE_EXIT,
-                                                            this);
-        if (actionExit) {
-            actionExit->setShortcuts(QKeySequence::Quit);
-            actionExit->setStatusTip(STRING_SAVE_EXIT_TIP);
-            mMenu[MainType::File]->addAction(actionExit);
-            // mToolBar[MainType::File]->addAction(actionExit);
-            connect(actionExit, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
-            });
-        }
-    }
-
-    // =================================================================================================================
-    // EDIT
-    // =================================================================================================================
-    if (true) {
-        mMenu[MainType::Edit] = mMainWindow->menuBar()->addMenu(STRING_EDIT);
-        mToolBar[MainType::Edit] = mMainWindow->addToolBar(STRING_EDIT);
-
-#ifndef QT_NO_CLIPBOARD
-        QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
-                                                            QIcon(IAMGE_CUT)),
-                                                            STRING_CUT,
-                                                            this);
-        if (actionCut) {
-            actionCut->setShortcuts(QKeySequence::Cut);
-            actionCut->setStatusTip(STRING_CUT_TIP);
-            mMenu[MainType::Edit]->addAction(actionCut);
-            mToolBar[MainType::Edit]->addAction(actionCut);
-            connect(actionCut, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeEditCut, QVariant());
-            });
-        }
-
-        QAction *actionCopy = new QAction(QIcon::fromTheme("actionCopy",
-                                                            QIcon(IAMGE_COPY)),
-                                                            STRING_COPY,
-                                                            this);
-        if (actionCopy) {
-            actionCopy->setShortcuts(QKeySequence::Copy);
-            actionCopy->setStatusTip(STRING_COPY_TIP);
-            mMenu[MainType::Edit]->addAction(actionCopy);
-            mToolBar[MainType::Edit]->addAction(actionCopy);
-            connect(actionCopy, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeEditCopy, QVariant());
-            });
-        }
-
-        QAction *actionPaste = new QAction(QIcon::fromTheme("actionPaste",
-                                                            QIcon(IAMGE_PASTE)),
-                                                            STRING_PASTE,
-                                                            this);
-        if (actionPaste) {
-            actionPaste->setShortcuts(QKeySequence::Paste);
-            actionPaste->setStatusTip(STRING_PASTE_TIP);
-            mMenu[MainType::Edit]->addAction(actionPaste);
-            mToolBar[MainType::Edit]->addAction(actionPaste);
-            connect(actionPaste, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeEditPaste, QVariant());
-            });
-        }
-
-        mMainWindow->menuBar()->addSeparator();
-#endif
-    }
-
-    // =================================================================================================================
-    // Setting
-    // =================================================================================================================
-    if (true) {
-        mMenu[MainType::Setting] = mMainWindow->menuBar()->addMenu(STRING_SETTING);
-        mToolBar[MainType::Setting] = mMainWindow->addToolBar(STRING_SETTING);
-
-
-        QAction *actionConfig = new QAction(QIcon::fromTheme("actionConfig"),
-                                                            STRING_CONFIG,
-                                                            this);
-        if (actionConfig) {
-            actionConfig->setStatusTip(STRING_CONFIG_TIP);
-            mMenu[MainType::Setting]->addAction(actionConfig);
-            mToolBar[MainType::Setting]->addAction(actionConfig);
-            connect(actionConfig, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeSettingConfig, QVariant());
-            });
-        }
-
-        QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
-                                                            STRING_PATH,
-                                                            this);
-        if (actionDevPath) {
-            actionDevPath->setStatusTip(STRING_PATH_TIP);
-            mMenu[MainType::Setting]->addAction(actionDevPath);
-            mToolBar[MainType::Setting]->addAction(actionDevPath);
-            connect(actionDevPath, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
-            });
-        }
-
-        QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
-                                                            STRING_REPORT,
-                                                            this);
-        if (actionTestReport) {
-            actionTestReport->setStatusTip(STRING_REPORT_TIP);
-            mToolBar[MainType::Setting]->addAction(actionTestReport);
-            connect(actionTestReport, &QAction::triggered, this, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
-            });
-
-            QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(STRING_TEST_REPORT);
-            if (mSubMenu) {
-                QAction *actionTestResult = new QAction(QIcon::fromTheme("actionTestResult"),
-                                                                STRING_TEST_RESULT,
-                                                                this);
-                if (actionTestResult) {
-                    actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
-                    mSubMenu->addAction(actionTestResult);
-                    connect(actionTestResult, &QAction::triggered, [=]() {
-                        createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestResult, QVariant());
-                    });
-                }
-
-                QAction *actionTestCoverage = new QAction(QIcon::fromTheme("actionTestCoverage"),
-                                                                STRING_TEST_RESULT_COVERAGE,
-                                                                mSubMenu);
-                if (actionTestCoverage) {
-                    actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
-                    mSubMenu->addAction(actionTestCoverage);
-                    connect(actionTestCoverage, &QAction::triggered, [=]() {
-                        createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
-                    });
-                }
-            }
-        }
-
-        // TooBar - Push Button
-        // QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));
-        // if (buttonTestResult) {
-        //     buttonTestResult->setObjectName(QString("TestResult"));
-        //     mToolBar[MainType::Setting]->addWidget(buttonTestResult);
-        //     connect(buttonTestResult, &QPushButton::clicked, this, [=]() {
-        //         qDebug() << "Test Result";
-        //     });
-        // }
-        // QPushButton* buttonTestCoverage = new QPushButton(QString("TestCoverage"));
-        // if (buttonTestCoverage) {
-        //     buttonTestResult->setObjectName(QString("TestConverage"));
-        //     mToolBar[MainType::Setting]->addWidget(buttonTestCoverage);
-        //     connect(buttonTestCoverage, &QPushButton::clicked, this, [=]() {
-        //         qDebug() << "Test Coverage";
-        //     });
-        // }
-
-        mMainWindow->menuBar()->addSeparator();
-    }
-
-
-    // =================================================================================================================
-    // Help
-    // =================================================================================================================
-    if (true) {
-        mMenu[MainType::Help] = mMainWindow->menuBar()->addMenu(STRING_HELP);
-
-        QAction *actionAbout = new QAction(QIcon::fromTheme("actionAbout"),
-                                                            STRING_ABOUT,
-                                                            this);
-        if (actionAbout) {
-            actionAbout->setStatusTip(STRING_ABOUT_TIP);
-            mMenu[MainType::Help]->addAction(actionAbout);
-            connect(actionAbout, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeHelpAbout, QVariant());
-            });
-        }
-
-        QAction *actionAboutQt = new QAction(QIcon::fromTheme("actionAboutQt"),
-                                                            STRING_ABOUT_QT,
-                                                            this);
-        if (actionAboutQt) {
-            actionAboutQt->setStatusTip(STRING_ABOUT_QT_TIP);
-            mMenu[MainType::Help]->addAction(actionAboutQt);
-            connect(actionAboutQt, &QAction::triggered, [=]() {
-                createSignal(ivis::common::EventTypeEnum::EventTypeHelpAboutQt, QVariant());
-            });
-        }
-    }
+    drawMenuFile();
+    drawMenuEdit();
+    drawMenuView();
+    drawMenuSetting();
+    drawMenuHelp();
 }
 
 void GuiTop::drawDisplayDepth1() {
@@ -306,6 +57,276 @@ void GuiTop::updateDisplayVisible() {
         mMainWindow->hide();
     }
 }
+
+void GuiTop::drawMenuFile() {
+    mMenu[MainType::File] = mMainWindow->menuBar()->addMenu(STRING_FILE);
+    mToolBar[MainType::File] = mMainWindow->addToolBar(STRING_FILE);
+
+    QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
+                                                        QIcon(IAMGE_COPY)),
+                                                        STRING_NEW,
+                                                        this);
+    if (actionNew) {
+        actionNew->setShortcuts(QKeySequence::New);
+        actionNew->setStatusTip(STRING_NEW_TIP);
+        mMenu[MainType::File]->addAction(actionNew);
+        mToolBar[MainType::File]->addAction(actionNew);
+        connect(actionNew, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeFileNew, QVariant());
+        });
+    }
+
+    QAction *actionOpen = new QAction(QIcon::fromTheme("actionOpen",
+                                                        QIcon(IAMGE_OPEN)),
+                                                        STRING_OPEN,
+                                                        this);
+    if (actionOpen) {
+        actionOpen->setShortcuts(QKeySequence::Open);
+        actionOpen->setStatusTip(STRING_OPEN_TIP);
+        mMenu[MainType::File]->addAction(actionOpen);
+        mToolBar[MainType::File]->addAction(actionOpen);
+        connect(actionOpen, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeFileOpen, QVariant());
+        });
+    }
+
+    QAction *actionSave = new QAction(QIcon::fromTheme("actionSave",
+                                                        QIcon(IAMGE_SAVE)),
+                                                        STRING_SAVE,
+                                                        this);
+    if (actionSave) {
+        actionSave->setShortcuts(QKeySequence::Save);
+        actionSave->setStatusTip(STRING_SAVE_TIP);
+        mMenu[MainType::File]->addAction(actionSave);
+        mToolBar[MainType::File]->addAction(actionSave);
+        connect(actionSave, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
+        });
+    }
+
+    QAction *actionSaveAs = new QAction(QIcon::fromTheme("actionSaveAs"),
+                                                        STRING_SAVE_AS,
+                                                        this);
+    if (actionSaveAs) {
+        // actionSaveAs->setDisabled(true);
+        actionSaveAs->setShortcuts(QKeySequence::SaveAs);
+        actionSaveAs->setStatusTip(STRING_SAVE_AS_TIP);
+        mMenu[MainType::File]->addAction(actionSaveAs);
+        // mMenu[MainType::File]->setStyleSheet(QString("QMenu::item{background-color : red; color : blue;);}"));
+        // qDebug() << "StyelSheet :" << mMenu[MainType::File]->styleSheet();
+        // mToolBar[MainType::File]->addAction(actionSaveAs);
+        connect(actionSaveAs, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
+        });
+    }
+
+    mMenu[MainType::File]->addSeparator();
+    QAction *actionExit = new QAction(QIcon::fromTheme("actionExit"),
+                                                        STRING_SAVE_EXIT,
+                                                        this);
+    if (actionExit) {
+        actionExit->setShortcuts(QKeySequence::Quit);
+        actionExit->setStatusTip(STRING_SAVE_EXIT_TIP);
+        mMenu[MainType::File]->addAction(actionExit);
+        // mToolBar[MainType::File]->addAction(actionExit);
+        connect(actionExit, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
+        });
+    }
+}
+
+void GuiTop::drawMenuEdit() {
+    mMenu[MainType::Edit] = mMainWindow->menuBar()->addMenu(STRING_EDIT);
+    mToolBar[MainType::Edit] = mMainWindow->addToolBar(STRING_EDIT);
+
+#ifndef QT_NO_CLIPBOARD
+    QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
+                                                        QIcon(IAMGE_CUT)),
+                                                        STRING_CUT,
+                                                        this);
+    if (actionCut) {
+        actionCut->setShortcuts(QKeySequence::Cut);
+        actionCut->setStatusTip(STRING_CUT_TIP);
+        mMenu[MainType::Edit]->addAction(actionCut);
+        mToolBar[MainType::Edit]->addAction(actionCut);
+        connect(actionCut, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCut, QVariant());
+        });
+    }
+
+    QAction *actionCopy = new QAction(QIcon::fromTheme("actionCopy",
+                                                        QIcon(IAMGE_COPY)),
+                                                        STRING_COPY,
+                                                        this);
+    if (actionCopy) {
+        actionCopy->setShortcuts(QKeySequence::Copy);
+        actionCopy->setStatusTip(STRING_COPY_TIP);
+        mMenu[MainType::Edit]->addAction(actionCopy);
+        mToolBar[MainType::Edit]->addAction(actionCopy);
+        connect(actionCopy, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCopy, QVariant());
+        });
+    }
+
+    QAction *actionPaste = new QAction(QIcon::fromTheme("actionPaste",
+                                                        QIcon(IAMGE_PASTE)),
+                                                        STRING_PASTE,
+                                                        this);
+    if (actionPaste) {
+        actionPaste->setShortcuts(QKeySequence::Paste);
+        actionPaste->setStatusTip(STRING_PASTE_TIP);
+        mMenu[MainType::Edit]->addAction(actionPaste);
+        mToolBar[MainType::Edit]->addAction(actionPaste);
+        connect(actionPaste, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditPaste, QVariant());
+        });
+    }
+
+    mMainWindow->menuBar()->addSeparator();
+#endif
+}
+
+
+void GuiTop::drawMenuView() {
+    mMenu[MainType::View] = mMainWindow->menuBar()->addMenu(STRING_VIEW);
+    mToolBar[MainType::View] = mMainWindow->addToolBar(STRING_VIEW);
+
+    QAction *actionConfig = new QAction(QIcon::fromTheme("actionConfig"),
+                                                        STRING_CONFIG,
+                                                        this);
+    if (actionConfig) {
+        actionConfig->setStatusTip(STRING_CONFIG_TIP);
+        mMenu[MainType::View]->addAction(actionConfig);
+        mToolBar[MainType::View]->addAction(actionConfig);
+        connect(actionConfig, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeViewConfig, QVariant());
+        });
+    }
+
+    QAction *actionSignal = new QAction(QIcon::fromTheme("actionSignal"),
+                                                        STRING_SIGNAL,
+                                                        this);
+    if (actionSignal) {
+        actionSignal->setStatusTip(STRING_SIGNAL_TIP);
+        mMenu[MainType::View]->addAction(actionSignal);
+        mToolBar[MainType::View]->addAction(actionSignal);
+        connect(actionSignal, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeViewSignal, QVariant());
+        });
+    }
+
+    QAction *actionPython = new QAction(QIcon::fromTheme("actionPython"),
+                                                        STRING_PYTHON,
+                                                        this);
+    if (actionPython) {
+        actionPython->setStatusTip(STRING_PYTHON_TIP);
+        mMenu[MainType::View]->addAction(actionPython);
+        mToolBar[MainType::View]->addAction(actionPython);
+        connect(actionPython, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeViewPythonLib, QVariant());
+        });
+    }
+}
+
+void GuiTop::drawMenuSetting() {
+    mMenu[MainType::Setting] = mMainWindow->menuBar()->addMenu(STRING_SETTING);
+    mToolBar[MainType::Setting] = mMainWindow->addToolBar(STRING_SETTING);
+
+    QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
+                                                        STRING_PATH,
+                                                        this);
+    if (actionDevPath) {
+        actionDevPath->setStatusTip(STRING_PATH_TIP);
+        mMenu[MainType::Setting]->addAction(actionDevPath);
+        mToolBar[MainType::Setting]->addAction(actionDevPath);
+        connect(actionDevPath, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
+        });
+    }
+
+    QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
+                                                        STRING_REPORT,
+                                                        this);
+    if (actionTestReport) {
+        actionTestReport->setStatusTip(STRING_REPORT_TIP);
+        mToolBar[MainType::Setting]->addAction(actionTestReport);
+        connect(actionTestReport, &QAction::triggered, this, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
+        });
+
+        QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(STRING_TEST_REPORT);
+        if (mSubMenu) {
+            QAction *actionTestResult = new QAction(QIcon::fromTheme("actionTestResult"),
+                                                            STRING_TEST_RESULT,
+                                                            this);
+            if (actionTestResult) {
+                actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
+                mSubMenu->addAction(actionTestResult);
+                connect(actionTestResult, &QAction::triggered, [=]() {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestResult, QVariant());
+                });
+            }
+
+            QAction *actionTestCoverage = new QAction(QIcon::fromTheme("actionTestCoverage"),
+                                                            STRING_TEST_RESULT_COVERAGE,
+                                                            mSubMenu);
+            if (actionTestCoverage) {
+                actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
+                mSubMenu->addAction(actionTestCoverage);
+                connect(actionTestCoverage, &QAction::triggered, [=]() {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
+                });
+            }
+        }
+    }
+
+    // TooBar - Push Button
+    // QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));
+    // if (buttonTestResult) {
+    //     buttonTestResult->setObjectName(QString("TestResult"));
+    //     mToolBar[MainType::Setting]->addWidget(buttonTestResult);
+    //     connect(buttonTestResult, &QPushButton::clicked, this, [=]() {
+    //         qDebug() << "Test Result";
+    //     });
+    // }
+    // QPushButton* buttonTestCoverage = new QPushButton(QString("TestCoverage"));
+    // if (buttonTestCoverage) {
+    //     buttonTestResult->setObjectName(QString("TestConverage"));
+    //     mToolBar[MainType::Setting]->addWidget(buttonTestCoverage);
+    //     connect(buttonTestCoverage, &QPushButton::clicked, this, [=]() {
+    //         qDebug() << "Test Coverage";
+    //     });
+    // }
+
+    mMainWindow->menuBar()->addSeparator();
+}
+
+void GuiTop::drawMenuHelp() {
+    mMenu[MainType::Help] = mMainWindow->menuBar()->addMenu(STRING_HELP);
+
+    QAction *actionAbout = new QAction(QIcon::fromTheme("actionAbout"),
+                                                        STRING_ABOUT,
+                                                        this);
+    if (actionAbout) {
+        actionAbout->setStatusTip(STRING_ABOUT_TIP);
+        mMenu[MainType::Help]->addAction(actionAbout);
+        connect(actionAbout, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeHelpAbout, QVariant());
+        });
+    }
+
+    QAction *actionAboutQt = new QAction(QIcon::fromTheme("actionAboutQt"),
+                                                        STRING_ABOUT_QT,
+                                                        this);
+    if (actionAboutQt) {
+        actionAboutQt->setStatusTip(STRING_ABOUT_QT_TIP);
+        mMenu[MainType::Help]->addAction(actionAboutQt);
+        connect(actionAboutQt, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeHelpAboutQt, QVariant());
+        });
+    }
+}
+
 
 void GuiTop::updateDisplayAllConfig() {
     static QTextEdit* configContent = nullptr;

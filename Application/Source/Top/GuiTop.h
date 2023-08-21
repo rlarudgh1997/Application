@@ -15,6 +15,7 @@ private:
     enum class MainType {
         File = 0,
         Edit,
+        View,
         Setting,
         Help,
         Max,
@@ -35,6 +36,11 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
+    void drawMenuFile();
+    void drawMenuEdit();
+    void drawMenuView();
+    void drawMenuSetting();
+    void drawMenuHelp();
     void updateDisplayAllConfig();
     void updateDisplayDefaultPath();
     void updateDisplayTempWidget(const int& type);
