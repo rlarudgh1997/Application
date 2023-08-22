@@ -24,7 +24,7 @@ enum class PopupType {
     Exit,
     Open,
     Save,
-    DefaultPath,
+    SettingPath,
     OpenFail,
     NoInstallLib,
     NowInstalling,
@@ -84,10 +84,10 @@ public:
                 button = drawPopupSave(handler);
                 break;
             }
-            case PopupType::DefaultPath : {
+            case PopupType::SettingPath : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
-                    button = drawPopupDevPath(handler, infoData.at(0).toString(), infoData.at(1).toString());
+                    button = drawPopupSettingPath(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
@@ -202,19 +202,19 @@ private:
         }
         return button;
     }
-    static PopupButton drawPopupDevPath(AbstractHandler* handler, const QString& title, const QString& path) {
+    static PopupButton drawPopupSettingPath(AbstractHandler* handler, const QString& title, const QString& path) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             QString showPath = path;
             if (showPath.size() == 0) {
                 showPath = QApplication::applicationDirPath();
             }
-            QString defaultPath = QFileDialog::getExistingDirectory(handler->getScreen(),
+            QString path = QFileDialog::getExistingDirectory(handler->getScreen(),
                                             title,
                                             showPath,
                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-            if (defaultPath.size() > 0) {
-                setPopupData(defaultPath);
+            if (path.size() > 0) {
+                setPopupData(path);
                 button = PopupButton::OK;
             }
         }

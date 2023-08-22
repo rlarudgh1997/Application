@@ -10,7 +10,7 @@
 // class AbstractHandler;
 
 
-
+#include <QObject>
 class AbstractControl : public QObject {
     Q_OBJECT
 

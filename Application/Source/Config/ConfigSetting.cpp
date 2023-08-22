@@ -148,7 +148,7 @@ QMap<int, QPair<QString, QVariant>> ConfigSetting::allConfig() {
         }
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
-        allConfig[allConfig.size()] = QPair<QString, QVariant>(configName, readConfig(configType));
+        allConfig[configType] = QPair<QString, QVariant>(configName, readConfig(configType));
     }
     // qDebug() << "allConfig :" << allConfig;
     return allConfig;

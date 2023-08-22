@@ -13,8 +13,7 @@ namespace common {
 #define SCREEN_MINIMUM_HEIGHT            480
 #define SCREEN_MAXIMUM_WIDTH             2100
 #define SCREEN_MAXIMUM_HEIGHT            1300
-
-
+#define SCREEN_MARGIN_HEIGHT             120
 
 #define PROPETRY_START_COMMON            0
 #define PROPETRY_START_NORMAL            1000
@@ -85,7 +84,7 @@ public:
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
-        PropertyTypeAllConfigInfo,
+        PropertyTypeConfigInfo,
         PropertyTypeDefaultPath,
         PropertyTypeSignalListAll,  // SFC + VSM
         PropertyTypeSignalListSFC,
@@ -132,9 +131,11 @@ public:
         EventTypeEditCopy,
         EventTypeEditPaste,
         EventTypeViewConfig,
+        EventTypeChangedConfig,
         EventTypeViewSignal,
         EventTypeViewPythonLib,
         EventTypeSettingDevPath,
+        EventTypeSettingNodePath,
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,

@@ -54,8 +54,9 @@ void ControlTop::initBaseData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
     ivis::common::CheckTimer checkTimer;
-    QStringList sfcList = ivis::common::FileInfo::readFile(defaultPath + "/NodeAddressSFC.info");
-    QStringList vsmList = ivis::common::FileInfo::readFile(defaultPath + "/NodeAddressVSM.info");
+    QString nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
+    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath + "/NodeAddressSFC.info");
+    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath + "/NodeAddressVSM.info");
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
@@ -197,42 +198,44 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeViewConfig : {
             QVariantList allConfig = QVariantList();
-            for (const auto& config : ConfigSetting::instance().data()->allConfig()) {
-                QString content = QString();
-                QString name = config.first;
-                QVariant value = config.second;
-                QVariant::Type type = value.type();
-                if ((type == QVariant::Type::List) || (type == QVariant::Type::StringList) || (type == QVariant::Type::Rect)) {
-                    QString temp = QString();
-                    if (type == QVariant::Type::List) {
-                        foreach(const auto& v, value.toList()) {
-                            temp.append(QString("%1, ").arg(v.toString()));
-                        }
-                    } else if (type == QVariant::Type::StringList) {
-                        foreach(const auto& v, value.toStringList()) {
-                            temp.append(QString("%1, ").arg(v));
-                        }
-                    } else {
-                        QRect rect = value.toRect();
-                        temp.append(QString("%1, %2, %3, %4, ").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
-                    }
-                    temp.resize(temp.size() - 2);
-                    content.append(QString("\t%1 = [%2]\n\n").arg(name).arg(temp));
-                } else {
-                    content.append(QString("\t%1 = %2\n\n").arg(name).arg(value.toString()));
-                }
-                allConfig.append(content);
+            QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
+            while (iter.hasNext()) {
+                iter.next();
+                allConfig.append(QVariant(QVariantList({iter.key(), iter.value().first, iter.value().second})));
             }
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllConfigInfo, QVariant(allConfig), true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfig), true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeViewSignal : {
+            QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+            QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
+            QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeChangedConfig : {
+            QVariantList configInfo = value.toList();
+            if (configInfo.size() == 2) {
+                ConfigSetting::instance().data()->writeConfig(configInfo.at(0).toInt(), configInfo.at(1));
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingDevPath : {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
             QVariant popupData = QVariant();
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DefaultPath, isHandler(), popupData,
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
                                     QVariantList({STRING_DEFAULT_PATH, defaultPath})) == ivis::common::PopupButton::OK) {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, popupData);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, popupData);
+            }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSettingNodePath : {
+            QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+            QVariant popupData = QVariant();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
+                                    QVariantList({STRING_NODE_PATH, nodeAddressPath})) == ivis::common::PopupButton::OK) {
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeNodeAddressPath, popupData);
             }
             break;
         }

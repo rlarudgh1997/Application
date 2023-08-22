@@ -53,11 +53,15 @@ message("INSTALL_PATH=$$INSTALL_PATH")
 !isEmpty(INSTALL_PATH) {
     target.path = $$INSTALL_PATH
     python.path = $$INSTALL_PATH
-    python.files = $$PWD/../Example/excel_parsing.py
+    python.files = $$PWD/../Data/excel_parsing.py
+    node.path = $$INSTALL_PATH
+    node.files = $$PWD/../Data/NodeAddressSFC.info $$PWD/../Data/NodeAddressVSM.info
 } else {
-	target.path = $$OUT_PWD
+    target.path = $$OUT_PWD
     python.path = $$OUT_PWD
-    python.files = $$PWD/../Example/excel_parsing.py
+    python.files = $$PWD/../Data/excel_parsing.py
+    node.path = $$OUT_PWD
+    node.files = $$PWD/../Data/NodeAddressSFC.info $$PWD/../Data/NodeAddressVSM.info
 }
 
 
@@ -65,9 +69,12 @@ message("DEFINES=$$DEFINES")
 message("target.path=$${target.path}")
 message("python.path=$${python.path}")
 message("python.files=$${python.files}")
+message("node.path=$${node.path}")
+message("node.files=$${node.files}")
 
 !isEmpty(target.path): INSTALLS += target
 !isEmpty(python.path): INSTALLS += python
+!isEmpty(node.path): INSTALLS += node
 
 message("INSTALLS=$$INSTALLS")
 message("PWD=$$PWD")

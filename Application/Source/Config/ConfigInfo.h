@@ -23,6 +23,7 @@ public:
         // General
         ConfigTypeScreenInfo,
         ConfigTypeDefaultPath,
+        ConfigTypeNodeAddressPath,
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
@@ -70,6 +71,8 @@ private:
                                                                         SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath",
                                                         QVariant(QApplication::applicationDirPath() + QString("/SFC")));
+        mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>("ConfigTypeNodeAddressPath",
+                                                        QVariant(QApplication::applicationDirPath()));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName",
                                                         QVariant(QVariantList({"Description", "Privates", "Telltales",
@@ -86,7 +89,7 @@ private:
 
         // File
         mConfigInfoData[ConfitTypeLastFileInfo] = QPair<QString, QVariant>("ConfitTypeLastFileInfo", QVariant(""));
-        mConfigInfoData[ConfitTypeDeleteFileTC] = QPair<QString, QVariant>("ConfitTypeDeleteFileTC", QVariant(false));
+        mConfigInfoData[ConfitTypeDeleteFileTC] = QPair<QString, QVariant>("ConfitTypeDeleteFileTC", QVariant(true));
 
 
 

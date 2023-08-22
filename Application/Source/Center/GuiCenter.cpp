@@ -250,8 +250,8 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
                         mExcelCellInfo[sheetIndex].append(CellInfo(rowStart, columnStart, rowEnd));
                     }
 
-                    createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo, QVariant(QVariantList({sheetIndex, columnStart,
-                                                    rowStart, rowEnd, editType})));
+                    createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo,
+                                                QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd, editType})));
                 } else {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
                 }

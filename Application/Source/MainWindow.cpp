@@ -12,13 +12,13 @@
 
 MainWindow::MainWindow() {
     qDebug() << "================================================================================================";
-    qDebug() << "- Application - Path :" << QApplication::applicationDirPath().toLatin1().data();
-    qDebug() << "- QT_VERSION :" << QT_VERSION_STR;
+    qDebug() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
+    qDebug() << "QT_VERSION  :" << QT_VERSION_STR;
     ivis::common::CheckTimer checkTimer;
 
     ConfigSetting::instance().data();
     mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-    qDebug() << "- ScreenInfo :" << mScreenInfo << "\n\n";
+    qDebug() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
     checkTimer.check("ConfigSetting");
 
     this->setGeometry(mScreenInfo);
