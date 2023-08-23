@@ -20,7 +20,7 @@ public:
     void sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue);
     void keyEvent(const int& inputType, QKeyEvent* keyEvent);
     void mouseEvent(const int& inputType, const int& inputValue);
-    void resizeEvent(QResizeEvent* resizeEvent);
+    void resizeEvent(QResizeEvent& resizeEvent);
     void exitProgram();
 
 private:

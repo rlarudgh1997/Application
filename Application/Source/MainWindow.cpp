@@ -90,8 +90,8 @@ void MainWindow::moveEvent(QMoveEvent* moveEvent) {
 }
 
 void MainWindow::resizeEvent(QResizeEvent* resizeEvent) {
-    ScreenInfo::instance().data()->resizeEvent(resizeEvent);
-    ControlManager::instance().data()->resizeEvent(resizeEvent);
+    ScreenInfo::instance().data()->resizeScreenInfo(*resizeEvent);
+    ControlManager::instance().data()->resizeEvent(*resizeEvent);
 
     mScreenInfo = QRect(mScreenInfo.x(), mScreenInfo.y(), resizeEvent->size().width(), resizeEvent->size().height());
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeScreenInfo, mScreenInfo);

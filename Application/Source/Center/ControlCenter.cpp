@@ -42,7 +42,8 @@ void ControlCenter::initControl(const int& currentMode) {
 void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
@@ -51,6 +52,8 @@ void ControlCenter::initBaseData() {
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, 0);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, 0);
+
+    updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
 }
 
 void ControlCenter::resetControl(const bool& reset) {
@@ -525,11 +528,12 @@ bool ControlCenter::checkPythonLibrary() {
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
-    Q_UNUSED(type)
-    Q_UNUSED(value)
-    // qDebug() << "ControlCenter::slotConfigChanged() ->" << type << "," << value;
+    // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
     // switch (type) {
-    //     case ConfigInfo::ConfigTypeDefaultPath : {
+    //     case ConfigInfo::ConfigTypeScreenInfo : {
+    //         QRect screenInfo = value.toRect();
+    //         QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
+    //         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
     //         break;
     //     }
     //     default : {

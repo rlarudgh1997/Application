@@ -36,7 +36,6 @@ private:
     virtual void drawDisplayDepth0() = 0;
     virtual void drawDisplayDepth1() = 0;
     virtual void drawDisplayDepth2() = 0;
-    virtual void updateDisplay(const bool& first, const int& type = 0) = 0;
     virtual void updateDisplaySize() = 0;
     virtual void updateDisplayVisible() = 0;
 

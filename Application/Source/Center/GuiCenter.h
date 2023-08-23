@@ -52,7 +52,6 @@ private:
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
     virtual void drawDisplayDepth2();
-    virtual void updateDisplay(const bool& first, const int& type = 0);
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
@@ -61,11 +60,10 @@ private:
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
-    void slotCellTextChanged(int row, int column);
-    void slotMenuRightSelected(const QPoint &pos);
 
 
 private:
+    QWidget* mMainView = nullptr;
     QTabWidget* mExcelView = nullptr;
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();

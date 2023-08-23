@@ -80,9 +80,9 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
 void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
 }
 
-void ControlManager::resizeEvent(QResizeEvent* resizeEvent) {
+void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
 #if defined(USE_RESIZE_SIGNAL)
-    setScreenSize(QSize(resizeEvent->size().width(), resizeEvent->size().height()));
+    setScreenSize(QSize(resizeEvent.size().width(), resizeEvent.size().height()));
     // connect(this, &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
     //     qDebug() << "ControlManager::ScreeSize:" << screenSize;
     // });

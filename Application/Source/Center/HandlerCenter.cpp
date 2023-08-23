@@ -26,7 +26,8 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                 QVariant(QSize(0,
                                                                                                         SCREEN_MARGIN_HEIGHT)));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                              QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(true));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible,                        QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
 
 

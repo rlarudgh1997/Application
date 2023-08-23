@@ -19,6 +19,7 @@ QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
 }
 
 GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
+    mMainView = new QWidget(isHandler()->getScreen());
     mExcelView = new QTabWidget(isHandler()->getScreen());
     updateDisplaySize();
 
@@ -38,7 +39,7 @@ GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
 }
 
 void GuiCenter::drawDisplayDepth0() {
-    updateDisplay(true, ivis::common::PropertyTypeEnum::PropertyTypeVisible);
+    updateDisplayVisible();
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -50,9 +51,9 @@ void GuiCenter::drawDisplayDepth2() {
 }
 
 void GuiCenter::updateDisplaySize() {
-    QRect rect = isHandler()->getScreen()->geometry();
     QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     QSize margin = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
+    QRect rect = isHandler()->getScreen()->geometry();
 
     if (margin.width() > 0) {
         rect.setX(margin.width());
@@ -62,12 +63,18 @@ void GuiCenter::updateDisplaySize() {
         rect.setY(margin.height());
         rect.setHeight(size.height() - margin.height());
     }
-
+    mMainView->setGeometry(rect);
     mExcelView->setGeometry(rect);
 }
 
 void GuiCenter::updateDisplayVisible() {
     if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
+        mMainView->show();
+    } else {
+        mMainView->hide();
+    }
+
+    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible).toBool()) {
         mExcelView->show();
     } else {
         mExcelView->hide();
@@ -273,39 +280,28 @@ void GuiCenter::updateDisplaySheetInfo(const int& type) {
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
-void GuiCenter::updateDisplay(const bool& first, const int& type) {
-    if (type == ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize) {
-        updateDisplaySize();
-    } else if (type == ivis::common::PropertyTypeEnum::PropertyTypeVisible) {
-        updateDisplayVisible();
-    } else if ((type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew)
-        || (type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)) {
-        updateDisplaySheetInfo(type);
-    } else {
-    }
-}
-
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
             drawDisplay(value);
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize :
+        case ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize : {
+            updateDisplaySize();
+            break;
+        }
         case ivis::common::PropertyTypeEnum::PropertyTypeVisible :
+        case ivis::common::PropertyTypeEnum::PropertyTypeSubVisible : {
+            updateDisplayVisible();
+            break;
+        }
         case ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew :
         case ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen : {
-            updateDisplay(false, type);
+            updateDisplaySheetInfo(type);
             break;
         }
         default : {
             break;
         }
     }
-}
-
-void GuiCenter::slotCellTextChanged(int row, int column) {
-}
-
-void GuiCenter::slotMenuRightSelected(const QPoint &pos) {
 }

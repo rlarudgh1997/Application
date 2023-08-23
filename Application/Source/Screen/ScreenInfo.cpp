@@ -130,17 +130,12 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
     return result;
 }
 
-void ScreenInfo::resizeEvent(QResizeEvent * resizeEvent) {
-    // qDebug() << "\n\tScreenInfo::resizeEvent :" << resizeEvent->oldSize() << " -> " << resizeEvent->size();
+void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
     foreach(const auto& widget, mSubScreens) {
-        widget->setGeometry(0, 0, resizeEvent->size().width(), resizeEvent->size().height());
+        widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
     }
     if (mRootScreen) {
-        // QRect rootScrren = mRootScreen->geometry();
-        // rootScrren.setWidth(resizeEvent->size().width());
-        // rootScrren.setHeight(resizeEvent->size().height());
-        // mRootScreen->setGeometry(rootScrren);
-        mRootScreen->resize(resizeEvent->size().width(), resizeEvent->size().height());
+        mRootScreen->resize(resizeEvent.size().width(), resizeEvent.size().height());
     }
 }
 

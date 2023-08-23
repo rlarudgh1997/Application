@@ -27,7 +27,7 @@ public:
     Q_INVOKABLE void captureScreen(const QRect& rect = QRect());
     bool updateLanguage(const int& changeLanguage, QString languageFileName = QString());
     Q_INVOKABLE void loadComplete(const int& displayType);
-    void resizeEvent(QResizeEvent * resizeEvent);
+    void resizeScreenInfo(QResizeEvent& resizeEvent);
 
 
 private:

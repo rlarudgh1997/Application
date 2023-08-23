@@ -13,7 +13,7 @@ namespace common {
 #define SCREEN_MINIMUM_HEIGHT            480
 #define SCREEN_MAXIMUM_WIDTH             2100
 #define SCREEN_MAXIMUM_HEIGHT            1300
-#define SCREEN_MARGIN_HEIGHT             120
+#define SCREEN_MARGIN_HEIGHT             60
 
 #define PROPETRY_START_COMMON            0
 #define PROPETRY_START_NORMAL            1000
@@ -81,6 +81,7 @@ public:
         PropertyTypeDisplaySizeMargin,
         PropertyTypeMode,
         PropertyTypeVisible,
+        PropertyTypeSubVisible,
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
