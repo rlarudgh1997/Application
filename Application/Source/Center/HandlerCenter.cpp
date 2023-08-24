@@ -14,7 +14,7 @@ QSharedPointer<HandlerCenter>& HandlerCenter::instance() {
     return gHandler;
 }
 
-HandlerCenter::HandlerCenter() : AbstractHandler(ivis::common::ScreenEnum::DisplayTypeTop, QString("HandlerCenter"), true) {
+HandlerCenter::HandlerCenter() : AbstractHandler(ivis::common::ScreenEnum::DisplayTypeCenter, QString("HandlerCenter")) {
 #if defined(USE_GUI_MODULE)
     GuiCenter::instance(this);
 #endif
@@ -27,30 +27,14 @@ void HandlerCenter::initPropertyInfo() {
                                                                                                         SCREEN_MARGIN_HEIGHT)));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                              QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(true));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible,                        QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
 
 
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,               QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet,                   QVariant(false));
-
-
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,             QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates,                QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoTelltales,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoConstants,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoEvents,                  QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoSounds,                  QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters,                  QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoOutputs,                 QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved1,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved2,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved3,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved4,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved5,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved6,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved7,               QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo,                        QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
+    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC,                     QVariant(""));
+    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM,                     QVariant(""));
+    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListToMicom,                 QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

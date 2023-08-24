@@ -7,14 +7,8 @@
 #include <QKeySequence>
 #include <QLineEdit>
 #include <QCompleter>
-#include <QStringListModel>
+#include <QPushButton>
 
-// #include <QTextEdit>
-// #include <QStandardItemModel>
-// #include <QStandardItem>
-// #include <QListWidget>
-// #include <QVBoxLayout>
-// #include <QStyledItemDelegate>
 
 
 
@@ -27,9 +21,8 @@ QSharedPointer<GuiTop>& GuiTop::instance(AbstractHandler* handler) {
 }
 
 GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
-    mMainWindow = new QMainWindow();    // 부팅시 윈도우창 만들기
-    mMainWindow->setParent(isHandler()->getScreen());
-    mView = new QStackedWidget(isHandler()->getScreen());
+    mMainView = new QMainWindow();
+    mMainView->setParent(isHandler()->getScreen());    // 부팅시 윈도우창 만들기
     updateDisplaySize();
 }
 
@@ -52,36 +45,29 @@ void GuiTop::updateDisplaySize() {
     QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     QSize margin = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
     QRect rect = isHandler()->getScreen()->geometry();
-    mMainWindow->setGeometry(rect);
 
-    if (margin.width() > 0) {
+    if (margin.width() != 0) {
         rect.setX(margin.width());
         rect.setWidth(size.width() - margin.width());
     }
-    if (margin.height() > 0) {
+    if (margin.height() != 0) {
         rect.setY(margin.height());
         rect.setHeight(size.height() - margin.height());
     }
-    mView->setGeometry(rect);
+    mMainView->setGeometry(rect);
 }
 
 void GuiTop::updateDisplayVisible() {
     if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        mMainWindow->show();
+        mMainView->show();
     } else {
-        mMainWindow->hide();
-    }
-
-    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible).toBool()) {
-        mView->show();
-    } else {
-        mView->hide();
+        mMainView->hide();
     }
 }
 
 void GuiTop::drawMenuFile() {
-    mMenu[MainType::File] = mMainWindow->menuBar()->addMenu(STRING_FILE);
-    mToolBar[MainType::File] = mMainWindow->addToolBar(STRING_FILE);
+    mMenu[MainType::File] = mMainView->menuBar()->addMenu(STRING_FILE);
+    mToolBar[MainType::File] = mMainView->addToolBar(STRING_FILE);
 
     QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
                                                         QIcon(IAMGE_COPY)),
@@ -157,8 +143,8 @@ void GuiTop::drawMenuFile() {
 }
 
 void GuiTop::drawMenuEdit() {
-    mMenu[MainType::Edit] = mMainWindow->menuBar()->addMenu(STRING_EDIT);
-    mToolBar[MainType::Edit] = mMainWindow->addToolBar(STRING_EDIT);
+    mMenu[MainType::Edit] = mMainView->menuBar()->addMenu(STRING_EDIT);
+    mToolBar[MainType::Edit] = mMainView->addToolBar(STRING_EDIT);
 
 #ifndef QT_NO_CLIPBOARD
     QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
@@ -203,14 +189,14 @@ void GuiTop::drawMenuEdit() {
         });
     }
 
-    mMainWindow->menuBar()->addSeparator();
+    mMainView->menuBar()->addSeparator();
 #endif
 }
 
 
 void GuiTop::drawMenuView() {
-    mMenu[MainType::View] = mMainWindow->menuBar()->addMenu(STRING_VIEW);
-    mToolBar[MainType::View] = mMainWindow->addToolBar(STRING_VIEW);
+    mMenu[MainType::View] = mMainView->menuBar()->addMenu(STRING_VIEW);
+    mToolBar[MainType::View] = mMainView->addToolBar(STRING_VIEW);
 
     QAction *actionConfig = new QAction(QIcon::fromTheme("actionConfig"),
                                                         STRING_CONFIG,
@@ -250,8 +236,8 @@ void GuiTop::drawMenuView() {
 }
 
 void GuiTop::drawMenuSetting() {
-    mMenu[MainType::Setting] = mMainWindow->menuBar()->addMenu(STRING_SETTING);
-    mToolBar[MainType::Setting] = mMainWindow->addToolBar(STRING_SETTING);
+    mMenu[MainType::Setting] = mMainView->menuBar()->addMenu(STRING_SETTING);
+    mToolBar[MainType::Setting] = mMainView->addToolBar(STRING_SETTING);
 
     QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
                                                         STRING_DEFAULT_PATH,
@@ -331,11 +317,11 @@ void GuiTop::drawMenuSetting() {
     //     });
     // }
 
-    mMainWindow->menuBar()->addSeparator();
+    mMainView->menuBar()->addSeparator();
 }
 
 void GuiTop::drawMenuHelp() {
-    mMenu[MainType::Help] = mMainWindow->menuBar()->addMenu(STRING_HELP);
+    mMenu[MainType::Help] = mMainView->menuBar()->addMenu(STRING_HELP);
 
     QAction *actionAbout = new QAction(QIcon::fromTheme("actionAbout"),
                                                         STRING_ABOUT,
@@ -361,9 +347,11 @@ void GuiTop::drawMenuHelp() {
 }
 
 void GuiTop::drawMenuEtc() {
+    updateDisplayDefaultPath();
+
     static QPushButton* lastFile = nullptr;
     if (lastFile == nullptr) {
-        lastFile = new QPushButton(mMainWindow);
+        lastFile = new QPushButton(mMainView);
         lastFile->setGeometry(900, 25, 50, 30);
         lastFile->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -376,7 +364,7 @@ void GuiTop::drawMenuEtc() {
 
     static QPushButton* excelOpen = nullptr;
     if (excelOpen == nullptr) {
-        excelOpen = new QPushButton(mMainWindow);
+        excelOpen = new QPushButton(mMainView);
         excelOpen->setGeometry(960, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -405,245 +393,6 @@ void GuiTop::updateDisplayDefaultPath() {
     defaultPath->setText(path);
 }
 
-void GuiTop::updateDisplayConfigInfo() {
-    qDebug() << "GuiTop::updateDisplayConfigInfo() -> ConfigInfo :" << mConfigInfo.size();
-    mView->setCurrentIndex(0);
-    mView->show();
-
-    if (mConfigWidget == nullptr) {
-        mConfigWidget = new QWidget(mView);
-        mConfigWidget->setGeometry(mMainWindow->geometry());
-        mConfigWidget->show();
-    } else {
-        if (mNodeAddressList) {
-            mNodeAddressList->hide();
-        }
-        mConfigWidget->show();
-        return;
-    }
-
-    QVariantList allConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    if (allConfig.size() == 0) {
-        foreach(const auto& info, mConfigInfo) {
-            info->clear();
-        }
-        mConfigInfo.clear();
-        return;
-    }
-
-    if (mConfigHideButton == nullptr) {
-        QRect rect = mConfigWidget->rect();
-        mConfigHideButton = new QPushButton(mConfigWidget);
-        rect.setX(rect.width() - 50);
-        rect.setY(0);
-        rect.setWidth(50);
-        rect.setHeight(50);
-        mConfigHideButton->setGeometry(rect);
-        mConfigHideButton->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        mConfigHideButton->setText("X");
-        mConfigHideButton->setStyleSheet("color: rgb(50, 50, 100)");
-        mConfigHideButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mConfigHideButton->show();
-        connect(mConfigHideButton, &QPushButton::clicked, [=]() {
-            mView->hide();
-        });
-    }
-
-
-    int index = 0;
-    foreach(const auto& data, allConfig) {
-        QVariantList config = data.toList();
-        if (config.size() != 3) {
-            continue;
-        }
-        int type = config.at(0).toInt();
-        QString name = config.at(1).toString();
-        QVariant value = config.at(2);
-        QString realValue = QString();
-        switch (value.type()) {
-            case QVariant::Type::List : {
-                foreach(const auto& v, value.toList()) {
-                    realValue.append(QString("%1, ").arg(v.toString()));
-                }
-                realValue.resize(realValue.size() - 2);
-                break;
-            }
-            case QVariant::Type::StringList : {
-                foreach(const auto& v, value.toStringList()) {
-                    realValue.append(QString("%1, ").arg(v));
-                }
-                realValue.resize(realValue.size() - 2);
-                break;
-            }
-            case QVariant::Type::Rect : {
-                QRect rect = value.toRect();
-                realValue.append(QString("%1, %2, %3, %4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
-                break;
-            }
-            default : {
-                realValue = value.toString();
-                break;
-            }
-        }
-        ListItem* item = new ListItem(index++, type, name, realValue, mConfigWidget);
-        mConfigInfo[mConfigInfo.size()] = item;
-        connect(item, &ListItem::signalValueChanged, [=](const int& index, const int& type, const QVariant& value) {
-            createSignal(ivis::common::EventTypeEnum::EventTypeChangedConfig, QVariant(QVariantList{type, value}));
-        });
-    }
-}
-
-void GuiTop::updateDisplayNodeAddress() {
-    qDebug() << "GuiTop::updateDisplayNodeAddress()";
-    mView->setCurrentIndex(1);
-    mView->show();
-
-    if (mNodeAddressList == nullptr) {
-        QRect rect = mMainWindow->geometry();
-        rect.setY(60);
-        rect.setHeight(rect.height() - rect.y());
-        mNodeAddressList = new QListView(mView);
-        mNodeAddressList->setGeometry(rect);
-        mNodeAddressList->show();
-    } else {
-        if (mConfigWidget) {
-            mConfigWidget->hide();
-        }
-        mNodeAddressList->show();
-        return;
-    }
-
-    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
-    QStringListModel* model = new QStringListModel();
-    model->setStringList(nodeAddress);
-    mNodeAddressList->setModel(model);
-    // mNodeAddressList->setItemDelegate(new QStyledItemDelegate(mNodeAddressList));
-
-    static QLineEdit* inputNodeAddress = nullptr;
-    if (inputNodeAddress == nullptr) {
-        inputNodeAddress = new QLineEdit(mNodeAddressList);
-        inputNodeAddress->setGeometry(10, 70, 1260, 30);
-        inputNodeAddress->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        inputNodeAddress->setStyleSheet("color: rgb(50, 50, 100)");
-        inputNodeAddress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        inputNodeAddress->show();
-    }
-    static QCompleter* autoComplete = nullptr;
-    if (autoComplete == nullptr) {
-        autoComplete = new QCompleter(nodeAddress, inputNodeAddress);
-        autoComplete->setCaseSensitivity(Qt::CaseInsensitive);
-        autoComplete->setFilterMode(Qt::MatchContains);
-        autoComplete->setWrapAround(false);
-        // autoComplete->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
-    }
-    inputNodeAddress->setCompleter(autoComplete);
-
-
-
-
-
-#if 0
-    static QListWidget* mView = nullptr;
-    if (mView == nullptr) {
-        QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-        QRect rect = mMainWindow->geometry();
-        rect.setY(120);
-        rect.setWidth(size.width());
-        rect.setHeight(size.height() - 120);
-        mView = new QListWidget(mMainWindow);
-        mView->setGeometry(rect);
-        mView->show();
-    }
-    for (int i = 0; i < 100; ++i) {
-        QListWidgetItem *item = new QListWidgetItem(mView);
-        QWidget *widget = new QWidget;
-        QHBoxLayout *layout = new QHBoxLayout(widget);
-
-        QLabel *label = new QLabel("Item " + QString::number(i));
-        // label->setGeometry(0, 0, 100, 50);
-        QPushButton *left = new QPushButton("left");
-        QPushButton *right = new QPushButton("right");
-        layout->addWidget(left);
-        layout->addWidget(label);
-        layout->addWidget(right);
-        layout->addStretch();     // Add stretchable space to align the button to the right
-
-        item->setSizeHint(widget->sizeHint());
-        mView->setItemWidget(item, widget);
-    }
-#endif
-
-
-
-#if 0
-    static QListWidget* mView = nullptr;
-    if (mView == nullptr) {
-        QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-        QRect rect = mMainWindow->geometry();
-        rect.setY(120);
-        rect.setWidth(size.width());
-        rect.setHeight(size.height());
-        mView = new QListWidget(mMainWindow);
-        mView->setGeometry(rect);
-        mView->show();
-    }
-
-//    new QListWidgetItem(tr("Oak"), mView);
-//    new QListWidgetItem(tr("Fir"), mView);
-//    new QListWidgetItem(tr("Pine"), mView);
-
-    QListWidgetItem *newItem1 = new QListWidgetItem();
-    QListWidgetItem *newItem2 = new QListWidgetItem();
-    QListWidgetItem *newItem3 = new QListWidgetItem();
-    QListWidgetItem *newItem4 = new QListWidgetItem();
-    newItem1->setText("000000000000000");
-    mView->insertItem(0, newItem1);
-    newItem2->setText("111111111111111111");
-    mView->insertItem(1, newItem2);
-    newItem3->setText("222222222222222");
-    mView->insertItem(2, newItem3);
-    mView->insertItem(3, new QListWidgetItem("33333333333"));
-    mView->insertItem(5, new QListWidgetItem("444444444444"));
-#endif
-
-
-
-
-#if 0
-    static QListView* mView = nullptr;
-    if (mView == nullptr) {
-        QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
-        QRect rect = mMainWindow->geometry();
-        rect.setY(120);
-        rect.setWidth(size.width());
-        rect.setHeight(size.height());
-        mView = new QListView(mMainWindow);
-        mView->setGeometry(rect);
-        mView->show();
-    }
-
-    QStandardItemModel* model = new QStandardItemModel(5, 2);
-    QStringList data = QStringList({"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"});
-
-    foreach(auto& d, data) {
-        model->appendRow(new QStandardItem(d));
-    }
-    mView->setModel(model);
-
-    for (int i = 0; i < model->rowCount(); i++) {
-        QWidget* widget = new QWidget();
-        // QPushButton* left = new QPushButton(widget);
-        // left->setGeometry(0, 0, 80, 80);
-        // left->setText("Left");
-        QPushButton* right = new QPushButton(widget);
-        right->setGeometry(200, 0, 80, 80);
-        right->setText("Right");
-        mView->setIndexWidget(model->index(i, 0), new QPushButton("Right"));
-        mView->setIndexWidget(model->index(i, 0), new QPushButton("Right"));
-    }
-#endif
-}
-
 void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
@@ -654,21 +403,12 @@ void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplaySize();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeVisible :
-        case ivis::common::PropertyTypeEnum::PropertyTypeSubVisible : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeVisible : {
             updateDisplayVisible();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath : {
             updateDisplayDefaultPath();
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo : {
-            updateDisplayConfigInfo();
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll : {
-            updateDisplayNodeAddress();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC :

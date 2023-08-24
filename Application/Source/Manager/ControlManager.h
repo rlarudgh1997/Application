@@ -12,6 +12,7 @@ class ControlManager : public QObject {
     Q_OBJECT
 
     QML_WRITABLE_PROPERTY(QSize, ScreenSize, true)
+    QML_WRITABLE_PROPERTY(int, PreviousMode, true)
     QML_WRITABLE_PROPERTY(int, CurrentMode, true)
 
 public:

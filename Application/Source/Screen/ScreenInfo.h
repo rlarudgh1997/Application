@@ -22,8 +22,8 @@ public:
     static QSharedPointer<ScreenInfo>& instance();
     ~ScreenInfo();
     void updateRootItem(QWidget *rootItem);
-    QWidget* drawScreen(const int& displayType, const QString& objectName = QString(), const bool& show = true);
-    void controlScreen(const int& displayType, const bool& show);
+    QWidget* drawScreen(const int& displayType, const QString& objectName);
+    void controlScreen(const int& displayType, const bool& show = true);
     Q_INVOKABLE void captureScreen(const QRect& rect = QRect());
     bool updateLanguage(const int& changeLanguage, QString languageFileName = QString());
     Q_INVOKABLE void loadComplete(const int& displayType);
@@ -40,6 +40,7 @@ signals:
 
 private:
     QWidget* mRootScreen = nullptr;
+    QWidget* mAlwaysTopScreen = nullptr;
     QMap<int, QWidget*> mSubScreens = QMap<int, QWidget*>();
     QTranslator *mTranslator = new QTranslator();
 };

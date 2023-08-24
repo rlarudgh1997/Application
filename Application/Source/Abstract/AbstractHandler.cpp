@@ -3,8 +3,8 @@
 
 #include <QDebug>
 
-AbstractHandler::AbstractHandler(const int& displayType, const QString& objcetName, const bool& show) {
-    mScreen = ScreenInfo::instance().data()->drawScreen(displayType, objcetName, show);
+AbstractHandler::AbstractHandler(const int& displayType, const QString& objcetName) {
+    mScreen = ScreenInfo::instance().data()->drawScreen(displayType, objcetName);
 }
 
 bool AbstractHandler::init() {

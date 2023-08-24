@@ -53,13 +53,6 @@ void ControlTop::initBaseData() {
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
-    QString nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
-    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath + "/NodeAddressSFC.info");
-    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath + "/NodeAddressVSM.info");
-    // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC, sfcList);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM, vsmList);
-
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
 }
 
@@ -154,7 +147,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
                 QVariant popupData = QVariant();
                 button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Exit, isHandler(), popupData, QVariant(text));
                 if (button == ivis::common::PopupButton::OK) {
-                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter,
+                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel,
                                     ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
                     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
                 }
@@ -181,8 +174,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeFileOpen :
         case ivis::common::EventTypeEnum::EventTypeFileSave :
         case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSubVisible, false);
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEditCut : {
@@ -197,6 +189,13 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "Edit - Paste";
             break;
         }
+#if 1
+        case ivis::common::EventTypeEnum::EventTypeViewConfig :
+        case ivis::common::EventTypeEnum::EventTypeViewSignal : {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
+            break;
+        }
+#else
         case ivis::common::EventTypeEnum::EventTypeViewConfig : {
             QVariantList allConfig = QVariantList();
             QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
@@ -221,6 +220,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
             break;
         }
+#endif
         case ivis::common::EventTypeEnum::EventTypeChangedConfig : {
             QVariantList configInfo = value.toList();
             if (configInfo.size() == 2) {

@@ -4,6 +4,7 @@ include($$PWD/Screen/Screen.pri)
 include($$PWD/Config/Config.pri)
 include($$PWD/Manager/Manager.pri)
 include($$PWD/Top/Top.pri)
+include($$PWD/Excel/Excel.pri)
 include($$PWD/Center/Center.pri)
 
 
@@ -18,9 +19,3 @@ HEADERS += \
 SOURCES += \
     $$PWD/main.cpp\
     $$PWD/MainWindow.cpp\
-
-
-
-
-
-

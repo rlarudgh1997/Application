@@ -3,9 +3,8 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDateTime>
-#include <QDebug>
 #include <QResizeEvent>
-// #include "CommonUtil.h"
+#include <QDebug>
 
 
 QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
@@ -35,22 +34,25 @@ void ScreenInfo::updateRootItem(QWidget *rootItem) {
     }
 }
 
-QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectName, const bool& show) {
+QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectName) {
     QWindowList windowList = qApp->allWindows();
 
-    qDebug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    qDebug("ScreenInfo::drawScreen(%d, %s, %d)", displayType, objectName.toLatin1().data(), show);
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    qDebug() << "ScreenInfo::drawScreen(" << displayType << "," << objectName << ")";
 
      if (windowList.count() > 0) {
         if (mSubScreens[displayType] == nullptr) {
             mSubScreens[displayType] = new QWidget(mRootScreen);
-            mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
+            if (mAlwaysTopScreen == nullptr) {
+                mAlwaysTopScreen = mSubScreens[displayType];
+                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), 60);
+            } else  {
+                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
+            }
             mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            // mSubScreens[displayType]->setStyleSheet("background-color: rgb(50, 50, 100)");
-            // mSubScreens[displayType]->setStyleSheet("background-color: rgb(0, 0, 255)");
             mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
             mSubScreens[displayType]->setObjectName(objectName);
-            (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
+            mSubScreens[displayType]->show();
         }
      }
 
@@ -60,7 +62,14 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
-        (show) ? (mSubScreens[displayType]->show()) : (mSubScreens[displayType]->hide());
+        foreach(const auto& screen, mSubScreens) {
+            if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
+                continue;
+            }
+            screen->hide();
+        }
+        mSubScreens[displayType]->show();
+        mSubScreens[displayType]->stackUnder(mAlwaysTopScreen);
     }
 }
 
@@ -86,9 +95,9 @@ void ScreenInfo::captureScreen(const QRect& rect) {
     savePath.append(FILE_EXTENSION_PNG);
 
     if (pixmap.save(savePath, nullptr, 100)) {
-        qDebug("CaptrueScreen - OK -> %s", savePath.toLatin1().data());
+        qDebug() << "CaptrueScreen - OK ->" << savePath;
     } else {
-        qDebug("CaptrueScreen - Fail");
+        qDebug() << "CaptrueScreen - Fail";
     }
 }
 
@@ -111,10 +120,8 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
             }
         }
     }
-    // qDebug("languageFileName=%s", languageFileName.toLatin1().data());
 
     qApp->removeTranslator(mTranslator);
-
     if (mTranslator->load(languageFileName)) {
         // qApp->installTranslator(mTranslator);
         // qobject_cast<QQuickView*>(qApp->allWindows().at(0))->engine()->retranslate();
@@ -124,9 +131,8 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
         // result = true;
     }
 
-    qDebug("ScreenInfo::updateMultiLanguage(%d, %s)->LanguageChange-%s !!!!!!!\n\n\n\n", changeLanguage,
-                                            languageFileName.toLatin1().data(), (result)?("Sucess"):("Fail"));
-
+    qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
+                                        << ")->LanguageChange :" << ((result)?("Sucess"):("Fail")) << "!!!!!!!\n\n\n\n";
     return result;
 }
 
@@ -140,6 +146,6 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
 }
 
 void ScreenInfo::loadComplete(const int& displayType) {
-    qDebug("ScreenInfo::loadComplete(%d)", displayType);
+    qDebug() << "ScreenInfo::loadComplete(" << displayType << ")";
     emit signalLoadComplete(displayType);
 }

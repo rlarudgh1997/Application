@@ -5,6 +5,8 @@
 #include "ConfigSetting.h"
 #include "ControlTop.h"
 #include "ControlCenter.h"
+#include "ControlExcel.h"
+// #include "CommonUtil.h"
 
 
 QSharedPointer<ControlManager>& ControlManager::instance() {
@@ -27,6 +29,12 @@ void ControlManager::sendEventInfo(const int& source, const int& destination, co
     if (destination != ivis::common::ScreenEnum::DisplayTypeInvalid) {
         createControl(destination);
         emit signalEventInfoChanged(destination, eventType, eventValue);
+    }
+
+    if (source == ivis::common::ScreenEnum::DisplayTypeTop) {
+        ivis::common::CheckTimer checkTimer;
+        ScreenInfo::instance().data()->controlScreen(destination, true);
+        checkTimer.check("RaiseScreen");
     }
 }
 
@@ -105,13 +113,18 @@ void ControlManager::createControl(const int& displayType) {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlCenter::instance().data());
                 break;
             }
+            case ivis::common::ScreenEnum::DisplayTypeExcel : {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlExcel::instance().data());
+                break;
+            }
             default : {
+                qDebug() << "Fail to create control instnace - displayType :" << displayType;
                 break;
             }
         }
 
         if (mControlInfo[displayType]) {
-            qDebug() << "ControlManager::createControl : " << displayType;
+            // qDebug() << "ControlManager::createControl :" << displayType;
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
             mControlInfo[displayType]->init(displayType);
 #if defined(USE_RESIZE_SIGNAL)

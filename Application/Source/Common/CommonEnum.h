@@ -9,8 +9,8 @@ namespace ivis {
 namespace common {
 
 
-#define SCREEN_MINIMUM_WIDTH             640
-#define SCREEN_MINIMUM_HEIGHT            480
+#define SCREEN_MINIMUM_WIDTH             1200
+#define SCREEN_MINIMUM_HEIGHT            700
 #define SCREEN_MAXIMUM_WIDTH             2100
 #define SCREEN_MAXIMUM_HEIGHT            1300
 #define SCREEN_MARGIN_HEIGHT             60
@@ -29,11 +29,12 @@ public:
         DisplayTypeInvalid             = 0x000000,
         DisplayTypeTop                 = 0x000001,
         DisplayTypeCenter              = 0x000002,
-        DisplayTypeBottom              = 0x000004,
-        DisplayTypeLeft                = 0x000008,
-        DisplayTypeRight               = 0x000010,
+        DisplayTypeExcel               = 0x000004,
+        // DisplayTypeBottom              = 0x000008,
+        // DisplayTypeLeft                = 0x000010,
+        // DisplayTypeRight               = 0x000020,
 
-        DisplayTypePopup               = 0x800000,
+        // DisplayTypePopup               = 0x800000,
 
         DisplayTypeAll                 = 0xFFFFFF,
     };
@@ -81,7 +82,6 @@ public:
         PropertyTypeDisplaySizeMargin,
         PropertyTypeMode,
         PropertyTypeVisible,
-        PropertyTypeSubVisible,
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
@@ -131,8 +131,6 @@ public:
         EventTypeEditCut,
         EventTypeEditCopy,
         EventTypeEditPaste,
-        EventTypeViewConfig,
-        EventTypeChangedConfig,
         EventTypeViewSignal,
         EventTypeViewPythonLib,
         EventTypeSettingDevPath,
@@ -150,6 +148,7 @@ public:
         EventTypeSheetRowDelete,
         EventTypeCellMergeSplit,
         EventTypeCellMergeSplitWarning,
+        EventTypeViewInfoClose,
 
         EventTypeSendOtherControl = 2000,
         EventTypeLastFile,
@@ -158,6 +157,8 @@ public:
         EventTypeFileSave,
         EventTypeFileSaveAs,
         EventTypeFileSaveType,
+        EventTypeViewConfig,
+        EventTypeChangedConfig,
     };
     enum EventValue{
         EventValueInvalid = 0,
