@@ -4,6 +4,7 @@
 #include "AbstractGui.h"
 
 #include <QWidget>
+#include <QTableWidget>
 #include <QStackedWidget>
 #include <QLabel>
 #include <QPushButton>
@@ -57,7 +58,7 @@ public:
         clear();
     }
     void clear() {
-        qDebug() << "~ListItem() ->" << mNameButton->text() << "," << mValueDispaly->text();
+        // qDebug() << "~ListItem() ->" << mNameButton->text() << "," << mValueDispaly->text();
         delete mNameButton;
         delete mValueDispaly;
         delete mValueEdit;
@@ -65,8 +66,20 @@ public:
     void initStyle() {
         mNameButton->setStyleSheet(mStyleNormal);
         mValueDispaly->setStyleSheet(mStyleNormal);
+        mValueEdit->setText(mValueDispaly->text());
         mValueEdit->hide();
         mEditState = true;
+    }
+    void setData(const QString& name, const QString& value) {
+        if (mNameButton) {
+            mNameButton->setText(name);
+        }
+        if (mValueDispaly) {
+            mValueDispaly->setText(value);
+        }
+        if (mValueEdit) {
+            mValueEdit->setText(value);
+        }
     }
 
 private:
@@ -127,12 +140,14 @@ public slots:
 
 private:
     QStackedWidget* mMainView = nullptr;
+    // QTabWidget* mMainView = nullptr;
+    // QTableWidget* mMainView = nullptr;
     QWidget* mConfigWidget = nullptr;
-    QWidget* mNodeAddressWidget = nullptr;
     QListView* mNodeAddressList = nullptr;
-    QStringListModel* mNodeAddressModel = new QStringListModel();
-    QPushButton* mConfigHideButton = nullptr;
     QMap<int, ListItem*> mConfigListItem = QMap<int, ListItem*>();
+    QVariantList mConfigValue = QVariantList();
+    QLineEdit* mInputNodeAddress = nullptr;
+    QPushButton* mConfigHideButton = nullptr;
 };
 
 #endif    // GUI_CENTER_H

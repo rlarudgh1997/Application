@@ -362,7 +362,6 @@ public:
     CheckLib() {}
     ~CheckLib() {
         join();
-        qDebug() << "~CheckLib()";
     }
     void setLibInfo(const QStringList& libInfo) {
         foreach(const auto info, libInfo) {

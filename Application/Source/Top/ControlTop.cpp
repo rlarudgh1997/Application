@@ -120,17 +120,21 @@ void ControlTop::sendEventInfo(const int& destination, const int& eventType, con
 
 void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
     // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
-    // switch (type) {
-    //     case ConfigInfo::ConfigTypeScreenInfo : {
-    //         QRect screenInfo = value.toRect();
-    //         QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
-    //         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-    //         break;
-    //     }
-    //     default : {
-    //         break;
-    //     }
-    // }
+    switch (type) {
+        case ConfigInfo::ConfigTypeDefaultPath : {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
+            break;
+        }
+        // case ConfigInfo::ConfigTypeScreenInfo : {
+        //     QRect screenInfo = value.toRect();
+        //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
+        //     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+        //     break;
+        // }
+        default : {
+            break;
+        }
+    }
 }
 
 void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
@@ -189,50 +193,9 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "Edit - Paste";
             break;
         }
-#if 1
         case ivis::common::EventTypeEnum::EventTypeViewConfig :
         case ivis::common::EventTypeEnum::EventTypeViewSignal : {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
-            break;
-        }
-#else
-        case ivis::common::EventTypeEnum::EventTypeViewConfig : {
-            QVariantList allConfig = QVariantList();
-            QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
-            while (iter.hasNext()) {
-                iter.next();
-                QStringList temp = iter.value().first.split("ConfigType");
-                if (temp.size() != 2) {
-                    continue;
-                }
-                int type = iter.key();
-                QString name = temp.at(1);
-                QVariant value = iter.value().second;
-                allConfig.append(QVariant(QVariantList({type, name, value})));
-            }
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfig), true);
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeViewSignal : {
-            QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
-            QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
-            QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
-            break;
-        }
-#endif
-        case ivis::common::EventTypeEnum::EventTypeChangedConfig : {
-            QVariantList configInfo = value.toList();
-            if (configInfo.size() == 2) {
-                int type = configInfo.at(0).toInt();
-                QStringList temp = configInfo.at(1).toString().split(", ");
-                QVariant value = QVariant(temp);
-                if ((type == ConfigInfo::ConfigTypeScreenInfo) && (temp.size() == 4)) {
-                    value = QVariant(QRect(temp.at(0).toInt(), temp.at(1).toInt(), temp.at(2).toInt(), temp.at(3).toInt()));
-                }
-                qDebug() << "ConfgiValue[" << type << "] :" << value;
-                ConfigSetting::instance().data()->writeConfig(type, value);
-            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingDevPath : {

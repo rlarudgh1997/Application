@@ -222,6 +222,7 @@ void GuiTop::drawMenuView() {
         });
     }
 
+#if 0
     QAction *actionPython = new QAction(QIcon::fromTheme("actionPython"),
                                                         STRING_PYTHON,
                                                         this);
@@ -233,6 +234,7 @@ void GuiTop::drawMenuView() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewPythonLib, QVariant());
         });
     }
+#endif
 }
 
 void GuiTop::drawMenuSetting() {
@@ -362,6 +364,7 @@ void GuiTop::drawMenuEtc() {
         });
     }
 
+#if 0
     static QPushButton* excelOpen = nullptr;
     if (excelOpen == nullptr) {
         excelOpen = new QPushButton(mMainView);
@@ -374,6 +377,7 @@ void GuiTop::drawMenuEtc() {
             // createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
         });
     }
+#endif
 }
 
 void GuiTop::updateDisplayDefaultPath() {

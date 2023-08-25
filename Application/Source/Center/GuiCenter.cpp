@@ -23,47 +23,61 @@ QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
 }
 
 GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
-    mMainView = new QStackedWidget(isHandler()->getScreen());
+   mMainView = new QStackedWidget(isHandler()->getScreen());
+    // mMainView = new QTableWidget(isHandler()->getScreen());
     updateDisplaySize();
 }
 
 void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
+#if 0
+    mMainView->setRowCount(10);
+    mMainView->setColumnCount(4);
 
+
+    QTableWidgetItem *newItem = new QTableWidgetItem(QString("Text1"));
+    newItem->setIcon(QIcon(QPixmap(IAMGE_SAVE)));
+    newItem->setTextAlignment(Qt::AlignVCenter);
+    mMainView->setItem(0, 1, newItem);
+#else
     if (mConfigWidget == nullptr) {
         mConfigWidget = new QWidget();
         mConfigWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
+        // mConfigWidget->setStyleSheet("background-color: blue");
         mConfigWidget->show();
         mMainView->insertWidget(0, mConfigWidget);
     }
-    if (mNodeAddressWidget == nullptr) {
-        mNodeAddressWidget = new QWidget();
-        mNodeAddressWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
-        mNodeAddressWidget->show();
-        mMainView->insertWidget(1, mNodeAddressWidget);
 
-        if (mNodeAddressList == nullptr) {
-            mNodeAddressList = new QListView(mNodeAddressWidget);
-            mNodeAddressList->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height() - 100);
-            mNodeAddressList->show();
-            mNodeAddressWidget->stackUnder(mNodeAddressList);
-        }
+    if (mNodeAddressList == nullptr) {
+        mNodeAddressList = new QListView();
+        mNodeAddressList->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
+        // mNodeAddressList->setStyleSheet("background-color: green");
+        mNodeAddressList->show();
+        mMainView->insertWidget(1, mNodeAddressList);
     }
+#endif
 
+    if (mInputNodeAddress == nullptr) {
+        mInputNodeAddress = new QLineEdit(mNodeAddressList);
+        mInputNodeAddress->setGeometry(400, 20, 840, 50);
+        mInputNodeAddress->setStyleSheet("background-color: white; color: black; font: bold; font-size:15px");
+        mInputNodeAddress->show();
+    }
 
     if (mConfigHideButton == nullptr) {
         mConfigHideButton = new QPushButton(mMainView);
-        mConfigHideButton->setGeometry(1300 - 50, 0, 50, 50);
+        mConfigHideButton->setGeometry(1250, 20, 50, 50);
         mConfigHideButton->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
         mConfigHideButton->setText("X");
-        // mConfigHideButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         connect(mConfigHideButton, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex()));
         });
         mConfigHideButton->show();
-        mConfigHideButton->raise();
-        mMainView->stackUnder(mConfigHideButton);
+        // mConfigHideButton->raise();
     }
+    // mMainView->stackUnder(mConfigHideButton);
+    // mConfigWidget->stackUnder(mConfigHideButton);
+    // mNodeAddressList->stackUnder(mConfigHideButton);
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -99,32 +113,40 @@ void GuiCenter::updateDisplayVisible() {
 }
 
 void GuiCenter::updateDisplayConfigInfo() {
-    QVariantList allConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << allConfig.size();
-    if ((allConfig.size() == 0) || (mConfigWidget == nullptr)) {
+    QVariantList configValue = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
+    qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << mConfigValue.size() << "," << configValue.size();
+
+    if (mConfigWidget == nullptr) {
+        return;
+    } else {
+        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+        mMainView->setCurrentIndex(viewType);
+        if (mNodeAddressList) {
+            mNodeAddressList->hide();
+        }
+        mConfigWidget->raise();
+        mConfigHideButton->raise();
+
+        if (mConfigValue == configValue) {
+            foreach(const auto& item, mConfigListItem) {
+                item->initStyle();
+            }
+            return;
+        }
+    }
+
+    bool newItem = (mConfigValue.size() != configValue.size());
+    if (newItem) {
         foreach(const auto& item, mConfigListItem) {
             item->clear();
         }
-        return;
-    }
-
-    mMainView->setCurrentIndex(0);
-    if (mNodeAddressList) {
-        mNodeAddressList->hide();
-    }
-    mConfigWidget->show();
-
-    if (mConfigListItem.size() > 0) {
-        foreach(const auto& item, mConfigListItem) {
-            item->initStyle();
-        }
-        qDebug() << "ConfigInfo List Item Count :" << mConfigListItem.size();
-        return;
+        mConfigListItem.clear();
     }
 
     int index = 0;
-    foreach(const auto& data, allConfig) {
-        QVariantList config = data.toList();
+    mConfigValue = configValue;
+    foreach(const auto& info, configValue) {
+        QVariantList config = info.toList();
         if (config.size() != 3) {
             continue;
         }
@@ -157,49 +179,54 @@ void GuiCenter::updateDisplayConfigInfo() {
                 break;
             }
         }
-        ListItem* item = new ListItem(index++, type, name, realValue, mConfigWidget);
-        mConfigListItem[mConfigListItem.size()] = item;
-        connect(item, &ListItem::signalValueChanged, [=](const int& type, const QVariant& value) {
-            createSignal(ivis::common::EventTypeEnum::EventTypeChangedConfig, QVariant(QVariantList{type, value}));
-        });
+
+        if (newItem) {
+            mConfigListItem[index] = new ListItem(index, type, name, realValue, mConfigWidget);
+            connect(mConfigListItem[index], &ListItem::signalValueChanged, [=](const int& type, const QVariant& value) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeWriteConfig, QVariant(QVariantList{type, value}));
+            });
+        } else {
+            if (mConfigListItem[index]) {
+                mConfigListItem[index]->setData(name, realValue);
+            }
+        }
+        index++;
     }
 }
 
 void GuiCenter::updateDisplayNodeAddress() {
     QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
     qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << nodeAddress.size();
-    if ((nodeAddress.size() == 0) || (mNodeAddressList == nullptr)) {
+
+    if (mNodeAddressList == nullptr) {
         return;
+    } else {
+        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+        mMainView->setCurrentIndex(viewType);
+        if (mConfigWidget) {
+            mConfigWidget->hide();
+        }
+        mNodeAddressList->raise();
+        mInputNodeAddress->raise();
+        mConfigHideButton->raise();
     }
 
-    mMainView->setCurrentIndex(1);
-    if (mConfigWidget) {
-        mConfigWidget->hide();
-    }
-    mNodeAddressList->show();
-
+    static QStringListModel* mNodeAddressModel = new QStringListModel();
     mNodeAddressModel->setStringList(nodeAddress);
     mNodeAddressList->setModel(mNodeAddressModel);
     // mNodeAddressList->setItemDelegate(new QStyledItemDelegate(mNodeAddressList));
 
-    static QLineEdit* inputNodeAddress = nullptr;
-    if (inputNodeAddress == nullptr) {
-        inputNodeAddress = new QLineEdit(mNodeAddressList);
-        inputNodeAddress->setGeometry(10, 70, 1260, 30);
-        inputNodeAddress->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
-        inputNodeAddress->setStyleSheet("color: rgb(50, 50, 100)");
-        inputNodeAddress->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        inputNodeAddress->show();
-    }
     static QCompleter* autoComplete = nullptr;
     if (autoComplete == nullptr) {
-        autoComplete = new QCompleter(nodeAddress, inputNodeAddress);
+        autoComplete = new QCompleter(nodeAddress, mInputNodeAddress);
         autoComplete->setCaseSensitivity(Qt::CaseInsensitive);
         autoComplete->setFilterMode(Qt::MatchContains);
         autoComplete->setWrapAround(false);
         // autoComplete->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     }
-    inputNodeAddress->setCompleter(autoComplete);
+    if (mInputNodeAddress) {
+        mInputNodeAddress->setCompleter(autoComplete);
+    }
 }
 
 

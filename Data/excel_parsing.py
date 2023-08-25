@@ -163,7 +163,7 @@ def readFromText(path, saveFilePath) :
         # read.replace(" ", "")
 
 
-        if configInfo["ConfitTypeDeleteFileTC"] == "true" :
+        if configInfo["ConfigTypeDeleteFileTC"] == "true" :
             print("Delete File :", filePath)
             os.remove(filePath)
 

@@ -213,6 +213,26 @@
       <string>PushButton</string>
      </property>
     </widget>
+    <widget class="QTableView" name="tableView">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>260</y>
+       <width>256</width>
+       <height>192</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>480</y>
+       <width>256</width>
+       <height>192</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QLineEdit" name="lineEdit">
@@ -304,6 +324,39 @@
    <property name="wordWrap">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>560</y>
+     <width>391</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Tab 1</string>
+    </attribute>
+    <widget class="QTableWidget" name="tableWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>391</width>
+       <height>301</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Tab 2</string>
+    </attribute>
+   </widget>
   </widget>
  </widget>
  <resources/>

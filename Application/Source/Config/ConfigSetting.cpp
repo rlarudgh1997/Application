@@ -61,8 +61,8 @@ void ConfigSetting::init() {
 }
 
 QVariant ConfigSetting::readConfig(const int& configType) {
-    if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMax)
-        ||(configType == ConfigInfo::ConfigTypeMaxDoNotSave)) {
+    if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMaxDoNotSave)
+        ||(configType == ConfigInfo::ConfigTypeMax)) {
         return QVariant();
     } else {
         return mConfigData[configType];
@@ -78,30 +78,28 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 
         emit signalConfigChanged(configType, configValue);
     }
-
-    if ((configType == ConfigInfo::ConfigTypeCheckLibOpenpyxl) || (configType == ConfigInfo::ConfigTypeCheckLibPandas)) {
-        qDebug() << "Config[" << configType << "] :" << configValue << "," << mConfigData[configType];
-    }
 }
 
 void ConfigSetting::readConfig() {
     for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                         ConfigInfo::ConfigGetTypeName).toString();
-
-        if (configType < ConfigInfo::ConfitTypeLastFileInfo) {
-            mSetting->beginGroup(GROUP_NAME_GENERAL);
-        } else if (configType < ConfigInfo::ConfigTypeMax) {
-            mSetting->beginGroup(GROUP_NAME_FILE);
+        if (configType > ConfigInfo::ConfigTypeMaxDoNotSave) {
+            mConfigData[configType] = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                                                ConfigInfo::ConfigGetTypeValue);
         } else {
-            mSetting->beginGroup(GROUP_NAME_COMMON);
+            if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
+                mSetting->beginGroup(GROUP_NAME_GENERAL);
+            } else if (configType < ConfigInfo::ConfigTypeMax) {
+                mSetting->beginGroup(GROUP_NAME_FILE);
+            } else {
+                mSetting->beginGroup(GROUP_NAME_COMMON);
+            }
+            mConfigData[configType] = mSetting->value(configName);
+            mSetting->endGroup();
         }
-
-        QVariant configValue = mSetting->value(configName);
-        mConfigData[configType] = configValue;
-        mConfigBackup[configType] = mConfigData[configType];
-        mSetting->endGroup();
     }
+    mConfigBackup = mConfigData;
 }
 
 void ConfigSetting::writeConfig() {
@@ -111,7 +109,7 @@ void ConfigSetting::writeConfig() {
             QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
 
-            if (configType < ConfigInfo::ConfitTypeLastFileInfo) {
+            if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
@@ -142,8 +140,8 @@ void ConfigSetting::resetConfig() {
 
 QMap<int, QPair<QString, QVariant>> ConfigSetting::allConfig() {
     QMap<int, QPair<QString, QVariant>> allConfig = QMap<int, QPair<QString, QVariant>>();
-    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMaxDoNotSave; configType++) {
-        if (configType == ConfigInfo::ConfigTypeMax) {
+    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
+        if (configType == ConfigInfo::ConfigTypeMaxDoNotSave) {
             continue;
         }
         QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),

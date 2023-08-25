@@ -51,8 +51,10 @@ void MainWindow::controlConnect() {
             Qt::UniqueConnection);
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
+            qDebug() << "Python lib openpyxl :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, state);
         } else  if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
+            qDebug() << "Python lib pandas   :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
         } else {
             mCheckLib.clear();

@@ -189,7 +189,7 @@ void ControlExcel::updateSheetInfo(const int& propertyType, const QVariant& dirP
                 qDebug() << "Delete Path Info :" << dirPath << ", " << filePath;
             }
 
-            bool deleteFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeDeleteFileTC).toBool();
+            bool deleteFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool();
             if (deleteFile) {
                 ivis::common::ExcuteProgram process(false);
                 QStringList log;
@@ -552,7 +552,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
                 QString dirPath = sytemCall(ivis::common::EventTypeEnum::EventTypeOpenExcel, filePath);
                 if (dirPath.size() > 0) {
                     updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
-                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
                 } else {
                     QVariant popupData = QVariant();
                     ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
@@ -567,7 +567,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
                 QVariant filePath = value;
                 if (writeSheetInfo(filePath)) {
                     if (sytemCall(ivis::common::EventTypeEnum::EventTypeSaveExcel, filePath) > 0) {
-                        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, filePath);
+                        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
                         sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop,
                                         ivis::common::EventTypeEnum::EventTypeFileSaveType, false);
                     }
@@ -610,7 +610,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
     qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeLastFile : {
-            QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
+            QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastFileInfo).toString();
             if (lastFilePath.size() == 0) {
                 QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
                 QVariant popupData = QVariant();
@@ -625,7 +625,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         }
         case ivis::common::EventTypeEnum::EventTypeFileNew : {
             updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeLastFileInfo, QVariant());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, QVariant());
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             break;
         }
@@ -646,7 +646,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
                 return;
             }
 
-            QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeLastFileInfo).toString();
+            QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastFileInfo).toString();
             if (eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs) {
                 filePath.clear();
             }

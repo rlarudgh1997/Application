@@ -29,12 +29,9 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
 
-
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType,                          QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo,                        QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
-    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC,                     QVariant(""));
-    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM,                     QVariant(""));
-    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListToMicom,                 QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

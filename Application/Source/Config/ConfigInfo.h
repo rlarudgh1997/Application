@@ -30,20 +30,20 @@ public:
         ConfigTypeContentTitle,
 
         // File
-        ConfitTypeLastFileInfo,
-        ConfitTypeDeleteFileTC,
+        ConfigTypeLastFileInfo,
+        ConfigTypeDeleteFileTC,
 
-        ConfigTypeMax,
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
         // ==========================================================================
+        ConfigTypeMaxDoNotSave,
         ConfigTypeInit,
         ConfigTypeMode,
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
 
-        ConfigTypeMaxDoNotSave,
+        ConfigTypeMax,
     } ConfigType;
     typedef enum {
         ConfigGetTypeName = 0,
@@ -88,8 +88,8 @@ private:
 
 
         // File
-        mConfigInfoData[ConfitTypeLastFileInfo] = QPair<QString, QVariant>("ConfitTypeLastFileInfo", QVariant(""));
-        mConfigInfoData[ConfitTypeDeleteFileTC] = QPair<QString, QVariant>("ConfitTypeDeleteFileTC", QVariant(true));
+        mConfigInfoData[ConfigTypeLastFileInfo] = QPair<QString, QVariant>("ConfigTypeLastFileInfo", QVariant(""));
+        mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
 
 
 

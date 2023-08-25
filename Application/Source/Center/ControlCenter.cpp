@@ -8,8 +8,6 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
-//#include <QProcess>
-
 
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
@@ -42,7 +40,7 @@ void ControlCenter::initControl(const int& currentMode) {
 void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
@@ -113,18 +111,26 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
-    // switch (type) {
-    //     case ConfigInfo::ConfigTypeScreenInfo : {
-    //         QRect screenInfo = value.toRect();
-    //         QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
-    //         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-    //         break;
-    //     }
-    //     default : {
-    //         break;
-    //     }
-    // }
+    qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
+    switch (type) {
+        case ConfigInfo::ConfigTypeCheckLibOpenpyxl :
+        case ConfigInfo::ConfigTypeCheckLibPandas :
+        case ConfigInfo::ConfigTypeDefaultPath : {
+            int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeViewConfig, "");
+            }
+        }
+        // case ConfigInfo::ConfigTypeScreenInfo : {
+        //     QRect screenInfo = value.toRect();
+        //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
+        //     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+        //     break;
+        // }
+        default : {
+            break;
+        }
+    }
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
@@ -134,6 +140,20 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeWriteConfig : {
+            QVariantList configInfo = value.toList();
+            if (configInfo.size() == 2) {
+                int type = configInfo.at(0).toInt();
+                QStringList temp = configInfo.at(1).toString().split(", ");
+                QVariant value = QVariant(temp);
+                if ((type == ConfigInfo::ConfigTypeScreenInfo) && (temp.size() == 4)) {
+                    value = QVariant(QRect(temp.at(0).toInt(), temp.at(1).toInt(), temp.at(2).toInt(), temp.at(3).toInt()));
+                }
+                qDebug() << "ConfgiValue[" << type << "] :" << value;
+                ConfigSetting::instance().data()->writeConfig(type, value);
+            }
             break;
         }
         default : {
@@ -150,8 +170,8 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewConfig : {
-            QVariantList allConfig = QVariantList();
             QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
+            QVariantList allConfig = QVariantList();
             while (iter.hasNext()) {
                 iter.next();
                 QStringList temp = iter.value().first.split("ConfigType");
@@ -163,16 +183,24 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                 QVariant value = iter.value().second;
                 allConfig.append(QVariant(QVariantList({type, name, value})));
             }
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfig), true);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+            if (allConfig.size() > 0) {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
+                                                                    ivis::common::ViewTypeEnum::ViewTypeConfig);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfig), true);
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewSignal : {
             QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
             QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
             QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+            if ((sfcList.size() > 0) || (vsmList.size() > 0)) {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
+                                                                    ivis::common::ViewTypeEnum::ViewTypeSignal);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
+            }
             break;
         }
         default : {

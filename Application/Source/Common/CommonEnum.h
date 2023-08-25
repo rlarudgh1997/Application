@@ -85,6 +85,7 @@ public:
         PropertyTypeDepth,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
+        PropertyTypeViewType,
         PropertyTypeConfigInfo,
         PropertyTypeDefaultPath,
         PropertyTypeSignalListAll,  // SFC + VSM
@@ -158,13 +159,21 @@ public:
         EventTypeFileSaveAs,
         EventTypeFileSaveType,
         EventTypeViewConfig,
-        EventTypeChangedConfig,
+        EventTypeWriteConfig,
     };
     enum EventValue{
         EventValueInvalid = 0,
         EventValueInt,
         EventValueString,
         EventValueList,
+    };
+};
+
+class ViewTypeEnum {
+public:
+    enum ViewType {
+        ViewTypeConfig = 0,
+        ViewTypeSignal,
     };
 };
 

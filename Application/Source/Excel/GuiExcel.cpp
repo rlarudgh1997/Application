@@ -92,6 +92,9 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
 
     // Clear - Previous Table Widget
     mMainView->clear();
+    foreach(const auto& s, mExcelSheet) {
+        delete s;
+    }
     mExcelSheet.clear();
     mExcelCellInfo.clear();
 
@@ -133,7 +136,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
             QStringList detailInfoData = detailInfo[ivis::common::CellInfoEnum::ListInfoExcel::Data + rowIndex].toStringList();
             for (int columnIndex = 0; columnIndex < detailInfoData.size(); columnIndex++) {
                 QString data = detailInfoData[columnIndex];
-                if (((columnIndex < 4) && (columnIndex != 1))    // (0:TCName, 1:VehicleType, 2:Result, 3:Case)
+                if (((columnIndex < 4))    // && (columnIndex != 1))    // (0:TCName, 1:VehicleType, 2:Result, 3:Case)
                     // && (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
                     // && (type == ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen)
                     ) {
@@ -152,13 +155,13 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
                 if (data.compare(STRING_EXCEL_SPLIT) == false) {
                     data.clear();
                 }
-                QTableWidgetItem *detailDataItem = new QTableWidgetItem(data);
+                // QTableWidgetItem *detailDataItem = new QTableWidgetItem(data);
                 // detailDataItem->setTextAlignment(Qt::AlignCenter);
-                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, detailDataItem);
+                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(data));
             }
         }
 
-        mergeInfos[1] = mergeInfos[0];  // VehicleType 공백인 경우 존재하여 TCName 값으로 대입함.
+        // mergeInfos[1] = mergeInfos[0];  // VehicleType 공백인 경우 존재하여 TCName 값으로 대입함.
         // Draw - Merge Cell : (0:TCName, 1:VehicleType, 2:Result, 3:Case)
         for (int titleIndex = 0; titleIndex < mergeInfos.size(); titleIndex++) {
             QList<QPair<int, int>> mergeInfo = mergeInfos[titleIndex];
