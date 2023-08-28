@@ -9,7 +9,6 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	pip install openpyxl pandas
 	pip uninstall openpyxl pandas
 
-
 - lib 설치 확인
 	pip list | grep "openpyxl" >> ./CheckLib.txt
 	pip list | grep "pandas" >> ./CheckLib.txt
@@ -24,53 +23,34 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
-- 메뉴 항목 추가
-	: View
-		- Config : 전체 표시, 수정 버튼 활성화
-		- Signal(SFC, Vehicle) : VehicleType 별로 해당 하는 항목인지 여부 표시
-		- Python Lib Install Check
-	: Edit
-		- Config : 수정 기능 제공
+- view 메뉴 항목
+	: Signal(SFC, Vehicle)
+		- VehicleType 별로 해당 하는 항목인지 여부 표시
+		- listView & tableView 사용하여 표시
+	: Python Lib Install Check
 
 
+- edit 메뉴 항목
+	: 복사 & 붙여넣기
 
 
+- 엑셀 파일 오픈 & 수정
+	: 이상태에서 new 선택시 수정중인 엑셀 파일 저장 팝업 표시 안됨
 
-
-- 병합셀 정보 구성 확인
-	: excel to txt
-		- NaN 값 공백으로 변환함 : 현재 주석 처리함
-		- NaN 값인 경우 특정 string 으로 변환
-		- app에서 화면 표시시 특정 string은 공백으로 표시(Gui 에서 처리)
-	: ini to excel
-		-
-
-
-- 병합셀인 경우
-	: 병합 해제시
-		- control 에 병합 상태 정보 전달
-		- 병합/해제 인진에 대한 true/false 전달
-	: VehicleType 병합/해제 시
-		- TCName 도 함꼐 병합 되도록 수정
-		- TCName 병합시 VehicleType 함께 병합 되고 있음
-	: 페이지 하단에서 머지 동작시 화면 상단으로 이동하는 문제
 
 - 임시 코드 적용
 	: Description 내부 병합/해제 되도록 코드 적용됨
 		- 해당 기능 필요한지 여부 확인 필요
 
-- column 선택 2개 이상인 경우
-	: 메뉴 항목중 : 병합/해제는 disable 처리
-	: 경고 팝업 : 컬럼을 2개 이상 선택 하였다
 
-- column 인덱스가 4이상인 경우
-	: 메뉴 항목중 : 병합/해제는 disable 처리
-
-
+- 메뉴 팝업 disalbe 처리 조건
+	: column 2개 이상 선택인 경우
+		- 경고 팝업 : 컬럼을 2개 이상 선택 하였다
+	: column 인덱스가 4이상인 상태에서 병합인 경우
+		- 경고 팝업 : 병합할수 없는 column 을 선택 하였다.
 
 
-
-- 셀 선택후 자동완성 기능 동작확인
+- 셀 편집시 자동완성 기능
 	: _MCAN / _CCAN 으로 된 시그널은 .**__MCAN 글자 전체를 삭제
 	: Output 으로 사용한 시그널은 별도 정리 List 로 제공
 	: 자동 완성 필요 부분

@@ -95,6 +95,7 @@ public:
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
         PropertyTypeUpdateEditSheet,
+        PropertyTypeExcelSplitText,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,

@@ -52,7 +52,10 @@ void ControlExcel::initBaseData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, 0);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, 0);
 
-    updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
+    QString excelSplitText = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelBlankText).toString();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSplitText, excelSplitText);
+
+    // updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
 }
 
 void ControlExcel::resetControl(const bool& reset) {
@@ -163,7 +166,7 @@ void ControlExcel::updateSheetInfo(const int& propertyType, const QVariant& dirP
                 int fileIndex = sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
                 QMap<int, QVariant> dataInfo = QMap<int, QVariant>();
                 QVariant title = QVariant();
-                QString filePath = QString("%1/%2_%3.txt").arg(dirPath.toString()).arg(fileIndex).arg(sheet.toString());
+                QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath.toString()).arg(fileIndex).arg(sheet.toString());
                 QStringList readData = ivis::common::FileInfo::readFile(filePath);
                 rowCount = readData.size();
 
@@ -176,8 +179,11 @@ void ControlExcel::updateSheetInfo(const int& propertyType, const QVariant& dirP
                 for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
                     QStringList columnInfo = readData[rowIndex].split("\t");
                     if (rowIndex == 0) {
-                        dataInfo[ivis::common::CellInfoEnum::ListInfoExcel::Count] =
-                                                            QVariant(QVariantList({rowCount - 1, columnInfo.count()}));
+                        // Row[0] = column index number info -> do not used
+                    } else if (rowIndex == 1) {
+                        dataInfo[ivis::common::CellInfoEnum::ListInfoExcel::Count] = QVariant(QVariantList({
+                                                                        rowCount - 2,    // RowCount = 1 ~ (Max - 2)
+                                                                        columnInfo.count()}));
                         dataInfo[ivis::common::CellInfoEnum::ListInfoExcel::Title] = columnInfo;
                     } else {
                         dataInfo[ivis::common::CellInfoEnum::ListInfoExcel::Data + rowIndex - 1] = columnInfo;
@@ -345,9 +351,9 @@ bool ControlExcel::updateSheetCellInfo(const QVariant& cellInfo) {
         }
         case ivis::common::EditCellEnum::EditCellInfo::Merge :
         case ivis::common::EditCellEnum::EditCellInfo::Split : {
+            QString excelSplitText = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelSplitText).toString();
+            QString str = (editType == ivis::common::EditCellEnum::EditCellInfo::Merge) ? ("") : (excelSplitText);
             rowEnd += rowStart;
-
-            QString str = (editType == ivis::common::EditCellEnum::EditCellInfo::Merge) ? ("") : (STRING_EXCEL_SPLIT);
             foreach(const auto& detail, detailInfo) {
                 if (rowIndex < ivis::common::CellInfoEnum::ListInfoExcel::Data) {
                     updateData.append(detail);
@@ -422,7 +428,7 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
         QString writeData = QString();
         foreach(const auto& detail, detailInfo) {
             if (index == ivis::common::CellInfoEnum::ListInfoExcel::Sheet) {
-                file = QString("%1_%2.ini").arg(sheetIndex++).arg(detail.toString());
+                file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(detail.toString());
             } else if (index >= ivis::common::CellInfoEnum::ListInfoExcel::Title) {
                 QString infoData = QString();
                 int count = 0;
@@ -528,17 +534,21 @@ bool ControlExcel::checkPythonLibrary() {
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
     // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
-    // switch (type) {
-    //     case ConfigInfo::ConfigTypeScreenInfo : {
-    //         QRect screenInfo = value.toRect();
-    //         QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
-    //         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-    //         break;
-    //     }
-    //     default : {
-    //         break;
-    //     }
-    // }
+    switch (type) {
+        case ConfigInfo::ConfigTypeExcelBlankText : {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSplitText, value);
+            break;
+        }
+        // case ConfigInfo::ConfigTypeScreenInfo : {
+        //     QRect screenInfo = value.toRect();
+        //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
+        //     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+        //     break;
+        // }
+        default : {
+            break;
+        }
+    }
 }
 
 void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {

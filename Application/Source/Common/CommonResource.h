@@ -6,17 +6,6 @@
 
 
 
-// excel_parsing.py 내부 코드와 동기화 필요 :   read.replace("ExcelSplit", "")
-// #define STRING_EXCEL_SPLIT                         QString(" ")
-#define STRING_EXCEL_SPLIT                         QString("ExcelSplit")
-
-
-
-
-
-
-
-
 
 // =============================================================================================================
 // String Define

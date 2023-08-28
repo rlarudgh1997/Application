@@ -175,7 +175,22 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeLastFile :
         case ivis::common::EventTypeEnum::EventTypeFileNew :
-        case ivis::common::EventTypeEnum::EventTypeFileOpen :
+        case ivis::common::EventTypeEnum::EventTypeFileOpen : {
+#if 1
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
+#else
+            if (getData(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType).toBool()) {
+                QVariant popupData = QVariant();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), popupData)
+                    == ivis::common::PopupButton::OK) {
+                    slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeFileSave, popupData);
+                }
+            } else {
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
+            }
+#endif
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeFileSave :
         case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);

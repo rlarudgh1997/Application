@@ -100,6 +100,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
 
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
+    QString excelSplitText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSplitText).toString();
 
 
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
@@ -152,7 +153,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
                     }
                 }
 
-                if (data.compare(STRING_EXCEL_SPLIT) == false) {
+                if (data.compare(excelSplitText) == false) {
                     data.clear();
                 }
                 // QTableWidgetItem *detailDataItem = new QTableWidgetItem(data);

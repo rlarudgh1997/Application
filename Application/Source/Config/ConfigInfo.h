@@ -32,6 +32,7 @@ public:
         // File
         ConfigTypeLastFileInfo,
         ConfigTypeDeleteFileTC,
+        ConfigTypeExcelBlankText,
 
 
         // ==========================================================================
@@ -90,7 +91,8 @@ private:
         // File
         mConfigInfoData[ConfigTypeLastFileInfo] = QPair<QString, QVariant>("ConfigTypeLastFileInfo", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
-
+        mConfigInfoData[ConfigTypeExcelBlankText] = QPair<QString, QVariant>("ConfigTypeExcelBlankText",
+                                                        QVariant("ExcelBlankText"));
 
 
 
