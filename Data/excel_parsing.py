@@ -52,12 +52,12 @@ def readConfigSetting() :
                 configInfo[key] = value[0]
     file.close()
 
-    excelSplitText = configInfo["ConfigTypeExcelBlankText"]
+    excelBlankText = configInfo["ConfigTypeExcelBlankText"]
     readSheetName = configInfo["ConfigTypeSheetName"].split(", ")
     for name in readSheetName :
         sheetName.append(name)
 
-    print("ExcelSplitText :", excelSplitText, ",", type(excelSplitText))
+    print("ExcelSplitText :", excelBlankText, ",", type(excelBlankText))
     print("SheetName      :", sheetName,      ",", type(sheetName))
     print("==============================================================================================\n")
 
@@ -202,9 +202,9 @@ def readFromText(path, saveFilePath) :
         print("    SheetMergeInfo : ", sheetMergeInfoList, "\n")
 
 
-        # 특정 공백 스트링(ExcelSplit) -> 실제 공백으로 제거
+        # 특정 공백 스트링(ExcelBlankText) -> 실제 공백으로 제거
         read.replace(configInfo["ConfigTypeExcelBlankText"], "")
-        # read.str.replace("ExcelSplit", "")
+        # read.str.replace("ExcelBlankText", "")
         # read.replace(" ", "")
 
 

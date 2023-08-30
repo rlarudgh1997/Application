@@ -25,6 +25,10 @@ private:
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const int& type, const QVariant& filePath);
     bool checkPythonLibrary();
+    QVariantList isInsertDeleteCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
+                                                                const int& rowStart, const int& rowEnd);
+    QVariantList isMergeSplitCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
+                                                                const int& rowStart, const int& rowEnd);
 
 
 protected:

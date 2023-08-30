@@ -39,6 +39,7 @@
 
 
 
+#define CELL_INFO_TEMP
 
 
 

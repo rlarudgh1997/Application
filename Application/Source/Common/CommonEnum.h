@@ -95,7 +95,7 @@ public:
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
         PropertyTypeUpdateEditSheet,
-        PropertyTypeExcelSplitText,
+        PropertyTypeExcelBlankText,
         PropertyTypeFileSaveType,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -146,6 +146,7 @@ public:
         EventTypeSaveExcel,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,
+        EventTypeUpdateSheetInfo,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
         EventTypeCellMergeSplit,

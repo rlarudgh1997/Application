@@ -33,7 +33,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,               QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet,                   QVariant(false));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSplitText,                    QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText,                    QVariant(""));
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,             QVariant(""));
