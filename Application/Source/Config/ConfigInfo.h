@@ -43,6 +43,7 @@ public:
         ConfigTypeMode,
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
+        ConfigTypeSeparator,
 
         ConfigTypeMax,
     } ConfigType;
@@ -101,6 +102,7 @@ private:
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant(0));
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
+        mConfigInfoData[ConfigTypeSeparator] = QPair<QString, QVariant>("ConfigTypeSeparator", QVariant("[=]"));
     }
 
 

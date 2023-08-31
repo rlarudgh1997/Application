@@ -58,6 +58,7 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDisplaySheetInfo(const int& type);
+    void readExcelInfo();
 
 
 public slots:

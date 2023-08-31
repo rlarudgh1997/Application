@@ -23,6 +23,13 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
+- QTableView 사용방법에 대한 정보
+	: https://blog.naver.com/anakt/221834285100
+
+- python lib
+	: 프로젝트 빌드시 라이브러리 체크하여 파일 생성
+	: 프로그램 실행시 라이브러리 체크 코드는 삭제
+
 - view 메뉴 항목
 	: Signal(SFC, Vehicle)
 		- VehicleType 별로 해당 하는 항목인지 여부 표시

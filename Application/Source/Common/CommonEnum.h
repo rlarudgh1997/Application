@@ -97,6 +97,7 @@ public:
         PropertyTypeUpdateEditSheet,
         PropertyTypeExcelBlankText,
         PropertyTypeFileSaveType,
+        PropertyTypeReadExcelInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -162,6 +163,7 @@ public:
         EventTypeFileSaveType,
         EventTypeViewConfig,
         EventTypeWriteConfig,
+        EventTypeReadExcelInfo,
     };
     enum EventValue{
         EventValueInvalid = 0,

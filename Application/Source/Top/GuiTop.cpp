@@ -364,17 +364,17 @@ void GuiTop::drawMenuEtc() {
         });
     }
 
-#if 0
+#if 1
     static QPushButton* excelOpen = nullptr;
     if (excelOpen == nullptr) {
         excelOpen = new QPushButton(mMainView);
         excelOpen->setGeometry(960, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        excelOpen->setText("[     ]");
+        excelOpen->setText("Read");
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            // createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeReadExcelInfo, QVariant());
         });
     }
 #endif

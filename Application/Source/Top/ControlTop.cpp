@@ -244,6 +244,10 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "Setting - Test Coverage";
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeReadExcelInfo : {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
+            break;
+        }
         default : {
             break;
         }
