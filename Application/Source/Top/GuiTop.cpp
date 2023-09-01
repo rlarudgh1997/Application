@@ -28,7 +28,7 @@ GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
 
 void GuiTop::drawDisplayDepth0() {
     drawMenuFile();
-    drawMenuEdit();
+    // drawMenuEdit();
     drawMenuView();
     drawMenuSetting();
     drawMenuHelp();

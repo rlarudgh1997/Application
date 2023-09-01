@@ -21,6 +21,7 @@ ControlManager::ControlManager() {
 }
 
 void ControlManager::init() {
+    setCurrentMode(ivis::common::ScreenEnum::DisplayTypeTop);
     createControl(ivis::common::ScreenEnum::DisplayTypeTop);
 }
 

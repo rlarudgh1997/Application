@@ -37,7 +37,7 @@
 
 
 
-
+#define USE_EXCEL_FUNCTION_OLD
 
 #define CELL_INFO_TEMP
 

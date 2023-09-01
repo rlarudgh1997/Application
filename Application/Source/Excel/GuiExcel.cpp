@@ -210,8 +210,6 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
                 }
             }
         }
-#else
-
 #endif
 
         // Draw - Cell Text Width/Height
@@ -222,10 +220,12 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetTextInfo,
-                            QVariant(QVariantList({sheetIndex, column, row, text})));
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
             mExcelSheet[sheetIndex]->resizeRowsToContents();
+#if defined(USE_EXCEL_FUNCTION_OLD)
+            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetTextInfo,
+                            QVariant(QVariantList({sheetIndex, column, row, text})));
+#endif
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
@@ -282,6 +282,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
                                                                         columnStart, columnEnd,
                                                                         rowStart, rowEnd})));
             } else {
+#if defined(USE_EXCEL_FUNCTION_OLD)
                 if (((columnEnd == 1) && (columnStart < 4))) {
                     ivis::common::EditCellEnum::EditCellInfo editType = ivis::common::EditCellEnum::EditCellInfo::Merge;
                     if (mExcelCellInfo[sheetIndex].size() > 0) {
@@ -306,6 +307,9 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
                 } else {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
                 }
+#else
+
+#endif
             }
         });
     }
@@ -339,7 +343,7 @@ void GuiExcel::readExcelInfo() {
         int columnCount = sheet->columnCount();
 
         dataInfo[ivis::common::CellInfoEnum::ListInfoExcel::Sheet] = QVariant(mMainView->tabText(sheetIndex));
-        QVariantList title = QVariantList();
+        QStringList title = QStringList();
         for (int columnIndex = 0; columnIndex < sheet->columnCount(); columnIndex++) {
             title.append(sheet->horizontalHeaderItem(columnIndex)->text());
         }

@@ -137,11 +137,15 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
 }
 
 void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
-    foreach(const auto& widget, mSubScreens) {
-        widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
-    }
     if (mRootScreen) {
         mRootScreen->resize(resizeEvent.size().width(), resizeEvent.size().height());
+    }
+    foreach(const auto& widget, mSubScreens) {
+        if (widget == mAlwaysTopScreen) {
+            widget->setGeometry(0, 0, resizeEvent.size().width(), 60);
+        } else {
+            widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
+        }
     }
 }
 
