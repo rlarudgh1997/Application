@@ -145,15 +145,11 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeWriteConfig : {
             QVariantList configInfo = value.toList();
             if (configInfo.size() == 2) {
-                int type = configInfo.at(0).toInt();
-                QStringList temp = configInfo.at(1).toString().split(", ");
-                QVariant value = QVariant(temp);
-                if ((type == ConfigInfo::ConfigTypeScreenInfo) && (temp.size() == 4)) {
-                    value = QVariant(QRect(temp.at(0).toInt(), temp.at(1).toInt(), temp.at(2).toInt(), temp.at(3).toInt()));
-                }
-                qDebug() << "ConfgiValue[" << type << "] :" << value;
-                ConfigSetting::instance().data()->writeConfig(type, value);
+                int configType = configInfo.at(0).toInt();
+                QVariant configValue = configInfo.at(1);
+                ConfigSetting::instance().data()->editConfig(configType, configValue);
             }
+
             break;
         }
         default : {

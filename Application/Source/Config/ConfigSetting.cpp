@@ -65,6 +65,9 @@ QVariant ConfigSetting::readConfig(const int& configType) {
         ||(configType == ConfigInfo::ConfigTypeMax)) {
         return QVariant();
     } else {
+        if (configType == ConfigInfo::ConfigTypeNewSheetRowCount) {
+            qDebug() << "NewSheetRowCount :" << mConfigData[configType];
+        }
         return mConfigData[configType];
     }
 }
@@ -78,6 +81,45 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 
         emit signalConfigChanged(configType, configValue);
     }
+}
+
+void ConfigSetting::editConfig(const int& configType, const QVariant& configValue) {
+    QVariant editValue = QVariant();
+    switch (configType) {
+        case ConfigInfo::ConfigTypeNewSheetRowCount : {
+            editValue = configValue.toInt();
+            break;
+        }
+        case ConfigInfo::ConfigTypeDeleteFileTC : {
+            editValue = configValue.toBool();
+            break;
+        }
+        case ConfigInfo::ConfigTypeScreenInfo : {
+            QStringList value = configValue.toString().split(", ");
+            if (value.size() == 4) {
+                QRect rect(value.at(0).toInt(), value.at(1).toInt(), value.at(2).toInt(), value.at(3).toInt());
+                editValue = QVariant(rect);
+            }
+            break;
+        }
+        case ConfigInfo::ConfigTypeSheetName :
+        case ConfigInfo::ConfigTypeDescTitle :
+        case ConfigInfo::ConfigTypeContentTitle : {
+            QStringList value = configValue.toString().split(", ");
+            QVariantList list = QVariantList();
+            foreach(const auto& v, value) {
+                list.append(v);
+            }
+            editValue = QVariant(list);
+            break;
+        }
+        default : {
+            editValue = configValue;
+            break;
+        }
+    }
+    // qDebug() << "ConfgiValue[" << configType << "] :" << configValue.type() << editValue;
+    writeConfig(configType, editValue);
 }
 
 void ConfigSetting::readConfig() {
