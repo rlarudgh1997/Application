@@ -44,8 +44,6 @@ void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
     bool fileExists = configSettingFile.exists();
 
-    // qDebug() << "ConfigInfo=" << fileExists << ", " << configSettingFile.fileName().toLatin1().data();
-
     if ((fileExists == false) && (configSettingFile.open(QIODevice::WriteOnly|QIODevice::Text))) {
         resetConfig();
         configSettingFile.close();
@@ -62,12 +60,9 @@ void ConfigSetting::init() {
 
 QVariant ConfigSetting::readConfig(const int& configType) {
     if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMaxDoNotSave)
-        ||(configType == ConfigInfo::ConfigTypeMax)) {
+        || (configType == ConfigInfo::ConfigTypeMax)) {
         return QVariant();
     } else {
-        if (configType == ConfigInfo::ConfigTypeNewSheetRowCount) {
-            qDebug() << "NewSheetRowCount :" << mConfigData[configType];
-        }
         return mConfigData[configType];
     }
 }
@@ -118,7 +113,6 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
             break;
         }
     }
-    // qDebug() << "ConfgiValue[" << configType << "] :" << configValue.type() << editValue;
     writeConfig(configType, editValue);
 }
 
@@ -192,7 +186,6 @@ QMap<int, QPair<QString, QVariant>> ConfigSetting::allConfig() {
                                                         ConfigInfo::ConfigGetTypeName).toString();
         allConfig[configType] = QPair<QString, QVariant>(configName, readConfig(configType));
     }
-    // qDebug() << "allConfig :" << allConfig;
     return allConfig;
 }
 

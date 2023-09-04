@@ -6,6 +6,12 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QTableWidget>
+#include <QLineEdit>
+#include <QCompleter>
+#include <QTableWidgetItem>
+
+
+
 
 class CellInfo {
 public:
@@ -57,6 +63,7 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
+    void updateDisplayNodeAddress(QTableWidgetItem* item);
     void updateDisplaySheetInfo(const int& type);
     void readExcelInfo();
 
@@ -69,6 +76,9 @@ private:
     QTabWidget* mMainView = nullptr;
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();
+    QLineEdit* mInputNodeAddress = nullptr;
+    QCompleter* mAutoComplete = nullptr;
+    QTableWidgetItem* mCurrentItem = nullptr;
 };
 
 #endif    // GUI_EXCEL_H

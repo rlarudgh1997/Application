@@ -33,10 +33,9 @@ AbstractHandler* ControlTop::isHandler() {
 void ControlTop::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
-
         controlConnect(true);
-        initBaseData();
         initCommonData(currentMode, ivis::common::ScreenEnum::DisplayTypeTop);
+        initBaseData();
     }
 }
 

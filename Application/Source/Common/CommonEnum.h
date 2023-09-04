@@ -13,7 +13,7 @@ namespace common {
 #define SCREEN_MINIMUM_HEIGHT            700
 #define SCREEN_MAXIMUM_WIDTH             2100
 #define SCREEN_MAXIMUM_HEIGHT            1300
-#define SCREEN_MARGIN_HEIGHT             60
+#define SCREEN_HEIGHT_MARGIN             60
 
 #define PROPETRY_START_COMMON            0
 #define PROPETRY_START_NORMAL            1000

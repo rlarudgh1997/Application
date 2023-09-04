@@ -7,8 +7,9 @@
 #include <QMenu>
 #include <QLabel>
 #include <QTextEdit>
-
-
+#include <QStringListModel>
+#include <QHeaderView>
+#include <QDialog>
 
 QSharedPointer<GuiExcel>& GuiExcel::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiExcel> gGui;
@@ -74,6 +75,61 @@ void GuiExcel::updateDisplayVisible() {
     }
 }
 
+void GuiExcel::updateDisplayNodeAddress(QTableWidgetItem* item) {
+    // if (mInputNodeAddress == nullptr) {
+    if (1) {
+#if 1
+        QDialog* aaa = new QDialog();
+        aaa->setGeometry(1200, 500, 600, 50);
+        aaa->setModal(true);
+        aaa->show();
+        mInputNodeAddress = new QLineEdit(aaa);
+        QRect rect = isHandler()->getScreen()->geometry();
+        mInputNodeAddress->setGeometry(0, 0, 600, 50);
+#else
+        mInputNodeAddress = new QLineEdit();
+        mInputNodeAddress->setGeometry(900, 50, 400, 30);
+#endif
+        mInputNodeAddress->setStyleSheet("background-color: white; color: black; font: bold; font-size:12px");
+        mInputNodeAddress->activateWindow();
+        mInputNodeAddress->setFocus();
+
+        if (item) {
+            mInputNodeAddress->show();
+        } else {
+            mInputNodeAddress->hide();
+        }
+        mCurrentItem = item;
+
+        if (mAutoComplete == nullptr) {
+            mAutoComplete = new QCompleter(mInputNodeAddress);
+            mAutoComplete->setCaseSensitivity(Qt::CaseInsensitive);
+            mAutoComplete->setFilterMode(Qt::MatchContains);
+            mAutoComplete->setWrapAround(false);
+            mAutoComplete->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+
+            connect(mAutoComplete, QOverload<const QString &>::of(&QCompleter::activated), [=](const QString &text) {
+                qDebug() << "activated :" << text << mCurrentItem;
+                mCurrentItem->setText(text);
+            });
+        }
+    }
+
+    connect(mInputNodeAddress, &QWidget::destroyed, [=]() {
+        qDebug() << "destroyed :" << mInputNodeAddress;
+    });
+
+    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+    if (mInputNodeAddress) {
+        if (mAutoComplete) {
+            static QStringListModel* listModel = new QStringListModel(nodeAddress);
+            mAutoComplete->setModel(listModel);
+            mInputNodeAddress->setCompleter(mAutoComplete);
+        }
+    }
+    mInputNodeAddress->raise();
+}
+
 void GuiExcel::updateDisplaySheetInfo(const int& type) {
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     int updateSheetSize = isHandler()->getProperty(type).toInt();
@@ -97,6 +153,9 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
     }
     mExcelSheet.clear();
     mExcelCellInfo.clear();
+
+    // mMainView->raise();
+    // mInputNodeAddress->raise();
 
     QString sheetName = QString();
     QStringList contentTitle = QStringList();
@@ -217,7 +276,61 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         mExcelSheet[sheetIndex]->resizeRowsToContents();
 
         // Connect - Signal
+#if 1
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemDoubleClicked, [=](QTableWidgetItem *item) {
+            qDebug() << sheetIndex << ". itemDoubleClicked :" << item << item->column() << item->row();
+            QModelIndexList selectedIndexes = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+            QRect rect = isHandler()->getScreen()->geometry();
+            qDebug() << "1 rect :" << rect;
+            rect = mMainView->geometry();
+            qDebug() << "2 rect :" << rect;
+            updateDisplayNodeAddress(item);
+            foreach(const QModelIndex& modelIndex, selectedIndexes) {
+                // int column = modelIndex.column();
+                // int row = modelIndex.row();
+                // int width = mExcelSheet[sheetIndex]->columnWidth(column);
+                // int height = mExcelSheet[sheetIndex]->rowHeight(row);
+                // qDebug() << "Size :" << width << height << mExcelSheet[sheetIndex]->visualRect(modelIndex);
+                QRect rect = mExcelSheet[sheetIndex]->visualRect(modelIndex);
+                QRect setRect = QRect(rect.x() + 24, rect.y() + 47, rect.width(), rect.height());
+//                mInputNodeAddress->setGeometry(setRect);
+                // mInputNodeAddress->show();
+                // mInputNodeAddress->setText(item->text());
+                qDebug() << "setRect :" << setRect;
+                qDebug() << "horizontalHeader :" << mExcelSheet[sheetIndex]->horizontalHeader()->geometry();
+                qDebug() << "verticalHeader :" << mExcelSheet[sheetIndex]->verticalHeader()->geometry();
+            }
+            // int width = mExcelSheet[sheetIndex]->columnWidth(item->column());
+            // int height = mExcelSheet[sheetIndex]->rowHeight(item->row());
+            // qDebug() << "Size :" << width << height
+            // mInputNodeAddress->setGeometry(900, 50, width, height);
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemChanged, [=](QTableWidgetItem *item) {
+            qDebug() << sheetIndex << ". itemChanged :" << item;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::currentItemChanged, [=](QTableWidgetItem *current,
+                                                                                QTableWidgetItem *previous) {
+            qDebug() << sheetIndex << ". currentItemChanged :" << current << previous;
+            mInputNodeAddress->hide();
+        });
+#else
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+            QList<QTableWidgetItem*> selected = mExcelSheet[sheetIndex]->selectedItems();
+            qDebug() << sheetIndex << ". itemSelectionChanged" << selected;
+            foreach(const auto& sel, selected) {
+                qDebug() << "Selected :" << sel->column() << sel->row();
+            }
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
+            qDebug() << sheetIndex << ". cellDoubleClicked :" << mExcelSheet[sheetIndex]->currentItem() << column << row;
+            static QLineEdit* text = new QLineEdit(mExcelSheet[sheetIndex]);
+        });
+#endif
+
+
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
+            mInputNodeAddress->hide();
+
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
@@ -229,7 +342,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-            // qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
+            qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
             bool sheetInfoNull = (modelIndexs.size() == 0);
 
             if (sheetInfoNull) {
@@ -382,6 +495,10 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeVisible : {
             updateDisplayVisible();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll : {
+            updateDisplayNodeAddress(nullptr);
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelInfo : {

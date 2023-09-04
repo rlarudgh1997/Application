@@ -31,8 +31,8 @@ void ControlExcel::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
         controlConnect(true);
-        initBaseData();
         initCommonData(currentMode, ivis::common::ScreenEnum::DisplayTypeExcel);
+        initBaseData();
     }
 }
 
@@ -52,7 +52,12 @@ void ControlExcel::initBaseData() {
     QString excelBlankText = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelBlankText).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText, excelBlankText);
 
-    // updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
+    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
+    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
+    if ((sfcList.size() > 0) || (vsmList.size() > 0)) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList));
+    }
 }
 
 void ControlExcel::resetControl(const bool& reset) {

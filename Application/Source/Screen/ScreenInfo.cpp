@@ -7,6 +7,8 @@
 #include <QDebug>
 
 
+#define SCREEN_HEIGHT_MARGIN            60
+
 QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
     static QSharedPointer<ScreenInfo> gScreenInfo;
     if (gScreenInfo.isNull()) {
@@ -45,7 +47,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
             mSubScreens[displayType] = new QWidget(mRootScreen);
             if (mAlwaysTopScreen == nullptr) {
                 mAlwaysTopScreen = mSubScreens[displayType];
-                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), 60);
+                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), SCREEN_HEIGHT_MARGIN);
             } else  {
                 mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
             }
@@ -142,7 +144,7 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
     }
     foreach(const auto& widget, mSubScreens) {
         if (widget == mAlwaysTopScreen) {
-            widget->setGeometry(0, 0, resizeEvent.size().width(), 60);
+            widget->setGeometry(0, 0, resizeEvent.size().width(), SCREEN_HEIGHT_MARGIN);
         } else {
             widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
         }

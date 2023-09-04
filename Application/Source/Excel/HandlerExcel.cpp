@@ -24,12 +24,13 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay,                           QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize,                       QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                 QVariant(QSize(0,
-                                                                                                        SCREEN_MARGIN_HEIGHT)));
+                                                                                                        SCREEN_HEIGHT_MARGIN)));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                              QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
 
 
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,               QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet,                   QVariant(false));

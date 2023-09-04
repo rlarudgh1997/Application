@@ -32,8 +32,8 @@ void ControlCenter::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
         controlConnect(true);
-        initBaseData();
         initCommonData(currentMode, ivis::common::ScreenEnum::DisplayTypeCenter);
+        initBaseData();
     }
 }
 
@@ -149,7 +149,6 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 QVariant configValue = configInfo.at(1);
                 ConfigSetting::instance().data()->editConfig(configType, configValue);
             }
-
             break;
         }
         default : {
