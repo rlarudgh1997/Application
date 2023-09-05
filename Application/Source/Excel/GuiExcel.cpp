@@ -145,7 +145,7 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                 mInputNodeAddress->hide();
                 QString inputText = mInputNodeAddress->text();
                 if (inputText.size() > 0) {
-                    if (mCurrentCellItem) {
+                    if (mCurrentCellItem != nullptr) {
                         mCurrentCellItem->setText(inputText);
                     }
                     if (mInputNodeAddress) {
@@ -322,6 +322,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         // Connect - Signal
         connect(mExcelSheet[sheetIndex], &QTableWidget::currentItemChanged, [=](QTableWidgetItem *current,
                                                                                 QTableWidgetItem *previous) {
+            qDebug() << sheetIndex << ". currentItemChanged :" << current << previous;
 #if defined(USE_AUTO_COMPLETE_NORMAL)
             updateDisplayNodeAddress(AutoComplete::Hide, mExcelSheet[sheetIndex], current);
 #else
@@ -450,8 +451,8 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
     connect(mMainView, &QTabWidget::currentChanged, [=](int index) {
         if (index >= 0) {
             mMainView->setCurrentIndex(index);
+            updateDisplayNodeAddress(AutoComplete::Hide, nullptr, nullptr);
         }
-        updateDisplayNodeAddress(AutoComplete::Hide, mCurrentSheet, nullptr);
     });
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
