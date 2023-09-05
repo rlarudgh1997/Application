@@ -23,6 +23,30 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
+- 데모 리뷰 순서
+	: default path 기능 설명
+	: node address path 기능 설명
+	: 기존 파일 open 기능 설명
+	: new 기능 설명
+	: save & save as 기능 설명
+	: merge 기능 설명
+	: split 기능 설명
+	: insert 기능 설명
+	: delete 기능 설명
+	: config 표시, 수정 기능 설명
+	: node addres 표시 기능 설명
+	: node addres 자동완성 기능 설명
+
+
+
+- editConfig 데이터 입력 유효성
+
+- initCommonData 이동
+- initNormalData 이동
+
+
+
+
 - QTableView 사용방법에 대한 정보
 	: https://blog.naver.com/anakt/221834285100
 

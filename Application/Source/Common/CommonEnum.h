@@ -97,6 +97,7 @@ public:
         PropertyTypeUpdateEditSheet,
         PropertyTypeExcelBlankText,
         PropertyTypeFileSaveType,
+        PropertyTypeAutoComplete,
         PropertyTypeReadExcelInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,

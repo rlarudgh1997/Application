@@ -30,23 +30,22 @@ AbstractHandler* ControlTop::isHandler() {
     return mHandler;
 }
 
-void ControlTop::initControl(const int& currentMode) {
+bool ControlTop::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
-        controlConnect(true);
-        initCommonData(currentMode, ivis::common::ScreenEnum::DisplayTypeTop);
-        initBaseData();
+        return true;
     }
+    return false;
 }
 
-void ControlTop::initCommonData(const int& currentMode, const int& displayType) {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
+void ControlTop::initCommonData(const int& currentMode) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeTop);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
-void ControlTop::initBaseData() {
+void ControlTop::initNormalData() {
     resetControl(false);
 
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();

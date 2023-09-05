@@ -40,10 +40,10 @@ protected:
 
 private:
     virtual AbstractHandler* isHandler() = 0;
-    virtual void initControl(const int& currentMode) = 0;
+    virtual bool initControl(const int& currentMode) = 0;
     virtual void controlConnect(const bool& state = true) = 0;
-    virtual void initCommonData(const int& currentMode, const int& displayType) = 0;
-    virtual void initBaseData() = 0;
+    virtual void initCommonData(const int& currentMode) = 0;
+    virtual void initNormalData() = 0;
     virtual void resetControl(const bool& reset) = 0;
     virtual void timerFunc(const int& timerId) = 0;
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;

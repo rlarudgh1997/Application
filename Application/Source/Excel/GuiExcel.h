@@ -8,6 +8,7 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QCompleter>
+#include <QStringListModel>
 #include <QTableWidgetItem>
 
 
@@ -48,6 +49,12 @@ private:
         RowDelete,
         CellMergeSplit,
     };
+    enum class AutoComplete {
+        Draw = 0,
+        Update,
+        Show,
+        Hide,
+    };
 
 
 public:
@@ -63,7 +70,7 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
-    void updateDisplayNodeAddress(QTableWidgetItem* item);
+    void updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item);
     void updateDisplaySheetInfo(const int& type);
     void readExcelInfo();
 
@@ -76,9 +83,12 @@ private:
     QTabWidget* mMainView = nullptr;
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();
+    int mCurrentSheetIndex = 0;
     QLineEdit* mInputNodeAddress = nullptr;
     QCompleter* mAutoComplete = nullptr;
-    QTableWidgetItem* mCurrentItem = nullptr;
+    QStringListModel mNodeAddressListModel = QStringListModel();
+    QTableWidget* mCurrentSheet = nullptr;
+    QTableWidgetItem* mCurrentCellItem = nullptr;
 };
 
 #endif    // GUI_EXCEL_H

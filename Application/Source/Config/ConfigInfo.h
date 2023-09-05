@@ -74,7 +74,7 @@ private:
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath",
                                                         QVariant(QApplication::applicationDirPath() + QString("/SFC")));
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>("ConfigTypeNodeAddressPath",
-                                                        QVariant(QApplication::applicationDirPath()));
+                                                        QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName",
                                                         QVariant(QVariantList({"Description", "Privates", "Telltales",

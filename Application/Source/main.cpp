@@ -48,10 +48,63 @@ void sigHandler(int32_t sig) {
 #endif
 }
 
+enum LogLevel {
+    LogLevelInvalid  = 0x0000,
+    LogLevelDebug    = 0x0001,
+    LogLevelInfo     = 0x0002,
+    LogLevelWarnig   = 0x0004,
+    LogLevelCritical = 0x0008,
+    LogLevelFatal    = 0x0010,
+    LogLevelAll      = (LogLevelDebug | LogLevelInfo | LogLevelWarnig | LogLevelCritical | LogLevelFatal),
+};
+int logLevel = (LogLevelInfo);
+
+// 사용자 정의 로깅 핸들러 함수
+void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    switch (type) {
+        case QtDebugMsg : {
+            if (logLevel & LogLevelDebug) {
+                qDebug() << "Debug    :" << msg;
+            }
+            break;
+        }
+        case QtInfoMsg : {
+            if (logLevel & LogLevelInfo) {
+                qInfo() << "Info     :" << msg;
+            }
+            break;
+        }
+        case QtWarningMsg : {
+            if (logLevel & LogLevelWarnig) {
+                qWarning() << "Warning  :" << msg;
+            }
+            break;
+        }
+        case QtCriticalMsg : {
+            if (logLevel & LogLevelCritical) {
+                qCritical() << "Critical :" << msg;
+            }
+            break;
+        }
+        // case QtFatalMsg : {
+        //     if (logLevel & LogLevelFatal) {
+        //         qFatal() << "Fatal    :" << msg;
+        //     }
+        //     break;
+        // }
+        default : {
+            break;
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     signal(SIGABRT, sigHandler);
     signal(SIGSEGV, sigHandler);
 
+    QApplication app(argc, argv);
+
+    // qInstallMessageHandler(customMessageHandler);
     QString messagPattern = QString("%1 %2%3%4%5%6 %7")
                                     .arg("[%{time yyyyMMdd h:mm:ss.zzz}]")    // .arg("[%{time yyyyMMdd h:mm:ss.zzz t}")
                                     .arg("[%{if-debug}D%{endif}")
@@ -62,9 +115,8 @@ int main(int argc, char *argv[]) {
                                     .arg("%{message}");   // .arg("[%{category}] %{message}");
     qSetMessagePattern(messagPattern);
 
-    QApplication app(argc, argv);
-
-    qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");
+    // qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");
+    // qputenv("QT_LOGGING_RULES", "myApp.debug=true;myApp.info=true;myApp.warning=false;myApp.critical=false");
 
     MainWindow mainWindow;
 

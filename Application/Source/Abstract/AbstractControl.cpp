@@ -5,8 +5,10 @@ AbstractControl::AbstractControl() {
 
 bool AbstractControl::init(const int& currentMode) {
     if (mInit == false) {
-        initControl(currentMode);
-        mInit = true;
+        mInit = initControl(currentMode);
+        controlConnect(true);
+        initCommonData(currentMode);
+        initNormalData();
     }
     return mInit;
 }

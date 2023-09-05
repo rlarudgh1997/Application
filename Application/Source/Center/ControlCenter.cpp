@@ -28,23 +28,22 @@ AbstractHandler* ControlCenter::isHandler() {
     return mHandler;
 }
 
-void ControlCenter::initControl(const int& currentMode) {
+bool ControlCenter::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
-        controlConnect(true);
-        initCommonData(currentMode, ivis::common::ScreenEnum::DisplayTypeCenter);
-        initBaseData();
+        return true;
     }
+    return false;
 }
 
-void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
+void ControlCenter::initCommonData(const int& currentMode) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeCenter);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
-void ControlCenter::initBaseData() {
+void ControlCenter::initNormalData() {
     resetControl(false);
 }
 
@@ -190,12 +189,9 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
             QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
             QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-            if ((sfcList.size() > 0) || (vsmList.size() > 0)) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
-                                                                    ivis::common::ViewTypeEnum::ViewTypeSignal);
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
-            }
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeSignal);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
             break;
         }
         default : {

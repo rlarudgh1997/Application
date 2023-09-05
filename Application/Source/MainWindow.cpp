@@ -11,14 +11,14 @@
 
 
 MainWindow::MainWindow() {
-    qDebug() << "================================================================================================";
-    qDebug() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
-    qDebug() << "QT_VERSION  :" << QT_VERSION_STR;
+    qInfo() << "================================================================================================";
+    qInfo() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
+    qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
     ivis::common::CheckTimer checkTimer;
 
     ConfigSetting::instance().data();
     mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-    qDebug() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
+    qInfo() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
     checkTimer.check("ConfigSetting");
 
     this->setGeometry(mScreenInfo);
@@ -42,7 +42,7 @@ MainWindow::MainWindow() {
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << "Complete - Exit Application !!!!!!!! \n\n";
+    qInfo() << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
 void MainWindow::controlConnect() {
@@ -51,10 +51,10 @@ void MainWindow::controlConnect() {
             Qt::UniqueConnection);
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
-            qDebug() << "Python lib openpyxl :" << ((state) ? ("valid") : ("invalid"));
+            qInfo() << "Python lib openpyxl :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, state);
         } else  if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
-            qDebug() << "Python lib pandas   :" << ((state) ? ("valid") : ("invalid"));
+            qInfo() << "Python lib pandas   :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
         } else {
             mCheckLib.clear();

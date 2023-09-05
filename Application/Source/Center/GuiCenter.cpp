@@ -1,7 +1,6 @@
 #include "GuiCenter.h"
 #include "AbstractHandler.h"
 
-#include "CommonEnum.h"
 #include "CommonResource.h"
 
 #include <QStringListModel>

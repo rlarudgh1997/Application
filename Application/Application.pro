@@ -53,15 +53,17 @@ message("INSTALL_PATH=$$INSTALL_PATH")
 !isEmpty(INSTALL_PATH) {
     target.path = $$INSTALL_PATH
     python.path = $$INSTALL_PATH
-    python.files = $$PWD/../Data/excel_parsing.py
+    python.files = $$PWD/../Python/excel_parsing.py
     node.path = $$INSTALL_PATH
-    node.files = $$PWD/../Data/NodeAddressSFC.info $$PWD/../Data/NodeAddressVSM.info
+    # node.files = $$PWD/../Python/NodeAddressSFC.info $$PWD/../Python/NodeAddressVSM.info
+    node.files = $$PWD/../Python/NodeAddress
 } else {
     target.path = $$OUT_PWD
     python.path = $$OUT_PWD
-    python.files = $$PWD/../Data/excel_parsing.py
+    python.files = $$PWD/../Python/excel_parsing.py
     node.path = $$OUT_PWD
-    node.files = $$PWD/../Data/NodeAddressSFC.info $$PWD/../Data/NodeAddressVSM.info
+    # node.files = $$PWD/../Python/NodeAddressSFC.info $$PWD/../Python/NodeAddressVSM.info
+    node.files = $$PWD/../Python/NodeAddress
 }
 
 
