@@ -34,6 +34,14 @@
         "ratio": "cpp",
         "variant": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "unordered_set": "cpp",
+        "complex": "cpp",
+        "thread": "cpp",
+        "condition_variable": "cpp",
+        "cmath": "cpp",
+        "qmenu": "cpp",
+        "qlabel": "cpp",
+        "mutex": "cpp"
     }
 }
