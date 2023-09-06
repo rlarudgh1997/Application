@@ -148,6 +148,7 @@ private:
     QVariantList mConfigValue = QVariantList();
     QLineEdit* mInputNodeAddress = nullptr;
     QPushButton* mConfigHideButton = nullptr;
+    QPushButton* mConfigResetButton = nullptr;
 };
 
 #endif    // GUI_CENTER_H

@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QLabel>
 #include <QTextEdit>
-// #include <QHeaderView>
+ #include <QHeaderView>
 // #include <QDialog>
 
 
@@ -145,7 +145,7 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                 mInputNodeAddress->hide();
                 QString inputText = mInputNodeAddress->text();
                 if (inputText.size() > 0) {
-                    if (mCurrentCellItem != nullptr) {
+                    if (mCurrentCellItem) {
                         mCurrentCellItem->setText(inputText);
                     }
                     if (mInputNodeAddress) {
@@ -154,6 +154,7 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                         mCurrentCellItem = nullptr;
                     }
                 }
+                // mCurrentSheet->setFocus();
                 mCurrentSheet = sheet;
                 mCurrentCellItem = item;
             }
@@ -320,6 +321,28 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         mExcelSheet[sheetIndex]->resizeRowsToContents();
 
         // Connect - Signal
+        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized, [=](int logicalIndex,
+                                                                                        int oldSize, int newSize) {
+            Q_UNUSED(logicalIndex)
+            Q_UNUSED(oldSize)
+            Q_UNUSED(newSize)
+            // qDebug() << sheetIndex << ". H sectionResized :" << logicalIndex << oldSize << newSize;
+            updateDisplayNodeAddress(AutoComplete::Hide, nullptr, nullptr);
+        });
+        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized, [=](int logicalIndex,
+                                                                                        int oldSize, int newSize) {
+            Q_UNUSED(logicalIndex)
+            Q_UNUSED(oldSize)
+            Q_UNUSED(newSize)
+            // qDebug() << sheetIndex << ". V sectionResized :" << logicalIndex << oldSize << newSize;
+            updateDisplayNodeAddress(AutoComplete::Hide, nullptr, nullptr);
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+            qDebug() << sheetIndex << ". itemSelectionChanged :" << mExcelSheet[sheetIndex]->selectedItems();
+            if (mExcelSheet[sheetIndex]->selectedItems().size() == 0) {
+                updateDisplayNodeAddress(AutoComplete::Hide, nullptr, nullptr);
+            }
+        });
         connect(mExcelSheet[sheetIndex], &QTableWidget::currentItemChanged, [=](QTableWidgetItem *current,
                                                                                 QTableWidgetItem *previous) {
             qDebug() << sheetIndex << ". currentItemChanged :" << current << previous;
@@ -521,6 +544,8 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             if ((mCurrentSheet) && (mCurrentCellItem)) {
                 AutoComplete type = (value.toBool()) ? (AutoComplete::Show) : (AutoComplete::Hide);
                 updateDisplayNodeAddress(type, mCurrentSheet, mCurrentCellItem);
+            } else {
+                qDebug() << "ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete";
             }
             break;
         }
@@ -557,7 +582,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
 
 
 #if 0
-void GuiExcel::aaaaaaaaaaaaaaaaa(QTableWidgetItem* item) {
+void GuiExcel::UpdateNodeAddressDialog(QTableWidgetItem* item) {
     // if (mInputNodeAddress == nullptr) {
         static QDialog* aaa = new QDialog(isHandler()->getScreen());
 

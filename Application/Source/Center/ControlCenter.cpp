@@ -110,8 +110,9 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
-    qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
+    qDebug() << "ControlCenter::slotConfigChanged(" << type << "," << value << ")";
     switch (type) {
+        case ConfigInfo::ConfigTypeInit :
         case ConfigInfo::ConfigTypeCheckLibOpenpyxl :
         case ConfigInfo::ConfigTypeCheckLibPandas :
         case ConfigInfo::ConfigTypeDefaultPath : {
@@ -120,12 +121,6 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeViewConfig, "");
             }
         }
-        // case ConfigInfo::ConfigTypeScreenInfo : {
-        //     QRect screenInfo = value.toRect();
-        //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
-        //     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-        //     break;
-        // }
         default : {
             break;
         }
@@ -134,8 +129,6 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     // qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
-    ivis::common::CheckTimer checkTimer;
-
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
@@ -148,6 +141,10 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 QVariant configValue = configInfo.at(1);
                 ConfigSetting::instance().data()->editConfig(configType, configValue);
             }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeConfigReset : {
+            ConfigSetting::instance().data()->resetConfig();
             break;
         }
         default : {

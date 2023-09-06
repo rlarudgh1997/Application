@@ -37,13 +37,18 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 	: node addres 표시 기능 설명
 	: node addres 자동완성 기능 설명
 
+- Top 이름 변경
+	: Menu 로 변경
+
+- 셀 자동완성
+	: 입력후 엔터로 완료시 셀 폭 자동 조절 되는 이슈
+	: 편집중 다른 화면으로 전환후 new 로 생성하여 f2로 편집시 자동완성 표시 안됨
+		: 해당 조건인 경우 포커스를 잃어 버려서 키 입력 이벤트를 받을수 없음
 
 
 - editConfig 데이터 입력 유효성
-
-- initCommonData 이동
-- initNormalData 이동
-
+	: ConfigSetting 내부에서 조건 처리
+		: str 비교 - true, false, 숫자 변경가능한지..
 
 
 

@@ -154,6 +154,7 @@ public:
         EventTypeCellMergeSplit,
         EventTypeCellMergeSplitWarning,
         EventTypeViewInfoClose,
+        EventTypeConfigReset,
 
         EventTypeSendOtherControl = 2000,
         EventTypeLastFile,

@@ -29,16 +29,7 @@ GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
 
 void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
-#if 0
-    mMainView->setRowCount(10);
-    mMainView->setColumnCount(4);
 
-
-    QTableWidgetItem *newItem = new QTableWidgetItem(QString("Text1"));
-    newItem->setIcon(QIcon(QPixmap(IAMGE_SAVE)));
-    newItem->setTextAlignment(Qt::AlignVCenter);
-    mMainView->setItem(0, 1, newItem);
-#else
     if (mConfigWidget == nullptr) {
         mConfigWidget = new QWidget();
         mConfigWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
@@ -54,7 +45,6 @@ void GuiCenter::drawDisplayDepth0() {
         mNodeAddressList->show();
         mMainView->insertWidget(1, mNodeAddressList);
     }
-#endif
 
     if (mInputNodeAddress == nullptr) {
         mInputNodeAddress = new QLineEdit(mNodeAddressList);
@@ -72,11 +62,18 @@ void GuiCenter::drawDisplayDepth0() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex()));
         });
         mConfigHideButton->show();
-        // mConfigHideButton->raise();
     }
-    // mMainView->stackUnder(mConfigHideButton);
-    // mConfigWidget->stackUnder(mConfigHideButton);
-    // mNodeAddressList->stackUnder(mConfigHideButton);
+
+    if (mConfigResetButton == nullptr) {
+        mConfigResetButton = new QPushButton(mMainView);
+        mConfigResetButton->setGeometry(1250, 75, 50, 50);
+        mConfigResetButton->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:12px");
+        mConfigResetButton->setText("Reset");
+        connect(mConfigResetButton, &QPushButton::clicked, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant());
+        });
+        mConfigHideButton->show();
+    }
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -125,6 +122,7 @@ void GuiCenter::updateDisplayConfigInfo() {
         }
         mConfigWidget->raise();
         mConfigHideButton->raise();
+        mConfigResetButton->raise();
 
         if (mConfigValue == configValue) {
             foreach(const auto& item, mConfigListItem) {
