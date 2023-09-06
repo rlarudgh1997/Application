@@ -82,7 +82,7 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
     QVariant editValue = QVariant();
     switch (configType) {
         case ConfigInfo::ConfigTypeNewSheetRowCount : {
-            editValue = configValue.toInt();
+            editValue = (configValue.toInt() >= 1000) ? (1000) : (configValue.toInt());
             break;
         }
         case ConfigInfo::ConfigTypeDeleteFileTC : {

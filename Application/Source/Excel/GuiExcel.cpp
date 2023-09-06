@@ -115,13 +115,17 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
             break;
         }
         case AutoComplete::Show : {
-            if (mInputNodeAddress) {
+            if ((mInputNodeAddress) && (sheet)) {
 #if defined(USE_AUTO_COMPLETE_NORMAL)
                 QModelIndexList modelIndexs = sheet->selectionModel()->selectedIndexes();
                 foreach(const QModelIndex& modelIndex, modelIndexs) {
                     QRect rect = sheet->visualRect(modelIndex);
-                    int xMargin = (sheet->rowCount() >= 100) ? (33) : (24);
-                    QRect setRect = QRect(rect.x() + xMargin, rect.y() + 47, rect.width(), rect.height());
+                    int marginX = sheet->verticalHeader()->geometry().x() + sheet->verticalHeader()->geometry().width() + 2;
+                    int marginY = 47;
+                    // qDebug() << "RectH :" << sheet->horizontalHeader()->geometry();
+                    // qDebug() << "RectV :" << sheet->verticalHeader()->geometry();
+                    // qDebug() << "Margin :" << marginX << marginY;
+                    QRect setRect = QRect(rect.x() + marginX, rect.y() + marginY, rect.width(), rect.height());
                     mInputNodeAddress->raise();
                     mInputNodeAddress->setGeometry(setRect);
                     mInputNodeAddress->activateWindow();
