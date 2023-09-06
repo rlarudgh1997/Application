@@ -111,6 +111,12 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     qDebug() << "ControlCenter::slotConfigChanged(" << type << "," << value << ")";
+#if 1
+    int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+    if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeViewConfig, "");
+    }
+#else
     switch (type) {
         case ConfigInfo::ConfigTypeInit :
         case ConfigInfo::ConfigTypeCheckLibOpenpyxl :
@@ -125,6 +131,7 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
             break;
         }
     }
+#endif
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {

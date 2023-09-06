@@ -23,20 +23,6 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # ToDo
-- 데모 리뷰 순서
-	: default path 기능 설명
-	: node address path 기능 설명
-	: 기존 파일 open 기능 설명
-	: new 기능 설명
-	: save & save as 기능 설명
-	: merge 기능 설명
-	: split 기능 설명
-	: insert 기능 설명
-	: delete 기능 설명
-	: config 표시, 수정 기능 설명
-	: node addres 표시 기능 설명
-	: node addres 자동완성 기능 설명
-
 - Top 이름 변경
 	: Menu 로 변경
 
@@ -111,7 +97,50 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 
+=====================================================================
+# Demo 순서
+** 기본 기능 리스트
+	- default path 기능 설명
+		: 기본 작업 폴더 지정
 
+	- node address path 기능 설명
+		: node address 파일 위치 지정
+			-> NodeAddressSFC.info
+			-> NodeAddressVSM.info
+
+	- 기존 파일 open 기능 설명
+		: 기존 작업중인 엑셀 파일 열기 기능
+
+	- new 기능 설명
+		: 새로운 엑셀 파일 생성
+			-> Config 설정에서 만들 갯수 지정 가능
+
+	- save & save as 기능 설명
+		: new, open 으로 만들 엑셀 수정 후 저장 기능
+
+	- 자동완성 기능
+		: 선택된 셀에서만 자동완성 기능 동작함
+			-> 선택 셀 기준으로 화면 표시시 너비가 좁아서 전체 node address 가 표시 되지 않음
+			-> 추후 별도 팝업으로 구현 필요
+
+	- 셀 병합/해제 기능 설명
+		: 셀 병합 기능
+		: 병합 셀 해제 기능
+
+	- 행 추가/삭제 기능 설명
+		: 행 추가/삭제
+		: 열에 대한 기능은 구현 하지 않음
+
+
+	- config 표시, 수정 기능 설명
+		: 어플리케이션에서 사용주인 설정 파일 보기 및 수정 기능은
+
+	- node addres 표시 기능 설명
+		: sfc, vsm 노드 명 리스트 표시 기능은
+
+
+** 기존 동작중인 generator.py 파일 수정 적용 필요
+	- sfc, vsm node address 파일 생성을 위해서 gen.py 파일 수정 하여 적용 필요함
 
 
 

@@ -120,7 +120,8 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                 QModelIndexList modelIndexs = sheet->selectionModel()->selectedIndexes();
                 foreach(const QModelIndex& modelIndex, modelIndexs) {
                     QRect rect = sheet->visualRect(modelIndex);
-                    QRect setRect = QRect(rect.x() + 33, rect.y() + 47, rect.width(), rect.height());
+                    int xMargin = (sheet->rowCount() >= 100) ? (33) : (24);
+                    QRect setRect = QRect(rect.x() + xMargin, rect.y() + 47, rect.width(), rect.height());
                     mInputNodeAddress->raise();
                     mInputNodeAddress->setGeometry(setRect);
                     mInputNodeAddress->activateWindow();
