@@ -77,7 +77,7 @@ void GuiExcel::updateDisplayVisible() {
 }
 
 void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item) {
-    qDebug() << "updateDisplayNodeAddress :" << static_cast<int>(type) << sheet << item;
+    // qDebug() << "updateDisplayNodeAddress :" << static_cast<int>(type) << sheet << item;
 
     switch (type) {
         case AutoComplete::Draw : {
@@ -136,7 +136,6 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                 mCurrentSheet = sheet;
                 mCurrentCellItem = item;
             }
-            qDebug() << "\t Show";
             break;
         }
         case AutoComplete::Hide : {
@@ -166,7 +165,6 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
             mCurrentSheet = sheet;
             mCurrentCellItem = item;
 #endif
-            qDebug() << "\t Hide";
             break;
         }
         default : {
@@ -186,10 +184,9 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
     if (updateSheetSize == 0) {
         qDebug() << "Fail to update sheet info[" << type << "] size : 0";
         return;
-    } else {
-        qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize
-                    << ", CurrentSheetIndex :" << mMainView->currentIndex();
     }
+
+    qDebug() << "UpdateSheetSize[" << type << "] :" << updateSheetSize << ", CurrentSheetIndex :" << mMainView->currentIndex();
 
     // True : Update Cell Insert/Delete,  False : New, Open Update Sheet Info
     bool editSheet = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet).toBool();
@@ -229,7 +226,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
         mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mMainView->addTab(mExcelSheet[sheetIndex], sheetName);
-        qDebug() << "Sheet[" << sheetIndex << mExcelSheet[sheetIndex] << "] - Count :" << rowCount << "," << columnCount;
+        // qDebug() << "Sheet[" << sheetIndex << mExcelSheet[sheetIndex] << "] - Count :" << rowCount << "," << columnCount;
 
         // Draw - Detail List Data
         QMap<int, QList<QPair<int, int>>> mergeInfos;
@@ -380,17 +377,18 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-            qDebug() << sheetIndex << ". MenuRightClick : " << pos;    // << ", SelectItem :" << modelIndexs;
-            bool sheetInfoNull = (modelIndexs.size() == 0);
+            int curretSheetRowCount = mExcelSheet[sheetIndex]->rowCount();
+            qDebug() << sheetIndex << ". MenuRightClick : " << pos << modelIndexs.size() << curretSheetRowCount;
+            bool selectCellInfo = ((modelIndexs.size() == 0)/*&& (curretSheetRowCount == 0)*/);
 
-            if (sheetInfoNull) {
-                qDebug() << "Fail to menu right click - modalindex size : 0 -> only display menu : insert";
+            if (selectCellInfo) {
+                qDebug() << "Menu Right Display : Only Insert -  modalindex size : 0";
             }
 
-            int columnStart = (sheetInfoNull) ? (1) : (modelIndexs.at(0).column());
-            int columnEnd = (sheetInfoNull) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-            int rowStart = (sheetInfoNull) ? (0) : (modelIndexs.at(0).row());
-            int rowEnd = (sheetInfoNull) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            int columnStart = (selectCellInfo) ? (1) : (modelIndexs.at(0).column());
+            int columnEnd = (selectCellInfo) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+            int rowStart = (selectCellInfo) ? (0) : (modelIndexs.at(0).row());
+            int rowEnd = (selectCellInfo) ? (1) : (modelIndexs.last().row() - rowStart + 1);
             qDebug() << sheetIndex << ". cellSelected :" << "," << columnStart << "," << columnEnd
                                     << "," << rowStart << "," << rowEnd;
 
@@ -398,7 +396,7 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
             QMap<MenuItemRight, QAction*> menuItem = QMap<MenuItemRight, QAction*>();
 
             menuItem[MenuItemRight::RowInsert] = menuRight->addAction("Insert");
-            if (sheetInfoNull == false) {
+            if (selectCellInfo == false) {
                 menuItem[MenuItemRight::RowDelete] = menuRight->addAction("Delete");
                 menuItem[MenuItemRight::CellMergeSplit] = menuRight->addAction("Merge/Split");
             }
@@ -411,14 +409,23 @@ void GuiExcel::updateDisplaySheetInfo(const int& type) {
 
             if (selectAction == menuItem[MenuItemRight::RowInsert]) {
                 selectMenuItem = MenuItemRight::RowInsert;
-            } else if (selectAction == menuItem[MenuItemRight::RowDelete]) {
-                selectMenuItem = MenuItemRight::RowDelete;
-            } else if (selectAction == menuItem[MenuItemRight::CellMergeSplit]) {
-                selectMenuItem = MenuItemRight::CellMergeSplit;
             } else {
+                if (selectCellInfo == false) {
+                    if (selectAction == menuItem[MenuItemRight::RowDelete]) {
+                        selectMenuItem = MenuItemRight::RowDelete;
+                    } else if (selectAction == menuItem[MenuItemRight::CellMergeSplit]) {
+                        selectMenuItem = MenuItemRight::CellMergeSplit;
+                    } else {
+                    }
+                }
+            }
+            qDebug() << "selectMenuItem :" << static_cast<int>(selectMenuItem);
+
+            if (selectMenuItem == MenuItemRight::Invalid) {
                 qDebug() << "Fail to select right menu item.";
                 return;
             }
+
 
             if (selectMenuItem == MenuItemRight::RowInsert) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo, QVariant(QVariantList({

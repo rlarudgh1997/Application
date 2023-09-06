@@ -55,14 +55,12 @@ message("INSTALL_PATH=$$INSTALL_PATH")
     python.path = $$INSTALL_PATH
     python.files = $$PWD/../Python/excel_parsing.py
     node.path = $$INSTALL_PATH
-    # node.files = $$PWD/../Python/NodeAddressSFC.info $$PWD/../Python/NodeAddressVSM.info
     node.files = $$PWD/../Python/NodeAddress
 } else {
     target.path = $$OUT_PWD
     python.path = $$OUT_PWD
     python.files = $$PWD/../Python/excel_parsing.py
     node.path = $$OUT_PWD
-    # node.files = $$PWD/../Python/NodeAddressSFC.info $$PWD/../Python/NodeAddressVSM.info
     node.files = $$PWD/../Python/NodeAddress
 }
 
