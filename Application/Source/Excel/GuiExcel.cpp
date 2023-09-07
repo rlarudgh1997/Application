@@ -82,7 +82,8 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
     switch (type) {
         case AutoComplete::Draw : {
             mInputNodeAddress = new QLineEdit(mMainView);
-            mInputNodeAddress->setStyleSheet("background-color: rgb(200, 200, 200); color: black; font: bold; font-size:12px");
+            mInputNodeAddress->setStyleSheet("background-color: rgb(230, 230, 230); color: black; font-size:12px");
+            mInputNodeAddress->setTextMargins(1, 0, 0, 0);
             mInputNodeAddress->setFrame(false);
             mInputNodeAddress->setEnabled(true);
             if (mAutoComplete == nullptr) {
@@ -122,10 +123,8 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                     QRect rect = sheet->visualRect(modelIndex);
                     int marginX = sheet->verticalHeader()->geometry().x() + sheet->verticalHeader()->geometry().width() + 2;
                     int marginY = 47;
-                    // qDebug() << "RectH :" << sheet->horizontalHeader()->geometry();
-                    // qDebug() << "RectV :" << sheet->verticalHeader()->geometry();
-                    // qDebug() << "Margin :" << marginX << marginY;
                     QRect setRect = QRect(rect.x() + marginX, rect.y() + marginY, rect.width(), rect.height());
+                    mInputNodeAddress->setText(item->text());
                     mInputNodeAddress->raise();
                     mInputNodeAddress->setGeometry(setRect);
                     mInputNodeAddress->activateWindow();

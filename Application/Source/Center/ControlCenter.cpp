@@ -139,6 +139,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeViewInfoClose, "");
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeWriteConfig : {
@@ -161,7 +162,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlCenter::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
         return;
     }
 

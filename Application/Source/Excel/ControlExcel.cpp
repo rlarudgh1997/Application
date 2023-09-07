@@ -727,12 +727,17 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlExcel::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay) != QVariant(displayType)) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
         return;
     }
 
     qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
+        case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
+            // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRaise, true, true);
+            ControlManager::instance().data()->raise(displayType);
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeLastFile : {
             QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastFileInfo).toString();
             if (lastFilePath.size() == 0) {

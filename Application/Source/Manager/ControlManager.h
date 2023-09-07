@@ -19,6 +19,7 @@ public:
     static QSharedPointer<ControlManager>& instance();
     void init();
     void sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue);
+    void raise(const int& displayType);
     void keyEvent(const int& inputType, QKeyEvent* keyEvent);
     void mouseEvent(const int& inputType, const int& inputValue);
     void resizeEvent(QResizeEvent& resizeEvent);

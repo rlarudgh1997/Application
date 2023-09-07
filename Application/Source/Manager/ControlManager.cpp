@@ -34,9 +34,13 @@ void ControlManager::sendEventInfo(const int& source, const int& destination, co
 
     if (source == ivis::common::ScreenEnum::DisplayTypeTop) {
         ivis::common::CheckTimer checkTimer;
-        ScreenInfo::instance().data()->controlScreen(destination, true);
+        raise(destination);
         checkTimer.check("RaiseScreen");
     }
+}
+
+void ControlManager::raise(const int& displayType) {
+    ScreenInfo::instance().data()->controlScreen(displayType);
 }
 
 void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {

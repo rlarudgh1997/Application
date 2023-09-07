@@ -3,33 +3,31 @@
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
-# [Python 관련 설정]
-- lib 설치
-	# pip install xlrd
-	pip install openpyxl pandas
-	pip uninstall openpyxl pandas
-
-- lib 설치 확인
-	pip list | grep "openpyxl" >> ./CheckLib.txt
-	pip list | grep "pandas" >> ./CheckLib.txt
-	pip list | grep "xlrd" >> ./CheckLib.txt
-
-- gen_sfc.sh / gen_vsm.sh
-	: sfc / vsm 관련 h 파일 생성
-	: 생성 경로
-cd ~/900_Code/610_Application/SFC/model/ssfs/include/generated
-Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
-
-
-=====================================================================
 # ToDo
-- Top 이름 변경
-	: Menu 로 변경
-
-- 셀 자동완성
+- 자동완성
+	: 병합셀에서 자동완성 동작시 문제
+	: 활성화 상태에서 엔터 입력시 셀에 수정 텍스트 입력 안됨
+	: 활성화시 셀에 있는 텍스트 표시 안됨
+	: 더블 클릭으로 활성화시 포커스 이동 안됨
 	: 입력후 엔터로 완료시 셀 폭 자동 조절 되는 이슈
 	: 편집중 다른 화면으로 전환후 new 로 생성하여 f2로 편집시 자동완성 표시 안됨
 		: 해당 조건인 경우 포커스를 잃어 버려서 키 입력 이벤트를 받을수 없음
+
+- Open
+	: vehicle type 항목 - null 인 경우 병합셀 정보로 표시 되지 않음
+	: 수정 한 상태에서 new 동작시 save as 팝업 표시 하도록 수정
+
+- New
+	: new 로 생성한 내역이 있는 경우(현재 New 상태) 새로 생성하지 않고 raise or skip 동작 하도록
+	: row count 값만 전달하여 gui 에서 시트 구성 하도록 변경
+
+- SendEvent
+	: All 로 전송시 각 컨트롤에서 동작 하도록
+
+
+- Top 이름 변경
+	: Menu 로 변경
+
 
 
 - editConfig 데이터 입력 유효성
@@ -90,6 +88,25 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
 
+
+
+=====================================================================
+# [Python 관련 설정]
+- lib 설치
+	# pip install xlrd
+	pip install openpyxl pandas
+	pip uninstall openpyxl pandas
+
+- lib 설치 확인
+	pip list | grep "openpyxl" >> ./CheckLib.txt
+	pip list | grep "pandas" >> ./CheckLib.txt
+	pip list | grep "xlrd" >> ./CheckLib.txt
+
+- gen_sfc.sh / gen_vsm.sh
+	: sfc / vsm 관련 h 파일 생성
+	: 생성 경로
+cd ~/900_Code/610_Application/SFC/model/ssfs/include/generated
+Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 
