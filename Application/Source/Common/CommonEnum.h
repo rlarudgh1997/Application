@@ -135,7 +135,7 @@ public:
         EventTypeEditCut,
         EventTypeEditCopy,
         EventTypeEditPaste,
-        EventTypeViewSignal,
+        EventTypeViewNodeAddress,
         EventTypeViewPythonLib,
         EventTypeSettingDevPath,
         EventTypeSettingNodePath,

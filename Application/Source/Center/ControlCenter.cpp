@@ -189,7 +189,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeViewSignal : {
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
             QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
             QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
             QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");

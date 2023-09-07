@@ -27,11 +27,15 @@ GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
 
 void GuiTop::drawDisplayDepth0() {
     drawMenuFile();
-    // drawMenuEdit();
+#if !defined(USE_DEMO)
+    drawMenuEdit();
+#endif
     drawMenuView();
     drawMenuSetting();
     drawMenuHelp();
+#if !defined(USE_DEMO)
     drawMenuEtc();
+#endif
 }
 
 void GuiTop::drawDisplayDepth1() {
@@ -209,15 +213,15 @@ void GuiTop::drawMenuView() {
         });
     }
 
-    QAction *actionSignal = new QAction(QIcon::fromTheme("actionSignal"),
-                                                        STRING_SIGNAL,
+    QAction *actionNodeAddress = new QAction(QIcon::fromTheme("actionNodeAddress"),
+                                                        STRING_NODE_ADDRESS,
                                                         this);
-    if (actionSignal) {
-        actionSignal->setStatusTip(STRING_SIGNAL_TIP);
-        mMenu[MainType::View]->addAction(actionSignal);
-        mToolBar[MainType::View]->addAction(actionSignal);
-        connect(actionSignal, &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeViewSignal, QVariant());
+    if (actionNodeAddress) {
+        actionNodeAddress->setStatusTip(STRING_NODE_ADDRESS_TIP);
+        mMenu[MainType::View]->addAction(actionNodeAddress);
+        mToolBar[MainType::View]->addAction(actionNodeAddress);
+        connect(actionNodeAddress, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeViewNodeAddress, QVariant());
         });
     }
 

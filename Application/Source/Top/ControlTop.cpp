@@ -207,7 +207,7 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewConfig :
-        case ivis::common::EventTypeEnum::EventTypeViewSignal : {
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
