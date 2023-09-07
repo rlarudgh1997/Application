@@ -54,6 +54,7 @@ private:
         Update,
         Show,
         Hide,
+        Cancel,
     };
 
 

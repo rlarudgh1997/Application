@@ -3,7 +3,7 @@
 #include "CommonEnum.h"
 #include "ScreenInfo.h"
 #include "ConfigSetting.h"
-#include "ControlTop.h"
+#include "ControlMenu.h"
 #include "ControlCenter.h"
 #include "ControlExcel.h"
 // #include "CommonUtil.h"
@@ -21,8 +21,8 @@ ControlManager::ControlManager() {
 }
 
 void ControlManager::init() {
-    setCurrentMode(ivis::common::ScreenEnum::DisplayTypeTop);
-    createControl(ivis::common::ScreenEnum::DisplayTypeTop);
+    setCurrentMode(ivis::common::ScreenEnum::DisplayTypeMenu);
+    createControl(ivis::common::ScreenEnum::DisplayTypeMenu);
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {
@@ -32,7 +32,7 @@ void ControlManager::sendEventInfo(const int& source, const int& destination, co
         emit signalEventInfoChanged(destination, eventType, eventValue);
     }
 
-    if (source == ivis::common::ScreenEnum::DisplayTypeTop) {
+    if (source == ivis::common::ScreenEnum::DisplayTypeMenu) {
         ivis::common::CheckTimer checkTimer;
         raise(destination);
         checkTimer.check("RaiseScreen");
@@ -110,8 +110,8 @@ void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
-            case ivis::common::ScreenEnum::DisplayTypeTop : {
-                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTop::instance().data());
+            case ivis::common::ScreenEnum::DisplayTypeMenu : {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlMenu::instance().data());
                 break;
             }
             case ivis::common::ScreenEnum::DisplayTypeCenter : {

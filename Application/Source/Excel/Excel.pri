@@ -2,7 +2,7 @@ INCLUDEPATH += \
     $$PWD\
 
 
-DEFINES += __MODULE_CENTER__
+DEFINES += __MODULE_EXCEL__
 
 
 HEADERS += \

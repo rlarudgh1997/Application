@@ -1,4 +1,4 @@
-#include "GuiTop.h"
+#include "GuiMenu.h"
 #include "AbstractHandler.h"
 
 #include "CommonResource.h"
@@ -11,21 +11,21 @@
 
 
 
-QSharedPointer<GuiTop>& GuiTop::instance(AbstractHandler* handler) {
-    static QSharedPointer<GuiTop> gGui;
+QSharedPointer<GuiMenu>& GuiMenu::instance(AbstractHandler* handler) {
+    static QSharedPointer<GuiMenu> gGui;
     if (gGui.isNull()) {
-        gGui = QSharedPointer<GuiTop>(new GuiTop(handler));
+        gGui = QSharedPointer<GuiMenu>(new GuiMenu(handler));
     }
     return gGui;
 }
 
-GuiTop::GuiTop(AbstractHandler* handler) : AbstractGui(handler) {
+GuiMenu::GuiMenu(AbstractHandler* handler) : AbstractGui(handler) {
     mMainView = new QMainWindow();
     mMainView->setParent(isHandler()->getScreen());    // 부팅시 윈도우창 만들기
     updateDisplaySize();
 }
 
-void GuiTop::drawDisplayDepth0() {
+void GuiMenu::drawDisplayDepth0() {
     drawMenuFile();
 #if !defined(USE_DEMO)
     drawMenuEdit();
@@ -38,13 +38,13 @@ void GuiTop::drawDisplayDepth0() {
 #endif
 }
 
-void GuiTop::drawDisplayDepth1() {
+void GuiMenu::drawDisplayDepth1() {
 }
 
-void GuiTop::drawDisplayDepth2() {
+void GuiMenu::drawDisplayDepth2() {
 }
 
-void GuiTop::updateDisplaySize() {
+void GuiMenu::updateDisplaySize() {
     QSize size = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize).toSize();
     QSize margin = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin).toSize();
     QRect rect = isHandler()->getScreen()->geometry();
@@ -60,7 +60,7 @@ void GuiTop::updateDisplaySize() {
     mMainView->setGeometry(rect);
 }
 
-void GuiTop::updateDisplayVisible() {
+void GuiMenu::updateDisplayVisible() {
     if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
         mMainView->show();
     } else {
@@ -68,7 +68,7 @@ void GuiTop::updateDisplayVisible() {
     }
 }
 
-void GuiTop::drawMenuFile() {
+void GuiMenu::drawMenuFile() {
     mMenu[MainType::File] = mMainView->menuBar()->addMenu(STRING_FILE);
     mToolBar[MainType::File] = mMainView->addToolBar(STRING_FILE);
 
@@ -145,7 +145,7 @@ void GuiTop::drawMenuFile() {
     }
 }
 
-void GuiTop::drawMenuEdit() {
+void GuiMenu::drawMenuEdit() {
     mMenu[MainType::Edit] = mMainView->menuBar()->addMenu(STRING_EDIT);
     mToolBar[MainType::Edit] = mMainView->addToolBar(STRING_EDIT);
 
@@ -197,7 +197,7 @@ void GuiTop::drawMenuEdit() {
 }
 
 
-void GuiTop::drawMenuView() {
+void GuiMenu::drawMenuView() {
     mMenu[MainType::View] = mMainView->menuBar()->addMenu(STRING_VIEW);
     mToolBar[MainType::View] = mMainView->addToolBar(STRING_VIEW);
 
@@ -240,7 +240,7 @@ void GuiTop::drawMenuView() {
 #endif
 }
 
-void GuiTop::drawMenuSetting() {
+void GuiMenu::drawMenuSetting() {
     mMenu[MainType::Setting] = mMainView->menuBar()->addMenu(STRING_SETTING);
     mToolBar[MainType::Setting] = mMainView->addToolBar(STRING_SETTING);
 
@@ -256,6 +256,7 @@ void GuiTop::drawMenuSetting() {
         });
     }
 
+#if !defined(USE_DEMO)
     QAction *actionNodePath = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,
                                                         this);
@@ -267,6 +268,7 @@ void GuiTop::drawMenuSetting() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingNodePath, QVariant());
         });
     }
+#endif
 
     QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
                                                         STRING_REPORT,
@@ -325,7 +327,7 @@ void GuiTop::drawMenuSetting() {
     mMainView->menuBar()->addSeparator();
 }
 
-void GuiTop::drawMenuHelp() {
+void GuiMenu::drawMenuHelp() {
     mMenu[MainType::Help] = mMainView->menuBar()->addMenu(STRING_HELP);
 
     QAction *actionAbout = new QAction(QIcon::fromTheme("actionAbout"),
@@ -351,7 +353,7 @@ void GuiTop::drawMenuHelp() {
     }
 }
 
-void GuiTop::drawMenuEtc() {
+void GuiMenu::drawMenuEtc() {
     updateDisplayDefaultPath();
 
     static QPushButton* lastFile = nullptr;
@@ -383,7 +385,7 @@ void GuiTop::drawMenuEtc() {
 #endif
 }
 
-void GuiTop::updateDisplayDefaultPath() {
+void GuiMenu::updateDisplayDefaultPath() {
     QString path = QString("Path : %1")
                         .arg(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath).toString());
     static QPushButton* defaultPath = nullptr;
@@ -400,7 +402,7 @@ void GuiTop::updateDisplayDefaultPath() {
     defaultPath->setText(path);
 }
 
-void GuiTop::slotPropertyChanged(const int& type, const QVariant& value) {
+void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
             drawDisplay(value);

@@ -1,5 +1,5 @@
-#ifndef CONTROL_TOP_H
-#define CONTROL_TOP_H
+#ifndef CONTROL_MENU_H
+#define CONTROL_MENU_H
 
 #include "AbstractControl.h"
 
@@ -9,17 +9,17 @@
 
 
 
-class ControlTop : public AbstractControl {
+class ControlMenu : public AbstractControl {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlTop>& instance();
+    static QSharedPointer<ControlMenu>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
 
 private:
-    explicit ControlTop();
+    explicit ControlMenu();
 
 
 protected:
@@ -46,4 +46,4 @@ private:
 };
 
 
-#endif    // CONTROL_TOP_H
+#endif    // CONTROL_MENU_H

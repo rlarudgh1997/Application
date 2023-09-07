@@ -1,5 +1,5 @@
-#ifndef GUI_TOP_H
-#define GUI_TOP_H
+#ifndef GUI_MENU_H
+#define GUI_MENU_H
 
 #include "AbstractGui.h"
 
@@ -10,7 +10,7 @@
 #include <QToolBar>
 
 
-class GuiTop : public AbstractGui {
+class GuiMenu : public AbstractGui {
     Q_OBJECT
 
 private:
@@ -25,11 +25,11 @@ private:
 
 
 public:
-    static QSharedPointer<GuiTop>& instance(AbstractHandler* handler = nullptr);
+    static QSharedPointer<GuiMenu>& instance(AbstractHandler* handler = nullptr);
 
 
 private:
-    explicit GuiTop(AbstractHandler* handler = nullptr);
+    explicit GuiMenu(AbstractHandler* handler = nullptr);
 
     virtual void drawDisplayDepth0();
     virtual void drawDisplayDepth1();
@@ -56,4 +56,4 @@ private:
     QMap<MainType, QToolBar*> mToolBar = QMap<MainType, QToolBar*>();
 };
 
-#endif    // GUI_TOP_H
+#endif    // GUI_MENU_H

@@ -1,26 +1,26 @@
-#include "HandlerTop.h"
+#include "HandlerMenu.h"
 #include "CommonEnum.h"
 
 #if defined(USE_GUI_MODULE)
-#include "GuiTop.h"
+#include "GuiMenu.h"
 #endif
 
 
-QSharedPointer<HandlerTop>& HandlerTop::instance() {
-    static QSharedPointer<HandlerTop> gHandler;
+QSharedPointer<HandlerMenu>& HandlerMenu::instance() {
+    static QSharedPointer<HandlerMenu> gHandler;
     if (gHandler.isNull()) {
-        gHandler = QSharedPointer<HandlerTop>(new HandlerTop());
+        gHandler = QSharedPointer<HandlerMenu>(new HandlerMenu());
     }
     return gHandler;
 }
 
-HandlerTop::HandlerTop() : AbstractHandler(ivis::common::ScreenEnum::DisplayTypeTop, QString("HandlerTop")) {
+HandlerMenu::HandlerMenu() : AbstractHandler(ivis::common::ScreenEnum::DisplayTypeMenu, QString("HandlerMenu")) {
 #if defined(USE_GUI_MODULE)
-    GuiTop::instance(this);
+    GuiMenu::instance(this);
 #endif
 }
 
-void HandlerTop::initPropertyInfo() {
+void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay,                           QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize,                       QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                 QVariant(QSize(0, 0)));
@@ -33,16 +33,16 @@ void HandlerTop::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType,                      QVariant(false));
 }
 
-void HandlerTop::controlConnect(const bool& state) {
+void HandlerMenu::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
 #if 1
-        connect(this,                      &HandlerTop::signalPropertyChanged,
-                GuiTop::instance().data(), &GuiTop::slotPropertyChanged,
+        connect(this,                      &HandlerMenu::signalPropertyChanged,
+                GuiMenu::instance().data(), &GuiMenu::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerTop::signalPropertyChanged, [=](const int& type, const QVariant& value) {
-            GuiTop::instance().data()->slotPropertyChanged(type, value);
+        connect(this, &HandlerMenu::signalPropertyChanged, [=](const int& type, const QVariant& value) {
+            GuiMenu::instance().data()->slotPropertyChanged(type, value);
         });
 #endif
 #endif
@@ -51,9 +51,9 @@ void HandlerTop::controlConnect(const bool& state) {
     }
 }
 
-void HandlerTop::timerFunc(const int& timerId) {
+void HandlerMenu::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
-    if (timerId == getTimerId(HandlerTopTimerStart)) {
+    if (timerId == getTimerId(HandlerMenuTimerStart)) {
         // do nothing
     }
 }

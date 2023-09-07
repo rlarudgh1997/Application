@@ -50,7 +50,11 @@ void GuiCenter::drawDisplayDepth0() {
         mInputNodeAddress = new QLineEdit(mNodeAddressList);
         mInputNodeAddress->setGeometry(400, 20, 840, 50);
         mInputNodeAddress->setStyleSheet("background-color: white; color: black; font: bold; font-size:15px");
+#if defined(USE_DEMO)
+        mInputNodeAddress->hide();
+#else
         mInputNodeAddress->show();
+#endif
     }
 
     if (mConfigHideButton == nullptr) {

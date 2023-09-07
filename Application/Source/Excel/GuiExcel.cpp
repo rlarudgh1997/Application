@@ -151,9 +151,8 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
                     if (mCurrentCellItem) {
                         mCurrentCellItem->setText(inputText);
                     }
-                    if (mInputNodeAddress) {
-                        mInputNodeAddress->clear();
-                        mInputNodeAddress->hide();
+                    mInputNodeAddress->clear();
+                    if (mCurrentCellItem) {
                         mCurrentCellItem = nullptr;
                     }
                 }
@@ -169,6 +168,13 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
             mCurrentSheet = sheet;
             mCurrentCellItem = item;
 #endif
+            break;
+        }
+        case AutoComplete::Cancel : {
+            if (mInputNodeAddress) {
+                mInputNodeAddress->hide();
+                mInputNodeAddress->clear();
+            }
             break;
         }
         default : {
@@ -553,7 +559,15 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete : {
             if ((mCurrentSheet) && (mCurrentCellItem)) {
-                AutoComplete type = (value.toBool()) ? (AutoComplete::Show) : (AutoComplete::Hide);
+                AutoComplete type = AutoComplete::Hide;
+                int inputType = value.toInt();
+                if (inputType == 1) {
+                    type = AutoComplete::Show;
+                } else if (inputType == 2) {
+                    type = AutoComplete::Cancel;
+                } else {
+                    type = AutoComplete::Hide;
+                }
                 updateDisplayNodeAddress(type, mCurrentSheet, mCurrentCellItem);
             } else {
                 qDebug() << "ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete";

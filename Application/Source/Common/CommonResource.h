@@ -33,7 +33,7 @@
 #define STRING_VIEW                                QString("View")
 #define STRING_CONFIG                              QString("Config")
 #define STRING_CONFIG_TIP                          QString("View config infomation")
-#define STRING_NODE_ADDRESS                        QString("Node Address")
+#define STRING_NODE_ADDRESS                        QString("Node")
 #define STRING_NODE_ADDRESS_TIP                    QString("View node address infomation")
 #define STRING_PYTHON                              QString("Python")
 #define STRING_PYTHON_TIP                          QString("View python lib install infomation")

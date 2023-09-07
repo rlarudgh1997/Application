@@ -91,14 +91,16 @@ void ControlExcel::timerFunc(const int& timerId) {
 void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
     if (inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) {
         if (inputValue == Qt::Key_F2) {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, true, true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 1, true);
         } else if ((inputValue == ivis::common::KeyTypeEnum::KeyInputValueOK)
 #if defined(PLATFORM_X86)
             || (inputValue == ivis::common::KeyTypeEnum::KeyInputValueNumOK)
             || (inputValue == ivis::common::KeyTypeEnum::KeyInputValueNumOK2)
 #endif
             ) {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, false, true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 0, true);
+        } else if (inputValue == Qt::Key_Escape) {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 2, true);
         } else {
         }
     }
@@ -643,7 +645,7 @@ QVariantList ControlExcel::isMergeSplitCellInfo(const int& editType, const int& 
 }
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
+    // qDebug() << "ControlMenu::slotConfigChanged(" << type << "," << value << ")";
     switch (type) {
         case ConfigInfo::ConfigTypeExcelBlankText : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText, value);
@@ -688,7 +690,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
                 if (writeSheetInfo(filePath)) {
                     if (sytemCall(ivis::common::EventTypeEnum::EventTypeSaveExcel, filePath) > 0) {
                         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
-                        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop,
+                        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu,
                                         ivis::common::EventTypeEnum::EventTypeFileSaveType, false);
                     }
                 }
@@ -698,14 +700,14 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeUpdateSheetTextInfo : {
             if (updateSheetTextInfo(value)) {
-                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
             checkTimer.check("Update Sheet Text Info");
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeUpdateSheetCellInfo : {
             if (updateSheetCellInfo(value)) {
-                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             }
             checkTimer.check("Update Sheet Cell Info");
             break;
@@ -755,7 +757,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeFileNew : {
             updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, QVariant());
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeTop, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen : {

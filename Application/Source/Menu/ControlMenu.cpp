@@ -1,5 +1,5 @@
-#include "ControlTop.h"
-#include "HandlerTop.h"
+#include "ControlMenu.h"
+#include "HandlerMenu.h"
 
 #include "CommonEnum.h"
 #include "ControlManager.h"
@@ -8,29 +8,29 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
-// Q_LOGGING_CATEGORY(C_TOP, "ControlTop")
+// Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
 
 
-QSharedPointer<ControlTop>& ControlTop::instance() {
-    static QSharedPointer<ControlTop> gControl;
+QSharedPointer<ControlMenu>& ControlMenu::instance() {
+    static QSharedPointer<ControlMenu> gControl;
     if (gControl.isNull()) {
-        gControl = QSharedPointer<ControlTop>(new ControlTop());
+        gControl = QSharedPointer<ControlMenu>(new ControlMenu());
     }
     return gControl;
 }
 
-ControlTop::ControlTop() {
+ControlMenu::ControlMenu() {
     isHandler();
 }
 
-AbstractHandler* ControlTop::isHandler() {
+AbstractHandler* ControlMenu::isHandler() {
     if (mHandler == nullptr) {
-        mHandler = static_cast<AbstractHandler*>(HandlerTop::instance().data());
+        mHandler = static_cast<AbstractHandler*>(HandlerMenu::instance().data());
     }
     return mHandler;
 }
 
-bool ControlTop::initControl(const int& currentMode) {
+bool ControlMenu::initControl(const int& currentMode) {
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -38,14 +38,14 @@ bool ControlTop::initControl(const int& currentMode) {
     return false;
 }
 
-void ControlTop::initCommonData(const int& currentMode) {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeTop);
+void ControlMenu::initCommonData(const int& currentMode) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeMenu);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
-void ControlTop::initNormalData() {
+void ControlMenu::initNormalData() {
     resetControl(false);
 
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
@@ -54,20 +54,20 @@ void ControlTop::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
 }
 
-void ControlTop::resetControl(const bool& reset) {
+void ControlMenu::resetControl(const bool& reset) {
     Q_UNUSED(reset)
 }
 
-void ControlTop::controlConnect(const bool& state) {
+void ControlMenu::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(),                       &HandlerTop::signalHandlerEvent,
-                this,                              &ControlTop::slotHandlerEvent,
+        connect(isHandler(),                       &HandlerMenu::signalHandlerEvent,
+                this,                              &ControlMenu::slotHandlerEvent,
                 Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-                this,                              &ControlTop::slotConfigChanged,
+                this,                              &ControlMenu::slotConfigChanged,
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlTop::slotEventInfoChanged,
+                this,                              &ControlMenu::slotEventInfoChanged,
                 Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
@@ -81,16 +81,16 @@ void ControlTop::controlConnect(const bool& state) {
     }
 }
 
-void ControlTop::timerFunc(const int& timerId) {
+void ControlMenu::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
 }
 
-void ControlTop::keyEvent(const int& inputType, const int& inputValue) {
+void ControlMenu::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
 }
 
-void ControlTop::resizeEvent(const int& width, const int& height) {
+void ControlMenu::resizeEvent(const int& width, const int& height) {
 #if defined(USE_RESIZE_SIGNAL)
     Q_UNUSED(width)
     Q_UNUSED(height)
@@ -99,25 +99,25 @@ void ControlTop::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlTop::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+void ControlMenu::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
         createSignal(type, value, alwaysUpdate);
     }
 }
 
-void ControlTop::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
+void ControlMenu::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
         createSignal(type, value, alwaysUpdate);
     }
 }
 
-void ControlTop::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
+void ControlMenu::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
                                                         destination, eventType, eventValue);
 }
 
-void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlTop::slotConfigChanged(" << type << "," << value << ")";
+void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
+    // qDebug() << "ControlMenu::slotConfigChanged(" << type << "," << value << ")";
     switch (type) {
         case ConfigInfo::ConfigTypeDefaultPath : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
@@ -135,8 +135,8 @@ void ControlTop::slotConfigChanged(const int& type, const QVariant& value) {
     }
 }
 
-void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
-    qDebug() << "ControlTop::slotHandlerEvent() ->" << type << "," << value;
+void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
+    qDebug() << "ControlMenu::slotHandlerEvent() ->" << type << "," << value;
     ivis::common::CheckTimer checkTimer;
 
     switch (type) {
@@ -252,12 +252,12 @@ void ControlTop::slotHandlerEvent(const int& type, const QVariant& value) {
     }
 }
 
-void ControlTop::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
+void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
     if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
         return;
     }
 
-    qDebug() << "ControlTop::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeFileSaveType : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, eventValue);

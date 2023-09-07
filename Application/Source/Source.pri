@@ -3,7 +3,7 @@ include($$PWD/Common/Common.pri)
 include($$PWD/Screen/Screen.pri)
 include($$PWD/Config/Config.pri)
 include($$PWD/Manager/Manager.pri)
-include($$PWD/Top/Top.pri)
+include($$PWD/Menu/Menu.pri)
 include($$PWD/Excel/Excel.pri)
 include($$PWD/Center/Center.pri)
 

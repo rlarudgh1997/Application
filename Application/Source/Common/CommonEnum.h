@@ -27,7 +27,7 @@ class ScreenEnum {
 public:
     enum DisplayType {
         DisplayTypeInvalid             = 0x000000,
-        DisplayTypeTop                 = 0x000001,
+        DisplayTypeMenu                 = 0x000001,
         DisplayTypeCenter              = 0x000002,
         DisplayTypeExcel               = 0x000004,
         // DisplayTypeBottom              = 0x000008,
@@ -208,6 +208,14 @@ public:
     //     RowDelete,
     //     CellMergeSplit,
     // };
+    enum class AutoComplete {
+        Draw = 0,
+        Update,
+        Show,
+        Hide,
+        Cancel,
+    };
+
 };
 
 
