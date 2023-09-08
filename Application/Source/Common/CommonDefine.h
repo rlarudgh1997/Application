@@ -41,7 +41,7 @@
 #define USE_EXCEL_CELL_INFO_TEMP                   // Excel Cell 정보 구성서 임시 텍스트 사용
 #define USE_AUTO_COMPLETE_NORMAL                   // Excel Text 자동완성 기능 초기 버전 사용
 
-
+#define USE_EXCEL_FUNCTION_NEW
 
 
 

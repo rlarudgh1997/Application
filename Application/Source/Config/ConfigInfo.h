@@ -27,7 +27,7 @@ public:
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
-        ConfigTypeContentTitle,
+        ConfigTypeOtherTitle,
 
         // File
         ConfigTypeLastFileInfo,
@@ -82,11 +82,11 @@ private:
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>("ConfigTypeDescTitle",
                                                         QVariant(QVariantList({"test", "version", "description", "Config_Signal",
                                                                         "Data"})));
-        mConfigInfoData[ConfigTypeContentTitle] = QPair<QString, QVariant>("ConfigTypeContentTitle",
+        mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>("ConfigTypeOtherTitle",
                                                         QVariant(QVariantList({"TCName", "VehicleType", "Result", "Case",
                                                                         "Input_Signal", "Input_Data", "Output_Signal",
                                                                         "isInitialize", "Output_Value", "Config_Signal",
-                                                                        "Data", "Negative", "Test"})));
+                                                                        "Data", "Negative Test"})));
 
 
         // File

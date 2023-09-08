@@ -47,6 +47,9 @@ void ControlCenter::initNormalData() {
     resetControl(false);
 }
 
+void ControlCenter::initControlData() {
+}
+
 void ControlCenter::resetControl(const bool& reset) {
     Q_UNUSED(reset)
 }
@@ -92,13 +95,11 @@ void ControlCenter::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlCenter::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
-    if (setData(type, value, alwaysUpdate)) {
-        createSignal(type, value, alwaysUpdate);
-    }
+void ControlCenter::updateDataControl(const int& type, const QVariant& value) {
+    setData(type, value, false);
 }
 
-void ControlCenter::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
+void ControlCenter::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
         createSignal(type, value, alwaysUpdate);
     }

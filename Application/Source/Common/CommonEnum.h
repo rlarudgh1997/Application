@@ -18,7 +18,7 @@ namespace common {
 #define PROPETRY_START_COMMON            0
 #define PROPETRY_START_NORMAL            1000
 #define PROPETRY_START_LIST              3000
-
+#define PROPETRY_START_ONLY_CONTROL      5000    // Only used inside the controller
 
 
 
@@ -27,14 +27,9 @@ class ScreenEnum {
 public:
     enum DisplayType {
         DisplayTypeInvalid             = 0x000000,
-        DisplayTypeMenu                 = 0x000001,
+        DisplayTypeMenu                = 0x000001,
         DisplayTypeCenter              = 0x000002,
         DisplayTypeExcel               = 0x000004,
-        // DisplayTypeBottom              = 0x000008,
-        // DisplayTypeLeft                = 0x000010,
-        // DisplayTypeRight               = 0x000020,
-
-        // DisplayTypePopup               = 0x800000,
 
         DisplayTypeAll                 = 0xFFFFFF,
     };
@@ -92,13 +87,20 @@ public:
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
+#if defined(USE_EXCEL_FUNCTION_NEW)
+        PropertyTypeExcelSheetName,
+        PropertyTypeExcelDescTitle,
+        PropertyTypeExcelOtherTitle,
+        PropertyTypeExcelSheetCount,
+        PropertyTypeExcelOpen,
+#endif
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
         PropertyTypeUpdateEditSheet,
         PropertyTypeExcelBlankText,
         PropertyTypeFileSaveType,
         PropertyTypeAutoComplete,
-        PropertyTypeReadExcelInfo,
+        PropertyTypeReadExcelSheet,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -109,6 +111,7 @@ public:
         PropertyTypeDetailInfoSounds,
         PropertyTypeDetailInfoInters,
         PropertyTypeDetailInfoOutputs,
+        PropertyTypeDetailInfoReserved0,
         PropertyTypeDetailInfoReserved1,
         PropertyTypeDetailInfoReserved2,
         PropertyTypeDetailInfoReserved3,
@@ -116,6 +119,15 @@ public:
         PropertyTypeDetailInfoReserved5,
         PropertyTypeDetailInfoReserved6,
         PropertyTypeDetailInfoReserved7,
+        PropertyTypeDetailInfoReserved8,
+        PropertyTypeDetailInfoReserved9,
+        PropertyTypeListMax,
+
+
+        PropertyTypeOnlyControl = PROPETRY_START_ONLY_CONTROL,
+        PropertyTypeSaveFilePath,
+        PropertyTypeEditExcelSheet,
+        PropertyTypeOnlyControlMax,
     };
     enum PropertyValue{
         PropertyValueInvalid = 0,
@@ -146,6 +158,9 @@ public:
         EventTypeHelpAboutQt,
         EventTypeOpenExcel,
         EventTypeSaveExcel,
+        EventTypeUpdateExcelSheet,
+        EventTypeEditExcelSheet,
+        EventTypeReadExcelSheetComplete,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,
         EventTypeUpdateSheetInfo,
@@ -166,6 +181,27 @@ public:
         EventTypeViewConfig,
         EventTypeWriteConfig,
         EventTypeReadExcelInfo,
+
+        EventTypeList = 3000,
+        EventTypeListDescription,
+        EventTypeListPrivates,
+        EventTypeListTelltales,
+        EventTypeListConstants,
+        EventTypeListEvents,
+        EventTypeListSounds,
+        EventTypeListInters,
+        EventTypeListOutputs,
+        EventTypeListReserved0,
+        EventTypeListReserved1,
+        EventTypeListReserved2,
+        EventTypeListReserved3,
+        EventTypeListReserved4,
+        EventTypeListReserved5,
+        EventTypeListReserved6,
+        EventTypeListReserved7,
+        EventTypeListReserved8,
+        EventTypeListReserved9,
+        EventTypeListMax,
     };
     enum EventValue{
         EventValueInvalid = 0,

@@ -9,6 +9,7 @@ bool AbstractControl::init(const int& currentMode) {
         controlConnect(true);
         initCommonData(currentMode);
         initNormalData();
+        initControlData();
     }
     return mInit;
 }

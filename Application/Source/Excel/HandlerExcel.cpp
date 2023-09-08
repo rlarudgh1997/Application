@@ -31,12 +31,20 @@ void HandlerExcel::initPropertyInfo() {
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
+#if defined(USE_EXCEL_FUNCTION_NEW)
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName,                    QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle,                    QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle,                   QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount,                   QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen,                         QVariant(false));
+#else
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoNew,                QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen,               QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateEditSheet,                   QVariant(false));
+#endif
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText,                    QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete,                      QVariant(false));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelInfo,                     QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet,                    QVariant());
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,             QVariant(""));

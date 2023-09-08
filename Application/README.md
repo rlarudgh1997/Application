@@ -4,6 +4,11 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 # ToDo
+- 파이썬 코드 수정
+	: class 로 변경
+	: print 함수를 별도 api 로 변경하여 release, debug 인 경우에 맞도록 프린터 되도록 수정
+
+
 - 자동완성
 	: 편집중 esc 키 입력시 동작 안함
 	: 병합셀에서 자동완성 동작시 문제
@@ -20,7 +25,10 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	: 수정 한 상태에서 new 동작시 save as 팝업 표시 하도록 수정
 	: config view 상태에서 open 팝업 표시시 view 화면 사라짐
 	: new/open 하여 엑셀 수정 상태에서 다시 open 하는 경우 편집중 저장 팝업 표시 없이 바로 동작함
-
+	: *.fromExcel 파일 정보의 title 로 gui title 구성 하도록
+		: 현재는 config title 정보 기반으로 구성 되어 있음
+			-> title 정보가 config 와 fromExcel 이 다른 경우 readExcelData 시 문제 발생할수 있음
+			-> config title 정보 잘못 입력한 경우 sheet 의 컬럼 정보가 달라서 없는 셀의 정보를 요청 하여 nullptr 오류 발생
 
 - New
 	: new 로 생성한 내역이 있는 경우(현재 New 상태) 새로 생성하지 않고 raise or skip 동작 하도록

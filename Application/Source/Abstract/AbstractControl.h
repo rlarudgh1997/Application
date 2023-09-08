@@ -27,7 +27,7 @@ public:
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
     int getTimerId(const int& timerType);
     const QVariant getData(const int& type);
-    bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate);
+    bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     bool createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
@@ -44,11 +44,12 @@ private:
     virtual void controlConnect(const bool& state = true) = 0;
     virtual void initCommonData(const int& currentMode) = 0;
     virtual void initNormalData() = 0;
+    virtual void initControlData() = 0;
     virtual void resetControl(const bool& reset) = 0;
     virtual void timerFunc(const int& timerId) = 0;
+    virtual void updateDataControl(const int& type, const QVariant& value) = 0;
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;
-    virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false) = 0;
-    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) = 0;
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant()) = 0;
 
 
 private slots:

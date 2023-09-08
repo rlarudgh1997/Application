@@ -28,11 +28,12 @@ protected:
     virtual void controlConnect(const bool& state = true);
     virtual void initCommonData(const int& currentMode);
     virtual void initNormalData();
+    virtual void initControlData();
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
+    virtual void updateDataControl(const int& type, const QVariant& value);
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
-    virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false);
-    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue);
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
 
 public slots:

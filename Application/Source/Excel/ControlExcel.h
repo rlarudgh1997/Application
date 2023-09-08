@@ -5,7 +5,7 @@
 
 #include "AbstractControl.h"
 #include "CommonUtil.h"
-
+#include "CommonDefine.h"
 
 
 class ControlExcel : public AbstractControl {
@@ -19,7 +19,14 @@ public:
 
 private:
     explicit ControlExcel();
+
+#if defined(USE_EXCEL_FUNCTION_NEW)
+    void updateExcelSheet(const int& propertyType, const QVariant& dirPath);
+    bool writeExcelSheet(const QVariant& filePath);
+#else
     void updateSheetInfo(const int& propertyType, const QVariant& dirPath);
+#endif
+    void writeExcelFile(const QVariant& filePath);
     bool updateSheetTextInfo(const QVariant& textInfo);
     bool updateSheetCellInfo(const QVariant& cellInfo);
     bool writeSheetInfo(const QVariant& filePath);
@@ -37,11 +44,12 @@ protected:
     virtual void controlConnect(const bool& state = true);
     virtual void initCommonData(const int& currentMode);
     virtual void initNormalData();
+    virtual void initControlData();
     virtual void resetControl(const bool& reset);
     virtual void timerFunc(const int& timerId);
+    virtual void updateDataControl(const int& type, const QVariant& value);
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
-    virtual void updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate = false);
-    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue);
+    virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
 
 public slots:

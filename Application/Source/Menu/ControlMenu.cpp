@@ -54,6 +54,9 @@ void ControlMenu::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
 }
 
+void ControlMenu::initControlData() {
+}
+
 void ControlMenu::resetControl(const bool& reset) {
     Q_UNUSED(reset)
 }
@@ -99,13 +102,11 @@ void ControlMenu::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlMenu::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
-    if (setData(type, value, alwaysUpdate)) {
-        createSignal(type, value, alwaysUpdate);
-    }
+void ControlMenu::updateDataControl(const int& type, const QVariant& value) {
+    setData(type, value, false);
 }
 
-void ControlMenu::updateDataHandler(const int& type, const QVariantList& value, const bool& alwaysUpdate) {
+void ControlMenu::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
         createSignal(type, value, alwaysUpdate);
     }

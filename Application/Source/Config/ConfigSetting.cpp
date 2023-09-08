@@ -99,7 +99,7 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         }
         case ConfigInfo::ConfigTypeSheetName :
         case ConfigInfo::ConfigTypeDescTitle :
-        case ConfigInfo::ConfigTypeContentTitle : {
+        case ConfigInfo::ConfigTypeOtherTitle : {
             QStringList value = configValue.toString().split(", ");
             QVariantList list = QVariantList();
             foreach(const auto& v, value) {
