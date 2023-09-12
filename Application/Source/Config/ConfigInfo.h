@@ -32,6 +32,9 @@ public:
         // File
         ConfigTypeLastFileInfo,
         ConfigTypeDeleteFileTC,
+        ConfigTypeExcelMergeTextStart,
+        ConfigTypeExcelMergeText,
+        ConfigTypeExcelMergeTextEnd,
         ConfigTypeExcelBlankText,
 
 
@@ -92,6 +95,12 @@ private:
         // File
         mConfigInfoData[ConfigTypeLastFileInfo] = QPair<QString, QVariant>("ConfigTypeLastFileInfo", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
+        mConfigInfoData[ConfigTypeExcelMergeTextStart] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart",
+                                                        QVariant("ExcelMergeTextStart"));
+        mConfigInfoData[ConfigTypeExcelMergeText] = QPair<QString, QVariant>("ConfigTypeExcelMergeText",
+                                                        QVariant("ExcelMergeText"));
+        mConfigInfoData[ConfigTypeExcelMergeTextEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd",
+                                                        QVariant("ExcelMergeTextEnd"));
         mConfigInfoData[ConfigTypeExcelBlankText] = QPair<QString, QVariant>("ConfigTypeExcelBlankText",
                                                         QVariant("ExcelBlankText"));
 

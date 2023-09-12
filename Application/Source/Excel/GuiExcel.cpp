@@ -212,115 +212,6 @@ void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* 
 }
 
 #if defined(USE_EXCEL_FUNCTION_NEW)
-void GuiExcel::updateDisplayExcelSheet() {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-
-    bool excelOpen = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
-    qDebug() << "Excel Update :" << ((excelOpen) ? ("Open") : ("New"));
-
-    // Clear - Table, TableWidget, Menu, Action
-    if (mExcelSheet.size() > 0) {
-        foreach(const auto& s, mExcelSheet) {
-            disconnect(s);
-            delete s;
-        }
-        mExcelSheet.clear();
-        mMainView->clear();
-
-        foreach(const auto& a, mMenuActionItem) {
-            delete a;
-        }
-        mMenuActionItem.clear();
-        mMenuRight->clear();
-    }
-    mMenuActionItem[MenuItemRight::Insert] = mMenuRight->addAction("Insert");
-    mMenuActionItem[MenuItemRight::Delete] = mMenuRight->addAction("Delete");
-    mMenuActionItem[MenuItemRight::MergeSplit] = mMenuRight->addAction("Merge/Split");
-
-
-
-    QStringList sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName).toStringList();
-    QStringList descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
-    QStringList otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
-    QVariantList rowCount = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount).toList();
-    QString excelBlankText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText).toString();
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
-    int rowIndexList = 0;
-    foreach(const auto& sheet, sheetName) {
-        QStringList contentTitle = (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) ?
-                                                                            (descTitle) : (otherTitle);
-        int rowMax = rowCount.at(rowIndexList++).toInt();
-        int columnMax = contentTitle.size();
-
-        // Draw Sheet
-        mExcelSheet[sheetIndex] = new QTableWidget(rowMax, columnMax);
-        mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
-        mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        mMainView->addTab(mExcelSheet[sheetIndex], sheet);
-
-        // Draw Sheet Data
-        if (excelOpen) {
-            QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
-            // qDebug() << "====================================================================================================";
-            // qDebug() << "Length :" << sheetData.size() << rowMax << columnMax;
-            // qDebug() << sheet << ":" << sheetData;
-            for (int rowIndex = 0; rowIndex < sheetData.size(); rowIndex++) {
-                QStringList rowDataList = sheetData[rowIndex].toStringList();
-                for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
-                    QString text = (rowDataList[columnIndex].compare(excelBlankText) == false) ?
-                                                                        ("") : (rowDataList[columnIndex]);
-                    mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(text));
-                }
-            }
-        }
-
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
-            QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
-            qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
-                            QVariant(QVariantList({sheetIndex, column, row, text})));
-            mExcelSheet[sheetIndex]->resizeColumnsToContents();
-            mExcelSheet[sheetIndex]->resizeRowsToContents();
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
-            QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-            bool selectInavalid = (modelIndexs.size() == 0);
-            int columnStart = (selectInavalid) ? (1) : (modelIndexs.at(0).column());
-            int columnEnd = (selectInavalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-            int rowStart = (selectInavalid) ? (0) : (modelIndexs.at(0).row());
-            int rowEnd = (selectInavalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-            QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
-
-            qDebug() << sheetIndex << ". cellSelected :" << pos << ", Column :" << columnStart << columnEnd
-                                << ", Row :" << rowStart <<rowEnd;    // << ", Action :" << selectAction->text();
-
-            if ((selectAction == mMenuActionItem[MenuItemRight::Insert])
-                || (selectAction == mMenuActionItem[MenuItemRight::Delete])) {
-                bool insert = (selectAction == mMenuActionItem[MenuItemRight::Insert]);
-                for (int index = 0; index < rowEnd; index++) {
-                    if (insert) {
-                        mExcelSheet[sheetIndex]->insertRow(rowStart);
-                    } else {
-                        mExcelSheet[sheetIndex]->removeRow(rowStart);
-                    }
-                }
-            } else if (selectAction == mMenuActionItem[MenuItemRight::MergeSplit]) {
-            } else {
-                return;
-            }
-
-            mExcelSheet[sheetIndex]->resizeColumnsToContents();
-            mExcelSheet[sheetIndex]->resizeRowsToContents();
-        });
-
-        // Resize - Cell Width/Height
-        mExcelSheet[sheetIndex]->resizeColumnsToContents();
-        mExcelSheet[sheetIndex]->resizeRowsToContents();
-        sheetIndex++;
-    }
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
-}
-
 QVariantList GuiExcel::readExcelSheet(const int& sheetIndex) {
     QVariantList sheetData = QVariantList();
 
@@ -332,6 +223,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex) {
 
     int rowMax = mExcelSheet[sheetIndex]->rowCount();
     int columnMax = mExcelSheet[sheetIndex]->columnCount();
+    QMap<int, QList<QPair<int, int>>> mergeInfo = mCellInfo[sheetIndex].isMergeInfo();
 
     // Read Title
     QStringList title = QStringList();
@@ -341,19 +233,26 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex) {
     sheetData.append(title);
 
     // Read Row Data
+    QString excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText).toString();
     for (int rowIndex = 0; rowIndex < rowMax; rowIndex++) {
         QStringList rowData = QStringList();
         for (int columnIndex = 0; columnIndex < columnMax; columnIndex++) {
-            QString text = QString();
-            if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)) {
-                text = mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
+            QString readText = ((mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)) ?
+                                (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text()) : (QString()));
+            QString text = readText;
+            foreach(const auto& info, mergeInfo[columnIndex]) {
+                int rowStart = info.first;
+                int rowEnd = (info.first + info.second);
+                if ((rowIndex >= rowStart) && (rowIndex < rowEnd)) {
+                    text = excelMergeText + ((rowIndex == rowStart) ? (readText) : (""));
+                    qDebug() << "MergeText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << "] :" << text;
+                }
             }
             rowData.append(text);
-            // qDebug() << "Index :" << rowIndex << columnIndex<< "Text :" << text;
+            // qDebug() << "ReadText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << << "] :" << text;
         }
         sheetData.append(rowData);
     }
-
     // qDebug() << "readExcelSheet() ->"<< "Length :" << rowMax << columnMax << sheetData.size();
     // qDebug() << mExcelSheet[sheetIndex] << ":" << sheetData;
     // qDebug() << "==================================================================================================\n";
@@ -377,7 +276,261 @@ void GuiExcel::readAllExcelSheet() {
             sheetIndex++;
         }
     }
-    createSignal(ivis::common::EventTypeEnum::EventTypeReadExcelSheetComplete, true);
+    createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, true);
+}
+
+void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
+    QMap<int, QList<QPair<int, int>>> mergeInfo = mCellInfo[sheetIndex].isMergeInfo();
+    QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
+    while (iter.hasNext()) {
+        iter.next();
+        int mergeColumnIndex = iter.key();
+        foreach(const auto& v, iter.value()) {
+            if (mExcelSheet[sheetIndex]) {
+                int mergeRowStart = v.first;
+                int mergeRowEnd = v.second;
+                // qDebug() << "\t UpdateMergeCell :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
+                mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowEnd, 1);
+            }
+        }
+    }
+}
+
+void GuiExcel::updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo,
+                                                                const QMap<int, QVariantList>& sheetData) {
+    if (mergeInfo.size() != 3) {
+        qDebug() << "Fail to merge text size :" << mergeInfo.size();
+        return;
+    }
+
+    QString excelMergeTextStart = mergeInfo.at(0).toString();
+    QString excelMergeTextEnd = mergeInfo.at(1).toString();
+    QString excelMergeText = mergeInfo.at(2).toString();
+
+    QMapIterator<int, QVariantList> iter(sheetData);
+    while (iter.hasNext()) {
+        iter.next();
+        int columnIndex = iter.key();
+        int rowIndex = 0;
+        int rowStart = (-1);
+        int rowEnd = (-1);
+        foreach(const auto& v, iter.value()) {
+            QString readText = v.toString();
+            QStringList startText = readText.split(excelMergeTextStart);
+            QStringList endText = readText.split(excelMergeTextEnd);
+            QStringList mergeText = readText.split(excelMergeText);
+            QString type = QString();
+
+            if (startText.size() == 2) {
+                type = "Start ";
+                rowStart = rowIndex;
+                rowEnd = (-1);
+            } else if (endText.size() == 2) {
+                type = "End   ";
+                rowEnd = rowIndex - rowStart + 1;
+            } else {
+                if (mergeText.size() == 2) {
+                    type = "Merge ";
+                } else {
+                    type = "Normal";
+                }
+            }
+            rowIndex++;
+
+            if ((rowStart >= 0) && (rowEnd >= 0)) {
+                mCellInfo[sheetIndex].insertMergeInfo(columnIndex, rowStart, rowEnd);
+                // qDebug() << "\t MergeCell[" << sheetIndex << "] :" << columnIndex << rowStart << rowEnd;
+                rowStart = (-1);
+                rowEnd = (-1);
+            }
+        }
+        // qDebug() << "---------------------------------------------------------------------";
+    }
+
+    mCheckTimer.check("Update Cell");
+
+    // Draw - Merge Cell
+    updateDisplayMergeCell(sheetIndex);
+}
+
+void GuiExcel::updateDisplayExcelSheet() {
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+
+    mCheckTimer.reset();
+
+    bool excelOpen = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+    qDebug() << "Excel Update :" << ((excelOpen) ? ("Open") : ("New"));
+
+    // Clear - Table, TableWidget, CellInfo, Menu, Action
+    if (mExcelSheet.size() > 0) {
+        foreach(const auto& s, mExcelSheet) {
+            disconnect(s);
+            delete s;
+        }
+        mExcelSheet.clear();
+        mMainView->clear();
+
+        foreach(const auto& a, mMenuActionItem) {
+            delete a;
+        }
+        mMenuActionItem.clear();
+        mMenuRight->clear();
+    }
+    mCellInfo.clear();
+
+    mMenuActionItem[MenuItemRight::Insert] = mMenuRight->addAction("Insert");
+    mMenuActionItem[MenuItemRight::Delete] = mMenuRight->addAction("Delete");
+    mMenuActionItem[MenuItemRight::MergeSplit] = mMenuRight->addAction("Merge/Split");
+
+
+    // Draw - Sheet
+    QStringList sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName).toStringList();
+    QStringList descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
+    QStringList otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
+    QVariantList rowCount = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount).toList();
+    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
+    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
+    QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    int rowIndexList = 0;
+    foreach(const auto& sheet, sheetName) {
+        QStringList contentTitle = (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) ?
+                                                                            (descTitle) : (otherTitle);
+        int rowMax = rowCount.at(rowIndexList++).toInt();
+        int columnMax = contentTitle.size();
+
+        // Draw Sheet
+        mExcelSheet[sheetIndex] = new QTableWidget(rowMax, columnMax);
+        mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
+        mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mMainView->addTab(mExcelSheet[sheetIndex], sheet);
+
+        // Draw Sheet Data
+        if (excelOpen) {
+            QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
+            QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
+
+            // qDebug() << "====================================================================================================";
+            // qDebug() << "Length :" << sheetData.size() << rowMax << columnMax;
+            // qDebug() << sheet << ":" << sheetData;
+            for (int rowIndex = 0; rowIndex < sheetData.size(); rowIndex++) {
+                QStringList rowDataList = sheetData[rowIndex].toStringList();
+                for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
+                    QString readText = rowDataList[columnIndex];
+                    QStringList startText = readText.split(excelMergeTextStart.toString());
+                    QStringList endText = readText.split(excelMergeTextEnd.toString());
+                    QStringList mergeText = readText.split(excelMergeText.toString());
+                    QString setText = QString();
+                    QString type = QString();
+
+                    newSheetData[columnIndex].append(readText);
+
+                    if (startText.size() == 2) {
+                        type = "Start ";
+                        setText = startText.at(1);
+                    } else if (endText.size() == 2) {
+                        type = "End   ";
+                        setText = endText.at(1);
+                    } else {
+                        if (mergeText.size() == 2) {
+                            type = "Merge ";
+                            setText = mergeText.at(1);
+                        } else {
+                            type = "Normal";
+                            setText = mergeText.at(0);
+                        }
+                    }
+                    // qDebug() << type << "[" << rowIndex << columnIndex <<"] :" << setText;
+                    mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(setText));
+                }
+            }
+
+            QVariantList mergeInfo = QVariantList{excelMergeTextStart, excelMergeTextEnd, excelMergeText};
+            updateDisplayCellInfo(sheetIndex, mergeInfo, newSheetData);
+#if defined(USE_EXCEL_CELL_INFO_TEMP)
+        } else {
+            for (int rowIndex = 0; rowIndex < rowMax; rowIndex++) {
+                for (int columnIndex = 0; columnIndex < columnMax; columnIndex++) {
+                    QString text = QString("%1[%2_%3]").arg(sheet).arg(rowIndex).arg(columnIndex);
+                    mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(text));
+                }
+            }
+#endif
+        }
+
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
+            QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
+            qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
+                            QVariant(QVariantList({sheetIndex, column, row, text})));
+            mExcelSheet[sheetIndex]->resizeColumnsToContents();
+            mExcelSheet[sheetIndex]->resizeRowsToContents();
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
+            QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+            bool selectInavalid = (modelIndexs.size() == 0);
+            int columnStart = (selectInavalid) ? (1) : (modelIndexs.at(0).column());
+            int columnEnd = (selectInavalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+            int rowStart = (selectInavalid) ? (0) : (modelIndexs.at(0).row());
+            int rowEnd = (selectInavalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
+
+            qDebug() << sheetIndex << ". cellSelected :" << pos << ", Index :" << columnStart << rowStart << rowEnd << columnEnd;
+
+            if ((selectAction == mMenuActionItem[MenuItemRight::Insert])
+                || (selectAction == mMenuActionItem[MenuItemRight::Delete])) {
+                bool insert = (selectAction == mMenuActionItem[MenuItemRight::Insert]);
+                for (int index = 0; index < rowEnd; index++) {
+                    if (insert) {
+                        mExcelSheet[sheetIndex]->insertRow(rowStart);
+                    } else {
+                        mExcelSheet[sheetIndex]->removeRow(rowStart);
+                    }
+                }
+            } else if (selectAction == mMenuActionItem[MenuItemRight::MergeSplit]) {
+                if (mCellInfo[sheetIndex].isCellStateMerge(columnStart, rowStart, rowEnd)) {
+                    // qDebug() << "\t Split Cell :" << columnStart << rowStart << rowEnd;
+                    mExcelSheet[sheetIndex]->clearSpans();
+                    mCellInfo[sheetIndex].updateMergeInfo(columnStart, rowStart, rowEnd);
+                } else {
+                    // qDebug() << "\t Insert Cell :" << columnStart << rowStart << rowEnd;
+                    mCellInfo[sheetIndex].insertMergeInfo(columnStart, rowStart, rowEnd);
+                }
+
+                // Draw - Merge Cell
+                updateDisplayMergeCell(sheetIndex);
+
+                // QMap<int, QList<QPair<int, int>>> mergeInfo = mCellInfo[sheetIndex].isMergeInfo();
+                // QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
+                // while (iter.hasNext()) {
+                //     iter.next();
+                //     int mergeColumnIndex = iter.key();
+                //     foreach(const auto& v, iter.value()) {
+                //         int mergeRowStart = v.first;
+                //         int mergeRowEnd = v.second;
+                //         // qDebug() << "\t Merge Cell :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
+                //         mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowEnd, 1);
+                //     }
+                // }
+            } else {
+                qDebug() << "Fail to menu right selection action item";
+                return;
+            }
+
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
+                            QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd})));
+            mExcelSheet[sheetIndex]->resizeColumnsToContents();
+            mExcelSheet[sheetIndex]->resizeRowsToContents();
+        });
+
+        // Resize - Cell Width/Height
+        mExcelSheet[sheetIndex]->resizeColumnsToContents();
+        mExcelSheet[sheetIndex]->resizeRowsToContents();
+        sheetIndex++;
+    }
+
+    mCheckTimer.check("Update Excel Sheet - GUI");
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
 #else

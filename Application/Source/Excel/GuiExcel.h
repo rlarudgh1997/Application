@@ -12,6 +12,7 @@
 #include <QTableWidgetItem>
 #include <QMenu>
 
+#include "CommonUtil.h"
 
 
 
@@ -39,6 +40,59 @@ private:
     int mColumnStart = 0;
     int mRowEnd = 0;
 };
+
+
+class ExcelSheet {
+public:
+    ExcelSheet() {
+        clear();
+    }
+    bool isCellStateMerge(const int& columnIndex, const int& rowStart, const int& rowEnd) {
+        if (mMergeInfo.contains(columnIndex)) {
+            foreach(const auto& v, mMergeInfo[columnIndex]) {
+                if ((v.first == rowStart) && (v.second == rowEnd)) {
+                    // qDebug() << "\t\t Is Cell State Merge :" << columnIndex << v.first << v.second;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    QMap<int, QList<QPair<int, int>>> isMergeInfo() {
+        return mMergeInfo;
+    }
+    void insertMergeInfo(const int& columnIndex, const int& rowStart, const int& rowEnd) {
+        // qDebug() << "\t\t\t Insert Merge Cell :" << columnIndex << rowStart << rowEnd;
+        mMergeInfo[columnIndex].append(QPair<int, int>(rowStart, rowEnd));
+    }
+    void updateMergeInfo(const int& columnIndex, const int& rowStart, const int& rowEnd) {
+        QMap<int, QList<QPair<int, int>>> mergeInfo = mMergeInfo;
+        QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
+        clear();
+        while (iter.hasNext()) {
+            iter.next();
+            int currColumnIndex = iter.key();
+            foreach(const auto& v, iter.value()) {
+                if ((currColumnIndex == columnIndex) && (rowStart == v.first) && (rowEnd == v.second)) {
+                    // qDebug() << "\t\t 2. Erase Merge Cell :" << currColumnIndex << v.first << v.second;
+                    continue;
+                }
+                // qDebug() << "\t\t 1. Update Merge Cell :" << currColumnIndex << v.first << v.second;
+                insertMergeInfo(currColumnIndex, v.first, v.second);
+            }
+        }
+    }
+
+private:
+    void clear(const bool& all = true) {
+        mMergeInfo.clear();
+    }
+
+
+private:
+    QMap<int, QList<QPair<int, int>>> mMergeInfo = QMap<int, QList<QPair<int, int>>>();
+};
+
 
 class GuiExcel : public AbstractGui {
     Q_OBJECT
@@ -76,9 +130,11 @@ private:
 
     void updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item);
 #if defined(USE_EXCEL_FUNCTION_NEW)
-    void updateDisplayExcelSheet();
     QVariantList readExcelSheet(const int& sheetIndex);
     void readAllExcelSheet();
+    void updateDisplayMergeCell(const int& sheetIndex);
+    void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
+    void updateDisplayExcelSheet();
 #else
     void updateDisplaySheetInfo(const int& type);
     void readExcelInfo();
@@ -92,7 +148,9 @@ public slots:
 private:
     QTabWidget* mMainView = nullptr;
 #if defined(USE_EXCEL_FUNCTION_NEW)
-    QMap<QVariant, QTableWidget*> mExcelSheet = QMap<QVariant, QTableWidget*>();
+    QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
+    QMap<int, ExcelSheet> mCellInfo = QMap<int, ExcelSheet>();
+    QMap<int, QMap<int, QPair<int, int>>> mMergeInfo = QMap<int, QMap<int, QPair<int, int>>>();
 #else
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();
@@ -106,6 +164,7 @@ private:
     QStringListModel mNodeAddressListModel = QStringListModel();
     QTableWidget* mCurrentSheet = nullptr;
     QTableWidgetItem* mCurrentCellItem = nullptr;
+    ivis::common::CheckTimer mCheckTimer;
 };
 
 #endif    // GUI_EXCEL_H

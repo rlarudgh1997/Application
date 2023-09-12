@@ -9,6 +9,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.utils import coordinate_to_tuple, range_to_tuple
 # from openpyxl.utils import get_column_letter
 from pandas import DataFrame
+import time
 
 # 하위 경로 import 방법 3가지
 # import source.def_functon as func
@@ -66,38 +67,103 @@ def readConfigSetting() :
 
 
 def readFromExcel(file_path, sheet_name):
+    excelMergeTextStart = configInfo["ConfigTypeExcelMergeTextStart"]
+    excelMergeTextEnd = configInfo["ConfigTypeExcelMergeTextEnd"]
+    excelMergeText = configInfo["ConfigTypeExcelMergeText"]
+
+    start_time = time.time()
+
     wb = load_workbook(file_path, data_only=True)
     for sheet in sheetName:
         currentSheet = wb[sheet]
         merged_cells = currentSheet.merged_cells.ranges
-        # print(merged_cells)
-
         sheetData = list()
-        rowIndex = 0
-        for row in currentSheet.iter_rows(min_row=1, max_row=currentSheet.max_row, min_col=1, max_col=currentSheet.max_column):
-            # print("\n==============================================================")
-            data = list()
-            for cell in row:
-                currentRow, currentColumn = coordinate_to_tuple(cell.coordinate)
-                # print("RowCell :", cell.value, currentColumn, currentRow, cell.value is None)
-                if cell.value is None:
+
+        if False:    # new code : True, False -> 파싱 속도 오래 걸림
+            for row in currentSheet.iter_rows(min_row=1, max_row=currentSheet.max_row, min_col=1, max_col=currentSheet.max_column):
+                data = list()
+                for currentCell in row:    # 현재 셀이 머지된 셀인지 확인
+                    readCellText = currentCell.value
                     checkMerged = False
-                    for merged_range in merged_cells:
-                        column_start, row_start, column_end, row_end = merged_range.bounds
-                        if currentColumn == column_start:
-                            # print("\t Merged :", column_start, row_start, column_end, row_end)
-                            if currentRow >= row_start and currentRow <= row_end:
+
+                    for merged_cell in merged_cells:
+                        if currentCell.coordinate in merged_cell:
+                            checkMerged = True
+                            break
+
+                    if checkMerged:    # 머지된 셀의 경우
+                        rowStart, columnStart, rowEnd, columnEnd = merged_cell.min_row, merged_cell.min_col, merged_cell.max_row, merged_cell.max_col
+                        currentMergeCell = currentSheet.cell(row=rowStart, column=columnStart)
+
+                        if True:    # new code : True, False
+                            if currentCell.row == rowStart:
+                                mergeCellText = excelMergeTextStart
+                            elif currentCell.row == rowEnd:
+                                mergeCellText = excelMergeTextEnd
+                            else:
+                                mergeCellText = excelMergeText
+
+                            if readCellText:
+                                mergeCellText = mergeCellText + currentMergeCell.value
+                        else:
+                            if readCellText is None:
+                                mergeCellText = excelMergeText
+                            else:
+                                mergeCellText = excelMergeText + currentMergeCell.value
+
+                        readCellText = mergeCellText
+                        # print("Merge[", currentCell.row, ",", currentCell.column, "] :", readCellText)
+
+                    data.append(readCellText)
+                    # print("Text[", currentCell.row, ",", currentCell.column, "] :", checkMerged, ",", readCellText)
+
+                sheetData.append(data)
+
+            sheetInfo.append(sheetData)
+
+        else:    # 파싱 속도 빠름
+            for row in currentSheet.iter_rows(min_row=1, max_row=currentSheet.max_row, min_col=1, max_col=currentSheet.max_column):
+                data = list()
+                for currentCell in row:
+                    readCellText = currentCell.value
+                    rowIndex, columnIndex = coordinate_to_tuple(currentCell.coordinate)
+
+                    checkMerged = False
+                    for merged_cell in merged_cells:
+                        columnStart, rowStart, columnEnd, rowEnd = merged_cell.bounds
+                        if columnIndex == columnStart:
+                            if rowIndex >= rowStart and rowIndex <= rowEnd:
                                 checkMerged = True
-                                # print("\t\t Merged :", currentColumn, currentRow, cell.coordinate)
                                 break
+
                     if checkMerged:
-                        data.append(cell.value)    # 머지 셀 텍스트 입력
-                    else:
-                        data.append(configInfo["ConfigTypeExcelBlankText"])
-                else:
-                    data.append(cell.value)
-            sheetData.append(data)
-        sheetInfo.append(sheetData)
+                        if rowIndex == rowStart:
+                            mergeCellText = excelMergeTextStart
+                        elif rowIndex == rowEnd:
+                            mergeCellText = excelMergeTextEnd
+                        else:
+                            mergeCellText = excelMergeText
+
+                        if readCellText:
+                            mergeCellText = mergeCellText + readCellText
+
+                        readCellText = mergeCellText
+                        # print("Merge[", rowIndex, ",", columnIndex, "] :", readCellText)
+
+                    data.append(readCellText)
+                    # print("Text[", rowIndex, ",", columnIndex, "] :", checkMerged, ",", readCellText)
+
+                sheetData.append(data)
+
+            sheetInfo.append(sheetData)
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print("\n==============================================================")
+    print("\t 엑셀 파싱 시간 :", execution_time, "초")
+    print("\n==============================================================\n")
+
+
 
 
 

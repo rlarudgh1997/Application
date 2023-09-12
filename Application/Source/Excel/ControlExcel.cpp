@@ -56,8 +56,16 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, 0);
 #endif
 
-    QString excelBlankText = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelBlankText).toString();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText, excelBlankText);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText,
+                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelBlankText));
+
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart,
+                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextStart));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText,
+                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeText));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd,
+                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextEnd));
+
     QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
     QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
     QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
@@ -573,7 +581,7 @@ QString ControlExcel::sytemCall(const int& type, const QVariant& filePath) {
         fileName.append(".xlsx");
     }
 
-    QString cmd = QString("python %1/excel_parsing.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
+    QString cmd = QString("python %1/ExcelParser.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
@@ -795,6 +803,10 @@ void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelBlankText, value);
             break;
         }
+        case ConfigInfo::ConfigTypeExcelMergeText : {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText, value);
+            break;
+        }
         // case ConfigInfo::ConfigTypeScreenInfo : {
         //     QRect screenInfo = value.toRect();
         //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
@@ -816,19 +828,22 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             if (checkPythonLibrary()) {
                 QVariant filePath = value;
                 QString dirPath = sytemCall(ivis::common::EventTypeEnum::EventTypeOpenExcel, filePath);
+                checkTimer.check("Open Excel - 1");
                 if (dirPath.size() > 0) {
 #if defined(USE_EXCEL_FUNCTION_NEW)
                     updateExcelSheet(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
+                    checkTimer.check("Open Excel - 2");
 #else
                     updateSheetInfo(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSheetInfoOpen, dirPath);
 #endif
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
+                    checkTimer.check("Open Excel - 3");
                 } else {
                     QVariant popupData = QVariant();
                     ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
                                                     QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
                 }
-                checkTimer.check("Open Excel");
+                checkTimer.check("Open Excel - 4");
             }
             break;
         }
@@ -843,7 +858,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet, QVariant(), true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeReadExcelSheetComplete : {
+        case ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet : {
             writeExcelFile(getData(ivis::common::PropertyTypeEnum::PropertyTypeSaveFilePath));
             break;
         }
@@ -886,10 +901,10 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
                 int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription +
                                                                 (type - ivis::common::EventTypeEnum::EventTypeListDescription);
                 updateDataHandler(propertyType, sheetData);
-                // qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-                // qDebug() << "EvetnType :" << type << ", Length :" << sheetData.size();
-                // qDebug() << "SheetData :" << sheetData;
-                // qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+                qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+                qDebug() << "EvetnType :" << type << ", Length :" << sheetData.size();
+                qDebug() << "SheetData :" << sheetData;
+                qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
             }
             break;
         }
