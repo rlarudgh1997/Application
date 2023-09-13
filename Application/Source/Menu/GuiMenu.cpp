@@ -150,20 +150,6 @@ void GuiMenu::drawMenuEdit() {
     mToolBar[MainType::Edit] = mMainView->addToolBar(STRING_EDIT);
 
 #ifndef QT_NO_CLIPBOARD
-    QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
-                                                        QIcon(IAMGE_CUT)),
-                                                        STRING_CUT,
-                                                        this);
-    if (actionCut) {
-        actionCut->setShortcuts(QKeySequence::Cut);
-        actionCut->setStatusTip(STRING_CUT_TIP);
-        mMenu[MainType::Edit]->addAction(actionCut);
-        mToolBar[MainType::Edit]->addAction(actionCut);
-        connect(actionCut, &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditCut, QVariant());
-        });
-    }
-
     QAction *actionCopy = new QAction(QIcon::fromTheme("actionCopy",
                                                         QIcon(IAMGE_COPY)),
                                                         STRING_COPY,
@@ -175,6 +161,20 @@ void GuiMenu::drawMenuEdit() {
         mToolBar[MainType::Edit]->addAction(actionCopy);
         connect(actionCopy, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeEditCopy, QVariant());
+        });
+    }
+
+    QAction *actionCut = new QAction(QIcon::fromTheme("actionCut",
+                                                        QIcon(IAMGE_CUT)),
+                                                        STRING_CUT,
+                                                        this);
+    if (actionCut) {
+        actionCut->setShortcuts(QKeySequence::Cut);
+        actionCut->setStatusTip(STRING_CUT_TIP);
+        mMenu[MainType::Edit]->addAction(actionCut);
+        mToolBar[MainType::Edit]->addAction(actionCut);
+        connect(actionCut, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCut, QVariant());
         });
     }
 

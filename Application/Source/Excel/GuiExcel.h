@@ -128,16 +128,11 @@ private:
     void controlConnect(const bool& state = true);
 
     void updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item);
-#if defined(USE_EXCEL_FUNCTION_NEW)
     QVariantList readExcelSheet(const int& sheetIndex);
     void readAllExcelSheet();
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
     void updateDisplayExcelSheet();
-#else
-    void updateDisplaySheetInfo(const int& type);
-    void readExcelInfo();
-#endif
 
 
 public slots:
@@ -146,14 +141,9 @@ public slots:
 
 private:
     QTabWidget* mMainView = nullptr;
-#if defined(USE_EXCEL_FUNCTION_NEW)
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, ExcelSheet> mCellInfo = QMap<int, ExcelSheet>();
     QMap<int, QMap<int, QPair<int, int>>> mMergeInfo = QMap<int, QMap<int, QPair<int, int>>>();
-#else
-    QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
-    QMap<int, QList<CellInfo>> mExcelCellInfo = QMap<int, QList<CellInfo>>();
-#endif
     QMenu* mMenuRight = nullptr;
     QMap<MenuItemRight, QAction*> mMenuActionItem = QMap<MenuItemRight, QAction*>();
 

@@ -35,7 +35,6 @@ public:
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
-        ConfigTypeExcelBlankText,
 
 
         // ==========================================================================
@@ -101,8 +100,6 @@ private:
                                                         QVariant("ExcelMergeText"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd",
                                                         QVariant("ExcelMergeTextEnd"));
-        mConfigInfoData[ConfigTypeExcelBlankText] = QPair<QString, QVariant>("ConfigTypeExcelBlankText",
-                                                        QVariant("ExcelBlankText"));
 
 
 

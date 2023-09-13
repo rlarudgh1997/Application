@@ -87,18 +87,11 @@ public:
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
-#if defined(USE_EXCEL_FUNCTION_NEW)
         PropertyTypeExcelSheetName,
         PropertyTypeExcelDescTitle,
         PropertyTypeExcelOtherTitle,
         PropertyTypeExcelSheetCount,
         PropertyTypeExcelOpen,
-#else
-        PropertyTypeUpdateSheetInfoNew,
-        PropertyTypeUpdateSheetInfoOpen,
-        PropertyTypeUpdateEditSheet,
-        PropertyTypeExcelBlankText,
-#endif
         PropertyTypeExcelMergeTextStart,
         PropertyTypeExcelMergeText,
         PropertyTypeExcelMergeTextEnd,
