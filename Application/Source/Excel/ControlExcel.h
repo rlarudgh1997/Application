@@ -21,10 +21,14 @@ private:
     explicit ControlExcel();
 
 #if defined(USE_EXCEL_FUNCTION_NEW)
-    void updateExcelSheet(const int& propertyType, const QVariant& dirPath);
+    void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath);
 #else
     void updateSheetInfo(const int& propertyType, const QVariant& dirPath);
+    QVariantList isInsertDeleteCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
+                                                                const int& rowStart, const int& rowEnd);
+    QVariantList isMergeSplitCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
+                                                                const int& rowStart, const int& rowEnd);
 #endif
     void writeExcelFile(const QVariant& filePath);
     bool updateSheetTextInfo(const QVariant& textInfo);
@@ -32,10 +36,6 @@ private:
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const int& type, const QVariant& filePath);
     bool checkPythonLibrary();
-    QVariantList isInsertDeleteCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
-                                                                const int& rowStart, const int& rowEnd);
-    QVariantList isMergeSplitCellInfo(const int& editType, const int& sheetIndex, const int& columnSelect,
-                                                                const int& rowStart, const int& rowEnd);
 
 
 protected:

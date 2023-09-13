@@ -71,7 +71,6 @@ def readFromExcel(file_path, sheet_name):
     excelMergeTextEnd = configInfo["ConfigTypeExcelMergeTextEnd"]
     excelMergeText = configInfo["ConfigTypeExcelMergeText"]
 
-    start_time = time.time()
 
     wb = load_workbook(file_path, data_only=True)
     for sheet in sheetName:
@@ -112,10 +111,10 @@ def readFromExcel(file_path, sheet_name):
                                 mergeCellText = excelMergeText + currentMergeCell.value
 
                         readCellText = mergeCellText
-                        # print("Merge[", currentCell.row, ",", currentCell.column, "] :", readCellText)
+                        # print("1 Merge[", currentCell.row, ",", currentCell.column, "] :", readCellText)
 
                     data.append(readCellText)
-                    # print("Text[", currentCell.row, ",", currentCell.column, "] :", checkMerged, ",", readCellText)
+                    # print("1 Text[", currentCell.row, ",", currentCell.column, "] :", checkMerged, ",", readCellText)
 
                 sheetData.append(data)
 
@@ -129,6 +128,8 @@ def readFromExcel(file_path, sheet_name):
                     rowIndex, columnIndex = coordinate_to_tuple(currentCell.coordinate)
 
                     checkMerged = False
+                    rowStart = (-1)
+                    rowEnd = (-1)
                     for merged_cell in merged_cells:
                         columnStart, rowStart, columnEnd, rowEnd = merged_cell.bounds
                         if columnIndex == columnStart:
@@ -148,20 +149,14 @@ def readFromExcel(file_path, sheet_name):
                             mergeCellText = mergeCellText + readCellText
 
                         readCellText = mergeCellText
-                        # print("Merge[", rowIndex, ",", columnIndex, "] :", readCellText)
+                        # print("2 Merge[", rowIndex, ",", columnIndex, "] :", readCellText, rowStart, rowEnd)
 
                     data.append(readCellText)
-                    # print("Text[", rowIndex, ",", columnIndex, "] :", checkMerged, ",", readCellText)
+                    # print("2 Text[", rowIndex, ",", columnIndex, "] :", checkMerged, ",", readCellText)
 
                 sheetData.append(data)
 
             sheetInfo.append(sheetData)
-
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print("\n==============================================================")
-    print("\t 엑셀 파싱 시간 :", execution_time, "초")
-    print("\n==============================================================\n")
 
 
 
@@ -209,6 +204,166 @@ def writeToText(path) :
 
 
 def readFromText(path, saveFilePath) :
+    print("\n=================================================================================================")
+    print("readFromText : ", path)
+
+    excelMergeTextStart = configInfo["ConfigTypeExcelMergeTextStart"]
+    excelMergeTextEnd = configInfo["ConfigTypeExcelMergeTextEnd"]
+    excelMergeText = configInfo["ConfigTypeExcelMergeText"]
+
+    readData = list()
+    mergeInfoList = dict()
+    sheetIndex = (-1)
+
+    for sheet in sheetName:
+        sheetIndex += 1
+        filePath = path + str(sheetIndex) + "_" + sheet + ".toExcel"
+        read = pd.read_csv(filePath, sep = "\t")
+        print(sheet, "[", len(read.index), ",", len(read.columns), "]")
+
+        rowCount = len(read.index)
+        columnCount = len(read.columns)
+
+
+        if True:    # Merge Cell 정보 구성
+            rowStart = (-1)
+            rowEnd = (-1)
+            mergeInfo = list()
+
+            for columnIndex in range(0, columnCount):
+                for rowIndex in range(0, rowCount):
+                    readText = read.iloc[rowIndex][columnIndex]
+                    if type(readText) == str:
+                        startText = readText.split(excelMergeTextStart)
+                        endText = readText.split(excelMergeTextEnd)
+                        mergeText = readText.split(excelMergeText)
+                        if len(startText) == 2 :
+                            rowStart = rowIndex
+                            rowEnd = (-1)
+                        elif len(endText) == 2 :
+                            rowEnd = rowIndex
+
+                    if (rowStart >= 0) and (rowEnd >= 0):
+                        # print("\t\t Info :", columnIndex, rowStart, rowEnd)
+                        info = list({rowStart, rowEnd})
+                        info.sort(reverse=False)    # 오름 차순 정렬
+                        mergeInfo.append(dict({columnIndex: info}))
+                        rowStart = (-1)
+                        rowEnd = (-1)
+
+            # print("\t MergeInfo :", mergeInfo)
+            mergeInfoList[sheet] = mergeInfo
+
+
+        if True:    # "ExcelMergeText" -> "" 으로 변경
+            for rowIndex in range(0, rowCount):
+                for columnIndex in range(0, columnCount):
+                    # readText = read.iloc[rowIndex][columnIndex]
+                    # readText = read.loc[rowIndex][columnIndex]
+                    readText = read.iat[rowIndex, columnIndex]
+                    # readText = read.at[rowIndex][columnIndex]
+                    text = ""
+                    if type(readText) == str:
+                        startText = readText.split(excelMergeTextStart)
+                        endText = readText.split(excelMergeTextEnd)
+                        mergeText = readText.split(excelMergeText)
+                        typeText = ""
+                        if len(startText) == 2 :
+                            typeText = "Start "
+                            text = startText[1]
+                        elif len(endText) == 2 :
+                            typeText = "End   "
+                            text = ""   # endText[1]
+                        elif len(mergeText) == 2 :
+                            typeText = "Merge "
+                            text = ""   # mergeText[1]
+                        else:
+                            typeText = "Normal"
+                            text = readText
+                    else:
+                        typeText = "Blank "
+                        text = ""
+
+                    # read.iloc[rowIndex][columnIndex] = text
+                    # read.loc[rowIndex][columnIndex] = text
+                    read.iat[rowIndex, columnIndex] = text
+                    # read.at[rowIndex][columnIndex] = text
+                    # print(typeText, "[", rowIndex, ",", columnIndex, "] :", text)
+
+            readData.append(read)
+
+
+
+
+        if True:    # 파일 삭제
+            if configInfo["ConfigTypeDeleteFileTC"] == "true" :
+                print("Delete File :", filePath)
+                os.remove(filePath)
+
+
+    if True:    # 파일 저장
+        writeToExcel(readData, saveFilePath)
+
+
+    if True:    # 저장한 파일에서 머지 정보 업데이트 후 다시 저장
+        writeToMergeCell(mergeInfoList, saveFilePath)
+
+
+
+def writeToExcel(data, filePath) :
+    print("\n=================================================================================================")
+    with pd.ExcelWriter(filePath) as write:
+        count = 0
+        for sheet in sheetName:
+            data[count].to_excel(write, sheet_name = sheetName[count], index = False)
+            # print("Sheet[", count, "] : ", sheetName[count])
+            count += 1
+        print("writeToExcel : ", filePath)
+
+    ## [시트 row, column 높이, 너비 자동정렬 추가]
+    # wb = load_workbook(filePath)
+    # ws = wb.active
+    # for sheet in sheetInfo:
+    #     cellAutoFit = pd.DataFrame(sheet)
+
+
+
+
+def writeToMergeCell(mergeInfoList, filePath) :
+    print("\n=================================================================================================")
+
+    # wb = load_workbook(filePath, data_only=True)
+    wb = load_workbook(filePath)
+
+    for sheetKey, sheetValue in mergeInfoList.items():
+        print("[", sheetKey, "] :", sheetValue)
+
+        ws = wb[sheetKey]
+        for merge in sheetValue:
+            for columnKey, rowValue in merge.items():
+                if len(rowValue) == 2:
+                    columString = chr(65 + columnKey)   # 0 ~   -->>   A ~   값으로 변경
+                    rowStart = columString + str(rowValue[0] + 2)   # 엑셀 병합시 : 시작값 1부터, Row 1 은 Title 임
+                    rowEnd   = columString + str(rowValue[1] + 2)   # 엑셀 병합시 : 시작값 1부터, Row 1 은 Title 임
+                    mergeCell = rowStart + ":" + rowEnd
+                    # print("\t Merge[", columnKey, "] :", mergeCell)
+                    ws.merge_cells(mergeCell)
+
+    wb.save(filePath)
+    print("")
+    print("writeToMergeCell : ", filePath)
+
+
+
+
+
+
+
+
+
+
+
+def readFromTextOld(path, saveFilePath) :
     print("\n=================================================================================================")
     print("path : ", path)
 
@@ -275,35 +430,18 @@ def readFromText(path, saveFilePath) :
 
 
         if configInfo["ConfigTypeDeleteFileTC"] == "true" :
-            print("Delete File :", filePath)
+            # print("\t Delete File :", filePath)
             os.remove(filePath)
 
         readData.append(read)
         index += 1
 
     writeToExcel(readData, saveFilePath)
-    writeToMergeCell(sheetRowCount, mergeInfoList, saveFilePath)
+    writeToMergeCellOld(sheetRowCount, mergeInfoList, saveFilePath)
 
 
 
-
-def writeToExcel(data, filePath) :
-    print("\n=================================================================================================")
-    with pd.ExcelWriter(filePath) as write:
-        count = 0
-        for sheet in sheetName:
-            data[count].to_excel(write, sheet_name = sheetName[count], index = False)
-            # print("Sheet[", count, "] : ", sheetName[count])
-            count += 1
-        print("SaveFilePath : ", filePath, "\n\n")
-
-    ## [시트 row, column 높이, 너비 자동정렬 추가]
-    # wb = load_workbook(filePath)
-    # ws = wb.active
-    # for sheet in sheetInfo:
-    #     cellAutoFit = pd.DataFrame(sheet)
-
-def writeToMergeCell(sheetRowCount, mergeInfoData, filePath) :
+def writeToMergeCellOld(sheetRowCount, mergeInfoData, filePath) :
     print("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("[MergeInfo]")
     wb = load_workbook(filePath)
@@ -363,6 +501,8 @@ def main(argv) :
         print("input length error !!!!!!!!!!")
         raise
 
+    start_time = time.time()
+
     readConfigSetting()
 
     pathDir = argv[1] + "TC/"
@@ -379,20 +519,30 @@ def main(argv) :
     if openState :
         print("File - Open !!!!!")
         if (os.path.isfile(pathFile)) :
-            # readPandas = True
-            readPandas = False
-            if readPandas:
+            if False:   # True, False
                 readFromExcelPandas(pathFile, sheetName)
             else:
                 readFromExcel(pathFile, sheetName)
+
             writeToText(pathDir)
         else :
             print("Fail to fiel exists : ", pathFile)
             raise
 
+        execution_time = time.time() - start_time
+        print("\n==============================================================")
+        print("\t 엑셀 읽기 시간 :", execution_time, "초")
+        print("\n==============================================================\n")
+
+
     else :
         print("File - Write !!!!!")
         readFromText(pathDir, pathFile)
+
+        execution_time = time.time() - start_time
+        print("\n==============================================================")
+        print("\t 엑셀 쓰기 시간 :", execution_time, "초")
+        print("\n==============================================================\n")
 
 
     print("\n=================================================================================================")

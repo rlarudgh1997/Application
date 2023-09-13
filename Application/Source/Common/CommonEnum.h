@@ -93,11 +93,12 @@ public:
         PropertyTypeExcelOtherTitle,
         PropertyTypeExcelSheetCount,
         PropertyTypeExcelOpen,
-#endif
+#else
         PropertyTypeUpdateSheetInfoNew,
         PropertyTypeUpdateSheetInfoOpen,
         PropertyTypeUpdateEditSheet,
         PropertyTypeExcelBlankText,
+#endif
         PropertyTypeExcelMergeTextStart,
         PropertyTypeExcelMergeText,
         PropertyTypeExcelMergeTextEnd,

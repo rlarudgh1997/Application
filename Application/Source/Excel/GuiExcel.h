@@ -12,7 +12,6 @@
 #include <QTableWidgetItem>
 #include <QMenu>
 
-#include "CommonUtil.h"
 
 
 
@@ -164,7 +163,6 @@ private:
     QStringListModel mNodeAddressListModel = QStringListModel();
     QTableWidget* mCurrentSheet = nullptr;
     QTableWidgetItem* mCurrentCellItem = nullptr;
-    ivis::common::CheckTimer mCheckTimer;
 };
 
 #endif    // GUI_EXCEL_H
