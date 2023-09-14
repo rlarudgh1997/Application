@@ -41,6 +41,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd,                 QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete,                      QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet,                    QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutKey,                       QVariant());
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription,             QVariant(""));

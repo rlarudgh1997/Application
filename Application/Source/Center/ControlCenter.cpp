@@ -111,7 +111,6 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
-    qDebug() << "ControlCenter::slotConfigChanged(" << type << "," << value << ")";
 #if 1
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
     if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
@@ -198,6 +197,14 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeSignal);
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeReportResult : {
+            qDebug() << "Report - result";
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
+            qDebug() << "Report - Coverage";
             break;
         }
         default : {

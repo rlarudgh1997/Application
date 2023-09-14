@@ -118,18 +118,11 @@ void ControlMenu::sendEventInfo(const int& destination, const int& eventType, co
 }
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlMenu::slotConfigChanged(" << type << "," << value << ")";
     switch (type) {
         case ConfigInfo::ConfigTypeDefaultPath : {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
             break;
         }
-        // case ConfigInfo::ConfigTypeScreenInfo : {
-        //     QRect screenInfo = value.toRect();
-        //     QSize screenSize = QSize(screenInfo.width(), screenInfo.height());
-        //     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-        //     break;
-        // }
         default : {
             break;
         }
@@ -195,20 +188,16 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditCut : {
-            qDebug() << "Edit - Cut";
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeEditCopy : {
-            qDebug() << "Edit - Copy";
-            break;
-        }
+        case ivis::common::EventTypeEnum::EventTypeEditCut :
+        case ivis::common::EventTypeEnum::EventTypeEditCopy :
         case ivis::common::EventTypeEnum::EventTypeEditPaste : {
-            qDebug() << "Edit - Paste";
+            qDebug() << "Edit :" << value;
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewConfig :
-        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress :
+        case ivis::common::EventTypeEnum::EventTypeReportResult :
+        case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
@@ -229,22 +218,6 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
                                     QVariantList({STRING_NODE_PATH, nodeAddressPath})) == ivis::common::PopupButton::OK) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeNodeAddressPath, popupData);
             }
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeSettingTestReport : {
-            qDebug() << "Setting - Test Report";
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeSettingTestResult : {
-            qDebug() << "Setting - Test Result";
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeSettingTestCoverage : {
-            qDebug() << "Setting - Test Coverage";
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeReadExcelInfo : {
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
         default : {

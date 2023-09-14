@@ -61,7 +61,7 @@ void ControlExcel::initNormalData() {
     QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
     QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
     QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList),  true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
 }
 
 void ControlExcel::initControlData() {
@@ -101,20 +101,46 @@ void ControlExcel::timerFunc(const int& timerId) {
 }
 
 void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
-    if (inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) {
-        if (inputValue == Qt::Key_F2) {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 1, true);
-        } else if ((inputValue == ivis::common::KeyTypeEnum::KeyInputValueOK)
+    static bool shortcutCtrl = false;
+
+    if (inputType == ivis::common::KeyTypeEnum::KeyInputTypePress) {
+        // if (inputValue == Qt::Key_Control) {
+        //     shortcutCtrl = true;
+        // }
+    } else if (inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) {
+        switch (inputValue) {
 #if defined(PLATFORM_X86)
-            || (inputValue == ivis::common::KeyTypeEnum::KeyInputValueNumOK)
-            || (inputValue == ivis::common::KeyTypeEnum::KeyInputValueNumOK2)
+            case ivis::common::KeyTypeEnum::KeyInputValueNumOK :
+            case ivis::common::KeyTypeEnum::KeyInputValueNumOK2 :
 #endif
-            ) {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 0, true);
-        } else if (inputValue == Qt::Key_Escape) {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 2, true);
-        } else {
+            case ivis::common::KeyTypeEnum::KeyInputValueOK : {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 0, true);
+                break;
+            }
+            case Qt::Key_Escape : {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 2, true);
+                break;
+            }
+            case Qt::Key_F2 : {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 1, true);
+                break;
+            }
+            case Qt::Key_I :
+            case Qt::Key_D :
+            case Qt::Key_M :
+            case Qt::Key_S : {
+                if (shortcutCtrl) {
+                    qDebug() << "ShortcutKey :" << inputValue;
+                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutKey, inputValue, true);
+                }
+                break;
+            }
+            default : {
+                break;
+            }
         }
+        shortcutCtrl = false;
+    } else {
     }
 }
 
@@ -403,7 +429,6 @@ bool ControlExcel::checkPythonLibrary() {
 }
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
-    // qDebug() << "ControlMenu::slotConfigChanged(" << type << "," << value << ")";
     switch (type) {
         case ConfigInfo::ConfigTypeExcelMergeTextStart :
         case ConfigInfo::ConfigTypeExcelMergeTextEnd :

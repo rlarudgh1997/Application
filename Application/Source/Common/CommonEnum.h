@@ -98,6 +98,7 @@ public:
         PropertyTypeFileSaveType,
         PropertyTypeAutoComplete,
         PropertyTypeReadExcelSheet,
+        PropertyTypeShortcutKey,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -167,8 +168,10 @@ public:
         EventTypeCellMergeSplitWarning,
         EventTypeViewInfoClose,
         EventTypeConfigReset,
+        EventTypeRunTC,
 
         EventTypeSendOtherControl = 2000,
+        EventTypeTest,
         EventTypeLastFile,
         EventTypeFileNew,
         EventTypeFileOpen,
@@ -178,6 +181,8 @@ public:
         EventTypeViewConfig,
         EventTypeWriteConfig,
         EventTypeReadExcelInfo,
+        EventTypeReportResult,
+        EventTypeReportCoverage,
 
         EventTypeList = 3000,
         EventTypeListDescription,

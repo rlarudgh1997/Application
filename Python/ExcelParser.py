@@ -139,7 +139,7 @@ def readFromExcel(file_path, sheet_name):
                             mergeCellText = excelMergeText
 
                         if readCellText:
-                            mergeCellText = mergeCellText + readCellText
+                            mergeCellText = mergeCellText + str(readCellText)
 
                         readCellText = mergeCellText
                         # print("2 Merge[", rowIndex, ",", columnIndex, "] :", readCellText, rowStart, rowEnd)

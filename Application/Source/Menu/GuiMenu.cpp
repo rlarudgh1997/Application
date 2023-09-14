@@ -32,6 +32,8 @@ void GuiMenu::drawDisplayDepth0() {
 #endif
     drawMenuView();
     drawMenuSetting();
+    drawMenuReport();
+    drawMenuRun();
     drawMenuHelp();
 #if !defined(USE_DEMO)
     drawMenuEtc();
@@ -270,6 +272,7 @@ void GuiMenu::drawMenuSetting() {
     }
 #endif
 
+#if 0
     QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
                                                         STRING_REPORT,
                                                         this);
@@ -305,6 +308,7 @@ void GuiMenu::drawMenuSetting() {
             }
         }
     }
+#endif
 
     // TooBar - Push Button
     // QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));
@@ -325,6 +329,52 @@ void GuiMenu::drawMenuSetting() {
     // }
 
     mMainView->menuBar()->addSeparator();
+}
+
+void GuiMenu::drawMenuReport() {
+    mMenu[MainType::Report] = mMainView->menuBar()->addMenu(STRING_REPORT);
+    mToolBar[MainType::Report] = mMainView->addToolBar(STRING_REPORT);
+
+    QAction *actionReportResult = new QAction(QIcon::fromTheme("actionReportResult"),
+                                                        STRING_RESULT,
+                                                        this);
+    if (actionReportResult) {
+        actionReportResult->setStatusTip(STRING_RESULT_TIP);
+        mMenu[MainType::Report]->addAction(actionReportResult);
+        // mToolBar[MainType::Report]->addAction(actionReportResult);
+        connect(actionReportResult, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeReportResult, QVariant());
+        });
+    }
+
+    QAction *actionReportCoverage = new QAction(QIcon::fromTheme("actionReportCoverage"),
+                                                        STRING_COVERAGE,
+                                                        this);
+    if (actionReportCoverage) {
+        actionReportCoverage->setStatusTip(STRING_COVERAGE_TIP);
+        mMenu[MainType::Report]->addAction(actionReportCoverage);
+        // mToolBar[MainType::Report]->addAction(actionReportCoverage);
+        connect(actionReportCoverage, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeReportCoverage, QVariant());
+        });
+    }
+}
+
+void GuiMenu::drawMenuRun() {
+    mMenu[MainType::Run] = mMainView->menuBar()->addMenu(STRING_RUN);
+    mToolBar[MainType::Run] = mMainView->addToolBar(STRING_RUN);
+
+    QAction *actionRun = new QAction(QIcon::fromTheme("actionRun"),
+                                                        STRING_RUN,
+                                                        this);
+    if (actionRun) {
+        actionRun->setStatusTip(STRING_RESULT_TIP);
+        mMenu[MainType::Run]->addAction(actionRun);
+        // mToolBar[MainType::Run]->addAction(actionRun);
+        connect(actionRun, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeRunTC, QVariant());
+        });
+    }
 }
 
 void GuiMenu::drawMenuHelp() {
@@ -376,10 +426,10 @@ void GuiMenu::drawMenuEtc() {
         excelOpen->setGeometry(960, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        excelOpen->setText("Read");
+        excelOpen->setText("Test");
         excelOpen->show();
         connect(excelOpen, &QPushButton::clicked, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeReadExcelInfo, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeTest, QVariant());
         });
     }
 #endif

@@ -7,7 +7,6 @@
 #include <QLabel>
 #include <QTextEdit>
  #include <QHeaderView>
-// #include <QDialog>
 
 
 
@@ -40,32 +39,8 @@ GuiExcel::GuiExcel(AbstractHandler* handler) : AbstractGui(handler) {
 #endif
 }
 
-void GuiExcel::controlConnect(const bool& state) {
-//     if (state) {
-//         connect(isHandler(),                       &HandlerExcel::signalHandlerEvent,
-//                 this,                              &ControlExcel::slotHandlerEvent,
-//                 Qt::UniqueConnection);
-//         connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-//                 this,                              &ControlExcel::slotConfigChanged,
-//                 Qt::UniqueConnection);
-//         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-//                 this,                              &ControlExcel::slotEventInfoChanged,
-//                 Qt::UniqueConnection);
-// #if defined(USE_RESIZE_SIGNAL)
-//         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-//                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
-//         });
-// #endif
-//     } else {
-//         disconnect(isHandler());
-//         disconnect(ControlManager::instance().data());
-//         disconnect(ConfigSetting::instance().data());
-//     }
-}
-
 void GuiExcel::drawDisplayDepth0() {
     updateDisplayVisible();
-    updateDisplayNodeAddress(AutoComplete::Draw, nullptr, nullptr);
 }
 
 void GuiExcel::drawDisplayDepth1() {
@@ -97,117 +72,6 @@ void GuiExcel::updateDisplayVisible() {
         mMainView->show();
     } else {
         mMainView->hide();
-    }
-}
-
-void GuiExcel::updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item) {
-    // qDebug() << "updateDisplayNodeAddress :" << static_cast<int>(type) << sheet << item;
-
-    switch (type) {
-        case AutoComplete::Draw : {
-            mInputNodeAddress = new QLineEdit(mMainView);
-            mInputNodeAddress->setStyleSheet("background-color: rgb(230, 230, 230); color: black; font-size:12px");
-            mInputNodeAddress->setTextMargins(1, 0, 0, 0);
-            mInputNodeAddress->setFrame(false);
-            mInputNodeAddress->setEnabled(true);
-            if (mAutoComplete == nullptr) {
-                mAutoComplete = new QCompleter(mInputNodeAddress);
-                mAutoComplete->setCaseSensitivity(Qt::CaseInsensitive);
-                mAutoComplete->setFilterMode(Qt::MatchContains);
-                mAutoComplete->setWrapAround(false);
-                mAutoComplete->setMaxVisibleItems(20);
-                // mAutoComplete->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
-                connect(mAutoComplete, QOverload<const QString &>::of(&QCompleter::activated), [=](const QString &text) {
-                    if (mCurrentCellItem) {
-                        mCurrentCellItem->setText(text);
-                    }
-                    if (mInputNodeAddress) {
-                        mInputNodeAddress->clear();
-                        mInputNodeAddress->hide();
-                        mCurrentCellItem = nullptr;
-                    }
-                });
-            }
-            break;
-        }
-        case AutoComplete::Update : {
-            QVariant nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll);
-            if ((mInputNodeAddress) && (mAutoComplete) && (nodeAddress.toStringList().size() > 0)) {
-                mNodeAddressListModel.setStringList(nodeAddress.toStringList());
-                mAutoComplete->setModel(&mNodeAddressListModel);
-                mInputNodeAddress->setCompleter(mAutoComplete);
-            }
-            break;
-        }
-        case AutoComplete::Show : {
-            if ((mInputNodeAddress) && (sheet)) {
-#if defined(USE_AUTO_COMPLETE_NORMAL)
-                QModelIndexList modelIndexs = sheet->selectionModel()->selectedIndexes();
-                foreach(const QModelIndex& modelIndex, modelIndexs) {
-                    QRect rect = sheet->visualRect(modelIndex);
-                    int marginX = sheet->verticalHeader()->geometry().x() + sheet->verticalHeader()->geometry().width() + 2;
-                    int marginY = 47;
-                    QRect setRect = QRect(rect.x() + marginX, rect.y() + marginY, rect.width(), rect.height());
-                    mInputNodeAddress->setText(item->text());
-                    mInputNodeAddress->raise();
-                    mInputNodeAddress->setGeometry(setRect);
-                    mInputNodeAddress->activateWindow();
-                    mInputNodeAddress->setFocus();
-                    mInputNodeAddress->show();
-                }
-#else
-                if (sheet) {
-                    sheet->setCellWidget(item->row(), item->column(), mInputNodeAddress);
-                    qDebug() << "\t Show -" << item->row() << item->column();
-                }
-#endif
-                mCurrentSheet = sheet;
-                mCurrentCellItem = item;
-            }
-            break;
-        }
-        case AutoComplete::Hide : {
-#if defined(USE_AUTO_COMPLETE_NORMAL)
-            if (mInputNodeAddress) {
-                mInputNodeAddress->hide();
-                QString inputText = mInputNodeAddress->text();
-                if (inputText.size() > 0) {
-                    if (mCurrentCellItem) {
-                        mCurrentCellItem->setText(inputText);
-                    }
-                    mInputNodeAddress->clear();
-                    if (mCurrentCellItem) {
-                        mCurrentCellItem = nullptr;
-                    }
-                }
-                // mCurrentSheet->setFocus();
-                mCurrentSheet = sheet;
-                mCurrentCellItem = item;
-            }
-#else
-            if ((sheet) && (mCurrentCellItem)) {
-                    qDebug() << "\t Hide -" << mCurrentCellItem->row() << mCurrentCellItem->column();
-                sheet->removeCellWidget(mCurrentCellItem->row(), mCurrentCellItem->column());
-            }
-            mCurrentSheet = sheet;
-            mCurrentCellItem = item;
-#endif
-            break;
-        }
-        case AutoComplete::Cancel : {
-            if (mInputNodeAddress) {
-                mInputNodeAddress->hide();
-                mInputNodeAddress->clear();
-            }
-            break;
-        }
-        default : {
-            break;
-        }
-    }
-
-    if ((mInputNodeAddress == nullptr) || (mAutoComplete == nullptr)) {
-        qDebug() << "Fail to create instnace - mInputNodeAddress :" << mInputNodeAddress << ", mAutoComplete :" << mAutoComplete;
     }
 }
 
@@ -260,6 +124,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex) {
         }
         sheetData.append(rowData);
     }
+
     // qDebug() << "readExcelSheet() ->"<< "Length :" << rowMax << columnMax << sheetData.size();
     // qDebug() << mExcelSheet[sheetIndex] << ":" << sheetData;
     // qDebug() << "==================================================================================================\n";
@@ -460,9 +325,13 @@ void GuiExcel::updateDisplayExcelSheet() {
 #endif
         }
 
+
+
+
+
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
-            qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
+            // qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
             createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
                             QVariant(QVariantList({sheetIndex, column, row, text})));
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
@@ -470,14 +339,16 @@ void GuiExcel::updateDisplayExcelSheet() {
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-            bool selectInavalid = (modelIndexs.size() == 0);
-            int columnStart = (selectInavalid) ? (1) : (modelIndexs.at(0).column());
-            int columnEnd = (selectInavalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-            int rowStart = (selectInavalid) ? (0) : (modelIndexs.at(0).row());
-            int rowEnd = (selectInavalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            bool selectInvalid = (modelIndexs.size() == 0);
+            int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
+            int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+            int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
+            int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            int rowCount = mExcelSheet[sheetIndex]->rowCount();
             QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
 
-            qDebug() << sheetIndex << ". cellSelected :" << pos << ", Index :" << columnStart << rowStart << rowEnd << columnEnd;
+            qDebug() << sheetIndex << ". cellSelected :" << pos << ", Index :" << columnStart << rowStart << rowEnd << columnEnd
+                                    << ", RowCount :" << rowCount;
 
             if ((selectAction == mMenuActionItem[MenuItemRight::Insert])
                 || (selectAction == mMenuActionItem[MenuItemRight::Delete])) {
@@ -489,17 +360,16 @@ void GuiExcel::updateDisplayExcelSheet() {
                         mExcelSheet[sheetIndex]->removeRow(rowStart);
                     }
                 }
+                qDebug() << "\t RowCount :" << rowCount << "->" << mExcelSheet[sheetIndex]->rowCount();
             } else if (selectAction == mMenuActionItem[MenuItemRight::MergeSplit]) {
                 bool columnSelectError = (columnEnd > 1);
                 if (columnSelectError) {
                     createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
                 } else {
                     if (mCellInfo[sheetIndex].isCellStateMerge(columnStart, rowStart, rowEnd)) {
-                        // qDebug() << "\t Split Cell :" << columnStart << rowStart << rowEnd;
                         mExcelSheet[sheetIndex]->clearSpans();
                         mCellInfo[sheetIndex].updateMergeInfo(columnStart, rowStart, rowEnd);
                     } else {
-                        // qDebug() << "\t Insert Cell :" << columnStart << rowStart << rowEnd;
                         mCellInfo[sheetIndex].insertMergeInfo(columnStart, rowStart, rowEnd);
                     }
                     // Draw - Merge Cell
@@ -515,6 +385,28 @@ void GuiExcel::updateDisplayExcelSheet() {
             mExcelSheet[sheetIndex]->resizeColumnsToContents();
             mExcelSheet[sheetIndex]->resizeRowsToContents();
         });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
+            if ((column != 4) && (column != 6)) {
+                qDebug() << "Fail to not support auto complete column :" << column;
+                return;
+            }
+            QTableWidgetItem* selectItem = mExcelSheet[sheetIndex]->item(row, column);
+            if (selectItem == nullptr) {
+                mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
+                selectItem = mExcelSheet[sheetIndex]->item(row, column);
+            }
+            updateDisplayAutoComplete(true, selectItem);
+            mExcelSheet[sheetIndex]->clearFocus();
+        });
+        // connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
+        //                                                         [=](int logicalIndex, int oldSize, int newSize) {
+        //     qDebug() << sheetIndex << ". H_sectionResized :" << logicalIndex << oldSize << newSize;
+        // });
+        // connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized,
+        //                                                         [=](int logicalIndex, int oldSize, int newSize) {
+        //     qDebug() << sheetIndex << ". V_sectionResized :" << logicalIndex << oldSize << newSize;
+        // });
+
 
         // Resize - Cell Width/Height
         mExcelSheet[sheetIndex]->resizeColumnsToContents();
@@ -522,6 +414,36 @@ void GuiExcel::updateDisplayExcelSheet() {
         sheetIndex++;
     }
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+}
+
+void GuiExcel::updateDisplayAutoComplete(const bool& show, QTableWidgetItem* selectItem) {
+    qDebug() << "updateDisplayAutoComplete :" << show << "," << selectItem << "," << mAutoComplete;
+
+    if (mAutoComplete == nullptr) {
+        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), list);
+    }
+
+    connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
+        if (selectItem) {
+            selectItem->setText(text);
+        }
+        mAutoComplete->hide();
+    });
+    connect(mAutoComplete, &QDialog::finished, [=]() {
+        disconnect(mAutoComplete);
+        delete mAutoComplete;
+        mAutoComplete = nullptr;
+    });
+
+    if (show) {
+        mAutoComplete->show();
+        if (selectItem) {
+            mAutoComplete->setInputText(selectItem->text());
+        }
+    } else {
+        mAutoComplete->hide();
+    }
 }
 
 void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -538,33 +460,33 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayVisible();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll : {
-            updateDisplayNodeAddress(AutoComplete::Update, nullptr, nullptr);
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete : {
-            if ((mCurrentSheet) && (mCurrentCellItem)) {
-                AutoComplete type = AutoComplete::Hide;
-                int inputType = value.toInt();
-                if (inputType == 1) {
-                    type = AutoComplete::Show;
-                } else if (inputType == 2) {
-                    type = AutoComplete::Cancel;
-                } else {
-                    type = AutoComplete::Hide;
-                }
-                updateDisplayNodeAddress(type, mCurrentSheet, mCurrentCellItem);
-            } else {
-                qDebug() << "ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete";
-            }
-            break;
-        }
         case ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen : {
             updateDisplayExcelSheet();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet : {
             readAllExcelSheet();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeShortcutKey : {
+            qDebug() << "\t ShortcutKey :" << value;
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete : {
+            // if ((mCurrentSheet) && (mCurrentCellItem)) {
+            //     AutoComplete type = AutoComplete::Hide;
+            //     int inputType = value.toInt();
+            //     if (inputType == 1) {
+            //         type = AutoComplete::Show;
+            //     } else if (inputType == 2) {
+            //         type = AutoComplete::Cancel;
+            //     } else {
+            //         type = AutoComplete::Hide;
+            //     }
+            //     updateDisplayNodeAddress(type, mCurrentSheet, mCurrentCellItem);
+            // } else {
+            //     qDebug() << "ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete";
+            // }
             break;
         }
         default : {

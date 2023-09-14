@@ -19,6 +19,8 @@ private:
         Edit,
         View,
         Setting,
+        Report,
+        Run,
         Help,
         Max,
     };
@@ -41,6 +43,8 @@ private:
     void drawMenuEdit();
     void drawMenuView();
     void drawMenuSetting();
+    void drawMenuReport();
+    void drawMenuRun();
     void drawMenuHelp();
     void drawMenuEtc();
     void updateDisplayDefaultPath();

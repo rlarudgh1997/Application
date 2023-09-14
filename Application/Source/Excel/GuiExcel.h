@@ -14,31 +14,79 @@
 
 
 
+#include <QDialog>
+#include <QListWidget>
+#include <QVBoxLayout>
 
-class CellInfo {
+
+
+class AutoCompleteDialog : public QDialog {
+    Q_OBJECT
+
 public:
-    CellInfo() : mRowStart(0), mColumnStart(0), mRowEnd(0) {
+    explicit AutoCompleteDialog(QWidget* parent = nullptr, const QStringList& list = QStringList())
+        : QDialog(parent), mAutoCompleteStringList(list) {
+        setWindowTitle("AutoComplete");
+        setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+        setWindowFlag(Qt::WindowCloseButtonHint, false);
+        setParent(parent);
+        setModal(true);
+
+        mInputeText = new QLineEdit(this);
+        mSuggestionsList = new QListWidget(this);
+
+        QVBoxLayout* layout = new QVBoxLayout;
+        layout->addWidget(mInputeText);
+        layout->addWidget(mSuggestionsList);
+
+        QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
+        QRect setRect = QRect();
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 800) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - 500) * 0.5));
+        setRect.setWidth(800);
+        setRect.setHeight(500);
+
+        setGeometry(setRect);
+        setLayout(layout);
+        setFocus();
+        mInputeText->setFocus();
+
+        connect(mInputeText, &QLineEdit::textChanged, [=](const QString& text){
+            mSuggestionsList->clear();
+            for (const QString& str : mAutoCompleteStringList) {
+                if (str.contains(text, Qt::CaseInsensitive)) {    // (str.startsWith(text, Qt::CaseInsensitive))
+                    mSuggestionsList->addItem(str);
+                }
+            }
+            mSuggestionsList->setCurrentRow(0);
+        });
+        connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem *item) {
+            emit signalAutoCompleteSelectedText(item->text());
+            mInputeText->clear();
+            mSuggestionsList->clear();
+        });
     }
-    CellInfo(const int& rowStart, const int& columnStart, const int& rowEnd)
-        : mRowStart(rowStart), mColumnStart(columnStart), mRowEnd(rowEnd) {
-    }
-    void isCellInfo(int& rowStart, int& columnStart, int& rowEnd) {
-        rowStart = mRowStart;
-        columnStart = mColumnStart;
-        rowEnd = mRowEnd;
-    }
-    bool isMergeCell(const int& rowStart, const int& columnStart, const int& rowEnd) {
-        if ((mRowStart == rowStart) && (mColumnStart == columnStart) && (mRowEnd == rowEnd)) {
-            return true;
+    void setInputText(const QString& text) {
+        if (mInputeText) {
+            mInputeText->setText(text);
         }
-        return false;
     }
+    void setAutoCompleteStringList(const QStringList& autoCompleteStringList) {
+        mAutoCompleteStringList = autoCompleteStringList;
+    }
+
+signals:
+     void signalAutoCompleteSelectedText(const QString& text);
+
 
 private:
-    int mRowStart = 0;
-    int mColumnStart = 0;
-    int mRowEnd = 0;
+    QLineEdit* mInputeText = nullptr;
+    QListWidget* mSuggestionsList;
+    QStringList mAutoCompleteStringList;
 };
+
+
+
 
 
 class ExcelSheet {
@@ -87,7 +135,6 @@ private:
         mMergeInfo.clear();
     }
 
-
 private:
     QMap<int, QList<QPair<int, int>>> mMergeInfo = QMap<int, QList<QPair<int, int>>>();
 };
@@ -125,14 +172,12 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
-    void controlConnect(const bool& state = true);
-
-    void updateDisplayNodeAddress(const AutoComplete& type, QTableWidget* sheet, QTableWidgetItem* item);
     QVariantList readExcelSheet(const int& sheetIndex);
     void readAllExcelSheet();
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
     void updateDisplayExcelSheet();
+    void updateDisplayAutoComplete(const bool& show, QTableWidgetItem* selectItem);
 
 
 public slots:
@@ -146,13 +191,7 @@ private:
     QMap<int, QMap<int, QPair<int, int>>> mMergeInfo = QMap<int, QMap<int, QPair<int, int>>>();
     QMenu* mMenuRight = nullptr;
     QMap<MenuItemRight, QAction*> mMenuActionItem = QMap<MenuItemRight, QAction*>();
-
-    int mCurrentSheetIndex = 0;
-    QLineEdit* mInputNodeAddress = nullptr;
-    QCompleter* mAutoComplete = nullptr;
-    QStringListModel mNodeAddressListModel = QStringListModel();
-    QTableWidget* mCurrentSheet = nullptr;
-    QTableWidgetItem* mCurrentCellItem = nullptr;
+    AutoCompleteDialog* mAutoComplete = nullptr;
 };
 
 #endif    // GUI_EXCEL_H

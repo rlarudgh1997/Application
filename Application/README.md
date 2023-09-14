@@ -8,6 +8,9 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	: class 로 변경
 	: print 함수를 별도 api 로 변경하여 release, debug 인 경우에 맞도록 프린터 되도록 수정
 
+- insert, delete
+	: 병합셀이 포함된 곳에서 추가, 삭제시 병합셀 정보 재구성 해야함.
+
 
 - 자동완성
 	: 편집중 esc 키 입력시 동작 안함
@@ -21,8 +24,6 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 
 - Open
-	: vehicle type 항목 - null 인 경우 병합셀 정보로 표시 되지 않음
-	: 수정 한 상태에서 new 동작시 save as 팝업 표시 하도록 수정
 	: config view 상태에서 open 팝업 표시시 view 화면 사라짐
 	: new/open 하여 엑셀 수정 상태에서 다시 open 하는 경우 편집중 저장 팝업 표시 없이 바로 동작함
 	: *.fromExcel 파일 정보의 title 로 gui title 구성 하도록
@@ -32,7 +33,6 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 - New
 	: new 로 생성한 내역이 있는 경우(현재 New 상태) 새로 생성하지 않고 raise or skip 동작 하도록
-	: row count 값만 전달하여 gui 에서 시트 구성 하도록 변경
 
 
 - SendEvent
@@ -41,6 +41,7 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 - 단축키 기능
 	: 추가, 삭제, 병합, 해제 단축키로 동작 하도록
+
 - Edit 기능
 	: 복사 & 붙여넣기 기능 추가 - 시트 단위로만 동작
 
