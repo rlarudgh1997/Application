@@ -201,22 +201,17 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSettingDevPath : {
-            QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            QVariant popupData = QVariant();
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
-                                    QVariantList({STRING_DEFAULT_PATH, defaultPath})) == ivis::common::PopupButton::OK) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, popupData);
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultPath, popupData);
-            }
-            break;
-        }
+        case ivis::common::EventTypeEnum::EventTypeSettingDevPath :
         case ivis::common::EventTypeEnum::EventTypeSettingNodePath : {
-            QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+            bool defaultPath = (type == ivis::common::EventTypeEnum::EventTypeSettingDevPath);
+            QString text = (defaultPath) ? (STRING_DEFAULT_PATH) : (STRING_NODE_PATH);
+            int configType = (defaultPath) ? (ConfigInfo::ConfigTypeDefaultPath) : (ConfigInfo::ConfigTypeNodeAddressPath);
+            QVariant path = ConfigSetting::instance().data()->readConfig(configType);
             QVariant popupData = QVariant();
+
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
-                                    QVariantList({STRING_NODE_PATH, nodeAddressPath})) == ivis::common::PopupButton::OK) {
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeNodeAddressPath, popupData);
+                                    QVariantList({text, path})) == ivis::common::PopupButton::OK) {
+                ConfigSetting::instance().data()->writeConfig(configType, popupData);
             }
             break;
         }

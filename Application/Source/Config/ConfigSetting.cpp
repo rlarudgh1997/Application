@@ -17,6 +17,7 @@
 
 #define GROUP_NAME_COMMON    "Common"
 #define GROUP_NAME_GENERAL   "Gernal"
+#define GROUP_NAME_REPORT    "Report"
 #define GROUP_NAME_FILE      "File"
 
 
@@ -78,15 +79,28 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
     }
 }
 
+QVariant ConfigSetting::isConfigName(const int& configType) {
+    if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMaxDoNotSave)
+        || (configType == ConfigInfo::ConfigTypeMax)) {
+        return QVariant();
+    } else {
+        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
+                                                        ConfigInfo::ConfigGetTypeName).toString();
+        QStringList temp = configName.split("ConfigType");
+        if (temp.size() == 2) {
+            return temp.at(1);
+        } else {
+            return QVariant();
+        }
+    }
+}
+
+
 void ConfigSetting::editConfig(const int& configType, const QVariant& configValue) {
     QVariant editValue = QVariant();
     switch (configType) {
         case ConfigInfo::ConfigTypeNewSheetRowCount : {
             editValue = (configValue.toInt() >= 1000) ? (1000) : (configValue.toInt());
-            break;
-        }
-        case ConfigInfo::ConfigTypeDeleteFileTC : {
-            editValue = configValue.toBool();
             break;
         }
         case ConfigInfo::ConfigTypeScreenInfo : {
@@ -108,6 +122,18 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
             editValue = QVariant(list);
             break;
         }
+        case ConfigInfo::ConfigTypeDeleteFileTC :
+        case ConfigInfo::ConfigTypeReportResult :
+        case ConfigInfo::ConfigTypeReportResultSplit :
+        case ConfigInfo::ConfigTypeReportResultConfig :
+        case ConfigInfo::ConfigTypeReportResultExcel :
+        case ConfigInfo::ConfigTypeReportCoverage :
+        case ConfigInfo::ConfigTypeReportCoverageLine :
+        case ConfigInfo::ConfigTypeReportCoverageFunction :
+        case ConfigInfo::ConfigTypeReportCoverageBranch : {
+            editValue = configValue.toBool();
+            break;
+        }
         default : {
             editValue = configValue;
             break;
@@ -126,8 +152,10 @@ void ConfigSetting::readConfig() {
         } else {
             if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeMax) {
+            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
+            } else if (configType < ConfigInfo::ConfigTypeMax) {
+                mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
@@ -150,12 +178,13 @@ void ConfigSetting::writeConfig() {
                                                             ConfigInfo::ConfigGetTypeName).toString();
             if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeMax) {
+            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
+            } else if (configType < ConfigInfo::ConfigTypeMax) {
+                mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
-
             mConfigBackup[configType] = mConfigData[configType];
             mSetting->setValue(configName, mConfigData[configType]);
             mSetting->endGroup();
@@ -174,19 +203,6 @@ void ConfigSetting::resetConfig() {
     }
     writeConfig();
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
-}
-
-QMap<int, QPair<QString, QVariant>> ConfigSetting::allConfig() {
-    QMap<int, QPair<QString, QVariant>> allConfig = QMap<int, QPair<QString, QVariant>>();
-    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
-            continue;
-        }
-        QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
-                                                        ConfigInfo::ConfigGetTypeName).toString();
-        allConfig[configType] = QPair<QString, QVariant>(configName, readConfig(configType));
-    }
-    return allConfig;
 }
 
 void ConfigSetting::threadFunc() {

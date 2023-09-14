@@ -36,6 +36,16 @@ public:
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
 
+        // Report
+        ConfigTypeReportResult,
+        ConfigTypeReportResultSplit,
+        ConfigTypeReportResultConfig,
+        ConfigTypeReportResultExcel,
+        ConfigTypeReportCoverage,
+        ConfigTypeReportCoverageLine,
+        ConfigTypeReportCoverageFunction,
+        ConfigTypeReportCoverageBranch,
+
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -91,6 +101,7 @@ private:
                                                                         "Data", "Negative Test"})));
 
 
+
         // File
         mConfigInfoData[ConfigTypeLastFileInfo] = QPair<QString, QVariant>("ConfigTypeLastFileInfo", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
@@ -100,6 +111,26 @@ private:
                                                         QVariant("ExcelMergeText"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd",
                                                         QVariant("ExcelMergeTextEnd"));
+
+
+
+        // Report
+        mConfigInfoData[ConfigTypeReportResult] = QPair<QString, QVariant>("ConfigTypeReportResult",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportResultSplit] = QPair<QString, QVariant>("ConfigTypeReportResultSplit",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportResultConfig] = QPair<QString, QVariant>("ConfigTypeReportResultConfig",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportResultExcel] = QPair<QString, QVariant>("ConfigTypeReportResultExcel",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportCoverage] = QPair<QString, QVariant>("ConfigTypeReportCoverage",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportCoverageLine] = QPair<QString, QVariant>("ConfigTypeReportCoverageLine",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportCoverageFunction] = QPair<QString, QVariant>("ConfigTypeReportCoverageFunction",
+                                                                                    QVariant(false));
+        mConfigInfoData[ConfigTypeReportCoverageBranch] = QPair<QString, QVariant>("ConfigTypeReportCoverageBranch",
+                                                                                    QVariant(false));
 
 
 

@@ -132,6 +132,8 @@ private:
 
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress();
+    void updateDisplayReportResult();
+    void updateDisplayReportCoverage();
 
 
 public slots:
@@ -144,6 +146,7 @@ private:
     // QTableWidget* mMainView = nullptr;
     QWidget* mConfigWidget = nullptr;
     QListView* mNodeAddressList = nullptr;
+    QWidget* mReportWidget = nullptr;
     QMap<int, ListItem*> mConfigListItem = QMap<int, ListItem*>();
     QVariantList mConfigValue = QVariantList();
     QLineEdit* mInputNodeAddress = nullptr;

@@ -169,8 +169,9 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewConfig : {
+            QVariantList allConfigData = QVariantList();
+#if 0
             QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
-            QVariantList allConfig = QVariantList();
             while (iter.hasNext()) {
                 iter.next();
                 QStringList temp = iter.value().first.split("ConfigType");
@@ -178,15 +179,22 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
                     continue;
                 }
                 int type = iter.key();
-                QString name = temp.at(1);
+                QString name = ConfigSetting::instance().data()->isConfigName(type);
                 QVariant value = iter.value().second;
-                allConfig.append(QVariant(QVariantList({type, name, value})));
+                allConfigData.append(QVariant(QVariantList({type, name, value})));
             }
-            if (allConfig.size() > 0) {
+#else
+            for (int type = (ConfigInfo::ConfigTypeInvalid + 1); type < ConfigInfo::ConfigTypeReportResult; type++) {
+                QVariant name = ConfigSetting::instance().data()->isConfigName(type);
+                QVariant value = ConfigSetting::instance().data()->readConfig(type);
+                allConfigData.append(QVariant(QVariantList({type, name, value})));
+            }
+#endif
+            if (allConfigData.size() > 0) {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
                                                                     ivis::common::ViewTypeEnum::ViewTypeConfig);
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfig), true);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
             }
             break;
         }
@@ -196,15 +204,20 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeSignal);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll, (sfcList + vsmList), true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(sfcList + vsmList), true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeReportResult : {
-            qDebug() << "Report - result";
-            break;
-        }
+        case ivis::common::EventTypeEnum::EventTypeReportResult :
         case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
-            qDebug() << "Report - Coverage";
+            QVariantList reportData = QVariantList();
+            for (int type = ConfigInfo::ConfigTypeReportResult; type <= ConfigInfo::ConfigTypeReportCoverageBranch; type++) {
+                QVariant name = ConfigSetting::instance().data()->isConfigName(type);
+                QVariant value = ConfigSetting::instance().data()->readConfig(type);
+                reportData.append(QVariant(QVariantList({type, name, value})));
+            }
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(reportData), true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
             break;
         }
         default : {

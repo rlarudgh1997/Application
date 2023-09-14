@@ -31,7 +31,8 @@ void HandlerCenter::initPropertyInfo() {
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType,                          QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo,                        QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll,                    QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport,                        QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

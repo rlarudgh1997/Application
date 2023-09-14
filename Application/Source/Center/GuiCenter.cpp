@@ -57,6 +57,14 @@ void GuiCenter::drawDisplayDepth0() {
 #endif
     }
 
+    if (mReportWidget == nullptr) {
+        mReportWidget = new QWidget();
+        mReportWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
+        mReportWidget->show();
+        mMainView->insertWidget(2, mReportWidget);
+    }
+
+
     if (mConfigHideButton == nullptr) {
         mConfigHideButton = new QPushButton(mMainView);
         mConfigHideButton->setGeometry(1250, 20, 50, 50);
@@ -123,6 +131,9 @@ void GuiCenter::updateDisplayConfigInfo() {
         mMainView->setCurrentIndex(viewType);
         if (mNodeAddressList) {
             mNodeAddressList->hide();
+        }
+        if (mReportWidget) {
+            mReportWidget->hide();
         }
         mConfigWidget->raise();
         mConfigHideButton->raise();
@@ -196,7 +207,7 @@ void GuiCenter::updateDisplayConfigInfo() {
 }
 
 void GuiCenter::updateDisplayNodeAddress() {
-    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
     qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << nodeAddress.size();
 
     if (mNodeAddressList == nullptr) {
@@ -206,6 +217,9 @@ void GuiCenter::updateDisplayNodeAddress() {
         mMainView->setCurrentIndex(viewType);
         if (mConfigWidget) {
             mConfigWidget->hide();
+        }
+        if (mReportWidget) {
+            mReportWidget->hide();
         }
         mNodeAddressList->raise();
         mInputNodeAddress->raise();
@@ -230,6 +244,26 @@ void GuiCenter::updateDisplayNodeAddress() {
     }
 }
 
+void GuiCenter::updateDisplayReportResult() {
+    if (mReportWidget == nullptr) {
+        return;
+    } else {
+        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+        mMainView->setCurrentIndex(viewType);
+        if (mConfigWidget) {
+            mConfigWidget->hide();
+        }
+        if (mNodeAddressList) {
+            mNodeAddressList->hide();
+        }
+        mNodeAddressList->raise();
+        mInputNodeAddress->raise();
+        mConfigHideButton->raise();
+    }
+}
+
+void GuiCenter::updateDisplayReportCoverage() {
+}
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
@@ -249,7 +283,7 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayConfigInfo();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll : {
             updateDisplayNodeAddress();
             break;
         }

@@ -420,7 +420,7 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, QTableWidgetItem* sel
     qDebug() << "updateDisplayAutoComplete :" << show << "," << selectItem << "," << mAutoComplete;
 
     if (mAutoComplete == nullptr) {
-        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll).toStringList();
+        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), list);
     }
 

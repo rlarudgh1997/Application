@@ -30,7 +30,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
 
 
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSignalListAll,                     QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll,                    QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName,                    QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle,                    QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle,                   QVariant());

@@ -82,8 +82,9 @@ public:
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeViewType,
         PropertyTypeConfigInfo,
+        PropertyTypeNodeAddressAll,
+        PropertyTypeTestReport,
         PropertyTypeDefaultPath,
-        PropertyTypeSignalListAll,  // SFC + VSM
         PropertyTypeSignalListSFC,
         PropertyTypeSignalListVSM,
         PropertyTypeSignalListToMicom,
@@ -218,6 +219,7 @@ public:
     enum ViewType {
         ViewTypeConfig = 0,
         ViewTypeSignal,
+        ViewTypeReport,
     };
 };
 
