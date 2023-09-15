@@ -22,10 +22,13 @@ private:
 
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath);
-    void writeExcelFile(const QVariant& filePath);
+    bool writeExcelFile(const QVariant& filePath);
     bool writeSheetInfo(const QVariant& filePath);
-    QString sytemCall(const int& type, const QVariant& filePath);
+    QString sytemCall(const bool& readFile, const QVariant& filePath);
     bool checkPythonLibrary();
+    void openExcelFile(const QVariant& filePath);
+    void loadExcelFile(const int& eventType);
+    void saveExcelFile(const bool& saveAs);
 
 
 protected:

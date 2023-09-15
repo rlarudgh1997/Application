@@ -20,6 +20,11 @@ public:
 private:
     explicit ControlCenter();
 
+    void updateConfigInfo();
+    void updateNodeAddress();
+    void updateTestReport();
+
+
 protected:
     virtual AbstractHandler* isHandler();
     virtual bool initControl(const int& currentMode);

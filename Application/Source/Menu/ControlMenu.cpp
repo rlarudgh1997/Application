@@ -50,8 +50,6 @@ void ControlMenu::initNormalData() {
 
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
 }
 
 void ControlMenu::initControlData() {
@@ -136,8 +134,8 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeExitProgram : {
             ivis::common::PopupButton button = ivis::common::PopupButton::Discard;
-            bool fileSaveType = getData(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType).toBool();
-            if (fileSaveType) {
+            bool fileSave = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+            if (fileSave) {
                 QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
                                                     STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
                 QVariant popupData = QVariant();
@@ -145,7 +143,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
                 if (button == ivis::common::PopupButton::OK) {
                     sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel,
                                     ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
-                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, false);
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                 }
             }
 
@@ -171,7 +169,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
 #if 1
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
 #else
-            if (getData(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType).toBool()) {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
                 QVariant popupData = QVariant();
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), popupData)
                     == ivis::common::PopupButton::OK) {
@@ -228,10 +226,6 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
 
     qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        case ivis::common::EventTypeEnum::EventTypeFileSaveType : {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType, eventValue);
-            break;
-        }
         default : {
             break;
         }

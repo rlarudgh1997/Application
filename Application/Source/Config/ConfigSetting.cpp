@@ -150,7 +150,7 @@ void ConfigSetting::readConfig() {
             mConfigData[configType] = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                                 ConfigInfo::ConfigGetTypeValue);
         } else {
-            if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
+            if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeReportResult) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
@@ -176,7 +176,7 @@ void ConfigSetting::writeConfig() {
         if (mConfigData[configType] != mConfigBackup[configType]) {
             QString configName = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeName).toString();
-            if (configType < ConfigInfo::ConfigTypeLastFileInfo) {
+            if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeReportResult) {
                 mSetting->beginGroup(GROUP_NAME_FILE);

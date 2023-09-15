@@ -110,28 +110,46 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
                                                         destination, eventType, eventValue);
 }
 
+void ControlCenter::updateConfigInfo() {
+    QVariantList allConfigData = QVariantList();
+    for (int type = (ConfigInfo::ConfigTypeInvalid + 1); type < ConfigInfo::ConfigTypeReportResult; type++) {
+        QVariant name = ConfigSetting::instance().data()->isConfigName(type);
+        QVariant value = ConfigSetting::instance().data()->readConfig(type);
+        allConfigData.append(QVariant(QVariantList({type, name, value})));
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeConfig);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
+}
+
+void ControlCenter::updateNodeAddress() {
+    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
+    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeSignal);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(sfcList + vsmList), true);
+}
+
+void ControlCenter::updateTestReport() {
+    QVariantList reportData = QVariantList();
+    for (int type = ConfigInfo::ConfigTypeReportResult; type <= ConfigInfo::ConfigTypeReportCoverageBranch; type++) {
+        QVariant name = ConfigSetting::instance().data()->isConfigName(type);
+        QVariant value = ConfigSetting::instance().data()->readConfig(type);
+        reportData.append(QVariant(QVariantList({type, name, value})));
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(reportData), true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
+}
+
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
-#if 1
-    int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-    if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
-        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeViewConfig, "");
-    }
-#else
-    switch (type) {
-        case ConfigInfo::ConfigTypeInit :
-        case ConfigInfo::ConfigTypeCheckLibOpenpyxl :
-        case ConfigInfo::ConfigTypeCheckLibPandas :
-        case ConfigInfo::ConfigTypeDefaultPath : {
-            int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
-                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeViewConfig, "");
-            }
-        }
-        default : {
-            break;
+    if (type < ConfigInfo::ConfigTypeMaxDoNotSave) {
+        int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+        if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+            updateConfigInfo();
         }
     }
-#endif
 }
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
@@ -169,55 +187,16 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewConfig : {
-            QVariantList allConfigData = QVariantList();
-#if 0
-            QMapIterator<int, QPair<QString, QVariant>> iter(ConfigSetting::instance().data()->allConfig());
-            while (iter.hasNext()) {
-                iter.next();
-                QStringList temp = iter.value().first.split("ConfigType");
-                if (temp.size() != 2) {
-                    continue;
-                }
-                int type = iter.key();
-                QString name = ConfigSetting::instance().data()->isConfigName(type);
-                QVariant value = iter.value().second;
-                allConfigData.append(QVariant(QVariantList({type, name, value})));
-            }
-#else
-            for (int type = (ConfigInfo::ConfigTypeInvalid + 1); type < ConfigInfo::ConfigTypeReportResult; type++) {
-                QVariant name = ConfigSetting::instance().data()->isConfigName(type);
-                QVariant value = ConfigSetting::instance().data()->readConfig(type);
-                allConfigData.append(QVariant(QVariantList({type, name, value})));
-            }
-#endif
-            if (allConfigData.size() > 0) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
-                                                                    ivis::common::ViewTypeEnum::ViewTypeConfig);
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
-            }
+            updateConfigInfo();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
-            QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
-            QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
-            QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeSignal);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(sfcList + vsmList), true);
+            updateNodeAddress();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeReportResult :
         case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
-            QVariantList reportData = QVariantList();
-            for (int type = ConfigInfo::ConfigTypeReportResult; type <= ConfigInfo::ConfigTypeReportCoverageBranch; type++) {
-                QVariant name = ConfigSetting::instance().data()->isConfigName(type);
-                QVariant value = ConfigSetting::instance().data()->readConfig(type);
-                reportData.append(QVariant(QVariantList({type, name, value})));
-            }
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(reportData), true);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
+            updateTestReport();
             break;
         }
         default : {

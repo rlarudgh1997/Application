@@ -96,9 +96,8 @@ public:
         PropertyTypeExcelMergeTextStart,
         PropertyTypeExcelMergeText,
         PropertyTypeExcelMergeTextEnd,
-        PropertyTypeFileSaveType,
         PropertyTypeAutoComplete,
-        PropertyTypeReadExcelSheet,
+        PropertyTypeReadExcelSheetBeforeSave,
         PropertyTypeShortcutKey,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -125,7 +124,6 @@ public:
 
         PropertyTypeOnlyControl = PROPETRY_START_ONLY_CONTROL,
         PropertyTypeSaveFilePath,
-        PropertyTypeEditExcelSheet,
         PropertyTypeOnlyControlMax,
     };
     enum PropertyValue{
@@ -178,10 +176,8 @@ public:
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
-        EventTypeFileSaveType,
         EventTypeViewConfig,
         EventTypeWriteConfig,
-        EventTypeReadExcelInfo,
         EventTypeReportResult,
         EventTypeReportCoverage,
 

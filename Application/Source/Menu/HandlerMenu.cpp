@@ -30,7 +30,6 @@ void HandlerMenu::initPropertyInfo() {
 
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath,                       QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeFileSaveType,                      QVariant(false));
 }
 
 void HandlerMenu::controlConnect(const bool& state) {

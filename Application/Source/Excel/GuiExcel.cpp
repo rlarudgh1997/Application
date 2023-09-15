@@ -148,7 +148,8 @@ void GuiExcel::readAllExcelSheet() {
             sheetIndex++;
         }
     }
-    createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, true);
+    QVariant saveFielPath = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave);
+    createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, saveFielPath);
 }
 
 void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
@@ -464,7 +465,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayExcelSheet();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave : {
             readAllExcelSheet();
             break;
         }

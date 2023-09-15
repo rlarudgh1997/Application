@@ -65,8 +65,6 @@ void ControlExcel::initNormalData() {
 }
 
 void ControlExcel::initControlData() {
-    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeSaveFilePath, "");
-    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeEditExcelSheet, false);
 }
 
 void ControlExcel::resetControl(const bool& reset) {
@@ -274,19 +272,17 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath) {
     return (writeSize > 0);
 }
 
-void ControlExcel::writeExcelFile(const QVariant& filePath) {
+bool ControlExcel::writeExcelFile(const QVariant& filePath) {
+    bool result = false;
     if (checkPythonLibrary() == false) {
-        qDebug() << "Faitl to python lib not install.";
-        return;
+        qDebug() << "Fail to python lib not install.";
+        return result;
     }
 
     if (writeExcelSheet(filePath)) {
-        if (sytemCall(ivis::common::EventTypeEnum::EventTypeSaveExcel, filePath) > 0) {
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeEditExcelSheet, false);
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, false);
-        }
+        result = (sytemCall(false, filePath) > 0);
     }
+    return result;
 }
 
 bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
@@ -350,9 +346,9 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
     return (writeSize > 0);
 }
 
-QString ControlExcel::sytemCall(const int& type, const QVariant& filePath) {
-    qDebug() << "ControlExcel::sytemCall() ->" << type << "," << filePath;
-    QString cmdType = ((type == ivis::common::EventTypeEnum::EventTypeOpenExcel) ? ("read") : ("write"));
+QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) {
+    qDebug() << "ControlExcel::sytemCall() ->" << readFile << "," << filePath;
+    QString cmdType = ((readFile) ? ("read") : ("write"));
     QStringList fileInfo = filePath.toString().split("/");
 
     if (fileInfo.size() == 0) {
@@ -428,6 +424,77 @@ bool ControlExcel::checkPythonLibrary() {
 #endif
 }
 
+void ControlExcel::openExcelFile(const QVariant& filePath) {
+    if (checkPythonLibrary()) {
+        QString dirPath = sytemCall(true, filePath);
+        if (dirPath.size() > 0) {
+            updateExcelSheet(true, dirPath);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+        } else {
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
+                                            QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+        }
+    }
+}
+
+void ControlExcel::loadExcelFile(const int& eventType) {
+    switch (eventType) {
+        case ivis::common::EventTypeEnum::EventTypeFileNew : {
+            updateExcelSheet(false, QVariant());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeFileOpen : {
+            QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+            QVariant filePath = QVariant();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
+                                    QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
+                openExcelFile(filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeLastFile : {
+            QVariant lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
+            if (lastFilePath.toString().size() == 0) {
+                QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
+                QVariant filePath = QVariant();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
+                                        QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
+                    openExcelFile(filePath);
+                }
+            } else {
+                openExcelFile(lastFilePath);
+            }
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            break;
+        }
+        default : {
+            break;
+        }
+    }
+}
+
+void ControlExcel::saveExcelFile(const bool& saveAs) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool() == false) {
+        qDebug() << "The file is not saved because the contents of the excel have not changed.";
+        return;
+    }
+
+    QVariant savefilePath = (saveAs) ? (QVariant())
+                        : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
+    if (savefilePath.toString().size() == 0) {
+        QVariant filePath = QVariant();
+        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath)
+                                                                                    == ivis::common::PopupButton::OK) {
+            savefilePath = filePath;
+        }
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave, savefilePath, true);
+}
+
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ConfigInfo::ConfigTypeExcelMergeTextStart :
@@ -443,38 +510,20 @@ void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
 }
 
 void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
-    // qDebug() << "ControlExcel::slotHandlerEvent() ->" << type << "," << value;
-    ivis::common::CheckTimer checkTimer;
-
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeOpenExcel : {
-            if (checkPythonLibrary()) {
-                QVariant filePath = value;
-                QString dirPath = sytemCall(ivis::common::EventTypeEnum::EventTypeOpenExcel, filePath);
-                if (dirPath.size() > 0) {
-                    updateExcelSheet(true, dirPath);
-                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, filePath);
-                } else {
-                    QVariant popupData = QVariant();
-                    ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
-                                                    QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
-                }
-                checkTimer.check("Open Excel");
-            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEditExcelSheet : {
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeEditExcelSheet, true);
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
-            checkTimer.check("Edit Excel Sheet");
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeReadExcelInfo : {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheet, QVariant(), true);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet : {
-            writeExcelFile(getData(ivis::common::PropertyTypeEnum::PropertyTypeSaveFilePath));
+            QVariant saveFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave);
+            if (writeExcelFile(saveFilePath)) {
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, saveFilePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning : {
@@ -507,63 +556,18 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
     qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
-            // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRaise, true, true);
             ControlManager::instance().data()->raise(displayType);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeLastFile : {
-            QString lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastFileInfo).toString();
-            if (lastFilePath.size() == 0) {
-                QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-                QVariant popupData = QVariant();
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), popupData,
-                                        QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
-                    slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeOpenExcel, popupData);
-                }
-            } else {
-                slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeOpenExcel, lastFilePath);
-            }
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeFileNew : {
-            updateExcelSheet(false, QVariant());
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeEditExcelSheet, true);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastFileInfo, QVariant());
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeFileSaveType, true);
-            break;
-        }
+        case ivis::common::EventTypeEnum::EventTypeLastFile :
+        case ivis::common::EventTypeEnum::EventTypeFileNew :
         case ivis::common::EventTypeEnum::EventTypeFileOpen : {
-            QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
-            QVariant popupData = QVariant();
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), popupData,
-                                    QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
-                slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeOpenExcel, popupData);
-            }
+            loadExcelFile(eventType);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileSave :
         case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
-            if (getData(ivis::common::PropertyTypeEnum::PropertyTypeEditExcelSheet).toBool() == false) {
-                qDebug() << "Fail to file save, Nothing to save content.";
-                return;
-            }
-
-            QString filePath = (eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs) ? (QString())
-                                : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastFileInfo).toString());
-            if (filePath.size() == 0) {
-                QVariant popupData = QVariant();
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), popupData)
-                                                                                            == ivis::common::PopupButton::OK) {
-                    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeSaveFilePath, popupData);
-                }
-            } else {
-                updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeSaveFilePath, filePath);
-            }
-            slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeReadExcelInfo, QVariant());
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeReadExcelInfo : {
-            slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeReadExcelInfo, QVariant());
+            saveExcelFile(eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs);
             break;
         }
         default : {

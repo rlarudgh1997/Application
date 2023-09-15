@@ -8,8 +8,9 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	: class 로 변경
 	: print 함수를 별도 api 로 변경하여 release, debug 인 경우에 맞도록 프린터 되도록 수정
 
-- insert, delete
-	: 병합셀이 포함된 곳에서 추가, 삭제시 병합셀 정보 재구성 해야함.
+- Save
+	: 저장시 팝업 상태에서 esc 키 동작시 파일 저장됨
+	: new 생성후 바로 파일 오픈 하고 편집 하지 않은 상태에서 저장시 저장됨
 
 
 - 자동완성

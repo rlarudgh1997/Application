@@ -30,7 +30,7 @@ public:
         ConfigTypeOtherTitle,
 
         // File
-        ConfigTypeLastFileInfo,
+        ConfigTypeLastSavedFilePath,
         ConfigTypeDeleteFileTC,
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
@@ -55,7 +55,7 @@ public:
         ConfigTypeMode,
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
-        ConfigTypeSeparator,
+        ConfigTypeDoFileSave,
 
         ConfigTypeMax,
     } ConfigType;
@@ -103,7 +103,7 @@ private:
 
 
         // File
-        mConfigInfoData[ConfigTypeLastFileInfo] = QPair<QString, QVariant>("ConfigTypeLastFileInfo", QVariant(""));
+        mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
         mConfigInfoData[ConfigTypeExcelMergeTextStart] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart",
                                                         QVariant("ExcelMergeTextStart"));
@@ -139,7 +139,7 @@ private:
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant(1));
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
-        mConfigInfoData[ConfigTypeSeparator] = QPair<QString, QVariant>("ConfigTypeSeparator", QVariant("[=]"));
+        mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));
     }
 
 
