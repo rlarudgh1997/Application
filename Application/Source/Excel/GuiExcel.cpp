@@ -387,8 +387,10 @@ void GuiExcel::updateDisplayExcelSheet() {
             mExcelSheet[sheetIndex]->resizeRowsToContents();
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
-            if ((column != 4) && (column != 6)) {
-                qDebug() << "Fail to not support auto complete column :" << column;
+            if (((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) && (column != 3))
+                || ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
+                    && ((column != 4) && (column != 6) && (column != 9)))) {
+                qDebug() << "Fail to not support auto complete :" << sheetIndex << column;
                 return;
             }
             QTableWidgetItem* selectItem = mExcelSheet[sheetIndex]->item(row, column);
@@ -396,7 +398,7 @@ void GuiExcel::updateDisplayExcelSheet() {
                 mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
                 selectItem = mExcelSheet[sheetIndex]->item(row, column);
             }
-            updateDisplayAutoComplete(true, selectItem);
+            updateDisplayAutoComplete(true, column, selectItem);
             mExcelSheet[sheetIndex]->clearFocus();
         });
         // connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
@@ -417,11 +419,18 @@ void GuiExcel::updateDisplayExcelSheet() {
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
-void GuiExcel::updateDisplayAutoComplete(const bool& show, QTableWidgetItem* selectItem) {
-    qDebug() << "updateDisplayAutoComplete :" << show << "," << selectItem << "," << mAutoComplete;
+void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnIndex, QTableWidgetItem* selectItem) {
+    qDebug() << "updateDisplayAutoComplete :" << show << "," << columnIndex << "," << selectItem << "," << mAutoComplete;
 
     if (mAutoComplete == nullptr) {
-        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+        QStringList list = QStringList();
+        if (columnIndex == 5) {
+            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();
+        } else if (columnIndex == 9) {
+            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList();
+        } else {
+            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+        }
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), list);
     }
 

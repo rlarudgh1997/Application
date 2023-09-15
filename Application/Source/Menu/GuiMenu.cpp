@@ -470,10 +470,6 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayDefaultPath();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListSFC :
-        case ivis::common::PropertyTypeEnum::PropertyTypeSignalListVSM : {
-            break;
-        }
         default : {
             break;
         }

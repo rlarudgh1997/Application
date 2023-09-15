@@ -177,7 +177,7 @@ private:
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
     void updateDisplayExcelSheet();
-    void updateDisplayAutoComplete(const bool& show, QTableWidgetItem* selectItem);
+    void updateDisplayAutoComplete(const bool& show, const int& columnIndex, QTableWidgetItem* selectItem);
 
 
 public slots:

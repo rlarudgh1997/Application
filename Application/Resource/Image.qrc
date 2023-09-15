@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>Image/Top/Copy.png</file>
-        <file>Image/Top/Cut.png</file>
-        <file>Image/Top/New.png</file>
-        <file>Image/Top/Open.png</file>
-        <file>Image/Top/Paste.png</file>
-        <file>Image/Top/Save.png</file>
+        <file>Image/Menu/Copy.png</file>
+        <file>Image/Menu/Cut.png</file>
+        <file>Image/Menu/New.png</file>
+        <file>Image/Menu/Open.png</file>
+        <file>Image/Menu/Paste.png</file>
+        <file>Image/Menu/Save.png</file>
         <file>Image/Popup/Loading.png</file>
         <file>Image/Popup/Loading.gif</file>
     </qresource>
