@@ -2,6 +2,7 @@
 #define GUI_CENTER_H
 
 #include "AbstractGui.h"
+#include "CommonUtil.h"
 
 #include <QWidget>
 #include <QTableWidget>
@@ -11,15 +12,38 @@
 #include <QLineEdit>
 #include <QListView>
 #include <QStringListModel>
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QCheckBox>
 
 
+class ReportItemInfo {
+public:
+    enum class Config {
+        On = 0,
+        Option1,
+        Option2,
+        Option3,
+    };
+    enum class Text {
+        Title = 0,
+        On,
+        Off,
+        Option,
+        Option1,
+        Option2,
+        Option3,
+        Apply,
+        Cancel,
+    };
+};
 
 class ListItem : public QObject {
     Q_OBJECT
 
 public:
     ListItem() {}
-    ListItem(const int& index, const int& type, const QString& name, const QString& value, QWidget* parent = nullptr) {
+    explicit ListItem(const int& index, const int& type, const QString& name, const QString& value, QWidget* parent = nullptr) {
         int posY = 20 + (index * 55);
         int height = 50;
 
@@ -113,6 +137,151 @@ private:
 };
 
 
+class ReportItem : public QObject {
+    Q_OBJECT
+
+public:
+    ReportItem() {
+        clear();
+    }
+    explicit ReportItem(QWidget* parent, const int& index, const bool& select) {
+        initGui(parent, index, select);
+    }
+    ~ReportItem() {
+        clear();
+    }
+    void updateConfig(const QMap<int, bool>& config) {
+        if ((mInit == false) && (config.size() == 0)
+            && (mOn = nullptr) && (mOff = nullptr)
+            && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
+            return;
+        }
+
+        bool on = config[static_cast<int>(ReportItemInfo::Config::On)];
+        mOn->setChecked(on);
+        mOff->setChecked(on == false);
+        mOption1->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option1)]);
+        mOption1->setEnabled(on);
+        mOption2->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option2)]);
+        mOption2->setEnabled(on);
+        mOption3->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option3)]);
+        mOption3->setEnabled(on);
+    }
+    void updateText(const QMap<int, QString>& text, const bool& on) {
+        if ((mInit == false) && (text.size() == 0)
+            && (mTitle = nullptr) && (mOn = nullptr) && (mOff = nullptr) && (mOption = nullptr)
+            && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)
+            && (mApply = nullptr) && (mCancel = nullptr)) {
+            return;
+        }
+
+        mTitle->setText(text[static_cast<int>(ReportItemInfo::Text::Title)]);
+        mOn->setText(text[static_cast<int>(ReportItemInfo::Text::On)]);
+        mOff->setText(text[static_cast<int>(ReportItemInfo::Text::Off)]);
+        mOption->setText(text[static_cast<int>(ReportItemInfo::Text::Option)]);
+        mOption1->setText(text[static_cast<int>(ReportItemInfo::Text::Option1)]);
+        mOption1->setEnabled(on);
+        mOption2->setText(text[static_cast<int>(ReportItemInfo::Text::Option2)]);
+        mOption2->setEnabled(on);
+        mOption3->setText(text[static_cast<int>(ReportItemInfo::Text::Option3)]);
+        mOption3->setEnabled(on);
+        mApply->setText(text[static_cast<int>(ReportItemInfo::Text::Apply)]);
+        mCancel->setText(text[static_cast<int>(ReportItemInfo::Text::Cancel)]);
+    }
+    void clear() {
+        delete mFrame;
+        delete mTitle;
+        delete mOption;
+        delete mOn;
+        delete mOff;
+        delete mOption1;
+        delete mOption2;
+        delete mOption3;
+        delete mGroup;
+        delete mApply;
+        delete mCancel;
+    }
+
+private:
+    void initGui(QWidget* parent, const int& index, const bool& select) {
+        if (mInit) {
+            return;
+        }
+
+        mFrame   = ivis::common::createWidget<QFrame>(parent,       QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(30, (20 + index * 310), 750, 300));
+        mFrame->setFrameShape(QFrame::Shape::Box);
+        if (select) {
+            mFrame->setLineWidth(3);
+        } else {
+            mFrame->setLineWidth(1);
+        }
+        mFrame->setEnabled(select);
+
+        mTitle   = ivis::common::createWidget<QLabel>(mFrame,       QString("color: black; font: bold; font-size:20px"),
+                                                                    QRect(100, 50, 200, 50));
+        mOn      = ivis::common::createWidget<QRadioButton>(mFrame, QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(350, 50, 100, 50));
+        mOff     = ivis::common::createWidget<QRadioButton>(mFrame, QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(450, 50, 100, 50));
+
+        mGroup   = new QButtonGroup(mFrame);
+        mGroup->addButton(mOn, 1);
+        mGroup->addButton(mOff, 0);
+
+        mOption  = ivis::common::createWidget<QLabel>(mFrame,       QString("color: black; font: bold; font-size:20px"),
+                                                                    QRect(130, 110, 150, 50));
+        mOption1 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(300, 110, 100, 50));
+        mOption2 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(400, 110, 100, 50));
+        mOption3 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
+                                                                    QRect(500, 110, 100, 50));
+
+        mApply   = ivis::common::createWidget<QPushButton>(mFrame,  QString("color: black; font: bold; font-size:20px"),
+                                                                    QRect(150, 200, 200, 50));
+        mCancel  = ivis::common::createWidget<QPushButton>(mFrame,  QString("color: black; font: bold; font-size:20px"),
+                                                                    QRect(400, 200, 200, 50));
+
+        connect(mApply, &QPushButton::clicked, [=]() {
+            QMap<int, bool> config = QMap<int, bool>();
+            config[static_cast<int>(ReportItemInfo::Config::On)] = (mGroup->checkedId() == 1);
+            config[static_cast<int>(ReportItemInfo::Config::Option1)] = mOption1->isChecked();
+            config[static_cast<int>(ReportItemInfo::Config::Option2)] = mOption2->isChecked();
+            config[static_cast<int>(ReportItemInfo::Config::Option3)] = mOption3->isChecked();
+            emit signalReportItemValueChanged(config);
+        });
+        connect(mCancel, &QPushButton::clicked, [=]() {
+            emit signalReportItemValueChanged(QMap<int, bool>());
+        });
+        // connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
+        //     qDebug() << "buttonClicked :" << id;
+        // });
+        // connect(mOption1, QOverload<int>::of(&QCheckBox::stateChanged), [=](int state) {
+        //     qDebug() << "1 stateChanged :" << state;
+        // });
+
+        mInit = true;
+    }
+
+signals:
+    void signalReportItemValueChanged(const QMap<int, bool>& config);
+
+private:
+    bool mInit = false;
+    QFrame* mFrame = nullptr;
+    QButtonGroup* mGroup = nullptr;
+    QLabel* mTitle = nullptr;
+    QLabel* mOption = nullptr;
+    QRadioButton* mOn = nullptr;
+    QRadioButton* mOff = nullptr;
+    QCheckBox* mOption1 = nullptr;
+    QCheckBox* mOption2 = nullptr;
+    QCheckBox* mOption3 = nullptr;
+    QPushButton* mApply = nullptr;
+    QPushButton* mCancel = nullptr;
+};
+
 
 class GuiCenter : public AbstractGui {
     Q_OBJECT
@@ -132,8 +301,7 @@ private:
 
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress();
-    void updateDisplayReportResult();
-    void updateDisplayReportCoverage();
+    void updateDisplayTestReport();
 
 
 public slots:
@@ -152,6 +320,7 @@ private:
     QLineEdit* mInputNodeAddress = nullptr;
     QPushButton* mConfigHideButton = nullptr;
     QPushButton* mConfigResetButton = nullptr;
+    QMap<int, ReportItem*> mTestReport = QMap<int, ReportItem*>();
 };
 
 #endif    // GUI_CENTER_H

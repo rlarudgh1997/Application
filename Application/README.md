@@ -117,9 +117,38 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 
 =====================================================================
+# [QT 관련 설정]
+	sudo apt-get update
+	sudo apt-get install qtchooser qtcreator qt5-default make g++ gcc git cmake
+
+	- QML 추가 설치 : 아래 순서대로 하나씩 설치해서 이상 유무 확인
+		Project ERROR: Unknown module(s) in QT: qml quick multimedia 3drender serialbus serialport
+
+		sudo apt-get install libqt5qml5 libqt5quick5 libqt5serialbus5-dev
+		sudo apt-get install qtdeclarative5-dev qml-module-qtquick-controls
+		sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5
+		sudo apt-get install qml-module-qtmultimedia
+
+		sudo apt-get install libqt5serialport5-dev
+		sudo apt-get install qtbase5-dev
+		sudo apt-get install qt5*-dev
+
+	- cmake 오류 : 아래 순서대로 하나씩 설치해서 이상 유무 확인
+		sudo apt-get install net-tools
+		sudo apt-get install git
+		sudo apt-get install lib32stdc++6 build-essential
+		sudo apt-get install cmake
+		sudo apt-get install lib32z1
+		sudo apt-get install libgl1-mesa-dev
+		sudo apt-get install gdb
+
+
+
+=====================================================================
 # [Python 관련 설정]
 - lib 설치
 	# pip install xlrd
+	sudo apt install python python3 python3-pip
 	pip install openpyxl pandas
 	pip uninstall openpyxl pandas
 
@@ -138,52 +167,6 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 
-
-
-=====================================================================
-# Demo 순서
-** 기본 기능 리스트
-	- default path 기능 설명
-		: 기본 작업 폴더 지정
-
-	- node address path 기능 설명
-		: node address 파일 위치 지정
-			-> NodeAddressSFC.info
-			-> NodeAddressVSM.info
-
-	- 기존 파일 open 기능 설명
-		: 기존 작업중인 엑셀 파일 열기 기능
-
-	- new 기능 설명
-		: 새로운 엑셀 파일 생성
-			-> Config 설정에서 만들 갯수 지정 가능
-
-	- save & save as 기능 설명
-		: new, open 으로 만들 엑셀 수정 후 저장 기능
-
-	- 자동완성 기능
-		: 선택된 셀에서만 자동완성 기능 동작함
-			-> 선택 셀 기준으로 화면 표시시 너비가 좁아서 전체 node address 가 표시 되지 않음
-			-> 추후 별도 팝업으로 구현 필요
-
-	- 셀 병합/해제 기능 설명
-		: 셀 병합 기능
-		: 병합 셀 해제 기능
-
-	- 행 추가/삭제 기능 설명
-		: 행 추가/삭제
-		: 열에 대한 기능은 구현 하지 않음
-
-
-	- config 표시, 수정 기능 설명
-		: 어플리케이션에서 사용주인 설정 파일 보기 및 수정 기능은
-
-	- node addres 표시 기능 설명
-		: sfc, vsm 노드 명 리스트 표시 기능은
-
-
-** 기존 동작중인 generator.py 파일 수정 적용 필요
-	- sfc, vsm node address 파일 생성을 위해서 gen.py 파일 수정 하여 적용 필요함
 
 
 

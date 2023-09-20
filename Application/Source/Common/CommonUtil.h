@@ -124,8 +124,26 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
     }
 }
 
+template <typename T1, typename T2>
+inline T1* createWidget(T2* parent, const QString& styleSheet, const QRect& geometry) {
+    T1* widget = new T1(parent);
+    widget->setStyleSheet(styleSheet);
+    widget->setGeometry(geometry);
+    widget->show();
+    return widget;
+}
 
-
+template <typename T1>
+inline void widgetVisible(T1* widget, const bool& visible) {
+    if (widget) {
+        if (visible) {
+            widget->show();
+        } else {
+            widget->hide();
+        }
+        widget->raise();
+    }
+}
 
 
 

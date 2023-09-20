@@ -2,15 +2,11 @@
 #include "AbstractHandler.h"
 
 #include "CommonResource.h"
+#include "ConfigInfo.h"
 
 #include <QStringListModel>
 #include <QCompleter>
-// #include <QTextEdit>
-// #include <QStandardItemModel>
-// #include <QStandardItem>
-// #include <QListWidget>
-// #include <QVBoxLayout>
-// #include <QStyledItemDelegate>
+
 
 
 QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
@@ -31,7 +27,7 @@ void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
 
     if (mConfigWidget == nullptr) {
-        mConfigWidget = new QWidget();
+        mConfigWidget = new QWidget(mMainView);
         mConfigWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
         // mConfigWidget->setStyleSheet("background-color: blue");
         mConfigWidget->show();
@@ -39,7 +35,7 @@ void GuiCenter::drawDisplayDepth0() {
     }
 
     if (mNodeAddressList == nullptr) {
-        mNodeAddressList = new QListView();
+        mNodeAddressList = new QListView(mMainView);
         mNodeAddressList->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
         // mNodeAddressList->setStyleSheet("background-color: green");
         mNodeAddressList->show();
@@ -58,7 +54,7 @@ void GuiCenter::drawDisplayDepth0() {
     }
 
     if (mReportWidget == nullptr) {
-        mReportWidget = new QWidget();
+        mReportWidget = new QWidget(mMainView);
         mReportWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
         mReportWidget->show();
         mMainView->insertWidget(2, mReportWidget);
@@ -129,15 +125,11 @@ void GuiCenter::updateDisplayConfigInfo() {
     } else {
         int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
         mMainView->setCurrentIndex(viewType);
-        if (mNodeAddressList) {
-            mNodeAddressList->hide();
-        }
-        if (mReportWidget) {
-            mReportWidget->hide();
-        }
-        mConfigWidget->raise();
-        mConfigHideButton->raise();
-        mConfigResetButton->raise();
+        ivis::common::widgetVisible(mNodeAddressList, false);
+        ivis::common::widgetVisible(mReportWidget, false);
+        ivis::common::widgetVisible(mConfigWidget, true);
+        ivis::common::widgetVisible(mConfigHideButton, true);
+        ivis::common::widgetVisible(mConfigResetButton, true);
 
         if (mConfigValue == configValue) {
             foreach(const auto& item, mConfigListItem) {
@@ -195,7 +187,7 @@ void GuiCenter::updateDisplayConfigInfo() {
         if (newItem) {
             mConfigListItem[index] = new ListItem(index, type, name, realValue, mConfigWidget);
             connect(mConfigListItem[index], &ListItem::signalValueChanged, [=](const int& type, const QVariant& value) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeWriteConfig, QVariant(QVariantList{type, value}));
+                createSignal(ivis::common::EventTypeEnum::EventTypeUpdateConfig, QVariant(QVariantList{type, value}));
             });
         } else {
             if (mConfigListItem[index]) {
@@ -215,15 +207,12 @@ void GuiCenter::updateDisplayNodeAddress() {
     } else {
         int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
         mMainView->setCurrentIndex(viewType);
-        if (mConfigWidget) {
-            mConfigWidget->hide();
-        }
-        if (mReportWidget) {
-            mReportWidget->hide();
-        }
-        mNodeAddressList->raise();
-        mInputNodeAddress->raise();
-        mConfigHideButton->raise();
+        ivis::common::widgetVisible(mConfigWidget, false);
+        ivis::common::widgetVisible(mReportWidget, false);
+        ivis::common::widgetVisible(mNodeAddressList, false);
+        ivis::common::widgetVisible(mNodeAddressList, true);
+        ivis::common::widgetVisible(mInputNodeAddress, true);
+        ivis::common::widgetVisible(mConfigHideButton, true);
     }
 
     static QStringListModel* mNodeAddressModel = new QStringListModel();
@@ -244,25 +233,86 @@ void GuiCenter::updateDisplayNodeAddress() {
     }
 }
 
-void GuiCenter::updateDisplayReportResult() {
+void GuiCenter::updateDisplayTestReport() {
     if (mReportWidget == nullptr) {
         return;
     } else {
         int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
         mMainView->setCurrentIndex(viewType);
-        if (mConfigWidget) {
-            mConfigWidget->hide();
-        }
-        if (mNodeAddressList) {
-            mNodeAddressList->hide();
-        }
-        mNodeAddressList->raise();
-        mInputNodeAddress->raise();
-        mConfigHideButton->raise();
+        ivis::common::widgetVisible(mConfigWidget, false);
+        ivis::common::widgetVisible(mConfigResetButton, false);
+        ivis::common::widgetVisible(mNodeAddressList, false);
+        ivis::common::widgetVisible(mConfigHideButton, true);
     }
-}
 
-void GuiCenter::updateDisplayReportCoverage() {
+    for (int reportType = ivis::common::ReportTypeEnum::ReportTypeResult;
+                                reportType < ivis::common::ReportTypeEnum::ReportTypeAll; reportType++) {
+        int propertyType = 0;
+        QMap<int, QString> text = QMap<int, QString>();
+        if (reportType == ivis::common::ReportTypeEnum::ReportTypeResult) {
+            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResult;
+            text[static_cast<int>(ReportItemInfo::Text::Title)]   = QString("Test Result :");
+            text[static_cast<int>(ReportItemInfo::Text::On)]      = QString("On");
+            text[static_cast<int>(ReportItemInfo::Text::Off)]     = QString("Off");
+            text[static_cast<int>(ReportItemInfo::Text::Option)]  = QString("Options :");
+            text[static_cast<int>(ReportItemInfo::Text::Option1)] = QString("Split");
+            text[static_cast<int>(ReportItemInfo::Text::Option2)] = QString("Config");
+            text[static_cast<int>(ReportItemInfo::Text::Option3)] = QString("Excel");
+        } else {
+            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverage;
+            text[static_cast<int>(ReportItemInfo::Text::Title)]   = QString("Test Coverage :");
+            text[static_cast<int>(ReportItemInfo::Text::On)]      = QString("On");
+            text[static_cast<int>(ReportItemInfo::Text::Off)]     = QString("Off");
+            text[static_cast<int>(ReportItemInfo::Text::Option)]  = QString("Options :");
+            text[static_cast<int>(ReportItemInfo::Text::Option1)] = QString("Line");
+            text[static_cast<int>(ReportItemInfo::Text::Option2)] = QString("Function");
+            text[static_cast<int>(ReportItemInfo::Text::Option3)] = QString("Branch");
+        }
+        text[static_cast<int>(ReportItemInfo::Text::Apply)]       = QString("Apply");
+        text[static_cast<int>(ReportItemInfo::Text::Cancel)]      = QString("Cancel");
+
+        QVariantList reportData = isHandler()->getProperty(propertyType).toList();
+        QMap<int, bool> config = QMap<int, bool>();
+        int configInfo = static_cast<int>(ReportItemInfo::Config::On);
+        foreach(const auto& data, reportData) {
+            QVariantList info = data.toList();
+            if (info.size() != 2) {
+                continue;
+            }
+            int configType = info.at(0).toInt();
+            bool configValue = info.at(1).toBool();
+            config[configInfo] = configValue;
+            qDebug() << "UpdateConfig :" << configInfo << configValue << config[configInfo];
+            configInfo++;
+        }
+
+        if (mTestReport[propertyType] == nullptr) {
+            mTestReport[propertyType] = new ReportItem(mReportWidget, reportType, true);
+            connect(mTestReport[propertyType], &ReportItem::signalReportItemValueChanged, [=](const QMap<int, bool>& config) {
+                if (config.size() == 0) {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeTestReportReset, reportType);
+                } else {
+                    QVariantList reportData = QVariantList();
+                    QMapIterator<int, bool> iter(config);
+                    while (iter.hasNext()) {
+                        iter.next();
+                        int configType = iter.key();
+                        bool configValue = iter.value();
+                        reportData.append(QVariant(QVariantList({configType, configValue})));
+                        // qDebug() << reportType << ". ReportData :" << configType << configValue;
+                    }
+                    if (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeTestReportResult) {
+                        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateTestReportResult, reportData);
+                    } else {
+                        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateTestReportCoverage, reportData);
+                    }
+                }
+            });
+        }
+        mTestReport[propertyType]->updateConfig(config);
+        mTestReport[propertyType]->updateText(text, config[static_cast<int>(ReportItemInfo::Config::On)]);
+        qDebug() << "\t Config :" << config.size() << config;
+    }
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -285,6 +335,10 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll : {
             updateDisplayNodeAddress();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTestReportType : {
+            updateDisplayTestReport();
             break;
         }
         default : {

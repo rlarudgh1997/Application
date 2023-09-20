@@ -22,7 +22,7 @@ private:
 
     void updateConfigInfo();
     void updateNodeAddress();
-    void updateTestReport();
+    void updateTestReport(const int& type, const QVariant& value = QVariant());
 
 
 protected:

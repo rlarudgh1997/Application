@@ -65,6 +65,8 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
 
+    // Firt Booting : new excel sheet
+    // updateExcelSheet(false, QVariant());
 }
 
 void ControlExcel::initControlData() {

@@ -131,16 +131,39 @@ void ControlCenter::updateNodeAddress() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(sfcList + vsmList), true);
 }
 
-void ControlCenter::updateTestReport() {
-    QVariantList reportData = QVariantList();
-    for (int type = ConfigInfo::ConfigTypeReportResult; type <= ConfigInfo::ConfigTypeReportCoverageBranch; type++) {
-        QVariant name = ConfigSetting::instance().data()->isConfigName(type);
-        QVariant value = ConfigSetting::instance().data()->readConfig(type);
-        reportData.append(QVariant(QVariantList({type, name, value})));
+void ControlCenter::updateTestReport(const int& type, const QVariant& value) {
+    int start = type;
+    int end = start + 1;
+
+    if (type == ivis::common::ReportTypeEnum::ReportTypeAll) {
+        start = ivis::common::ReportTypeEnum::ReportTypeResult;
+        end = ivis::common::ReportTypeEnum::ReportTypeAll;
     }
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(reportData), true);
+
+    for (int index = start; index < end; index++) {
+        int configStart = ConfigInfo::ConfigTypeReportResult;
+        int configEnd = ConfigInfo::ConfigTypeReportResultExcel;
+        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResult;
+
+        if (index == ivis::common::ReportTypeEnum::ReportTypeCoverage) {
+            configStart = ConfigInfo::ConfigTypeReportCoverage;
+            configEnd = ConfigInfo::ConfigTypeReportCoverageBranch;
+            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverage;
+        }
+
+        QVariantList reportData = QVariantList();
+        for (int configType = configStart; configType <= configEnd; configType++) {
+            QVariant configValue = ConfigSetting::instance().data()->readConfig(configType);
+            reportData.append(QVariant(QVariantList({configType, configValue})));
+            qDebug() << "readConfig :" << configType << configValue;
+        }
+        // qDebug() << "ReportType :" << index << propertyType << reportData;
+        updateDataHandler(propertyType, QVariant(reportData));
+    }
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, type, true);
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
@@ -160,7 +183,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeViewInfoClose, "");
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeWriteConfig : {
+        case ivis::common::EventTypeEnum::EventTypeUpdateConfig : {
             QVariantList configInfo = value.toList();
             if (configInfo.size() == 2) {
                 int configType = configInfo.at(0).toInt();
@@ -171,6 +194,27 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeConfigReset : {
             ConfigSetting::instance().data()->resetConfig();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeUpdateTestReportResult :
+        case ivis::common::EventTypeEnum::EventTypeUpdateTestReportCoverage : {
+            foreach(const auto& data, value.toList()) {
+                QVariantList info = data.toList();
+                if (info.size() != 2) {
+                    continue;
+                }
+                int configType = info.at(0).toInt() + ((type == ivis::common::EventTypeEnum::EventTypeUpdateTestReportResult) ?
+                                                (ConfigInfo::ConfigTypeReportResult) : (ConfigInfo::ConfigTypeReportCoverage));
+                bool configValue = info.at(1).toBool();
+                qDebug() << "writeConfig :" << configType << configValue;
+                ConfigSetting::instance().data()->writeConfig(configType, configValue);
+            }
+            // updateTestReport(ivis::common::ReportTypeEnum::ReportTypeAll);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeTestReportReset : {
+            int reportType = value.toInt();
+            updateTestReport(reportType);
             break;
         }
         default : {
@@ -196,7 +240,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case ivis::common::EventTypeEnum::EventTypeReportResult :
         case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
-            updateTestReport();
+            updateTestReport(ivis::common::ReportTypeEnum::ReportTypeAll);
             break;
         }
         default : {

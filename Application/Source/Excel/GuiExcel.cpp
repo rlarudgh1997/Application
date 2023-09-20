@@ -361,7 +361,7 @@ void GuiExcel::updateDisplayExcelSheet() {
                         mExcelSheet[sheetIndex]->removeRow(rowStart);
                     }
                 }
-                qDebug() << "\t RowCount :" << rowCount << "->" << mExcelSheet[sheetIndex]->rowCount();
+                qDebug() << "\t Changed RowCount :" << rowCount << "->" << mExcelSheet[sheetIndex]->rowCount();
             } else if (selectAction == mMenuActionItem[MenuItemRight::MergeSplit]) {
                 bool columnSelectError = (columnEnd > 1);
                 if (columnSelectError) {
@@ -393,12 +393,13 @@ void GuiExcel::updateDisplayExcelSheet() {
                 qDebug() << "Fail to not support auto complete :" << sheetIndex << column;
                 return;
             }
-            QTableWidgetItem* selectItem = mExcelSheet[sheetIndex]->item(row, column);
-            if (selectItem == nullptr) {
+
+            mSelectItem = mExcelSheet[sheetIndex]->item(row, column);
+            if (mSelectItem == nullptr) {
                 mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
-                selectItem = mExcelSheet[sheetIndex]->item(row, column);
+                mSelectItem = mExcelSheet[sheetIndex]->item(row, column);
             }
-            updateDisplayAutoComplete(true, column, selectItem);
+            updateDisplayAutoComplete(true, sheetIndex, row, column);
             mExcelSheet[sheetIndex]->clearFocus();
         });
         // connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
@@ -419,10 +420,11 @@ void GuiExcel::updateDisplayExcelSheet() {
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
-void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnIndex, QTableWidgetItem* selectItem) {
-    qDebug() << "updateDisplayAutoComplete :" << show << "," << columnIndex << "," << selectItem << "," << mAutoComplete;
+void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
+    qDebug() << "updateDisplayAutoComplete :" << show << sheetIndex << rowIndex << columnIndex;
 
     if (mAutoComplete == nullptr) {
+#if 0
         QStringList list = QStringList();
         if (columnIndex == 5) {
             list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();
@@ -431,12 +433,15 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnInde
         } else {
             list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
         }
+#else
+        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+#endif
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), list);
     }
 
     connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
-        if (selectItem) {
-            selectItem->setText(text);
+        if (mSelectItem) {
+            mSelectItem->setText(text);
         }
         mAutoComplete->hide();
     });
@@ -448,8 +453,8 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnInde
 
     if (show) {
         mAutoComplete->show();
-        if (selectItem) {
-            mAutoComplete->setInputText(selectItem->text());
+        if (mSelectItem) {
+            mAutoComplete->setInputText(mSelectItem->text());
         }
     } else {
         mAutoComplete->hide();
@@ -483,20 +488,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete : {
-            // if ((mCurrentSheet) && (mCurrentCellItem)) {
-            //     AutoComplete type = AutoComplete::Hide;
-            //     int inputType = value.toInt();
-            //     if (inputType == 1) {
-            //         type = AutoComplete::Show;
-            //     } else if (inputType == 2) {
-            //         type = AutoComplete::Cancel;
-            //     } else {
-            //         type = AutoComplete::Hide;
-            //     }
-            //     updateDisplayNodeAddress(type, mCurrentSheet, mCurrentCellItem);
-            // } else {
-            //     qDebug() << "ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete";
-            // }
+            qDebug() << "\t AutoCompleteKey :" << value;
             break;
         }
         default : {

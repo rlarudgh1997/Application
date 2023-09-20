@@ -177,7 +177,7 @@ private:
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
     void updateDisplayExcelSheet();
-    void updateDisplayAutoComplete(const bool& show, const int& columnIndex, QTableWidgetItem* selectItem);
+    void updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex);
 
 
 public slots:
@@ -192,6 +192,7 @@ private:
     QMenu* mMenuRight = nullptr;
     QMap<MenuItemRight, QAction*> mMenuActionItem = QMap<MenuItemRight, QAction*>();
     AutoCompleteDialog* mAutoComplete = nullptr;
+    QTableWidgetItem* mSelectItem = nullptr;
 };
 
 #endif    // GUI_EXCEL_H

@@ -83,7 +83,9 @@ public:
         PropertyTypeViewType,
         PropertyTypeConfigInfo,
         PropertyTypeNodeAddressAll,
-        PropertyTypeTestReport,
+        PropertyTypeTestReportResult,
+        PropertyTypeTestReportCoverage,
+        PropertyTypeTestReportType,
         PropertyTypeDefaultPath,
         PropertyTypeNodeAddressSFC,
         PropertyTypeNodeAddressVSM,
@@ -166,7 +168,11 @@ public:
         EventTypeCellMergeSplit,
         EventTypeCellMergeSplitWarning,
         EventTypeViewInfoClose,
+        EventTypeUpdateConfig,
         EventTypeConfigReset,
+        EventTypeUpdateTestReportResult,
+        EventTypeUpdateTestReportCoverage,
+        EventTypeTestReportReset,
         EventTypeRunTC,
 
         EventTypeSendOtherControl = 2000,
@@ -177,7 +183,6 @@ public:
         EventTypeFileSave,
         EventTypeFileSaveAs,
         EventTypeViewConfig,
-        EventTypeWriteConfig,
         EventTypeReportResult,
         EventTypeReportCoverage,
 
@@ -219,6 +224,15 @@ public:
     };
 };
 
+class ReportTypeEnum {
+public:
+    enum ReportType {
+        ReportTypeResult = 0,
+        ReportTypeCoverage,
+        ReportTypeAll,
+    };
+};
+
 class CellInfoEnum {
 public:
     enum ListInfoExcel {
@@ -251,7 +265,6 @@ public:
         Hide,
         Cancel,
     };
-
 };
 
 
