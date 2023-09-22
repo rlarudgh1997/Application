@@ -32,7 +32,7 @@ void GuiMenu::drawDisplayDepth0() {
 #endif
     drawMenuView();
     drawMenuSetting();
-    drawMenuReport();
+    // drawMenuReport();
     drawMenuRun();
     drawMenuHelp();
 #if !defined(USE_DEMO)
@@ -221,11 +221,53 @@ void GuiMenu::drawMenuView() {
     if (actionNodeAddress) {
         actionNodeAddress->setStatusTip(STRING_NODE_ADDRESS_TIP);
         mMenu[MainType::View]->addAction(actionNodeAddress);
-        mToolBar[MainType::View]->addAction(actionNodeAddress);
+        // mToolBar[MainType::View]->addAction(actionNodeAddress);
         connect(actionNodeAddress, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewNodeAddress, QVariant());
         });
     }
+
+#if 1
+    QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
+                                                        STRING_TEST_REPORT,
+                                                        this);
+    if (actionTestReport) {
+        actionTestReport->setStatusTip(STRING_TEST_REPORT_TIP);
+        mMenu[MainType::View]->addAction(actionTestReport);
+        mToolBar[MainType::View]->addAction(actionTestReport);
+        connect(actionTestReport, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
+        });
+
+#if 0
+        QMenu* mSubMenu = mMenu[MainType::View]->addMenu(STRING_TEST_REPORT);
+        if (mSubMenu) {
+            QAction *actionTestResult = new QAction(QIcon::fromTheme("actionTestResult"),
+                                                            STRING_TEST_RESULT,
+                                                            this);
+            if (actionTestResult) {
+                actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
+                mSubMenu->addAction(actionTestResult);
+                connect(actionTestResult, &QAction::triggered, [=]() {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestResult, QVariant());
+                });
+            }
+
+            QAction *actionTestCoverage = new QAction(QIcon::fromTheme("actionTestCoverage"),
+                                                            STRING_TEST_RESULT_COVERAGE,
+                                                            mSubMenu);
+            if (actionTestCoverage) {
+                actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
+                mSubMenu->addAction(actionTestCoverage);
+                connect(actionTestCoverage, &QAction::triggered, [=]() {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
+                });
+            }
+        }
+#endif
+    }
+#endif
+
 
 #if 0
     QAction *actionPython = new QAction(QIcon::fromTheme("actionPython"),
@@ -272,61 +314,27 @@ void GuiMenu::drawMenuSetting() {
     }
 #endif
 
+
+
 #if 0
-    QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
-                                                        STRING_REPORT,
-                                                        this);
-    if (actionTestReport) {
-        actionTestReport->setStatusTip(STRING_REPORT_TIP);
-        // mToolBar[MainType::Setting]->addAction(actionTestReport);
-        connect(actionTestReport, &QAction::triggered, this, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
+    TooBar - Push Button
+    QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));
+    if (buttonTestResult) {
+        buttonTestResult->setObjectName(QString("TestResult"));
+        mToolBar[MainType::Setting]->addWidget(buttonTestResult);
+        connect(buttonTestResult, &QPushButton::clicked, this, [=]() {
+            qDebug() << "Test Result";
         });
-
-        QMenu* mSubMenu = mMenu[MainType::Setting]->addMenu(STRING_TEST_REPORT);
-        if (mSubMenu) {
-            QAction *actionTestResult = new QAction(QIcon::fromTheme("actionTestResult"),
-                                                            STRING_TEST_RESULT,
-                                                            this);
-            if (actionTestResult) {
-                actionTestResult->setStatusTip(STRING_TEST_RESULT_TIP);
-                mSubMenu->addAction(actionTestResult);
-                connect(actionTestResult, &QAction::triggered, [=]() {
-                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestResult, QVariant());
-                });
-            }
-
-            QAction *actionTestCoverage = new QAction(QIcon::fromTheme("actionTestCoverage"),
-                                                            STRING_TEST_RESULT_COVERAGE,
-                                                            mSubMenu);
-            if (actionTestCoverage) {
-                actionTestCoverage->setStatusTip(STRING_TEST_RESULT_COVERAGE_TIP);
-                mSubMenu->addAction(actionTestCoverage);
-                connect(actionTestCoverage, &QAction::triggered, [=]() {
-                    createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestCoverage, QVariant());
-                });
-            }
-        }
+    }
+    QPushButton* buttonTestCoverage = new QPushButton(QString("TestCoverage"));
+    if (buttonTestCoverage) {
+        buttonTestResult->setObjectName(QString("TestConverage"));
+        mToolBar[MainType::Setting]->addWidget(buttonTestCoverage);
+        connect(buttonTestCoverage, &QPushButton::clicked, this, [=]() {
+            qDebug() << "Test Coverage";
+        });
     }
 #endif
-
-    // TooBar - Push Button
-    // QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));
-    // if (buttonTestResult) {
-    //     buttonTestResult->setObjectName(QString("TestResult"));
-    //     mToolBar[MainType::Setting]->addWidget(buttonTestResult);
-    //     connect(buttonTestResult, &QPushButton::clicked, this, [=]() {
-    //         qDebug() << "Test Result";
-    //     });
-    // }
-    // QPushButton* buttonTestCoverage = new QPushButton(QString("TestCoverage"));
-    // if (buttonTestCoverage) {
-    //     buttonTestResult->setObjectName(QString("TestConverage"));
-    //     mToolBar[MainType::Setting]->addWidget(buttonTestCoverage);
-    //     connect(buttonTestCoverage, &QPushButton::clicked, this, [=]() {
-    //         qDebug() << "Test Coverage";
-    //     });
-    // }
 
     mMainView->menuBar()->addSeparator();
 }
@@ -364,15 +372,39 @@ void GuiMenu::drawMenuRun() {
     mMenu[MainType::Run] = mMainView->menuBar()->addMenu(STRING_RUN);
     mToolBar[MainType::Run] = mMainView->addToolBar(STRING_RUN);
 
-    QAction *actionRun = new QAction(QIcon::fromTheme("actionRun"),
-                                                        STRING_RUN,
+    QAction *actionGenTC = new QAction(QIcon::fromTheme("actionGenTC"),
+                                                        STRING_GENERATE_TC,
                                                         this);
-    if (actionRun) {
-        actionRun->setStatusTip(STRING_RESULT_TIP);
-        mMenu[MainType::Run]->addAction(actionRun);
-        // mToolBar[MainType::Run]->addAction(actionRun);
-        connect(actionRun, &QAction::triggered, [=]() {
+    if (actionGenTC) {
+        actionGenTC->setStatusTip(STRING_GENERATE_TC_TIP);
+        mMenu[MainType::Run]->addAction(actionGenTC);
+        // mToolBar[MainType::Run]->addAction(actionGenTC);
+        connect(actionGenTC, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeGenerateTC, QVariant());
+        });
+    }
+
+    QAction *actionRunTc = new QAction(QIcon::fromTheme("actionRun"),
+                                                        STRING_RUN_TC,
+                                                        this);
+    if (actionRunTc) {
+        actionRunTc->setStatusTip(STRING_RUN_TC_TIP);
+        mMenu[MainType::Run]->addAction(actionRunTc);
+        // mToolBar[MainType::Run]->addAction(actionRunTc);
+        connect(actionRunTc, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeRunTC, QVariant());
+        });
+    }
+
+    QAction *actionGenReport = new QAction(QIcon::fromTheme("actionGenReport"),
+                                                        STRING_GENERATE_REPORT,
+                                                        this);
+    if (actionGenReport) {
+        actionGenReport->setStatusTip(STRING_GENERATE_REPORT_TIP);
+        mMenu[MainType::Run]->addAction(actionGenReport);
+        // mToolBar[MainType::Run]->addAction(actionGenReport);
+        connect(actionGenReport, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeGenerateReport, QVariant());
         });
     }
 }
@@ -409,7 +441,7 @@ void GuiMenu::drawMenuEtc() {
     static QPushButton* lastFile = nullptr;
     if (lastFile == nullptr) {
         lastFile = new QPushButton(mMainView);
-        lastFile->setGeometry(900, 25, 50, 30);
+        lastFile->setGeometry(920, 25, 50, 30);
         lastFile->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         lastFile->setText("Last");
@@ -423,7 +455,7 @@ void GuiMenu::drawMenuEtc() {
     static QPushButton* excelOpen = nullptr;
     if (excelOpen == nullptr) {
         excelOpen = new QPushButton(mMainView);
-        excelOpen->setGeometry(960, 25, 50, 30);
+        excelOpen->setGeometry(980, 25, 50, 30);
         excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         excelOpen->setText("Test");
@@ -441,7 +473,7 @@ void GuiMenu::updateDisplayDefaultPath() {
     static QPushButton* defaultPath = nullptr;
     if (defaultPath == nullptr) {
         defaultPath = new QPushButton(isHandler()->getScreen());
-        defaultPath->setGeometry(380, 25, 500, 30);
+        defaultPath->setGeometry(400, 25, 500, 30);
         defaultPath->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
         defaultPath->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         defaultPath->show();

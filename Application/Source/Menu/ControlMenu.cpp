@@ -194,6 +194,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeViewConfig :
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress :
+        case ivis::common::EventTypeEnum::EventTypeSettingTestReport :
         case ivis::common::EventTypeEnum::EventTypeReportResult :
         case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
@@ -213,6 +214,13 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeGenerateTC :
+        case ivis::common::EventTypeEnum::EventTypeRunTC :
+        case ivis::common::EventTypeEnum::EventTypeGenerateReport : {
+            qDebug() << "TC - Menu Select";
+            break;
+        }
+
         default : {
             break;
         }

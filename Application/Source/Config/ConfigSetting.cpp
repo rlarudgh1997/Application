@@ -194,14 +194,32 @@ void ConfigSetting::writeConfig() {
     mSetting->sync();
 }
 
-void ConfigSetting::resetConfig() {
-    for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
+void ConfigSetting::resetConfig(const int& resetType) {
+    int start = ConfigInfo::ConfigTypeInvalid;
+    int end = ConfigInfo::ConfigTypeMax;
+    int startSkip = (-1);
+    int endSkip = (-1);
+
+    if (resetType == ConfigResetTypeNormal) {
+        startSkip = ConfigInfo::ConfigTypeReportResult;
+        endSkip = ConfigInfo::ConfigTypeReportCoverageBranch;
+    } else if (resetType == ConfigResetTypeReport) {
+        start = ConfigInfo::ConfigTypeReportResult;
+        end = ConfigInfo::ConfigTypeReportCoverageBranch + 1;
+    } else {
+    }
+
+    for (int configType = start; configType < end; configType++) {
+        if ((configType >= startSkip) && (configType <= endSkip)) {
+            continue;
+        }
         mMutex.lock();
         mConfigData[configType] = mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType),
                                                             ConfigInfo::ConfigGetTypeValue);
         mMutex.unlock();
     }
     writeConfig();
+    qDebug() << "resetConfig :" << resetType;
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
 }
 

@@ -150,45 +150,62 @@ public:
     ~ReportItem() {
         clear();
     }
-    void updateConfig(const QMap<int, bool>& config) {
-        if ((mInit == false) && (config.size() == 0)
-            && (mOn = nullptr) && (mOff = nullptr)
+    void updateConfig(const QMap<int, QPair<int, bool>>& config) {
+        if ((mInit == false) && (config.size() == 0) && (mOn = nullptr) && (mOff = nullptr)
             && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
             return;
         }
-
-        bool on = config[static_cast<int>(ReportItemInfo::Config::On)];
+        bool on = config[static_cast<int>(ReportItemInfo::Config::On)].second;
         mOn->setChecked(on);
         mOff->setChecked(on == false);
-        mOption1->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option1)]);
-        mOption1->setEnabled(on);
-        mOption2->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option2)]);
-        mOption2->setEnabled(on);
-        mOption3->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option3)]);
-        mOption3->setEnabled(on);
+        mOption1->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option1)].second);
+        mOption2->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option2)].second);
+        mOption3->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option3)].second);
+
+        QMapIterator<int, QPair<int, bool>> iter(config);
+        mConfigType.clear();
+        while (iter.hasNext()) {
+            iter.next();
+            mConfigType.insert(iter.key(), iter.value().first);
+        }
     }
-    void updateText(const QMap<int, QString>& text, const bool& on) {
+    void updateText(const QMap<int, QString>& text) {
         if ((mInit == false) && (text.size() == 0)
             && (mTitle = nullptr) && (mOn = nullptr) && (mOff = nullptr) && (mOption = nullptr)
-            && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)
-            && (mApply = nullptr) && (mCancel = nullptr)) {
+            // && (mApply = nullptr)
+            && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
             return;
         }
-
         mTitle->setText(text[static_cast<int>(ReportItemInfo::Text::Title)]);
         mOn->setText(text[static_cast<int>(ReportItemInfo::Text::On)]);
         mOff->setText(text[static_cast<int>(ReportItemInfo::Text::Off)]);
         mOption->setText(text[static_cast<int>(ReportItemInfo::Text::Option)]);
         mOption1->setText(text[static_cast<int>(ReportItemInfo::Text::Option1)]);
-        mOption1->setEnabled(on);
         mOption2->setText(text[static_cast<int>(ReportItemInfo::Text::Option2)]);
-        mOption2->setEnabled(on);
         mOption3->setText(text[static_cast<int>(ReportItemInfo::Text::Option3)]);
+        // mApply->setText(text[static_cast<int>(ReportItemInfo::Text::Apply)]);
+    }
+    void updateStatus(const bool& on) {
+        if ((mInit == false) && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
+            return;
+        }
+        QString color = (on) ? (QString("black")) : (QString("gray"));
+        QString colorOption = mBaseStyle.arg(color).arg("20");
+        QString colorOption1 = mBaseStyle.arg(color).arg("15");
+        QString colorOption2 = mBaseStyle.arg(color).arg("15");
+        QString colorOption3 = mBaseStyle.arg(color).arg("15");
+
+        mOption->setStyleSheet(colorOption);
+        mOption1->setStyleSheet(colorOption1);
+        mOption2->setStyleSheet(colorOption2);
+        mOption3->setStyleSheet(colorOption3);
+
+        mOption1->setEnabled(on);
+        mOption2->setEnabled(on);
         mOption3->setEnabled(on);
-        mApply->setText(text[static_cast<int>(ReportItemInfo::Text::Apply)]);
-        mCancel->setText(text[static_cast<int>(ReportItemInfo::Text::Cancel)]);
     }
     void clear() {
+        mConfigType.clear();
         delete mFrame;
         delete mTitle;
         delete mOption;
@@ -198,8 +215,7 @@ public:
         delete mOption2;
         delete mOption3;
         delete mGroup;
-        delete mApply;
-        delete mCancel;
+        // delete mApply;
     }
 
 private:
@@ -208,8 +224,9 @@ private:
             return;
         }
 
-        mFrame   = ivis::common::createWidget<QFrame>(parent,       QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(30, (20 + index * 310), 750, 300));
+        mFrame   = ivis::common::createWidget<QFrame>(parent,       mBaseStyle.arg("balck").arg("15"),
+                                                                    QRect(30, (20 + index * 210), 750, 200));
+                                                                    // QRect(30, (20 + index * 310), 750, 300));
         mFrame->setFrameShape(QFrame::Shape::Box);
         if (select) {
             mFrame->setLineWidth(3);
@@ -218,57 +235,62 @@ private:
         }
         mFrame->setEnabled(select);
 
-        mTitle   = ivis::common::createWidget<QLabel>(mFrame,       QString("color: black; font: bold; font-size:20px"),
-                                                                    QRect(100, 50, 200, 50));
-        mOn      = ivis::common::createWidget<QRadioButton>(mFrame, QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(350, 50, 100, 50));
-        mOff     = ivis::common::createWidget<QRadioButton>(mFrame, QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(450, 50, 100, 50));
+        mTitle   = ivis::common::createWidget<QLabel>(mFrame,       mBaseStyle.arg("balck").arg("20"), QRect(100, 50, 200, 50));
+        mOn      = ivis::common::createWidget<QRadioButton>(mFrame, mBaseStyle.arg("balck").arg("15"), QRect(350, 50, 100, 50));
+        mOff     = ivis::common::createWidget<QRadioButton>(mFrame, mBaseStyle.arg("balck").arg("15"), QRect(450, 50, 100, 50));
 
         mGroup   = new QButtonGroup(mFrame);
         mGroup->addButton(mOn, 1);
         mGroup->addButton(mOff, 0);
 
-        mOption  = ivis::common::createWidget<QLabel>(mFrame,       QString("color: black; font: bold; font-size:20px"),
-                                                                    QRect(130, 110, 150, 50));
-        mOption1 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(300, 110, 100, 50));
-        mOption2 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(400, 110, 100, 50));
-        mOption3 = ivis::common::createWidget<QCheckBox>(mFrame,    QString("color: black; font: bold; font-size:15px"),
-                                                                    QRect(500, 110, 100, 50));
+        mOption  = ivis::common::createWidget<QLabel>(mFrame,       mBaseStyle.arg("balck").arg("20"), QRect(130, 110, 150, 50));
+        mOption1 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(300, 110, 100, 50));
+        mOption2 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(400, 110, 100, 50));
+        mOption3 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(500, 110, 100, 50));
+        // mApply = ivis::common::createWidget<QPushButton>(mFrame,  mBaseStyle.arg("balck").arg("15"), QRect(250, 200, 250, 50));
 
-        mApply   = ivis::common::createWidget<QPushButton>(mFrame,  QString("color: black; font: bold; font-size:20px"),
-                                                                    QRect(150, 200, 200, 50));
-        mCancel  = ivis::common::createWidget<QPushButton>(mFrame,  QString("color: black; font: bold; font-size:20px"),
-                                                                    QRect(400, 200, 200, 50));
-
-        connect(mApply, &QPushButton::clicked, [=]() {
-            QMap<int, bool> config = QMap<int, bool>();
-            config[static_cast<int>(ReportItemInfo::Config::On)] = (mGroup->checkedId() == 1);
-            config[static_cast<int>(ReportItemInfo::Config::Option1)] = mOption1->isChecked();
-            config[static_cast<int>(ReportItemInfo::Config::Option2)] = mOption2->isChecked();
-            config[static_cast<int>(ReportItemInfo::Config::Option3)] = mOption3->isChecked();
-            emit signalReportItemValueChanged(config);
+        connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
+            updateStatus(id == 1);
+            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::On)], (id == 1));
         });
-        connect(mCancel, &QPushButton::clicked, [=]() {
-            emit signalReportItemValueChanged(QMap<int, bool>());
+        connect(mOption1, &QCheckBox::clicked, [=](bool checked) {
+            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option1),
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::Option1)], checked);
         });
-        // connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
-        //     qDebug() << "buttonClicked :" << id;
-        // });
-        // connect(mOption1, QOverload<int>::of(&QCheckBox::stateChanged), [=](int state) {
-        //     qDebug() << "1 stateChanged :" << state;
+        connect(mOption2, &QCheckBox::clicked, [=](bool checked) {
+            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option2),
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::Option2)], checked);
+        });
+        connect(mOption3, &QCheckBox::clicked, [=](bool checked) {
+            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option3),
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::Option3)], checked);
+        });
+        // connect(mApply, &QPushButton::clicked, [=]() {
+        //     emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
+        //                                     mConfigType[static_cast<int>(ReportItemInfo::Config::On)],
+        //                                     (mGroup->checkedId() == 1));
+        //     emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option1),
+        //                                     mConfigType[static_cast<int>(ReportItemInfo::Config::Option1)],
+        //                                     mOption1->isChecked());
+        //     emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option2),
+        //                                     mConfigType[static_cast<int>(ReportItemInfo::Config::Option2)],
+        //                                     mOption2->isChecked());
+        //     emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option3),
+        //                                     mConfigType[static_cast<int>(ReportItemInfo::Config::Option3)],
+        //                                     mOption3->isChecked());
         // });
 
         mInit = true;
     }
 
 signals:
-    void signalReportItemValueChanged(const QMap<int, bool>& config);
+    void signalReportValueChanged(const int& index, const int& type, const bool& value);
 
 private:
     bool mInit = false;
+    QMap<int, int> mConfigType = QMap<int, int>();
+    QString mBaseStyle = QString("color: %1; font: bold; font-size: %2px");
     QFrame* mFrame = nullptr;
     QButtonGroup* mGroup = nullptr;
     QLabel* mTitle = nullptr;
@@ -279,7 +301,6 @@ private:
     QCheckBox* mOption2 = nullptr;
     QCheckBox* mOption3 = nullptr;
     QPushButton* mApply = nullptr;
-    QPushButton* mCancel = nullptr;
 };
 
 
@@ -310,8 +331,6 @@ public slots:
 
 private:
     QStackedWidget* mMainView = nullptr;
-    // QTabWidget* mMainView = nullptr;
-    // QTableWidget* mMainView = nullptr;
     QWidget* mConfigWidget = nullptr;
     QListView* mNodeAddressList = nullptr;
     QWidget* mReportWidget = nullptr;

@@ -18,12 +18,19 @@
 class ConfigSetting : public QObject {
     Q_OBJECT
 
+public:
+    enum {
+        ConfigResetTypeAll = 0,
+        ConfigResetTypeNormal,
+        ConfigResetTypeReport,
+    };
+
 private:
     enum {
         ConfigDataTypeCurrent = 0,
         ConfigDataTypePrevious,
         ConfigDataTypeMax,
-    } ConfigDataType;
+    };
 
 public:
     static QSharedPointer<ConfigSetting>& instance();
@@ -32,7 +39,7 @@ public:
     void writeConfig(const int& configType, const QVariant& configValue);
     QVariant isConfigName(const int& configType);
     void editConfig(const int& configType, const QVariant& configValue);
-    void resetConfig();
+    void resetConfig(const int& resetType = ConfigResetTypeAll);
 
 private:
     explicit ConfigSetting();
