@@ -118,8 +118,11 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 # [QT 관련 설정]
-	sudo apt-get update
-	sudo apt-get install qtchooser qtcreator qt5-default make g++ gcc git cmake
+	- QT5 설치
+		sudo apt-get update
+		sudo apt-get install make g++ gcc git cmake net-tools
+		sudo apt-get install qtchooser qtcreator qt5-default
+
 
 	- QML 추가 설치 : 아래 순서대로 하나씩 설치해서 이상 유무 확인
 		Project ERROR: Unknown module(s) in QT: qml quick multimedia 3drender serialbus serialport
@@ -133,7 +136,8 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 		sudo apt-get install qtbase5-dev
 		sudo apt-get install qt5*-dev
 
-	- cmake 오류 : 아래 순서대로 하나씩 설치해서 이상 유무 확인
+
+	- make 오류 : 아래 순서대로 하나씩 설치해서 이상 유무 확인
 		sudo apt-get install net-tools
 		sudo apt-get install git
 		sudo apt-get install lib32stdc++6 build-essential
@@ -143,6 +147,41 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 		sudo apt-get install gdb
 
 
+	- QT6 설치
+		sudo apt-get update
+		sudo apt-get install make g++ gcc git cmake net-tools
+		sudo apt-get install qt6-base-dev
+		sudo apt-get install qt6-declarative-dev
+		sudo apt-get install qml6-module-*
+
+	- qtchooser qmake6 사용하도록 설정 (QT6 사용시)
+		cd /usr/bin
+		sudo rm qmake
+		sudo ln -s /usr/lib/qt6/bin/qmake6 qmake
+
+	- python 설치
+		sudo apt-get install python3 python3-pip
+		pip install openpyxl pandas
+		#sudo ln -s /usr/bin/python3 python
+			- Ubuntu_22.04(QT6) : Python 3.10.12
+			- Ubuntu_20.04(QT5) : Python 3.8.10
+
+
+
+		- 추가 설치 내역
+ 			sudo apt-get install libqt6*
+			sudo apt-get install libqt6serialport6
+			sudo apt-get install qtmultimedia5-dev
+			sudo apt-get install libqt6multimedia6 libqt6multimediaquick6 libqt6multimediawidgets6
+			sudo apt-get install qml-module-qtmultimedia
+
+	- taglib 오류 발생시 : pkg-config 라이브러리 없어서 발생하는 듯
+	sudo apt-get install libtag1-dev
+		sudo apt install pkg-config pkgconf
+		sudo apt-get install lib32stdc++6 build-essential
+		sudo apt-get install lib32z1
+		sudo apt-get install libgl1-mesa-dev
+		sudo apt-get install gdb
 
 =====================================================================
 # [Python 관련 설정]

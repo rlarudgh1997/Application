@@ -249,11 +249,21 @@ private:
         mOption3 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(500, 110, 100, 50));
         // mApply = ivis::common::createWidget<QPushButton>(mFrame,  mBaseStyle.arg("balck").arg("15"), QRect(250, 200, 250, 50));
 
+#if 0   // QT6 버전 에서 미지원
         connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
-            updateStatus(id == 1);
+            bool onOff = (id == 1);
+            updateStatus(onOff);
             emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
-                                            mConfigType[static_cast<int>(ReportItemInfo::Config::On)], (id == 1));
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::On)], onOff);
         });
+#else
+        connect(mGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton* button) {
+            bool onOff = (button == mOn);
+            updateStatus(onOff);
+            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
+                                            mConfigType[static_cast<int>(ReportItemInfo::Config::On)], onOff);
+        });
+#endif
         connect(mOption1, &QCheckBox::clicked, [=](bool checked) {
             emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option1),
                                             mConfigType[static_cast<int>(ReportItemInfo::Config::Option1)], checked);

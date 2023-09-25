@@ -285,7 +285,7 @@ bool ControlExcel::writeExcelFile(const QVariant& filePath) {
     }
 
     if (writeExcelSheet(filePath)) {
-        result = (sytemCall(false, filePath) > 0);
+        result = (sytemCall(false, filePath).size() > 0);
     }
     return result;
 }
@@ -372,7 +372,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
         fileName.append(".xlsx");
     }
 
-    QString cmd = QString("python %1/ExcelParser.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
+    QString cmd = QString("python3 %1/ExcelParser.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
