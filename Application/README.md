@@ -166,6 +166,10 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 			- Ubuntu_22.04(QT6) : Python 3.10.12
 			- Ubuntu_20.04(QT5) : Python 3.8.10
 
+	- QT Creator 설치
+		sudo apt-get install qtcreator
+		vi .bashrc : qc alias 경로 수정
+			/usr/bin/qtcreator
 
 
 		- 추가 설치 내역

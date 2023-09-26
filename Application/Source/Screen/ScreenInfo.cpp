@@ -44,17 +44,22 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 
      if (windowList.count() > 0) {
         if (mSubScreens[displayType] == nullptr) {
-            mSubScreens[displayType] = new QWidget(mRootScreen);
-            if (mAlwaysTopScreen == nullptr) {
-                mAlwaysTopScreen = mSubScreens[displayType];
-                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), SCREEN_HEIGHT_MARGIN);
-            } else  {
-                mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), mRootScreen->geometry().height());
+            try {
+                mSubScreens[displayType] = new QWidget(mRootScreen);
+                if (mAlwaysTopScreen == nullptr) {
+                    mAlwaysTopScreen = mSubScreens[displayType];
+                    mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), SCREEN_HEIGHT_MARGIN);
+                } else  {
+                    mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(),
+                                                                                                mRootScreen->geometry().height());
+                }
+                mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
+                mSubScreens[displayType]->setObjectName(objectName);
+                mSubScreens[displayType]->show();
+            } catch (...) {
+                qDebug() << "Fail to create component";
             }
-            mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
-            mSubScreens[displayType]->setObjectName(objectName);
-            mSubScreens[displayType]->show();
         }
      }
 
@@ -65,10 +70,14 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
         foreach(const auto& screen, mSubScreens) {
-            if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
-                continue;
+            try {
+                if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
+                    continue;
+                }
+                screen->hide();
+            } catch (...) {
+                qDebug() << "Fail to hide screen :" << screen;
             }
-            screen->hide();
         }
         mSubScreens[displayType]->show();
         mSubScreens[displayType]->stackUnder(mAlwaysTopScreen);
@@ -143,10 +152,14 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
         mRootScreen->resize(resizeEvent.size().width(), resizeEvent.size().height());
     }
     foreach(const auto& widget, mSubScreens) {
-        if (widget == mAlwaysTopScreen) {
-            widget->setGeometry(0, 0, resizeEvent.size().width(), SCREEN_HEIGHT_MARGIN);
-        } else {
-            widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
+        try {
+            if (widget == mAlwaysTopScreen) {
+                widget->setGeometry(0, 0, resizeEvent.size().width(), SCREEN_HEIGHT_MARGIN);
+            } else {
+                widget->setGeometry(0, 0, resizeEvent.size().width(), resizeEvent.size().height());
+            }
+        } catch (...) {
+            qDebug() << "Fail to resize widget :" << widget;
         }
     }
 }

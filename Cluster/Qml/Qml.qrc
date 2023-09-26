@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DataModel/DataModel.qml</file>
+        <file>DataModel/DataModelHome.qml</file>
+        <file>DataModel/DataModelTelltale.qml</file>
+        <file>Home/Home.qml</file>
+        <file>Telltale/Telltale.qml</file>
+        <file>Telltale/TelltaleCommon.qml</file>
+        <file>Telltale/TelltaleCV.qml</file>
+        <file>Telltale/TelltalePV.qml</file>
+    </qresource>
+</RCC>
