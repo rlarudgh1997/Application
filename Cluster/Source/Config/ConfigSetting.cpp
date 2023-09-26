@@ -12,7 +12,7 @@
 
 
 #define CONFIG_PATH QGuiApplication::applicationDirPath().toLatin1().data()
-#define CONFIG_NAME "Application.ini"
+#define CONFIG_NAME "Cluster.ini"
 #define CONFIG_FILE (QString("%1/%2").arg(CONFIG_PATH).arg(CONFIG_NAME))
 
 #define GROUP_NAME_COMMON    "Common"

@@ -141,8 +141,11 @@ CMD=$1
 
 if [ "$1" = h ] || [ "$1" = "" ]; then
 	CMD=host
-elif [ "$2" = t ]; then
+elif [ "$1" = t ]; then
 	CMD=target
+elif [ "$1" = c ]; then
+	CMD=host
+	BIN_NAME="Cluster"
 else
 	CMD=$1
 fi
