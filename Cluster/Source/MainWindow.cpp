@@ -60,19 +60,19 @@ void MainWindow::setQmlRegisterType() {
                                                                           "PropertyType");
 
     // Home
-    qmlRegisterType<ivis::common::HandlerHomeEnum>                       ("HandlerHomeEnum",     1, 0,
+    qmlRegisterType<ivis::common::HandlerHomeEnum>                       ("HomeEnum",     1, 0,
                                                                           "Home");
 
     // Telltale
-    qmlRegisterType<ivis::common::TelltaleStatType>                      ("HandlerTelltaleEnum", 1, 0,
+    qmlRegisterType<ivis::common::TelltaleStatType>                      ("TelltaleEnum", 1, 0,
                                                                           "TelltaleStat");
-    qmlRegisterType<ivis::common::TelltaleECASStatOptionalType>          ("HandlerTelltaleEnum", 1, 0,
+    qmlRegisterType<ivis::common::TelltaleECASStatOptionalType>          ("TelltaleEnum", 1, 0,
                                                                           "TelltaleECASStatOptional");
-    qmlRegisterType<ivis::common::TelltaleECASAxleMotionStatOptionalType>("HandlerTelltaleEnum", 1, 0,
+    qmlRegisterType<ivis::common::TelltaleECASAxleMotionStatOptionalType>("elltaleEnum", 1, 0,
                                                                           "TelltaleECASAxleMotionStatOptional");
-    qmlRegisterType<ivis::common::TelltaleOATIceWarnStatOptionalType>    ("HandlerTelltaleEnum", 1, 0,
+    qmlRegisterType<ivis::common::TelltaleOATIceWarnStatOptionalType>    ("TelltaleEnum", 1, 0,
                                                                           "TelltaleOATIceWarnStatOptional");
-    qmlRegisterType<ivis::common::TelltaleLowFuelWarnStatOptionalType>   ("HandlerTelltaleEnum", 1, 0,
+    qmlRegisterType<ivis::common::TelltaleLowFuelWarnStatOptionalType>   ("TelltaleEnum", 1, 0,
                                                                           "TelltaleLowFuelWarnStatOptional");
 }
 

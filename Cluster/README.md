@@ -1,6 +1,6 @@
 =====================================================================
 # [Repo 정보]
-git clone git@github.com.rlarudgh1997:rlarudgh1997/Cluster.git
+git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 [Qt 버전별 import 방법]
