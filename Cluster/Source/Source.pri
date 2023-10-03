@@ -5,6 +5,7 @@ include($$PWD/Config/Config.pri)
 include($$PWD/Manager/Manager.pri)
 include($$PWD/Home/Home.pri)
 include($$PWD/Telltale/Telltale.pri)
+#include($$PWD/Service/Service.pri)
 
 
 

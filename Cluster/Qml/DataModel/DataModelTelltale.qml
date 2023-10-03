@@ -10,6 +10,13 @@ DataModel {
 
     property int telltaleType: 0
 
+    property int telltaleSeatbeltStat: 0
+    property int telltalexEVSystemReadyStat: 0
+    property int telltaleEcallStat: 0
+    property int telltaleAirBagStat: 0
+
+
+
     property int telltaleDualPowerStat: 0
     property int telltaleDualPowerOptional: 0
     property int telltaleLiftgateStat: 0
@@ -61,16 +68,12 @@ DataModel {
     property int telltaleSrvLmpEvStat: 0
     property int telltaleSrvLmpHevStat: 0
     property int telltaleSrvLmpFcevStat: 0
-    property int telltaleEcallStat: 2
-    property int telltaleSeatbeltStat: 2
     property int telltaleOATIceWarnStat: 0
     property int telltaleOATIceWarnStatOptional: 0
-    property int telltaleAirBagStat: 2
     property int telltaleAirBagBlinkValueA: 0
     property int telltaleAirBagBlinkValueB: 0
     property int telltaleLampFailWarningStat: 2
     property int telltaleIFSStat: 194
-    property int telltalexEVSystemReadyStat: 2
     property int telltaleKeySystemStat: 0
     property int telltaleLampIndicatorFrontFogStat: 0
     property int telltaleLampIndicatorHighBeamStat: 0

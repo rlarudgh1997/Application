@@ -24,23 +24,23 @@ namespace common {
 #define PROPETRY_START_LIST              2000
 #define PROPETRY_START_HOME              3000
 #define PROPETRY_START_GAUGE             4000
-#define PROPETRY_START_TELLTALE          5000
-#define PROPETRY_START_POPUP             6000
+#define PROPETRY_START_CONTENT           5000
+#define PROPETRY_START_TELLTALE          6000
+#define PROPETRY_START_POPUP             7000
 
 
 
 
 class DisplayEnum : public QObject {
     Q_OBJECT
-    Q_ENUMS(DisplaySize)
-    Q_ENUMS(DisplayType)
-    Q_ENUMS(DisplayDepth)
 
 public:
     enum DisplaySize {
-        Width = SCREEN_SIZE_WIDTH,
+        Width  = SCREEN_SIZE_WIDTH,
         Height = SCREEN_SIZE_HEIGHT,
     };
+    Q_ENUMS(DisplaySize)
+
     enum DisplayType {
         DisplayTypeInvalid             = 0x000000,
         DisplayTypeHome                = 0x000001,
@@ -50,17 +50,18 @@ public:
 
         DisplayTypeAll                 = 0xFFFFFF,
     };
+    Q_ENUMS(DisplayType)
+
     enum DisplayDepth {
         DisplayDepthDepth0 = 0,
         DisplayDepthDepth1,
         DisplayDepthDepth2,
     };
+    Q_ENUMS(DisplayDepth)
 };
 
 class KeyEnum : public QObject {
     Q_OBJECT
-    Q_ENUMS(KeyInputType)
-    Q_ENUMS(KeyInputValue)
 
 public:
     enum KeyInputType {
@@ -68,6 +69,8 @@ public:
         KeyInputTypePress,
         KeyInputTypeRelease,
     };
+    Q_ENUMS(KeyInputType)
+
     enum KeyInputValue {
         KeyInputValueInvalid          = 0,
         KeyInputValueUp               = Qt::Key_Up,
@@ -86,6 +89,7 @@ public:
         KeyInputValueNumOK2           = Qt::Key_Alt,         // KeyInputValueOK
 #endif
     };
+    Q_ENUMS(KeyInputValue)
 };
 
 class PropertyEnum : public QObject {
@@ -102,15 +106,27 @@ public:
         CommonNormal = PROPETRY_START_NORMAL,
 
         CommonList = PROPETRY_START_LIST,
-        CommonListMax,
+        CommonMax,
     };
     Q_ENUMS(CommonType)
 
     enum HomeType  {
-        HomeInvalid = PROPETRY_START_TELLTALE,
+        HomeInvalid = PROPETRY_START_HOME,
         HomeType,
     };
     Q_ENUMS(HomeType)
+
+    enum GaugeType  {
+        GaugeInvalid = PROPETRY_START_GAUGE,
+        GaugeType,
+    };
+    Q_ENUMS(GaugeType)
+
+    enum ContentType  {
+        ContentInvalid = PROPETRY_START_CONTENT,
+        ContentType,
+    };
+    Q_ENUMS(GaugeType)
 
     enum TelltaleType  {
         TelltaleInvalid = PROPETRY_START_TELLTALE,
@@ -216,11 +232,16 @@ public:
         TelltaleGFDWarningGFDStat,
     };
     Q_ENUMS(TelltaleType)
+
+    enum PopupType  {
+        PopupInvalid = PROPETRY_START_POPUP,
+        PopupType,
+    };
+    Q_ENUMS(PopupType)
 };
 
 class EventEnum : public QObject {
     Q_OBJECT
-    Q_ENUMS(EventType)
 
 public:
     enum EventType {
@@ -234,13 +255,13 @@ public:
         EventTypeList = 3000,
         EventTypeListMax,
     };
+    Q_ENUMS(EventType)
 };
 
 
 
 class HandlerHomeEnum : public QObject {
     Q_OBJECT
-    Q_ENUMS(HomeType)
 
 public:
     enum HomeType {
@@ -249,6 +270,7 @@ public:
         Menu,
         Sub,
     };
+    Q_ENUMS(HomeType)
 };
 
 

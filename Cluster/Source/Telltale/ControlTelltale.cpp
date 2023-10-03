@@ -46,6 +46,20 @@ void ControlTelltale::initCommonData(const int& currentMode) {
 void ControlTelltale::initNormalData() {
     resetControl(false);
     updateDataHandler(ivis::common::PropertyEnum::TelltaleType, 0);
+
+#if 1
+    updateDataHandler(ivis::common::PropertyEnum::TelltaleSeatbeltStat,
+                                static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+    updateDataHandler(ivis::common::PropertyEnum::TelltalexEVSystemReadyStat,
+                                static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+    updateDataHandler(ivis::common::PropertyEnum::TelltaleEcallStat,
+                                static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+    updateDataHandler(ivis::common::PropertyEnum::TelltaleAirBagStat,
+                                static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+
+
+
+#endif
 }
 
 void ControlTelltale::initControlData() {
