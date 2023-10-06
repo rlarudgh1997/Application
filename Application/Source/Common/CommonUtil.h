@@ -125,11 +125,18 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
 }
 
 template <typename T1, typename T2>
-inline T1* createWidget(T2* parent, const QString& styleSheet, const QRect& geometry) {
+inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geometry = QRect(),
+                                                                    const QString& styleSheet = QString()) {
     T1* widget = new T1(parent);
-    widget->setStyleSheet(styleSheet);
-    widget->setGeometry(geometry);
-    widget->show();
+    if (geometry.isValid()) {
+        widget->setGeometry(geometry);
+    }
+    if (styleSheet.size() > 0) {
+        widget->setStyleSheet(styleSheet);
+    }
+    if (show) {
+        widget->show();
+    }
     return widget;
 }
 

@@ -166,6 +166,23 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 			- Ubuntu_22.04(QT6) : Python 3.10.12
 			- Ubuntu_20.04(QT5) : Python 3.8.10
 
+	- Ubuntu 22.04 LTS에 Python 3.8 or 3.9 설치 방법
+		https://makebct.net/ubuntu-22-04-lts-%ED%99%98%EA%B2%BD%EC%97%90-python-3-8-%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95/
+		sudo apt-get install software-properties-common
+		sudo add-apt-repository ppa:deadsnakes/ppa
+		sudo apt-cache policy python3.8
+		sudo apt-get install python3.8
+		- python 기본 버전 설정
+			sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+			sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 2
+			sudo update-alternatives --config python
+		- python3 기본 버전 설정
+			sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+			sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+			sudo update-alternatives --config python3
+		python -V
+		python3 -V
+
 	- QT Creator 설치
 		sudo apt-get install qtcreator
 		vi .bashrc : qc alias 경로 수정

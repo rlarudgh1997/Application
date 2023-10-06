@@ -32,7 +32,9 @@ void GuiMenu::drawDisplayDepth0() {
 #endif
     drawMenuView();
     drawMenuSetting();
-    // drawMenuReport();
+#if !defined(USE_VIEW_REPORT)
+    drawMenuReport();
+#endif
     drawMenuRun();
     drawMenuHelp();
 #if !defined(USE_DEMO)
@@ -227,7 +229,7 @@ void GuiMenu::drawMenuView() {
         });
     }
 
-#if 1
+#if defined(USE_VIEW_REPORT)
     QAction *actionTestReport = new QAction(QIcon::fromTheme("actionTestReport"),
                                                         STRING_TEST_REPORT,
                                                         this);

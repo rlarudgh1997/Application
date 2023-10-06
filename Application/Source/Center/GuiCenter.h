@@ -47,33 +47,24 @@ public:
         int posY = 20 + (index * 55);
         int height = 50;
 
-        mNameButton = new QPushButton(parent);
-        mNameButton->setGeometry(30, posY, 195, height);
-        mNameButton->setStyleSheet(mStyleNormal);
+        mNameButton = ivis::common::createWidget<QPushButton>(parent, true, QRect(30, posY, 195, height), mStyleNormal);
         mNameButton->setText(name);
-        mNameButton->show();
         connect(mNameButton, &QPushButton::clicked, [=]() {
             editValue(type, mEditState);
         });
 
-        mValueDispaly = new QLabel(parent);
-        mValueDispaly->setGeometry(230, posY, 1000, height);
-        mValueDispaly->setStyleSheet(mStyleNormal);
-        mValueDispaly->setFrameShape(QLabel::StyledPanel);
+        mValueDispaly = ivis::common::createWidget<QLabel>(parent, false, QRect(230, posY, 1000, height), mStyleNormal);
         mValueDispaly->setIndent(2);
         mValueDispaly->setWordWrap(true);
         mValueDispaly->setText(value);
-        mValueDispaly->show();
+        ivis::common::widgetVisible(mValueDispaly, true);
 
-        mValueEdit = new QLineEdit(parent);
-        mValueEdit->setGeometry(mValueDispaly->geometry());
-        mValueEdit->setStyleSheet(QString("color: blue; font-size: 15px"));
+
+        mValueEdit = ivis::common::createWidget<QLineEdit>(parent, false, QRect(mValueDispaly->geometry()),
+                                                                    QString("color: blue; font-size: 15px"));
         mValueEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        // QRegExp rx("(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])");
-        // QRegExpValidator *validator = new QRegExpValidator(rx,this);
-        // mValueEdit->setValidator(validator);
         mValueEdit->setText(value);
-        mValueEdit->hide();
+        ivis::common::widgetVisible(mValueEdit, true);
         connect(mValueEdit, &QLineEdit::returnPressed, [=]() {
             editValue(type, false);
         });
@@ -224,9 +215,8 @@ private:
             return;
         }
 
-        mFrame   = ivis::common::createWidget<QFrame>(parent,       mBaseStyle.arg("balck").arg("15"),
-                                                                    QRect(30, (20 + index * 210), 750, 200));
-                                                                    // QRect(30, (20 + index * 310), 750, 300));
+        mFrame   = ivis::common::createWidget<QFrame>(parent, true, QRect(30, (20 + index * 210), 750, 200),
+                                                                        mBaseStyle.arg("balck").arg("15"));
         mFrame->setFrameShape(QFrame::Shape::Box);
         if (select) {
             mFrame->setLineWidth(3);
@@ -235,19 +225,26 @@ private:
         }
         mFrame->setEnabled(select);
 
-        mTitle   = ivis::common::createWidget<QLabel>(mFrame,       mBaseStyle.arg("balck").arg("20"), QRect(100, 50, 200, 50));
-        mOn      = ivis::common::createWidget<QRadioButton>(mFrame, mBaseStyle.arg("balck").arg("15"), QRect(350, 50, 100, 50));
-        mOff     = ivis::common::createWidget<QRadioButton>(mFrame, mBaseStyle.arg("balck").arg("15"), QRect(450, 50, 100, 50));
+        mTitle   = ivis::common::createWidget<QLabel>(mFrame,  true, QRect(100, 50, 200, 50), mBaseStyle.arg("balck").arg("20"));
+        mOn      = ivis::common::createWidget<QRadioButton>(mFrame, true, QRect(350, 50, 100, 50),
+                                                                            mBaseStyle.arg("balck").arg("15"));
+        mOff     = ivis::common::createWidget<QRadioButton>(mFrame, true, QRect(450, 50, 100, 50),
+                                                                            mBaseStyle.arg("balck").arg("15"));
 
         mGroup   = new QButtonGroup(mFrame);
         mGroup->addButton(mOn, 1);
         mGroup->addButton(mOff, 0);
 
-        mOption  = ivis::common::createWidget<QLabel>(mFrame,       mBaseStyle.arg("balck").arg("20"), QRect(130, 110, 150, 50));
-        mOption1 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(300, 110, 100, 50));
-        mOption2 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(400, 110, 100, 50));
-        mOption3 = ivis::common::createWidget<QCheckBox>(mFrame,    mBaseStyle.arg("balck").arg("15"), QRect(500, 110, 100, 50));
-        // mApply = ivis::common::createWidget<QPushButton>(mFrame,  mBaseStyle.arg("balck").arg("15"), QRect(250, 200, 250, 50));
+        mOption  = ivis::common::createWidget<QLabel>(mFrame, true, QRect(130, 110, 150, 50),
+                                                                        mBaseStyle.arg("balck").arg("20"));
+        mOption1 = ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(300, 110, 100, 50),
+                                                                        mBaseStyle.arg("balck").arg("15"));
+        mOption2 = ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(400, 110, 100, 50),
+                                                                        mBaseStyle.arg("balck").arg("15"));
+        mOption3 = ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(500, 110, 100, 50),
+                                                                        mBaseStyle.arg("balck").arg("15"));
+        // mApply = ivis::common::createWidget<QPushButton>(mFrame, true, QRect(250, 200, 250, 50),
+        //                                                                 mBaseStyle.arg("balck").arg("15"));
 
 #if 0   // QT6 버전 에서 미지원
         connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
@@ -330,6 +327,8 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
+    template <typename T>
+    void updateDisplayViewType(const int& viewType = (-1), T* widget = nullptr);
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress();
     void updateDisplayTestReport();

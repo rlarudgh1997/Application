@@ -25,62 +25,50 @@ GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
 
 void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
+    // QRect parentRect = mMainView->geometry();
 
+    // Draw - ViewType
     if (mConfigWidget == nullptr) {
-        mConfigWidget = new QWidget(mMainView);
-        mConfigWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
-        // mConfigWidget->setStyleSheet("background-color: blue");
-        mConfigWidget->show();
-        mMainView->insertWidget(0, mConfigWidget);
+        mConfigWidget = ivis::common::createWidget<QWidget>(mMainView);
+        updateDisplayViewType<QWidget>(ivis::common::ViewTypeEnum::ViewTypeConfig, mConfigWidget);
     }
 
     if (mNodeAddressList == nullptr) {
-        mNodeAddressList = new QListView(mMainView);
-        mNodeAddressList->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
-        // mNodeAddressList->setStyleSheet("background-color: green");
-        mNodeAddressList->show();
-        mMainView->insertWidget(1, mNodeAddressList);
-    }
+        mNodeAddressList = ivis::common::createWidget<QListView>(mMainView);
+        updateDisplayViewType<QListView>(ivis::common::ViewTypeEnum::ViewTypeSignal, mNodeAddressList);
 
-    if (mInputNodeAddress == nullptr) {
-        mInputNodeAddress = new QLineEdit(mNodeAddressList);
-        mInputNodeAddress->setGeometry(400, 20, 840, 50);
-        mInputNodeAddress->setStyleSheet("background-color: white; color: black; font: bold; font-size:15px");
-#if defined(USE_DEMO)
-        mInputNodeAddress->hide();
-#else
-        mInputNodeAddress->show();
+#if !defined(USE_DEMO)
+        if (mInputNodeAddress == nullptr) {
+            mInputNodeAddress = ivis::common::createWidget<QLineEdit>(mNodeAddressList, true, QRect(400, 20, 840, 50),
+                                                QString("background-color: white; color: black; font: bold; font-size:15px"));
+            mInputNodeAddress->show();
+        }
 #endif
     }
 
     if (mReportWidget == nullptr) {
-        mReportWidget = new QWidget(mMainView);
-        mReportWidget->setGeometry(0, 0, mMainView->geometry().width(), mMainView->geometry().height());
-        mReportWidget->show();
-        mMainView->insertWidget(2, mReportWidget);
+        mReportWidget = ivis::common::createWidget<QWidget>(mMainView);
+        updateDisplayViewType<QWidget>(ivis::common::ViewTypeEnum::ViewTypeReport, mReportWidget);
     }
 
 
+    // ETC - Button
     if (mConfigHideButton == nullptr) {
-        mConfigHideButton = new QPushButton(mMainView);
-        mConfigHideButton->setGeometry(1250, 20, 50, 50);
-        mConfigHideButton->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:20px");
+        mConfigHideButton = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(1250, 20, 50, 50),
+                                            QString("background-color: white; color: black; font: bold; font-size:20px"));
         mConfigHideButton->setText("X");
         connect(mConfigHideButton, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex()));
         });
-        mConfigHideButton->show();
     }
 
     if (mConfigResetButton == nullptr) {
-        mConfigResetButton = new QPushButton(mMainView);
-        mConfigResetButton->setGeometry(1250, 75, 50, 50);
-        mConfigResetButton->setStyleSheet("background-color: rgb(255, 255, 255); color: black; font: bold; font-size:12px");
+        mConfigResetButton = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(1250, 75, 50, 50),
+                                            QString("background-color: white; color: black; font: bold; font-size:12px"));
         mConfigResetButton->setText("Reset");
         connect(mConfigResetButton, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant());
         });
-        mConfigHideButton->show();
     }
 }
 
@@ -116,6 +104,17 @@ void GuiCenter::updateDisplayVisible() {
     }
 }
 
+template <typename T>
+void GuiCenter::updateDisplayViewType(const int& viewType, T* widget) {
+    int currViewType = (viewType >= 0) ? (viewType) :
+                        (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt());
+    if ((viewType >= 0) && (widget)) {
+        mMainView->insertWidget(currViewType, widget);
+    } else {
+        mMainView->setCurrentIndex(currViewType);
+    }
+}
+
 void GuiCenter::updateDisplayConfigInfo() {
     QVariantList configValue = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
     qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << mConfigValue.size() << "," << configValue.size();
@@ -123,8 +122,7 @@ void GuiCenter::updateDisplayConfigInfo() {
     if (mConfigWidget == nullptr) {
         return;
     } else {
-        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-        mMainView->setCurrentIndex(viewType);
+        updateDisplayViewType<QWidget>();
         ivis::common::widgetVisible(mConfigWidget,      true);
         ivis::common::widgetVisible(mNodeAddressList,   false);
         ivis::common::widgetVisible(mReportWidget,      false);
@@ -206,8 +204,7 @@ void GuiCenter::updateDisplayNodeAddress() {
     if (mNodeAddressList == nullptr) {
         return;
     } else {
-        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-        mMainView->setCurrentIndex(viewType);
+        updateDisplayViewType<QWidget>();
         ivis::common::widgetVisible(mConfigWidget,      false);
         ivis::common::widgetVisible(mNodeAddressList,   true);
         ivis::common::widgetVisible(mReportWidget,      false);
@@ -238,8 +235,7 @@ void GuiCenter::updateDisplayTestReport() {
     if (mReportWidget == nullptr) {
         return;
     } else {
-        int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-        mMainView->setCurrentIndex(viewType);
+        updateDisplayViewType<QWidget>();
         ivis::common::widgetVisible(mConfigWidget,      false);
         ivis::common::widgetVisible(mNodeAddressList,   false);
         ivis::common::widgetVisible(mReportWidget,      true);

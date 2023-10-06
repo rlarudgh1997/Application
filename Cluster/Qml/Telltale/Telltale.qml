@@ -392,4 +392,15 @@ DataModelTelltale {
             }
         }
     }
+
+
+
+
+    TelltaleCV {
+        anchors.fill: parent
+    }
+
+    TelltalePV {
+        anchors.fill: parent
+    }
 }
