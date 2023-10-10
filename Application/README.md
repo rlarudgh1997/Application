@@ -4,6 +4,11 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 # ToDo
+- 자동완성
+	: 공백 입력 안됨
+
+
+
 - 파이썬 코드 수정
 	: class 로 변경
 	: print 함수를 별도 api 로 변경하여 release, debug 인 경우에 맞도록 프린터 되도록 수정

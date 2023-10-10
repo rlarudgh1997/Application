@@ -424,7 +424,7 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
     qDebug() << "updateDisplayAutoComplete :" << show << sheetIndex << rowIndex << columnIndex;
 
     if (mAutoComplete == nullptr) {
-#if 0
+#if 0   // 자동완성 동작 조건 처리
         QStringList list = QStringList();
         if (columnIndex == 5) {
             list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();

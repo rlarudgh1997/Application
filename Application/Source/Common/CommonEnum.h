@@ -219,8 +219,8 @@ class ViewTypeEnum {
 public:
     enum ViewType {
         ViewTypeConfig = 0,
-        ViewTypeSignal,
         ViewTypeReport,
+        ViewTypeNodeAddress,
     };
 };
 

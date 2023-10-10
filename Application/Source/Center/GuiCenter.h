@@ -15,7 +15,10 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QCompleter>
 
+
+class AutoCompleteDialog;
 
 class ReportItemInfo {
 public:
@@ -330,8 +333,9 @@ private:
     template <typename T>
     void updateDisplayViewType(const int& viewType = (-1), T* widget = nullptr);
     void updateDisplayConfigInfo();
-    void updateDisplayNodeAddress();
     void updateDisplayTestReport();
+    void updateDisplayAutoComplete(const bool& show);
+    void updateDisplayNodeAddress();
 
 
 public slots:
@@ -341,14 +345,15 @@ public slots:
 private:
     QStackedWidget* mMainView = nullptr;
     QWidget* mConfigWidget = nullptr;
-    QListView* mNodeAddressList = nullptr;
     QWidget* mReportWidget = nullptr;
+    QTableWidget* mNodeAddress = nullptr;
     QMap<int, ListItem*> mConfigListItem = QMap<int, ListItem*>();
     QVariantList mConfigValue = QVariantList();
-    QLineEdit* mInputNodeAddress = nullptr;
     QPushButton* mConfigHideButton = nullptr;
     QPushButton* mConfigResetButton = nullptr;
+    QPushButton* mNodeAddressSearch = nullptr;
     QMap<int, ReportItem*> mTestReport = QMap<int, ReportItem*>();
+    AutoCompleteDialog* mAutoComplete = nullptr;
 };
 
 #endif    // GUI_CENTER_H

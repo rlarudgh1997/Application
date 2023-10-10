@@ -41,11 +41,10 @@ public:
 
         QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();
-        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 800) * 0.5));
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 900) * 0.5));
         setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - 500) * 0.5));
-        setRect.setWidth(800);
+        setRect.setWidth(900);
         setRect.setHeight(500);
-
         setGeometry(setRect);
         setLayout(layout);
         setFocus();
@@ -60,11 +59,21 @@ public:
             }
             mSuggestionsList->setCurrentRow(0);
         });
+        connect(mInputeText, &QLineEdit::returnPressed, [=]() {
+            emit signalAutoCompleteSelectedText(inputText());
+        });
         connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem *item) {
             emit signalAutoCompleteSelectedText(item->text());
             mInputeText->clear();
             mSuggestionsList->clear();
         });
+    }
+    QString inputText() {
+        QString text = QString();
+        if (mInputeText) {
+            text = mInputeText->text();
+        }
+        return text;
     }
     void setInputText(const QString& text) {
         if (mInputeText) {
