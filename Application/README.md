@@ -4,8 +4,48 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 =====================================================================
 # ToDo
-- 자동완성
-	: 공백 입력 안됨
+- Open Excel
+	: 파일명 Title 에 표시
+	: 파일 Open 폴더명과 DeafultModule.info 내부 폴더명과 같으면 현재 Config 저장
+		ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
+
+- Save Excel
+	: 파일명 Title 에 표시
+
+- New Excel
+	: 작업 폴더명과 상관 없이 전체 VSM 표시
+
+
+
+
+- 기본 동작
+	: default path
+		- 상대 경로로 sfc/model/폴더 지정
+
+	: SFC/model/VSM 내부 CV 폴더 모델 리스트업
+		- 부팅시 마다 검색 : 1번 설정 path 참조
+
+	: VSM 파일 파싱
+		- 앱 부팅 완료 후 별도 동작으로 정보 구성 & 부팅시 마다 구성
+		- 파싱 필요한 파일 config.ini 정보로 구성 & 참조
+			CLU_VSM_CV_EV.Vehicle.CV.vsm
+			CLU_VSM_CV_FCEV.Vehicle.CV.vsm
+			CLU_VSM_CV_ICV.Vehicle.CV.vsm
+
+	: module 정보
+		- config 정보로 저장 : do not save info
+		- Open : 폴더명
+		- new  : All
+
+
+- 화면 구성
+	: node address 구성과 동일
+		- VSM 파일 파싱 결과 리스트 표시
+	: Module(현재 선택), All, Search 버튼 배치
+		- module 정보 참조
+
+
+
 
 
 
@@ -229,6 +269,26 @@ cd ~/900_Code/610_Application/SFC/model/ssfs/include/generated
 Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
+=====================================================================
+# [Ubuntu_22.04 + QT6 = Docker]
+- qtchooser qmake6 사용하도록 설정 (QT6 사용시)
+	cd /usr/bin
+	sudo rm qmake
+	sudo ln -s /usr/lib/qt6/bin/qmake6 qmake
+
+- PIP 오류 발생시
+	sudo apt-get update
+	sudo apt-get install python3.8-distutils
+	#sudo apt-get install --reinstall python3.8-distutils
+
+	: .bashrc 추가 (현재 사용안함)
+		#echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+		#export PATH="$HOME/.local/bin:$PATH"
+		#source ~/.bashrc
+
+- 파이썬 엑셀 open 오류 발생시
+	[ImportErrrImportError: Unable to import required dependencies:	pytz: No module named 'zoneinfo']
+	pip install --upgrade pytz
 
 
 

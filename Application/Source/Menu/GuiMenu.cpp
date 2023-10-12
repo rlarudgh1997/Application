@@ -2,6 +2,7 @@
 #include "AbstractHandler.h"
 
 #include "CommonResource.h"
+#include "CommonUtil.h"
 
 #include <QKeySequence>
 #include <QLineEdit>
@@ -38,7 +39,7 @@ void GuiMenu::drawDisplayDepth0() {
     drawMenuRun();
     drawMenuHelp();
 #if !defined(USE_DEMO)
-    drawMenuEtc();
+    drawMenuEtc(false);
 #endif
 }
 
@@ -77,7 +78,7 @@ void GuiMenu::drawMenuFile() {
     mToolBar[MainType::File] = mMainView->addToolBar(STRING_FILE);
 
     QAction *actionNew = new QAction(QIcon::fromTheme("actionNew",
-                                                        QIcon(IAMGE_COPY)),
+                                                        QIcon(IAMGE_NEW)),
                                                         STRING_NEW,
                                                         this);
     if (actionNew) {
@@ -223,7 +224,7 @@ void GuiMenu::drawMenuView() {
     if (actionNodeAddress) {
         actionNodeAddress->setStatusTip(STRING_NODE_ADDRESS_TIP);
         mMenu[MainType::View]->addAction(actionNodeAddress);
-        // mToolBar[MainType::View]->addAction(actionNodeAddress);
+        mToolBar[MainType::View]->addAction(actionNodeAddress);
         connect(actionNodeAddress, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewNodeAddress, QVariant());
         });
@@ -315,6 +316,18 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 #endif
+
+    QAction *actionVsmPath = new QAction(QIcon::fromTheme("actionVsmPath"),
+                                                        STRING_VSM_PATH,
+                                                        this);
+    if (actionVsmPath) {
+        actionVsmPath->setStatusTip(STRING_VSM_PATH_TIP);
+        mMenu[MainType::Setting]->addAction(actionVsmPath);
+        // mToolBar[MainType::Setting]->addAction(actionVsmPath);
+        connect(actionVsmPath, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant());
+        });
+    }
 
 
 
@@ -437,53 +450,42 @@ void GuiMenu::drawMenuHelp() {
     }
 }
 
-void GuiMenu::drawMenuEtc() {
-    updateDisplayDefaultPath();
+void GuiMenu::drawMenuEtc(const bool& update) {
+    QString styleInfo = QString("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
 
-    static QPushButton* lastFile = nullptr;
-    if (lastFile == nullptr) {
-        lastFile = new QPushButton(mMainView);
-        lastFile->setGeometry(920, 25, 50, 30);
-        lastFile->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
-        lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        lastFile->setText("Last");
-        lastFile->show();
-        connect(lastFile, &QPushButton::clicked, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeLastFile, QVariant());
-        });
-    }
-
-#if 1
-    static QPushButton* excelOpen = nullptr;
-    if (excelOpen == nullptr) {
-        excelOpen = new QPushButton(mMainView);
-        excelOpen->setGeometry(980, 25, 50, 30);
-        excelOpen->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
-        excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        excelOpen->setText("Test");
-        excelOpen->show();
-        connect(excelOpen, &QPushButton::clicked, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeTest, QVariant());
-        });
-    }
-#endif
-}
-
-void GuiMenu::updateDisplayDefaultPath() {
-    QString path = QString("Path : %1")
-                        .arg(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath).toString());
     static QPushButton* defaultPath = nullptr;
     if (defaultPath == nullptr) {
-        defaultPath = new QPushButton(isHandler()->getScreen());
-        defaultPath->setGeometry(400, 25, 500, 30);
-        defaultPath->setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
-        defaultPath->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        defaultPath->show();
+        defaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(400, 25, 500, 30), styleInfo);
         connect(defaultPath, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
         });
     }
-    defaultPath->setText(path);
+    QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath);
+    defaultPath->setText(QString("Path : %1").arg(path.toString()));
+
+    if (update == false) {
+        static QPushButton* lastFile = nullptr;
+        if (lastFile == nullptr) {
+            lastFile = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(1000, 25, 50, 30), styleInfo);
+            lastFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            lastFile->setText("Last");
+            connect(lastFile, &QPushButton::clicked, [=]() {
+                createSignal(ivis::common::EventTypeEnum::EventTypeLastFile, QVariant());
+            });
+        }
+
+#if 1
+        static QPushButton* excelOpen = nullptr;
+        if (excelOpen == nullptr) {
+            excelOpen = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(1060, 25, 50, 30), styleInfo);
+            excelOpen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            excelOpen->setText("Test");
+            connect(excelOpen, &QPushButton::clicked, [=]() {
+                createSignal(ivis::common::EventTypeEnum::EventTypeTest, QVariant());
+            });
+        }
+#endif
+    }
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -501,7 +503,7 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath : {
-            updateDisplayDefaultPath();
+            drawMenuEtc(true);
             break;
         }
         default : {

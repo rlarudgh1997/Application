@@ -63,8 +63,17 @@ void GuiCenter::drawDisplayDepth0() {
         });
     }
 
+    if (mSelectModuleButton == nullptr) {
+        mSelectModuleButton = ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1050, 20, 80, 50),
+                                            QString("background-color: white; color: black; font: bold; font-size:12px"));
+        mSelectModuleButton->setText("Select\nModule");
+        connect(mSelectModuleButton, &QPushButton::clicked, [=]() {
+            updateDisplaySelectModule();
+        });
+    }
+
     if (mNodeAddressSearch == nullptr) {
-        mNodeAddressSearch = ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1130, 20, 100, 50),
+        mNodeAddressSearch = ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1150, 20, 80, 50),
                                             QString("background-color: white; color: black; font: bold; font-size:12px"));
         mNodeAddressSearch->setText("Search");
         connect(mNodeAddressSearch, &QPushButton::clicked, [=]() {
@@ -124,12 +133,13 @@ void GuiCenter::updateDisplayConfigInfo() {
         return;
     } else {
         updateDisplayViewType<QWidget>();
-        ivis::common::widgetVisible(mConfigWidget,      true);
-        ivis::common::widgetVisible(mReportWidget,      false);
-        ivis::common::widgetVisible(mNodeAddress,       false);
-        ivis::common::widgetVisible(mConfigHideButton,  true);
-        ivis::common::widgetVisible(mConfigResetButton, true);
-        ivis::common::widgetVisible(mNodeAddressSearch, false);
+        ivis::common::widgetVisible(mConfigWidget,       true);
+        ivis::common::widgetVisible(mReportWidget,       false);
+        ivis::common::widgetVisible(mNodeAddress,        false);
+        ivis::common::widgetVisible(mConfigHideButton,   true);
+        ivis::common::widgetVisible(mConfigResetButton,  true);
+        ivis::common::widgetVisible(mSelectModuleButton, false);
+        ivis::common::widgetVisible(mNodeAddressSearch,  false);
 
         if (mConfigValue == configValue) {
             foreach(const auto& item, mConfigListItem) {
@@ -205,12 +215,13 @@ void GuiCenter::updateDisplayTestReport() {
         return;
     } else {
         updateDisplayViewType<QWidget>();
-        ivis::common::widgetVisible(mConfigWidget,      false);
-        ivis::common::widgetVisible(mReportWidget,      true);
-        ivis::common::widgetVisible(mNodeAddress,       false);
-        ivis::common::widgetVisible(mConfigHideButton,  true);
-        ivis::common::widgetVisible(mConfigResetButton, true);
-        ivis::common::widgetVisible(mNodeAddressSearch, false);
+        ivis::common::widgetVisible(mConfigWidget,       false);
+        ivis::common::widgetVisible(mReportWidget,       true);
+        ivis::common::widgetVisible(mNodeAddress,        false);
+        ivis::common::widgetVisible(mConfigHideButton,   true);
+        ivis::common::widgetVisible(mConfigResetButton,  true);
+        ivis::common::widgetVisible(mSelectModuleButton, false);
+        ivis::common::widgetVisible(mNodeAddressSearch,  false);
     }
 
     for (int reportType = ivis::common::ReportTypeEnum::ReportTypeResult;
@@ -272,62 +283,21 @@ void GuiCenter::updateDisplayTestReport() {
     }
 }
 
-void GuiCenter::updateDisplayAutoComplete(const bool& show) {
-    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-    QStringList nodeAddressName = QStringList();
-    for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
-        QStringList text = nodeAddress[rowIndex].split("\t");
-        nodeAddressName.append(text[0]);
-    }
-
-    if (mAutoComplete == nullptr) {
-        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), nodeAddressName);
-    }
-
-    connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& selectNodeName) {
-        int rowIndex = 0;
-        foreach(const auto& nodeName, nodeAddressName) {
-            if (selectNodeName == nodeName) {
-                break;
-            }
-            rowIndex++;
-        }
-        mNodeAddress->clearSelection();
-        QTableWidgetItem* scrollItem = mNodeAddress->item(rowIndex, 0);
-        if (scrollItem) {
-            mNodeAddress->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
-            scrollItem->setSelected(true);
-        }
-
-        mAutoComplete->hide();
-    });
-    connect(mAutoComplete, &QDialog::finished, [=]() {
-        disconnect(mAutoComplete);
-        delete mAutoComplete;
-        mAutoComplete = nullptr;
-    });
-
-    if (show) {
-        mAutoComplete->show();
-    } else {
-        mAutoComplete->hide();
-    }
-}
-
-void GuiCenter::updateDisplayNodeAddress() {
-    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-    qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << nodeAddress.size();
+void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
+    QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
+    qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
 
     if (mNodeAddress == nullptr) {
         return;
     } else {
         updateDisplayViewType<QTableWidget>();
-        ivis::common::widgetVisible(mConfigWidget,      false);
-        ivis::common::widgetVisible(mReportWidget,      false);
-        ivis::common::widgetVisible(mNodeAddress,       true);
-        ivis::common::widgetVisible(mConfigHideButton,  true);
-        ivis::common::widgetVisible(mConfigResetButton, false);
-        ivis::common::widgetVisible(mNodeAddressSearch, true);
+        ivis::common::widgetVisible(mConfigWidget,       false);
+        ivis::common::widgetVisible(mReportWidget,       false);
+        ivis::common::widgetVisible(mNodeAddress,        true);
+        ivis::common::widgetVisible(mConfigHideButton,   true);
+        ivis::common::widgetVisible(mConfigResetButton,  false);
+        ivis::common::widgetVisible(mSelectModuleButton, true);
+        ivis::common::widgetVisible(mNodeAddressSearch,  true);
     }
 
     QStringList title = QStringList({"Node Name", "Vehicle Type"});
@@ -352,6 +322,80 @@ void GuiCenter::updateDisplayNodeAddress() {
     mNodeAddress->show();
 }
 
+void GuiCenter::updateDisplayAutoComplete(const bool& show) {
+    QStringList nodeAddressName = QStringList();
+    QStringList nodeAddress = QStringList();
+
+    for (int rowIndex = 0; rowIndex < mNodeAddress->rowCount(); rowIndex++) {
+        nodeAddress.append(mNodeAddress->item(rowIndex, 0)->text());
+    }
+
+    if (nodeAddress.size() == 0) {
+        nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+    }
+
+    for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
+        QStringList text = nodeAddress[rowIndex].split("\t");
+        nodeAddressName.append(text[0]);
+    }
+
+    if (mAutoComplete == nullptr) {
+        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("Search"), nodeAddressName);
+        connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& selectNodeName) {
+            int rowIndex = 0;
+            foreach(const auto& nodeName, nodeAddressName) {
+                if (selectNodeName == nodeName) {
+                    break;
+                }
+                rowIndex++;
+            }
+            mNodeAddress->clearSelection();
+            QTableWidgetItem* scrollItem = mNodeAddress->item(rowIndex, 0);
+            if (scrollItem) {
+                mNodeAddress->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
+                scrollItem->setSelected(true);
+            }
+
+            mAutoComplete->hide();
+        });
+        connect(mAutoComplete, &QDialog::finished, [=]() {
+            disconnect(mAutoComplete);
+            delete mAutoComplete;
+            mAutoComplete = nullptr;
+        });
+    }
+
+    if (show) {
+        mAutoComplete->show();
+    } else {
+        mAutoComplete->hide();
+    }
+}
+
+
+void GuiCenter::updateDisplaySelectModule() {
+    qDebug() << "updateDisplaySelectModule";
+    QStringList moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeModuleList).toStringList();
+
+    if (mSelectModule == nullptr) {
+        mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList);
+        connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
+            mSelectModule->hide();
+            QVariantList moduleSelect = QVariantList();
+            foreach(const auto& select, selectModule) {
+                moduleSelect.append(QVariant(select.second));
+            }
+            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
+        });
+        connect(mSelectModule, &QDialog::finished, [=]() {
+            disconnect(mSelectModule);
+            delete mSelectModule;
+            mSelectModule = nullptr;
+        });
+    }
+    mSelectModule->show();
+}
+
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
@@ -374,8 +418,9 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll : {
-            updateDisplayNodeAddress();
+        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll :
+        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule : {
+            updateDisplayNodeAddress(type);
             break;
         }
         default : {

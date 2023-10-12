@@ -21,6 +21,7 @@ MainWindow::MainWindow() {
     qInfo() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
     checkTimer.check("ConfigSetting");
 
+    this->setWindowTitle("TC Creator");
     this->setGeometry(mScreenInfo);
     this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
     // this->setMaximumSize(QSize(SCREEN_MAXIMUM_WIDTH, SCREEN_MAXIMUM_HEIGHT));
@@ -49,6 +50,14 @@ void MainWindow::controlConnect() {
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram,
             this,                              &QApplication::quit,    // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
+    connect(ControlManager::instance().data(), &ControlManager::signalUpdateWindowTitle, [=](const QString& title) {
+        QString text = QString("TC Creator");
+        if (title.size() > 0) {
+            text.append(" : ");
+            text.append(title);
+        }
+        this->setWindowTitle(text);
+    });
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
             qInfo() << "Python lib openpyxl :" << ((state) ? ("valid") : ("invalid"));

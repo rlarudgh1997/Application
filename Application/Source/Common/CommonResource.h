@@ -42,6 +42,8 @@
 #define STRING_DEFAULT_PATH_TIP                    QString("Setting default SFC test output foler")
 #define STRING_NODE_PATH                           QString("Node Path")
 #define STRING_NODE_PATH_TIP                       QString("Setting node address file path")
+#define STRING_VSM_PATH                            QString("VSM Path")
+#define STRING_VSM_PATH_TIP                        QString("Setting VSM file path")
 #define STRING_TEST_REPORT                         QString("Tes Report")
 #define STRING_TEST_REPORT_TIP                     QString("Test report setting")
 #define STRING_REPORT                              QString("Report")
@@ -156,7 +158,7 @@
 // =============================================================================================================
 // Image Define
 // =============================================================================================================
-#define IAMGE_COPY                                 ":/Image/Menu/Copy.png"
+#define IAMGE_NEW                                  ":/Image/Menu/New.png"
 #define IAMGE_OPEN                                 ":/Image/Menu/Open.png"
 #define IAMGE_SAVE                                 ":/Image/Menu/Save.png"
 #define IAMGE_CUT                                  ":/Image/Menu/Cut.png"

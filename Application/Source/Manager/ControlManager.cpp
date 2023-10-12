@@ -145,3 +145,7 @@ void ControlManager::createControl(const int& displayType) {
 void ControlManager::exitProgram() {
     emit signalExitProgram();
 }
+
+void ControlManager::updateWindowTitle(const QString& title) {
+    emit signalUpdateWindowTitle(title);
+}

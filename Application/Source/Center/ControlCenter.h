@@ -21,7 +21,7 @@ private:
     explicit ControlCenter();
 
     void updateConfigInfo();
-    void updateNodeAddress();
+    void updateNodeAddress(const QVariantList& updateModule);
     void updateTestReport();
 
 

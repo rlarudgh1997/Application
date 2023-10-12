@@ -29,6 +29,7 @@ AbstractHandler* ControlCenter::isHandler() {
 }
 
 bool ControlCenter::initControl(const int& currentMode) {
+    Q_UNUSED(currentMode)
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -45,6 +46,10 @@ void ControlCenter::initCommonData(const int& currentMode) {
 
 void ControlCenter::initNormalData() {
     resetControl(false);
+
+    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+    QStringList moduleList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/DefaultModule.info");
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeModuleList, QVariant(moduleList), true);
 }
 
 void ControlCenter::initControlData() {
@@ -122,13 +127,69 @@ void ControlCenter::updateConfigInfo() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
 }
 
-void ControlCenter::updateNodeAddress() {
-    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
-    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
-    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
+void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
+    int updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll;
+    QStringList vsmList = QStringList();
+    QVariantList selectModule = (updateModule.size() > 0) ? (updateModule)
+                                : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
+    if (selectModule.size() > 0) {
+        QStringList vsmAll = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule;
+        foreach(const auto& moudleName, selectModule) {
+            foreach(const auto& vsmInfo, vsmAll) {
+                if (vsmInfo.contains(moudleName.toString())) {
+                    vsmList.append(vsmInfo);
+                }
+            }
+        }
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
+    } else {
+        QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+        QStringList vsmFile({"/CLU_VSM_CV_EV.Vehicle.CV.vsm", "/CLU_VSM_CV_FCEV.Vehicle.CV.vsm",
+                                                                "/CLU_VSM_CV_ICV.Vehicle.CV.vsm"});
+        QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
+
+        foreach(const auto& file, vsmFile) {
+            QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + file);
+            QStringList list = QStringList();
+            foreach(QString lineStr, readData) {
+                if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
+                    lineStr.remove(" ");
+                    lineStr.remove("-");
+                    lineStr.remove(":");
+                    list.append(lineStr);
+                    vsmList.append(lineStr);
+                }
+            }
+            vsmInfo[vsmInfo.size()].append(list);
+        }
+
+        for (int index = 0; index < vsmList.size(); index++) {
+            QString vsmSignal = vsmList[index];
+            QString vehicleType = QString();
+            for (int listIndex = 0; listIndex < vsmInfo.size(); listIndex++) {
+                if (vsmInfo[listIndex].contains(vsmSignal)) {
+                    if (vehicleType.size() > 0) {
+                        vehicleType.append(", ");
+                    }
+
+                    if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeEV)) {
+                        vehicleType.append("EV");
+                    } else if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeFCEV)) {
+                        vehicleType.append("FCEV");
+                    } else {
+                        vehicleType.append("ICV");
+                    }
+                }
+            }
+            vsmList[index] = QString("%1\t%2").arg(vsmSignal).arg(vehicleType);
+        }
+    }
+    vsmList.sort();
+    // qSort(vsmList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNodeAddress);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(sfcList + vsmList), true);
+    updateDataHandler(updateType, QVariant(vsmList), true);
 }
 
 void ControlCenter::updateTestReport() {
@@ -207,6 +268,10 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             updateTestReport();
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeSelectModule : {
+            updateNodeAddress(value.toList());
+            break;
+        }
         default : {
             break;
         }
@@ -225,7 +290,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
-            updateNodeAddress();
+            updateNodeAddress(QVariantList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingTestReport :

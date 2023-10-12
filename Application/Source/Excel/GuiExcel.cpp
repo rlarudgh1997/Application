@@ -436,20 +436,19 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
 #else
         QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
 #endif
-        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), list);
+        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("AutoComplete"), list);
+        connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
+            if (mSelectItem) {
+                mSelectItem->setText(text);
+            }
+            mAutoComplete->hide();
+        });
+        connect(mAutoComplete, &QDialog::finished, [=]() {
+            disconnect(mAutoComplete);
+            delete mAutoComplete;
+            mAutoComplete = nullptr;
+        });
     }
-
-    connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
-        if (mSelectItem) {
-            mSelectItem->setText(text);
-        }
-        mAutoComplete->hide();
-    });
-    connect(mAutoComplete, &QDialog::finished, [=]() {
-        disconnect(mAutoComplete);
-        delete mAutoComplete;
-        mAutoComplete = nullptr;
-    });
 
     if (show) {
         mAutoComplete->show();

@@ -248,9 +248,9 @@ def readFromText(path, saveFilePath) :
                         typeText = "Blank "
                         text = ""
 
-                    # read.iloc[rowIndex][columnIndex] = text
+                    read.iloc[rowIndex][columnIndex] = text
                     # read.loc[rowIndex][columnIndex] = text
-                    read.iat[rowIndex, columnIndex] = text
+                    # read.iat[rowIndex, columnIndex] = text    # Python 3.10 : Warning Message
                     # read.at[rowIndex][columnIndex] = text
                     # print(typeText, "[", rowIndex, ",", columnIndex, "] :", text)
 

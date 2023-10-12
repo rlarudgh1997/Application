@@ -201,10 +201,21 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingDevPath :
-        case ivis::common::EventTypeEnum::EventTypeSettingNodePath : {
-            bool defaultPath = (type == ivis::common::EventTypeEnum::EventTypeSettingDevPath);
-            QString text = (defaultPath) ? (STRING_DEFAULT_PATH) : (STRING_NODE_PATH);
-            int configType = (defaultPath) ? (ConfigInfo::ConfigTypeDefaultPath) : (ConfigInfo::ConfigTypeNodeAddressPath);
+        case ivis::common::EventTypeEnum::EventTypeSettingNodePath :
+        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath : {
+            QString text = STRING_DEFAULT_PATH;
+            int configType = ConfigInfo::ConfigTypeDefaultPath;
+
+            if (type == ivis::common::EventTypeEnum::EventTypeSettingNodePath) {
+                text = STRING_NODE_PATH;
+                configType = ConfigInfo::ConfigTypeNodeAddressPath;
+            } else if (type == ivis::common::EventTypeEnum::EventTypeSettingVsmPath) {
+                text = STRING_VSM_PATH;
+                configType = ConfigInfo::ConfigTypeVsmPath;
+            } else {
+                // ivis::common::EventTypeEnum::EventTypeSettingDevPath
+            }
+
             QVariant path = ConfigSetting::instance().data()->readConfig(configType);
             QVariant popupData = QVariant();
 

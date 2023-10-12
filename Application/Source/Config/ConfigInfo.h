@@ -24,6 +24,7 @@ public:
         ConfigTypeScreenInfo,
         ConfigTypeDefaultPath,
         ConfigTypeNodeAddressPath,
+        ConfigTypeVsmPath,
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
@@ -56,6 +57,7 @@ public:
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
+        ConfigTypeSelectModule,
 
         ConfigTypeMax,
     } ConfigType;
@@ -87,6 +89,9 @@ private:
                                                         QVariant(QApplication::applicationDirPath() + QString("/SFC")));
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>("ConfigTypeNodeAddressPath",
                                                         QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
+        mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>("ConfigTypeVsmPath",
+                                                        QVariant(QApplication::applicationDirPath()
+                                                                                            + QString("/../SFC/model/VSM")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName",
                                                         QVariant(QVariantList({"Description", "Privates", "Telltales",

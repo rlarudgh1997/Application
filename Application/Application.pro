@@ -75,6 +75,7 @@ message("node.files=$${node.files}")
 !isEmpty(target.path): INSTALLS += target
 !isEmpty(python.path): INSTALLS += python
 !isEmpty(node.path): INSTALLS += node
+!isEmpty(module.path): INSTALLS += module
 
 message("INSTALLS=$$INSTALLS")
 message("PWD=$$PWD")

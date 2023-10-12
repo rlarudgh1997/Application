@@ -1,0 +1,129 @@
+python3.8 버전 적용한 sfc ubuntu22.04 qt6 docker 이미지 공유드립니다.
+sfc-docker-ubuntu22-04-qt6.tar
+
+
+docker load -i sfc-docker-ubuntu22-04-qt6.tar
+
+
+위 파일 받으신 후 docker load -i sfc-docker-ubuntu22-04-qt6.tat 하시면 
+sfc-docker-ubuntu22-04-qt6로 docker image 로드 됩니다.
+
+도커 이미지 로드 후 run_sfc_docker.sh 실행 하시고, 
+docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash 
+하셔서 도커 이미지 실행 하시면 됩니다. (도커 실행은 현재 홈 환경으로 실행됩니다. 해당 이미지와 첨부 스크립트 사용하시면, docker 컨테이서 상에서 qt6 프로그램 빌드 및 gui 실행 가능합니다.)
+
+
+도커 이미지의 python 버전을 3.8.10으로 고정하여 이미지 빌드 할 수 있도록 Dockerfile 수정 중 수정 완료하여 
+생성된 도커 이미지 김경호 책임님에게 전달하여 테스트 예정
+
+
+
+============================================================================================================================
+sudo apt-get install x11-xserver-utils
+
+
+
+============================================================================================================================
+sudo service docker start
+sleep 1
+sudo chmod -R 777 /var/run/docker.sock
+
+
+docker load -i sfc-docker-ubuntu22-04-qt6.tar
+	[도커 에러 발생시]
+		Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+		위와 같은 명령어가 뜨면 docker service가 실행이 안되어있는것이다. 
+
+		sudo systemctl status docker
+			상태를 확인해 봐라 stop일 것이다
+		
+		sudo systemctl start docker
+		sudo systemctl enable docker
+
+
+~/900_Code/000_Docker/run_sfc_docker.sh
+docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
+
+
+docker ps
+docker stop 01e1bb164ee8
+
+
+
+============================================================================================================================
+- WSL 사용시 : .bashrc 추가
+	USER_SET_DISPLAY=yes
+	if [ "$USER_SET_DISPLAY" = yes ]; then
+		export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0.0 # in WSL 2
+		export QMLSCENE_DEVICE=softwarecontext
+		
+		alias qc='/usr/bin/qtcreator &'
+		alias d='cd /home/ivis/900_Code/000_Docker'
+		alias a='cd /home/ivis/900_Code/610_Application/Script'
+		
+		cd ~/900_Code
+	fi
+
+- qtchooser qmake6 사용하도록 설정 (QT6 사용시)
+	cd /usr/bin
+	sudo rm qmake
+	sudo ln -s /usr/lib/qt6/bin/qmake6 qmake
+
+- PIP 오류 발생시 : .bashrc 추가
+	#echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+	#export PATH="$HOME/.local/bin:$PATH"
+	#source ~/.bashrc
+	
+	sudo apt-get update
+	sudo apt-get install python3.8-distutils
+	#sudo apt-get install --reinstall python3.8-distutils
+
+- 파이썬 엑셀 open 오류 발생시
+	ImportErrrImportError: Unable to import required dependencies:	pytz: No module named 'zoneinfo'
+	pip install --upgrade pytz
+
+
+- python 설치
+	sudo apt-get install python3 python3-pip
+	pip install openpyxl pandas
+	#sudo ln -s /usr/bin/python3 python
+		- Ubuntu_22.04(QT6) : Python 3.10.12
+		- Ubuntu_20.04(QT5) : Python 3.8.10
+
+		
+	
+	
+	
+	sudo apt update && sudo apt upgrade -y
+	sudo apt install software-properties-common -y
+	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo apt install python3.10
+	python3.10 --version
+	curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+	python3.10 -m pip --version
+	python3.10 -m pip install --upgrade pip
+	sudo apt install python3.10-venv
+
+	[가상화후 사용]
+	python3.10 -m venv venv3.10
+	source venv3.10/bin/activate
+
+
+
+============================================================================================================================
+
+sudo addgroup --system docker
+sudo adduser $USER docker
+newgrp docker
+# And something needs to be done so $USER always runs in group `docker` on the `Ubuntu` WSL
+sudo chown root:docker /var/run/docker.sock
+sudo chmod g+w /var/run/docker.sock
+
+
+
+sudo usermod -aG docker ivis
+
+
+
+
+

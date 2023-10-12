@@ -83,6 +83,8 @@ public:
         PropertyTypeViewType,
         PropertyTypeConfigInfo,
         PropertyTypeNodeAddressAll,
+        PropertyTypeNodeAddressModule,
+        PropertyTypeModuleList,
         PropertyTypeTestReportResultInfo,
         PropertyTypeTestReportCoverageInfo,
         PropertyTypeTestReportType,
@@ -150,6 +152,7 @@ public:
         EventTypeViewPythonLib,
         EventTypeSettingDevPath,
         EventTypeSettingNodePath,
+        EventTypeSettingVsmPath,
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
@@ -174,6 +177,7 @@ public:
         EventTypeGenerateTC,
         EventTypeRunTC,
         EventTypeGenerateReport,
+        EventTypeSelectModule,
 
         EventTypeSendOtherControl = 2000,
         EventTypeTest,
@@ -268,6 +272,14 @@ public:
 };
 
 
+class VsmTypeEnum {
+public:
+    enum VsmType {
+        VsmTypeEV = 0,
+        VsmTypeFCEV,
+        VsmTypeICV,
+    };
+};
 
 
 

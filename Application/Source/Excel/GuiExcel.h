@@ -2,6 +2,7 @@
 #define GUI_EXCEL_H
 
 #include "AbstractGui.h"
+#include "CommonUtil.h"
 
 #include <QWidget>
 #include <QTabWidget>
@@ -24,18 +25,21 @@ class AutoCompleteDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AutoCompleteDialog(QWidget* parent = nullptr, const QStringList& list = QStringList())
+    explicit AutoCompleteDialog(QWidget* parent = nullptr,
+                                const QString& title = QString(),
+                                const QStringList& list = QStringList())
         : QDialog(parent), mAutoCompleteStringList(list) {
-        setWindowTitle("AutoComplete");
+        setWindowTitle(title);
         setWindowFlag(Qt::WindowContextHelpButtonHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
         setParent(parent);
         setModal(true);
 
-        mInputeText = new QLineEdit(this);
-        mSuggestionsList = new QListWidget(this);
+        mInputeText = ivis::common::createWidget<QLineEdit>(this);
+        mInputeText->setFocus();
+        mSuggestionsList = ivis::common::createWidget<QListWidget>(this);
 
-        QVBoxLayout* layout = new QVBoxLayout;
+        QVBoxLayout* layout = new QVBoxLayout(this);
         layout->addWidget(mInputeText);
         layout->addWidget(mSuggestionsList);
 
@@ -48,16 +52,11 @@ public:
         setGeometry(setRect);
         setLayout(layout);
         setFocus();
-        mInputeText->setFocus();
+
+        updateSuggestionsList(QString());
 
         connect(mInputeText, &QLineEdit::textChanged, [=](const QString& text){
-            mSuggestionsList->clear();
-            for (const QString& str : mAutoCompleteStringList) {
-                if (str.contains(text, Qt::CaseInsensitive)) {    // (str.startsWith(text, Qt::CaseInsensitive))
-                    mSuggestionsList->addItem(str);
-                }
-            }
-            mSuggestionsList->setCurrentRow(0);
+            updateSuggestionsList(text);
         });
         connect(mInputeText, &QLineEdit::returnPressed, [=]() {
             emit signalAutoCompleteSelectedText(inputText());
@@ -65,7 +64,6 @@ public:
         connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem *item) {
             emit signalAutoCompleteSelectedText(item->text());
             mInputeText->clear();
-            mSuggestionsList->clear();
         });
     }
     QString inputText() {
@@ -83,6 +81,24 @@ public:
     void setAutoCompleteStringList(const QStringList& autoCompleteStringList) {
         mAutoCompleteStringList = autoCompleteStringList;
     }
+
+private:
+     void updateSuggestionsList(const QString& text) {
+        bool matching = (text.size() > 0);
+
+        mSuggestionsList->clear();
+        for (const QString& str : mAutoCompleteStringList) {
+            if (matching) {
+                if (str.contains(text, Qt::CaseInsensitive)) {
+                    mSuggestionsList->addItem(str);
+                }
+            } else {
+                mSuggestionsList->addItem(str);
+            }
+        }
+        mSuggestionsList->setCurrentRow(0);
+     }
+
 
 signals:
      void signalAutoCompleteSelectedText(const QString& text);

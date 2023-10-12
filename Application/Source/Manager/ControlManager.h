@@ -24,6 +24,7 @@ public:
     void mouseEvent(const int& inputType, const int& inputValue);
     void resizeEvent(QResizeEvent& resizeEvent);
     void exitProgram();
+    void updateWindowTitle(const QString& title);
 
 private:
     explicit ControlManager();
@@ -32,6 +33,7 @@ private:
 
 signals:
     void signalExitProgram();
+    void signalUpdateWindowTitle(const QString& title);
     void signalEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
 
 

@@ -46,8 +46,7 @@ private:
     void drawMenuReport();
     void drawMenuRun();
     void drawMenuHelp();
-    void drawMenuEtc();
-    void updateDisplayDefaultPath();
+    void drawMenuEtc(const bool& update = false);
 
 
 public slots:

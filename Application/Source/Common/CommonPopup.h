@@ -97,7 +97,7 @@ public:
         }
         setPopupType(popupType);
         popupData = isPopupData();
-        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << isPopupData();
+        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << popupData;
         return button;
     }
 
@@ -107,7 +107,6 @@ private:
         return gPopupType;
     }
     static QVariant isPopupData() {
-        qDebug() << "Popup::isPopupData() ->" << gPopupData;
         return gPopupData;
     }
     static void setPopupType(const PopupType& type) {

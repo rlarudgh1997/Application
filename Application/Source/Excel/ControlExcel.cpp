@@ -457,6 +457,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             updateExcelSheet(false, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
+            ControlManager::instance().data()->updateWindowTitle(QString());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen : {
@@ -466,6 +467,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                                     QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+                ControlManager::instance().data()->updateWindowTitle(filePath.toString());
             }
             break;
         }
@@ -536,6 +538,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             if (writeExcelFile(saveFilePath)) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, saveFilePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+                ControlManager::instance().data()->updateWindowTitle(saveFilePath.toString());
             }
             break;
         }
