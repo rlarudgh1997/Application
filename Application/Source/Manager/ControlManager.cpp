@@ -142,10 +142,11 @@ void ControlManager::createControl(const int& displayType) {
     }
 }
 
-void ControlManager::exitProgram() {
-    emit signalExitProgram();
-}
-
-void ControlManager::updateWindowTitle(const QString& title) {
-    emit signalUpdateWindowTitle(title);
+void ControlManager::exitProgram(const bool& check) {
+    if (check) {
+        sendEventInfo(ivis::common::ScreenEnum::DisplayTypeInvalid, ivis::common::ScreenEnum::DisplayTypeMenu,
+                                                ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
+    } else {
+        emit signalExitProgram();
+    }
 }

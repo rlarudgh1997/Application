@@ -437,18 +437,21 @@ bool ControlExcel::checkPythonLibrary() {
 #endif
 }
 
-void ControlExcel::openExcelFile(const QVariant& filePath) {
+bool ControlExcel::openExcelFile(const QVariant& filePath) {
+    bool result = false;
     if (checkPythonLibrary()) {
         QString dirPath = sytemCall(true, filePath);
         if (dirPath.size() > 0) {
             updateExcelSheet(true, dirPath);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+            result = true;
         } else {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
                                             QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
         }
     }
+    return result;
 }
 
 void ControlExcel::loadExcelFile(const int& eventType) {
@@ -457,7 +460,8 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             updateExcelSheet(false, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
-            ControlManager::instance().data()->updateWindowTitle(QString());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, QString());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen : {
@@ -465,9 +469,25 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             QVariant filePath = QVariant();
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
                                     QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
-                openExcelFile(filePath);
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
-                ControlManager::instance().data()->updateWindowTitle(filePath.toString());
+                QStringList moduleTemp = QStringList();
+                QStringList module = QStringList();
+
+                if (openExcelFile(filePath)) {
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
+                    moduleTemp = filePath.toString().split("/model/SFC/CV/");
+                }
+
+                if (moduleTemp.size() == 2) {
+                    qDebug() << "1 Parser :" << moduleTemp;
+                    module = moduleTemp[1].split("/");
+                }
+
+                if (module.size() == 2) {
+                    qDebug() << "2 Parser :" << module;
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule,
+                                                                                    QVariant(QVariantList({module[0]})));
+                }
             }
             break;
         }
@@ -538,7 +558,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             if (writeExcelFile(saveFilePath)) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, saveFilePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
-                ControlManager::instance().data()->updateWindowTitle(saveFilePath.toString());
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, saveFilePath.toString());
             }
             break;
         }

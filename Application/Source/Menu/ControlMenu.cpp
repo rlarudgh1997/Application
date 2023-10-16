@@ -135,6 +135,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeExitProgram : {
             ivis::common::PopupButton button = ivis::common::PopupButton::Discard;
             bool fileSave = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+
             if (fileSave) {
                 QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
                                                     STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
@@ -148,7 +149,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
 
             if (button != ivis::common::PopupButton::Cancel) {
-                ControlManager::instance().data()->exitProgram();
+                ControlManager::instance().data()->exitProgram(false);
             }
             break;
         }
@@ -245,6 +246,11 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
 
     qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
+        case ivis::common::EventTypeEnum::EventTypeExitProgram :
+        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath : {
+            slotHandlerEvent(eventType, eventValue);
+            break;
+        }
         default : {
             break;
         }

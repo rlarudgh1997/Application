@@ -36,6 +36,7 @@ public:
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
+        ConfigTypeVsmNodeAddress,
 
         // Report
         ConfigTypeReportResult,
@@ -58,6 +59,7 @@ public:
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
         ConfigTypeSelectModule,
+        ConfigTypeWindowTitle,
 
         ConfigTypeMax,
     } ConfigType;
@@ -106,7 +108,6 @@ private:
                                                                         "Data", "Negative Test"})));
 
 
-
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
@@ -116,7 +117,10 @@ private:
                                                         QVariant("ExcelMergeText"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd",
                                                         QVariant("ExcelMergeTextEnd"));
-
+        mConfigInfoData[ConfigTypeVsmNodeAddress] = QPair<QString, QVariant>("ConfigTypeVsmNodeAddress",
+                                                        QVariant(QVariantList({"CLU_VSM_CV_EV.Vehicle.CV.vsm",
+                                                                                "CLU_VSM_CV_FCEV.Vehicle.CV.vsm",
+                                                                                "CLU_VSM_CV_ICV.Vehicle.CV.vsm"})));
 
 
         // Report
@@ -138,13 +142,14 @@ private:
                                                                                     QVariant(false));
 
 
-
         // Common : The setting information is not saved as a file. (Do not save config file)
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant(1));
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));
+        mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
+        mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
     }
 
 

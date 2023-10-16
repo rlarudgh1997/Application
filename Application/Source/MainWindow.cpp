@@ -50,7 +50,7 @@ void MainWindow::controlConnect() {
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram,
             this,                              &QApplication::quit,    // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
-    connect(ControlManager::instance().data(), &ControlManager::signalUpdateWindowTitle, [=](const QString& title) {
+    connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle, [=](const QString& title) {
         QString text = QString("TC Creator");
         if (title.size() > 0) {
             text.append(" : ");
@@ -71,10 +71,12 @@ void MainWindow::controlConnect() {
     });
 }
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
+    Q_UNUSED(mouseEvent)
     // ControlManager::instance().data()->mouseEvent(0, mouseEvent);
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent* mouseEvent) {
+    Q_UNUSED(mouseEvent)
     // ControlManager::instance().data()->mouseEvent(1, mouseEvent);
 }
 
@@ -87,11 +89,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
 }
 
 void MainWindow::closeEvent(QCloseEvent* closeEvent) {
-    // qDebug() << "MainWindow::closeEvent()\n\n";
-    if (true) {
-        closeEvent->accept();
-    } else {
-        closeEvent->ignore();
+    closeEvent->ignore();
+    if (closeEvent->type() == QEvent::Type::Close) {
+        ControlManager::instance().data()->exitProgram(true);
     }
 }
 

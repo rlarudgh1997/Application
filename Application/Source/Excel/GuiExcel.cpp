@@ -390,7 +390,7 @@ void GuiExcel::updateDisplayExcelSheet() {
             if (((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) && (column != 3))
                 || ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription)
                     && ((column != 4) && (column != 6) && (column != 9)))) {
-                qDebug() << "Fail to not support auto complete :" << sheetIndex << column;
+                // qDebug() << "Fail to not support auto complete :" << sheetIndex << column;
                 return;
             }
 

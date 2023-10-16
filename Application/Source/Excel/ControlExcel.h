@@ -26,7 +26,7 @@ private:
     bool writeSheetInfo(const QVariant& filePath);
     QString sytemCall(const bool& readFile, const QVariant& filePath);
     bool checkPythonLibrary();
-    void openExcelFile(const QVariant& filePath);
+    bool openExcelFile(const QVariant& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);
 

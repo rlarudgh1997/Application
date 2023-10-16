@@ -36,11 +36,11 @@ void GuiMenu::drawDisplayDepth0() {
 #if !defined(USE_VIEW_REPORT)
     drawMenuReport();
 #endif
-    drawMenuRun();
-    drawMenuHelp();
 #if !defined(USE_DEMO)
-    drawMenuEtc(false);
+    drawMenuRun();
 #endif
+    drawMenuHelp();
+    drawMenuEtc(false);
 }
 
 void GuiMenu::drawDisplayDepth1() {
@@ -212,7 +212,7 @@ void GuiMenu::drawMenuView() {
     if (actionConfig) {
         actionConfig->setStatusTip(STRING_CONFIG_TIP);
         mMenu[MainType::View]->addAction(actionConfig);
-        mToolBar[MainType::View]->addAction(actionConfig);
+        // mToolBar[MainType::View]->addAction(actionConfig);
         connect(actionConfig, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeViewConfig, QVariant());
         });
@@ -237,7 +237,7 @@ void GuiMenu::drawMenuView() {
     if (actionTestReport) {
         actionTestReport->setStatusTip(STRING_TEST_REPORT_TIP);
         mMenu[MainType::View]->addAction(actionTestReport);
-        mToolBar[MainType::View]->addAction(actionTestReport);
+        // mToolBar[MainType::View]->addAction(actionTestReport);
         connect(actionTestReport, &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingTestReport, QVariant());
         });
@@ -289,7 +289,7 @@ void GuiMenu::drawMenuView() {
 
 void GuiMenu::drawMenuSetting() {
     mMenu[MainType::Setting] = mMainView->menuBar()->addMenu(STRING_SETTING);
-    mToolBar[MainType::Setting] = mMainView->addToolBar(STRING_SETTING);
+    // mToolBar[MainType::Setting] = mMainView->addToolBar(STRING_SETTING);
 
     QAction *actionDevPath = new QAction(QIcon::fromTheme("actionDevPath"),
                                                         STRING_DEFAULT_PATH,
@@ -303,7 +303,19 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 
-#if !defined(USE_DEMO)
+    QAction *actionVsmPath = new QAction(QIcon::fromTheme("actionVsmPath"),
+                                                        STRING_VSM_PATH,
+                                                        this);
+    if (actionVsmPath) {
+        actionVsmPath->setStatusTip(STRING_VSM_PATH_TIP);
+        mMenu[MainType::Setting]->addAction(actionVsmPath);
+        // mToolBar[MainType::Setting]->addAction(actionVsmPath);
+        connect(actionVsmPath, &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant());
+        });
+    }
+
+#if 0   // !defined(USE_DEMO)
     QAction *actionNodePath = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,
                                                         this);
@@ -316,18 +328,6 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 #endif
-
-    QAction *actionVsmPath = new QAction(QIcon::fromTheme("actionVsmPath"),
-                                                        STRING_VSM_PATH,
-                                                        this);
-    if (actionVsmPath) {
-        actionVsmPath->setStatusTip(STRING_VSM_PATH_TIP);
-        mMenu[MainType::Setting]->addAction(actionVsmPath);
-        // mToolBar[MainType::Setting]->addAction(actionVsmPath);
-        connect(actionVsmPath, &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant());
-        });
-    }
 
 
 
@@ -356,7 +356,7 @@ void GuiMenu::drawMenuSetting() {
 
 void GuiMenu::drawMenuReport() {
     mMenu[MainType::Report] = mMainView->menuBar()->addMenu(STRING_REPORT);
-    mToolBar[MainType::Report] = mMainView->addToolBar(STRING_REPORT);
+    // mToolBar[MainType::Report] = mMainView->addToolBar(STRING_REPORT);
 
     QAction *actionReportResult = new QAction(QIcon::fromTheme("actionReportResult"),
                                                         STRING_RESULT,
@@ -385,7 +385,7 @@ void GuiMenu::drawMenuReport() {
 
 void GuiMenu::drawMenuRun() {
     mMenu[MainType::Run] = mMainView->menuBar()->addMenu(STRING_RUN);
-    mToolBar[MainType::Run] = mMainView->addToolBar(STRING_RUN);
+    // mToolBar[MainType::Run] = mMainView->addToolBar(STRING_RUN);
 
     QAction *actionGenTC = new QAction(QIcon::fromTheme("actionGenTC"),
                                                         STRING_GENERATE_TC,
@@ -455,7 +455,7 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 
     static QPushButton* defaultPath = nullptr;
     if (defaultPath == nullptr) {
-        defaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(400, 25, 500, 30), styleInfo);
+        defaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(350, 25, 500, 30), styleInfo);
         connect(defaultPath, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
         });
@@ -463,6 +463,7 @@ void GuiMenu::drawMenuEtc(const bool& update) {
     QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath);
     defaultPath->setText(QString("Path : %1").arg(path.toString()));
 
+#if !defined(USE_DEMO)
     if (update == false) {
         static QPushButton* lastFile = nullptr;
         if (lastFile == nullptr) {
@@ -474,7 +475,6 @@ void GuiMenu::drawMenuEtc(const bool& update) {
             });
         }
 
-#if 1
         static QPushButton* excelOpen = nullptr;
         if (excelOpen == nullptr) {
             excelOpen = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(1060, 25, 50, 30), styleInfo);
@@ -484,8 +484,8 @@ void GuiMenu::drawMenuEtc(const bool& update) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeTest, QVariant());
             });
         }
-#endif
     }
+#endif
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {

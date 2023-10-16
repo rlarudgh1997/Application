@@ -4,9 +4,9 @@
 #include "CommonEnum.h"
 #include "ControlManager.h"
 #include "ConfigSetting.h"
-//#include "CommonUtil.h"
 #include "CommonResource.h"
 #include "CommonPopup.h"
+
 
 
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
@@ -132,61 +132,88 @@ void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
     QStringList vsmList = QStringList();
     QVariantList selectModule = (updateModule.size() > 0) ? (updateModule)
                                 : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
-    if (selectModule.size() > 0) {
-        QStringList vsmAll = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule;
-        foreach(const auto& moudleName, selectModule) {
-            foreach(const auto& vsmInfo, vsmAll) {
-                if (vsmInfo.contains(moudleName.toString())) {
-                    vsmList.append(vsmInfo);
-                }
-            }
-        }
-        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
-    } else {
-        QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
-        QStringList vsmFile({"/CLU_VSM_CV_EV.Vehicle.CV.vsm", "/CLU_VSM_CV_FCEV.Vehicle.CV.vsm",
-                                                                "/CLU_VSM_CV_ICV.Vehicle.CV.vsm"});
-        QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
+    QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+    QVariantList vsmFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddress).toList();
+    QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
+    bool fileNotFound = (vsmFile.size() == 0);
 
-        foreach(const auto& file, vsmFile) {
-            QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + file);
-            QStringList list = QStringList();
-            foreach(QString lineStr, readData) {
-                if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
-                    lineStr.remove(" ");
-                    lineStr.remove("-");
-                    lineStr.remove(":");
-                    list.append(lineStr);
-                    vsmList.append(lineStr);
-                }
-            }
-            vsmInfo[vsmInfo.size()].append(list);
-        }
-
-        for (int index = 0; index < vsmList.size(); index++) {
-            QString vsmSignal = vsmList[index];
-            QString vehicleType = QString();
-            for (int listIndex = 0; listIndex < vsmInfo.size(); listIndex++) {
-                if (vsmInfo[listIndex].contains(vsmSignal)) {
-                    if (vehicleType.size() > 0) {
-                        vehicleType.append(", ");
-                    }
-
-                    if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeEV)) {
-                        vehicleType.append("EV");
-                    } else if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeFCEV)) {
-                        vehicleType.append("FCEV");
-                    } else {
-                        vehicleType.append("ICV");
-                    }
-                }
-            }
-            vsmList[index] = QString("%1\t%2").arg(vsmSignal).arg(vehicleType);
+    foreach(const auto& file, vsmFile) {
+        QFile filePath = QString("%1/%2").arg(vsmPath.toString()).arg(file.toString());
+        if (filePath.exists() == false) {
+            fileNotFound = true;
+            break;
         }
     }
-    vsmList.sort();
-    // qSort(vsmList);
+
+    if (fileNotFound) {
+        ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+        QVariantList text = QVariantList({STRING_POPUP_FILE_NOT_EXIST, STRING_POPUP_FILE_NOT_EXIST_TIP,
+                                            STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
+        QVariant popupData = QVariant();
+        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::FileNotExist, isHandler(), popupData,
+                                                                                        QVariant(text));
+        if (button == ivis::common::PopupButton::Confirm) {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeSettingVsmPath);
+        }
+        return;
+    }
+
+    foreach(const auto& file, vsmFile) {
+        QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + "/" + file.toString());
+        QStringList list = QStringList();
+        foreach(QString lineStr, readData) {
+            if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
+                lineStr.remove(" ");
+                lineStr.remove("-");
+                lineStr.remove(":");
+                list.append(lineStr);
+                vsmList.append(lineStr);
+            }
+        }
+        vsmInfo[vsmInfo.size()].append(list);
+    }
+
+    for (int index = 0; index < vsmList.size(); index++) {
+        QString vsmSignal = vsmList[index];
+        QString vehicleType = QString();
+        for (int listIndex = 0; listIndex < vsmInfo.size(); listIndex++) {
+            if (vsmInfo[listIndex].contains(vsmSignal)) {
+                if (vehicleType.size() > 0) {
+                    vehicleType.append(", ");
+                }
+
+                if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeEV)) {
+                    vehicleType.append("EV");
+                } else if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeFCEV)) {
+                    vehicleType.append("FCEV");
+                } else {
+                    vehicleType.append("ICV");
+                }
+            }
+        }
+        vsmList[index] = QString("%1\t%2").arg(vsmSignal).arg(vehicleType);
+    }
+    vsmList.sort();    // qSort(vsmList);
+
+
+    qDebug() << "Module :" << selectModule;
+    if (selectModule.size() > 0) {
+        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule;
+        QStringList vsmTemp = QStringList();
+        foreach(const auto& moudleName, selectModule) {
+            foreach(const auto& vsmInfo, vsmList) {
+                if (vsmInfo.contains(moudleName.toString())) {
+                    vsmTemp.append(vsmInfo);
+                }
+            }
+        }
+        vsmList = vsmTemp;
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
+    } else {
+        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll;
+    }
+
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNodeAddress);
     updateDataHandler(updateType, QVariant(vsmList), true);

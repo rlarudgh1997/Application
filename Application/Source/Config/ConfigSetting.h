@@ -51,6 +51,7 @@ private:
 
 signals:
     void signalConfigChanged(const int& type, const QVariant& value);
+    void signalUpdateWindowTitle(const QString& title);
 
 
 private:
