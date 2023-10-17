@@ -313,7 +313,7 @@ void GuiMenu::drawMenuSetting() {
 
 
 
-#if 0
+#if 1
     QAction *actionNodePath = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,
                                                         this);
