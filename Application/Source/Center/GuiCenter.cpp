@@ -68,7 +68,7 @@ void GuiCenter::drawDisplayDepth0() {
                                             QString("background-color: white; color: black; font: bold; font-size:12px"));
         mSelectModuleButton->setText("Select\nModule");
         connect(mSelectModuleButton, &QPushButton::clicked, [=]() {
-            updateDisplaySelectModule();
+            createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant());
         });
     }
 
@@ -372,28 +372,31 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
     }
 }
 
+void GuiCenter::updateDisplaySelectModule(const bool& show) {
+    if (show) {
+        if (mSelectModule == nullptr) {
+            mSelectModule = new SelectModuleDialog(isHandler()->getScreen(),
+                        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList());
+            mSelectModule->updateSelectModule(
+                        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList());
 
-void GuiCenter::updateDisplaySelectModule() {
-    qDebug() << "updateDisplaySelectModule";
-    QStringList moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeModuleList).toStringList();
-
-    if (mSelectModule == nullptr) {
-        mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList);
-        connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
-            mSelectModule->hide();
-            QVariantList moduleSelect = QVariantList();
-            foreach(const auto& select, selectModule) {
-                moduleSelect.append(QVariant(select.second));
-            }
-            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
-        });
-        connect(mSelectModule, &QDialog::finished, [=]() {
-            disconnect(mSelectModule);
-            delete mSelectModule;
-            mSelectModule = nullptr;
-        });
+            connect(mSelectModule, &SelectModuleDialog::signalModuleSelected,
+                                                            [=](const QList<QPair<int, QString>>& selectModule) {
+                mSelectModule->hide();
+                QVariantList moduleSelect = QVariantList();
+                foreach(const auto& select, selectModule) {
+                    moduleSelect.append(QVariant(select.second));
+                }
+                createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
+            });
+            connect(mSelectModule, &QDialog::finished, [=]() {
+                disconnect(mSelectModule);
+                delete mSelectModule;
+                mSelectModule = nullptr;
+            });
+        }
+        mSelectModule->show();
     }
-    mSelectModule->show();
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -418,9 +421,12 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll :
-        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule : {
+        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll : {
             updateDisplayNodeAddress(type);
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule : {
+            updateDisplaySelectModule(value.toBool());
             break;
         }
         default : {

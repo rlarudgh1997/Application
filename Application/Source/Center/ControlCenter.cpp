@@ -49,7 +49,8 @@ void ControlCenter::initNormalData() {
 
     QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
     QStringList moduleList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/DefaultModule.info");
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeModuleList, QVariant(moduleList), true);
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, moduleList);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(moduleList), true);
 }
 
 void ControlCenter::initControlData() {
@@ -127,13 +128,33 @@ void ControlCenter::updateConfigInfo() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
 }
 
-void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
-    int updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll;
-    QStringList vsmList = QStringList();
-    QVariantList selectModule = (updateModule.size() > 0) ? (updateModule)
-                                : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
-    QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
-    QVariantList vsmFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddress).toList();
+void ControlCenter::updateTestReport() {
+    for (int index = ivis::common::ReportTypeEnum::ReportTypeResult;
+                                                    index < ivis::common::ReportTypeEnum::ReportTypeAll; index++) {
+        int configStart = ConfigInfo::ConfigTypeReportResult;
+        int configEnd = ConfigInfo::ConfigTypeReportResultExcel;
+        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo;
+
+        if (index == ivis::common::ReportTypeEnum::ReportTypeCoverage) {
+            configStart = ConfigInfo::ConfigTypeReportCoverage;
+            configEnd = ConfigInfo::ConfigTypeReportCoverageBranch;
+            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo;
+        }
+
+        QVariantList reportData = QVariantList();
+        for (int configType = configStart; configType <= configEnd; configType++) {
+            QVariant configValue = ConfigSetting::instance().data()->readConfig(configType);
+            reportData.append(QVariant(QVariantList({configType, configValue})));
+            // qDebug() << "readConfig :" << configType << configValue;
+        }
+        updateDataHandler(propertyType, QVariant(reportData));
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, true, true);
+}
+
+bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile) {
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
     bool fileNotFound = (vsmFile.size() == 0);
 
@@ -155,8 +176,14 @@ void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
         if (button == ivis::common::PopupButton::Confirm) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeSettingVsmPath);
         }
-        return;
     }
+
+    return fileNotFound;
+}
+
+QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVariantList& vsmFile) {
+    QStringList vsmList = QStringList();
+    QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
 
     foreach(const auto& file, vsmFile) {
         QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + "/" + file.toString());
@@ -195,10 +222,14 @@ void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
     }
     vsmList.sort();    // qSort(vsmList);
 
+    return vsmList;
+}
 
-    qDebug() << "Module :" << selectModule;
+QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmList) {
+    QStringList vsmMatchingList = vsmList;
+    QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
+
     if (selectModule.size() > 0) {
-        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule;
         QStringList vsmTemp = QStringList();
         foreach(const auto& moudleName, selectModule) {
             foreach(const auto& vsmInfo, vsmList) {
@@ -207,42 +238,47 @@ void ControlCenter::updateNodeAddress(const QVariantList& updateModule) {
                 }
             }
         }
-        vsmList = vsmTemp;
-        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
-    } else {
-        updateType = ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll;
+        vsmMatchingList = vsmTemp;
     }
 
+    return vsmMatchingList;
+}
+
+void ControlCenter::updateNodeAddress(const bool& check) {
+    QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+    QVariantList vsmFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddress).toList();
+
+    if ((check) && (checkNodeAddress(vsmPath, vsmFile))) {
+        qDebug() << "Fail to vsm file not found.";
+        return;
+    }
+
+    QStringList vsmListAll = isNodeAddressAll(vsmPath, vsmFile);
+    QStringList vsmList = isNodeAddressMatchingModule(vsmListAll);
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNodeAddress);
-    updateDataHandler(updateType, QVariant(vsmList), true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
+
+    updateSelectModueList(false);
 }
 
-void ControlCenter::updateTestReport() {
-    for (int index = ivis::common::ReportTypeEnum::ReportTypeResult;
-                                                    index < ivis::common::ReportTypeEnum::ReportTypeAll; index++) {
-        int configStart = ConfigInfo::ConfigTypeReportResult;
-        int configEnd = ConfigInfo::ConfigTypeReportResultExcel;
-        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo;
+void ControlCenter::updateSelectModueList(const bool& show) {
+    QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toStringList();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, show, true);
+}
 
-        if (index == ivis::common::ReportTypeEnum::ReportTypeCoverage) {
-            configStart = ConfigInfo::ConfigTypeReportCoverage;
-            configEnd = ConfigInfo::ConfigTypeReportCoverageBranch;
-            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo;
-        }
-
-        QVariantList reportData = QVariantList();
-        for (int configType = configStart; configType <= configEnd; configType++) {
-            QVariant configValue = ConfigSetting::instance().data()->readConfig(configType);
-            reportData.append(QVariant(QVariantList({configType, configValue})));
-            // qDebug() << "readConfig :" << configType << configValue;
-        }
-        updateDataHandler(propertyType, QVariant(reportData));
+void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule) {
+    if (selectModule.size() > 0) {
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, selectModule);
     }
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, true, true);
+
+    if (update) {
+        updateNodeAddress(false);
+    } else {
+        updateSelectModueList(false);
+    }
 }
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
@@ -295,8 +331,12 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             updateTestReport();
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeShowModule : {
+            updateSelectModueList(true);
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeSelectModule : {
-            updateNodeAddress(value.toList());
+            updateSelectModueNodeAddress(true, value.toList());
             break;
         }
         default : {
@@ -317,7 +357,11 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
-            updateNodeAddress(QVariantList());
+            updateNodeAddress(true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSelectModule : {
+            updateSelectModueNodeAddress(false, eventValue.toList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingTestReport :

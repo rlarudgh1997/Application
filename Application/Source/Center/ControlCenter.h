@@ -21,8 +21,13 @@ private:
     explicit ControlCenter();
 
     void updateConfigInfo();
-    void updateNodeAddress(const QVariantList& updateModule);
     void updateTestReport();
+    bool checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile);
+    QStringList isNodeAddressAll(const QVariant& vsmPath, const QVariantList& vsmFile);
+    QStringList isNodeAddressMatchingModule(const QStringList& vsmList);
+    void updateNodeAddress(const bool& check);
+    void updateSelectModueList(const bool& show);
+    void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
 
 
 protected:

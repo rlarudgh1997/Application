@@ -1,5 +1,5 @@
-#ifndef COMMON_ENUM_H
-#define COMMON_ENUM_H
+#ifndef COMMON_ENUM_CLUSTER_H
+#define COMMON_ENUM_CLUSTER_H
 
 #include "CommonDefine.h"
 #include <QObject>
@@ -382,4 +382,4 @@ public:
 
 
 
-#endif  // COMMON_ENUM_H
+#endif  // COMMON_ENUM_CLUSTER_H

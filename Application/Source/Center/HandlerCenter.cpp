@@ -33,7 +33,9 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo,                        QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll,                    QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule,                 QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeModuleList,                        QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList,                     QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule,                QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule,                  QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo,              QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo,            QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType,                    QVariant(0));

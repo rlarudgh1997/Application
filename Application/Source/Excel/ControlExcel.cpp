@@ -479,14 +479,14 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                 }
 
                 if (moduleTemp.size() == 2) {
-                    qDebug() << "1 Parser :" << moduleTemp;
                     module = moduleTemp[1].split("/");
                 }
 
                 if (module.size() == 2) {
-                    qDebug() << "2 Parser :" << module;
-                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule,
-                                                                                    QVariant(QVariantList({module[0]})));
+                    QVariant selectModuleList = QVariant(QVariantList({module[0]}));
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, selectModuleList);
+                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter,
+                                                        ivis::common::EventTypeEnum::EventTypeSelectModule, selectModuleList);
                 }
             }
             break;
