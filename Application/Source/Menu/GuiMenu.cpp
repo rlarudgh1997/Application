@@ -28,17 +28,13 @@ GuiMenu::GuiMenu(AbstractHandler* handler) : AbstractGui(handler) {
 
 void GuiMenu::drawDisplayDepth0() {
     drawMenuFile();
-#if !defined(USE_DEMO)
     drawMenuEdit();
-#endif
     drawMenuView();
     drawMenuSetting();
 #if !defined(USE_VIEW_REPORT)
     drawMenuReport();
 #endif
-#if !defined(USE_DEMO)
     drawMenuRun();
-#endif
     drawMenuHelp();
     drawMenuEtc(false);
 }
@@ -315,7 +311,9 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 
-#if 0   // !defined(USE_DEMO)
+
+
+#if 0
     QAction *actionNodePath = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,
                                                         this);
@@ -328,9 +326,6 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 #endif
-
-
-
 #if 0
     TooBar - Push Button
     QPushButton* buttonTestResult = new QPushButton(QString("TestResult"));

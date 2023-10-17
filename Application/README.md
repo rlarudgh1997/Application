@@ -2,8 +2,30 @@
 # [Repo 정보]
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
-# [Docker]
+# [SFC 정보]
+git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
+
+# [Docker 정보]
 git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
+
+
+
+
+=====================================================================
+# [Docker 사용법]
+- VMware 에서 사용시
+	sudo apt-get update
+	docker_build.sh
+- 도커 실행 준비
+	sudo service docker start
+		5ivis!
+	sudo chmod -R 777 /var/run/docker.sock
+
+- 도커 실행
+	~/900_Code/sfc-docker-jis/run_sfc_docker.sh
+	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
+
+
 =====================================================================
 # ToDo
 - Open Excel
