@@ -61,17 +61,16 @@ public:
         });
 
         mValueDispaly = ivis::common::createWidget<QLabel>(parent, false, QRect(230, posY, 1000, height), mStyleNormal);
+        mValueDispaly->setFrameShape(QLabel::Shape::Panel);
         mValueDispaly->setIndent(2);
         mValueDispaly->setWordWrap(true);
         mValueDispaly->setText(value);
-        ivis::common::widgetVisible(mValueDispaly, true);
-
+        mValueDispaly->show();
 
         mValueEdit = ivis::common::createWidget<QLineEdit>(parent, false, QRect(mValueDispaly->geometry()),
                                                                     QString("color: blue; font-size: 15px"));
         mValueEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         mValueEdit->setText(value);
-        ivis::common::widgetVisible(mValueEdit, true);
         connect(mValueEdit, &QLineEdit::returnPressed, [=]() {
             editValue(type, false);
         });
