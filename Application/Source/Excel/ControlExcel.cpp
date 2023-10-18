@@ -518,16 +518,20 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
         return;
     }
 
+    ivis::common::PopupButton button = ivis::common::PopupButton::OK;
     QVariant savefilePath = (saveAs) ? (QVariant())
                         : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
     if (savefilePath.toString().size() == 0) {
         QVariant filePath = QVariant();
-        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath)
-                                                                                    == ivis::common::PopupButton::OK) {
+        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath);
+        if (button == ivis::common::PopupButton::OK) {
             savefilePath = filePath;
         }
     }
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave, savefilePath, true);
+
+    if (button == ivis::common::PopupButton::OK) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave, savefilePath, true);
+    }
 }
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
