@@ -108,6 +108,7 @@ private:
         QString style = QString();
         if (editState) {
             mNameButton->setStyleSheet(mStyleEdit);
+            mValueDispaly->hide();
             mValueEdit->show();
         } else {
             QString value = mValueEdit->text();
@@ -116,6 +117,7 @@ private:
                 emit signalValueChanged(type, value);
             }
             mNameButton->setStyleSheet(mStyleNormal);
+            mValueDispaly->show();
             mValueEdit->hide();
         }
         mEditState =!editState;
