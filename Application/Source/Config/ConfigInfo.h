@@ -88,7 +88,9 @@ private:
                                                         QVariant(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y,
                                                                         SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath",
-                                                        QVariant(QApplication::applicationDirPath() + QString("/SFC")));
+                                                        QVariant(QApplication::applicationDirPath()
+                                                                                            + QString("/../../model/SFC/CV")));
+
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>("ConfigTypeNodeAddressPath",
                                                         QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>("ConfigTypeVsmPath",

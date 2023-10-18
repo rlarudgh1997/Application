@@ -311,9 +311,7 @@ void GuiMenu::drawMenuSetting() {
         });
     }
 
-
-
-#if 1
+#if 0
     QAction *actionNodePath = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,
                                                         this);
@@ -450,7 +448,7 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 
     static QPushButton* defaultPath = nullptr;
     if (defaultPath == nullptr) {
-        defaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(350, 25, 500, 30), styleInfo);
+        defaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(350, 25, 600, 30), styleInfo);
         connect(defaultPath, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
         });
