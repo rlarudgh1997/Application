@@ -88,6 +88,7 @@ public:
     void initStyle() {
         mNameButton->setStyleSheet(mStyleNormal);
         mValueDispaly->setStyleSheet(mStyleNormal);
+        mValueDispaly->show();
         mValueEdit->setText(mValueDispaly->text());
         mValueEdit->hide();
         mEditState = true;
