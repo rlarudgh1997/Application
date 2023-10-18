@@ -71,6 +71,7 @@ public:
                                                                     QString("color: blue; font-size: 15px"));
         mValueEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         mValueEdit->setText(value);
+        mValueEdit->hide();
         connect(mValueEdit, &QLineEdit::returnPressed, [=]() {
             editValue(type, false);
         });
