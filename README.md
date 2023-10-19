@@ -1,12 +1,40 @@
 =====================================================================
 # [Repo 정보]
-git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
+	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 # [SFC 정보]
-git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
 
 # [Docker 정보]
-git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
+	# git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
+
+# [다른 PR fetch 방법 : PR 번호 65 를 ivis.kkh 브랜치로 fetch]
+	- 이경우 다른 사람이 요청한 PR 정보의 REPO 접근 권한이 없는 경우에 fetch 하여 사용하는 방법임
+	git fetch origin refs/pull-requests/65/from:ivis.kkh
+	git checkout ivis.kkh
+
+=====================================================================
+# [Bitbucket 사용]
+- Repo 개인 추가 : bitbucket 내부(https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/browse)에서 Create fork 후 생성
+	git clone https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git --recursive
+	git checkout feature/EXNCP-38725-tc_creator-app
+	# git remote add ivis.kkh https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git
+	# git checkout ivis.kkh
+
+- Log
+	ENH: TC_Creator Application Implement
+
+	Description:
+ 	- 설명
+
+	Jira: EXNCP-999999999999
+
+
+- Git Push
+	git push ivis.kkh refs/heads/feature/EXNCP-38725-tc_creator-app
+
 
 =====================================================================
 # [Docker 사용법]
@@ -19,6 +47,8 @@ git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
 	sudo chmod -R 777 /var/run/docker.sock
 
 - 도커 실행
+	docker ps
+	docker stop 01e1bb164ee8
 	~/900_Code/sfc-docker-jis/run_sfc_docker.sh
 	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
 
@@ -151,7 +181,6 @@ git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
 
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
-
 
 
 =====================================================================

@@ -29,7 +29,6 @@ echo "==========================================================================
 echo
 echo
 
-#/opt/fsl-imx-xwayland/4.19-warrior
 function setEnvironments(){
 	unset LD_LIBRARY_PATH
 
@@ -38,7 +37,7 @@ function setEnvironments(){
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
-		export PATH=$QT_PATH:$PATH
+		# export PATH=$QT_PATH:$PATH
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit
