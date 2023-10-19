@@ -8,7 +8,6 @@
 # [Docker 정보]
 	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
 	# git clone https://repo.ccos.dev/scm/~janginsang_ivis.ai/sfc-docker-jis.git
-	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
 
 # [다른 PR fetch 방법 : PR 번호 65 를 ivis.kkh 브랜치로 fetch]
 	- 이경우 다른 사람이 요청한 PR 정보의 REPO 접근 권한이 없는 경우에 fetch 하여 사용하는 방법임
@@ -49,7 +48,7 @@
 - 도커 실행
 	docker ps
 	docker stop 01e1bb164ee8
-	~/900_Code/sfc-docker-jis/run_sfc_docker.sh
+	~/900_Code/sfc-docker/run_sfc_docker.sh
 	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
 
 

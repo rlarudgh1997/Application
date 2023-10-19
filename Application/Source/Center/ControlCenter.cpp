@@ -47,10 +47,16 @@ void ControlCenter::initCommonData(const int& currentMode) {
 void ControlCenter::initNormalData() {
     resetControl(false);
 
-    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
-    QStringList moduleList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/DefaultModule.info");
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, moduleList);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(moduleList), true);
+    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+    QDir sfcDirectory(path);
+    QStringList sfcModules = sfcDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    if (sfcModules.size() == 0) {
+        path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
+        sfcModules = ivis::common::FileInfo::readFile(path + "/DefaultModule.info");
+    }
+    // qDebug() << "sfc modules load path :" << sfcModules.size() << path;
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, sfcModules);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(sfcModules), true);
 }
 
 void ControlCenter::initControlData() {
