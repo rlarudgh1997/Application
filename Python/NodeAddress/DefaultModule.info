@@ -13,7 +13,6 @@ Brake_Air
 Brake_System_Malfunction
 Cab_Tilting
 CNG_Fuel_System_CV
-comSFCTC
 Cooling_System
 CruiseControl_CV
 Curb_Mode
@@ -57,11 +56,8 @@ Lamp_Fail_Warning_CV
 Lamp_Indicator_CV
 Luggage_Door
 LWS
-Memory_CV
-Memory_IGN_CV
 MIL_OBD_Lamp
 Over_Speed_Warning_CV
-Param_CV
 Parking_Brake_CV
 PDC
 Regenerative_Braking_System

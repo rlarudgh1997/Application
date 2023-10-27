@@ -442,6 +442,7 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
                 mSelectItem->setText(text);
             }
             mAutoComplete->hide();
+            // mAutoComplete->finished(true);
         });
         connect(mAutoComplete, &QDialog::finished, [=]() {
             disconnect(mAutoComplete);

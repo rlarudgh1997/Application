@@ -7,8 +7,9 @@ HEADERS += \
     $$PWD/CommonEnum.h\
     $$PWD/CommonPopup.h\
     $$PWD/CommonUtil.h\
+    $$PWD/CommonFunction.h\
     $$PWD/CommonResource.h\
 
 
-SOURCES += \
+#SOURCES += \
 #    $$PWD/CommonEnum.cpp \

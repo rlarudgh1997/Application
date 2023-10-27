@@ -2,6 +2,7 @@
 #define CONTROL_MENU_H
 
 #include "AbstractControl.h"
+#include "CommonUtil.h"
 
 // #include <QLoggingCategory>
 // Q_DECLARE_LOGGING_CATEGORY(C_TOP)
@@ -20,6 +21,10 @@ public:
 
 private:
     explicit ControlMenu();
+
+    void updateAllModueList(const QString& filter);
+    void updateSelectModueList(const int& type, const QVariantList& selectModule = QVariantList());
+    void excuteScript(const int& type, const QVariant& selectInfo);
 
 
 protected:
@@ -44,6 +49,8 @@ public slots:
 
 private:
     AbstractHandler* mHandler = nullptr;
+    QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
+    ivis::common::FileSystemWatcherThread* mWatcher = nullptr;
 };
 
 

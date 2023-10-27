@@ -89,6 +89,9 @@ public:
         PropertyTypeAllModuleList,
         PropertyTypeUpdateSelectModule,
         PropertyTypeShowSelectModule,
+        PropertyTypeSelectModuleOfGenTC,
+        PropertyTypeSelectModuleOfRunTC,
+        PropertyTypeTestResultInfo,
         PropertyTypeTestReportResultInfo,
         PropertyTypeTestReportCoverageInfo,
         PropertyTypeTestReportType,
@@ -194,6 +197,9 @@ public:
         EventTypeGenerateReport,
         EventTypeShowModule,
         EventTypeSelectModule,
+        EventTypeSelectModuleOfGenTC,
+        EventTypeSelectModuleOfRunTC,
+        EventTypeTestResultClick,
 
 
         EventTypeTest = 3000,

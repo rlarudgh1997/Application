@@ -412,8 +412,8 @@ bool ControlExcel::checkPythonLibrary() {
 
     if (checkLib == false) {
         ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
-        QVariantList text = QVariantList({STRING_POPUP_LIB, STRING_POPUP_CONFIRM,
-                                            STRING_POPUP_INSTALL, STRING_POPUP_CONFIRM});
+        QVariantList text = QVariantList({STRING_POPUP_LIB, STRING_POPUP_LIB_INSTALL_TIP,
+                                            STRING_POPUP_INSTALL, STRING_POPUP_CANCEL});
         QVariant popupData = QVariant();
         button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), popupData, QVariant(text));
         if (button == ivis::common::PopupButton::Install) {

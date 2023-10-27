@@ -17,7 +17,7 @@ class AbstractControl : public QObject {
 public:
     enum {
         AbstractTimerTypeInvalid = 0,
-        AbstractTimerStart ,
+        AbstractTimerStart,
     };
 
 public:

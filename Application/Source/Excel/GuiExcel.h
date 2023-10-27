@@ -34,24 +34,23 @@ public:
         setWindowFlag(Qt::WindowCloseButtonHint, false);
         setParent(parent);
         setModal(true);
+        setFocus();
 
         mInputeText = ivis::common::createWidget<QLineEdit>(this);
         mInputeText->setFocus();
         mSuggestionsList = ivis::common::createWidget<QListWidget>(this);
 
-        QVBoxLayout* layout = new QVBoxLayout(this);
-        layout->addWidget(mInputeText);
-        layout->addWidget(mSuggestionsList);
-
         QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();
         setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 900) * 0.5));
         setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - 500) * 0.5));
-        setRect.setWidth(900);
-        setRect.setHeight(500);
+        setFixedSize(QSize(900, 500));
         setGeometry(setRect);
-        setLayout(layout);
-        setFocus();
+
+        mLayout = new QVBoxLayout(this);
+        mLayout->addWidget(mInputeText);
+        mLayout->addWidget(mSuggestionsList);
+        setLayout(mLayout);
 
         updateSuggestionsList(QString());
 
@@ -62,8 +61,8 @@ public:
             emit signalAutoCompleteSelectedText(inputText());
         });
         connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem *item) {
-            emit signalAutoCompleteSelectedText(item->text());
             mInputeText->clear();
+            emit signalAutoCompleteSelectedText(item->text());
         });
     }
     QString inputText() {
@@ -83,7 +82,7 @@ public:
     }
 
 private:
-     void updateSuggestionsList(const QString& text) {
+    void updateSuggestionsList(const QString& text) {
         bool matching = (text.size() > 0);
 
         mSuggestionsList->clear();
@@ -97,7 +96,7 @@ private:
             }
         }
         mSuggestionsList->setCurrentRow(0);
-     }
+    }
 
 
 signals:
@@ -105,8 +104,9 @@ signals:
 
 
 private:
+    QVBoxLayout* mLayout = nullptr;
     QLineEdit* mInputeText = nullptr;
-    QListWidget* mSuggestionsList;
+    QListWidget* mSuggestionsList = nullptr;
     QStringList mAutoCompleteStringList;
 };
 

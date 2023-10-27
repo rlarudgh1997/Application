@@ -8,6 +8,7 @@
 #include <QCompleter>
 
 #include "GuiExcel.h"
+// #include "CommonFunction.h"
 
 
 QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
@@ -357,6 +358,7 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
             }
 
             mAutoComplete->hide();
+            // mAutoComplete->finished(true);
         });
         connect(mAutoComplete, &QDialog::finished, [=]() {
             disconnect(mAutoComplete);
@@ -375,10 +377,11 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
 void GuiCenter::updateDisplaySelectModule(const bool& show) {
     if (show) {
         if (mSelectModule == nullptr) {
-            mSelectModule = new SelectModuleDialog(isHandler()->getScreen(),
-                        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList());
-            mSelectModule->updateSelectModule(
-                        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList());
+            QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
+            QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);
+            bool allState = (moduleList.toStringList().size() == selectModule.toStringList().size());
+            mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList.toStringList(), allState);
+            mSelectModule->updateSelectModule(selectModule.toStringList());
 
             connect(mSelectModule, &SelectModuleDialog::signalModuleSelected,
                                                             [=](const QList<QPair<int, QString>>& selectModule) {
@@ -388,6 +391,7 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
                     moduleSelect.append(QVariant(select.second));
                 }
                 createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
+                // mSelectModule->finished(true);
             });
             connect(mSelectModule, &QDialog::finished, [=]() {
                 disconnect(mSelectModule);

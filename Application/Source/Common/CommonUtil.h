@@ -16,7 +16,9 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QThread>
-// #include <thread>
+#include <QFileSystemWatcher>
+#include <QMenu>
+#include <QPair>
 
 
 namespace ivis {
@@ -124,6 +126,36 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
     }
 }
 
+template <typename T1>
+inline void widgetVisible(T1* widget, const bool& visible = true) {
+    if (widget) {
+        if (visible) {
+            widget->show();
+            widget->raise();
+        } else {
+            widget->hide();
+        }
+    }
+}
+
+template <typename T1>
+inline void widgetStyleSheet(T1* widget, const QString& styleSheet) {
+    if (widget) {
+        if (styleSheet.size() > 0) {
+            widget->setStyleSheet(styleSheet);
+        }
+    }
+}
+
+template <typename T1>
+inline void widgetEnable(T1* widget, const bool& enable, const QString& color = QString()) {
+    if (widget) {
+        QString setStyleSheet = (color.size() == 0) ? ((enable) ? ("color: blue") : ("color: gray")) : (color);
+        widgetStyleSheet<T1>(widget, setStyleSheet);
+        widget->setEnabled(enable);
+    }
+}
+
 template <typename T1, typename T2>
 inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geometry = QRect(),
                                                                     const QString& styleSheet = QString()) {
@@ -131,26 +163,33 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
     if (geometry.isValid()) {
         widget->setGeometry(geometry);
     }
-    if (styleSheet.size() > 0) {
-        widget->setStyleSheet(styleSheet);
-    }
-    if (show) {
-        widget->show();
-    }
+    widgetStyleSheet<T1>(widget, styleSheet);
+    widgetVisible<T1>(widget, show);
     return widget;
 }
 
-template <typename T1>
-inline void widgetVisible(T1* widget, const bool& visible) {
-    if (widget) {
-        if (visible) {
-            widget->show();
-        } else {
-            widget->hide();
-        }
-        widget->raise();
-    }
-}
+// template <typename T1>
+// inline void deleteWidget(T1* widget) {
+//     if (widget) {
+//         disconnect(widget);
+//         delete widget;
+//         widget = nullptr;
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -184,17 +223,23 @@ public:
             currentPath.append(QApplication::applicationDirPath());
             currentPath.append("/SFC");
         }
-        return readFileInfo(currentPath, fileList);
+        return readFileListInfo(currentPath, fileList);
     }
     static QStringList readFile(const QString& filePath) {
-        return readFileData(filePath);
+        bool openError = false;
+        return readFileDataInfo(filePath, openError);
+    }
+    static QPair<bool, QStringList> readFileData(const QString& filePath) {
+        bool openError = false;
+        QStringList readData = readFileDataInfo(filePath, openError);
+        return QPair<bool, QStringList>(openError, readData);
     }
     static int writeFile(const QString& filePath, const QString& str) {
         return writeFileData(filePath, str);
     }
 
 private:
-    static QStringList readFileInfo(const QString& path, QFileInfoList& fileList) {
+    static QStringList readFileListInfo(const QString& path, QFileInfoList& fileList) {
         QStringList fileNames = QStringList();
         QDir directory(path);
         directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
@@ -211,9 +256,10 @@ private:
         qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
         return fileNames;
     }
-    static QStringList readFileData(const QString& filePath) {
+    static QStringList readFileDataInfo(const QString& filePath, bool& openError) {
         QStringList fileContent = QStringList();
         QFile file(filePath);
+        openError = false;
         // qDebug() << "filePath :" << filePath;
         if (file.open(QFile::ReadOnly | QFile::Text)) {
             QTextStream readData(&file);
@@ -228,6 +274,7 @@ private:
             } else {
                 qDebug() << "Fail to open error :" << filePath;
             }
+            openError = true;
         }
         return fileContent;
     }
@@ -302,17 +349,15 @@ class ExcuteProgramThread: public QObject {
     Q_OBJECT
 
 public:
-    ExcuteProgramThread() {
-        mUseProcess = false;
-    }
     explicit ExcuteProgramThread(const bool& useProcess) {
         mUseProcess = useProcess;
     }
     ~ExcuteProgramThread() {
-        join();
+        // join();
         qDebug() << "~ExcuteProgramThread()";
     }
     void setCommandInfo(const QString& cmd) {
+        QMutexLocker lock(&mMutex);
         mCommand = cmd;
     }
     void start() {
@@ -320,6 +365,12 @@ public:
         connect(mThread, &QThread::finished, this, &QObject::deleteLater);
         connect(mThread, &QThread::started, this, &ExcuteProgramThread::runThread);
         mThread->start();
+    }
+    void terminate() {
+        if (mProcess.state() != QProcess::ProcessState::NotRunning) {
+            mProcess.terminate();
+        }
+        join();
     }
 
 private:
@@ -332,24 +383,26 @@ private:
     void runThread() {
         int result = 0;
         QStringList log = QStringList();
+
+        emit signalExcuteProgramStarted();
+
         if (mUseProcess) {
-            QProcess process;
             QStringList splitCmd = mCommand.split(" ");
 
             if (splitCmd.size() == 0) {
-                 process.start(mCommand);
+                mProcess.start(mCommand);
             } else {
                 QString command = splitCmd.at(0);
                 QStringList arguments = QStringList();
                 for (int index = 1; index < splitCmd.size(); index++) {
                     arguments.append(splitCmd[index]);
                 }
-                process.start(command, arguments);
+                mProcess.start(command, arguments);
             }
 
-            if (process.waitForStarted()) {    // if (process.waitForFinished()) {
-                while (process.waitForReadyRead()) {
-                    QString readAllData = process.readAll();
+            if (mProcess.waitForStarted()) {    // if (mProcess.waitForFinished()) {
+                while (mProcess.waitForReadyRead()) {
+                    QString readAllData = mProcess.readAll();
                     QString logData = QString();
                     foreach(const QString& data, readAllData) {
                         if (data.compare("\n") == false) {
@@ -367,15 +420,18 @@ private:
         } else {
             result = system(mCommand.toLatin1());
         }
-        qDebug() << "ExcuteProgramThread::start() ->" << result;
+        qDebug() << "ExcuteProgramThread::runThread() -> Result :" << result << "Command :" << mCommand;
         emit signalExcuteProgramCompleted(result == 0);
     }
 
 signals:
+    void signalExcuteProgramStarted();
     void signalExcuteProgramCompleted(const bool& result);
 
 private:
     QThread* mThread = new QThread();
+    QMutex mMutex;
+    QProcess mProcess;
     bool mUseProcess = true;
     QString mCommand = QString();
 };
@@ -386,7 +442,7 @@ class CheckLib : public QObject {
 public:
     CheckLib() {}
     ~CheckLib() {
-        join();
+        // join();
     }
     void setLibInfo(const QStringList& libInfo) {
         foreach(const auto info, libInfo) {
@@ -439,6 +495,65 @@ private:
 };
 
 
+class FileSystemWatcherThread : public QObject {
+    Q_OBJECT
+
+public:
+    FileSystemWatcherThread() {
+    }
+    explicit FileSystemWatcherThread(const QString& filePath) {
+        mWatcherFile = filePath;
+    }
+    ~FileSystemWatcherThread() {
+        // join();
+        qDebug() << "~FileSystemWatcherThread()";
+    }
+    void start() {
+        this->moveToThread(mThread);
+        connect(mThread, &QThread::finished, this, &QObject::deleteLater);
+        connect(mThread, &QThread::started, this, &FileSystemWatcherThread::runThread);
+        mThread->start();
+
+        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString &path) {
+            QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
+            if (readData.first) {
+                emit signalWatcherFileError(true);
+            } else {
+                if (readData.second.size() > 0) {
+                    emit signalWatcherFileDataChanged(readData.second);
+                }
+            }
+        });
+    }
+    void clear() {
+    }
+
+private:
+    void join() {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
+        }
+    }
+    void runThread() {
+        while (mWatcher.addPath(mWatcherFile) == false) {
+            qDebug() << "\t Fail to watcher file :" << mWatcherFile;
+            QThread::msleep(1000);
+        }
+        qDebug() << "\t Watcher file :" << mWatcherFile;
+    }
+
+signals:
+    void signalWatcherFileError(const bool& error);
+    void signalWatcherFileChanged(const QString& filePath);
+    void signalWatcherFileDataChanged(const QStringList& fileData);
+
+private:
+    QThread* mThread = new QThread();
+    QFileSystemWatcher mWatcher;
+    QString mWatcherFile = QString();
+    bool mRunThread = true;
+};
 
 
 }  // end of namespace common

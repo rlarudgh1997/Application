@@ -12,6 +12,7 @@
 # [다른 PR fetch 방법 : PR 번호 65 를 ivis.kkh 브랜치로 fetch]
 	- 이경우 다른 사람이 요청한 PR 정보의 REPO 접근 권한이 없는 경우에 fetch 하여 사용하는 방법임
 	git fetch origin refs/pull-requests/65/from:ivis.kkh
+	git fetch origin refs/pull-requests/3367/from:ivis.kkh
 	git checkout ivis.kkh
 
 =====================================================================
@@ -36,20 +37,44 @@
 
 
 =====================================================================
-# [Docker 사용법]
+# [SFC Docker 사용법]
+- Repo : SFC Docker
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
+
+	: 계정 정보 수정 : ~/.git-credentials 참조
+		git-credentials
+			https://kkh1997%40ivis.ai:Kyeongho2003%21@repo.ccos.dev
+
+	: 도커 설치 가이드
+		https://synergy.ccos.dev/display/EXNCP/Alton+Docker
+
 - VMware 에서 사용시
 	sudo apt-get update
 	docker_build.sh
+
 - 도커 실행 준비
 	sudo service docker start
 		5ivis!
 	sudo chmod -R 777 /var/run/docker.sock
+
+- 도커 이미지 확인 & 삭제
+	docker images
+	docker rmi -f IMAGE_ID
 
 - 도커 실행
 	docker ps
 	docker stop 01e1bb164ee8
 	~/900_Code/sfc-docker/run_sfc_docker.sh
 	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
+	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/sh
+
+
+- 도커 명령어
+	: 도커 REPO/TAG 변경 : IMAGE_ID (5d94b61a2ffe)
+		docker tag 5d94b61a2ffe artifacts.ccos.dev/sfc-docker/sfc-docker:latest
+	: 도커 이미지 삭제 : IMAGE_ID (5d94b61a2ffe), REPO (artifacts.ccos.dev/sfc-docker/sfc-docker)
+		docker rmi -f 5d94b61a2ffe
+		docker rmi -f artifacts.ccos.dev/sfc-docker/sfc-docker:latest
 
 
 =====================================================================

@@ -38,7 +38,6 @@
 #define USE_VIEW_REPORT                            // Test Report 메뉴 View 하위 메뉴로 설정
 
 // Excel 기능 관련
-#define USE_AUTO_COMPLETE_NORMAL                   // Excel Text 자동완성 기능 초기 버전 사용
 // #define USE_PYTHON_LIB_CHECK_READ_WRITE            // Excel Read/Write 동작시 파이썬 라이브러리 존재 유무로 동작 하도록 사용
 
 

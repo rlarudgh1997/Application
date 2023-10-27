@@ -86,6 +86,7 @@
 #define STRING_POPUP_INSTALL                       QString("Install")
 #define STRING_POPUP_CONFIRM                       QString("OK")
 #define STRING_POPUP_LIB                           QString("Library")
+#define STRING_POPUP_LIB_INSTALL_TIP               QString("Would you like to install Python-related libraries?")
 #define STRING_POPUP_CELL_COLUMN                   QString("Select merge/split cells")
 #define STRING_POPUP_NO_INSTALL_LIB_TIP            QString("Python-related libraries are not installed.")
 #define STRING_POPUP_NOW_INSTALLING_TIP            QString("Python-related libraries are being installed.")
