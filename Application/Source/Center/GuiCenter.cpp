@@ -9,6 +9,11 @@
 
 #include "GuiExcel.h"
 // #include "CommonFunction.h"
+#if 0
+#include "ConfigSetting.h"
+#include <QtWidgets>
+#include <QtWebEngineWidgets/QWebEngineView>
+#endif
 
 
 QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
@@ -207,6 +212,20 @@ void GuiCenter::updateDisplayConfigInfo() {
         }
         index++;
     }
+
+
+
+
+#if 0
+    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+    QString htmlFilePath = path + "/HTML/gtest_report.html";
+    qDebug() << "htmlFilePath :" << htmlFilePath;
+
+    static QWebEngineView* webView = new QWebEngineView(mConfigWidget);
+    webView->setGeometry(QRect(0, 100, 800, 800));
+    webView->setUrl(QUrl::fromLocalFile(htmlFilePath));
+    webView->show();
+#endif
 }
 
 void GuiCenter::updateDisplayTestReport() {

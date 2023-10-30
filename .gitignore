@@ -8,7 +8,7 @@ debug
 deploy_target
 deploy_x86
 SFC
-#.vscode
+.vscode
 .qmake.stash
 
 *.m4a

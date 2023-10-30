@@ -6,11 +6,12 @@ CONFIG += c++17
 
 QT += \
     widgets\
+#    xml webenginewidgets\
 #    core\
 #    gui\
 #    serialbus\
 #    network\
-#    xml\
+
 
 
 # Define

@@ -196,7 +196,8 @@ def readFromText(path, saveFilePath) :
 
             for columnIndex in range(0, columnCount):
                 for rowIndex in range(0, rowCount):
-                    readText = read.iloc[rowIndex][columnIndex]
+                    readText = read.iloc[rowIndex, columnIndex]
+
                     if type(readText) == str:
                         startText = readText.split(excelMergeTextStart)
                         endText = readText.split(excelMergeTextEnd)
@@ -222,9 +223,9 @@ def readFromText(path, saveFilePath) :
         if True:    # "ExcelMergeText" -> "" 으로 변경
             for rowIndex in range(0, rowCount):
                 for columnIndex in range(0, columnCount):
-                    # readText = read.iloc[rowIndex][columnIndex]
+                    readText = read.iloc[rowIndex, columnIndex]
                     # readText = read.loc[rowIndex][columnIndex]
-                    readText = read.iat[rowIndex, columnIndex]
+                    # readText = read.iat[rowIndex, columnIndex]
                     # readText = read.at[rowIndex][columnIndex]
                     text = ""
                     if type(readText) == str:
@@ -248,20 +249,22 @@ def readFromText(path, saveFilePath) :
                         typeText = "Blank "
                         text = ""
 
-                    read.iloc[rowIndex][columnIndex] = text
+                    read.iloc[rowIndex, columnIndex] = text
                     # read.loc[rowIndex][columnIndex] = text
                     # read.iat[rowIndex, columnIndex] = text    # Python 3.10 : Warning Message
                     # read.at[rowIndex][columnIndex] = text
                     # print(typeText, "[", rowIndex, ",", columnIndex, "] :", text)
+                    # print(sheet, "[", rowIndex, "][", columnIndex, "] :", readText, "->", text, "->", read.iloc[rowIndex, columnIndex])
+
 
             readData.append(read)
 
 
 
-
-        if True:    # 파일 삭제
-            if configInfo["ConfigTypeDeleteFileTC"] == "true" :
-                os.remove(filePath)
+        # # Folder(TC), File(*.toExcel) -->> 삭제 동작 CPP 코드로 변경
+        # if True:    # 파일 삭제
+        #     if configInfo["ConfigTypeDeleteFileTC"] == "true" :
+        #         os.remove(filePath)    # Delete : File
 
 
     if True:    # 파일 저장

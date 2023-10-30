@@ -217,11 +217,11 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
             // qDebug() << "==================================================================================================\n";
         }
 
-        // Delete Folder
+        // Delete : Folder(TC)
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
             QStringList log;
             ivis::common::ExcuteProgram process(false);
-            process.start(QString("rm -rf %1/*").arg(dirPath.toString()), log);
+            process.start(QString("rm -rf %1").arg(dirPath.toString()), log);    // Delete : /TC/*.fromExcel
         }
     } else {
         int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
@@ -275,7 +275,7 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath) {
 
         if (writeData.size() > 0) {
             QString writeFielPath = QString("%1/%2").arg(writePath).arg(file);
-            int size = ivis::common::FileInfo::writeFile(writeFielPath, writeData);
+            int size = ivis::common::FileInfo::writeFile(writeFielPath, writeData, false);
             writeSize += size;
             if (size == 0) {
                 qDebug() << "Fail to write size : 0, filePath :" << writeFielPath;
@@ -293,7 +293,16 @@ bool ControlExcel::writeExcelFile(const QVariant& filePath) {
     }
 
     if (writeExcelSheet(filePath)) {
-        result = (sytemCall(false, filePath).size() > 0);
+        QString dirPath = sytemCall(false, filePath);
+        if (dirPath.size() > 0) {
+            result = true;
+            // Delete : Folder(TC)
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
+                QStringList log;
+                ivis::common::ExcuteProgram process(false);
+                process.start(QString("rm -rf %1").arg(dirPath), log);    // Delete : /TC/*.toExcel
+            }
+        }
     }
     return result;
 }
@@ -350,7 +359,7 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
 
         if (writeData.size() > 0) {
             QString saveFilePaht = QString("%1/%2").arg(savePath).arg(file);
-            writeSize = ivis::common::FileInfo::writeFile(saveFilePaht, writeData);
+            writeSize = ivis::common::FileInfo::writeFile(saveFilePaht, writeData, false);
             if (writeSize == 0) {
                 qDebug() << "Fail to write size : 0, filePath :" << saveFilePaht;
             }
@@ -513,7 +522,8 @@ void ControlExcel::loadExcelFile(const int& eventType) {
 }
 
 void ControlExcel::saveExcelFile(const bool& saveAs) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool() == false) {
+    if ((ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool() == false)
+        && (saveAs == false)) {
         qDebug() << "The file is not saved because the contents of the excel have not changed.";
         return;
     }

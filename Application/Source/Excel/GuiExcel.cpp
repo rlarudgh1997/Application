@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QLabel>
 #include <QTextEdit>
- #include <QHeaderView>
+#include <QHeaderView>
 
 
 

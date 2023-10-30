@@ -36,6 +36,14 @@
 	git push ivis.kkh refs/heads/feature/EXNCP-38725-tc_creator-app
 
 
+
+
+
+ sudo apt-get install qtwebengine5-dev*
+
+
+
+
 =====================================================================
 # [SFC Docker 사용법]
 - Repo : SFC Docker
@@ -394,3 +402,19 @@ git clone git@github.com.rlarudgh1997:rlarudgh1997/Document.git
 - 파일에서 특정 테스트 위치 찾아서 파일명, 라인 출력
 	grep -inr "TEXT"
 	grep -inr "TEXT" *
+
+
+
+
+
+
+
+sudo apt-get install qtwebengine5-dev*
+
+sudo apt-get install libgl1-mesa-dev
+sudo apt-get install qt6-webengine-dev*
+sudo apt-get install libqt6webengine*
+
+
+#sudo apt-get install qt6-webengine-private-dev*
+#sudo apt-get install qt6-webview-dev*

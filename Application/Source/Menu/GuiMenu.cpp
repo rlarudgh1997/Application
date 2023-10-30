@@ -8,7 +8,6 @@
 #include <QLineEdit>
 #include <QCompleter>
 
-
 #include "GuiCenter.h"
 
 
@@ -88,7 +87,7 @@ void GuiMenu::drawMenuFile() {
         });
     }
 
-    mAction[MainType::File][STRING_NEW] = new QAction(QIcon::fromTheme("actionOpen",
+    mAction[MainType::File][STRING_OPEN] = new QAction(QIcon::fromTheme("actionOpen",
                                                         QIcon(IAMGE_OPEN)),
                                                         STRING_OPEN,
                                                         this);
@@ -572,33 +571,33 @@ void GuiMenu::updateDisplayTestResultInfo() {
         moduleStateInfo.append(info.toString() + "\n");
     }
 
-    qDebug() << "\t " << testResultInfo;
-    qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
-    qDebug() << "\t [1] :" << testResultInfo.at(1).toString().size() << testResultInfo.at(1);
-    qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
+    // qDebug() << "\t " << testResultInfo;
+    // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
+    // qDebug() << "\t [1] :" << testResultInfo.at(1).toString().size() << testResultInfo.at(1);
+    // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
 
-    if (complete == false) {
-        if (mLogDisplay == nullptr) {
-            mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"), errorInfo, moduleStateInfo);
+    if (mLogDisplay == nullptr) {
+        mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"), errorInfo, moduleStateInfo);
 
-            connect(mLogDisplay, &LogDisplayDialog::signalTestResultCacel, [=]() {
+        connect(mLogDisplay, &LogDisplayDialog::signalTestResultClick, [=](const bool& cancel) {
+            if (cancel) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeTestResultClick, true);
-                mLogDisplay->hide();
-                mLogDisplay->finished(true);
-            });
-            connect(mLogDisplay, &QDialog::finished, [=]() {
-                if (mProgressBar) {
-                    delete mProgressBar;
-                    mProgressBar = nullptr;
-                }
-                disconnect(mLogDisplay);
-                delete mLogDisplay;
-                mLogDisplay = nullptr;
-            });
-            mLogDisplay->show();
-        }
-        mLogDisplay->updateLogDisplay(errorInfo, moduleStateInfo);
+            }
+            mLogDisplay->hide();
+            mLogDisplay->finished(true);
+        });
+        connect(mLogDisplay, &QDialog::finished, [=]() {
+            if (mProgressBar) {
+                delete mProgressBar;
+                mProgressBar = nullptr;
+            }
+            disconnect(mLogDisplay);
+            delete mLogDisplay;
+            mLogDisplay = nullptr;
+        });
+        mLogDisplay->show();
     }
+    mLogDisplay->updateLogDisplay(errorInfo, moduleStateInfo);
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -621,7 +620,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC :
         case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC : {
-            updateDisplaySelectModule(type);
+            bool update = value.toBool();
+            if (update) {
+                updateDisplaySelectModule(type);
+            }
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo : {

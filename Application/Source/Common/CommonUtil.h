@@ -234,8 +234,8 @@ public:
         QStringList readData = readFileDataInfo(filePath, openError);
         return QPair<bool, QStringList>(openError, readData);
     }
-    static int writeFile(const QString& filePath, const QString& str) {
-        return writeFileData(filePath, str);
+    static int writeFile(const QString& filePath, const QString& str, const bool& append) {
+        return writeFileData(filePath, str, append);
     }
 
 private:
@@ -278,13 +278,23 @@ private:
         }
         return fileContent;
     }
-    static int writeFileData(const QString& filePath, const QString& str) {
+    static int writeFileData(const QString& filePath, const QString& str, const bool& append) {
         // qDebug() << "filePath :" << filePath;
+        QStringList readData = QStringList();
+        if (append) {
+            bool openError = false;
+            readData = readFileDataInfo(filePath, openError);
+            // qDebug() << "ReadData :" << readData;
+        }
         QFile file(filePath);
         if (file.open(QFile::WriteOnly | QFile::Text) == false) {
             return 0;
         }
         QTextStream out(&file);
+        foreach(const auto& data, readData) {
+            QString lineData = QString("%1\n").arg(data);
+            out << lineData;
+        }
         out << str;
         file.close();
         return str.size();
@@ -517,7 +527,7 @@ public:
         connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString &path) {
             QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
             if (readData.first) {
-                emit signalWatcherFileError(true);
+                emit signalWatcherFileReadError(true);
             } else {
                 if (readData.second.size() > 0) {
                     emit signalWatcherFileDataChanged(readData.second);
@@ -536,16 +546,27 @@ private:
         }
     }
     void runThread() {
-        while (mWatcher.addPath(mWatcherFile) == false) {
-            qDebug() << "\t Fail to watcher file :" << mWatcherFile;
-            QThread::msleep(1000);
+        int count = 0;
+        while (count < 10) {
+            if (mWatcher.addPath(mWatcherFile)) {
+                qDebug() << "\t [Sucess] Watcher file :" << mWatcherFile;
+                count = 0;
+                break;
+            } else {
+                qDebug() << "\t [Fail] Watcher file :" << count << mWatcherFile;
+                count++;
+                QThread::msleep(1000);
+            }
         }
-        qDebug() << "\t Watcher file :" << mWatcherFile;
+
+        if (count != 0) {
+            emit signalWatcherFileFail(count);
+        }
     }
 
 signals:
-    void signalWatcherFileError(const bool& error);
-    void signalWatcherFileChanged(const QString& filePath);
+    void signalWatcherFileFail(const int& count);
+    void signalWatcherFileReadError(const bool& error);
     void signalWatcherFileDataChanged(const QStringList& fileData);
 
 private:

@@ -36,9 +36,9 @@ public:
         setModal(true);
         setFocus();
 
-        mInputeText = ivis::common::createWidget<QLineEdit>(this);
+        mInputeText = ivis::common::createWidget<QLineEdit>(this, true);
         mInputeText->setFocus();
-        mSuggestionsList = ivis::common::createWidget<QListWidget>(this);
+        mSuggestionsList = ivis::common::createWidget<QListWidget>(this, true);
 
         QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();

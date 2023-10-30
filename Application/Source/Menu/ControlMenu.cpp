@@ -229,10 +229,12 @@ void ControlMenu::updateSelectModueList(const int& type, const QVariantList& sel
     }
 
     int eventType = ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC;
+    int clearType = ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC;
     QString filter = QString(".xlsx");
 
     if (type == ivis::common::EventTypeEnum::EventTypeRunTC) {
         eventType = ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC;
+        clearType = ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC;
         filter = QString(".tc");
     }
 
@@ -243,11 +245,11 @@ void ControlMenu::updateSelectModueList(const int& type, const QVariantList& sel
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
     updateAllModueList(filter);
+    updateDataHandler(clearType, false);
     updateDataHandler(eventType, true, true);
 }
 
-void ControlMenu::excuteScript(const int& type, const QVariant& selectInfo) {
-    QVariantList selectInfoList = selectInfo.toList();
+void ControlMenu::excuteScript(const int& type, const QVariantList& selectInfoList) {
     if (selectInfoList.size() != 2) {
         qDebug() << "Fail to select info list size :" << selectInfoList.size();
         return;
@@ -294,59 +296,72 @@ void ControlMenu::excuteScript(const int& type, const QVariant& selectInfo) {
     }
 
 #if 1
-    if (mWatcher == nullptr) {
-        mWatcher = new ivis::common::FileSystemWatcherThread(currentPath + "/TCResult.Info");
-        connect(mWatcher, &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
-                                                                        [=](const QStringList& fileData) {
-            int current = 0;
-            int total = 0;
-            bool complete = false;
-            QVariant errorInfo = QVariant("Test Case : Progressing");
-            QVariantList moduleStateInfo = QVariantList();
-            qDebug() << "\t fileData :" << fileData;
-            foreach(const auto& fileInfo, fileData) {
-                QStringList info = fileInfo.split(" : ");
-                if (info.size() != 2) {
-                    continue;
-                }
-                QString id = info.at(0);
-                if (id.compare("CURRENT") == false) {
-                    current = info.at(1).toInt();
-                } else if (id.compare("TOTAL") == false) {
-                    total = info.at(1).toInt();
-                } else if (id.compare("COMPLETE") == false) {
-                    complete = (info.at(1).compare("PASS") == false);
-                } else if (id.compare("ERROR_INFO") == false) {
-                    errorInfo = fileInfo;
-                } else {
-                    moduleStateInfo.append(fileInfo);
-                }
-            }
-            if (complete) {
-                errorInfo = QVariant("Test Case : Completed");
-            }
-            QVariantList countInfo = QVariantList({current, total, complete});
-            QVariantList testResultInfo = QVariantList({countInfo, errorInfo, moduleStateInfo});
-            // qDebug() << "\t " << testResultInfo;
-            // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
-            // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().toString() << testResultInfo.at(1);
-            // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
-
-            // if (complete) {
-            //     disconnect(mWatcher);
-            //     delete mWatcher;
-            //     mWatcher = nullptr;
-            // }
-        });
-        // connect(mWatcher, &ivis::common::FileSystemWatcherThread::signalWatcherFileChanged, [=](const QString& filePath) {
-        //     qDebug() << "\t FilePath :" << filePath;
-        // });
-        // connect(mWatcher, &ivis::common::FileSystemWatcherThread::signalWatcherFileError, [=](const bool& error) {
-        //     qDebug() << "\t FileOpenError :" << error;
-        // });
-        mWatcher->start();
+    if (mWatcher.isNull() == false) {
+        qDebug() << "Running Watcher File -> Request Stop";
+        mWatcher.reset();
     }
+
+    QString filePath = QString("%1/TCResult.Info").arg(currentPath);
+    mWatcher = QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(filePath));
+    mWatcher.data()->start();
+    connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
+                                                                    [=](const QStringList& fileData) {
+        int current = 0;
+        int total = 0;
+        bool complete = false;
+        bool completeState = false;
+        QVariant errorInfo = QVariant("");
+        QVariantList moduleStateInfo = QVariantList();
+        // qDebug() << "\t fileData :" << fileData;
+        foreach(const auto& fileInfo, fileData) {
+            QStringList info = fileInfo.split(" : ");
+            if (info.size() != 2) {
+                continue;
+            }
+            QString id = info.at(0);
+            if (id.compare("CURRENT") == false) {
+                current = info.at(1).toInt();
+            } else if (id.compare("TOTAL") == false) {
+                total = info.at(1).toInt();
+            } else if (id.compare("COMPLETE") == false) {
+                complete = true;
+                completeState = (info.at(1).compare("PASS") == false);
+            } else if (id.compare("ERROR_INFO") == false) {
+                errorInfo = fileInfo;
+            } else {
+                moduleStateInfo.append(fileInfo);
+            }
+        }
+        if (complete) {
+            QString temp = QString("Test Case : %1").arg((completeState ? ("Pass") : ("Fail")));
+            if (errorInfo.toString().size() > 0) {
+                temp.append("\n");
+                temp.append(errorInfo.toString());
+            }
+            errorInfo = temp;
+        } else {
+            errorInfo = QVariant("Test Case : Progressing");
+        }
+        QVariantList countInfo = QVariantList({current, total, complete});
+        QVariantList testResultInfo = QVariantList({countInfo, errorInfo, moduleStateInfo});
+        // qDebug() << "\t " << testResultInfo;
+        // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
+        // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().toString() << testResultInfo.at(1);
+        // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
+
+        if (complete) {
+            emit mWatcher.data()->signalWatcherFileFail(10);
+        }
+    });
+    connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileFail, [=](const int& count) {
+        qDebug() << "\t signalWatcherFileFail :" << count;
+        disconnect(mWatcher.data());
+        mWatcher.reset();
+    });
+    // connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError, [=](const bool& error) {
+    //     qDebug() << "\t FileOpenError :" << error;
+    // });
 #endif
 
 #if 1
@@ -379,6 +394,49 @@ void ControlMenu::excuteScript(const int& type, const QVariant& selectInfo) {
         mProcess.reset();
     });
 #endif
+}
+
+void ControlMenu::cancelScript() {
+    QStringList killProcess = QStringList({
+        "python",
+        "python3",
+        "gen_tc.sh",
+        "run_tc.sh",
+    });
+    foreach(const auto& process, killProcess) {
+        int result = system((QString("pkill -9 -ef %1").arg(process)).toLatin1().data());
+        qDebug() << "cancelScript - process :" << process << result;
+    }
+
+    QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+    bool genTC = getData(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC).toBool();
+    bool runTC = getData(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC).toBool();
+    if ((genTC) && (runTC == false)) {
+        currentPath.append("/../../../tc_generator");
+    } else if ((runTC) && (genTC == false)) {
+        currentPath.append("/../../../validator");
+    } else {
+        currentPath.clear();
+        qDebug() << "Fail to run script type error :" << genTC << genTC;
+    }
+
+    QString filePath = QString("%1/TCResult.Info").arg(currentPath);
+    if (QDir::setCurrent(currentPath)) {
+        QString errorInfo = QString("ERROR_INFO : User Request  - Process Exit");
+        ivis::common::FileInfo::writeFile(filePath, errorInfo, true);
+    }
+
+    if (mWatcher.isNull() == false) {
+        // emit mWatcher.data()->signalWatcherFileFail(10);
+        disconnect(mWatcher.data());
+        mWatcher.reset();
+    }
+
+    if (mProcess.isNull() == false) {
+        // emit mProcess.data()->signalExcuteProgramCompleted(true);
+        disconnect(mProcess.data());
+        mProcess.reset();
+    }
 }
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
@@ -491,10 +549,11 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfGenTC :
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRunTC : {
             updateSelectModueList(0, value.toList());
-            excuteScript(type, value);
+            excuteScript(type, value.toList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTestResultClick : {
+            cancelScript();
             break;
         }
         default : {

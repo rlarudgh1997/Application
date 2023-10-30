@@ -24,7 +24,8 @@ private:
 
     void updateAllModueList(const QString& filter);
     void updateSelectModueList(const int& type, const QVariantList& selectModule = QVariantList());
-    void excuteScript(const int& type, const QVariant& selectInfo);
+    void excuteScript(const int& type, const QVariantList& selectInfoList);
+    void cancelScript();
 
 
 protected:
@@ -50,7 +51,7 @@ public slots:
 private:
     AbstractHandler* mHandler = nullptr;
     QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
-    ivis::common::FileSystemWatcherThread* mWatcher = nullptr;
+    QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcher = nullptr;
 };
 
 

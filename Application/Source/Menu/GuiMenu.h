@@ -108,6 +108,7 @@ public:
         setFocus();
 
         mInfoLabel = ivis::common::createWidget<QLabel>(this, true, QRect(25, 0, 750, 80), mBaseStyle.arg(16));
+        // mInfoLabel->setAlignment(Qt::AlignTop);
         mContentLabel = ivis::common::createWidget<QLabel>(this, true, QRect(25, 80, 750, 420), mBaseStyle.arg(13));
         mContentLabel->setAlignment(Qt::AlignTop);
         updateLogDisplay(info, content);
@@ -118,19 +119,21 @@ public:
         mCancel->setText("Cancel");
 
         connect(mOK, &QPushButton::clicked, [=]() {
-            emit signalTestResultCacel();
+            emit signalTestResultClick(false);
         });
         connect(mCancel, &QPushButton::clicked, [=]() {
+            emit signalTestResultClick(true);
             finished(true);
         });
     }
     void updateLogDisplay(const QString& info, const QString& content) {
+        qDebug() << "updateLogDisplay :" << info << content;
         mInfoLabel->setText(info);
         mContentLabel->setText(content);
     }
 
 signals:
-    void signalTestResultCacel();
+    void signalTestResultClick(const bool& cancel);
 
 private:
     QString mBaseStyle = QString("color: blue; font-size: %1px");
