@@ -241,7 +241,8 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, runType, true);
 }
 
-void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInfoList) {
+void ControlMenu::excuteScript(const int& runType, const bool& option1, const QVariantList& selectInfoList) {
+    static int totalCount = 10;
     QString cmd = QString();
     QString subPath = QString();
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
@@ -268,12 +269,13 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
         }
 
         QString moduleList = QString();
-        foreach(const auto& module, selectInfoList[0].toList()) {
-            moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
-        }
-        if (moduleList.size() == 0) {
+        totalCount = selectInfoList[0].toList().size();
+        if (totalCount == 0) {
             qDebug() << "Fail to select module list : 0";
             return;
+        }
+        foreach(const auto& module, selectInfoList[0].toList()) {
+            moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
         }
 
         QString checkList = QString();
@@ -282,14 +284,17 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
         }
 
         if (runType == ivis::common::RunTypeEnum::RunTypeGenTC) {
-            QString negative = (checkList.size() == 0) ? (QString()) : (QString(" -o %1").arg(checkList));
+            QString negative = (option1) ? (QString(" -o Negative")) : (QString());
             cmd = QString("./gen_tc.sh -c CV -m \"%1\"%2").arg(moduleList).arg(negative);
             subPath = QString("/../../../tc_generator");
         } else if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             QString altonPath = QString("/usr/local/bin/altonservice");
+            QString docker = (option1) ? (QString("-d ")) : (QString());
             QString ptList = (checkList.size() == 0) ? (QString()) : (QString(" %1").arg(checkList));
-            cmd = QString("./run_tc.sh -b %1 -c CV -d -g -m \"%2\"%3").arg(altonPath).arg(moduleList).arg(ptList);
+            cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
             subPath = QString("/../../../validator");
+            int ptCount = selectInfoList[1].toList().size();
+            totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));    // No Select PT -> All(ICV, EV, FCEV) = 3
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
             return;
@@ -307,7 +312,7 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
     }
     qDebug() << "Default Run Path :" << defaultRunPath;
 
-#if 1
+
     if (mWatcher.isNull() == false) {
         qDebug() << "Running Watcher File -> Request Stop";
         mWatcher.reset();
@@ -318,34 +323,38 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
     mWatcher.data()->start();
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
                                                                     [=](const QStringList& fileData) {
+        int total = totalCount;
         int current = 0;
-        int total = 0;
         bool complete = false;
         QString errorString = QString();
         QString completeString = QString();
         QVariantList titleInfo = QVariantList();
         QVariantList moduleStateInfo = QVariantList();
-        foreach(const auto& fileInfo, fileData) {
-            QStringList info = fileInfo.split(" : ");
+        foreach(const auto& data, fileData) {
+            QStringList info = data.split(" : ");
             if (info.size() != 2) {
                 continue;
             }
             QString id = info.at(0);
             if (id.compare("CURRENT") == false) {
-                current = info.at(1).toInt();
+                current += info.at(1).toInt();
             } else if (id.compare("TOTAL") == false) {
-                total = info.at(1).toInt();
+                // total = info.at(1).toInt();
             } else if (id.compare("COMPLETE") == false) {
                 complete = true;
                 completeString = info.at(1);
             } else if (id.compare("ERROR_INFO") == false) {
-                errorString = fileInfo;
+                errorString = data;
             } else {
-                moduleStateInfo.append(fileInfo);
+                if (id.compare("CURRENT_POWER_TRAIN") == false) {
+                    moduleStateInfo.append("---------------------------------------------------------------");
+                }
+                moduleStateInfo.append(data);
             }
         }
 
         QVariantList countInfo = QVariantList({current, total, complete});
+        qDebug() << "\t 2 Send CountInfo :" << countInfo;
         if (complete) {
             titleInfo.append(QString("Test Case : Completed(%1)").arg(completeString));
             titleInfo.append(errorString);
@@ -368,10 +377,8 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
     // connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError, [=](const bool& error) {
     //     qDebug() << "\t FileOpenError :" << error;
     // });
-#endif
 
 
-#if 1
     if (mProcess.isNull() == false) {
         qDebug() << "Running Test Case -> Request Stop";
         mProcess.reset();
@@ -382,7 +389,7 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
     mProcess.data()->start();
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramStarted, [=]() {
-        QVariantList countInfo = QVariantList({0, 10, false});
+        QVariantList countInfo = QVariantList({0, totalCount, false});
         QVariantList titleInfo = QVariantList({"Test Case : Start", ""});
         QVariantList moduleStateInfo = QVariantList({});
         QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
@@ -399,13 +406,14 @@ void ControlMenu::excuteScript(const int& runType, const QVariantList& selectInf
         disconnect(mProcess.data());
         mProcess.reset();
     });
-#endif
 }
 
 void ControlMenu::cancelScript(const bool& complete) {
     QStringList killProcess = QStringList({
         "python",
         "python3",
+        "altonservice",
+        "sfc_validator",
         "gen_tc.sh",
         "run_tc.sh",
     });
@@ -545,15 +553,16 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted : {
-            excuteScript(ivis::common::RunTypeEnum::RunTypeEnterScriptText, QVariantList({value}));
+            excuteScript(ivis::common::RunTypeEnum::RunTypeEnterScriptText, false, QVariantList({value}));
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun : {
-            if (value.toList().size() == 3) {
+            if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
-                QVariantList selectInfoList = QVariantList({value.toList().at(1), value.toList().at(2)});
+                bool option1 = value.toList().at(1).toBool();
+                QVariantList selectInfoList = QVariantList({value.toList().at(2), value.toList().at(3)});
                 updateSelectModueList(0, selectInfoList);
-                excuteScript(runType, selectInfoList);
+                excuteScript(runType, option1, selectInfoList);
             }
             break;
         }

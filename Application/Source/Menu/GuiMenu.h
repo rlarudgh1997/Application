@@ -29,7 +29,7 @@ class SelectPtDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SelectPtDialog(QWidget* parent, const QStringList& itemList) : QDialog(parent) {
+    explicit SelectPtDialog(QWidget* parent, const QStringList& itemList1, QStringList& itemList2) : QDialog(parent) {
         setWindowTitle("Select PT");
         setWindowFlag(Qt::WindowContextHelpButtonHint, true);
         setWindowFlag(Qt::WindowCloseButtonHint, true);
@@ -45,33 +45,45 @@ public:
         setFocus();
 
         mLayout = new QVBoxLayout(this);
-        mCheckLayout = new QHBoxLayout(mLayout->widget());
-        mButtonLayout = new QHBoxLayout(mLayout->widget());
 
-        foreach(const auto& item, itemList) {
-            int index = mCheckBox.size();
-            mCheckBox[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout->widget(), true);
-            mCheckBox[index]->setText(item);
-            mCheckLayout->addWidget(mCheckBox[index]);
+        mCheckLayout1 = new QHBoxLayout(mLayout->widget());
+        foreach(const auto& item1, itemList1) {
+            int index = mCheckBox1.size();
+            mCheckBox1[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout1->widget(), true);
+            mCheckBox1[index]->setText(item1);
+            mCheckLayout1->addWidget(mCheckBox1[index]);
         }
+        mLayout->addLayout(mCheckLayout1);
 
+        if (itemList2.size() > 0) {
+            mCheckLayout2 = new QHBoxLayout(mLayout->widget());
+            foreach(const auto& item2, itemList2) {
+                int index = mCheckBox2.size();
+                mCheckBox2[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout2->widget(), true);
+                mCheckBox2[index]->setText(item2);
+                mCheckLayout2->addWidget(mCheckBox2[index]);
+            }
+        }
+        mLayout->addLayout(mCheckLayout2);
+
+        mButtonLayout = new QHBoxLayout(mLayout->widget());
         mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
         mOK->setText("OK");
         mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
         mCancel->setText("Cancel");
         mButtonLayout->addWidget(mOK);
         mButtonLayout->addWidget(mCancel);
-
-        mLayout->addLayout(mCheckLayout);
         mLayout->addLayout(mButtonLayout);
+
         setLayout(mLayout);
 
         connect(mOK, &QPushButton::clicked, [=]() {
+            bool option1 = ((mCheckBox1.size() == 1) ? (mCheckBox1[0]->checkState() == Qt::CheckState::Checked) : (false));
             QList<QPair<QString, bool>> checkStateList = QList<QPair<QString, bool>>();
-            foreach(const auto& check, mCheckBox) {
-                checkStateList.append(QPair<QString, bool>(check->text(), check->checkState()));
+            foreach(const auto& check, mCheckBox2) {
+                checkStateList.append(QPair<QString, bool>(check->text(), (check->checkState() == Qt::CheckState::Checked)));
             }
-            emit signalPtSelected(checkStateList);
+            emit signalPtSelected(option1, checkStateList);
         });
         connect(mCancel, &QPushButton::clicked, [=]() {
             finished(true);
@@ -79,15 +91,17 @@ public:
     }
 
 signals:
-    void signalPtSelected(const QList<QPair<QString, bool>>& checkStateList);
+    void signalPtSelected(const bool& option1, const QList<QPair<QString, bool>>& checkStateList);
 
 private:
     const int mWidth = 400;
     const int mHeight = 100;
     QVBoxLayout* mLayout = nullptr;
-    QHBoxLayout* mCheckLayout = nullptr;
+    QHBoxLayout* mCheckLayout1 = nullptr;
+    QHBoxLayout* mCheckLayout2 = nullptr;
     QHBoxLayout* mButtonLayout = nullptr;
-    QMap<int, QCheckBox*> mCheckBox = QMap<int, QCheckBox*>();
+    QMap<int, QCheckBox*> mCheckBox1 = QMap<int, QCheckBox*>();
+    QMap<int, QCheckBox*> mCheckBox2 = QMap<int, QCheckBox*>();
     QPushButton* mOK = nullptr;
     QPushButton* mCancel = nullptr;
 };

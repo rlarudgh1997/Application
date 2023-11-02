@@ -521,20 +521,24 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 
 void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
     if (mSelectPt == nullptr) {
-        QStringList itemList = QStringList({"Negative"});
+        QStringList itemList1 = QStringList({"Negative"});
+        QStringList itemList2 = QStringList();
         if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
-            itemList = QStringList({"ICV", "FCEV", "EV"});
+            itemList1 = QStringList({"Docker"});
+            itemList2 = QStringList({"ICV", "FCEV", "EV"});
         }
-        mSelectPt = new SelectPtDialog(isHandler()->getScreen(), itemList);
+        mSelectPt = new SelectPtDialog(isHandler()->getScreen(), itemList1, itemList2);
 
-        connect(mSelectPt, &SelectPtDialog::signalPtSelected, [=](const QList<QPair<QString, bool>>& checkStateList) {
+        connect(mSelectPt, &SelectPtDialog::signalPtSelected, [=](const bool& option1,
+                                                                    const QList<QPair<QString, bool>>& checkStateList) {
             QVariantList checkList = QVariantList();
             foreach(const auto& check, checkStateList) {
                 if (check.second) {
                     checkList.append(QVariant(check.first));
                 }
             }
-            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun, QVariant({runType, moduleList, checkList}));
+            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun,
+                                                                QVariant({runType, option1, moduleList, checkList}));
             if (mSelectModule) {
                 mSelectModule->finished(true);
             }
@@ -588,6 +592,7 @@ void GuiMenu::updateDisplayTestResultInfo() {
         moduleStateInfo.append(info.toString() + "\n");
     }
 
+    qDebug() << "\t Receive CountInfo :" << countInfo;
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);

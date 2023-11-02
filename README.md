@@ -111,6 +111,13 @@
 	./gen_tc.sh -c CV -m "ABS_CV AVH BCM_Warning_CV BEQ Brake_Air"
 	./run_tc.sh -b /usr/local/bin/altonservice -c CV -d -g -m "BCM_Warning_CV VCU Transmission_Warning_CV"
 
+- Run TC 수행 모듈
+	BCM_Warning_CV
+	VCU
+	Transmission_Warning_CV
+
+
+
 
 =====================================================================
 # [ToDo 정보]
