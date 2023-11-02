@@ -32,9 +32,9 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath,                       QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList,                     QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule,                QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC,               QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC,               QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun,                 QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo,                    QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText,                   QVariant(false));
 }
 
 void HandlerMenu::controlConnect(const bool& state) {

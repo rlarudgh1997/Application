@@ -388,7 +388,7 @@ void GuiMenu::drawMenuRun() {
         mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_GENERATE_TC]);
         // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_GENERATE_TC]);
         connect(mAction[MainType::Run][STRING_GENERATE_TC], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeGenerateTC, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeGenTC, QVariant());
         });
     }
 
@@ -413,6 +413,18 @@ void GuiMenu::drawMenuRun() {
         // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_GENERATE_REPORT]);
         connect(mAction[MainType::Run][STRING_GENERATE_REPORT], &QAction::triggered, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeGenerateReport, QVariant());
+        });
+    }
+
+    mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT] = new QAction(QIcon::fromTheme("actionEnterScrtipText"),
+                                                        STRING_ENTER_SCRIPT_TEXT,
+                                                        this);
+    if (mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT]) {
+        mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT]->setStatusTip(STRING_ENTER_SCRIPT_TEXT_TIP);
+        mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT]);
+        // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT]);
+        connect(mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptText, QVariant());
         });
     }
 }
@@ -481,9 +493,8 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 #endif
 }
 
-void GuiMenu::updateDisplaySelectModule(const int& type) {
-    qDebug() << "updateDisplaySelectModule :" << type;
-
+void GuiMenu::updateDisplaySelectModule(const int& runType) {
+    qDebug() << "updateDisplaySelectModule :" << runType;
     if (mSelectModule == nullptr) {
         QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
         QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);
@@ -497,7 +508,7 @@ void GuiMenu::updateDisplaySelectModule(const int& type) {
             foreach(const auto& select, selectModule) {
                 moduleSelect.append(QVariant(select.second));
             }
-            updateDisplaySelectPT(type, moduleSelect);
+            updateDisplaySelectPT(runType, moduleSelect);
         });
         connect(mSelectModule, &QDialog::finished, [=]() {
             disconnect(mSelectModule);
@@ -508,12 +519,10 @@ void GuiMenu::updateDisplaySelectModule(const int& type) {
     mSelectModule->show();
 }
 
-void GuiMenu::updateDisplaySelectPT(const int& type, const QVariantList& moduleList) {
+void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
     if (mSelectPt == nullptr) {
-        int eventType = ivis::common::EventTypeEnum::EventTypeSelectModuleOfGenTC;
         QStringList itemList = QStringList({"Negative"});
-        if (type == ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC) {
-            eventType = ivis::common::EventTypeEnum::EventTypeSelectModuleOfRunTC;
+        if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             itemList = QStringList({"ICV", "FCEV", "EV"});
         }
         mSelectPt = new SelectPtDialog(isHandler()->getScreen(), itemList);
@@ -525,7 +534,7 @@ void GuiMenu::updateDisplaySelectPT(const int& type, const QVariantList& moduleL
                     checkList.append(QVariant(check.first));
                 }
             }
-            createSignal(eventType, QVariant({moduleList, checkList}));
+            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun, QVariant({runType, moduleList, checkList}));
             if (mSelectModule) {
                 mSelectModule->finished(true);
             }
@@ -554,9 +563,10 @@ void GuiMenu::updateDisplayTestResultInfo() {
         qDebug() << "Fail to count info size :" << countInfo.size() << countInfo;
         return;
     }
+    static bool complete = false;
     int current = countInfo.at(0).toInt();
     int total = countInfo.at(1).toInt();
-    bool complete = countInfo.at(2).toBool();
+    complete = countInfo.at(2).toBool();
 
     if (mProgressBar == nullptr) {
         mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), false, QRect(1100, 25, 100, 30));
@@ -565,7 +575,14 @@ void GuiMenu::updateDisplayTestResultInfo() {
     mProgressBar->setRange(0, total);
     mProgressBar->setValue(current);
 
-    QString errorInfo = testResultInfo.at(1).toString();
+    QString titleInfo = QString();
+    foreach(const auto& info, testResultInfo.at(1).toList()) {
+        titleInfo.append(info.toString() + "\n");
+    }
+    QString errorInfo = QString();
+    if (testResultInfo.at(1).toList().size() == 2) {
+        errorInfo = testResultInfo.at(1).toList().at(1).toString();
+    }
     QString moduleStateInfo = QString();
     foreach(const auto& info, testResultInfo.at(2).toList()) {
         moduleStateInfo.append(info.toString() + "\n");
@@ -573,15 +590,14 @@ void GuiMenu::updateDisplayTestResultInfo() {
 
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
-    // qDebug() << "\t [1] :" << testResultInfo.at(1).toString().size() << testResultInfo.at(1);
+    // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
     // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
 
     if (mLogDisplay == nullptr) {
-        mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"), errorInfo, moduleStateInfo);
-
+        mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"));
         connect(mLogDisplay, &LogDisplayDialog::signalTestResultClick, [=](const bool& cancel) {
             if (cancel) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeTestResultClick, true);
+                createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCancel, complete);
             }
             mLogDisplay->hide();
             mLogDisplay->finished(true);
@@ -597,7 +613,25 @@ void GuiMenu::updateDisplayTestResultInfo() {
         });
         mLogDisplay->show();
     }
-    mLogDisplay->updateLogDisplay(errorInfo, moduleStateInfo);
+    mLogDisplay->updateLogDisplay(titleInfo, errorInfo, moduleStateInfo);
+}
+
+void GuiMenu::updateDisplayEnterScriptText() {
+    if (mTextEnter == nullptr) {
+        mTextEnter = new TextEnterDialog(isHandler()->getScreen());
+
+        connect(mTextEnter, &TextEnterDialog::signalEnterTextCompletd, [=](const QString& text) {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted, text);
+            mTextEnter->hide();
+            mTextEnter->finished(true);
+        });
+        connect(mTextEnter, &QDialog::finished, [=]() {
+            disconnect(mTextEnter);
+            delete mTextEnter;
+            mTextEnter = nullptr;
+        });
+    }
+    mTextEnter->show();
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -618,16 +652,21 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             drawMenuEtc(true);
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfGenTC :
-        case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRunTC : {
-            bool update = value.toBool();
-            if (update) {
-                updateDisplaySelectModule(type);
+        case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun : {
+            int runType = value.toInt();
+            if (runType != ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
+                updateDisplaySelectModule(runType);
             }
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo : {
             updateDisplayTestResultInfo();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText : {
+            if (value.toBool()) {
+                updateDisplayEnterScriptText();
+            }
             break;
         }
         default : {

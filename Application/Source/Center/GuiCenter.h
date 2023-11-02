@@ -287,9 +287,9 @@ signals:
     void signalReportValueChanged(const int& index, const int& type, const bool& value);
 
 private:
+    const QString mBaseStyle = QString("color: %1; font: bold; font-size: %2px");
     bool mInit = false;
     QMap<int, int> mConfigType = QMap<int, int>();
-    QString mBaseStyle = QString("color: %1; font: bold; font-size: %2px");
     QFrame* mFrame = nullptr;
     QButtonGroup* mGroup = nullptr;
     QLabel* mTitle = nullptr;
@@ -318,9 +318,9 @@ public:
 
         QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();
-        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 600) * 0.5));
-        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - 800) * 0.5));
-        setFixedSize(QSize(600, 800));
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
         setGeometry(setRect);
         setFocus();
 
@@ -392,6 +392,8 @@ signals:
     void signalModuleSelected(const QList<QPair<int, QString>>& selectModule);
 
 private:
+    const int mWidth = 600;
+    const int mHeight = 800;
     QVBoxLayout* mLayout = nullptr;
     QHBoxLayout* mButtonLayout = nullptr;
     bool mSelectAllState = true;

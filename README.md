@@ -85,6 +85,33 @@
 		docker rmi -f artifacts.ccos.dev/sfc-docker/sfc-docker:latest
 
 
+
+=====================================================================
+# [도커 내부에서 검증 동작 수행시]
+- Alton 환경 변수
+	export ALTON_SFC_CONFIGURATION=${HOME}/900_Code/620_SFC/model/SFC/compiled/config
+	export ALTON_SFC_MODEL_DIR=${HOME}/900_Code/620_SFC//model/SFC/compiled
+	export ALTON_EOL_VEHICLETYPE=ICV
+	export ALTON_SFC_CONFIGURATION_FILENAME=CV
+	export ALTON_ENG_SKIP_DUMMYCALL=ON
+
+- SFC 빌드 명령어
+	mkdir build
+	cd build
+	cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV
+	sudo cmake --build . --target install -j8
+
+- Validator 빌드
+	mkdir build
+	cd build
+	cmake ..
+	make -j8
+
+- GenTC, RunTC
+	./gen_tc.sh -c CV -m "ABS_CV AVH BCM_Warning_CV BEQ Brake_Air"
+	./run_tc.sh -b /usr/local/bin/altonservice -c CV -d -g -m "BCM_Warning_CV VCU Transmission_Warning_CV"
+
+
 =====================================================================
 # [ToDo 정보]
 - 기능 추가

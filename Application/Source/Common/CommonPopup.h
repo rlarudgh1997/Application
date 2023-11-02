@@ -24,6 +24,8 @@ enum class PopupType {
     OpenFail,
     NowInstalling,
     InstallComplete,
+    DefaultPathError,
+    InputTextError,
     SelectCellColumnError,
 
     Exit,
@@ -61,10 +63,13 @@ public:
             case PopupType::OpenFail :
             case PopupType::NowInstalling :
             case PopupType::InstallComplete :
+            case PopupType::DefaultPathError :
+            case PopupType::InputTextError :
             case PopupType::SelectCellColumnError : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
-                    button = drawPopupNoraml(handler, infoData.at(0).toString(), infoData.at(1).toString());
+                    button = drawPopupNoraml(handler, (popupType != PopupType::About),
+                                                        infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
@@ -120,10 +125,14 @@ private:
     static void setPopupData(const QVariant& data) {
         gPopupData = data;
     }
-    static PopupButton drawPopupNoraml(AbstractHandler* handler, const QString& title, const QString& tip) {
+    static PopupButton drawPopupNoraml(AbstractHandler* handler, const bool& warning, const QString& title, const QString& tip) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
-            QMessageBox::about(handler->getScreen(), title, tip);
+            if (warning) {
+                QMessageBox::warning(handler->getScreen(), title, tip);
+            } else {
+                QMessageBox::about(handler->getScreen(), title, tip);
+            }
             button = PopupButton::OK;
         }
         return button;
@@ -137,7 +146,6 @@ private:
         if ((popupType == PopupType::Exit) && (list.size() == 5)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
-            // selectBox.setInformativeText(list[1].toString());
             button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
             button[PopupButton::Discard] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             button[PopupButton::Cancel] = selectBox.addButton(list[4].toString(), QMessageBox::ActionRole);
@@ -153,7 +161,6 @@ private:
         } else if ((popupType == PopupType::NoInstallLib) && (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
-            // selectBox.setInformativeText(list[1].toString());
             button[PopupButton::Install] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
             button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             connect(button[PopupButton::Install], &QPushButton::clicked, [&]() {
@@ -165,7 +172,6 @@ private:
         } else if ((popupType == PopupType::FileNotExist) && (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
-            // selectBox.setInformativeText(list[1].toString());
             button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
             button[PopupButton::Cancel] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() {
@@ -173,6 +179,14 @@ private:
             });
             connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() {
                 buttonType = PopupButton::Cancel;
+            });
+        } else if (((popupType == PopupType::DefaultPathError) || (popupType == PopupType::InputTextError))
+            && (list.size() == 3)) {
+            selectBox.setWindowTitle(list[0].toString());
+            selectBox.setText(list[1].toString());
+            button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+            connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() {
+                buttonType = PopupButton::Confirm;
             });
         } else {
         }

@@ -59,6 +59,7 @@ public:
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
         ConfigTypeSelectModule,
+        ConfigTypeDefaultRunPath,
         ConfigTypeWindowTitle,
 
         ConfigTypeMax,
@@ -151,6 +152,7 @@ private:
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
+        mConfigInfoData[ConfigTypeDefaultRunPath] = QPair<QString, QVariant>("ConfigTypeDefaultRunPath", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
     }
 

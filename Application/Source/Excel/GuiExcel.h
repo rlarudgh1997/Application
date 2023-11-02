@@ -42,9 +42,9 @@ public:
 
         QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();
-        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - 900) * 0.5));
-        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - 500) * 0.5));
-        setFixedSize(QSize(900, 500));
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
         setGeometry(setRect);
 
         mLayout = new QVBoxLayout(this);
@@ -104,6 +104,8 @@ signals:
 
 
 private:
+    const int mWidth = 900;
+    const int mHeight = 500;
     QVBoxLayout* mLayout = nullptr;
     QLineEdit* mInputeText = nullptr;
     QListWidget* mSuggestionsList = nullptr;

@@ -88,9 +88,9 @@ public:
         PropertyTypeNodeAddressModule,
         PropertyTypeAllModuleList,
         PropertyTypeUpdateSelectModule,
+        PropertyTypeEnterScriptText,
         PropertyTypeShowSelectModule,
-        PropertyTypeSelectModuleOfGenTC,
-        PropertyTypeSelectModuleOfRunTC,
+        PropertyTypeSelectModuleOfRun,
         PropertyTypeTestResultInfo,
         PropertyTypeTestReportResultInfo,
         PropertyTypeTestReportCoverageInfo,
@@ -192,15 +192,15 @@ public:
         EventTypeUpdateConfig,
         EventTypeConfigReset,
         EventTypeTestReportReset,
-        EventTypeGenerateTC,
+        EventTypeGenTC,
         EventTypeRunTC,
         EventTypeGenerateReport,
+        EventTypeEnterScriptText,
         EventTypeShowModule,
         EventTypeSelectModule,
-        EventTypeSelectModuleOfGenTC,
-        EventTypeSelectModuleOfRunTC,
-        EventTypeTestResultClick,
-
+        EventTypeSelectModuleOfRun,
+        EventTypeGenRunTCCancel,
+        EventTypeEnterScriptTextCompleted,
 
         EventTypeTest = 3000,
         EventTypeLastFile,
@@ -288,13 +288,21 @@ public:
     };
 };
 
-
 class VsmTypeEnum {
 public:
     enum VsmType {
         VsmTypeEV = 0,
         VsmTypeFCEV,
         VsmTypeICV,
+    };
+};
+
+class RunTypeEnum {
+public:
+    enum RunType {
+        RunTypeGenTC = 0,
+        RunTypeRunTC,
+        RunTypeEnterScriptText,
     };
 };
 

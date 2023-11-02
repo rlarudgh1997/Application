@@ -23,9 +23,9 @@ private:
     explicit ControlMenu();
 
     void updateAllModueList(const QString& filter);
-    void updateSelectModueList(const int& type, const QVariantList& selectModule = QVariantList());
-    void excuteScript(const int& type, const QVariantList& selectInfoList);
-    void cancelScript();
+    void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
+    void excuteScript(const int& runType, const QVariantList& selectInfoList);
+    void cancelScript(const bool& complete);
 
 
 protected:

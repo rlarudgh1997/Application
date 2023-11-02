@@ -60,6 +60,8 @@
 #define STRING_GENERATE_TC_TIP                     QString("Generate TC file")
 #define STRING_GENERATE_REPORT                     QString("Generate Report")
 #define STRING_GENERATE_REPORT_TIP                 QString("Generate Report file")
+#define STRING_ENTER_SCRIPT_TEXT                   QString("Enter Script Text")
+#define STRING_ENTER_SCRIPT_TEXT_TIP               QString("Manually entering script execution text")
 #define STRING_TEST_RESULT                         QString("Test Result")
 #define STRING_TEST_RESULT_TIP                     QString("<b>Edit --></b> Test Result Tip")
 #define STRING_TEST_RESULT_COVERAGE                QString("Test Coverage")
@@ -96,8 +98,10 @@
 
 #define STRING_POPUP_FILE_NOT_EXIST                QString("File doesn't exist")
 #define STRING_POPUP_FILE_NOT_EXIST_TIP            QString("VSM file not found. Do you want to set vsm path?")
-
-
+#define STRING_POPUP_DEFAULT_PATH_ERROR            QString("Default path error")
+#define STRING_POPUP_DEFAULT_PATH_ERROR_TIP        QString("Please reset the default path.")
+#define STRING_POPUP_INPUT_TEXT_ERROR              QString("Input text error")
+#define STRING_POPUP_INPUT_TEXT_ERROR_TIP          QString("Input text does not contain script commands")
 
 
 
