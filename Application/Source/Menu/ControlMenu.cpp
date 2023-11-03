@@ -13,7 +13,7 @@
 // Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
 
 
-#define USE_TEST_RESULT_TEMP
+// #define USE_TEST_RESULT_TEMP
 
 
 QSharedPointer<ControlMenu>& ControlMenu::instance() {
@@ -217,8 +217,8 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
                 QString id = info.at(0);
                 if (id.compare("CURRENT") == false) {
                     currentCount += info.at(1).toInt();
-                // } else if (id.compare("TOTAL") == false) {
-                //     totalCount = info.at(1).toInt();
+                } else if (id.compare("TOTAL") == false) {
+                    // totalCount = info.at(1).toInt();
                 } else if (id.compare("COMPLETE") == false) {
                     complete = true;
                     completeString = info.at(1);
