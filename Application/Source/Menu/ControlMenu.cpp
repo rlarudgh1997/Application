@@ -417,7 +417,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
         disconnect(mProcess.data());
         mProcess.reset();
 
-#if 0   // 일반 오류 상황과 구분이 안됨
+#if 1   // 일반 오류 상황과 구분이 안됨
         if (result == false) {
             updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeError, totalCount);
         }
