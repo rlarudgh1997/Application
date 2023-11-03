@@ -42,6 +42,16 @@
         "cmath": "cpp",
         "qmenu": "cpp",
         "qlabel": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "qfilesystemwatcher": "cpp",
+        "qpushbutton": "cpp",
+        "memory": "cpp",
+        "qdiriterator": "cpp",
+        "qtxml": "cpp",
+        "random": "cpp",
+        "qprogressbar": "cpp",
+        "qlineedit": "cpp",
+        "qplaintextedit": "cpp",
+        "qscrollbar": "cpp"
     }
 }

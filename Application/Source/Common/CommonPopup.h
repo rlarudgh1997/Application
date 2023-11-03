@@ -26,6 +26,7 @@ enum class PopupType {
     InstallComplete,
     DefaultPathError,
     InputTextError,
+    ScriptRunnigCompleted,
     SelectCellColumnError,
 
     Exit,
@@ -65,11 +66,12 @@ public:
             case PopupType::InstallComplete :
             case PopupType::DefaultPathError :
             case PopupType::InputTextError :
+            case PopupType::ScriptRunnigCompleted :
             case PopupType::SelectCellColumnError : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
-                    button = drawPopupNoraml(handler, (popupType != PopupType::About),
-                                                        infoData.at(0).toString(), infoData.at(1).toString());
+                    bool warning = ((popupType != PopupType::About) && (popupType != PopupType::ScriptRunnigCompleted));
+                    button = drawPopupNoraml(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
@@ -131,7 +133,8 @@ private:
             if (warning) {
                 QMessageBox::warning(handler->getScreen(), title, tip);
             } else {
-                QMessageBox::about(handler->getScreen(), title, tip);
+                QMessageBox::information(handler->getScreen(), title, tip);
+                // QMessageBox::about(handler->getScreen(), title, tip);
             }
             button = PopupButton::OK;
         }

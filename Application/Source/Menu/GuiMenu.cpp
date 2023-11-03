@@ -521,13 +521,13 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 
 void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
     if (mSelectPt == nullptr) {
-        QStringList itemList1 = QStringList({"Negative"});
-        QStringList itemList2 = QStringList();
+        QString item = QString("Negative");
+        QStringList itemList = QStringList();
         if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
-            itemList1 = QStringList({"Docker"});
-            itemList2 = QStringList({"ICV", "FCEV", "EV"});
+            item = QString("Docker");
+            itemList = QStringList({"ICV", "FCEV", "EV"});
         }
-        mSelectPt = new SelectPtDialog(isHandler()->getScreen(), itemList1, itemList2);
+        mSelectPt = new SelectPtDialog(isHandler()->getScreen(), item, itemList);
 
         connect(mSelectPt, &SelectPtDialog::signalPtSelected, [=](const bool& option1,
                                                                     const QList<QPair<QString, bool>>& checkStateList) {
@@ -573,8 +573,7 @@ void GuiMenu::updateDisplayTestResultInfo() {
     complete = countInfo.at(2).toBool();
 
     if (mProgressBar == nullptr) {
-        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), false, QRect(1100, 25, 100, 30));
-        ivis::common::widgetVisible<QProgressBar>(mProgressBar, true);
+        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
     }
     mProgressBar->setRange(0, total);
     mProgressBar->setValue(current);
@@ -592,7 +591,6 @@ void GuiMenu::updateDisplayTestResultInfo() {
         moduleStateInfo.append(info.toString() + "\n");
     }
 
-    qDebug() << "\t Receive CountInfo :" << countInfo;
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);

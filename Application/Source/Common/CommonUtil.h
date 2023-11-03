@@ -168,14 +168,16 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
     return widget;
 }
 
-// template <typename T1>
-// inline void deleteWidget(T1* widget) {
-//     if (widget) {
-//         disconnect(widget);
-//         delete widget;
-//         widget = nullptr;
-//     }
-// }
+//template <typename T1>
+//inline void deleteWidget(T1* widget, const bool& clearConnect = false) {
+//    if (widget) {
+//        if (clearConnect) {
+//            disconnect(widget);
+//        }
+//        delete widget;
+//        widget = nullptr;
+//    }
+//}
 
 
 

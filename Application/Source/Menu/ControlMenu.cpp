@@ -13,7 +13,7 @@
 // Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
 
 
-// #define USE_TEST_RESULT_TEMP
+#define USE_TEST_RESULT_TEMP
 
 
 QSharedPointer<ControlMenu>& ControlMenu::instance() {
@@ -61,13 +61,7 @@ void ControlMenu::initNormalData() {
 
 #if defined(USE_TEST_RESULT_TEMP)
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
-
-    QVariantList countInfo = QVariantList({-1, 30, true});
-    QVariantList titleInfo = QVariantList({"Test Case : Start", "ERROR_INFO : To Do Test Code"});
-    QVariantList moduleStateInfo = QVariantList({});
-    QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
-
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
+    updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, 30);
 #endif
 }
 
@@ -105,50 +99,8 @@ void ControlMenu::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
 
 #if defined(USE_TEST_RESULT_TEMP)
-    static QVariantList tempState = QVariantList({
-        "ABS_CV : PASS",
-        "ABS_NO_ABS_Trailer : PASS",
-        "ADAS_Driving_CV : PASS",
-        "ADAS_PARKING_CV : PASS",
-        "Air_Bag_CV : PASS",
-        "Brake_Air : PASS",
-        "Brake_System_Malfunction : PASS",
-        "CNG_Fuel_System_CV : PASS",
-        "DEA : PASS",
-        "DSW : PASS",
-    });
-
     if (getTimerId(AbstractControl::AbstractTimerStart) == timerId) {
-        QVariantList testResultInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
-        if (testResultInfo.size() != 3) {
-            qDebug() << "Fail to test result info size :" << testResultInfo.size();
-            return;
-        }
-
-        QVariantList countInfo = testResultInfo.at(0).toList();
-        if (countInfo.size() != 3) {
-            qDebug() << "Fail to count info size :" << countInfo.size() << countInfo;
-            return;
-        }
-        int current = countInfo.at(0).toInt() + 1;
-        int total = countInfo.at(1).toInt();
-        bool complete = (current > total);
-        countInfo.clear();
-        countInfo = QVariantList({current, total, complete});
-        QVariantList titleInfo = testResultInfo.at(1).toList();
-        QVariantList moduleStateInfo = testResultInfo.at(2).toList();
-        moduleStateInfo.append(tempState.at(current % tempState.size()));
-
-        testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
-
-        // qDebug() << "\t 2 TestResultInfo :" << testResultInfo;
-        // qDebug() << "\t   2-0 :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
-        // qDebug() << "\t   2-1 :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
-        // qDebug() << "\t   2-2 :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
-
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
-
-        if (complete) {
+        if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeTest, 30)) {
             controlTimer(AbstractControl::AbstractTimerStart);
         }
     }
@@ -241,6 +193,112 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, runType, true);
 }
 
+bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData) {
+    QVariantList countInfo = QVariantList();
+    QVariantList titleInfo = QVariantList();
+    QVariantList moduleStateInfo = QVariantList();
+    bool complete = false;
+
+    switch (testReultType) {
+        case ivis::common::TestReultTypeEnum::TestReultTypeStart : {
+            countInfo = QVariantList({0, totalCount, false});
+            titleInfo = QVariantList({"Test Case : Start"});
+            break;
+        }
+        case ivis::common::TestReultTypeEnum::TestReultTypeUpdate : {
+            int currentCount = 0;
+            QString errorString = QString();
+            QString completeString = QString();
+            foreach(const auto& data, infoData) {
+                QStringList info = data.split(" : ");
+                if (info.size() != 2) {
+                    continue;
+                }
+                QString id = info.at(0);
+                if (id.compare("CURRENT") == false) {
+                    currentCount += info.at(1).toInt();
+                // } else if (id.compare("TOTAL") == false) {
+                //     totalCount = info.at(1).toInt();
+                } else if (id.compare("COMPLETE") == false) {
+                    complete = true;
+                    completeString = info.at(1);
+                } else if (id.compare("ERROR_INFO") == false) {
+                    errorString = data;
+                } else {
+                    if (id.compare("CURRENT_POWER_TRAIN") == false) {
+                        moduleStateInfo.append("---------------------------------------------------------------");
+                    }
+                    moduleStateInfo.append(data);
+                }
+            }
+            countInfo = QVariantList({currentCount, totalCount, complete});
+            if (complete) {
+                titleInfo.append(QString("Test Case : Completed(%1)").arg(completeString));
+                titleInfo.append(errorString);
+            } else {
+                titleInfo.append("Test Case : Progressing");
+                titleInfo.append("");
+            }
+            break;
+        }
+        case ivis::common::TestReultTypeEnum::TestReultTypeError : {
+            QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
+            countInfo = QVariantList({0, totalCount, true});
+            titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Script running error"});
+            moduleStateInfo = readInfo.at(2).toList();
+            break;
+        }
+#if defined(USE_TEST_RESULT_TEMP)
+        case ivis::common::TestReultTypeEnum::TestReultTypeTest : {
+            static QVariantList tempState = QVariantList({
+                "ABS_CV : PASS",
+                "ABS_NO_ABS_Trailer : PASS",
+                "ADAS_Driving_CV : PASS",
+                "ADAS_PARKING_CV : PASS",
+                "Air_Bag_CV : PASS",
+                "Brake_Air : PASS",
+                "Brake_System_Malfunction : PASS",
+                "CNG_Fuel_System_CV : PASS",
+                "DEA : PASS",
+                "DSW : FAIL",
+            });
+
+            QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
+            countInfo = readInfo.at(0).toList();
+            int current = countInfo.at(0).toInt() + 1;
+            int total = countInfo.at(1).toInt();
+            complete = (current > total);
+            countInfo.clear();
+            countInfo = QVariantList({current, total, complete});
+            titleInfo = readInfo.at(1).toList();
+            if (complete) {
+                titleInfo.append("ERROR_INFO : To Do Test Code");
+            }
+            moduleStateInfo = readInfo.at(2).toList();
+            moduleStateInfo.append(tempState.at(current % tempState.size()));
+            break;
+        }
+#endif
+        default : {
+            break;
+        }
+    }
+
+    QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
+    // qDebug() << "\t TestResultInfo :" << testResultInfo;
+    // qDebug() << "\t   0 :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
+    // qDebug() << "\t   1 :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
+    // qDebug() << "\t   2 :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
+
+    if (complete) {
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::ScriptRunnigCompleted, isHandler(), popupData,
+                                QVariantList({STRING_SCRIPT_RUNNIG_COMPLETED, STRING_SCRIPT_RUNNIG_COMPLETED_TIP}));
+    }
+    return complete;
+}
+
 void ControlMenu::excuteScript(const int& runType, const bool& option1, const QVariantList& selectInfoList) {
     static int totalCount = 10;
     QString cmd = QString();
@@ -322,50 +380,8 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
     mWatcher = QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(filePath));
     mWatcher.data()->start();
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
-                                                                    [=](const QStringList& fileData) {
-        int total = totalCount;
-        int current = 0;
-        bool complete = false;
-        QString errorString = QString();
-        QString completeString = QString();
-        QVariantList titleInfo = QVariantList();
-        QVariantList moduleStateInfo = QVariantList();
-        foreach(const auto& data, fileData) {
-            QStringList info = data.split(" : ");
-            if (info.size() != 2) {
-                continue;
-            }
-            QString id = info.at(0);
-            if (id.compare("CURRENT") == false) {
-                current += info.at(1).toInt();
-            } else if (id.compare("TOTAL") == false) {
-                // total = info.at(1).toInt();
-            } else if (id.compare("COMPLETE") == false) {
-                complete = true;
-                completeString = info.at(1);
-            } else if (id.compare("ERROR_INFO") == false) {
-                errorString = data;
-            } else {
-                if (id.compare("CURRENT_POWER_TRAIN") == false) {
-                    moduleStateInfo.append("---------------------------------------------------------------");
-                }
-                moduleStateInfo.append(data);
-            }
-        }
-
-        QVariantList countInfo = QVariantList({current, total, complete});
-        qDebug() << "\t 2 Send CountInfo :" << countInfo;
-        if (complete) {
-            titleInfo.append(QString("Test Case : Completed(%1)").arg(completeString));
-            titleInfo.append(errorString);
-        } else {
-            titleInfo.append("Test Case : Progressing");
-            titleInfo.append("");
-        }
-        QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
-
-       if (complete) {
+                                                                                [=](const QStringList& fileData) {
+        if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeUpdate, totalCount, fileData)) {
             emit mWatcher.data()->signalWatcherFileFail(10);
         }
     });
@@ -389,12 +405,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
     mProcess.data()->start();
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramStarted, [=]() {
-        QVariantList countInfo = QVariantList({0, totalCount, false});
-        QVariantList titleInfo = QVariantList({"Test Case : Start", ""});
-        QVariantList moduleStateInfo = QVariantList({});
-        QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
-
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
+        updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, totalCount);
     });
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [=](const bool& result) {
@@ -405,6 +416,9 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
 
         disconnect(mProcess.data());
         mProcess.reset();
+        if (result == false) {
+            updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeError, totalCount);
+        }
     });
 }
 

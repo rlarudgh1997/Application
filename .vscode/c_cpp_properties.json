@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Qt/Qt5.12.4/5.12.4/mingw73_64/include",
+                "C:/Qt/Qt5.12.10/5.12.10/mingw73_64/include",
                 "C:/mingw64/x86_64-8.1.0-release-win32-seh-rt_v6-rev0/mingw64/include"
             ],
             "defines": [
@@ -13,7 +13,7 @@
                 "_UNICODE"
             ],
             // "compilerPath": "C:/mingw64/x86_64-8.1.0-release-win32-seh-rt_v6-rev0/mingw64/bin/gcc.exe",
-            "compilerPath": "C:/Qt/Qt5.12.4/Tools/mingw730_64/bin/gcc.exe",
+            "compilerPath": "C:/Qt/Qt5.12.10/Tools/mingw730_64/bin/gcc.exe",
             "cStandard": "c17",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "windows-gcc-x64"

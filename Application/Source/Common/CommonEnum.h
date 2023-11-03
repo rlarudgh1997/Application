@@ -306,6 +306,16 @@ public:
     };
 };
 
+class TestReultTypeEnum {
+public:
+    enum TestReultType {
+        TestReultTypeStart = 0,
+        TestReultTypeUpdate,
+        TestReultTypeCompleted,
+        TestReultTypeError,
+        TestReultTypeTest,
+    };
+};
 
 
 

@@ -101,8 +101,9 @@
 #define STRING_POPUP_DEFAULT_PATH_ERROR            QString("Default path error")
 #define STRING_POPUP_DEFAULT_PATH_ERROR_TIP        QString("Please reset the default path.")
 #define STRING_POPUP_INPUT_TEXT_ERROR              QString("Input text error")
-#define STRING_POPUP_INPUT_TEXT_ERROR_TIP          QString("Input text does not contain script commands")
-
+#define STRING_POPUP_INPUT_TEXT_ERROR_TIP          QString("Input text does not contain script commands.")
+#define STRING_SCRIPT_RUNNIG_COMPLETED             QString("Script runnig completed")
+#define STRING_SCRIPT_RUNNIG_COMPLETED_TIP         QString("The script execution request has been completed.")
 
 
 
