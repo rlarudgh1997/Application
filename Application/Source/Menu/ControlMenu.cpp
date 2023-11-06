@@ -241,10 +241,15 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             }
             break;
         }
+        case ivis::common::TestReultTypeEnum::TestReultTypeCancel :
         case ivis::common::TestReultTypeEnum::TestReultTypeError : {
             QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
             countInfo = QVariantList({0, totalCount, true});
-            titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Script running error"});
+            if (testReultType == ivis::common::TestReultTypeEnum::TestReultTypeCancel) {
+                titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Request cancel"});
+            } else {
+                titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Script running error"});
+            }
             moduleStateInfo = readInfo.at(2).toList();
             break;
         }
@@ -417,16 +422,18 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
         disconnect(mProcess.data());
         mProcess.reset();
 
-#if 1   // 일반 오류 상황과 구분이 안됨
         if (result == false) {
-            updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeError, totalCount);
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString().size() == 0) {
+                updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeCancel, totalCount);
+            } else {
+                updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeError, totalCount);
+            }
         }
-#endif
     });
 }
 
 void ControlMenu::cancelScript(const bool& complete) {
-    QStringList killProcess = QStringList({
+    const QStringList killProcess = QStringList({
         "python",
         "python3",
         "altonservice",
@@ -434,13 +441,18 @@ void ControlMenu::cancelScript(const bool& complete) {
         "gen_tc.sh",
         "run_tc.sh",
     });
-    foreach(const auto& process, killProcess) {
-        int result = system((QString("pkill -9 -ef %1").arg(process)).toLatin1().data());
-        qDebug() << "cancelScript - process :" << process << result;
+    QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
+    if (complete == false) {
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, "");
+    }
+    foreach(const auto& info, killProcess) {
+        QStringList log;
+        ivis::common::ExcuteProgram process(false);
+        bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
+        qDebug() << "cancelScript - process :" << info;   // << result;
     }
 
     if (complete == false) {
-        QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
         qDebug() << "cancelScript - file write path :" << defaultRunPath;
         ivis::common::FileInfo::writeFile(defaultRunPath, QString("ERROR_INFO : User Request  - Process Exit"), true);
     }

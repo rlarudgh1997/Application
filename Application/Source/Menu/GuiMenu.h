@@ -50,8 +50,6 @@ public:
         mCheckBox1 = ivis::common::createWidget<QCheckBox>(mCheckLayout1->widget(), true);
         mCheckBox1->setText(item);
         mLayout->addWidget(mCheckBox1);
-        // mCheckLayout1->addWidget(mCheckBox1[index]);
-        // mLayout->addLayout(mCheckLayout1);
 
         if (itemList.size() > 0) {
             mCheckLayout2 = new QHBoxLayout(mLayout->widget());
@@ -61,9 +59,9 @@ public:
                 mCheckBox2[index]->setText(info);
                 mCheckLayout2->addWidget(mCheckBox2[index]);
             }
+            mLayout->addLayout(mCheckLayout2);
             mCheckBox1->setChecked(true);
         }
-        mLayout->addLayout(mCheckLayout2);
 
         mButtonLayout = new QHBoxLayout(mLayout->widget());
         mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);

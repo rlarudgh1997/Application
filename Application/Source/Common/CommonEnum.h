@@ -312,6 +312,7 @@ public:
         TestReultTypeStart = 0,
         TestReultTypeUpdate,
         TestReultTypeCompleted,
+        TestReultTypeCancel,
         TestReultTypeError,
         TestReultTypeTest,
     };
