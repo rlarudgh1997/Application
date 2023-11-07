@@ -1,5 +1,5 @@
-#ifndef CONTROL_TELLTALE_H
-#define CONTROL_TELLTALE_H
+#ifndef CONTROL_GAUGE_H
+#define CONTROL_GAUGE_H
 
 #include "AbstractControl.h"
 
@@ -7,17 +7,27 @@
 
 
 
-class ControlTelltale : public AbstractControl {
+class ControlGauge : public AbstractControl {
     Q_OBJECT
 
+private:
+    enum {
+        ControlGaugeTimerSpeed = AbstractControl::AbstractTimerStart,
+        ControlGaugeTimerRpm,
+    };
+
+
 public:
-    static QSharedPointer<ControlTelltale>& instance();
+    static QSharedPointer<ControlGauge>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
 
 private:
-    explicit ControlTelltale();
+    explicit ControlGauge();
+
+    qreal isGaugeAngle(const int& gaugeType, const QVariant& gaugeValue);
+    void updateGaugeInfo(const int& dataType, const QVariant& dataValue);
 
 
 protected:
@@ -46,4 +56,4 @@ private:
 };
 
 
-#endif    // CONTROL_TELLTALE_H
+#endif    // CONTROL_GAUGE_H

@@ -22,7 +22,7 @@ public:
 
 public:
     explicit AbstractControl();
-    bool init(const int& currentMode);
+    bool init(const int& currentMode, const int& displayType);
     bool isInitComplete();
     int controlTimer(const int& timerType, const bool& start = false, const int& interval = 0);
     int getTimerId(const int& timerType);
@@ -40,9 +40,9 @@ protected:
 
 private:
     virtual AbstractHandler* isHandler() = 0;
-    virtual bool initControl(const int& currentMode) = 0;
+    virtual bool initControl() = 0;
     virtual void controlConnect(const bool& state = true) = 0;
-    virtual void initCommonData(const int& currentMode) = 0;
+    virtual void initCommonData(const int& currentMode, const int& displayType) = 0;
     virtual void initNormalData() = 0;
     virtual void initControlData() = 0;
     virtual void resetControl(const bool& reset) = 0;
@@ -56,6 +56,7 @@ private slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
+    virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue) = 0;
 
 
 private:

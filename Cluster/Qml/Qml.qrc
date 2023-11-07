@@ -2,8 +2,16 @@
     <qresource prefix="/">
         <file>DataModel/DataModel.qml</file>
         <file>DataModel/DataModelHome.qml</file>
+        <file>DataModel/DataModelGauge.qml</file>
         <file>DataModel/DataModelTelltale.qml</file>
         <file>Home/Home.qml</file>
+        <file>Gauge/Gauge.qml</file>
+        <file>Gauge/GaugeRpm.qml</file>
+        <file>Gauge/GaugeRpmBg.qml</file>
+        <file>Gauge/GaugeSpeed.qml</file>
+        <file>Gauge/GaugeSpeedBg.qml</file>
+        <file>Gauge/GaugeFuel.qml</file>
+        <file>Gauge/GaugeTemperature.qml</file>
         <file>Telltale/Telltale.qml</file>
         <file>Telltale/TelltaleCV.qml</file>
         <file>Telltale/TelltalePV.qml</file>

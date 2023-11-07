@@ -3,11 +3,11 @@
 AbstractControl::AbstractControl() {
 }
 
-bool AbstractControl::init(const int& currentMode) {
+bool AbstractControl::init(const int& currentMode, const int& displayType) {
     if (mInit == false) {
-        mInit = initControl(currentMode);
+        mInit = initControl();
         controlConnect(true);
-        initCommonData(currentMode);
+        initCommonData(currentMode, displayType);
         initNormalData();
         initControlData();
     }

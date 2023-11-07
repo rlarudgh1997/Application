@@ -22,9 +22,9 @@ private:
 
 protected:
     virtual AbstractHandler* isHandler();
-    virtual bool initControl(const int& currentMode);
+    virtual bool initControl();
     virtual void controlConnect(const bool& state = true);
-    virtual void initCommonData(const int& currentMode);
+    virtual void initCommonData(const int& currentMode, const int& displayType);
     virtual void initNormalData();
     virtual void initControlData();
     virtual void resetControl(const bool& reset);
@@ -38,6 +38,7 @@ public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
+    virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue);
 
 
 private:

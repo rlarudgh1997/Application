@@ -60,6 +60,10 @@ void MainWindow::setQmlRegisterType() {
                                                                           "PropertyType");
 
     // Home
+    qmlRegisterType<ivis::common::HandlerHomeEnum>                       ("GaugeEnum",     1, 0,
+                                                                          "Gauge");
+
+    // Gauge
     qmlRegisterType<ivis::common::HandlerHomeEnum>                       ("HomeEnum",     1, 0,
                                                                           "Home");
 

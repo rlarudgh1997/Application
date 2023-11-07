@@ -96,7 +96,7 @@ class PropertyEnum : public QObject {
     Q_OBJECT
 
 public:
-    enum  CommonType {
+    enum CommonType {
         CommonInvalid = PROPETRY_START_COMMON,
         CommonDisplay,
         CommonVisible,
@@ -119,6 +119,18 @@ public:
     enum GaugeType  {
         GaugeInvalid = PROPETRY_START_GAUGE,
         GaugeType,
+        GaugeSpeed,
+        GaugeRpm,
+        GaugeFuel,
+        GaugeTemperature,
+        GaugeSpeedAngle,
+        GaugeRpmAngle,
+        GaugeFuelAngle,
+        GaugeTemperatureAngle,
+        GaugeSpeedUnit,
+        GaugeSpeedState,
+        GaugeSpeedSubDigitalState,
+        GaugeRpmState,
     };
     Q_ENUMS(GaugeType)
 
@@ -273,6 +285,18 @@ public:
     Q_ENUMS(HomeType)
 };
 
+class HandlerGaugeEnum : public QObject {
+    Q_OBJECT
+
+public:
+    enum GaugeType {
+        Invalid = 0,
+        Normal,
+        Eco,
+        Sport,
+    };
+    Q_ENUMS(GaugeType)
+};
 
 class TelltaleStatType : public QObject {
     Q_OBJECT
@@ -366,6 +390,57 @@ public:
 };
 
 
+class SpeedStateType : public QObject {
+    Q_OBJECT
+
+public:
+    enum class SpeedState : uint64_t {
+        NONE = 0x0,
+        DISPLAY_OFF,
+        VALUE,
+        MAX,
+    };
+    Q_ENUM(SpeedState)
+};
+
+class SpeedUnitType : public QObject {
+    Q_OBJECT
+
+public:
+    enum class SpeedUnit : uint64_t {
+        NONE = 0x0,
+        KM_PER_HOUR,
+        MILE_PER_HOUR,
+        MAX,
+    };
+    Q_ENUM(SpeedUnit)
+};
+
+class SpeedSubDigitalStateType : public QObject {
+    Q_OBJECT
+
+public:
+    enum class SpeedSubDigitalState : uint64_t {
+        NONE = 0x0,
+        DISPLAY_OFF,
+        VALUE,
+        MAX,
+    };
+    Q_ENUM(SpeedSubDigitalState)
+};
+
+class RpmStateType : public QObject {
+    Q_OBJECT
+
+public:
+    enum class RpmState : uint64_t {
+        NONE = 0x0,
+        DISPLAY_OFF,
+        VALUE,
+        MAX,
+    };
+    Q_ENUM(RpmState)
+};
 
 
 
@@ -373,8 +448,38 @@ public:
 
 
 
+class ServiceDataTypeEnum : public QObject {
+    Q_OBJECT
+
+public:
+    enum ServiceDataType {
+        ServiceDataTypeInvalid = 0,
+
+        ServiceDataTypeSpeed,
+        ServiceDataTypeRpm,
+        ServiceDataTypeFuel,
+        ServiceDataTypeTemperature,
+        ServiceDataTypeSpeedUnit,
+        ServiceDataTypeSpeedState,
+        ServiceDataTypeSpeedSubDigitalState,
+        ServiceDataTypeRpmState,
 
 
+        ServiceDataTypeMax,
+    };
+};
+
+class GaugeTypeEnum : public QObject {
+    Q_OBJECT
+
+public:
+    enum GaugeType {
+        GaugeTypeInvalid = 0,
+        GaugeTypeSpeed,
+        GaugeTypeSpeedMile,
+        GaugeTypeRpm,
+    };
+};
 
 }  // end of namespace common
 }  // end of namespace ivis

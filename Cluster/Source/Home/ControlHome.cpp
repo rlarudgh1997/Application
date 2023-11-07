@@ -28,8 +28,7 @@ AbstractHandler* ControlHome::isHandler() {
     return mHandler;
 }
 
-bool ControlHome::initControl(const int& currentMode) {
-    Q_UNUSED(currentMode)
+bool ControlHome::initControl() {
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -37,9 +36,9 @@ bool ControlHome::initControl(const int& currentMode) {
     return false;
 }
 
-void ControlHome::initCommonData(const int& currentMode) {
+void ControlHome::initCommonData(const int& currentMode, const int& displayType) {
     Q_UNUSED(currentMode)
-    updateDataHandler(ivis::common::PropertyEnum::CommonDisplay, ivis::common::DisplayEnum::DisplayTypeHome);
+    updateDataHandler(ivis::common::PropertyEnum::CommonDisplay, displayType);
     updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
 }
 
@@ -144,4 +143,8 @@ void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventT
             break;
         }
     }
+}
+
+void ControlHome::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
+
 }

@@ -129,9 +129,9 @@ void ControlManager::createControl(const int& displayType) {
         }
 
         if (mControlInfo[displayType]) {
-            // qDebug() << "ControlManager::createControl :" << displayType;
+            // qDebug() << "ControlManager::createControl :" << getCurrentMode() << displayType;
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
-            mControlInfo[displayType]->init(displayType);
+            mControlInfo[displayType]->init(getCurrentMode(), displayType);
 #if defined(USE_RESIZE_SIGNAL)
             emit signalScreenSizeChanged(getScreenSize());
 #else

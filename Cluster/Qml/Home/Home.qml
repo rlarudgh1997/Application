@@ -16,7 +16,8 @@ DataModelHome {
 
     Text {
         anchors.fill: parent
-        text: "TC Cluster App"
+        visible: false
+        text: "Test Application - 구현중"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         color: "#ffffff"

@@ -32,9 +32,9 @@ private:
 
 protected:
     virtual AbstractHandler* isHandler();
-    virtual bool initControl(const int& currentMode);
+    virtual bool initControl();
     virtual void controlConnect(const bool& state = true);
-    virtual void initCommonData(const int& currentMode);
+    virtual void initCommonData(const int& currentMode, const int& displayType);
     virtual void initNormalData();
     virtual void initControlData();
     virtual void resetControl(const bool& reset);

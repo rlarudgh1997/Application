@@ -20,17 +20,22 @@ HandlerHome::HandlerHome() : AbstractHandler(ivis::common::DisplayEnum::DisplayT
 void HandlerHome::initPropertyInfo() {
     // Common
     registerProperty(ivis::common::PropertyEnum::CommonDisplay,
-                                                QString("display"),                                  QVariant(0));
+                                                QString("display"),
+                                                QVariant(0));
     registerProperty(ivis::common::PropertyEnum::CommonVisible,
-                                                QString("visible"),                                  QVariant(true));
+                                                QString("visible"),
+                                                QVariant(true));
     registerProperty(ivis::common::PropertyEnum::CommonRect,
-                                                QString("rect"),                                     QVariant());
+                                                QString("rect"),
+                                                QVariant());
     registerProperty(ivis::common::PropertyEnum::CommonVehicleType,
-                                                QString("vehicleType"),                              QVariant(0));
+                                                QString("vehicleType"),
+                                                QVariant(0));
 
     // Home
     registerProperty(ivis::common::PropertyEnum::HomeType,
-                                                QString("homeType"),                                 QVariant(0));
+                                                QString("homeType"),
+                                                QVariant(0));
 }
 
 void HandlerHome::controlConnect(const bool& state) {

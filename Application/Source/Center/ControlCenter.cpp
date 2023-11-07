@@ -28,8 +28,7 @@ AbstractHandler* ControlCenter::isHandler() {
     return mHandler;
 }
 
-bool ControlCenter::initControl(const int& currentMode) {
-    Q_UNUSED(currentMode)
+bool ControlCenter::initControl() {
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -37,8 +36,8 @@ bool ControlCenter::initControl(const int& currentMode) {
     return false;
 }
 
-void ControlCenter::initCommonData(const int& currentMode) {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeCenter);
+void ControlCenter::initCommonData(const int& currentMode, const int& displayType) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);

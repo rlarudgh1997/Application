@@ -27,7 +27,7 @@ AbstractHandler* ControlExcel::isHandler() {
     return mHandler;
 }
 
-bool ControlExcel::initControl(const int& currentMode) {
+bool ControlExcel::initControl() {
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -35,8 +35,8 @@ bool ControlExcel::initControl(const int& currentMode) {
     return false;
 }
 
-void ControlExcel::initCommonData(const int& currentMode) {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, ivis::common::ScreenEnum::DisplayTypeExcel);
+void ControlExcel::initCommonData(const int& currentMode, const int& displayType) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);

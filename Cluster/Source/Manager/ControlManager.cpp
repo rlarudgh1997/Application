@@ -3,7 +3,9 @@
 #include "CommonEnum.h"
 #include "ScreenInfo.h"
 #include "ConfigSetting.h"
+
 #include "ControlHome.h"
+#include "ControlGauge.h"
 #include "ControlTelltale.h"
 
 
@@ -20,7 +22,9 @@ ControlManager::ControlManager() {
 
 void ControlManager::init() {
     setCurrentMode(ivis::common::DisplayEnum::DisplayTypeHome);
+
     createControl(ivis::common::DisplayEnum::DisplayTypeHome);
+    createControl(ivis::common::DisplayEnum::DisplayTypeGauge);
     createControl(ivis::common::DisplayEnum::DisplayTypeTelltale);
 }
 
@@ -113,6 +117,10 @@ void ControlManager::createControl(const int& displayType) {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlHome::instance().data());
                 break;
             }
+            case ivis::common::DisplayEnum::DisplayTypeGauge : {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlGauge::instance().data());
+                break;
+            }
             case ivis::common::DisplayEnum::DisplayTypeTelltale : {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTelltale::instance().data());
                 break;
@@ -126,7 +134,7 @@ void ControlManager::createControl(const int& displayType) {
         if (mControlInfo[displayType]) {
             // qDebug() << "ControlManager::createControl :" << displayType;
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
-            mControlInfo[displayType]->init(displayType);
+            mControlInfo[displayType]->init(getCurrentMode(), displayType);
 #if defined(USE_RESIZE_SIGNAL)
 //            emit signalScreenSizeChanged(getScreenSize());
 #else
