@@ -50,7 +50,7 @@ void ControlGauge::initNormalData() {
 
     // Handler Data
     updateDataHandler(ivis::common::PropertyEnum::GaugeDefaultAngle, mDefaultAngle);
-    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, 260);
     updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperature, 0);
@@ -73,6 +73,9 @@ void ControlGauge::initControlData() {
 #if defined(USE_GAUGE_TEMP_VALUE)
     controlTimer(ControlGaugeTimerSpeed, true, 200);
     controlTimer(ControlGaugeTimerRpm, true, 150);
+#else
+    slotServiceDataChanged(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, 180);
+    slotServiceDataChanged(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, 4500);
 #endif
 }
 
@@ -150,31 +153,36 @@ void ControlGauge::sendEventInfo(const int& destination, const int& eventType, c
 }
 
 qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValue) {
-    const double speedFactor140  = 1.09;          //  153/140
-    const double speedFactor260  = 0.725;         //   87/120
+    const double speedFactor140  = 1.11;          //  153/140
+    const double speedFactor260  = 0.745;         //   87/120   -> Base : 0.725, New : 0.745
     const double speedFactorMile = 1.5375;        //  246/160
-    const double rpmFactor      = 0.04;          // 240/6000
+    const double rpmFactor       = 0.0405;        // 240/6000
+    const double rpmFactor6000   = 0.039;         // RPM : 3000 ~ 6000 이상에서 좌표 안 맞아서 수정 적용
 
     qreal gaugeAngle = 0.0;
     int value = gaugeValue.toInt();
 
     switch (gaugeType) {
         case ivis::common::GaugeTypeEnum::GaugeTypeSpeed : {
-            if (value >= 0 && value <= 140) {
-                gaugeAngle = (value * speedFactor140) - 120;
-            } else {
+            if (value >  140) {
                 gaugeAngle = (33 + ((value - 140) * speedFactor260));
+            } else {
+                gaugeAngle = mDefaultAngle + (value * speedFactor140);
             }
             break;
         }
         case ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile : {
             if (value >= 0 && value <= 160) {
-                gaugeAngle = (value * speedFactorMile) - 123;
+                gaugeAngle = (mDefaultAngle - 3) + (value * speedFactorMile);
             }
             break;
         }
         case ivis::common::GaugeTypeEnum::GaugeTypeRpm : {
-            gaugeAngle = (value * rpmFactor) - 120;
+            if (value >= 3000) {
+                gaugeAngle = mDefaultAngle + (value * rpmFactor);
+            } else {
+                gaugeAngle = mDefaultAngle + (value * rpmFactor6000);
+            }
             break;
         }
         default : {

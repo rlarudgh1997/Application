@@ -63,7 +63,15 @@ Item {
         }
         Image {
             id: speedSubBg; x: 54; y: 54;
-            source: "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_graduation_card_07.png"
+            source: {
+                if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
+                    "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_graduation_card_04.png"
+                } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
+                    "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_graduation_card_07.png"
+                } else {
+                    ""
+                }
+            }
         }
         Image {
             id: speedUnit; x: 314; y: 404;
@@ -327,7 +335,7 @@ Item {
     Image {
         id: speedNiddle; x: 344; y: 170
         transform: Rotation {
-            id: speedNiddleRotation; origin.x: 6; origin.y: 180; angle: -120
+            id: speedNiddleRotation; origin.x: 6; origin.y: 180; angle: -123
         }
         source: "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_image_01.png"
     }

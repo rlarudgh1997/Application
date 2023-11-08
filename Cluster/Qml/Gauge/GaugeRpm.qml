@@ -136,7 +136,7 @@ Item {
     Image {
         id: rpmNiddle; x: 344; y: 170
         transform: Rotation {
-            id: rpmNiddleRotation; origin.x: 6; origin.y: 180; angle: -120
+            id: rpmNiddleRotation; origin.x: 6; origin.y: 180; angle: -123
         }
         source: "qrc:/Image/Gauge/RPM/T1_THEME_A_thm1_COMFORT/t1_thm1_tacho_image_01.png"
     }
