@@ -33,8 +33,8 @@ void HandlerGauge::initPropertyInfo() {
                                                 QVariant(0));
 
     // Gauge
-    registerProperty(ivis::common::PropertyEnum::GaugeType,
-                                                QString("gaugeType"),
+    registerProperty(ivis::common::PropertyEnum::GaugeDefaultAngle,
+                                                QString("gaugeDefaultAngle"),
                                                 QVariant(0));
     registerProperty(ivis::common::PropertyEnum::GaugeSpeed,
                                                 QString("gaugeSpeed"),

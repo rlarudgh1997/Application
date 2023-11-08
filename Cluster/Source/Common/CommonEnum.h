@@ -118,7 +118,7 @@ public:
 
     enum GaugeType  {
         GaugeInvalid = PROPETRY_START_GAUGE,
-        GaugeType,
+        GaugeDefaultAngle,
         GaugeSpeed,
         GaugeRpm,
         GaugeFuel,

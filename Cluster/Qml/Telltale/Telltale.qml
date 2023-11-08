@@ -394,13 +394,11 @@ DataModelTelltale {
     }
 
 
+    // TelltaleCV {
+    //     anchors.fill: parent
+    // }
 
-
-    TelltaleCV {
-        anchors.fill: parent
-    }
-
-    TelltalePV {
-        anchors.fill: parent
-    }
+    // TelltalePV {
+    //     anchors.fill: parent
+    // }
 }

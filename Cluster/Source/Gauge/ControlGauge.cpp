@@ -11,6 +11,7 @@
 #define USE_GAUGE_TEMP_VALUE
 
 
+
 QSharedPointer<ControlGauge>& ControlGauge::instance() {
     static QSharedPointer<ControlGauge> gControl;
     if (gControl.isNull()) {
@@ -47,33 +48,32 @@ void ControlGauge::initCommonData(const int& currentMode, const int& displayType
 void ControlGauge::initNormalData() {
     resetControl(false);
 
-    updateDataHandler(ivis::common::PropertyEnum::GaugeType, 0);
+    // Handler Data
+    updateDataHandler(ivis::common::PropertyEnum::GaugeDefaultAngle, mDefaultAngle);
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperature, 0);
-
-    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, -120);
-    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle, -120);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, mDefaultAngle);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle, mDefaultAngle);
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuelAngle, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperatureAngle, 0);
-
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedUnit,
                                     static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::KM_PER_HOUR));
-    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedState,
-                                    static_cast<int>(ivis::common::SpeedStateType::SpeedState::VALUE));
-    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState,
-                                    static_cast<int>(ivis::common::SpeedSubDigitalStateType::SpeedSubDigitalState::VALUE));
-    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmState,
-                                    static_cast<int>(ivis::common::RpmStateType::RpmState::VALUE));
-
-#if 0//defined(USE_GAUGE_TEMP_VALUE)
-    controlTimer(ControlGaugeTimerSpeed, true, 200);
-    controlTimer(ControlGaugeTimerRpm, true, 150);
-#endif
 }
 
 void ControlGauge::initControlData() {
+    updateDataControl(ivis::common::PropertyEnum::GaugeSpeedState,
+                                    static_cast<int>(ivis::common::SpeedStateType::SpeedState::VALUE));
+    updateDataControl(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState,
+                                    static_cast<int>(ivis::common::SpeedSubDigitalStateType::SpeedSubDigitalState::VALUE));
+    updateDataControl(ivis::common::PropertyEnum::GaugeRpmState,
+                                    static_cast<int>(ivis::common::RpmStateType::RpmState::VALUE));
+
+#if defined(USE_GAUGE_TEMP_VALUE)
+    controlTimer(ControlGaugeTimerSpeed, true, 200);
+    controlTimer(ControlGaugeTimerRpm, true, 150);
+#endif
 }
 
 void ControlGauge::resetControl(const bool& reset) {

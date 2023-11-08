@@ -72,8 +72,8 @@ DataModel {
     property int telltaleOATIceWarnStatOptional: 0
     property int telltaleAirBagBlinkValueA: 0
     property int telltaleAirBagBlinkValueB: 0
-    property int telltaleLampFailWarningStat: 2
-    property int telltaleIFSStat: 194
+    property int telltaleLampFailWarningStat: 0
+    property int telltaleIFSStat: 0
     property int telltaleKeySystemStat: 0
     property int telltaleLampIndicatorFrontFogStat: 0
     property int telltaleLampIndicatorHighBeamStat: 0
@@ -91,20 +91,20 @@ DataModel {
     property int telltaleLDWLKAStat: 0
     property int telltaleLDWLKABlinkValueA: 0
     property int telltaleLDWLKABlinkValueB: 0
-    property int telltaleFCAStat: 193
+    property int telltaleFCAStat: 0
     property int telltaleFCABlinkValueA: 0
     property int telltaleFCABlinkValueB: 0
-    property int telltaleELKStat: 193
+    property int telltaleELKStat: 0
     property int telltaleELKBlinkValueA: 0
     property int telltaleELKBlinkValueB: 0
     property int telltaleLowFuelWarnStat: 0
     property int telltaleLowFuelWarnStatOptional: 0
     property int telltaleLowFuelWarnBlinkValueA: 0
     property int telltaleLowFuelWarnBlinkValueB: 0
-    property int telltaleADASDrivingNewELKStat: 196
-    property int telltaleADASDrivingNewFCAStat: TelltaleStat.RED
+    property int telltaleADASDrivingNewELKStat: 0
+    property int telltaleADASDrivingNewFCAStat: 0
     property int telltaleADASDrivingNewLKAStat: 0
-    property int telltaleADASDrivingNewHBAStat: 199
+    property int telltaleADASDrivingNewHBAStat: 0
     property int telltaleADASDrivingNewLCALeftStat: 0
     property int telltaleADASDrivingNewLCARightStat: 0
     property int telltaleADASDrivingNewLFAStat: 0

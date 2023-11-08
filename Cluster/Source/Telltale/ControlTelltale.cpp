@@ -62,9 +62,9 @@ void ControlTelltale::initNormalData() {
     updateDataHandler(ivis::common::PropertyEnum::TelltaleADASDrivingNewHBAStat,
                         static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::WHITE));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleELKStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::YELLOW));
+                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::NONE));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleADASDrivingNewELKStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::RED));
+                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::NONE));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleFCAStat,
                         static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::RED));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleADASDrivingNewFCAStat,
@@ -75,8 +75,8 @@ void ControlTelltale::initNormalData() {
                         static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleLampIndicatorTailLampStat,
                         static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLampIndicatorHighBeamStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+    // updateDataHandler(ivis::common::PropertyEnum::TelltaleLampIndicatorHighBeamStat,
+    //                     static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleLampIndicatorLowBeamStat,
                         static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleLampIndicatorTurnSignalLeftStat,

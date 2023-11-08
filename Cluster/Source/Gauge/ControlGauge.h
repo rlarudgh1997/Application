@@ -53,6 +53,7 @@ public slots:
 
 private:
     AbstractHandler* mHandler = nullptr;
+    const qreal mDefaultAngle = (-120);
 };
 
 
