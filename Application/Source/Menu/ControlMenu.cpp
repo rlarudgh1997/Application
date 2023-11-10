@@ -315,7 +315,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
 
         if (cmd.contains("gen_tc.sh")) {
             subPath = QString("/../../../tc_generator");
-        } else if (cmd.contains("run_tc.sh")) {
+        } else if ((cmd.contains("run_tc.sh")) || (cmd.contains("gen_tcreport.sh")) || (cmd.contains("gen_gcov_report.sh"))) {
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;

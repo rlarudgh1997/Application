@@ -12,7 +12,7 @@
 # [다른 PR fetch 방법 : PR 번호 65 를 ivis.kkh 브랜치로 fetch]
 	- 이경우 다른 사람이 요청한 PR 정보의 REPO 접근 권한이 없는 경우에 fetch 하여 사용하는 방법임
 	git fetch origin refs/pull-requests/65/from:ivis.kkh
-	git fetch origin refs/pull-requests/3367/from:ivis.kkh
+	git fetch origin refs/pull-requests/3376/from:ivis.kkh
 	git checkout ivis.kkh
 
 =====================================================================
@@ -55,6 +55,7 @@
 
 	: 도커 설치 가이드
 		https://synergy.ccos.dev/display/EXNCP/Alton+Docker
+		https://haengsin.tistory.com/128
 
 - VMware 에서 사용시
 	sudo apt-get update
@@ -121,34 +122,7 @@
 
 =====================================================================
 # [ToDo 정보]
-- 기능 추가
-	: NodeAddressSFC.info
-	: NodeAddressVSM.info
-	: DefaultModule.info
-		-> 해당 파일이 생성 될수 있도록 기능 구현
-
-- Open Excel
-	: 파일명 Title 에 표시
-	: 파일 Open 폴더명과 DeafultModule.info 내부 폴더명과 같으면 현재 Config 저장
-		ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant(selectModule));
-
-- ./model/SFC/CV 하위 폴더 리스트 파일로 생성
-	: 생성 파일과 기존(DefaultModule.info) 과 비교하여 생성 리스트로 사용하도록 설정
-
-
-
-
-- 파이썬 코드 수정
-	: class 로 변경
-	: print 함수를 별도 api 로 변경하여 release, debug 인 경우에 맞도록 프린터 되도록 수정
-
-- Save
-	: 저장시 팝업 상태에서 esc 키 동작시 파일 저장됨
-	: new 생성후 바로 파일 오픈 하고 편집 하지 않은 상태에서 저장시 저장됨
-
-
 - 자동완성
-	: 편집중 esc 키 입력시 동작 안함
 	: 병합셀에서 자동완성 동작시 문제
 	: 활성화 상태에서 엔터 입력시 셀에 수정 텍스트 입력 안됨
 	: 활성화시 셀에 있는 텍스트 표시 안됨
