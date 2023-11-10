@@ -27,6 +27,8 @@ enum class PopupType {
     DefaultPathError,
     InputTextError,
     ScriptRunnigCompleted,
+    TCReportError,
+    GcovReportError,
     SelectCellColumnError,
 
     Exit,
@@ -67,6 +69,8 @@ public:
             case PopupType::DefaultPathError :
             case PopupType::InputTextError :
             case PopupType::ScriptRunnigCompleted :
+            case PopupType::TCReportError :
+            case PopupType::GcovReportError :
             case PopupType::SelectCellColumnError : {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {
@@ -183,7 +187,8 @@ private:
             connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() {
                 buttonType = PopupButton::Cancel;
             });
-        } else if (((popupType == PopupType::DefaultPathError) || (popupType == PopupType::InputTextError))
+        } else if (((popupType == PopupType::DefaultPathError) || (popupType == PopupType::InputTextError)
+            || (popupType == PopupType::TCReportError) || (popupType == PopupType::GcovReportError))
             && (list.size() == 3)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());

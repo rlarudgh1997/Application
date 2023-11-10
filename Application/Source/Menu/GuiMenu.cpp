@@ -404,15 +404,27 @@ void GuiMenu::drawMenuRun() {
         });
     }
 
-    mAction[MainType::Run][STRING_GENERATE_REPORT] = new QAction(QIcon::fromTheme("actionGenReport"),
-                                                        STRING_GENERATE_REPORT,
+    mAction[MainType::Run][STRING_TC_REPORT] = new QAction(QIcon::fromTheme("actionTCReport"),
+                                                        STRING_TC_REPORT,
                                                         this);
-    if (mAction[MainType::Run][STRING_GENERATE_REPORT]) {
-        mAction[MainType::Run][STRING_GENERATE_REPORT]->setStatusTip(STRING_GENERATE_REPORT_TIP);
-        mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_GENERATE_REPORT]);
-        // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_GENERATE_REPORT]);
-        connect(mAction[MainType::Run][STRING_GENERATE_REPORT], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeGenerateReport, QVariant());
+    if (mAction[MainType::Run][STRING_TC_REPORT]) {
+        mAction[MainType::Run][STRING_TC_REPORT]->setStatusTip(STRING_TC_REPORT_TIP);
+        mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_TC_REPORT]);
+        // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_TC_REPORT]);
+        connect(mAction[MainType::Run][STRING_TC_REPORT], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeTCReport, QVariant());
+        });
+    }
+
+    mAction[MainType::Run][STRING_GCOV_REPORT] = new QAction(QIcon::fromTheme("actionGcovReport"),
+                                                        STRING_GCOV_REPORT,
+                                                        this);
+    if (mAction[MainType::Run][STRING_GCOV_REPORT]) {
+        mAction[MainType::Run][STRING_GCOV_REPORT]->setStatusTip(STRING_GCOV_REPORT_TIP);
+        mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_GCOV_REPORT]);
+        // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_GCOV_REPORT]);
+        connect(mAction[MainType::Run][STRING_GCOV_REPORT], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeGcovReport, QVariant());
         });
     }
 

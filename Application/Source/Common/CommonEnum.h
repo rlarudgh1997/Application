@@ -194,7 +194,8 @@ public:
         EventTypeTestReportReset,
         EventTypeGenTC,
         EventTypeRunTC,
-        EventTypeGenerateReport,
+        EventTypeTCReport,
+        EventTypeGcovReport,
         EventTypeEnterScriptText,
         EventTypeShowModule,
         EventTypeSelectModule,
@@ -302,6 +303,8 @@ public:
     enum RunType {
         RunTypeGenTC = 0,
         RunTypeRunTC,
+        RunTypeTCReport,
+        RunTypeGcovReport,
         RunTypeEnterScriptText,
     };
 };

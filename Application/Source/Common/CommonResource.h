@@ -58,6 +58,10 @@
 #define STRING_RUN_TC_TIP                          QString("Run TC file")
 #define STRING_GENERATE_TC                         QString("Generate TC")
 #define STRING_GENERATE_TC_TIP                     QString("Generate TC file")
+#define STRING_TC_REPORT                           QString("TC Report")
+#define STRING_TC_REPORT_TIP                       QString("Create tc report file")
+#define STRING_GCOV_REPORT                         QString("Gcov Report")
+#define STRING_GCOV_REPORT_TIP                     QString("Create gcov report file")
 #define STRING_GENERATE_REPORT                     QString("Generate Report")
 #define STRING_GENERATE_REPORT_TIP                 QString("Generate Report file")
 #define STRING_ENTER_SCRIPT_TEXT                   QString("Enter Script Text")
@@ -104,6 +108,11 @@
 #define STRING_POPUP_INPUT_TEXT_ERROR_TIP          QString("Input text does not contain script commands.")
 #define STRING_SCRIPT_RUNNIG_COMPLETED             QString("Script runnig completed")
 #define STRING_SCRIPT_RUNNIG_COMPLETED_TIP         QString("The script execution request has been completed.")
+#define STRING_POPUP_TC_REPORT                     QString("TC report error")
+#define STRING_POPUP_TC_REPORT_TIP                 QString("TC report view value is not set.")
+#define STRING_POPUP_GCOV_REPORT                   QString("Gcov report error")
+#define STRING_POPUP_GCOV_REPORT_TIP               QString("Gcov report view value is not set.")
+
 
 
 

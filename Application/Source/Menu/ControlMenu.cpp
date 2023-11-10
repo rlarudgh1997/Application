@@ -325,6 +325,52 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
             return;
         }
         qDebug() << "CMD :" << subPath << cmd;
+    } else if (runType == ivis::common::RunTypeEnum::RunTypeTCReport) {
+        bool onOff = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResult).toBool();
+        if (onOff == false) {
+            qDebug() << "Fail to TC Report : TC Report View value is not set.";
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::TCReportError, isHandler(), popupData,
+                                    QVariantList({STRING_POPUP_TC_REPORT, STRING_POPUP_TC_REPORT_TIP}));
+            return;
+        }
+
+        bool split = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultSplit).toBool();
+        bool config = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultConfig).toBool();
+        bool excel = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultExcel).toBool();
+        // Test Result : On/Off -> Split Config Excel
+        //     ./gen_tcreport.sh -c CV -s S -o C -t E
+        //         -s : Split
+        //         -o : Config
+        //         -t : Excel
+        QString splitOption = (split) ? (" -s S") : ("");
+        QString configOption = (config) ? (" -o C") : ("");
+        QString excelOption = (excel) ? (" -t E") : ("");
+        cmd = QString("./gen_tcreport.sh -c CV%1%2%3").arg(splitOption).arg(configOption).arg(excelOption);
+        // qDebug() << "RunTypeTCReport CMD :" << cmd << ", Info :" << onOff << split << config << excel;
+    } else if (runType == ivis::common::RunTypeEnum::RunTypeGcovReport) {
+        bool onOff = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverage).toBool();
+        if (onOff == false) {
+            qDebug() << "Fail to Gcov Report : Gcov Report View value is not set.";
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::GcovReportError, isHandler(), popupData,
+                                    QVariantList({STRING_POPUP_GCOV_REPORT, STRING_POPUP_GCOV_REPORT_TIP}));
+            return;
+        }
+
+        bool funtion = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageFunction).toBool();
+        bool branch = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageBranch).toBool();
+        bool line = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine).toBool();
+        // Test Coverage : On/Off -> Line Function Branch
+        //     ./gen_gcov_report.sh -c CV -b ON -f ON
+        //         -b : Branch
+        //         -f : Function
+        //         #-n : Line -> Not define
+        QString funtionOption = (funtion) ? (" -b ON") : ("");
+        QString branchOption = (branch) ? (" -f ON") : ("");
+        QString lineOption = QString();   // (line) ? (" -l L") : ("");
+        cmd = QString("./gen_gcov_report.sh -c CV%1%2%3").arg(funtionOption).arg(branchOption).arg(lineOption);
+        // qDebug() << "RunTypeGcovReport CMD :" << cmd << ", Info :" << onOff << line << funtion << branch;
     } else {
         if (selectInfoList.size() != 2) {
             qDebug() << "Fail to select info list size :" << selectInfoList.size();
@@ -440,6 +486,8 @@ void ControlMenu::cancelScript(const bool& complete) {
         "sfc_validator",
         "gen_tc.sh",
         "run_tc.sh",
+        "gen_tcreport",
+        "gen_gcov_report",
     });
     QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
     if (complete == false) {
@@ -574,7 +622,12 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateSelectModueList(type, QVariantList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenerateReport : {
+        case ivis::common::EventTypeEnum::EventTypeTCReport : {
+            excuteScript(ivis::common::RunTypeEnum::RunTypeTCReport, false, QVariantList({value}));
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeGcovReport : {
+            excuteScript(ivis::common::RunTypeEnum::RunTypeGcovReport, false, QVariantList({value}));
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEnterScriptText : {
