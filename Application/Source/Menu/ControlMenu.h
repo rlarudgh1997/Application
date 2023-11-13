@@ -24,9 +24,11 @@ private:
 
     void updateAllModueList(const QString& filter);
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
+    void updateTestReportInfo(const int& eventType);
     bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());
-    void excuteScript(const int& runType, const bool& option1, const QVariantList& selectInfoList);
+    void excuteScript(const int& runType, const bool& state, const QVariantList& infoList);
     void cancelScript(const bool& complete);
+    int saveTestReportInfo(const int& reportType, const QList<bool>& value);
 
 
 protected:

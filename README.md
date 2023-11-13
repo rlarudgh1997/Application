@@ -21,7 +21,10 @@
 	git clone https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git --recursive
 	git checkout feature/EXNCP-38725-tc_creator-app
 	# git remote add ivis.kkh https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git
-	# git checkout ivis.kkh
+	# git fetch ivis.kkh
+	# git checkout [branch name]
+	## 에러 발생시 :  modified: model/VSM (new commits)
+	# git submodule update
 
 - Log
 	ENH: TC_Creator Application Implement
@@ -122,8 +125,14 @@
 
 =====================================================================
 # [ToDo 정보]
-- 자동완성
+- fault 이슈 수정
+	: TC, GCOV Report 동작시 Path 지정 되지 않았을 경우에 대한 처리
+		- 이경우 앱 죽는 이슈
 	: 병합셀에서 자동완성 동작시 문제
+		- 이후 죽는 이슈
+
+
+- 자동완성
 	: 활성화 상태에서 엔터 입력시 셀에 수정 텍스트 입력 안됨
 	: 활성화시 셀에 있는 텍스트 표시 안됨
 	: 더블 클릭으로 활성화시 포커스 이동 안됨

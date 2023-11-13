@@ -108,6 +108,7 @@ public:
         PropertyTypeAutoComplete,
         PropertyTypeReadExcelSheetBeforeSave,
         PropertyTypeShortcutKey,
+        PropertyTypeTestReport,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -194,14 +195,15 @@ public:
         EventTypeTestReportReset,
         EventTypeGenTC,
         EventTypeRunTC,
-        EventTypeTCReport,
-        EventTypeGcovReport,
+        EventTypeTestReportResult,
+        EventTypeTestReportCoverage,
         EventTypeEnterScriptText,
         EventTypeShowModule,
         EventTypeSelectModule,
         EventTypeSelectModuleOfRun,
         EventTypeGenRunTCCancel,
         EventTypeEnterScriptTextCompleted,
+        EventTypeRunTestReport,
 
         EventTypeTest = 3000,
         EventTypeLastFile,
@@ -321,7 +323,13 @@ public:
     };
 };
 
-
+class TestReportTypeEnum {
+public:
+    enum TestReportType {
+        TestReportTypeResult = 0,
+        TestReportTypeCoverage,
+    };
+};
 
 
 

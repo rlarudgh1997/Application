@@ -19,18 +19,141 @@
 #include <QTextEdit>
 #include <QScrollBar>
 #include <QTextCharFormat>
+#include <QButtonGroup>
+#include <QRadioButton>
+
 
 #include "CommonUtil.h"
 
 
 class SelectModuleDialog;
 
-class SelectPtDialog : public QDialog {
+class SelectReportDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SelectPtDialog(QWidget* parent, const QString& item, QStringList& itemList) : QDialog(parent) {
-        setWindowTitle("Select PT");
+    explicit SelectReportDialog(QWidget* parent, const QString& title, const bool& state,
+                                    const QList<QPair<bool, QString>>& options) : QDialog(parent) {
+        setWindowTitle(title);
+        setWindowFlag(Qt::WindowContextHelpButtonHint, true);
+        setWindowFlag(Qt::WindowCloseButtonHint, true);
+        setParent(parent);
+        setModal(true);
+
+        QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
+        QRect setRect = QRect();
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
+        setGeometry(setRect);
+        setFocus();
+
+        mLayout = new QVBoxLayout(this);
+
+        mRadioLayout = new QHBoxLayout(mLayout->widget());
+        mOn = ivis::common::createWidget<QRadioButton>(mRadioLayout->widget(), true);
+        mOn->setText("On");
+        mOn->setChecked(state);
+        mRadioLayout->addWidget(mOn);
+        mOff = ivis::common::createWidget<QRadioButton>(mRadioLayout->widget(), true);
+        mOff->setText("Off");
+        mOff->setChecked(state == false);
+        mRadioLayout->addWidget(mOff);
+        mLayout->addLayout(mRadioLayout);
+
+        if (options.size() > 0) {
+            mCheckLayout = new QHBoxLayout(mLayout->widget());
+            foreach(const auto& option, options) {
+                int index = mOptionCheck.size();
+                mOptionCheck[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout->widget(), true);
+                mOptionCheck[index]->setText(option.second);
+                mOptionCheck[index]->setChecked(option.first);
+                mCheckLayout->addWidget(mOptionCheck[index]);
+            }
+            mLayout->addLayout(mCheckLayout);
+        }
+        updateStatus(state);
+
+        mButtonLayout = new QHBoxLayout(mLayout->widget());
+        mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mOK->setText("OK");
+        mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mCancel->setText("Cancel");
+        mButtonLayout->addWidget(mOK);
+        mButtonLayout->addWidget(mCancel);
+        mLayout->addLayout(mButtonLayout);
+
+        setLayout(mLayout);
+
+//        connect(mRadioLayout, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton* button) {
+//            updateStatus((button == mOn));
+//        });
+        connect(mOn, &QRadioButton::clicked, [=]() {
+            mOn->setChecked(true);
+            mOff->setChecked(false);
+            updateStatus(true);
+        });
+        connect(mOff, &QRadioButton::clicked, [=]() {
+            mOn->setChecked(false);
+            mOff->setChecked(true);
+            updateStatus(false);
+        });
+        connect(mOK, &QPushButton::clicked, [=]() {
+            bool state = mOn->isChecked();
+            QList<QPair<QString, bool>> options = QList<QPair<QString, bool>>();
+            foreach(const auto& option, mOptionCheck) {
+                qDebug() << "Option :" << option->text() << (option->checkState() == Qt::CheckState::Checked);
+                options.append(QPair<QString, bool>(option->text(), option->checkState() == Qt::CheckState::Checked));
+            }
+            signalOptionSelected(state, options);
+        });
+        connect(mCancel, &QPushButton::clicked, [=]() {
+            finished(true);
+        });
+    }
+
+private:
+    void updateStatus(const bool& on) {
+        QString color = (on) ? (QString("black")) : (QString("gray"));
+        QString optionStyle = mBaseStyle.arg(color).arg("12");
+        foreach(const auto& option, mOptionCheck) {
+            option->setEnabled(on);
+            option->setStyleSheet(optionStyle);
+        }
+        mOn->setStyleSheet(mBaseStyle.arg(QString("black")).arg("12"));
+        mOff->setStyleSheet(mBaseStyle.arg(QString("black")).arg("12"));
+    }
+
+signals:
+    void signalOptionSelected(const bool& state, const QList<QPair<QString, bool>>& options);
+
+private:
+    // const QString mBaseStyle = QString("color: %1; font: bold; font-size: %2px");
+    const QString mBaseStyle = QString("color: %1; font-size: %2px");
+    const int mWidth = 400;
+    const int mHeight = 100;
+    const int mOnID = 1;
+    const int mOffID = 0;
+    QVBoxLayout* mLayout = nullptr;
+    QHBoxLayout* mRadioLayout = nullptr;
+    QRadioButton* mOn = nullptr;
+    QRadioButton* mOff = nullptr;
+    QHBoxLayout* mCheckLayout = nullptr;
+    QMap<int, QCheckBox*> mOptionCheck = QMap<int, QCheckBox*>();
+    QHBoxLayout* mButtonLayout = nullptr;
+    QPushButton* mOK = nullptr;
+    QPushButton* mCancel = nullptr;
+};
+
+
+
+class CheckBoxGroupDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit CheckBoxGroupDialog(QWidget* parent, const QString& title, const QString& item, QStringList& itemList)
+        : QDialog(parent) {
+        setWindowTitle(title);
         setWindowFlag(Qt::WindowContextHelpButtonHint, true);
         setWindowFlag(Qt::WindowCloseButtonHint, true);
         setParent(parent);
@@ -284,6 +407,7 @@ private:
     void updateDisplaySelectPT(const int& runType, const QVariantList& moduleList);
     void updateDisplayTestResultInfo();
     void updateDisplayEnterScriptText();
+    void updateDisplayTestReport();
 
 
 public slots:
@@ -298,9 +422,10 @@ private:
     QPushButton* mDefaultPath = nullptr;
     QProgressBar* mProgressBar = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;
-    SelectPtDialog* mSelectPt = nullptr;
+    CheckBoxGroupDialog* mCheckBoxGroup = nullptr;
     LogDisplayDialog* mLogDisplay = nullptr;
     TextEnterDialog* mTextEnter = nullptr;
+    SelectReportDialog* mTestReport = nullptr;
 };
 
 #endif    // GUI_MENU_H

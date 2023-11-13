@@ -193,6 +193,24 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, runType, true);
 }
 
+void ControlMenu::updateTestReportInfo(const int& eventType) {
+    QVariantList reportInfo = QVariantList();
+    if (eventType == ivis::common::EventTypeEnum::EventTypeTestReportResult) {
+        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeResult));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResult));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultSplit));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultConfig));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultExcel));
+    } else {
+        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeCoverage));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverage));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageFunction));
+        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageBranch));
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, reportInfo, true);
+}
+
 bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData) {
     QVariantList countInfo = QVariantList();
     QVariantList titleInfo = QVariantList();
@@ -304,18 +322,22 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     return complete;
 }
 
-void ControlMenu::excuteScript(const int& runType, const bool& option1, const QVariantList& selectInfoList) {
+void ControlMenu::excuteScript(const int& runType, const bool& state, const QVariantList& infoList) {
     static int totalCount = 10;
+    QString fileName = QString("TCResult.Info");
     QString cmd = QString();
     QString subPath = QString();
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
-        if (selectInfoList.size() == 1) {
-            cmd = selectInfoList.at(0).toString();
+        if (infoList.size() == 1) {
+            cmd = infoList.at(0).toString();
         }
 
         if (cmd.contains("gen_tc.sh")) {
             subPath = QString("/../../../tc_generator");
-        } else if ((cmd.contains("run_tc.sh")) || (cmd.contains("gen_tcreport.sh")) || (cmd.contains("gen_gcov_report.sh"))) {
+        } else if (cmd.contains("run_tc.sh")) {
+            subPath = QString("/../../../validator");
+        } else if ((cmd.contains("gen_tcreport.sh")) || (cmd.contains("gen_gcov_report.sh"))) {
+            fileName = QString("TCReport.Info");
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
@@ -325,84 +347,69 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
             return;
         }
         qDebug() << "CMD :" << subPath << cmd;
-    } else if (runType == ivis::common::RunTypeEnum::RunTypeTCReport) {
-        bool onOff = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResult).toBool();
-        if (onOff == false) {
-            qDebug() << "Fail to TC Report : TC Report View value is not set.";
-            QVariant popupData = QVariant();
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::TCReportError, isHandler(), popupData,
-                                    QVariantList({STRING_POPUP_TC_REPORT, STRING_POPUP_TC_REPORT_TIP}));
+    } else if ((runType == ivis::common::RunTypeEnum::RunTypeTCReport)
+            || (runType == ivis::common::RunTypeEnum::RunTypeGcovReport)) {
+        QVariantList options = infoList;
+        if (options.size() != 3) {
+            qDebug() << "Fail to report info options size :" << options.size();
             return;
         }
 
-        bool split = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultSplit).toBool();
-        bool config = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultConfig).toBool();
-        bool excel = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultExcel).toBool();
-        // Test Result : On/Off -> Split Config Excel
-        //     ./gen_tcreport.sh -c CV -s S -o C -t E
-        //         -s : Split
-        //         -o : Config
-        //         -t : Excel
-        QString splitOption = (split) ? (" -s S") : ("");
-        QString configOption = (config) ? (" -o C") : ("");
-        QString excelOption = (excel) ? (" -t E") : ("");
-        cmd = QString("./gen_tcreport.sh -c CV%1%2%3").arg(splitOption).arg(configOption).arg(excelOption);
-        // qDebug() << "RunTypeTCReport CMD :" << cmd << ", Info :" << onOff << split << config << excel;
-    } else if (runType == ivis::common::RunTypeEnum::RunTypeGcovReport) {
-        bool onOff = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverage).toBool();
-        if (onOff == false) {
-            qDebug() << "Fail to Gcov Report : Gcov Report View value is not set.";
-            QVariant popupData = QVariant();
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::GcovReportError, isHandler(), popupData,
-                                    QVariantList({STRING_POPUP_GCOV_REPORT, STRING_POPUP_GCOV_REPORT_TIP}));
-            return;
+        fileName = QString("TCReport.Info");
+        subPath = QString("/../../../validator");
+        // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
+        // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
+        cmd = QString("./%1.sh -c CV").arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ?
+                                                        (QString("gen_gcov_report")) : (QString("gen_tcreport")));
+        if (state) {
+            QString option1 = (options.at(0).toBool()) ? (" -s S") : ("");
+            QString option2 = (options.at(1).toBool()) ? (" -o C") : ("");
+            QString option3 = (options.at(2).toBool()) ? (" -t E") : ("");
+            if (runType == ivis::common::RunTypeEnum::RunTypeGcovReport) {
+                option1 = (options.at(0).toBool()) ? (" -b ON") : ("");
+                option2 = (options.at(1).toBool()) ? (" -f ON") : ("");
+                option3 = QString();   // (line) ? (" -n ON") : ("");     -> Not define
+            }
+            cmd.append(QString("%1%2%3").arg(option1).arg(option2).arg(option3));
         }
+        qDebug() << "RunTypeTC CMD :" << subPath << cmd << ", State :" << state << ", Options :" << options;
 
-        bool funtion = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageFunction).toBool();
-        bool branch = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageBranch).toBool();
-        bool line = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine).toBool();
-        // Test Coverage : On/Off -> Line Function Branch
-        //     ./gen_gcov_report.sh -c CV -b ON -f ON
-        //         -b : Branch
-        //         -f : Function
-        //         #-n : Line -> Not define
-        QString funtionOption = (funtion) ? (" -b ON") : ("");
-        QString branchOption = (branch) ? (" -f ON") : ("");
-        QString lineOption = QString();   // (line) ? (" -l L") : ("");
-        cmd = QString("./gen_gcov_report.sh -c CV%1%2%3").arg(funtionOption).arg(branchOption).arg(lineOption);
-        // qDebug() << "RunTypeGcovReport CMD :" << cmd << ", Info :" << onOff << line << funtion << branch;
+
+
+
+        return;
     } else {
-        if (selectInfoList.size() != 2) {
-            qDebug() << "Fail to select info list size :" << selectInfoList.size();
+        if (infoList.size() != 2) {
+            qDebug() << "Fail to select info list size :" << infoList.size();
             return;
         }
 
         QString moduleList = QString();
-        totalCount = selectInfoList[0].toList().size();
+        totalCount = infoList[0].toList().size();
         if (totalCount == 0) {
             qDebug() << "Fail to select module list : 0";
             return;
         }
-        foreach(const auto& module, selectInfoList[0].toList()) {
+        foreach(const auto& module, infoList[0].toList()) {
             moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
         }
 
         QString checkList = QString();
-        foreach(const auto& check, selectInfoList[1].toList()) {
+        foreach(const auto& check, infoList[1].toList()) {
             checkList.append(QString("%1%2").arg((checkList.size() == 0) ? ("") : (" ")).arg(check.toString()));
         }
 
         if (runType == ivis::common::RunTypeEnum::RunTypeGenTC) {
-            QString negative = (option1) ? (QString(" -o Negative")) : (QString());
+            QString negative = (state) ? (QString(" -o Negative")) : (QString());
             cmd = QString("./gen_tc.sh -c CV -m \"%1\"%2").arg(moduleList).arg(negative);
             subPath = QString("/../../../tc_generator");
         } else if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             QString altonPath = QString("/usr/local/bin/altonservice");
-            QString docker = (option1) ? (QString("-d ")) : (QString());
+            QString docker = (state) ? (QString("-d ")) : (QString());
             QString ptList = (checkList.size() == 0) ? (QString()) : (QString(" %1").arg(checkList));
             cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
             subPath = QString("/../../../validator");
-            int ptCount = selectInfoList[1].toList().size();
+            int ptCount = infoList[1].toList().size();
             totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));    // No Select PT -> All(ICV, EV, FCEV) = 3
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
@@ -426,7 +433,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& option1, const QV
         qDebug() << "Running Watcher File -> Request Stop";
         mWatcher.reset();
     }
-    QString filePath = QString("%1/TCResult.Info").arg(defaultRunPath);
+    QString filePath = QString("%1/%2").arg(defaultRunPath).arg(fileName);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, filePath);
     mWatcher = QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(filePath));
     mWatcher.data()->start();
@@ -516,6 +523,17 @@ void ControlMenu::cancelScript(const bool& complete) {
         disconnect(mProcess.data());
         mProcess.reset();
     }
+}
+
+int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& value) {
+    int count = 0;
+    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeResult) ?
+                                                (ConfigInfo::ConfigTypeReportResult) : (ConfigInfo::ConfigTypeReportCoverage);
+    foreach(const auto& configValue, value) {
+        ConfigSetting::instance().data()->writeConfig((configType + count), configValue);
+        count++;
+    }
+    return count;
 }
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
@@ -622,12 +640,29 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateSelectModueList(type, QVariantList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeTCReport : {
-            excuteScript(ivis::common::RunTypeEnum::RunTypeTCReport, false, QVariantList({value}));
+        case ivis::common::EventTypeEnum::EventTypeTestReportResult :
+        case ivis::common::EventTypeEnum::EventTypeTestReportCoverage : {
+            updateTestReportInfo(type);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGcovReport : {
-            excuteScript(ivis::common::RunTypeEnum::RunTypeGcovReport, false, QVariantList({value}));
+        case ivis::common::EventTypeEnum::EventTypeRunTestReport : {
+            QVariantList reportInfo = value.toList();
+            if (reportInfo.size() != 5) {
+                qDebug() << "Fail to report info size :" << reportInfo.size();
+                return;
+            }
+            int testReportType = reportInfo.at(0).toInt();
+            int runType = ivis::common::RunTypeEnum::RunTypeTCReport;
+            if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeCoverage)) {
+                runType = ivis::common::RunTypeEnum::RunTypeGcovReport;
+            }
+            bool state   = reportInfo.at(1).toBool();
+            bool option1 = reportInfo.at(2).toBool();
+            bool option2 = reportInfo.at(3).toBool();
+            bool option3 = reportInfo.at(4).toBool();
+            if (saveTestReportInfo(testReportType, QList({state, option1, option2, option3})) == 4) {
+                excuteScript(runType, state, QVariantList({option1, option2, option3}));
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEnterScriptText : {
@@ -641,10 +676,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun : {
             if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
-                bool option1 = value.toList().at(1).toBool();
+                bool state = value.toList().at(1).toBool();
                 QVariantList selectInfoList = QVariantList({value.toList().at(2), value.toList().at(3)});
                 updateSelectModueList(0, selectInfoList);
-                excuteScript(runType, option1, selectInfoList);
+                excuteScript(runType, state, selectInfoList);
             }
             break;
         }

@@ -412,7 +412,7 @@ void GuiMenu::drawMenuRun() {
         mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_TC_REPORT]);
         // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_TC_REPORT]);
         connect(mAction[MainType::Run][STRING_TC_REPORT], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeTCReport, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeTestReportResult, QVariant());
         });
     }
 
@@ -424,7 +424,7 @@ void GuiMenu::drawMenuRun() {
         mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_GCOV_REPORT]);
         // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_GCOV_REPORT]);
         connect(mAction[MainType::Run][STRING_GCOV_REPORT], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeGcovReport, QVariant());
+            createSignal(ivis::common::EventTypeEnum::EventTypeTestReportCoverage, QVariant());
         });
     }
 
@@ -532,16 +532,16 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 }
 
 void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
-    if (mSelectPt == nullptr) {
+    if (mCheckBoxGroup == nullptr) {
         QString item = QString("Negative");
         QStringList itemList = QStringList();
         if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             item = QString("Docker");
             itemList = QStringList({"ICV", "FCEV", "EV"});
         }
-        mSelectPt = new SelectPtDialog(isHandler()->getScreen(), item, itemList);
+        mCheckBoxGroup = new CheckBoxGroupDialog(isHandler()->getScreen(), QString("Select PT"), item, itemList);
 
-        connect(mSelectPt, &SelectPtDialog::signalPtSelected, [=](const bool& option1,
+        connect(mCheckBoxGroup, &CheckBoxGroupDialog::signalPtSelected, [=](const bool& option1,
                                                                     const QList<QPair<QString, bool>>& checkStateList) {
             QVariantList checkList = QVariantList();
             foreach(const auto& check, checkStateList) {
@@ -554,16 +554,16 @@ void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& modu
             if (mSelectModule) {
                 mSelectModule->finished(true);
             }
-            mSelectPt->hide();
-            mSelectPt->finished(true);
+            mCheckBoxGroup->hide();
+            mCheckBoxGroup->finished(true);
         });
-        connect(mSelectPt, &QDialog::finished, [=]() {
-            disconnect(mSelectPt);
-            delete mSelectPt;
-            mSelectPt = nullptr;
+        connect(mCheckBoxGroup, &QDialog::finished, [=]() {
+            disconnect(mCheckBoxGroup);
+            delete mCheckBoxGroup;
+            mCheckBoxGroup = nullptr;
         });
     }
-    mSelectPt->show();
+    mCheckBoxGroup->show();
 }
 
 void GuiMenu::updateDisplayTestResultInfo() {
@@ -649,6 +649,54 @@ void GuiMenu::updateDisplayEnterScriptText() {
     mTextEnter->show();
 }
 
+void GuiMenu::updateDisplayTestReport() {
+    if (mTestReport == nullptr) {
+        QVariantList reportInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport).toList();
+        if (reportInfo.size() != 5) {
+            qDebug() << "Fail to report info size :" << reportInfo.size();
+        }
+
+        int testReportType = reportInfo.at(0).toInt();
+        bool state         = reportInfo.at(1).toBool();
+        bool option1       = reportInfo.at(2).toBool();
+        bool option2       = reportInfo.at(3).toBool();
+        bool option3       = reportInfo.at(4).toBool();
+
+        QString title = QString();
+        QList<QPair<bool, QString>> options = QList<QPair<bool, QString>>();
+        if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeResult)) {
+            title = QString("Test Result");
+            options.append(QPair<bool, QString>(option1, QString("Split")));
+            options.append(QPair<bool, QString>(option2, QString("Config")));
+            options.append(QPair<bool, QString>(option3, QString("Excel")));
+        } else {
+            title = QString("Test Coverage");
+            options.append(QPair<bool, QString>(true, QString("Line")));
+            options.append(QPair<bool, QString>(option2, QString("Function")));
+            options.append(QPair<bool, QString>(option3, QString("Branch")));
+        }
+        mTestReport = new SelectReportDialog(isHandler()->getScreen(), title, state, options);
+        connect(mTestReport, &SelectReportDialog::signalOptionSelected,
+                                        [=](const bool& state, const QList<QPair<QString, bool>>& options) {
+            QVariantList reportInfo = QVariantList();
+            reportInfo.append(testReportType);
+            reportInfo.append(state);
+            foreach(const auto& option, options) {
+                reportInfo.append(option.second);
+            }
+            createSignal(ivis::common::EventTypeEnum::EventTypeRunTestReport, reportInfo);
+            mTestReport->hide();
+            mTestReport->finished(true);
+        });
+        connect(mTestReport, &QDialog::finished, [=]() {
+            disconnect(mTestReport);
+            delete mTestReport;
+            mTestReport = nullptr;
+        });
+    }
+    mTestReport->show();
+}
+
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
@@ -682,6 +730,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             if (value.toBool()) {
                 updateDisplayEnterScriptText();
             }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTestReport : {
+            updateDisplayTestReport();
             break;
         }
         default : {

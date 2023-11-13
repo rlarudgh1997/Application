@@ -52,6 +52,7 @@
         "qprogressbar": "cpp",
         "qlineedit": "cpp",
         "qplaintextedit": "cpp",
-        "qscrollbar": "cpp"
+        "qscrollbar": "cpp",
+        "qtextcharformat": "cpp"
     }
 }
