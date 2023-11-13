@@ -6,7 +6,5 @@
         <file>Image/Menu/Open.png</file>
         <file>Image/Menu/Paste.png</file>
         <file>Image/Menu/Save.png</file>
-        <file>Image/Popup/Loading.png</file>
-        <file>Image/Popup/Loading.gif</file>
     </qresource>
 </RCC>
