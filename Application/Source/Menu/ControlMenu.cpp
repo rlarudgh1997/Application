@@ -373,11 +373,6 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             cmd.append(QString("%1%2%3").arg(option1).arg(option2).arg(option3));
         }
         qDebug() << "RunTypeTC CMD :" << subPath << cmd << ", State :" << state << ", Options :" << options;
-
-
-
-
-        return;
     } else {
         if (infoList.size() != 2) {
             qDebug() << "Fail to select info list size :" << infoList.size();
