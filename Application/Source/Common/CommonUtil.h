@@ -517,8 +517,10 @@ public:
         mWatcherFile = filePath;
     }
     ~FileSystemWatcherThread() {
-        // join();
+        QMutexLocker lock(&mMutex);
+        mCount = 20;
         qDebug() << "~FileSystemWatcherThread()";
+        join();
     }
     void start() {
         this->moveToThread(mThread);
@@ -548,21 +550,21 @@ private:
         }
     }
     void runThread() {
-        int count = 0;
-        while (count < 10) {
+        while (mCount < 10) {
             if (mWatcher.addPath(mWatcherFile)) {
                 qDebug() << "\t [Sucess] Watcher file :" << mWatcherFile;
-                count = 0;
+                mCount = 0;
                 break;
             } else {
-                qDebug() << "\t [Fail] Watcher file :" << count << mWatcherFile;
-                count++;
+                qDebug() << "\t [Fail] Watcher file :" << mCount << mWatcherFile;
+                mCount++;
                 QThread::msleep(1000);
             }
         }
 
-        if (count != 0) {
-            emit signalWatcherFileFail(count);
+        if (mCount == 10) {
+            QMutexLocker lock(&mMutex);
+            emit signalWatcherFileFail(mCount);
         }
     }
 
@@ -573,9 +575,10 @@ signals:
 
 private:
     QThread* mThread = new QThread();
+    QMutex mMutex;
     QFileSystemWatcher mWatcher;
     QString mWatcherFile = QString();
-    bool mRunThread = true;
+    int mCount = 0;
 };
 
 

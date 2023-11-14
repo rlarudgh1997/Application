@@ -90,13 +90,13 @@ private:
                                                                         SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>("ConfigTypeDefaultPath",
                                                         QVariant(QApplication::applicationDirPath()
-                                                                                            + QString("/../../model/SFC/CV")));
+                                                                                            + QString("/../../../model/SFC/CV")));
 
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>("ConfigTypeNodeAddressPath",
                                                         QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>("ConfigTypeVsmPath",
                                                         QVariant(QApplication::applicationDirPath()
-                                                                                            + QString("/../../model/VSM")));
+                                                                                            + QString("/../../../model/VSM")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>("ConfigTypeSheetName",
                                                         QVariant(QVariantList({"Description", "Privates", "Telltales",

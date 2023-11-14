@@ -30,12 +30,21 @@ void GuiMenu::drawDisplayDepth0() {
     drawMenuEdit();
     drawMenuView();
     drawMenuSetting();
-#if !defined(USE_VIEW_REPORT)
+#if 0    // !defined(USE_VIEW_REPORT)
     drawMenuReport();
 #endif
     drawMenuRun();
     drawMenuHelp();
     drawMenuEtc(false);
+
+    QAction* insertAction = new QAction("insertAction", this);
+    insertAction->setShortcut(QKeySequence("Ctrl+I"));
+    mMenu[MainType::Max] = mMainView->menuBar()->addMenu("Insert");
+    mMenu[MainType::Max]->addAction(insertAction);
+    mMenu[MainType::Max]->hide();
+    connect(insertAction, &QAction::triggered, [=]() {
+        qDebug() << "Shortcut : Ctrl+I -> Insert";
+    });
 }
 
 void GuiMenu::drawDisplayDepth1() {

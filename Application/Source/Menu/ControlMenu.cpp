@@ -435,7 +435,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
                                                                                 [=](const QStringList& fileData) {
         if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeUpdate, totalCount, fileData)) {
-            emit mWatcher.data()->signalWatcherFileFail(10);
+            emit mWatcher.data()->signalWatcherFileFail(20);
         }
     });
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileFail, [=](const int& count) {
@@ -508,13 +508,13 @@ void ControlMenu::cancelScript(const bool& complete) {
     }
 
     if (mWatcher.isNull() == false) {
-        // emit mWatcher.data()->signalWatcherFileFail(10);
+        // emit mWatcher.data()->signalWatcherFileFail(20);
         disconnect(mWatcher.data());
         mWatcher.reset();
     }
 
     if (mProcess.isNull() == false) {
-        // emit mProcess.data()->signalExcuteProgramCompleted(true);
+        // emit mProcess.data()->signalExcuteProgramCompleted(false);
         disconnect(mProcess.data());
         mProcess.reset();
     }
