@@ -29,6 +29,7 @@ private:
     bool openExcelFile(const QVariant& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);
+    void updateShortcutInfo(const int& eventType);
 
 
 protected:

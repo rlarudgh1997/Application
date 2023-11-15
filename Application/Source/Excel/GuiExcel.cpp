@@ -243,6 +243,8 @@ void GuiExcel::updateDisplayExcelSheet() {
         }
         mMenuActionItem.clear();
         mMenuRight->clear();
+
+        qDebug() << "\t ExcelSheet : Clear";
     }
     mCellInfo.clear();
 
@@ -417,6 +419,12 @@ void GuiExcel::updateDisplayExcelSheet() {
         mExcelSheet[sheetIndex]->resizeRowsToContents();
         sheetIndex++;
     }
+
+    connect(mMainView, &QTabWidget::currentChanged, [=](int index) {
+        mCurrentSheetIndex = index;
+        qDebug() << "SheetIndex :" << index;
+    });
+
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
@@ -461,6 +469,67 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
     }
 }
 
+void GuiExcel::updateDisplayShortcutInfo() {
+    if (mExcelSheet.size() == 0) {
+        qDebug() << "Fail to - excel sheet was not created";
+        return;
+    }
+
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + mCurrentSheetIndex;
+    if (mExcelSheet[sheetIndex] == nullptr) {
+        qDebug() << "Fail to - excel sheet nullptr";
+        return;
+    }
+
+    int shortcutType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType).toInt();
+    qDebug() << "\t ShortcutType :" << shortcutType << sheetIndex;
+
+    QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+    bool selectInvalid = (modelIndexs.size() == 0);
+    int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
+    int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+    int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
+    int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+    int rowCount = mExcelSheet[sheetIndex]->rowCount();
+    qDebug() << "updateDisplayShortcutInfo : Index :" << sheetIndex
+                    << ", RowColumn :" << columnStart << rowStart << rowEnd << columnEnd << ", RowCount :" << rowCount;
+
+    if ((shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert)
+        || (shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeDelete)) {
+        bool insert = (shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
+        for (int index = 0; index < rowEnd; index++) {
+            if (insert) {
+                mExcelSheet[sheetIndex]->insertRow(rowStart);
+            } else {
+                mExcelSheet[sheetIndex]->removeRow(rowStart);
+            }
+        }
+        qDebug() << "\t Changed RowCount :" << rowCount << "->" << mExcelSheet[sheetIndex]->rowCount();
+    } else if (shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit) {
+        bool columnSelectError = (columnEnd > 1);
+        if (columnSelectError) {
+            createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
+        } else {
+            if (mCellInfo[sheetIndex].isCellStateMerge(columnStart, rowStart, rowEnd)) {
+                mExcelSheet[sheetIndex]->clearSpans();
+                mCellInfo[sheetIndex].updateMergeInfo(columnStart, rowStart, rowEnd);
+            } else {
+                mCellInfo[sheetIndex].insertMergeInfo(columnStart, rowStart, rowEnd);
+            }
+            // Draw - Merge Cell
+            updateDisplayMergeCell(sheetIndex);
+        }
+    } else {
+        qDebug() << "Fail to menu right selection action item";
+        return;
+    }
+
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
+                    QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd})));
+    mExcelSheet[sheetIndex]->resizeColumnsToContents();
+    mExcelSheet[sheetIndex]->resizeRowsToContents();
+}
+
 void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth : {
@@ -483,12 +552,11 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             readAllExcelSheet();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeShortcutKey : {
-            qDebug() << "\t ShortcutKey :" << value;
+        case ivis::common::PropertyTypeEnum::PropertyTypeShortcutType : {
+            updateDisplayShortcutInfo();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete : {
-            qDebug() << "\t AutoCompleteKey :" << value;
             break;
         }
         default : {

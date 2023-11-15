@@ -597,6 +597,12 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             qDebug() << "ControlMenu -> Edit :" << value;
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeEditCellInsert :
+        case ivis::common::EventTypeEnum::EventTypeEditCellDelete :
+        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit : {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeViewConfig :
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress :
         case ivis::common::EventTypeEnum::EventTypeSettingTestReport :

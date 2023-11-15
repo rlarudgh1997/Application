@@ -36,15 +36,6 @@ void GuiMenu::drawDisplayDepth0() {
     drawMenuRun();
     drawMenuHelp();
     drawMenuEtc(false);
-
-    QAction* insertAction = new QAction("insertAction", this);
-    insertAction->setShortcut(QKeySequence("Ctrl+I"));
-    mMenu[MainType::Max] = mMainView->menuBar()->addMenu("Insert");
-    mMenu[MainType::Max]->addAction(insertAction);
-    mMenu[MainType::Max]->hide();
-    connect(insertAction, &QAction::triggered, [=]() {
-        qDebug() << "Shortcut : Ctrl+I -> Insert";
-    });
 }
 
 void GuiMenu::drawDisplayDepth1() {
@@ -201,9 +192,48 @@ void GuiMenu::drawMenuEdit() {
             createSignal(ivis::common::EventTypeEnum::EventTypeEditPaste, QVariant());
         });
     }
+#endif
+
+    mAction[MainType::Edit][STRING_CELL_INSERT] = new QAction(QIcon::fromTheme("actionInsert"),
+                                                        STRING_CELL_INSERT,
+                                                        this);
+    if (mAction[MainType::Edit][STRING_CELL_INSERT]) {
+        mAction[MainType::Edit][STRING_CELL_INSERT]->setShortcut(QKeySequence("Ctrl+I"));
+        mAction[MainType::Edit][STRING_CELL_INSERT]->setStatusTip(STRING_CELL_INSERT_TIP);
+        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_INSERT]);
+        connect(mAction[MainType::Edit][STRING_CELL_INSERT], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellInsert, QVariant());
+        });
+    }
+
+    mAction[MainType::Edit][STRING_CELL_DELETE] = new QAction(QIcon::fromTheme("actionDelete"),
+                                                        STRING_CELL_DELETE,
+                                                        this);
+    if (mAction[MainType::Edit][STRING_CELL_DELETE]) {
+        mAction[MainType::Edit][STRING_CELL_DELETE]->setShortcut(QKeySequence("Ctrl+D"));
+        mAction[MainType::Edit][STRING_CELL_DELETE]->setStatusTip(STRING_CELL_DELETE_TIP);
+        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_DELETE]);
+        connect(mAction[MainType::Edit][STRING_CELL_DELETE], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellDelete, QVariant());
+        });
+    }
+
+    mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT] = new QAction(QIcon::fromTheme("actionMergeSplit",
+                                                        QIcon(IAMGE_MERGE_SPLIT)),
+                                                        STRING_CELL_MERGE_SPLIT,
+                                                        this);
+    if (mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]) {
+        mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]->setShortcut(QKeySequence("Ctrl+G"));
+        mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]->setStatusTip(STRING_CELL_MERGE_SPLIT_TIP);
+        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]);
+        mToolBar[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]);
+        connect(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit, QVariant());
+        });
+    }
+
 
     mMainView->menuBar()->addSeparator();
-#endif
 }
 
 

@@ -112,6 +112,10 @@ void ControlExcel::timerFunc(const int& timerId) {
 }
 
 void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
+#if 1
+    Q_UNUSED(inputType)
+    Q_UNUSED(inputValue)
+#else
     static bool shortcutCtrl = false;
 
     if (inputType == ivis::common::KeyTypeEnum::KeyInputTypePress) {
@@ -142,7 +146,7 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
             case Qt::Key_S : {
                 if (shortcutCtrl) {
                     qDebug() << "ShortcutKey :" << inputValue;
-                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutKey, inputValue, true);
+                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, inputValue, true);
                 }
                 break;
             }
@@ -153,6 +157,7 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
         shortcutCtrl = false;
     } else {
     }
+#endif
 }
 
 void ControlExcel::resizeEvent(const int& width, const int& height) {
@@ -544,6 +549,21 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
     }
 }
 
+void ControlExcel::updateShortcutInfo(const int& eventType) {
+    int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
+    if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellInsert) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellDelete) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
+    } else {
+        qDebug() << "Fail to shortcut eventType :" << eventType;
+        return;
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, shortcutType, true);
+}
+
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ConfigInfo::ConfigTypeExcelMergeTextStart :
@@ -618,6 +638,12 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeFileSave :
         case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
             saveExcelFile(eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeEditCellInsert :
+        case ivis::common::EventTypeEnum::EventTypeEditCellDelete :
+        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit : {
+            updateShortcutInfo(eventType);
             break;
         }
         default : {

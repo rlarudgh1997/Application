@@ -107,7 +107,7 @@ public:
         PropertyTypeExcelMergeTextEnd,
         PropertyTypeAutoComplete,
         PropertyTypeReadExcelSheetBeforeSave,
-        PropertyTypeShortcutKey,
+        PropertyTypeShortcutType,
         PropertyTypeTestReport,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -159,6 +159,9 @@ public:
         EventTypeEditCut = 1100,
         EventTypeEditCopy,
         EventTypeEditPaste,
+        EventTypeEditCellInsert,
+        EventTypeEditCellDelete,
+        EventTypeEditCellMergeSplit,
 
         EventTypeViewConfig = 1200,
         EventTypeViewNodeAddress,
@@ -331,7 +334,22 @@ public:
     };
 };
 
-
+class ShortcutTypeEnum {
+public:
+    enum ShortcutType {
+        ShortcutTypeInvalid = 0,
+        ShortcutTypeNew,
+        ShortcutTypeSave,
+        ShortcutTypeSaveAs,
+        ShortcutTypeCopy,
+        ShortcutTypePaste,
+        ShortcutTypeCut,
+        ShortcutTypeExit,
+        ShortcutTypeInsert,
+        ShortcutTypeDelete,
+        ShortcutTypeMergeSplit,
+    };
+};
 
 
 
