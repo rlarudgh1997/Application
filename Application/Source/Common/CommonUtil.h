@@ -520,7 +520,6 @@ public:
         QMutexLocker lock(&mMutex);
         mCount = 20;
         qDebug() << "~FileSystemWatcherThread()";
-        join();
     }
     void start() {
         this->moveToThread(mThread);

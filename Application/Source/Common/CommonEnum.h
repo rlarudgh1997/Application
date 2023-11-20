@@ -107,6 +107,7 @@ public:
         PropertyTypeExcelMergeTextEnd,
         PropertyTypeAutoComplete,
         PropertyTypeReadExcelSheetBeforeSave,
+        PropertyTypeClipboardType,
         PropertyTypeShortcutType,
         PropertyTypeTestReport,
 

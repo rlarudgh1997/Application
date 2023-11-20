@@ -29,6 +29,7 @@ private:
     bool openExcelFile(const QVariant& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);
+    void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
 
 

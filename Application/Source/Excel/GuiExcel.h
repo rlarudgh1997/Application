@@ -205,6 +205,7 @@ private:
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
     void updateDisplayExcelSheet();
     void updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    void updateDisplayClipboardInfo();
     void updateDisplayShortcutInfo();
 
 

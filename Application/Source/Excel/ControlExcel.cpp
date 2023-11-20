@@ -549,6 +549,21 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
     }
 }
 
+void ControlExcel::updateClipboardInfo(const int& eventType) {
+    int clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
+    if (eventType == ivis::common::EventTypeEnum::EventTypeEditCut) {
+        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeCut;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCopy) {
+        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeCopy;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditPaste) {
+        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypePaste;
+    } else {
+        qDebug() << "Fail to clipboard eventType :" << eventType;
+        return;
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, clipboardType, true);
+}
+
 void ControlExcel::updateShortcutInfo(const int& eventType) {
     int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
     if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellInsert) {
@@ -638,6 +653,12 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeFileSave :
         case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
             saveExcelFile(eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeEditCut :
+        case ivis::common::EventTypeEnum::EventTypeEditCopy :
+        case ivis::common::EventTypeEnum::EventTypeEditPaste : {
+            updateClipboardInfo(eventType);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEditCellInsert :

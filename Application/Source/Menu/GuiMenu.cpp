@@ -510,7 +510,7 @@ void GuiMenu::drawMenuEtc(const bool& update) {
     QString styleInfo = QString("background-color: rgb(255, 255, 255); color: rgb(50, 50, 100); font: bold; font-size: 12px");
 
     if (mDefaultPath == nullptr) {
-        mDefaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(350, 25, 600, 30), styleInfo);
+        mDefaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(400, 25, 600, 30), styleInfo);
         connect(mDefaultPath, &QPushButton::clicked, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant());
         });
