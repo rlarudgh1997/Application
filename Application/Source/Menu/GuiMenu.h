@@ -21,6 +21,7 @@
 #include <QTextCharFormat>
 #include <QButtonGroup>
 #include <QRadioButton>
+#include <QShortcut>
 
 
 #include "CommonUtil.h"
@@ -419,6 +420,7 @@ private:
     QMap<MainType, QMenu*> mMenu = QMap<MainType, QMenu*>();
     QMap<MainType, QToolBar*> mToolBar = QMap<MainType, QToolBar*>();
     QMap<MainType, QMap<QString, QAction*>> mAction = QMap<MainType, QMap<QString, QAction*>>();
+    QList<QShortcut*> mShortcut = QList<QShortcut*>();
     QPushButton* mDefaultPath = nullptr;
     QProgressBar* mProgressBar = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;

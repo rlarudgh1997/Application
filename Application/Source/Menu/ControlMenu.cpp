@@ -336,8 +336,11 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             subPath = QString("/../../../tc_generator");
         } else if (cmd.contains("run_tc.sh")) {
             subPath = QString("/../../../validator");
-        } else if ((cmd.contains("gen_tcreport.sh")) || (cmd.contains("gen_gcov_report.sh"))) {
+        } else if (cmd.contains("gen_tcreport.sh")) {
             fileName = QString("TCReport.Info");
+            subPath = QString("/../../../validator");
+        } else if (cmd.contains("gen_gcov_report.sh")) {
+            fileName = QString("GCOVReport.Info");
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
@@ -355,7 +358,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             return;
         }
 
-        fileName = QString("TCReport.Info");
+        fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.Info") : ("GCOVReport.Info"));
         subPath = QString("/../../../validator");
         // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
         // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
@@ -594,6 +597,8 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeEditCut :
         case ivis::common::EventTypeEnum::EventTypeEditCopy :
         case ivis::common::EventTypeEnum::EventTypeEditPaste :
+        case ivis::common::EventTypeEnum::EventTypeEditUndo :
+        case ivis::common::EventTypeEnum::EventTypeEditRedo :
         case ivis::common::EventTypeEnum::EventTypeEditCellInsert :
         case ivis::common::EventTypeEnum::EventTypeEditCellDelete :
         case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit : {

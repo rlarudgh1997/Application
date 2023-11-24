@@ -160,6 +160,8 @@ public:
         EventTypeEditCut = 1100,
         EventTypeEditCopy,
         EventTypeEditPaste,
+        EventTypeEditUndo,
+        EventTypeEditRedo,
         EventTypeEditCellInsert,
         EventTypeEditCellDelete,
         EventTypeEditCellMergeSplit,
@@ -349,6 +351,8 @@ public:
         ShortcutTypeInsert,
         ShortcutTypeDelete,
         ShortcutTypeMergeSplit,
+        ShortcutTypeUndo,
+        ShortcutTypeRedo,
     };
 };
 

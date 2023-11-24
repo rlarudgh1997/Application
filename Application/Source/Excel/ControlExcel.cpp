@@ -73,8 +73,10 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
 
-    // Firt Booting : new excel sheet
-    // updateExcelSheet(false, QVariant());
+
+#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)    // Firt Booting : new excel sheet
+    updateExcelSheet(false, QVariant());
+#endif
 }
 
 void ControlExcel::initControlData() {
@@ -655,6 +657,8 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             saveExcelFile(eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeEditUndo :
+        case ivis::common::EventTypeEnum::EventTypeEditRedo :
         case ivis::common::EventTypeEnum::EventTypeEditCut :
         case ivis::common::EventTypeEnum::EventTypeEditCopy :
         case ivis::common::EventTypeEnum::EventTypeEditPaste : {

@@ -344,12 +344,12 @@ void GuiExcel::updateDisplayExcelSheet() {
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint &pos) {
             QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-            bool selectInvalid = (modelIndexs.size() == 0);
-            int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
-            int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-            int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
-            int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-            int rowCount = mExcelSheet[sheetIndex]->rowCount();
+            bool selectInvalid    = (modelIndexs.size() == 0);
+            int columnStart       = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
+            int columnEnd         = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+            int rowStart          = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
+            int rowEnd            = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+            int rowCount          = mExcelSheet[sheetIndex]->rowCount();
             QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
 
             qDebug() << sheetIndex << ". cellSelected :" << pos << ", Index :" << columnStart << rowStart << rowEnd << columnEnd
@@ -472,105 +472,159 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
 }
 
 void GuiExcel::updateDisplayClipboardInfo() {
-#if 0
+    if (mExcelSheet.size() == 0) {
+        qDebug() << "Fail to - excel sheet was not created";
+        return;
+    }
+
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + mCurrentSheetIndex;
+    if (mExcelSheet[sheetIndex] == nullptr) {
+        qDebug() << "Fail to - excel sheet nullptr";
+        return;
+    }
+
     int clipboardType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType).toInt();
     qDebug() << "\t ClipboardType :" << clipboardType;
 
     if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypePaste) {
-        QClipboard* clipboard = QApplication::clipboard();
-        const QMimeData* mimeData = clipboard->mimeData();
-        qDebug() << "\t\t Data :" << mimeData->text();
-#if 0
-        if (mimeData && mimeData->hasText()) {
-            QString clipboardText = mimeData->text();
-            QStringList rows = clipboardText.split("\n", Qt::SkipEmptyParts);
-
-            int rowCount = rows.count();
-            int columnCount = 0;
-
-            for (int i = 0; i < rowCount; ++i) {
-                QStringList columns = rows[i].split("\t");
-
-                if (i == 0) {
-                    columnCount = columns.count();
-                    tableWidget->setRowCount(rowCount);
-                    tableWidget->setColumnCount(columnCount);
-                }
-
-                if (columns.count() != columnCount) {
-                    QMessageBox::warning(this, "Warning", "Inconsistent number of columns in pasted data.");
-                    return;
-                }
-
-                for (int j = 0; j < columnCount; ++j) {
-                    QTableWidgetItem *item = new QTableWidgetItem(columns[j]);
-                    tableWidget->setItem(i, j, item);
-                }
-            }
+        if ((QApplication::clipboard()->mimeData() == nullptr) || (QApplication::clipboard()->mimeData()->hasText() == false)) {
+            qDebug() << "Clipboard data invalid";
+            return;
         }
-#endif
-    } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeCopy) {
-#if 1
-        static int count = 0;
-        QGuiApplication::clipboard()->setText(QString("%1. Read : excel sheet data -> Write : Clipboard info").arg(count++));
-
         QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-        bool selectInvalid = (modelIndexs.size() == 0);
-        int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
-        int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-        int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
-        int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-        int rowCount = mExcelSheet[sheetIndex]->rowCount();
-        qDebug() << "updateDisplayShortcutInfo : Index :" << sheetIndex
-                        << ", RowColumn :" << columnStart << rowStart << rowEnd << columnEnd << ", RowCount :" << rowCount;
-
-
-#else
-        // Read : Sheet Data
-        QStringList headers;
-        headers << "Column 1" << "Column 2" << "Column 3";
-        tableWidget->setHorizontalHeaderLabels(headers);
-
-        for (int i = 0; i < tableWidget->rowCount(); ++i) {
-            for (int j = 0; j < tableWidget->columnCount(); ++j) {
-                QTableWidgetItem *item = new QTableWidgetItem(QString("Row %1, Col %2").arg(i + 1).arg(j + 1));
-                tableWidget->setItem(i, j, item);
-            }
-        }
-
-        QClipboard *clipboard = QGuiApplication::clipboard();
-        QModelIndexList selectedIndexes = tableWidget->selectedIndexes();
-
-        if (selectedIndexes.isEmpty()) {
-            QMessageBox::information(this, "Information", "No cells selected to copy.");
+        if (modelIndexs.size() > 1) {
+            qDebug() << "Select cell multi - count :" << modelIndexs.size();
             return;
         }
 
-        // Write : Clipboard
-        QString copiedText;
+#if 0    // Cut Cell Clear
+        if (mShortcutCutCellInfo.size() == 4) {
+            int clearRowStart = mShortcutCutCellInfo.at(0);
+            int clearColumnStart = mShortcutCutCellInfo.at(1);
+            int clearRowEnd = mShortcutCutCellInfo.at(2);
+            int clearColumnEnd  = mShortcutCutCellInfo.at(3);
 
-        // Build a tab-separated text from selected cells
-        int previousRow = -1;
-        foreach(const QModelIndex &index, selectedIndexes) {
-            if (index.row() != previousRow) {
-                if (previousRow != -1) {
-                    copiedText += "\n";
+            qDebug() << "Clear Cell Info :" << clearRowStart << clearColumnStart << clearRowEnd << clearColumnEnd;
+
+            for (int rowIndex = clearRowStart; rowIndex < (clearRowStart + clearRowEnd); rowIndex++) {
+                for (int columnIndex = clearColumnStart; columnIndex < (clearColumnStart + clearColumnEnd); columnIndex++) {
+                    if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+                        continue;
+                    }
+                    qDebug() << "Clear Cell :" << rowIndex << columnIndex;
+                    // mExcelSheet[sheetIndex]->clearItemData();
+                    // mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem();
                 }
-                previousRow = index.row();
-            } else {
-                copiedText += "\t";
             }
+            mShortcutCutCellInfo.clear();
+        }
+#endif
 
-            copiedText += index.data(Qt::DisplayRole).toString();
+        QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
+        int rowStart              = (modelIndexs.size() == 1) ? (modelIndexs.at(0).row()) : (0);
+        int columnStart           = (modelIndexs.size() == 1) ? (modelIndexs.at(0).column()) : (0);
+        int rowMax                = mExcelSheet[sheetIndex]->rowCount();
+        int columnMax             = mExcelSheet[sheetIndex]->columnCount();
+        int rowCount              = clipboardData.size() + rowStart;    // Row : 0(Header), 1 ~ Count(Item)
+
+        if (rowCount >= rowMax) {
+            qDebug() << "\t Incress Row :" << rowStart << rowCount << rowMax;
+            mExcelSheet[sheetIndex]->setRowCount(rowCount);
         }
 
-        clipboard->setText(copiedText);
-        QMessageBox::information(this, "Information", "Data copied to clipboard.");
+        int rowIndex = 0;
+        foreach(const auto& data, clipboardData) {
+            qDebug() << "\t Data :" << data;
+
+            int columnIndex = 0;
+            QStringList rowData = data.split("\t");
+            foreach(const auto& row, rowData) {
+                int itemRowIndex    = (rowStart    + rowIndex);
+                int itemColumnIndex = (columnStart + columnIndex);
+                if (itemColumnIndex >= columnMax) {
+                    // qDebug() << "\t   Data[" << columnIndex << "] :" << row << "- Skip";
+                    continue;
+                }
+                // qDebug() << "\t   Data[" << columnIndex << "] :" << row;
+                mExcelSheet[sheetIndex]->setItem(itemRowIndex, itemColumnIndex, new QTableWidgetItem(row));
+                columnIndex++;
+            }
+            rowIndex++;
+        }
+        mExcelSheet[sheetIndex]->resizeColumnsToContents();
+        mExcelSheet[sheetIndex]->resizeRowsToContents();
+    } else if ((clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeCopy)
+        || (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeCut)) {
+        QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+        if (modelIndexs.size() == 0) {
+            qDebug() << "Select cell count : 0";
+            return;
+        }
+
+        int columnStart = modelIndexs.at(0).column();
+        int columnEnd   = modelIndexs.last().column() - columnStart + 1;
+        int rowStart    = modelIndexs.at(0).row();
+        int rowEnd      = modelIndexs.last().row()    - rowStart    + 1;
+        int rowMax      = (rowStart    + rowEnd);
+        int columnMax   = (columnStart + columnEnd);
+
+        qDebug() << "\t Copy : Index :" << sheetIndex << ", Info :" << columnStart << rowStart << rowEnd << columnEnd;
+
+        QString clipboardData = QString();
+        for (int rowIndex = rowStart; rowIndex < rowMax; rowIndex++) {
+            QStringList rowDataList = QStringList();
+            for (int columnIndex = columnStart; columnIndex < columnMax; columnIndex++) {
+                if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+                    continue;
+                }
+                QString text = mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
+                if (rowDataList.size() > 0) {
+                    rowDataList.append("\t");
+                    clipboardData.append("\t");
+                }
+                rowDataList.append(text);
+                clipboardData.append(text);
+            }
+            clipboardData.append("\n");
+        }
+        clipboardData.resize(clipboardData.size() - 1);
+        qDebug() << "\t ClipboardData :" << clipboardData;
+        QGuiApplication::clipboard()->setText(clipboardData);
+
+        mShortcutCutCellInfo.clear();
+        if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeCut) {
+            mShortcutCutCellInfo.append(rowStart);
+            mShortcutCutCellInfo.append(columnStart);
+            mShortcutCutCellInfo.append((rowMax));
+            mShortcutCutCellInfo.append((columnMax));
+        }
+
+#if 1    // Cut Cell Clear
+        if (mShortcutCutCellInfo.size() == 4) {
+            int clearRowStart    = mShortcutCutCellInfo.at(0);
+            int clearColumnStart = mShortcutCutCellInfo.at(1);
+            int clearRowEnd      = mShortcutCutCellInfo.at(2);
+            int clearColumnEnd   = mShortcutCutCellInfo.at(3);
+
+            for (int clearRowIndex = clearRowStart; clearRowIndex < clearRowEnd; clearRowIndex++) {
+                for (int clearColumnIndex = clearColumnStart; clearColumnIndex < clearColumnEnd; clearColumnIndex++) {
+                    if (mExcelSheet[sheetIndex]->item(clearRowIndex, clearColumnIndex) == nullptr) {
+                        continue;
+                    }
+                    // qDebug() << "Clear Cell :" << clearRowIndex << clearColumnIndex;
+                    mExcelSheet[sheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem());
+                    // mExcelSheet[sheetIndex]-> setStyleSheet("QTableWidget::item:selected { border: 1px dashed red; }");
+                }
+            }
+            mShortcutCutCellInfo.clear();
+        }
 #endif
-    } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeCut) {
+    } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeUndo) {
+        qDebug() << "ShortcutTypeUndo";
+    } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeRedo) {
+        qDebug() << "ShortcutTypeRedo";
     } else {
     }
-#endif
 }
 
 void GuiExcel::updateDisplayShortcutInfo() {
@@ -590,11 +644,11 @@ void GuiExcel::updateDisplayShortcutInfo() {
 
     QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
     bool selectInvalid = (modelIndexs.size() == 0);
-    int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
-    int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-    int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
-    int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-    int rowCount = mExcelSheet[sheetIndex]->rowCount();
+    int columnStart    = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
+    int columnEnd      = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+    int rowStart       = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
+    int rowEnd         = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+    int rowCount       = mExcelSheet[sheetIndex]->rowCount();
     qDebug() << "updateDisplayShortcutInfo : Index :" << sheetIndex
                     << ", RowColumn :" << columnStart << rowStart << rowEnd << columnEnd << ", RowCount :" << rowCount;
 

@@ -220,6 +220,7 @@ private:
     QMap<int, QMap<int, QPair<int, int>>> mMergeInfo = QMap<int, QMap<int, QPair<int, int>>>();
     QMenu* mMenuRight = nullptr;
     QMap<MenuItemRight, QAction*> mMenuActionItem = QMap<MenuItemRight, QAction*>();
+    QList<int> mShortcutCutCellInfo = QList<int>();
     AutoCompleteDialog* mAutoComplete = nullptr;
     QTableWidgetItem* mSelectItem = nullptr;
     int mCurrentSheetIndex = 0;

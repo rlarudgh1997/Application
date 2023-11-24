@@ -15,6 +15,13 @@
 	git fetch origin refs/pull-requests/3376/from:ivis.kkh
 	git checkout ivis.kkh
 
+# [VSM 모듈 pull 안될경우]
+	cd ccos.core.sfc/model
+	rm -rf VSM
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.vsm.git
+	mv ccos.core.vsm VSM
+
+
 =====================================================================
 # [Bitbucket 사용]
 - Repo 개인 추가 : bitbucket 내부(https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/browse)에서 Create fork 후 생성
@@ -65,6 +72,7 @@
 	docker_build.sh
 
 - 도커 실행 준비
+	sudo service docker status
 	sudo service docker start
 		5ivis!
 	sudo chmod -R 777 /var/run/docker.sock
@@ -75,10 +83,13 @@
 
 - 도커 실행
 	docker ps
-	docker stop 01e1bb164ee8
+	docker stop sfc-latest-ivis
 	~/900_Code/sfc-docker/run_sfc_docker.sh
 	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
 	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/sh
+
+	~/900_Code/sfc-docker/WSL_run_sfc_docker.sh
+	docker exec -itu ${USER} -w ${HOME} sfc-latest-${USER} /bin/bash
 
 
 - 도커 명령어
@@ -100,12 +111,14 @@
 	export ALTON_ENG_SKIP_DUMMYCALL=ON
 
 - SFC 빌드 명령어
+	cd ${HOME}/900_Code/620_SFC
 	mkdir build
 	cd build
 	cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV
 	sudo cmake --build . --target install -j8
 
 - Validator 빌드
+	cd ${HOME}/900_Code/620_SFC/validator
 	mkdir build
 	cd build
 	cmake ..
@@ -119,8 +132,6 @@
 	BCM_Warning_CV
 	VCU
 	Transmission_Warning_CV
-
-
 
 
 =====================================================================
@@ -230,6 +241,17 @@
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340088463&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&	postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
 
 	https://blog.naver.com/PostView.naver?blogId=browniz1004&logNo=221340427103&categoryNo=15&parentCategoryNo=0&viewDate=&currentPage=3&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=30&userTopListManageOpen=false&userTopListCurrentPage=3
+
+
+
+
+
+=====================================================================
+# [VNC 정보]
+	vncserver -list
+	vncserver -kill :1
+	vncserver -localhost no -geometry 1400x900
+	# vncserver -localhost no -geometry 1400x900 -SecurityTypes None
 
 
 =====================================================================

@@ -194,44 +194,35 @@ void GuiMenu::drawMenuEdit() {
     }
 #endif
 
-    mAction[MainType::Edit][STRING_CELL_INSERT] = new QAction(QIcon::fromTheme("actionInsert"),
-                                                        STRING_CELL_INSERT,
-                                                        this);
-    if (mAction[MainType::Edit][STRING_CELL_INSERT]) {
-        mAction[MainType::Edit][STRING_CELL_INSERT]->setShortcut(QKeySequence("Ctrl+I"));
-        mAction[MainType::Edit][STRING_CELL_INSERT]->setStatusTip(STRING_CELL_INSERT_TIP);
-        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_INSERT]);
-        connect(mAction[MainType::Edit][STRING_CELL_INSERT], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellInsert, QVariant());
+    const QString shortcutInsert     = QString("Ctrl+I");
+    const QString shortcutDelete     = QString("Ctrl+D");
+    const QString shortcutMergeSplit = QString("Ctrl+G");
+    const QString shortcutUndo       = QString("Ctrl+Z");
+    const QString shortcutRedo       = QString("Ctrl+Y");
+    mShortcut.append(new QShortcut(QKeySequence(shortcutInsert), mMainView));
+    mShortcut.append(new QShortcut(QKeySequence(shortcutDelete), mMainView));
+    mShortcut.append(new QShortcut(QKeySequence(shortcutMergeSplit), mMainView));
+    mShortcut.append(new QShortcut(QKeySequence(shortcutUndo), mMainView));
+    mShortcut.append(new QShortcut(QKeySequence(shortcutRedo), mMainView));
+    foreach(const auto& key, mShortcut) {
+        connect(key, &QShortcut::activated, [=]() {
+            QString currentKey = key->key().toString();
+            qDebug() << "Key ID :" << key->id() << currentKey;
+            if (currentKey == shortcutInsert) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCellInsert, QVariant());
+            } else if (currentKey == shortcutDelete) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCellDelete, QVariant());
+            } else if (currentKey == shortcutMergeSplit) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit, QVariant());
+            } else if (currentKey == shortcutUndo) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditUndo, QVariant());
+            } else if (currentKey == shortcutRedo) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeEditRedo, QVariant());
+            } else{
+                // nothing to do
+            }
         });
     }
-
-    mAction[MainType::Edit][STRING_CELL_DELETE] = new QAction(QIcon::fromTheme("actionDelete"),
-                                                        STRING_CELL_DELETE,
-                                                        this);
-    if (mAction[MainType::Edit][STRING_CELL_DELETE]) {
-        mAction[MainType::Edit][STRING_CELL_DELETE]->setShortcut(QKeySequence("Ctrl+D"));
-        mAction[MainType::Edit][STRING_CELL_DELETE]->setStatusTip(STRING_CELL_DELETE_TIP);
-        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_DELETE]);
-        connect(mAction[MainType::Edit][STRING_CELL_DELETE], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellDelete, QVariant());
-        });
-    }
-
-    mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT] = new QAction(QIcon::fromTheme("actionMergeSplit",
-                                                        QIcon(IAMGE_MERGE_SPLIT)),
-                                                        STRING_CELL_MERGE_SPLIT,
-                                                        this);
-    if (mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]) {
-        mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]->setShortcut(QKeySequence("Ctrl+G"));
-        mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]->setStatusTip(STRING_CELL_MERGE_SPLIT_TIP);
-        mMenu[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]);
-        mToolBar[MainType::Edit]->addAction(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT]);
-        connect(mAction[MainType::Edit][STRING_CELL_MERGE_SPLIT], &QAction::triggered, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit, QVariant());
-        });
-    }
-
 
     mMainView->menuBar()->addSeparator();
 }

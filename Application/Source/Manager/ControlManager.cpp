@@ -23,6 +23,9 @@ ControlManager::ControlManager() {
 void ControlManager::init() {
     setCurrentMode(ivis::common::ScreenEnum::DisplayTypeMenu);
     createControl(ivis::common::ScreenEnum::DisplayTypeMenu);
+#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)
+    createControl(ivis::common::ScreenEnum::DisplayTypeExcel);
+#endif
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {

@@ -10,28 +10,9 @@ clear
 
 echo "=========================================================================================================="
 
-function setWayland(){
-	usleep 60000
-	while ! [ -f /tmp/wayland-0.lock ]; do
-		echo "waiting for initializing weston..."
-		usleep 10000
-	done
-
-	export XDG_RUNTIME_DIR=/tmp
-	export $(cat /tmp/dbus_session)
-	export QT_QPA_PLATFORM=wayland
-
-	echo "setWayland : $setWayland"
-	echo
-}
-
-function setMount(){
-	mount -o remount,rw /
-}
 
 function setAuth(){
 	chmod -R 755 $BASE_DIR
-	sync
 }
 
 function setEnvironments(){
@@ -39,22 +20,31 @@ function setEnvironments(){
 	clear
 
 	if [ "$1" = target ] || [ "$1" = t ]; then
-		export LANG=ko_KR.UTF-8
-		export QT_GSTREAMER_CAMERABIN_VIDEOSRC=imxv4l2src
-		APP_PATH=/home/root/Tractor
-	elif [ "$1" = wayland ]; then
-		setWayland
-		APP_PATH=$APP_PATH/deploy_target
-	else
-		echo "[Host PC]"
+		echo "[Target]"
+		APP_PATH=/home/root/App
+	elif [ "$1" = xserver ] || [ "$1" = xs ]; then
+		if [ "$2" = "" ]; then
+			echo "[Host - XServer : WSL]"
+			export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0.0 # in WSL 2
+			#export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+			#export DISPLAY=$(grep -oP "(?<=nameserver ).+" /etc/resolv.conf):0
+		else
+			echo "[Host - XServer : $2]"
+			#export DISPLAY=10.45.143.71:0
+			export DISPLAY=$2:0
+		fi
+
 		APP_PATH=$APP_PATH/deploy_x86
+	elif [ "$1" = host ] || [ "$1" = h ]; then
+		echo "[Host]"
+		APP_PATH=$APP_PATH/deploy_x86
+	else
+		echo "[setEnvironments] fail - $1"
+		exit
 	fi
 
-	export LD_LIBRARY_PATH=/usr/lib:/opt/GENIVI/lib/:$APP_PATH/lib:$LD_LIBRARY_PATH
 
-	echo "GSTREAMER=$QT_GSTREAMER_CAMERABIN_VIDEOSRC"
 	echo "APP_PATH=$APP_PATH"
-	echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 	echo "=========================================================================================================="
 	echo
 }
@@ -63,34 +53,35 @@ function runProcess(){
 	echo
 	echo "=========================================================================================================="
 
-	if [ "$3" = "" ]; then
-		runProcess2 $1 $2
-	else
-		SERVICE="$1"
-		FULL_PATH=""$2"/"$SERVICE""
+	SERVICE="$1"
+	FULL_PATH=""$2"/"$SERVICE""
 
-		echo "FULL_PATH_01=$FULL_PATH"
+	echo "FULL_PATH=$FULL_PATH"
 
-		if pgrep -x $SERVICE > /dev/null
-		then
-			echo "$SERVICE is already running"
-			killall -9 "$SERVICE"
-		fi
+	if pgrep -x $SERVICE > /dev/null
+	then
+		echo "$SERVICE is already running"
+		killall -9 "$SERVICE"
+	fi
 
-		if [ -f $FULL_PATH ]
-		then
-			echo "Launch $SERVICE !!!"
-			nohup $FULL_PATH > /dev/null 2>&1 &
+	if [ -f $FULL_PATH ]
+	then
+		echo "Start Launching [$SERVICE]"
 
-			sleep 0.1
-
-		if pgrep -x $SERVICE > /dev/null
-		then
-			echo "Launching $SERVICE is completed"
-		fi
+		if [ "$3" = "" ]; then
+			$FULL_PATH &
 		else
-			echo "$FULL_PATH not FOUND!!"
+			nohup $FULL_PATH > /dev/null 2>&1 &
 		fi
+
+		sleep 0.1
+
+	if pgrep -x $SERVICE > /dev/null
+	then
+		echo "Launching [$SERVICE] is completed"
+	fi
+	else
+		echo "[$FULL_PATH] not FOUND!!"
 	fi
 
 
@@ -99,29 +90,8 @@ function runProcess(){
 }
 
 
-function runProcess2(){
-	echo
-	echo "=========================================================================================================="
-
-	SERVICE="$1"
-	FULL_PATH=""$2"/"$SERVICE""
-
-	echo "FULL_PATH_02=$FULL_PATH"
-
-	killall -9 "$SERVICE"
-
-	$FULL_PATH &#> /dev/null 2>&1 &
-
-	echo
-	echo "=========================================================================================================="
-}
-
 function killProcess(){
 	kill -9 `ps -ef | grep "Tractor" | awk '{print $2}'`
-}
-
-function setEthernet(){
-	ifconfig eth0 192.168.200.100
 }
 
 
@@ -130,49 +100,35 @@ function setEthernet(){
 #Environments Setting
 
 #Partition Read/Write Setting
-#setMount
-setAuth
+#setAuth
 
 
 #Application Exec
-
-
-CMD=$1
-
-if [ "$1" = h ] || [ "$1" = "" ]; then
-	CMD=host
-elif [ "$1" = t ]; then
-	CMD=target
-elif [ "$1" = c ]; then
-	CMD=host
-	BIN_NAME="Cluster"
+if [ "$1" = target ] || [ "$1" = t ]; then
+	PLATFORM=target
+	ENV=target
+elif [ "$1" = xserver ] || [ "$1" = xs ]; then
+	PLATFORM=host
+	ENV=xserver
+	IP_ADDRESS=$2
+elif [ "$1" = host ] || [ "$1" = h ]; then
+	PLATFORM=host
+	ENV=host
 else
-	CMD=$1
+	PLATFORM=$1
+	ENV=$1
 fi
 
-case "$CMD" in
-	eth)
-		setEthernet
-		;;
-	app)
-		setEnvironments
-		killProcess
-		runProcess $BIN_NAME $APP_PATH $2 $3
-		;;
+case "$PLATFORM" in
 	host)
-		setEnvironments
+		setEnvironments $ENV $IP_ADDRESS
 		killProcess
-		runProcess $BIN_NAME $APP_PATH $2 $3
+		runProcess $BIN_NAME $APP_PATH $2
 		;;
 	target)
-		setEnvironments target
+		setEnvironments $ENV
 		killProcess
-		runProcess $BIN_NAME $APP_PATH $2 $3
-		;;
-	demo)
-		setEnvironments
-		killProcess
-		runProcess Demo $APP_PATH $2 $3
+		runProcess $BIN_NAME $APP_PATH $2
 		;;
 	*)
 		killProcess
