@@ -6,12 +6,11 @@
 # of this software shall be licensed only pursuant to the terms
 # of an applicable IVIS license agreement.
 
+from common.message import warning, error, verbose, debug, ask
+from common.helper import parse_version_string
+import sys
 import os
 import shutil
-import sys
-
-from common.helper import parse_version_string
-from common.message import ask, debug, error, verbose, warning
 
 
 class Generator:
@@ -116,7 +115,9 @@ class Generator:
                 _sfc_version_ext = "." + _sfc_version
 
             if "specVersion" not in sfc:
-                error("spec version tag is not defined in %s" % _sfc_name)
+                # NOTE: PV specVersion 미사용 결정, CV specVersion 사용 유지중
+                if self.parser.sfc_spec[_sfc_name] == "CV":
+                    error("spec version tag is not defined in %s" % _sfc_name)
                 _spec_version = "Not defined"
             else:
                 _spec_version = sfc["specVersion"]
@@ -193,7 +194,9 @@ class Generator:
                 _sfc_description = "// SFC Version : %s\n" % _sfc_version
 
             if "specVersion" not in sfc:
-                error("spec version tag is not defined in %s" % _sfc_name)
+                # NOTE: PV specVersion 미사용 결정, CV specVersion 사용 유지중
+                if self.parser.sfc_spec[_sfc_name] == "CV":
+                    error("spec version tag is not defined in %s" % _sfc_name)
                 _spec_version = "Not defined"
             else:
                 _spec_version = sfc["specVersion"]
@@ -562,6 +565,7 @@ class Generator:
             _header_buffer = _header_buffer.replace("__PLACEHOLDER_FILENAME__", (_header_name + ".h"))
             _header_file.write(_header_buffer)
             _header_file.close()
+        self._generate_write_node_address()
 
         # generate SFC helper source
         self._generate_helper_top_class_source(self.parser.sfc_address)
@@ -651,7 +655,6 @@ class Generator:
         _header_buffer = _header_buffer.replace("##PUBLIC_VARIABLE##", _public_variable_buffer)
         _header_buffer = _header_buffer.replace("##COMMENT_INNERCLASS##", "")
         self.helper_header_buffer["SFC." + node["name"]] = _header_buffer
-
 
     def _generate_helper_root_class_source(self, node: dict):
         _source_buffer = self.sfc_helper_root_class_source_template

@@ -1,19 +1,15 @@
-import os
-import re
-import shutil
-import sys
-import time
 from ast import Str
-from collections import OrderedDict
-from typing import Any, NamedTuple
 from xmlrpc.client import Boolean
-
-import lib.defines as DEFINE
-
 from .parser import Parser
 from .progress import Progress
+import lib.defines as DEFINE
 
-
+import os, sys
+import shutil
+import time
+import re
+from collections import OrderedDict
+from typing import NamedTuple, Any
 class TranslateSpec(NamedTuple):
     value_type: str             # uint64_t, int64_t
     value_suffix: str           # UL, L
@@ -999,7 +995,6 @@ class Generator:
         for child_node_name in node_data["children"].keys():
             self.do_merge_inner_class_header(node_data["children"][child_node_name])
 
-        print("\t child_node_name length:", len(node_data["children"].keys()))
         if len(node_data["children"].keys()) == 0:
             # Leaf Node
             parent_node = node_data["parent"]
@@ -1017,16 +1012,13 @@ class Generator:
             header_buffer = header_buffer.replace(DEFINE.TEMPLATE_CLASS_NAME, DEFINE.NODE_PREFIX + node_data["name"])
             header_buffer = header_buffer.replace(DEFINE.TEMPLATE_ADDRESS, node_data["address"])
 
-
-
             if self.node_address.__contains__(node_data["address"]):
                 self.node_address_duplicate.append(node_data["address"])
-                print("\t\t 0 conaint address:", node_data["address"], "\n")
+                # print("\t\t 0 conaint address:", node_data["address"], "\n")
             else:
                 self.node_address.append(node_data["address"])
-                print("\t\t 1 cnt:", self.count, " address:", node_data["address"], "\n")
+                # print("\t\t 1 cnt:", self.count, " address:", node_data["address"], "\n")
                 self.count += 1
-
 
             if node_data["signalName"] is None:
                 header_buffer = header_buffer.replace(DEFINE.TEMPLATE_SIGNALNAME, "")
@@ -1152,7 +1144,7 @@ class Generator:
                     parent_node["inner_class_header"] = []
                 parent_node["inner_class_header"].append(header_buffer)
 
-            print("\t\t 2 address:", node_data["address"], "\n")
+            # print("\t\t 2 address:", node_data["address"], "\n")
             self.node_address_title.append(node_data["address"])
 
         self.merge_progress = self.merge_progress + 1
@@ -1436,7 +1428,6 @@ class Generator:
         cal_value = (1 << ((int(end_bit, 10) + 1) - int(start_bit, 10))) - 1
         bit_value += "0x%X" % cal_value
         return bit_value
-
 
     def write_node_address(self, target_dir):
         _node_address_path = os.path.join(target_dir + "/include/generated/NodeAddressVSM.info")
