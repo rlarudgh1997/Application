@@ -7,11 +7,9 @@
 #include <QGuiApplication>
 #include <QQmlContext>
 
-
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
-
-MainWindow::MainWindow(QQuickView *parent) : QQuickView(parent) {
+MainWindow::MainWindow(QQuickView* parent) : QQuickView(parent) {
     qInfo() << "================================================================================================";
     qInfo() << "APP_PATH    :" << QGuiApplication::applicationDirPath().toLatin1().data();
     qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
@@ -43,8 +41,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::controlConnect() {
-    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram,
-            this,                              &QGuiApplication::quit,    // &QWidget::close, &QApplication::closeAllWindows()
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
+            &QGuiApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
 }
 
@@ -54,41 +52,27 @@ void MainWindow::setContextProperty() {
 
 void MainWindow::setQmlRegisterType() {
     // Common
-    qmlRegisterType<ivis::common::DisplayEnum>                            ("CommonEnum",          1, 0,
-                                                                            "Display");
-    qmlRegisterType<ivis::common::PropertyEnum>                           ("CommonEnum",          1, 0,
-                                                                            "PropertyType");
+    qmlRegisterType<ivis::common::DisplayEnum>("CommonEnum", 1, 0, "Display");
+    qmlRegisterType<ivis::common::PropertyEnum>("CommonEnum", 1, 0, "PropertyType");
 
     // Home
-    qmlRegisterType<ivis::common::HandlerHomeEnum>                        ("HomeEnum",            1, 0,
-                                                                            "Home");
+    qmlRegisterType<ivis::common::HandlerHomeEnum>("HomeEnum", 1, 0, "Home");
 
     // Gauge
-    qmlRegisterType<ivis::common::HandlerGaugeEnum>                       ("GaugeEnum",           1, 0,
-                                                                            "Gauge");
+    qmlRegisterType<ivis::common::HandlerGaugeEnum>("GaugeEnum", 1, 0, "Gauge");
 
-    qmlRegisterType<ivis::common::SpeedStateType>                         ("GaugeEnum",           1, 0,
-                                                                            "SpeedStateType");
-    qmlRegisterType<ivis::common::SpeedUnitType>                          ("GaugeEnum",           1, 0,
-                                                                            "SpeedUnitType");
-    qmlRegisterType<ivis::common::RpmStateType>                           ("GaugeEnum",           1, 0,
-                                                                            "RpmStateType");
-    qmlRegisterType<ivis::common::SpeedSubDigitalStateType>               ("GaugeEnum",           1, 0,
-                                                                            "SpeedSubDigitalStateType");
-
-
+    qmlRegisterType<ivis::common::SpeedStateType>("GaugeEnum", 1, 0, "SpeedStateType");
+    qmlRegisterType<ivis::common::SpeedUnitType>("GaugeEnum", 1, 0, "SpeedUnitType");
+    qmlRegisterType<ivis::common::RpmStateType>("GaugeEnum", 1, 0, "RpmStateType");
+    qmlRegisterType<ivis::common::SpeedSubDigitalStateType>("GaugeEnum", 1, 0, "SpeedSubDigitalStateType");
 
     // Telltale
-    qmlRegisterType<ivis::common::TelltaleStatType>                      ("TelltaleEnum",         1, 0,
-                                                                            "TelltaleStat");
-    qmlRegisterType<ivis::common::TelltaleECASStatOptionalType>          ("TelltaleEnum",         1, 0,
-                                                                            "TelltaleECASStatOptional");
-    qmlRegisterType<ivis::common::TelltaleECASAxleMotionStatOptionalType>("elltaleEnum",          1, 0,
-                                                                            "TelltaleECASAxleMotionStatOptional");
-    qmlRegisterType<ivis::common::TelltaleOATIceWarnStatOptionalType>    ("TelltaleEnum",         1, 0,
-                                                                            "TelltaleOATIceWarnStatOptional");
-    qmlRegisterType<ivis::common::TelltaleLowFuelWarnStatOptionalType>   ("TelltaleEnum",         1, 0,
-                                                                            "TelltaleLowFuelWarnStatOptional");
+    qmlRegisterType<ivis::common::TelltaleStatType>("TelltaleEnum", 1, 0, "TelltaleStat");
+    qmlRegisterType<ivis::common::TelltaleECASStatOptionalType>("TelltaleEnum", 1, 0, "TelltaleECASStatOptional");
+    qmlRegisterType<ivis::common::TelltaleECASAxleMotionStatOptionalType>("elltaleEnum", 1, 0,
+                                                                          "TelltaleECASAxleMotionStatOptional");
+    qmlRegisterType<ivis::common::TelltaleOATIceWarnStatOptionalType>("TelltaleEnum", 1, 0, "TelltaleOATIceWarnStatOptional");
+    qmlRegisterType<ivis::common::TelltaleLowFuelWarnStatOptionalType>("TelltaleEnum", 1, 0, "TelltaleLowFuelWarnStatOptional");
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {

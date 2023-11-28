@@ -55,6 +55,10 @@ void ControlHome::resetControl(const bool& reset) {
 void ControlHome::controlConnect(const bool& state) {
     if (state) {
         connect(isHandler(), &HandlerHome::signalHandlerEvent, this, &ControlHome::slotHandlerEvent, Qt::UniqueConnection);
+        connect(Service::instance().data(), &ConfigSetting::signalContentChagned(int type, QList<QVairnt> value), this,
+                &ControlHome::slotServiceChanged, updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
+
+                Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlHome::slotConfigChanged,
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,

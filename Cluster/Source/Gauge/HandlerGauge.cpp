@@ -1,10 +1,8 @@
 #include "HandlerGauge.h"
 #include "CommonEnum.h"
 
-
-#define QML          QString("qrc:/Gauge/Gauge.qml")
-#define QML_OBJECT   QString("dataModelGauge")   // DataModelGauge.qml : ojbectName
-
+#define QML QString("qrc:/Gauge/Gauge.qml")
+#define QML_OBJECT QString("dataModelGauge")  // DataModelGauge.qml : ojbectName
 
 QSharedPointer<HandlerGauge>& HandlerGauge::instance() {
     static QSharedPointer<HandlerGauge> gHandler;
@@ -19,62 +17,27 @@ HandlerGauge::HandlerGauge() : AbstractHandler(ivis::common::DisplayEnum::Displa
 
 void HandlerGauge::initPropertyInfo() {
     // Common
-    registerProperty(ivis::common::PropertyEnum::CommonDisplay,
-                                                QString("display"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::CommonVisible,
-                                                QString("visible"),
-                                                QVariant(true));
-    registerProperty(ivis::common::PropertyEnum::CommonRect,
-                                                QString("rect"),
-                                                QVariant());
-    registerProperty(ivis::common::PropertyEnum::CommonVehicleType,
-                                                QString("vehicleType"),
-                                                QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::CommonDisplay, QString("display"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::CommonVisible, QString("visible"), QVariant(true));
+    registerProperty(ivis::common::PropertyEnum::CommonRect, QString("rect"), QVariant());
+    registerProperty(ivis::common::PropertyEnum::CommonVehicleType, QString("vehicleType"), QVariant(0));
 
     // Gauge
-    registerProperty(ivis::common::PropertyEnum::GaugeDefaultAngle,
-                                                QString("gaugeDefaultAngle"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeSpeed,
-                                                QString("gaugeSpeed"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeRpm,
-                                                QString("gaugeRpm"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeFuel,
-                                                QString("gaugeFuel"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeTemperature,
-                                                QString("gaugeTemperature"),
-                                                QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeDefaultAngle, QString("gaugeDefaultAngle"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeSpeed, QString("gaugeSpeed"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeRpm, QString("gaugeRpm"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeFuel, QString("gaugeFuel"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeTemperature, QString("gaugeTemperature"), QVariant(0));
 
+    registerProperty(ivis::common::PropertyEnum::GaugeSpeedAngle, QString("gaugeSpeedAngle"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeRpmAngle, QString("gaugeRpmAngle"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeFuelAngle, QString("gaugeFuelAngle"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeTemperatureAngle, QString("gaugeTemperatureAngle"), QVariant(0));
 
-    registerProperty(ivis::common::PropertyEnum::GaugeSpeedAngle,
-                                                QString("gaugeSpeedAngle"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeRpmAngle,
-                                                QString("gaugeRpmAngle"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeFuelAngle,
-                                                QString("gaugeFuelAngle"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeTemperatureAngle,
-                                                QString("gaugeTemperatureAngle"),
-                                                QVariant(0));
-
-    registerProperty(ivis::common::PropertyEnum::GaugeSpeedUnit,
-                                                QString("gaugeSpeedUnit"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeSpeedState,
-                                                QString("gaugeSpeedState"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState,
-                                                QString("gaugeSpeedSubDigitalState"),
-                                                QVariant(0));
-    registerProperty(ivis::common::PropertyEnum::GaugeRpmState,
-                                                QString("gaugeRpmState"),
-                                                QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeSpeedUnit, QString("gaugeSpeedUnit"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeSpeedState, QString("gaugeSpeedState"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState, QString("gaugeSpeedSubDigitalState"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::GaugeRpmState, QString("gaugeRpmState"), QVariant(0));
 }
 
 void HandlerGauge::controlConnect(const bool& state) {

@@ -6,8 +6,7 @@
 #include <QResizeEvent>
 #include <QDebug>
 
-
-#define SCREEN_HEIGHT_MARGIN            60
+#define SCREEN_HEIGHT_MARGIN 60
 
 QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
     static QSharedPointer<ScreenInfo> gScreenInfo;
@@ -29,7 +28,7 @@ ScreenInfo::~ScreenInfo() {
     qDebug() << "~ScreenInfo";
 }
 
-void ScreenInfo::updateRootItem(QWidget *rootItem) {
+void ScreenInfo::updateRootItem(QWidget* rootItem) {
     if (mRootScreen == nullptr) {
         mRootScreen = rootItem;
         mRootScreen->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -42,16 +41,16 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     qDebug() << "ScreenInfo::drawScreen(" << displayType << "," << objectName << ")";
 
-     if (windowList.count() > 0) {
+    if (windowList.count() > 0) {
         if (mSubScreens[displayType] == nullptr) {
             try {
                 mSubScreens[displayType] = new QWidget(mRootScreen);
                 if (mAlwaysTopScreen == nullptr) {
                     mAlwaysTopScreen = mSubScreens[displayType];
                     mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(), SCREEN_HEIGHT_MARGIN);
-                } else  {
+                } else {
                     mSubScreens[displayType]->setGeometry(0, 0, mRootScreen->geometry().width(),
-                                                                                                mRootScreen->geometry().height());
+                                                          mRootScreen->geometry().height());
                 }
                 mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
@@ -61,7 +60,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
                 qDebug() << "Fail to create component";
             }
         }
-     }
+    }
 
     qDebug() << "Widget :" << mSubScreens[displayType] << "\n\n";
     return mSubScreens[displayType];
@@ -69,7 +68,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
-        foreach(const auto& screen, mSubScreens) {
+        foreach (const auto& screen, mSubScreens) {
             try {
                 if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
                     continue;
@@ -85,21 +84,18 @@ void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
 }
 
 void ScreenInfo::captureScreen(const QRect& rect) {
-    #define PWD QApplication::applicationDirPath().toLatin1().data()
-    #define DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")) \
-            .arg(QTime::currentTime().msec())
+#define PWD QApplication::applicationDirPath().toLatin1().data()
+#define DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")).arg(QTime::currentTime().msec())
 
-    #define SCREENSHOT_SAVE_NAME "/CaptureScreen_"
-    #define FILE_EXTENSION_JPG ".jpg"
-    #define FILE_EXTENSION_PNG ".png"
-    #define FILE_EXTENSION_BMP ".bmp"
+#define SCREENSHOT_SAVE_NAME "/CaptureScreen_"
+#define FILE_EXTENSION_JPG ".jpg"
+#define FILE_EXTENSION_PNG ".png"
+#define FILE_EXTENSION_BMP ".bmp"
 
     // QWindowList windowList = qApp->allWindows();
     QRect screenRect = (rect.isNull()) ? (mRootScreen->geometry()) : (rect);
     QScreen* screen = QGuiApplication::screens()[0];
-    QPixmap pixmap = screen->grabWindow(0,
-                                        screenRect.x(), screenRect.y(),
-                                        screenRect.width(), screenRect.height());
+    QPixmap pixmap = screen->grabWindow(0, screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
     QString savePath = QString(PWD);
     savePath.append(SCREENSHOT_SAVE_NAME);
     savePath.append(DATE_TIME);
@@ -117,15 +113,15 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
 
     if (languageFileName.size() == 0) {
         switch (changeLanguage) {
-            case LanguageEnglish : {
+            case LanguageEnglish: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_ENG.qm");
                 break;
             }
-            case LanguageKorea : {
+            case LanguageKorea: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_KOR.qm");
                 break;
             }
-            default : {
+            default: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_KOR.qm");
                 break;
             }
@@ -143,7 +139,7 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
     }
 
     qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
-                                        << ")->LanguageChange :" << ((result)?("Sucess"):("Fail")) << "!!!!!!!\n\n\n\n";
+             << ")->LanguageChange :" << ((result) ? ("Sucess") : ("Fail")) << "!!!!!!!\n\n\n\n";
     return result;
 }
 
@@ -151,7 +147,7 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
     if (mRootScreen) {
         mRootScreen->resize(resizeEvent.size().width(), resizeEvent.size().height());
     }
-    foreach(const auto& widget, mSubScreens) {
+    foreach (const auto& widget, mSubScreens) {
         try {
             if (widget == mAlwaysTopScreen) {
                 widget->setGeometry(0, 0, resizeEvent.size().width(), SCREEN_HEIGHT_MARGIN);

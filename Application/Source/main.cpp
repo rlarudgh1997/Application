@@ -15,7 +15,7 @@ void sigHandler(int32_t sig) {
     qDebug() << "Error : signal " << sig;
 
 #if defined(OS_LINUX)
-    void *array[20];
+    void* array[20];
     int32_t size = backtrace(array, 20);
     char** backTraceMsg = backtrace_symbols(array, size);
 
@@ -26,13 +26,10 @@ void sigHandler(int32_t sig) {
     char filename[1024];
     memset(filename, 0, sizeof(filename));
     if (timeInfo != nullptr) {
-        sprintf(filename, "./TraceMessage-%d-%04d%02d%02d.%02d%02d%02d", getpid(),
-                            timeInfo->tm_year + 1900, timeInfo->tm_mon + 1, timeInfo->tm_mday,
-                            timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
+        sprintf(filename, "./TraceMessage-%d-%04d%02d%02d.%02d%02d%02d", getpid(), timeInfo->tm_year + 1900, timeInfo->tm_mon + 1,
+                timeInfo->tm_mday, timeInfo->tm_hour, timeInfo->tm_min, timeInfo->tm_sec);
     } else {
-        sprintf(filename, "./TraceMessage-%d-%04d%02d%02d.%02d%02d%02d", getpid(),
-                            2023, 1, 1,
-                            1, 1, 1);
+        sprintf(filename, "./TraceMessage-%d-%04d%02d%02d.%02d%02d%02d", getpid(), 2023, 1, 1, 1, 1, 1);
     }
 
     std::ofstream dumpFile;
@@ -49,38 +46,38 @@ void sigHandler(int32_t sig) {
 }
 
 enum LogLevel {
-    LogLevelInvalid  = 0x0000,
-    LogLevelDebug    = 0x0001,
-    LogLevelInfo     = 0x0002,
-    LogLevelWarnig   = 0x0004,
+    LogLevelInvalid = 0x0000,
+    LogLevelDebug = 0x0001,
+    LogLevelInfo = 0x0002,
+    LogLevelWarnig = 0x0004,
     LogLevelCritical = 0x0008,
-    LogLevelFatal    = 0x0010,
-    LogLevelAll      = (LogLevelDebug | LogLevelInfo | LogLevelWarnig | LogLevelCritical | LogLevelFatal),
+    LogLevelFatal = 0x0010,
+    LogLevelAll = (LogLevelDebug | LogLevelInfo | LogLevelWarnig | LogLevelCritical | LogLevelFatal),
 };
 int logLevel = (LogLevelInfo);
 
 // 사용자 정의 로깅 핸들러 함수
-void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+void customMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     switch (type) {
-        case QtDebugMsg : {
+        case QtDebugMsg: {
             if (logLevel & LogLevelDebug) {
                 qDebug() << "Debug    :" << msg;
             }
             break;
         }
-        case QtInfoMsg : {
+        case QtInfoMsg: {
             if (logLevel & LogLevelInfo) {
                 qInfo() << "Info     :" << msg;
             }
             break;
         }
-        case QtWarningMsg : {
+        case QtWarningMsg: {
             if (logLevel & LogLevelWarnig) {
                 qWarning() << "Warning  :" << msg;
             }
             break;
         }
-        case QtCriticalMsg : {
+        case QtCriticalMsg: {
             if (logLevel & LogLevelCritical) {
                 qCritical() << "Critical :" << msg;
             }
@@ -92,13 +89,13 @@ void customMessageHandler(QtMsgType type, const QMessageLogContext &context, con
         //     }
         //     break;
         // }
-        default : {
+        default: {
             break;
         }
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     signal(SIGABRT, sigHandler);
     signal(SIGSEGV, sigHandler);
 
@@ -106,13 +103,13 @@ int main(int argc, char *argv[]) {
 
     // qInstallMessageHandler(customMessageHandler);
     QString messagPattern = QString("%1 %2%3%4%5%6 %7")
-                                    .arg("[%{time yyyyMMdd h:mm:ss.zzz}]")    // .arg("[%{time yyyyMMdd h:mm:ss.zzz t}")
-                                    .arg("[%{if-debug}D%{endif}")
-                                    .arg("%{if-info}I%{endif}")
-                                    .arg("%{if-warning}W%{endif}")
-                                    .arg("%{if-critical}C%{endif}")
-                                    .arg("%{if-fatal}F%{endif}]")
-                                    .arg("%{message}");   // .arg("[%{category}] %{message}");
+                                .arg("[%{time yyyyMMdd h:mm:ss.zzz}]")  // .arg("[%{time yyyyMMdd h:mm:ss.zzz t}")
+                                .arg("[%{if-debug}D%{endif}")
+                                .arg("%{if-info}I%{endif}")
+                                .arg("%{if-warning}W%{endif}")
+                                .arg("%{if-critical}C%{endif}")
+                                .arg("%{if-fatal}F%{endif}]")
+                                .arg("%{message}");  // .arg("[%{category}] %{message}");
     qSetMessagePattern(messagPattern);
 
     // qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");

@@ -390,6 +390,29 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 
+=====================================================================
+# Clang-format 설정
+
+[clang 우분투 설치]
+	wget https://apt.llvm.org/llvm.sh
+	chmod +x llvm.sh
+	sudo ./llvm.sh 13
+	sudo apt-get install clang-format-13
+
+
+[clang 윈도우 설치]
+	https://blog.naver.com/websearch/222344931042
+
+
+[bin 위치 : vscode 설정]
+	clang-foramt 위치 설정
+		/usr/bin/clang-format-13
+		C:\Program Files\LLVM\bin\clang-format.exe
+
+
+[clang 체크]
+	./sfc_clang_format.sh -a
+
 
 
 

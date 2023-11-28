@@ -3,10 +3,6 @@
 
 #include "AbstractControl.h"
 
-
-
-
-
 class ControlTelltale : public AbstractControl {
     Q_OBJECT
 
@@ -15,10 +11,8 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
-
 private:
     explicit ControlTelltale();
-
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -33,17 +27,14 @@ protected:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
-
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
     virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue);
 
-
 private:
     AbstractHandler* mHandler = nullptr;
 };
 
-
-#endif    // CONTROL_TELLTALE_H
+#endif  // CONTROL_TELLTALE_H

@@ -13,20 +13,15 @@
 #include <QTableWidgetItem>
 #include <QMenu>
 
-
-
 #include <QDialog>
 #include <QListWidget>
 #include <QVBoxLayout>
-
-
 
 class AutoCompleteDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AutoCompleteDialog(QWidget* parent = nullptr,
-                                const QString& title = QString(),
+    explicit AutoCompleteDialog(QWidget* parent = nullptr, const QString& title = QString(),
                                 const QStringList& list = QStringList())
         : QDialog(parent), mAutoCompleteStringList(list) {
         setWindowTitle(title);
@@ -40,7 +35,7 @@ public:
         mInputeText->setFocus();
         mSuggestionsList = ivis::common::createWidget<QListWidget>(this, true);
 
-        QRect rootWidgetRect =  static_cast<QWidget*>(parent->parent())->geometry();
+        QRect rootWidgetRect = static_cast<QWidget*>(parent->parent())->geometry();
         QRect setRect = QRect();
         setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
         setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
@@ -54,13 +49,9 @@ public:
 
         updateSuggestionsList(QString());
 
-        connect(mInputeText, &QLineEdit::textChanged, [=](const QString& text){
-            updateSuggestionsList(text);
-        });
-        connect(mInputeText, &QLineEdit::returnPressed, [=]() {
-            emit signalAutoCompleteSelectedText(inputText());
-        });
-        connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem *item) {
+        connect(mInputeText, &QLineEdit::textChanged, [=](const QString& text) { updateSuggestionsList(text); });
+        connect(mInputeText, &QLineEdit::returnPressed, [=]() { emit signalAutoCompleteSelectedText(inputText()); });
+        connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
             mInputeText->clear();
             emit signalAutoCompleteSelectedText(item->text());
         });
@@ -98,10 +89,8 @@ private:
         mSuggestionsList->setCurrentRow(0);
     }
 
-
 signals:
-     void signalAutoCompleteSelectedText(const QString& text);
-
+    void signalAutoCompleteSelectedText(const QString& text);
 
 private:
     const int mWidth = 900;
@@ -112,10 +101,6 @@ private:
     QStringList mAutoCompleteStringList;
 };
 
-
-
-
-
 class ExcelSheet {
 public:
     ExcelSheet() {
@@ -123,7 +108,7 @@ public:
     }
     bool isCellStateMerge(const int& columnIndex, const int& rowStart, const int& rowEnd) {
         if (mMergeInfo.contains(columnIndex)) {
-            foreach(const auto& v, mMergeInfo[columnIndex]) {
+            foreach (const auto& v, mMergeInfo[columnIndex]) {
                 if ((v.first == rowStart) && (v.second == rowEnd)) {
                     // qDebug() << "\t\t Is Cell State Merge :" << columnIndex << v.first << v.second;
                     return true;
@@ -146,7 +131,7 @@ public:
         while (iter.hasNext()) {
             iter.next();
             int currColumnIndex = iter.key();
-            foreach(const auto& v, iter.value()) {
+            foreach (const auto& v, iter.value()) {
                 if ((currColumnIndex == columnIndex) && (rowStart == v.first) && (rowEnd == v.second)) {
                     // qDebug() << "\t\t 2. Erase Merge Cell :" << currColumnIndex << v.first << v.second;
                     continue;
@@ -166,7 +151,6 @@ private:
     QMap<int, QList<QPair<int, int>>> mMergeInfo = QMap<int, QList<QPair<int, int>>>();
 };
 
-
 class GuiExcel : public AbstractGui {
     Q_OBJECT
 
@@ -185,10 +169,8 @@ private:
         Cancel,
     };
 
-
 public:
     static QSharedPointer<GuiExcel>& instance(AbstractHandler* handler = nullptr);
-
 
 private:
     explicit GuiExcel(AbstractHandler* handler = nullptr);
@@ -199,7 +181,7 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
-    QVariantList readExcelSheet(const int& sheetIndex);
+    QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo = QVariantList());
     void readAllExcelSheet();
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplayCellInfo(const int& sheetIndex, const QVariantList& mergeInfo, const QMap<int, QVariantList>& sheetData);
@@ -208,10 +190,8 @@ private:
     void updateDisplayClipboardInfo();
     void updateDisplayShortcutInfo();
 
-
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
-
 
 private:
     QTabWidget* mMainView = nullptr;
@@ -226,4 +206,4 @@ private:
     int mCurrentSheetIndex = 0;
 };
 
-#endif    // GUI_EXCEL_H
+#endif  // GUI_EXCEL_H

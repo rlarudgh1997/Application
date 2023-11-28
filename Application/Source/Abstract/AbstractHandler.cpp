@@ -21,9 +21,10 @@ bool AbstractHandler::init() {
 void AbstractHandler::controlConnect(const bool& state) {
     if (state) {
         connect(this, &AbstractHandler::signalUpdateDataModel,
-                        [=](const int& type, const QVariant& value, const bool& alwaysUpdate) {
-            QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, type), Q_ARG(QVariant, value), Q_ARG(bool, alwaysUpdate));
-        });
+                [=](const int& type, const QVariant& value, const bool& alwaysUpdate) {
+                    QMetaObject::invokeMethod(this, "setProperty", Q_ARG(int, type), Q_ARG(QVariant, value),
+                                              Q_ARG(bool, alwaysUpdate));
+                });
     } else {
         disconnect(this);
     }
@@ -34,7 +35,7 @@ QWidget* AbstractHandler::getScreen() {
     return mScreen;
 }
 
-void AbstractHandler::timerEvent(QTimerEvent *event) {
+void AbstractHandler::timerEvent(QTimerEvent* event) {
     timerFunc(event->timerId());
 }
 

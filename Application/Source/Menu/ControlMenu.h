@@ -7,9 +7,6 @@
 // #include <QLoggingCategory>
 // Q_DECLARE_LOGGING_CATEGORY(C_TOP)
 
-
-
-
 class ControlMenu : public AbstractControl {
     Q_OBJECT
 
@@ -17,7 +14,6 @@ public:
     static QSharedPointer<ControlMenu>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
-
 
 private:
     explicit ControlMenu();
@@ -29,7 +25,6 @@ private:
     void excuteScript(const int& runType, const bool& state, const QVariantList& infoList);
     void cancelScript(const bool& complete);
     int saveTestReportInfo(const int& reportType, const QList<bool>& value);
-
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -44,12 +39,10 @@ protected:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
-
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
-
 
 private:
     AbstractHandler* mHandler = nullptr;
@@ -57,5 +50,4 @@ private:
     QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcher = nullptr;
 };
 
-
-#endif    // CONTROL_MENU_H
+#endif  // CONTROL_MENU_H

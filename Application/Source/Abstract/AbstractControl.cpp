@@ -18,11 +18,11 @@ bool AbstractControl::isInitComplete() {
     return mInit;
 }
 
-void AbstractControl::timerEvent(QTimerEvent *event) {
+void AbstractControl::timerEvent(QTimerEvent* event) {
     timerFunc(event->timerId());
 }
 
-int AbstractControl::controlTimer(const int &timerType, const bool &start, const int &interval) {
+int AbstractControl::controlTimer(const int& timerType, const bool& start, const int& interval) {
     if (mTimer[timerType]) {
         killTimer(mTimer[timerType]);
         mTimer[timerType] = 0;
@@ -35,7 +35,7 @@ int AbstractControl::controlTimer(const int &timerType, const bool &start, const
     return mTimer[timerType];
 }
 
-int AbstractControl::getTimerId(const int &timerType) {
+int AbstractControl::getTimerId(const int& timerType) {
     return mTimer[timerType];
 }
 

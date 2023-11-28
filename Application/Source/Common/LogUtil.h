@@ -10,18 +10,18 @@
 #include <QFile>
 #include <QDateTime>
 
-
-class LogUtilElapsedTime
-{
+class LogUtilElapsedTime {
 public:
-    explicit LogUtilElapsedTime(const QString &functionName);
+    explicit LogUtilElapsedTime(const QString& functionName);
     ~LogUtilElapsedTime();
 
-    void printElapsedTime(const QString &msg);
+    void printElapsedTime(const QString& msg);
 
 public:
     static void setEnabled(bool enabled);
-    static bool endabled() { return s_enabled; }
+    static bool endabled() {
+        return s_enabled;
+    }
 
 private:
     QElapsedTimer m_elapsedTimer;
@@ -29,8 +29,8 @@ private:
     static bool s_enabled;
 };
 
-void logHandler(QtMsgType type, const QMessageLogContext & logContext, const QString &msg);
-void logHandlerForHarman(QtMsgType type, const QMessageLogContext & logContext, const QString &msg);
-void logHandlerForDLT(QtMsgType type, const QMessageLogContext & logContext, const QString &msg);
+void logHandler(QtMsgType type, const QMessageLogContext& logContext, const QString& msg);
+void logHandlerForHarman(QtMsgType type, const QMessageLogContext& logContext, const QString& msg);
+void logHandlerForDLT(QtMsgType type, const QMessageLogContext& logContext, const QString& msg);
 
-#endif // LOGUTIL_H
+#endif  // LOGUTIL_H

@@ -8,7 +8,6 @@
 #include "ControlExcel.h"
 // #include "CommonUtil.h"
 
-
 QSharedPointer<ControlManager>& ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
     if (gControl.isNull()) {
@@ -50,36 +49,36 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
     int inputValue = keyEvent->key();
 #if defined(PLATFORM_X86)
     switch (inputValue) {
-        case ivis::common::KeyTypeEnum::KeyInputValueNumUp    : {
+        case ivis::common::KeyTypeEnum::KeyInputValueNumUp: {
             inputValue = ivis::common::KeyTypeEnum::KeyInputValueUp;
             break;
         }
-        case ivis::common::KeyTypeEnum::KeyInputValueNumDown  : {
+        case ivis::common::KeyTypeEnum::KeyInputValueNumDown: {
             inputValue = ivis::common::KeyTypeEnum::KeyInputValueDown;
             break;
         }
-        case ivis::common::KeyTypeEnum::KeyInputValueNumLeft  : {
+        case ivis::common::KeyTypeEnum::KeyInputValueNumLeft: {
             inputValue = ivis::common::KeyTypeEnum::KeyInputValueLeft;
             break;
         }
-        case ivis::common::KeyTypeEnum::KeyInputValueNumRight : {
+        case ivis::common::KeyTypeEnum::KeyInputValueNumRight: {
             inputValue = ivis::common::KeyTypeEnum::KeyInputValueRight;
             break;
         }
-        case ivis::common::KeyTypeEnum::KeyInputValueNumOK    :
-        case ivis::common::KeyTypeEnum::KeyInputValueNumOK2   : {
+        case ivis::common::KeyTypeEnum::KeyInputValueNumOK:
+        case ivis::common::KeyTypeEnum::KeyInputValueNumOK2: {
             inputValue = ivis::common::KeyTypeEnum::KeyInputValueOK;
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
 #endif
 
 #if defined(USE_SCREEN_CAPTURE)
-    if ((inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease)
-        && (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCapture)) {
+    if ((inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) &&
+        (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCapture)) {
         ScreenInfo::instance().data()->captureScreen();
     }
 #endif
@@ -113,19 +112,19 @@ void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
-            case ivis::common::ScreenEnum::DisplayTypeMenu : {
+            case ivis::common::ScreenEnum::DisplayTypeMenu: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlMenu::instance().data());
                 break;
             }
-            case ivis::common::ScreenEnum::DisplayTypeCenter : {
+            case ivis::common::ScreenEnum::DisplayTypeCenter: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlCenter::instance().data());
                 break;
             }
-            case ivis::common::ScreenEnum::DisplayTypeExcel : {
+            case ivis::common::ScreenEnum::DisplayTypeExcel: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlExcel::instance().data());
                 break;
             }
-            default : {
+            default: {
                 qDebug() << "Fail to create control instnace - displayType :" << displayType;
                 break;
             }
@@ -148,7 +147,7 @@ void ControlManager::createControl(const int& displayType) {
 void ControlManager::exitProgram(const bool& check) {
     if (check) {
         sendEventInfo(ivis::common::ScreenEnum::DisplayTypeInvalid, ivis::common::ScreenEnum::DisplayTypeMenu,
-                                                ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
+                      ivis::common::EventTypeEnum::EventTypeExitProgram, QVariant());
     } else {
         emit signalExitProgram();
     }

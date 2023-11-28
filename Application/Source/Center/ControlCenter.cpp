@@ -7,8 +7,6 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
-
-
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
     if (gControl.isNull()) {
@@ -59,18 +57,14 @@ void ControlCenter::resetControl(const bool& reset) {
 
 void ControlCenter::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(),                       &HandlerCenter::signalHandlerEvent,
-                this,                              &ControlCenter::slotHandlerEvent,
+        connect(isHandler(), &HandlerCenter::signalHandlerEvent, this, &ControlCenter::slotHandlerEvent, Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlCenter::slotConfigChanged,
                 Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-                this,                              &ControlCenter::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlCenter::slotEventInfoChanged,
-                Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
+                &ControlCenter::slotEventInfoChanged, Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
         });
 #endif
     } else {
@@ -110,7 +104,7 @@ void ControlCenter::updateDataHandler(const int& type, const QVariant& value, co
 
 void ControlCenter::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
-                                                        destination, eventType, eventValue);
+                                                     destination, eventType, eventValue);
 }
 
 void ControlCenter::updateConfigInfo() {
@@ -126,8 +120,8 @@ void ControlCenter::updateConfigInfo() {
 }
 
 void ControlCenter::updateTestReport() {
-    for (int index = ivis::common::ReportTypeEnum::ReportTypeResult;
-                                                    index < ivis::common::ReportTypeEnum::ReportTypeAll; index++) {
+    for (int index = ivis::common::ReportTypeEnum::ReportTypeResult; index < ivis::common::ReportTypeEnum::ReportTypeAll;
+         index++) {
         int configStart = ConfigInfo::ConfigTypeReportResult;
         int configEnd = ConfigInfo::ConfigTypeReportResultExcel;
         int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo;
@@ -155,7 +149,7 @@ bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
     bool fileNotFound = (vsmFile.size() == 0);
 
-    foreach(const auto& file, vsmFile) {
+    foreach (const auto& file, vsmFile) {
         QFile filePath = QString("%1/%2").arg(vsmPath.toString()).arg(file.toString());
         if (filePath.exists() == false) {
             fileNotFound = true;
@@ -165,11 +159,10 @@ bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList
 
     if (fileNotFound) {
         ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
-        QVariantList text = QVariantList({STRING_POPUP_FILE_NOT_EXIST, STRING_POPUP_FILE_NOT_EXIST_TIP,
-                                            STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
+        QVariantList text = QVariantList(
+            {STRING_POPUP_FILE_NOT_EXIST, STRING_POPUP_FILE_NOT_EXIST_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
         QVariant popupData = QVariant();
-        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::FileNotExist, isHandler(), popupData,
-                                                                                        QVariant(text));
+        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::FileNotExist, isHandler(), popupData, QVariant(text));
         if (button == ivis::common::PopupButton::Confirm) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeSettingVsmPath);
         }
@@ -182,10 +175,10 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
     QStringList vsmList = QStringList();
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
 
-    foreach(const auto& file, vsmFile) {
+    foreach (const auto& file, vsmFile) {
         QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + "/" + file.toString());
         QStringList list = QStringList();
-        foreach(QString lineStr, readData) {
+        foreach (QString lineStr, readData) {
             if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
                 lineStr.remove(" ");
                 lineStr.remove("-");
@@ -217,7 +210,7 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
         }
         vsmList[index] = QString("%1\t%2").arg(vsmSignal).arg(vehicleType);
     }
-    vsmList.sort();    // qSort(vsmList);
+    vsmList.sort();  // qSort(vsmList);
 
     return vsmList;
 }
@@ -228,8 +221,8 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 
     if (selectModule.size() > 0) {
         QStringList vsmTemp = QStringList();
-        foreach(const auto& moudleName, selectModule) {
-            foreach(const auto& vsmInfo, vsmList) {
+        foreach (const auto& moudleName, selectModule) {
+            foreach (const auto& vsmInfo, vsmList) {
                 if (vsmInfo.contains(moudleName.toString())) {
                     vsmTemp.append(vsmInfo);
                 }
@@ -282,17 +275,17 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
 
     switch (viewType) {
-        case ivis::common::ViewTypeEnum::ViewTypeConfig : {
+        case ivis::common::ViewTypeEnum::ViewTypeConfig: {
             if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeDefaultPath)) {
                 updateConfigInfo();
             }
             break;
         }
-        case ivis::common::ViewTypeEnum::ViewTypeReport : {
+        case ivis::common::ViewTypeEnum::ViewTypeReport: {
             updateTestReport();
             break;
         }
-        default : {
+        default: {
         }
     }
 }
@@ -300,12 +293,12 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     // qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
     switch (type) {
-        case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
+        case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeViewInfoClose, "");
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeUpdateConfig : {
+        case ivis::common::EventTypeEnum::EventTypeUpdateConfig: {
             QVariantList configInfo = value.toList();
             if (configInfo.size() == 2) {
                 int configType = configInfo.at(0).toInt();
@@ -314,7 +307,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeConfigReset : {
+        case ivis::common::EventTypeEnum::EventTypeConfigReset: {
             int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
             if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
                 ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
@@ -324,19 +317,19 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeTestReportReset : {
+        case ivis::common::EventTypeEnum::EventTypeTestReportReset: {
             updateTestReport();
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeShowModule : {
+        case ivis::common::EventTypeEnum::EventTypeShowModule: {
             updateSelectModueList(true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSelectModule : {
+        case ivis::common::EventTypeEnum::EventTypeSelectModule: {
             updateSelectModueNodeAddress(true, value.toList());
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -349,25 +342,25 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
 
     qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        case ivis::common::EventTypeEnum::EventTypeViewConfig : {
+        case ivis::common::EventTypeEnum::EventTypeViewConfig: {
             updateConfigInfo();
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress : {
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress: {
             updateNodeAddress(true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSelectModule : {
+        case ivis::common::EventTypeEnum::EventTypeSelectModule: {
             updateSelectModueNodeAddress(false, eventValue.toList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSettingTestReport :
-        case ivis::common::EventTypeEnum::EventTypeReportResult :
-        case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
+        case ivis::common::EventTypeEnum::EventTypeSettingTestReport:
+        case ivis::common::EventTypeEnum::EventTypeReportResult:
+        case ivis::common::EventTypeEnum::EventTypeReportCoverage: {
             updateTestReport();
             break;
         }
-        default : {
+        default: {
             break;
         }
     }

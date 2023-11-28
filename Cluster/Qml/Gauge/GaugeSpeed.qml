@@ -37,6 +37,7 @@ Item {
     // Component.onCompleted: {
     //     speedNiddleRotation.angle = speedAngle
     // }
+    
     onSpeedAngleChanged: {
         if (speedGaugeAnimation.running) {
             speedGaugeAnimation.stop()

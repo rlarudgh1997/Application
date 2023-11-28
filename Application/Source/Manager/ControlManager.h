@@ -7,7 +7,6 @@
 #include "AbstractControl.h"
 #include "CommonUtil.h"
 
-
 class ControlManager : public QObject {
     Q_OBJECT
 
@@ -29,15 +28,12 @@ private:
     explicit ControlManager();
     void createControl(const int& displayType);
 
-
 signals:
     void signalExitProgram();
     void signalEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
-
 
 private:
     QMap<int, AbstractControl*> mControlInfo = QMap<int, AbstractControl*>();
 };
 
-
-#endif    // CONTROL_MANAGER_H
+#endif  // CONTROL_MANAGER_H

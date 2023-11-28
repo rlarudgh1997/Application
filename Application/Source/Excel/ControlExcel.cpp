@@ -7,7 +7,6 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
-
 QSharedPointer<ControlExcel>& ControlExcel::instance() {
     static QSharedPointer<ControlExcel> gControl;
     if (gControl.isNull()) {
@@ -52,29 +51,27 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, QVariant(false));
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart,
-                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextStart));
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextStart));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText,
-                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeText));
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeText));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd,
-                                ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextEnd));
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextEnd));
 
     QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
     QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
     QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-#if 1
     QStringList vsmListTemp = vsmList;
     vsmList.clear();
-    foreach(const auto& vsm, vsmListTemp) {
+    foreach (const auto& vsm, vsmListTemp) {
         QStringList temp = vsm.split("\t");
         vsmList.append(temp[0]);
     }
-#endif
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, sfcList, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
 
-
-#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)    // Firt Booting : new excel sheet
+#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)  // Firt Booting : new excel sheet
     updateExcelSheet(false, QVariant());
 #endif
 }
@@ -88,18 +85,14 @@ void ControlExcel::resetControl(const bool& reset) {
 
 void ControlExcel::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(),                       &HandlerExcel::signalHandlerEvent,
-                this,                              &ControlExcel::slotHandlerEvent,
+        connect(isHandler(), &HandlerExcel::signalHandlerEvent, this, &ControlExcel::slotHandlerEvent, Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlExcel::slotConfigChanged,
                 Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-                this,                              &ControlExcel::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlExcel::slotEventInfoChanged,
-                Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
+                &ControlExcel::slotEventInfoChanged, Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
         });
 #endif
     } else {
@@ -127,32 +120,32 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
     } else if (inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) {
         switch (inputValue) {
 #if defined(PLATFORM_X86)
-            case ivis::common::KeyTypeEnum::KeyInputValueNumOK :
-            case ivis::common::KeyTypeEnum::KeyInputValueNumOK2 :
+            case ivis::common::KeyTypeEnum::KeyInputValueNumOK:
+            case ivis::common::KeyTypeEnum::KeyInputValueNumOK2:
 #endif
-            case ivis::common::KeyTypeEnum::KeyInputValueOK : {
+            case ivis::common::KeyTypeEnum::KeyInputValueOK: {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 0, true);
                 break;
             }
-            case Qt::Key_Escape : {
+            case Qt::Key_Escape: {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 2, true);
                 break;
             }
-            case Qt::Key_F2 : {
+            case Qt::Key_F2: {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 1, true);
                 break;
             }
-            case Qt::Key_I :
-            case Qt::Key_D :
-            case Qt::Key_M :
-            case Qt::Key_S : {
+            case Qt::Key_I:
+            case Qt::Key_D:
+            case Qt::Key_M:
+            case Qt::Key_S: {
                 if (shortcutCtrl) {
                     qDebug() << "ShortcutKey :" << inputValue;
                     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, inputValue, true);
                 }
                 break;
             }
-            default : {
+            default: {
                 break;
             }
         }
@@ -183,7 +176,7 @@ void ControlExcel::updateDataHandler(const int& type, const QVariant& value, con
 
 void ControlExcel::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
-                                                        destination, eventType, eventValue);
+                                                     destination, eventType, eventValue);
 }
 
 void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPath) {
@@ -201,7 +194,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
     if (excelOpen) {
         int sheetIndex = 0;
 
-        foreach(const auto& sheet, sheetName) {
+        foreach (const auto& sheet, sheetName) {
             QVariantList sheetData = QVariantList();
             QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath.toString()).arg(sheetIndex).arg(sheet);
             QStringList readData = ivis::common::FileInfo::readFile(filePath);
@@ -228,13 +221,11 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
             QStringList log;
             ivis::common::ExcuteProgram process(false);
-            process.start(QString("rm -rf %1").arg(dirPath.toString()), log);    // Delete : /TC/*.fromExcel
+            process.start(QString("rm -rf %1").arg(dirPath.toString()), log);  // Delete : /TC/*.fromExcel
         }
     } else {
         int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
-        foreach(const auto& sheet, sheetName) {
-            rowCount.append(rowMax);
-        }
+        foreach (const auto& sheet, sheetName) { rowCount.append(rowMax); }
     }
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
@@ -260,16 +251,16 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath) {
     int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     int writeSize = 0;
 
-    foreach(const auto& sheet, sheetName) {
+    foreach (const auto& sheet, sheetName) {
         int sheetIndex = (propertyType - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription);
         QString file = QString("%1_%2.toExcel").arg(sheetIndex).arg(sheet);
         QString writeData = QString();
         QVariantList sheetData = getData(propertyType++).toList();
 
-        foreach(const auto& dataInfo, sheetData) {
+        foreach (const auto& dataInfo, sheetData) {
             QString rowData = QString();
             int count = 0;
-            foreach(QVariant info, dataInfo.toList()) {
+            foreach (QVariant info, dataInfo.toList()) {
                 rowData.append(info.toString());
                 if (count++ < (dataInfo.toList().size() - 1)) {
                     rowData.append("\t");
@@ -307,7 +298,7 @@ bool ControlExcel::writeExcelFile(const QVariant& filePath) {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
                 QStringList log;
                 ivis::common::ExcuteProgram process(false);
-                process.start(QString("rm -rf %1").arg(dirPath), log);    // Delete : /TC/*.toExcel
+                process.start(QString("rm -rf %1").arg(dirPath), log);  // Delete : /TC/*.toExcel
             }
         }
     }
@@ -320,9 +311,7 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     int writeSize = 0;
 
-    foreach(const auto& sheet, sheetName) {
-        excelDataInfo[sheetIndex++] = getData(sheetIndex).toList();
-    }
+    foreach (const auto& sheet, sheetName) { excelDataInfo[sheetIndex++] = getData(sheetIndex).toList(); }
 
     QStringList fileInfo = filePath.toString().split("/");
     QString savePath = QString();
@@ -340,16 +329,16 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
 
     QString file = QString();
     sheetIndex = 0;
-    foreach(const auto& detailInfo, excelDataInfo) {
+    foreach (const auto& detailInfo, excelDataInfo) {
         int index = 0;
         QString writeData = QString();
-        foreach(const auto& detail, detailInfo) {
+        foreach (const auto& detail, detailInfo) {
             if (index == ivis::common::CellInfoEnum::ListInfoExcel::Sheet) {
                 file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(detail.toString());
             } else if (index >= ivis::common::CellInfoEnum::ListInfoExcel::Title) {
                 QString infoData = QString();
                 int count = 0;
-                foreach(QVariant info, detail.toList()) {
+                foreach (QVariant info, detail.toList()) {
                     infoData.append(info.toString());
                     if (count++ < (detail.toList().size() - 1)) {
                         infoData.append("\t");
@@ -391,8 +380,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
     }
 
     QString fileName = fileInfo[fileInfo.size() - 1];
-    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false)
-        || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
+    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false) || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
         fileName.append(".xlsx");
     }
 
@@ -412,9 +400,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
     qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
-    foreach(const auto& d, log) {
-        qDebug() << "LogData  :" << d;
-    }
+    foreach (const auto& d, log) { qDebug() << "LogData  :" << d; }
     qDebug() << "*************************************************************************************************\n";
 
     return dirPath;
@@ -428,22 +414,21 @@ bool ControlExcel::checkPythonLibrary() {
 
     if (checkLib == false) {
         ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
-        QVariantList text = QVariantList({STRING_POPUP_LIB, STRING_POPUP_LIB_INSTALL_TIP,
-                                            STRING_POPUP_INSTALL, STRING_POPUP_CANCEL});
+        QVariantList text =
+            QVariantList({STRING_POPUP_LIB, STRING_POPUP_LIB_INSTALL_TIP, STRING_POPUP_INSTALL, STRING_POPUP_CANCEL});
         QVariant popupData = QVariant();
         button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), popupData, QVariant(text));
         if (button == ivis::common::PopupButton::Install) {
             mProcess.data()->setCommandInfo(QString("pip install openpyxl pandas"));
             mProcess.data()->start();
-            connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted,
-                                                                                    [&](const bool& result) {
+            connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [&](const bool& result) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, true);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, true);
                 ivis::common::Popup::drawPopup(ivis::common::PopupType::InstallComplete, isHandler(), popupData,
-                                            QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_NOW_INSTALLING_TIP})));
+                                               QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_NOW_INSTALLING_TIP})));
             });
             ivis::common::Popup::drawPopup(ivis::common::PopupType::NowInstalling, isHandler(), popupData,
-                                            QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_INSTALL_COMPLETE_TIP})));
+                                           QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_INSTALL_COMPLETE_TIP})));
         }
     }
     qDebug() << "Check lib - openpyxl :" << openpyxl << ", pandas :" << pandas;
@@ -464,7 +449,7 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
         } else {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
-                                            QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+                                           QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
         }
     }
     return result;
@@ -472,7 +457,7 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
 
 void ControlExcel::loadExcelFile(const int& eventType) {
     switch (eventType) {
-        case ivis::common::EventTypeEnum::EventTypeFileNew : {
+        case ivis::common::EventTypeEnum::EventTypeFileNew: {
             updateExcelSheet(false, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
@@ -480,11 +465,11 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeFileOpen : {
+        case ivis::common::EventTypeEnum::EventTypeFileOpen: {
             QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
             QVariant filePath = QVariant();
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                    QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
+                                               QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
                 QStringList moduleTemp = QStringList();
                 QStringList module = QStringList();
 
@@ -501,19 +486,20 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                 if (module.size() == 2) {
                     QVariant selectModuleList = QVariant(QVariantList({module[0]}));
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, selectModuleList);
-                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter,
-                                                        ivis::common::EventTypeEnum::EventTypeSelectModule, selectModuleList);
+                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeSelectModule,
+                                  selectModuleList);
                 }
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeLastFile : {
+        case ivis::common::EventTypeEnum::EventTypeLastFile: {
             QVariant lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
             if (lastFilePath.toString().size() == 0) {
                 QVariant defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath);
                 QVariant filePath = QVariant();
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                        QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
+                                                   QVariantList({STRING_FILE_OPEN, defaultPath})) ==
+                    ivis::common::PopupButton::OK) {
                     openExcelFile(filePath);
                 }
             } else {
@@ -522,22 +508,21 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
 }
 
 void ControlExcel::saveExcelFile(const bool& saveAs) {
-    if ((ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool() == false)
-        && (saveAs == false)) {
+    if ((ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool() == false) && (saveAs == false)) {
         qDebug() << "The file is not saved because the contents of the excel have not changed.";
         return;
     }
 
     ivis::common::PopupButton button = ivis::common::PopupButton::OK;
-    QVariant savefilePath = (saveAs) ? (QVariant())
-                        : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
+    QVariant savefilePath =
+        (saveAs) ? (QVariant()) : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
     if (savefilePath.toString().size() == 0) {
         QVariant filePath = QVariant();
         button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath);
@@ -583,13 +568,13 @@ void ControlExcel::updateShortcutInfo(const int& eventType) {
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case ConfigInfo::ConfigTypeExcelMergeTextStart :
-        case ConfigInfo::ConfigTypeExcelMergeTextEnd :
-        case ConfigInfo::ConfigTypeExcelMergeText : {
+        case ConfigInfo::ConfigTypeExcelMergeTextStart:
+        case ConfigInfo::ConfigTypeExcelMergeTextEnd:
+        case ConfigInfo::ConfigTypeExcelMergeText: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText, value);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -597,14 +582,14 @@ void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
-        case ivis::common::EventTypeEnum::EventTypeOpenExcel : {
+        case ivis::common::EventTypeEnum::EventTypeOpenExcel: {
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditExcelSheet : {
+        case ivis::common::EventTypeEnum::EventTypeEditExcelSheet: {
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet : {
+        case ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet: {
             QVariant saveFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave);
             if (writeExcelFile(saveFilePath)) {
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, saveFilePath);
@@ -613,17 +598,17 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning : {
+        case ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning: {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
-                                    QVariantList({STRING_POPUP_CELL_COLUMN, STRING_POPUP_CELL_COLUMN_TIP}));
+                                           QVariantList({STRING_POPUP_CELL_COLUMN, STRING_POPUP_CELL_COLUMN_TIP}));
             break;
         }
-        default : {
+        default: {
             if ((type > ivis::common::EventTypeEnum::EventTypeList) && (type < ivis::common::EventTypeEnum::EventTypeListMax)) {
                 QVariantList sheetData = value.toList();
                 int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription +
-                                                                (type - ivis::common::EventTypeEnum::EventTypeListDescription);
+                                   (type - ivis::common::EventTypeEnum::EventTypeListDescription);
                 updateDataHandler(propertyType, sheetData);
                 // qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
                 // qDebug() << "EvetnType :" << type << ", Length :" << sheetData.size();
@@ -642,36 +627,36 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
 
     qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        case ivis::common::EventTypeEnum::EventTypeViewInfoClose : {
+        case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
             ControlManager::instance().data()->raise(displayType);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeLastFile :
-        case ivis::common::EventTypeEnum::EventTypeFileNew :
-        case ivis::common::EventTypeEnum::EventTypeFileOpen : {
+        case ivis::common::EventTypeEnum::EventTypeLastFile:
+        case ivis::common::EventTypeEnum::EventTypeFileNew:
+        case ivis::common::EventTypeEnum::EventTypeFileOpen: {
             loadExcelFile(eventType);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeFileSave :
-        case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
+        case ivis::common::EventTypeEnum::EventTypeFileSave:
+        case ivis::common::EventTypeEnum::EventTypeFileSaveAs: {
             saveExcelFile(eventType == ivis::common::EventTypeEnum::EventTypeFileSaveAs);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditUndo :
-        case ivis::common::EventTypeEnum::EventTypeEditRedo :
-        case ivis::common::EventTypeEnum::EventTypeEditCut :
-        case ivis::common::EventTypeEnum::EventTypeEditCopy :
-        case ivis::common::EventTypeEnum::EventTypeEditPaste : {
+        case ivis::common::EventTypeEnum::EventTypeEditUndo:
+        case ivis::common::EventTypeEnum::EventTypeEditRedo:
+        case ivis::common::EventTypeEnum::EventTypeEditCut:
+        case ivis::common::EventTypeEnum::EventTypeEditCopy:
+        case ivis::common::EventTypeEnum::EventTypeEditPaste: {
             updateClipboardInfo(eventType);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditCellInsert :
-        case ivis::common::EventTypeEnum::EventTypeEditCellDelete :
-        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit : {
+        case ivis::common::EventTypeEnum::EventTypeEditCellInsert:
+        case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
+        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
             updateShortcutInfo(eventType);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }

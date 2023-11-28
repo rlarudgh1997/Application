@@ -54,5 +54,11 @@
         "qplaintextedit": "cpp",
         "qscrollbar": "cpp",
         "qtextcharformat": "cpp"
-    }
+    },
+    // "C_Cpp.clang_format_path": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
+    // // "C_Cpp.clang_format_path": "/usr/bin/clang-format-13",
+    // "C_Cpp.clang_format_fallbackStyle": "Google",
+    // // "editor.formatOnSave": true,
+    // "clang-format.executable": "Y:\\900_Code\\610_Application\\tc_creator\\.clang-format",
+    // // "clang-format.executable": "/absolute/path/to/clang-format",
 }

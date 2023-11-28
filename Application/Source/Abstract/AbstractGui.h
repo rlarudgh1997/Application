@@ -5,10 +5,10 @@
 #include "AbstractHandler.h"
 #include "CommonEnum.h"
 
-
 class AbstractGui : public QWidget {
 public:
-    explicit AbstractGui(AbstractHandler* handler) : mHandler(handler) {}
+    explicit AbstractGui(AbstractHandler* handler) : mHandler(handler) {
+    }
     AbstractHandler* isHandler() {
         return mHandler;
     }
@@ -46,4 +46,4 @@ private:
     AbstractHandler* mHandler = nullptr;
 };
 
-#endif    // ABSTRACT_GUI_H
+#endif  // ABSTRACT_GUI_H

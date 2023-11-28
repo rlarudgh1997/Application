@@ -1223,11 +1223,11 @@ void AppService::onTelltaleOATChanged(const HVehicleSignalList& signalList) {
 qstring getSfcnodeaddress(int type) {
     switch (type) {
         case TelltaleType::TelltaleAirBagStat:
-            return  SFC.Air_Bag.Telltale.AirBag.Stat;
+            return SFC.Air_Bag.Telltale.AirBag.Stat;
         case 2:
-            return  SFC.Air_Bag.Telltale.AirBag.event;
+            return SFC.Air_Bag.Telltale.AirBag.event;
         case 3:
-            return  SFC.Lamp_Fail_Warning.Telltale.LedLampFail.Stat;
+            return SFC.Lamp_Fail_Warning.Telltale.LedLampFail.Stat;
     }
 }
 

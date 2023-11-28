@@ -10,10 +10,8 @@
 #include <QThread>
 #include <QMutex>
 
-
 // #include <QLoggingCategory>
 // Q_DECLARE_LOGGING_CATEGORY(CONFIG)
-
 
 class ConfigSetting : public QObject {
     Q_OBJECT
@@ -48,13 +46,11 @@ private:
     void writeConfig();
     void threadFunc();
 
-
 signals:
     void signalConfigChanged(const int& type, const QVariant& value);
 
-
 private:
-    QSettings *mSetting = nullptr;
+    QSettings* mSetting = nullptr;
     ConfigInfo mConfigInfo;
     QThread* mThread = new QThread();
     QMutex mMutex;
@@ -64,4 +60,4 @@ private:
     bool mThreadDataSave = false;
 };
 
-#endif    // CONFIG_SETTING_H
+#endif  // CONFIG_SETTING_H

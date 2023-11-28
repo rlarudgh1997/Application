@@ -3,10 +3,6 @@
 
 #include "AbstractControl.h"
 
-
-
-
-
 class ControlGauge : public AbstractControl {
     Q_OBJECT
 
@@ -16,19 +12,16 @@ private:
         ControlGaugeTimerRpm,
     };
 
-
 public:
     static QSharedPointer<ControlGauge>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
-
 
 private:
     explicit ControlGauge();
 
     qreal isGaugeAngle(const int& gaugeType, const QVariant& gaugeValue);
     void updateGaugeInfo(const int& dataType, const QVariant& dataValue);
-
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -43,18 +36,15 @@ protected:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
-
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
     virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue);
 
-
 private:
     AbstractHandler* mHandler = nullptr;
     const qreal mDefaultAngle = (-120);
 };
 
-
-#endif    // CONTROL_GAUGE_H
+#endif  // CONTROL_GAUGE_H

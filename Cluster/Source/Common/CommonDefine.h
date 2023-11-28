@@ -15,8 +15,6 @@
 #define OS_X86
 #endif
 
-
-
 // ===================================================================================================
 // Feature, Funtion Define
 // ===================================================================================================
@@ -24,9 +22,7 @@
 #define USE_SCREEN_CAPTURE
 #define USE_RESIZE_SIGNAL
 
-
 #define USE_GUI_MODULE
-
 
 // Singleton 기능 관련
 #define USE_INTANCE_SINGLETON
@@ -34,12 +30,4 @@
 #define USE_INTANCE_SINGLETON_GUI
 #endif
 
-
-
-
-
-
-
-
-
-#endif    // COMMON_DEFINE_H
+#endif  // COMMON_DEFINE_H

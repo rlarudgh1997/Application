@@ -20,70 +20,64 @@
 #include <QMenu>
 #include <QPair>
 
-
 namespace ivis {
 namespace common {
 
-
-
 #define APP_PWD QApplication::applicationDirPath().toLatin1().data()
-#define CURRENT_DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")) \
-                                            .arg(QTime::currentTime().msec())
+#define CURRENT_DATE_TIME \
+    QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec())
 #define GET_CURRENT_DATE_TIME CURRENT_DATE_TIME.toLatin1().data()
 
-
-#define ARRAY_SIZE(array) (sizeof(array)/sizeof(array[0]))
+#define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
 #define TO_STRING(A) QString("%1").arg(A)
 #define STR_COMPARE(str1, str2) (QString::compare(str1, str2) == false) ? (true) : (false)
 #define OBJECT_NAME(widget) (widget->objectName().toLatin1().data())
-#define SWAP(a, b) {(a)^=(b)^=(a)^=(b);}    /*Value Switching*/
+#define SWAP(a, b) \
+    { (a) ^= (b) ^= (a) ^= (b); } /*Value Switching*/
 #define BOOL_REVERSE(var) (var = (var) ? (false) : (true))
 
-
 // name : The first letter starts with an uppercase letter
-#define QML_WRITABLE_PROPERTY(type, name, notify) \
+#define QML_WRITABLE_PROPERTY(type, name, notify)                                     \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
-    public: \
-        type get##name() const { \
-            return m##name ; \
-        } \
-    public Q_SLOTS: \
-        void set##name(const type& name) { \
-            QMutexLocker lock(&mMutex##name); \
-            if (m##name != name) { \
-                m##name = name; \
-                if (notify) { \
-                    emit signal##name##Changed(m##name); \
-                } \
-            } \
-        } \
-    Q_SIGNALS: \
-        void signal##name##Changed(const type& name); \
-    private: \
-        QMutex mMutex##name; \
-        type m##name; \
+public:                                                                               \
+    type get##name() const {                                                          \
+        return m##name;                                                               \
+    }                                                                                 \
+public Q_SLOTS:                                                                       \
+    void set##name(const type& name) {                                                \
+        QMutexLocker lock(&mMutex##name);                                             \
+        if (m##name != name) {                                                        \
+            m##name = name;                                                           \
+            if (notify) {                                                             \
+                emit signal##name##Changed(m##name);                                  \
+            }                                                                         \
+        }                                                                             \
+    }                                                                                 \
+Q_SIGNALS:                                                                            \
+    void signal##name##Changed(const type& name);                                     \
+                                                                                      \
+private:                                                                              \
+    QMutex mMutex##name;                                                              \
+    type m##name;
 
-
-#define QML_ENUM_CLASS(name, ...) \
-    class name : public QObject { \
-        Q_GADGET \
-    public: \
+#define QML_ENUM_CLASS(name, ...)  \
+    class name : public QObject {  \
+        Q_GADGET                   \
+    public:                        \
         enum Type { __VA_ARGS__ }; \
-        Q_ENUMS(Type) \
+        Q_ENUMS(Type)              \
     };
 
-
-#define INIT_BUTTON_WIEDGET(info, widget, index) \
-    if (index >= 0) {\
-        info.insert(widget->objectName(), index);\
-        connect(widget, SIGNAL(pressed()), this, SLOT(slotPressed()));\
-    } \
-    connect(widget, SIGNAL(clicked()), this, SLOT(slotClicked()));\
-
+#define INIT_BUTTON_WIEDGET(info, widget, index)                       \
+    if (index >= 0) {                                                  \
+        info.insert(widget->objectName(), index);                      \
+        connect(widget, SIGNAL(pressed()), this, SLOT(slotPressed())); \
+    }                                                                  \
+    connect(widget, SIGNAL(clicked()), this, SLOT(slotClicked()));
 
 template <typename T>
-inline void LIMIT(T &value, T min, T max) {
+inline void LIMIT(T& value, T min, T max) {
     (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
 }
 
@@ -99,9 +93,8 @@ inline void LIMIT_M(T& value, T gap, T min, T max) {
     (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
 }
 
-
 template <typename T>
-inline void REVOLVE(T &value, T min, T max) {
+inline void REVOLVE(T& value, T min, T max) {
     (value) = ((value) < (min)) ? (max) : ((value > (max)) ? (min) : (value));
 }
 
@@ -158,7 +151,7 @@ inline void widgetEnable(T1* widget, const bool& enable, const QString& color = 
 
 template <typename T1, typename T2>
 inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geometry = QRect(),
-                                                                    const QString& styleSheet = QString()) {
+                        const QString& styleSheet = QString()) {
     T1* widget = new T1(parent);
     if (geometry.isValid()) {
         widget->setGeometry(geometry);
@@ -168,32 +161,16 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
     return widget;
 }
 
-//template <typename T1>
-//inline void deleteWidget(T1* widget, const bool& clearConnect = false) {
-//    if (widget) {
-//        if (clearConnect) {
-//            disconnect(widget);
-//        }
-//        delete widget;
-//        widget = nullptr;
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// template <typename T1>
+// inline void deleteWidget(T1* widget, const bool& clearConnect = false) {
+//     if (widget) {
+//         if (clearConnect) {
+//             disconnect(widget);
+//         }
+//         delete widget;
+//         widget = nullptr;
+//     }
+// }
 
 class CheckTimer {
 public:
@@ -248,7 +225,7 @@ private:
         fileList = directory.entryInfoList();
         qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         qDebug() << "path :" << path << ", Count :" << fileList.size();
-        foreach(const QFileInfo& file, fileList) {
+        foreach (const QFileInfo& file, fileList) {
             fileNames.append(file.fileName());
             qDebug() << "--------------------------------------------------------------------------------------------";
             qDebug() << "File Name :" << file.fileName() << ", Size :" << file.size() << "byte";
@@ -293,7 +270,7 @@ private:
             return 0;
         }
         QTextStream out(&file);
-        foreach(const auto& data, readData) {
+        foreach (const auto& data, readData) {
             QString lineData = QString("%1\n").arg(data);
             out << lineData;
         }
@@ -319,7 +296,7 @@ public:
             QStringList splitCmd = cmd.split(" ");
 
             if (splitCmd.size() == 0) {
-                 process.start(cmd);
+                process.start(cmd);
             } else {
                 QString command = splitCmd.at(0);
                 QStringList arguments = QStringList();
@@ -329,11 +306,11 @@ public:
                 process.start(command, arguments);
             }
 
-            if (process.waitForStarted()) {    // if (process.waitForFinished()) {
+            if (process.waitForStarted()) {  // if (process.waitForFinished()) {
                 while (process.waitForReadyRead()) {
                     QString readAllData = process.readAll();
                     QString logData = QString();
-                    foreach(const QString& data, readAllData) {
+                    foreach (const QString& data, readAllData) {
                         if (data.compare("\n") == false) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
@@ -357,7 +334,7 @@ private:
     bool mUseProcess = true;
 };
 
-class ExcuteProgramThread: public QObject {
+class ExcuteProgramThread : public QObject {
     Q_OBJECT
 
 public:
@@ -412,11 +389,11 @@ private:
                 mProcess.start(command, arguments);
             }
 
-            if (mProcess.waitForStarted()) {    // if (mProcess.waitForFinished()) {
+            if (mProcess.waitForStarted()) {  // if (mProcess.waitForFinished()) {
                 while (mProcess.waitForReadyRead()) {
                     QString readAllData = mProcess.readAll();
                     QString logData = QString();
-                    foreach(const QString& data, readAllData) {
+                    foreach (const QString& data, readAllData) {
                         if (data.compare("\n") == false) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
@@ -452,14 +429,13 @@ class CheckLib : public QObject {
     Q_OBJECT
 
 public:
-    CheckLib() {}
+    CheckLib() {
+    }
     ~CheckLib() {
         // join();
     }
     void setLibInfo(const QStringList& libInfo) {
-        foreach(const auto info, libInfo) {
-            mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false);
-        }
+        foreach (const auto info, libInfo) { mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false); }
     }
     void check() {
         this->moveToThread(mThread);
@@ -478,10 +454,16 @@ private:
     void runThread() {
         QString filePath = QString("%1/CheckLib.txt").arg(APP_PWD);
         int count = 0;
-        foreach(const auto& info, mCheckInfo) {
+        foreach (const auto& info, mCheckInfo) {
             ExcuteProgram process(false);
             QString appendStr = QString((count == 0) ? (">") : (">>"));
-            QString cmd = QString("pip list | grep ""%1"" %2 %3").arg(info.first).arg(appendStr).arg(filePath);
+            QString cmd = QString(
+                              "pip list | grep "
+                              "%1"
+                              " %2 %3")
+                              .arg(info.first)
+                              .arg(appendStr)
+                              .arg(filePath);
             QStringList log;
             if (process.start(cmd, log)) {
                 count++;
@@ -489,10 +471,8 @@ private:
         }
         QStringList readDataList = FileInfo::readFile(filePath);
         QString readData = QString();
-        foreach(const auto& data, readDataList) {
-            readData.append(data);
-        }
-        foreach(const auto& info, mCheckInfo) {
+        foreach (const auto& data, readDataList) { readData.append(data); }
+        foreach (const auto& info, mCheckInfo) {
             emit signalCheckLibResult(info.first, readData.contains(info.first, Qt::CaseInsensitive));
         }
         emit signalCheckLibResult("Completed", true);
@@ -505,7 +485,6 @@ private:
     QThread* mThread = new QThread();
     QMap<int, QPair<QString, bool>> mCheckInfo = QMap<int, QPair<QString, bool>>();
 };
-
 
 class FileSystemWatcherThread : public QObject {
     Q_OBJECT
@@ -527,7 +506,7 @@ public:
         connect(mThread, &QThread::started, this, &FileSystemWatcherThread::runThread);
         mThread->start();
 
-        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString &path) {
+        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) {
             QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
             if (readData.first) {
                 emit signalWatcherFileReadError(true);
@@ -580,9 +559,7 @@ private:
     int mCount = 0;
 };
 
-
 }  // end of namespace common
 }  // end of namespace ivis
-
 
 #endif  // COMMON_UTIL_H

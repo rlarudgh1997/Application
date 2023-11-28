@@ -5,7 +5,6 @@
 #include "GuiCenter.h"
 #endif
 
-
 QSharedPointer<HandlerCenter>& HandlerCenter::instance() {
     static QSharedPointer<HandlerCenter> gHandler;
     if (gHandler.isNull()) {
@@ -21,37 +20,34 @@ HandlerCenter::HandlerCenter() : AbstractHandler(ivis::common::ScreenEnum::Displ
 }
 
 void HandlerCenter::initPropertyInfo() {
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay,                           QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize,                       QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin,                 QVariant(QSize(0,
-                                                                                                        SCREEN_HEIGHT_MARGIN)));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode,                              QVariant(-1));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible,                           QVariant(true));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth,                             QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySizeMargin, QVariant(QSize(0, SCREEN_HEIGHT_MARGIN)));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode, QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible, QVariant(true));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth, QVariant(-1));
 
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType,                          QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo,                        QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll,                    QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule,                 QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList,                     QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule,                QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule,                  QVariant(false));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo,              QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo,            QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType,                    QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType, QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressModule, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, QVariant(0));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
 #if 1
-        connect(this,                         &HandlerCenter::signalPropertyChanged,
-                GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
+        connect(this, &HandlerCenter::signalPropertyChanged, GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerCenter::signalPropertyChanged, [=](const int& type, const QVariant& value) {
-            GuiCenter::instance().data()->slotPropertyChanged(type, value);
-        });
+        connect(this, &HandlerCenter::signalPropertyChanged,
+                [=](const int& type, const QVariant& value) { GuiCenter::instance().data()->slotPropertyChanged(type, value); });
 #endif
 #endif
     } else {

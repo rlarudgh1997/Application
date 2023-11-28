@@ -1,12 +1,8 @@
 #ifndef CONTROL_CENTER_H
 #define CONTROL_CENTER_H
 
-
-
 #include "AbstractControl.h"
 #include "CommonUtil.h"
-
-
 
 class ControlCenter : public AbstractControl {
     Q_OBJECT
@@ -15,7 +11,6 @@ public:
     static QSharedPointer<ControlCenter>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
-
 
 private:
     explicit ControlCenter();
@@ -28,7 +23,6 @@ private:
     void updateNodeAddress(const bool& check);
     void updateSelectModueList(const bool& show);
     void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
-
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -43,12 +37,10 @@ protected:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
-
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
-
 
 private:
     AbstractHandler* mHandler = nullptr;
@@ -56,5 +48,4 @@ private:
     //     QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
 };
 
-
-#endif    // CONTROL_CENTER_H
+#endif  // CONTROL_CENTER_H

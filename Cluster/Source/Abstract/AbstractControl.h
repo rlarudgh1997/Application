@@ -9,7 +9,6 @@
 #include "AbstractHandler.h"
 // class AbstractHandler;
 
-
 #include <QObject>
 class AbstractControl : public QObject {
     Q_OBJECT
@@ -17,7 +16,7 @@ class AbstractControl : public QObject {
 public:
     enum {
         AbstractTimerTypeInvalid = 0,
-        AbstractTimerStart ,
+        AbstractTimerStart,
     };
 
 public:
@@ -33,10 +32,8 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
     virtual void resizeEvent(const int& width, const int& height) = 0;
 
-
 protected:
-    void timerEvent(QTimerEvent *event);
-
+    void timerEvent(QTimerEvent* event);
 
 private:
     virtual AbstractHandler* isHandler() = 0;
@@ -51,13 +48,11 @@ private:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant()) = 0;
 
-
 private slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
     virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue) = 0;
-
 
 private:
     QMap<int, int> mTimer = QMap<int, int>();
@@ -65,4 +60,4 @@ private:
     bool mInit = false;
 };
 
-#endif   // ABSTRACT_CONTROL_H
+#endif  // ABSTRACT_CONTROL_H

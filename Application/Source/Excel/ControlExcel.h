@@ -1,12 +1,9 @@
 #ifndef CONTROL_EXCEL_H
 #define CONTROL_EXCEL_H
 
-
-
 #include "AbstractControl.h"
 #include "CommonUtil.h"
 #include "CommonDefine.h"
-
 
 class ControlExcel : public AbstractControl {
     Q_OBJECT
@@ -15,7 +12,6 @@ public:
     static QSharedPointer<ControlExcel>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
-
 
 private:
     explicit ControlExcel();
@@ -32,7 +28,6 @@ private:
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
 
-
 protected:
     virtual AbstractHandler* isHandler();
     virtual bool initControl();
@@ -46,18 +41,15 @@ protected:
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
-
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
 
-
 private:
     AbstractHandler* mHandler = nullptr;
     QSharedPointer<ivis::common::ExcuteProgramThread> mProcess =
-       QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
+        QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
 };
 
-
-#endif    // CONTROL_EXCEL_H
+#endif  // CONTROL_EXCEL_H

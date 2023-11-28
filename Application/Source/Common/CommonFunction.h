@@ -26,16 +26,8 @@
 
 #include "CommonUtil.h"
 
-
-
 namespace ivis {
-namespace common {
-
-
-
-
-}  // end of namespace common
+namespace common {}  // end of namespace common
 }  // end of namespace ivis
-
 
 #endif  // COMMON_FUNCTIONL_H

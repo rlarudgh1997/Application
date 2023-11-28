@@ -4,34 +4,29 @@
 #include "CommonDefine.h"
 #include <QObject>
 
-
 namespace ivis {
 namespace common {
 
+#define SCREEN_MINIMUM_WIDTH 1200
+#define SCREEN_MINIMUM_HEIGHT 700
+#define SCREEN_MAXIMUM_WIDTH 2100
+#define SCREEN_MAXIMUM_HEIGHT 1300
+#define SCREEN_HEIGHT_MARGIN 60
 
-#define SCREEN_MINIMUM_WIDTH             1200
-#define SCREEN_MINIMUM_HEIGHT            700
-#define SCREEN_MAXIMUM_WIDTH             2100
-#define SCREEN_MAXIMUM_HEIGHT            1300
-#define SCREEN_HEIGHT_MARGIN             60
-
-#define PROPETRY_START_COMMON            0
-#define PROPETRY_START_NORMAL            1000
-#define PROPETRY_START_LIST              3000
-#define PROPETRY_START_ONLY_CONTROL      5000    // Only used inside the controller
-
-
-
+#define PROPETRY_START_COMMON 0
+#define PROPETRY_START_NORMAL 1000
+#define PROPETRY_START_LIST 3000
+#define PROPETRY_START_ONLY_CONTROL 5000  // Only used inside the controller
 
 class ScreenEnum {
 public:
     enum DisplayType {
-        DisplayTypeInvalid             = 0x000000,
-        DisplayTypeMenu                = 0x000001,
-        DisplayTypeCenter              = 0x000002,
-        DisplayTypeExcel               = 0x000004,
+        DisplayTypeInvalid = 0x000000,
+        DisplayTypeMenu = 0x000001,
+        DisplayTypeCenter = 0x000002,
+        DisplayTypeExcel = 0x000004,
 
-        DisplayTypeAll                 = 0xFFFFFF,
+        DisplayTypeAll = 0xFFFFFF,
     };
     enum DisplayDepth {
         DisplayDepthDepth0 = 0,
@@ -48,21 +43,21 @@ public:
         KeyInputTypeRelease,
     };
     enum KeyInputValue {
-        KeyInputValueInvalid          = 0,
-        KeyInputValueUp               = Qt::Key_Up,
-        KeyInputValueDown             = Qt::Key_Down,
-        KeyInputValueLeft             = Qt::Key_Left,
-        KeyInputValueRight            = Qt::Key_Right,
-        KeyInputValueOK               = Qt::Key_Enter,
-        KeyInputValueCancel           = Qt::Key_Escape,
-        KeyInputValueCapture          = Qt::Key_F12,
+        KeyInputValueInvalid = 0,
+        KeyInputValueUp = Qt::Key_Up,
+        KeyInputValueDown = Qt::Key_Down,
+        KeyInputValueLeft = Qt::Key_Left,
+        KeyInputValueRight = Qt::Key_Right,
+        KeyInputValueOK = Qt::Key_Enter,
+        KeyInputValueCancel = Qt::Key_Escape,
+        KeyInputValueCapture = Qt::Key_F12,
 #if defined(PLATFORM_X86)
-        KeyInputValueNumUp            = Qt::Key_8,           // KeyInputValueUp
-        KeyInputValueNumDown          = Qt::Key_2,           // KeyInputValueDown
-        KeyInputValueNumLeft          = Qt::Key_4,           // KeyInputValueLeft
-        KeyInputValueNumRight         = Qt::Key_6,           // KeyInputValueRight
-        KeyInputValueNumOK            = Qt::Key_Return,      // KeyInputValueOK
-        KeyInputValueNumOK2           = Qt::Key_Alt,         // KeyInputValueOK
+        KeyInputValueNumUp = Qt::Key_8,       // KeyInputValueUp
+        KeyInputValueNumDown = Qt::Key_2,     // KeyInputValueDown
+        KeyInputValueNumLeft = Qt::Key_4,     // KeyInputValueLeft
+        KeyInputValueNumRight = Qt::Key_6,    // KeyInputValueRight
+        KeyInputValueNumOK = Qt::Key_Return,  // KeyInputValueOK
+        KeyInputValueNumOK2 = Qt::Key_Alt,    // KeyInputValueOK
 #endif
     };
 };
@@ -132,12 +127,11 @@ public:
         PropertyTypeDetailInfoReserved9,
         PropertyTypeListMax,
 
-
         PropertyTypeOnlyControl = PROPETRY_START_ONLY_CONTROL,
         PropertyTypeSaveFilePath,
         PropertyTypeOnlyControlMax,
     };
-    enum PropertyValue{
+    enum PropertyValue {
         PropertyValueInvalid = 0,
         PropertyValueInt,
         PropertyValueString,
@@ -214,8 +208,6 @@ public:
         EventTypeTest = 3000,
         EventTypeLastFile,
 
-
-
         EventTypeList = 4000,
         EventTypeListDescription,
         EventTypeListPrivates,
@@ -237,7 +229,7 @@ public:
         EventTypeListReserved9,
         EventTypeListMax,
     };
-    enum EventValue{
+    enum EventValue {
         EventValueInvalid = 0,
         EventValueInt,
         EventValueString,
@@ -269,7 +261,7 @@ public:
         Sheet = 0,
         Count,  // row, column
         Title,
-        Data,   // Data 1 ~ Data n-1
+        Data,  // Data 1 ~ Data n-1
     };
 };
 
@@ -356,25 +348,7 @@ public:
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }  // end of namespace common
 }  // end of namespace ivis
-
-
-
 
 #endif  // COMMON_ENUM_H

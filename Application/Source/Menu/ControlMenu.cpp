@@ -9,12 +9,9 @@
 
 #include <QFileSystemWatcher>
 
-
 // Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
 
-
 // #define USE_TEST_RESULT_TEMP
-
 
 QSharedPointer<ControlMenu>& ControlMenu::instance() {
     static QSharedPointer<ControlMenu> gControl;
@@ -58,7 +55,6 @@ void ControlMenu::initNormalData() {
 
     updateAllModueList(QString());
 
-
 #if defined(USE_TEST_RESULT_TEMP)
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
     updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, 30);
@@ -74,18 +70,14 @@ void ControlMenu::resetControl(const bool& reset) {
 
 void ControlMenu::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(),                       &HandlerMenu::signalHandlerEvent,
-                this,                              &ControlMenu::slotHandlerEvent,
+        connect(isHandler(), &HandlerMenu::signalHandlerEvent, this, &ControlMenu::slotHandlerEvent, Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlMenu::slotConfigChanged,
                 Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-                this,                              &ControlMenu::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlMenu::slotEventInfoChanged,
-                Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
+                &ControlMenu::slotEventInfoChanged, Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
         });
 #endif
     } else {
@@ -133,7 +125,7 @@ void ControlMenu::updateDataHandler(const int& type, const QVariant& value, cons
 
 void ControlMenu::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
-                                                        destination, eventType, eventValue);
+                                                     destination, eventType, eventValue);
 }
 
 void ControlMenu::updateAllModueList(const QString& filter) {
@@ -146,11 +138,11 @@ void ControlMenu::updateAllModueList(const QString& filter) {
         if (filter.size() == 0) {
             sfcModules = sfcDirectory;
         } else {
-            foreach(const auto& sfc, sfcDirectory) {
+            foreach (const auto& sfc, sfcDirectory) {
                 QDir subDirectory(QString("%1/%2").arg(defaultPath).arg(sfc));
                 // subDirectory.setNameFilters(QStringList({".tc", ".xlsx"}));
                 bool fileFound = false;
-                foreach(const auto& file, subDirectory.entryList(QDir::Files)) {
+                foreach (const auto& file, subDirectory.entryList(QDir::Files)) {
                     if ((fileFound = file.contains(filter)) == true) {
                         // qDebug() << "  FileFound :" << sfc << file;
                         sfcModules.append(sfc);
@@ -218,16 +210,16 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     bool complete = false;
 
     switch (testReultType) {
-        case ivis::common::TestReultTypeEnum::TestReultTypeStart : {
+        case ivis::common::TestReultTypeEnum::TestReultTypeStart: {
             countInfo = QVariantList({0, totalCount, false});
             titleInfo = QVariantList({"Test Case : Start"});
             break;
         }
-        case ivis::common::TestReultTypeEnum::TestReultTypeUpdate : {
+        case ivis::common::TestReultTypeEnum::TestReultTypeUpdate: {
             int currentCount = 0;
             QString errorString = QString();
             QString completeString = QString();
-            foreach(const auto& data, infoData) {
+            foreach (const auto& data, infoData) {
                 QStringList info = data.split(" : ");
                 if (info.size() != 2) {
                     continue;
@@ -259,8 +251,8 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             }
             break;
         }
-        case ivis::common::TestReultTypeEnum::TestReultTypeCancel :
-        case ivis::common::TestReultTypeEnum::TestReultTypeError : {
+        case ivis::common::TestReultTypeEnum::TestReultTypeCancel:
+        case ivis::common::TestReultTypeEnum::TestReultTypeError: {
             QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
             countInfo = QVariantList({0, totalCount, true});
             if (testReultType == ivis::common::TestReultTypeEnum::TestReultTypeCancel) {
@@ -272,7 +264,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             break;
         }
 #if defined(USE_TEST_RESULT_TEMP)
-        case ivis::common::TestReultTypeEnum::TestReultTypeTest : {
+        case ivis::common::TestReultTypeEnum::TestReultTypeTest: {
             static QVariantList tempState = QVariantList({
                 "ABS_CV : PASS",
                 "ABS_NO_ABS_Trailer : PASS",
@@ -302,7 +294,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             break;
         }
 #endif
-        default : {
+        default: {
             break;
         }
     }
@@ -317,7 +309,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     if (complete) {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::ScriptRunnigCompleted, isHandler(), popupData,
-                                QVariantList({STRING_SCRIPT_RUNNIG_COMPLETED, STRING_SCRIPT_RUNNIG_COMPLETED_TIP}));
+                                       QVariantList({STRING_SCRIPT_RUNNIG_COMPLETED, STRING_SCRIPT_RUNNIG_COMPLETED_TIP}));
     }
     return complete;
 }
@@ -346,12 +338,12 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             qDebug() << "Input text does not contain script commands :" << cmd;
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
-                                    QVariantList({STRING_POPUP_INPUT_TEXT_ERROR, STRING_POPUP_INPUT_TEXT_ERROR_TIP}));
+                                           QVariantList({STRING_POPUP_INPUT_TEXT_ERROR, STRING_POPUP_INPUT_TEXT_ERROR_TIP}));
             return;
         }
         qDebug() << "CMD :" << subPath << cmd;
-    } else if ((runType == ivis::common::RunTypeEnum::RunTypeTCReport)
-            || (runType == ivis::common::RunTypeEnum::RunTypeGcovReport)) {
+    } else if ((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ||
+               (runType == ivis::common::RunTypeEnum::RunTypeGcovReport)) {
         QVariantList options = infoList;
         if (options.size() != 3) {
             qDebug() << "Fail to report info options size :" << options.size();
@@ -362,8 +354,9 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         subPath = QString("/../../../validator");
         // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
         // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
-        cmd = QString("./%1.sh -c CV").arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ?
-                                                        (QString("gen_gcov_report")) : (QString("gen_tcreport")));
+        cmd = QString("./%1.sh -c CV")
+                  .arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ? (QString("gen_gcov_report"))
+                                                                                 : (QString("gen_tcreport")));
         if (state) {
             QString option1 = (options.at(0).toBool()) ? (" -s S") : ("");
             QString option2 = (options.at(1).toBool()) ? (" -o C") : ("");
@@ -371,7 +364,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             if (runType == ivis::common::RunTypeEnum::RunTypeGcovReport) {
                 option1 = (options.at(0).toBool()) ? (" -b ON") : ("");
                 option2 = (options.at(1).toBool()) ? (" -f ON") : ("");
-                option3 = QString();   // (line) ? (" -n ON") : ("");     -> Not define
+                option3 = QString();  // (line) ? (" -n ON") : ("");     -> Not define
             }
             cmd.append(QString("%1%2%3").arg(option1).arg(option2).arg(option3));
         }
@@ -388,12 +381,12 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             qDebug() << "Fail to select module list : 0";
             return;
         }
-        foreach(const auto& module, infoList[0].toList()) {
+        foreach (const auto& module, infoList[0].toList()) {
             moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
         }
 
         QString checkList = QString();
-        foreach(const auto& check, infoList[1].toList()) {
+        foreach (const auto& check, infoList[1].toList()) {
             checkList.append(QString("%1%2").arg((checkList.size() == 0) ? ("") : (" ")).arg(check.toString()));
         }
 
@@ -408,7 +401,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
             subPath = QString("/../../../validator");
             int ptCount = infoList[1].toList().size();
-            totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));    // No Select PT -> All(ICV, EV, FCEV) = 3
+            totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(ICV, EV, FCEV) = 3
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
             return;
@@ -420,12 +413,11 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     if (QDir::setCurrent(defaultRunPath) == false) {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
-                                QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_DEFAULT_PATH_ERROR_TIP}));
+                                       QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_DEFAULT_PATH_ERROR_TIP}));
         qDebug() << "Fail to change folder :" << defaultRunPath;
         return;
     }
     qDebug() << "Default Run Path :" << defaultRunPath;
-
 
     if (mWatcher.isNull() == false) {
         qDebug() << "Running Watcher File -> Request Stop";
@@ -436,11 +428,11 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     mWatcher = QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(filePath));
     mWatcher.data()->start();
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
-                                                                                [=](const QStringList& fileData) {
-        if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeUpdate, totalCount, fileData)) {
-            emit mWatcher.data()->signalWatcherFileFail(20);
-        }
-    });
+            [=](const QStringList& fileData) {
+                if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeUpdate, totalCount, fileData)) {
+                    emit mWatcher.data()->signalWatcherFileFail(20);
+                }
+            });
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileFail, [=](const int& count) {
         qDebug() << "\t signalWatcherFileFail :" << count;
         disconnect(mWatcher.data());
@@ -450,19 +442,17 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     //     qDebug() << "\t FileOpenError :" << error;
     // });
 
-
     if (mProcess.isNull() == false) {
         qDebug() << "Running Test Case -> Request Stop";
         mProcess.reset();
     }
-    mProcess = QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false),
-                                                                                            &QObject::deleteLater);
+    mProcess =
+        QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
     mProcess.data()->setCommandInfo(cmd);
     mProcess.data()->start();
 
-    connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramStarted, [=]() {
-        updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, totalCount);
-    });
+    connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramStarted,
+            [=]() { updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, totalCount); });
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [=](const bool& result) {
         qDebug() << "*************************************************************************************************";
@@ -498,11 +488,11 @@ void ControlMenu::cancelScript(const bool& complete) {
     if (complete == false) {
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, "");
     }
-    foreach(const auto& info, killProcess) {
+    foreach (const auto& info, killProcess) {
         QStringList log;
         ivis::common::ExcuteProgram process(false);
         bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
-        qDebug() << "cancelScript - process :" << info;   // << result;
+        qDebug() << "cancelScript - process :" << info;  // << result;
     }
 
     if (complete == false) {
@@ -525,9 +515,10 @@ void ControlMenu::cancelScript(const bool& complete) {
 
 int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& value) {
     int count = 0;
-    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeResult) ?
-                                                (ConfigInfo::ConfigTypeReportResult) : (ConfigInfo::ConfigTypeReportCoverage);
-    foreach(const auto& configValue, value) {
+    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeResult)
+                         ? (ConfigInfo::ConfigTypeReportResult)
+                         : (ConfigInfo::ConfigTypeReportCoverage);
+    foreach (const auto& configValue, value) {
         ConfigSetting::instance().data()->writeConfig((configType + count), configValue);
         count++;
     }
@@ -536,11 +527,11 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case ConfigInfo::ConfigTypeDefaultPath : {
+        case ConfigInfo::ConfigTypeDefaultPath: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -551,18 +542,18 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
     ivis::common::CheckTimer checkTimer;
 
     switch (type) {
-        case ivis::common::EventTypeEnum::EventTypeExitProgram : {
+        case ivis::common::EventTypeEnum::EventTypeExitProgram: {
             ivis::common::PopupButton button = ivis::common::PopupButton::Discard;
             bool fileSave = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
 
             if (fileSave) {
-                QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP,
-                                                    STRING_POPUP_SAVE, STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
+                QVariantList text = QVariantList({STRING_POPUP_SAVE_FILE, STRING_POPUP_SAVE_FILE_TIP, STRING_POPUP_SAVE,
+                                                  STRING_POPUP_DISCARD, STRING_POPUP_CANCEL});
                 QVariant popupData = QVariant();
                 button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Exit, isHandler(), popupData, QVariant(text));
                 if (button == ivis::common::PopupButton::OK) {
-                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel,
-                                    ivis::common::EventTypeEnum::EventTypeFileSave, QVariant());
+                    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeFileSave,
+                                  QVariant());
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                 }
             }
@@ -572,50 +563,50 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeHelpAbout : {
+        case ivis::common::EventTypeEnum::EventTypeHelpAbout: {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::About, isHandler(), popupData,
-                                            QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
+                                           QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeHelpAboutQt : {
+        case ivis::common::EventTypeEnum::EventTypeHelpAboutQt: {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, isHandler(), popupData);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeLastFile :
-        case ivis::common::EventTypeEnum::EventTypeFileNew :
-        case ivis::common::EventTypeEnum::EventTypeFileOpen : {
+        case ivis::common::EventTypeEnum::EventTypeLastFile:
+        case ivis::common::EventTypeEnum::EventTypeFileNew:
+        case ivis::common::EventTypeEnum::EventTypeFileOpen: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeFileSave :
-        case ivis::common::EventTypeEnum::EventTypeFileSaveAs : {
+        case ivis::common::EventTypeEnum::EventTypeFileSave:
+        case ivis::common::EventTypeEnum::EventTypeFileSaveAs: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEditCut :
-        case ivis::common::EventTypeEnum::EventTypeEditCopy :
-        case ivis::common::EventTypeEnum::EventTypeEditPaste :
-        case ivis::common::EventTypeEnum::EventTypeEditUndo :
-        case ivis::common::EventTypeEnum::EventTypeEditRedo :
-        case ivis::common::EventTypeEnum::EventTypeEditCellInsert :
-        case ivis::common::EventTypeEnum::EventTypeEditCellDelete :
-        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit : {
+        case ivis::common::EventTypeEnum::EventTypeEditCut:
+        case ivis::common::EventTypeEnum::EventTypeEditCopy:
+        case ivis::common::EventTypeEnum::EventTypeEditPaste:
+        case ivis::common::EventTypeEnum::EventTypeEditUndo:
+        case ivis::common::EventTypeEnum::EventTypeEditRedo:
+        case ivis::common::EventTypeEnum::EventTypeEditCellInsert:
+        case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
+        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeViewConfig :
-        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress :
-        case ivis::common::EventTypeEnum::EventTypeSettingTestReport :
-        case ivis::common::EventTypeEnum::EventTypeReportResult :
-        case ivis::common::EventTypeEnum::EventTypeReportCoverage : {
+        case ivis::common::EventTypeEnum::EventTypeViewConfig:
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress:
+        case ivis::common::EventTypeEnum::EventTypeSettingTestReport:
+        case ivis::common::EventTypeEnum::EventTypeReportResult:
+        case ivis::common::EventTypeEnum::EventTypeReportCoverage: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSettingDevPath :
-        case ivis::common::EventTypeEnum::EventTypeSettingNodePath :
-        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath : {
+        case ivis::common::EventTypeEnum::EventTypeSettingDevPath:
+        case ivis::common::EventTypeEnum::EventTypeSettingNodePath:
+        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {
             QString text = STRING_DEFAULT_PATH;
             int configType = ConfigInfo::ConfigTypeDefaultPath;
 
@@ -633,22 +624,22 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             QVariant popupData = QVariant();
 
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
-                                    QVariantList({text, path})) == ivis::common::PopupButton::OK) {
+                                               QVariantList({text, path})) == ivis::common::PopupButton::OK) {
                 ConfigSetting::instance().data()->writeConfig(configType, popupData);
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTC :
-        case ivis::common::EventTypeEnum::EventTypeRunTC : {
+        case ivis::common::EventTypeEnum::EventTypeGenTC:
+        case ivis::common::EventTypeEnum::EventTypeRunTC: {
             updateSelectModueList(type, QVariantList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeTestReportResult :
-        case ivis::common::EventTypeEnum::EventTypeTestReportCoverage : {
+        case ivis::common::EventTypeEnum::EventTypeTestReportResult:
+        case ivis::common::EventTypeEnum::EventTypeTestReportCoverage: {
             updateTestReportInfo(type);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeRunTestReport : {
+        case ivis::common::EventTypeEnum::EventTypeRunTestReport: {
             QVariantList reportInfo = value.toList();
             if (reportInfo.size() != 5) {
                 qDebug() << "Fail to report info size :" << reportInfo.size();
@@ -659,7 +650,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeCoverage)) {
                 runType = ivis::common::RunTypeEnum::RunTypeGcovReport;
             }
-            bool state   = reportInfo.at(1).toBool();
+            bool state = reportInfo.at(1).toBool();
             bool option1 = reportInfo.at(2).toBool();
             bool option2 = reportInfo.at(3).toBool();
             bool option3 = reportInfo.at(4).toBool();
@@ -668,15 +659,15 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEnterScriptText : {
+        case ivis::common::EventTypeEnum::EventTypeEnterScriptText: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText, true, true);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted : {
+        case ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted: {
             excuteScript(ivis::common::RunTypeEnum::RunTypeEnterScriptText, false, QVariantList({value}));
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun : {
+        case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun: {
             if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
                 bool state = value.toList().at(1).toBool();
@@ -686,11 +677,11 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel : {
+        case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel: {
             cancelScript(value.toBool());
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -703,12 +694,12 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
 
     qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        case ivis::common::EventTypeEnum::EventTypeExitProgram :
-        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath : {
+        case ivis::common::EventTypeEnum::EventTypeExitProgram:
+        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {
             slotHandlerEvent(eventType, eventValue);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }

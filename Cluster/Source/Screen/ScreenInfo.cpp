@@ -8,7 +8,6 @@
 #include <QResizeEvent>
 #include <QDebug>
 
-
 QSharedPointer<ScreenInfo>& ScreenInfo::instance() {
     static QSharedPointer<ScreenInfo> gScreenInfo;
     if (gScreenInfo.isNull()) {
@@ -29,7 +28,7 @@ ScreenInfo::~ScreenInfo() {
     qDebug() << "~ScreenInfo";
 }
 
-void ScreenInfo::updateRootItem(QQuickItem *rootItem) {
+void ScreenInfo::updateRootItem(QQuickItem* rootItem) {
     if (mRootScreen == nullptr) {
         mRootScreen = rootItem;
     }
@@ -41,28 +40,28 @@ QQuickItem* ScreenInfo::drawScreen(const int& displayType, const QString& qml, c
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     qDebug() << "ScreenInfo::drawScreen(" << displayType << "," << objectName << ")";
 
-     if (windowList.count() > 0) {
+    if (windowList.count() > 0) {
         if (mSubScreens[displayType] == nullptr) {
             try {
                 const QQuickView* view = qobject_cast<QQuickView*>(windowList.at(0));
                 QQmlEngine* engine = view->engine();
                 QQmlComponent component(engine, QUrl(qml));
 
-                mSubScreens[displayType] = qobject_cast<QQuickItem *>(component.create());
+                mSubScreens[displayType] = qobject_cast<QQuickItem*>(component.create());
 
                 if (mSubScreens[displayType]) {
-                     mSubScreens[displayType]->setParent(view->contentItem());
+                    mSubScreens[displayType]->setParent(view->contentItem());
                     mSubScreens[displayType]->setParentItem(view->contentItem());
                     mSubScreens[displayType]->setObjectName(objectName);
                     mSubScreens[displayType]->setZ(displayType);
-                    mSubScreens[displayType]->setEnabled(true);    // Default : Enabled
-                    mSubScreens[displayType]->setVisible(true);    // Default : Visible
+                    mSubScreens[displayType]->setEnabled(true);  // Default : Enabled
+                    mSubScreens[displayType]->setVisible(true);  // Default : Visible
                 }
             } catch (...) {
                 qDebug() << "Fail to create component";
             }
         }
-     }
+    }
 
     qDebug() << "QQuickItem :" << mSubScreens[displayType] << "\n\n";
     return mSubScreens[displayType];
@@ -70,7 +69,7 @@ QQuickItem* ScreenInfo::drawScreen(const int& displayType, const QString& qml, c
 
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
-        foreach(const auto& screen, mSubScreens) {
+        foreach (const auto& screen, mSubScreens) {
             try {
                 if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
                     continue;
@@ -88,14 +87,13 @@ void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
 
 void ScreenInfo::captureScreen(const QRect& rect) {
 #if 0
-    #define PWD QGuiApplication::applicationDirPath().toLatin1().data()
-    #define DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")) \
-            .arg(QTime::currentTime().msec())
+#define PWD QGuiApplication::applicationDirPath().toLatin1().data()
+#define DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")).arg(QTime::currentTime().msec())
 
-    #define SCREENSHOT_SAVE_NAME "/CaptureScreen_"
-    #define FILE_EXTENSION_JPG ".jpg"
-    #define FILE_EXTENSION_PNG ".png"
-    #define FILE_EXTENSION_BMP ".bmp"
+#define SCREENSHOT_SAVE_NAME "/CaptureScreen_"
+#define FILE_EXTENSION_JPG ".jpg"
+#define FILE_EXTENSION_PNG ".png"
+#define FILE_EXTENSION_BMP ".bmp"
 
     QPixmap pixmap = QPixmap();
 
@@ -132,15 +130,15 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
 
     if (languageFileName.size() == 0) {
         switch (changeLanguage) {
-            case LanguageEnglish : {
+            case LanguageEnglish: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_ENG.qm");
                 break;
             }
-            case LanguageKorea : {
+            case LanguageKorea: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_KOR.qm");
                 break;
             }
-            default : {
+            default: {
                 languageFileName = QString(":/Language/MULTI_LANGUAGE_KOR.qm");
                 break;
             }
@@ -158,7 +156,7 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
     }
 
     qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
-                                        << ")->LanguageChange :" << ((result)?("Sucess"):("Fail")) << "!!!!!!!\n\n\n\n";
+             << ")->LanguageChange :" << ((result) ? ("Sucess") : ("Fail")) << "!!!!!!!\n\n\n\n";
     return result;
 }
 

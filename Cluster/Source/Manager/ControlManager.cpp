@@ -8,7 +8,6 @@
 #include "ControlGauge.h"
 #include "ControlTelltale.h"
 
-
 QSharedPointer<ControlManager>& ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
     if (gControl.isNull()) {
@@ -50,36 +49,36 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
     int inputValue = keyEvent->key();
 #if defined(PLATFORM_X86)
     switch (inputValue) {
-        case ivis::common::KeyEnum::KeyInputValueNumUp    : {
+        case ivis::common::KeyEnum::KeyInputValueNumUp: {
             inputValue = ivis::common::KeyEnum::KeyInputValueUp;
             break;
         }
-        case ivis::common::KeyEnum::KeyInputValueNumDown  : {
+        case ivis::common::KeyEnum::KeyInputValueNumDown: {
             inputValue = ivis::common::KeyEnum::KeyInputValueDown;
             break;
         }
-        case ivis::common::KeyEnum::KeyInputValueNumLeft  : {
+        case ivis::common::KeyEnum::KeyInputValueNumLeft: {
             inputValue = ivis::common::KeyEnum::KeyInputValueLeft;
             break;
         }
-        case ivis::common::KeyEnum::KeyInputValueNumRight : {
+        case ivis::common::KeyEnum::KeyInputValueNumRight: {
             inputValue = ivis::common::KeyEnum::KeyInputValueRight;
             break;
         }
-        case ivis::common::KeyEnum::KeyInputValueNumOK    :
-        case ivis::common::KeyEnum::KeyInputValueNumOK2   : {
+        case ivis::common::KeyEnum::KeyInputValueNumOK:
+        case ivis::common::KeyEnum::KeyInputValueNumOK2: {
             inputValue = ivis::common::KeyEnum::KeyInputValueOK;
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
 #endif
 
 #if defined(USE_SCREEN_CAPTURE)
-    if ((inputType == ivis::common::KeyEnum::KeyInputTypeRelease)
-        && (inputValue == ivis::common::KeyEnum::KeyInputValueCapture)) {
+    if ((inputType == ivis::common::KeyEnum::KeyInputTypeRelease) &&
+        (inputValue == ivis::common::KeyEnum::KeyInputValueCapture)) {
         ScreenInfo::instance().data()->captureScreen();
     }
 #endif
@@ -113,19 +112,19 @@ void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
-            case ivis::common::DisplayEnum::DisplayTypeHome : {
+            case ivis::common::DisplayEnum::DisplayTypeHome: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlHome::instance().data());
                 break;
             }
-            case ivis::common::DisplayEnum::DisplayTypeGauge : {
+            case ivis::common::DisplayEnum::DisplayTypeGauge: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlGauge::instance().data());
                 break;
             }
-            case ivis::common::DisplayEnum::DisplayTypeTelltale : {
+            case ivis::common::DisplayEnum::DisplayTypeTelltale: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTelltale::instance().data());
                 break;
             }
-            default : {
+            default: {
                 qDebug() << "Fail to create control instnace - displayType :" << displayType;
                 break;
             }

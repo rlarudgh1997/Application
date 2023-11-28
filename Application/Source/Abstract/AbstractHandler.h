@@ -7,7 +7,6 @@
 #include <QMap>
 #include <QVariant>
 
-
 class AbstractHandler : public QObject {
     Q_OBJECT
 
@@ -22,7 +21,6 @@ public:
         AbstractdrawDisplayDepth2,
     };
 
-
 public:
     explicit AbstractHandler(const int& displayType, const QString& objcetName);
     bool init();
@@ -32,7 +30,6 @@ public:
     void registerProperty(const int& type, const QVariant& value);
     QVariant getProperty(const int& type);
 
-
 private:
     Q_INVOKABLE void setProperty(const int& type, const QVariant& value, const bool& alwaysUpdate);
 
@@ -40,10 +37,8 @@ private:
     virtual void timerFunc(const int& timerId) = 0;
     virtual void initPropertyInfo() = 0;
 
-
 protected:
-    void timerEvent(QTimerEvent *event);
-
+    void timerEvent(QTimerEvent* event);
 
 signals:
     void signalUpdateDataModel(const int& type, const QVariant& value, const bool& alwaysUpdate);
@@ -57,4 +52,4 @@ private:
     bool mUpdateState = false;
 };
 
-#endif    // ABSTRACT_QML_HANDLER_H
+#endif  // ABSTRACT_QML_HANDLER_H

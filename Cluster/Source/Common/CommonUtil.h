@@ -10,70 +10,64 @@
 #include <QMutexLocker>
 #include <QThread>
 
-
 namespace ivis {
 namespace common {
 
-
-
 #define APP_PWD QApplication::applicationDirPath().toLatin1().data()
-#define CURRENT_DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")) \
-                                            .arg(QTime::currentTime().msec())
+#define CURRENT_DATE_TIME \
+    QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec())
 #define GET_CURRENT_DATE_TIME CURRENT_DATE_TIME.toLatin1().data()
 
-
-#define ARRAY_SIZE(array) (sizeof(array)/sizeof(array[0]))
+#define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
 #define TO_STRING(A) QString("%1").arg(A)
 #define STR_COMPARE(str1, str2) (QString::compare(str1, str2) == false) ? (true) : (false)
 #define OBJECT_NAME(widget) (widget->objectName().toLatin1().data())
-#define SWAP(a, b) {(a)^=(b)^=(a)^=(b);}    /*Value Switching*/
+#define SWAP(a, b) \
+    { (a) ^= (b) ^= (a) ^= (b); } /*Value Switching*/
 #define BOOL_REVERSE(var) (var = (var) ? (false) : (true))
 
-
 // name : The first letter starts with an uppercase letter
-#define QML_WRITABLE_PROPERTY(type, name, notify) \
+#define QML_WRITABLE_PROPERTY(type, name, notify)                                     \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
-    public: \
-        type get##name() const { \
-            return m##name ; \
-        } \
-    public Q_SLOTS: \
-        void set##name(const type& name) { \
-            QMutexLocker lock(&mMutex##name); \
-            if (m##name != name) { \
-                m##name = name; \
-                if (notify) { \
-                    emit signal##name##Changed(m##name); \
-                } \
-            } \
-        } \
-    Q_SIGNALS: \
-        void signal##name##Changed(const type& name); \
-    private: \
-        QMutex mMutex##name; \
-        type m##name; \
+public:                                                                               \
+    type get##name() const {                                                          \
+        return m##name;                                                               \
+    }                                                                                 \
+public Q_SLOTS:                                                                       \
+    void set##name(const type& name) {                                                \
+        QMutexLocker lock(&mMutex##name);                                             \
+        if (m##name != name) {                                                        \
+            m##name = name;                                                           \
+            if (notify) {                                                             \
+                emit signal##name##Changed(m##name);                                  \
+            }                                                                         \
+        }                                                                             \
+    }                                                                                 \
+Q_SIGNALS:                                                                            \
+    void signal##name##Changed(const type& name);                                     \
+                                                                                      \
+private:                                                                              \
+    QMutex mMutex##name;                                                              \
+    type m##name;
 
-
-#define QML_ENUM_CLASS(name, ...) \
-    class name : public QObject { \
-        Q_GADGET \
-    public: \
+#define QML_ENUM_CLASS(name, ...)  \
+    class name : public QObject {  \
+        Q_GADGET                   \
+    public:                        \
         enum Type { __VA_ARGS__ }; \
-        Q_ENUMS(Type) \
+        Q_ENUMS(Type)              \
     };
 
-
-#define INIT_BUTTON_WIEDGET(info, widget, index) \
-    if (index >= 0) {\
-        info.insert(widget->objectName(), index);\
-        connect(widget, SIGNAL(pressed()), this, SLOT(slotPressed()));\
-    } \
-    connect(widget, SIGNAL(clicked()), this, SLOT(slotClicked()));\
-
+#define INIT_BUTTON_WIEDGET(info, widget, index)                       \
+    if (index >= 0) {                                                  \
+        info.insert(widget->objectName(), index);                      \
+        connect(widget, SIGNAL(pressed()), this, SLOT(slotPressed())); \
+    }                                                                  \
+    connect(widget, SIGNAL(clicked()), this, SLOT(slotClicked()));
 
 template <typename T>
-inline void LIMIT(T &value, T min, T max) {
+inline void LIMIT(T& value, T min, T max) {
     (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
 }
 
@@ -89,9 +83,8 @@ inline void LIMIT_M(T& value, T gap, T min, T max) {
     (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
 }
 
-
 template <typename T>
-inline void REVOLVE(T &value, T min, T max) {
+inline void REVOLVE(T& value, T min, T max) {
     (value) = ((value) < (min)) ? (max) : ((value > (max)) ? (min) : (value));
 }
 
@@ -116,8 +109,6 @@ inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
     }
 }
 
-
-
 class CheckTimer {
 public:
     CheckTimer() {
@@ -140,10 +131,7 @@ private:
     QElapsedTimer mElapsedTimer;
 };
 
-
-
 }  // end of namespace common
 }  // end of namespace ivis
-
 
 #endif  // COMMON_UTIL_H

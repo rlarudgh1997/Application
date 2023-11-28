@@ -7,10 +7,7 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
-
 #define USE_GAUGE_TEMP_VALUE
-
-
 
 QSharedPointer<ControlGauge>& ControlGauge::instance() {
     static QSharedPointer<ControlGauge> gControl;
@@ -59,16 +56,15 @@ void ControlGauge::initNormalData() {
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuelAngle, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperatureAngle, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedUnit,
-                                    static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::KM_PER_HOUR));
+                      static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::KM_PER_HOUR));
 }
 
 void ControlGauge::initControlData() {
     updateDataControl(ivis::common::PropertyEnum::GaugeSpeedState,
-                                    static_cast<int>(ivis::common::SpeedStateType::SpeedState::VALUE));
+                      static_cast<int>(ivis::common::SpeedStateType::SpeedState::VALUE));
     updateDataControl(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState,
-                                    static_cast<int>(ivis::common::SpeedSubDigitalStateType::SpeedSubDigitalState::VALUE));
-    updateDataControl(ivis::common::PropertyEnum::GaugeRpmState,
-                                    static_cast<int>(ivis::common::RpmStateType::RpmState::VALUE));
+                      static_cast<int>(ivis::common::SpeedSubDigitalStateType::SpeedSubDigitalState::VALUE));
+    updateDataControl(ivis::common::PropertyEnum::GaugeRpmState, static_cast<int>(ivis::common::RpmStateType::RpmState::VALUE));
 
 #if defined(USE_GAUGE_TEMP_VALUE)
     controlTimer(ControlGaugeTimerSpeed, true, 200);
@@ -85,19 +81,14 @@ void ControlGauge::resetControl(const bool& reset) {
 
 void ControlGauge::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(),                       &HandlerGauge::signalHandlerEvent,
-                this,                              &ControlGauge::slotHandlerEvent,
+        connect(isHandler(), &HandlerGauge::signalHandlerEvent, this, &ControlGauge::slotHandlerEvent, Qt::UniqueConnection);
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlGauge::slotConfigChanged,
                 Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(),  &ConfigSetting::signalConfigChanged,
-                this,                              &ControlGauge::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
-                this,                              &ControlGauge::slotEventInfoChanged,
-                Qt::UniqueConnection);
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
+                &ControlGauge::slotEventInfoChanged, Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
-        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-                updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize);
-        });
+        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged,
+                [=](const QSize& screenSize) { updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize); });
 #endif
     } else {
         disconnect(isHandler());
@@ -148,36 +139,36 @@ void ControlGauge::updateDataHandler(const int& type, const QVariant& value, con
 }
 
 void ControlGauge::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
-    ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(),
-                                                        destination, eventType, eventValue);
+    ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
+                                                     eventType, eventValue);
 }
 
 qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValue) {
-    const double speedFactor140  = 1.11;          //  153/140
-    const double speedFactor260  = 0.745;         //   87/120   -> Base : 0.725, New : 0.745
-    const double speedFactorMile = 1.5375;        //  246/160
-    const double rpmFactor       = 0.0405;        // 240/6000
-    const double rpmFactor6000   = 0.039;         // RPM : 3000 ~ 6000 이상에서 좌표 안 맞아서 수정 적용
+    const double speedFactor140 = 1.11;     //  153/140
+    const double speedFactor260 = 0.745;    //   87/120   -> Base : 0.725, New : 0.745
+    const double speedFactorMile = 1.5375;  //  246/160
+    const double rpmFactor = 0.0405;        // 240/6000
+    const double rpmFactor6000 = 0.039;     // RPM : 3000 ~ 6000 이상에서 좌표 안 맞아서 수정 적용
 
     qreal gaugeAngle = 0.0;
     int value = gaugeValue.toInt();
 
     switch (gaugeType) {
-        case ivis::common::GaugeTypeEnum::GaugeTypeSpeed : {
-            if (value >  140) {
+        case ivis::common::GaugeTypeEnum::GaugeTypeSpeed: {
+            if (value > 140) {
                 gaugeAngle = (33 + ((value - 140) * speedFactor260));
             } else {
                 gaugeAngle = mDefaultAngle + (value * speedFactor140);
             }
             break;
         }
-        case ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile : {
+        case ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile: {
             if (value >= 0 && value <= 160) {
                 gaugeAngle = (mDefaultAngle - 3) + (value * speedFactorMile);
             }
             break;
         }
-        case ivis::common::GaugeTypeEnum::GaugeTypeRpm : {
+        case ivis::common::GaugeTypeEnum::GaugeTypeRpm: {
             if (value >= 3000) {
                 gaugeAngle = mDefaultAngle + (value * rpmFactor);
             } else {
@@ -185,7 +176,7 @@ qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValu
             }
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -195,32 +186,32 @@ qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValu
 
 void ControlGauge::updateGaugeInfo(const int& dataType, const QVariant& dataValue) {
     switch (dataType) {
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed : {
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed: {
             int speedUnit = getData(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedUnit).toInt();
             int gaugeType = ((speedUnit == static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::MILE_PER_HOUR))
-                                                                    ? (ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile)
-                                                                    : (ivis::common::GaugeTypeEnum::GaugeTypeSpeed));
+                                 ? (ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile)
+                                 : (ivis::common::GaugeTypeEnum::GaugeTypeSpeed));
             updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, dataValue);
             updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, isGaugeAngle(gaugeType, dataValue));
             break;
         }
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm : {
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, dataValue);
             updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle,
-                                                    isGaugeAngle(ivis::common::GaugeTypeEnum::GaugeTypeRpm, dataValue));
+                              isGaugeAngle(ivis::common::GaugeTypeEnum::GaugeTypeRpm, dataValue));
             break;
         }
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel : {
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, dataValue);
             // updateDataHandler(ivis::common::PropertyEnum::GaugeFuelAngle, dataValue);
             break;
         }
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeTemperature : {
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeTemperature: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeTemperature, dataValue);
             // updateDataHandler(ivis::common::PropertyEnum::GaugeTemperatureAngle, dataValue);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -228,7 +219,7 @@ void ControlGauge::updateGaugeInfo(const int& dataType, const QVariant& dataValu
 
 void ControlGauge::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
-        default : {
+        default: {
             break;
         }
     }
@@ -239,10 +230,10 @@ void ControlGauge::slotHandlerEvent(const int& type, const QVariant& value) {
     ivis::common::CheckTimer checkTimer;
 
     switch (type) {
-        case ivis::common::EventEnum::EventTypeExitProgram : {
+        case ivis::common::EventEnum::EventTypeExitProgram: {
             break;
         }
-        default : {
+        default: {
             break;
         }
     }
@@ -255,7 +246,7 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 
     qDebug() << "ControlGauge::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
-        default : {
+        default: {
             break;
         }
     }
@@ -263,14 +254,14 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 
 void ControlGauge::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
     switch (dataType) {
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed :
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm :
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel :
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeTemperature : {
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed:
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm:
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel:
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeTemperature: {
             updateGaugeInfo(dataType, dataValue);
             break;
         }
-        default : {
+        default: {
             break;
         }
     }

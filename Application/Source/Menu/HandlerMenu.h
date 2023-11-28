@@ -1,16 +1,11 @@
 #ifndef HANDLER_MENU_H
 #define HANDLER_MENU_H
 
-
 #include "AbstractHandler.h"
-
 
 class HandlerMenu : public AbstractHandler {
 private:
-    enum {
-        HandlerMenuTimerStart = AbstractHandler::AbstractTimerStart,
-    };
-
+    enum { HandlerMenuTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
     static QSharedPointer<HandlerMenu>& instance();
@@ -23,4 +18,4 @@ private:
     virtual void timerFunc(const int& timerId);
 };
 
-#endif    // HANDLER_MENU_H
+#endif  // HANDLER_MENU_H

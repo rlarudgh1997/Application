@@ -1,16 +1,11 @@
 #ifndef HANDLER_TELLTALE_H
 #define HANDLER_TELLTALE_H
 
-
 #include "AbstractHandler.h"
-
 
 class HandlerTelltale : public AbstractHandler {
 private:
-    enum {
-        HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart,
-    };
-
+    enum { HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
     static QSharedPointer<HandlerTelltale>& instance();
@@ -23,4 +18,4 @@ private:
     virtual void timerFunc(const int& timerId);
 };
 
-#endif    // HANDLER_TELLTALE_H
+#endif  // HANDLER_TELLTALE_H

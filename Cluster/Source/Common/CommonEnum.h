@@ -4,51 +4,46 @@
 #include "CommonDefine.h"
 #include <QObject>
 
-
 namespace ivis {
 namespace common {
 
+#define SCREEN_POSITION_X 50
+#define SCREEN_POSITION_Y 100
+#define SCREEN_SIZE_WIDTH 1920
+#define SCREEN_SIZE_HEIGHT 720
+#define SCREEN_MINIMUM_WIDTH 1200
+#define SCREEN_MINIMUM_HEIGHT 700
+#define SCREEN_MAXIMUM_WIDTH 2100
+#define SCREEN_MAXIMUM_HEIGHT 1300
+#define SCREEN_HEIGHT_MARGIN 60
 
-#define SCREEN_POSITION_X                50
-#define SCREEN_POSITION_Y                100
-#define SCREEN_SIZE_WIDTH                1920
-#define SCREEN_SIZE_HEIGHT               720
-#define SCREEN_MINIMUM_WIDTH             1200
-#define SCREEN_MINIMUM_HEIGHT            700
-#define SCREEN_MAXIMUM_WIDTH             2100
-#define SCREEN_MAXIMUM_HEIGHT            1300
-#define SCREEN_HEIGHT_MARGIN             60
-
-#define PROPETRY_START_COMMON            0
-#define PROPETRY_START_NORMAL            1000
-#define PROPETRY_START_LIST              2000
-#define PROPETRY_START_HOME              3000
-#define PROPETRY_START_GAUGE             4000
-#define PROPETRY_START_CONTENT           5000
-#define PROPETRY_START_TELLTALE          6000
-#define PROPETRY_START_POPUP             7000
-
-
-
+#define PROPETRY_START_COMMON 0
+#define PROPETRY_START_NORMAL 1000
+#define PROPETRY_START_LIST 2000
+#define PROPETRY_START_HOME 3000
+#define PROPETRY_START_GAUGE 4000
+#define PROPETRY_START_CONTENT 5000
+#define PROPETRY_START_TELLTALE 6000
+#define PROPETRY_START_POPUP 7000
 
 class DisplayEnum : public QObject {
     Q_OBJECT
 
 public:
     enum DisplaySize {
-        Width  = SCREEN_SIZE_WIDTH,
+        Width = SCREEN_SIZE_WIDTH,
         Height = SCREEN_SIZE_HEIGHT,
     };
     Q_ENUMS(DisplaySize)
 
     enum DisplayType {
-        DisplayTypeInvalid             = 0x000000,
-        DisplayTypeHome                = 0x000001,
-        DisplayTypeGauge               = 0x000002,
-        DisplayTypeTelltale            = 0x000004,
-        DisplayTypePopup               = 0x000008,
+        DisplayTypeInvalid = 0x000000,
+        DisplayTypeHome = 0x000001,
+        DisplayTypeGauge = 0x000002,
+        DisplayTypeTelltale = 0x000004,
+        DisplayTypePopup = 0x000008,
 
-        DisplayTypeAll                 = 0xFFFFFF,
+        DisplayTypeAll = 0xFFFFFF,
     };
     Q_ENUMS(DisplayType)
 
@@ -72,21 +67,21 @@ public:
     Q_ENUMS(KeyInputType)
 
     enum KeyInputValue {
-        KeyInputValueInvalid          = 0,
-        KeyInputValueUp               = Qt::Key_Up,
-        KeyInputValueDown             = Qt::Key_Down,
-        KeyInputValueLeft             = Qt::Key_Left,
-        KeyInputValueRight            = Qt::Key_Right,
-        KeyInputValueOK               = Qt::Key_Enter,
-        KeyInputValueCancel           = Qt::Key_Escape,
-        KeyInputValueCapture          = Qt::Key_F12,
+        KeyInputValueInvalid = 0,
+        KeyInputValueUp = Qt::Key_Up,
+        KeyInputValueDown = Qt::Key_Down,
+        KeyInputValueLeft = Qt::Key_Left,
+        KeyInputValueRight = Qt::Key_Right,
+        KeyInputValueOK = Qt::Key_Enter,
+        KeyInputValueCancel = Qt::Key_Escape,
+        KeyInputValueCapture = Qt::Key_F12,
 #if defined(PLATFORM_X86)
-        KeyInputValueNumUp            = Qt::Key_8,           // KeyInputValueUp
-        KeyInputValueNumDown          = Qt::Key_2,           // KeyInputValueDown
-        KeyInputValueNumLeft          = Qt::Key_4,           // KeyInputValueLeft
-        KeyInputValueNumRight         = Qt::Key_6,           // KeyInputValueRight
-        KeyInputValueNumOK            = Qt::Key_Return,      // KeyInputValueOK
-        KeyInputValueNumOK2           = Qt::Key_Alt,         // KeyInputValueOK
+        KeyInputValueNumUp = Qt::Key_8,       // KeyInputValueUp
+        KeyInputValueNumDown = Qt::Key_2,     // KeyInputValueDown
+        KeyInputValueNumLeft = Qt::Key_4,     // KeyInputValueLeft
+        KeyInputValueNumRight = Qt::Key_6,    // KeyInputValueRight
+        KeyInputValueNumOK = Qt::Key_Return,  // KeyInputValueOK
+        KeyInputValueNumOK2 = Qt::Key_Alt,    // KeyInputValueOK
 #endif
     };
     Q_ENUMS(KeyInputValue)
@@ -110,13 +105,13 @@ public:
     };
     Q_ENUMS(CommonType)
 
-    enum HomeType  {
+    enum HomeType {
         HomeInvalid = PROPETRY_START_HOME,
         HomeType,
     };
     Q_ENUMS(HomeType)
 
-    enum GaugeType  {
+    enum GaugeType {
         GaugeInvalid = PROPETRY_START_GAUGE,
         GaugeDefaultAngle,
         GaugeSpeed,
@@ -134,13 +129,13 @@ public:
     };
     Q_ENUMS(GaugeType)
 
-    enum ContentType  {
+    enum ContentType {
         ContentInvalid = PROPETRY_START_CONTENT,
         ContentType,
     };
     Q_ENUMS(GaugeType)
 
-    enum TelltaleType  {
+    enum TelltaleType {
         TelltaleInvalid = PROPETRY_START_TELLTALE,
         TelltaleType,
         TelltaleDualPowerStat,
@@ -245,7 +240,7 @@ public:
     };
     Q_ENUMS(TelltaleType)
 
-    enum PopupType  {
+    enum PopupType {
         PopupInvalid = PROPETRY_START_POPUP,
         PopupType,
     };
@@ -269,8 +264,6 @@ public:
     };
     Q_ENUMS(EventType)
 };
-
-
 
 class HandlerHomeEnum : public QObject {
     Q_OBJECT
@@ -389,7 +382,6 @@ public:
     Q_ENUM(TelltaleLowFuelWarnStatOptional)
 };
 
-
 class SpeedStateType : public QObject {
     Q_OBJECT
 
@@ -442,12 +434,6 @@ public:
     Q_ENUM(RpmState)
 };
 
-
-
-
-
-
-
 class ServiceDataTypeEnum : public QObject {
     Q_OBJECT
 
@@ -463,7 +449,6 @@ public:
         ServiceDataTypeSpeedState,
         ServiceDataTypeSpeedSubDigitalState,
         ServiceDataTypeRpmState,
-
 
         ServiceDataTypeMax,
     };
@@ -483,8 +468,5 @@ public:
 
 }  // end of namespace common
 }  // end of namespace ivis
-
-
-
 
 #endif  // COMMON_ENUM_CLUSTER_H

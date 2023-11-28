@@ -6,9 +6,7 @@
 
 #include <QApplication>
 
-
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
-
 
 MainWindow::MainWindow() {
     qInfo() << "================================================================================================";
@@ -47,8 +45,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::controlConnect() {
-    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram,
-            this,                              &QApplication::quit,    // &QWidget::close, &QApplication::closeAllWindows()
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
+            &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
     connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle, [=](const QString& title) {
         QString text = QString("TC Creator");
@@ -62,7 +60,7 @@ void MainWindow::controlConnect() {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
             qInfo() << "Python lib openpyxl :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, state);
-        } else  if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
+        } else if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
             qInfo() << "Python lib pandas   :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
         } else {

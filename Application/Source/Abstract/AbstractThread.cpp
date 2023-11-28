@@ -1,6 +1,5 @@
 #include "AbstractThread.h"
 
-
 AbstractThread::AbstractThread() {
     connect(this, &QThread::finished, this, &QObject::deleteLater);
     controlThread(ThreadStateStart);
@@ -43,4 +42,3 @@ void AbstractThread::run() {
     this->quit();
     this->wait();
 }
-
