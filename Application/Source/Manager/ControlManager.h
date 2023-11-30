@@ -2,7 +2,6 @@
 #define CONTROL_MANAGER_H
 
 #include <QObject>
-#include <QSharedPointer>
 
 #include "AbstractControl.h"
 #include "CommonUtil.h"

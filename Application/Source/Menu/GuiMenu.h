@@ -63,7 +63,7 @@ public:
 
         if (options.size() > 0) {
             mCheckLayout = new QHBoxLayout(mLayout->widget());
-            foreach (const auto& option, options) {
+            for (const auto& option : options) {
                 int index = mOptionCheck.size();
                 mOptionCheck[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout->widget(), true);
                 mOptionCheck[index]->setText(option.second);
@@ -102,7 +102,7 @@ public:
         connect(mOK, &QPushButton::clicked, [=]() {
             bool state = mOn->isChecked();
             QList<QPair<QString, bool>> options = QList<QPair<QString, bool>>();
-            foreach (const auto& option, mOptionCheck) {
+            for (const auto& option : mOptionCheck) {
                 qDebug() << "Option :" << option->text() << (option->checkState() == Qt::CheckState::Checked);
                 options.append(QPair<QString, bool>(option->text(), option->checkState() == Qt::CheckState::Checked));
             }
@@ -115,7 +115,7 @@ private:
     void updateStatus(const bool& on) {
         QString color = (on) ? (QString("black")) : (QString("gray"));
         QString optionStyle = mBaseStyle.arg(color).arg("12");
-        foreach (const auto& option, mOptionCheck) {
+        for (const auto& option : mOptionCheck) {
             option->setEnabled(on);
             option->setStyleSheet(optionStyle);
         }
@@ -173,7 +173,7 @@ public:
 
         if (itemList.size() > 0) {
             mCheckLayout2 = new QHBoxLayout(mLayout->widget());
-            foreach (const auto& info, itemList) {
+            for (const auto& info : itemList) {
                 int index = mCheckBox2.size();
                 mCheckBox2[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout2->widget(), true);
                 mCheckBox2[index]->setText(info);
@@ -197,7 +197,7 @@ public:
         connect(mOK, &QPushButton::clicked, [=]() {
             bool option1 = (mCheckBox1->checkState() == Qt::CheckState::Checked);
             QList<QPair<QString, bool>> checkStateList = QList<QPair<QString, bool>>();
-            foreach (const auto& check, mCheckBox2) {
+            for (const auto& check : mCheckBox2) {
                 checkStateList.append(QPair<QString, bool>(check->text(), (check->checkState() == Qt::CheckState::Checked)));
             }
             emit signalPtSelected(option1, checkStateList);

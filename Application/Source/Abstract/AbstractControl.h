@@ -7,9 +7,7 @@
 #include <QKeyEvent>
 
 #include "AbstractHandler.h"
-// class AbstractHandler;
 
-#include <QObject>
 class AbstractControl : public QObject {
     Q_OBJECT
 

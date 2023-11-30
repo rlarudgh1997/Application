@@ -225,7 +225,7 @@ private:
         fileList = directory.entryInfoList();
         qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         qDebug() << "path :" << path << ", Count :" << fileList.size();
-        foreach (const QFileInfo& file, fileList) {
+        for (const QFileInfo& file : fileList) {
             fileNames.append(file.fileName());
             qDebug() << "--------------------------------------------------------------------------------------------";
             qDebug() << "File Name :" << file.fileName() << ", Size :" << file.size() << "byte";
@@ -270,7 +270,7 @@ private:
             return 0;
         }
         QTextStream out(&file);
-        foreach (const auto& data, readData) {
+        for (const auto& data : readData) {
             QString lineData = QString("%1\n").arg(data);
             out << lineData;
         }
@@ -310,7 +310,7 @@ public:
                 while (process.waitForReadyRead()) {
                     QString readAllData = process.readAll();
                     QString logData = QString();
-                    foreach (const QString& data, readAllData) {
+                    for (const QString& data : readAllData) {
                         if (data.compare("\n") == false) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
@@ -393,7 +393,7 @@ private:
                 while (mProcess.waitForReadyRead()) {
                     QString readAllData = mProcess.readAll();
                     QString logData = QString();
-                    foreach (const QString& data, readAllData) {
+                    for (const QString& data : readAllData) {
                         if (data.compare("\n") == false) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
@@ -435,7 +435,7 @@ public:
         // join();
     }
     void setLibInfo(const QStringList& libInfo) {
-        foreach (const auto info, libInfo) { mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false); }
+        for (const auto info : libInfo) { mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false); }
     }
     void check() {
         this->moveToThread(mThread);
@@ -454,7 +454,7 @@ private:
     void runThread() {
         QString filePath = QString("%1/CheckLib.txt").arg(APP_PWD);
         int count = 0;
-        foreach (const auto& info, mCheckInfo) {
+        for (const auto& info : mCheckInfo) {
             ExcuteProgram process(false);
             QString appendStr = QString((count == 0) ? (">") : (">>"));
             QString cmd = QString(
@@ -471,8 +471,8 @@ private:
         }
         QStringList readDataList = FileInfo::readFile(filePath);
         QString readData = QString();
-        foreach (const auto& data, readDataList) { readData.append(data); }
-        foreach (const auto& info, mCheckInfo) {
+        for (const auto& data : readDataList) { readData.append(data); }
+        for (const auto& info : mCheckInfo) {
             emit signalCheckLibResult(info.first, readData.contains(info.first, Qt::CaseInsensitive));
         }
         emit signalCheckLibResult("Completed", true);

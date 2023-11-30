@@ -114,6 +114,10 @@ elif [ "$1" = xserver ] || [ "$1" = xs ]; then
 elif [ "$1" = host ] || [ "$1" = h ]; then
 	PLATFORM=host
 	ENV=host
+elif [ "$1" = cluster ] || [ "$1" = c ]; then
+	PLATFORM=host
+	ENV=host
+	BIN_NAME="Cluster"
 else
 	PLATFORM=$1
 	ENV=$1

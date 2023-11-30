@@ -181,7 +181,7 @@ void GuiMenu::drawMenuEdit() {
     mShortcut.append(new QShortcut(QKeySequence(shortcutMergeSplit), mMainView));
     mShortcut.append(new QShortcut(QKeySequence(shortcutUndo), mMainView));
     mShortcut.append(new QShortcut(QKeySequence(shortcutRedo), mMainView));
-    foreach (const auto& key, mShortcut) {
+    for (const auto& key : mShortcut) {
         connect(key, &QShortcut::activated, [=]() {
             QString currentKey = key->key().toString();
             qDebug() << "Key ID :" << key->id() << currentKey;
@@ -476,7 +476,7 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 
         connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
             QVariantList moduleSelect = QVariantList();
-            foreach (const auto& select, selectModule) { moduleSelect.append(QVariant(select.second)); }
+            for (const auto& select : selectModule) { moduleSelect.append(QVariant(select.second)); }
             updateDisplaySelectPT(runType, moduleSelect);
         });
         connect(mSelectModule, &QDialog::finished, [=]() {
@@ -501,7 +501,7 @@ void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& modu
         connect(mCheckBoxGroup, &CheckBoxGroupDialog::signalPtSelected,
                 [=](const bool& option1, const QList<QPair<QString, bool>>& checkStateList) {
                     QVariantList checkList = QVariantList();
-                    foreach (const auto& check, checkStateList) {
+                    for (const auto& check : checkStateList) {
                         if (check.second) {
                             checkList.append(QVariant(check.first));
                         }
@@ -548,13 +548,13 @@ void GuiMenu::updateDisplayTestResultInfo() {
     mProgressBar->setValue(current);
 
     QString titleInfo = QString();
-    foreach (const auto& info, testResultInfo.at(1).toList()) { titleInfo.append(info.toString() + "\n"); }
+    for (const auto& info : testResultInfo.at(1).toList()) { titleInfo.append(info.toString() + "\n"); }
     QString errorInfo = QString();
     if (testResultInfo.at(1).toList().size() == 2) {
         errorInfo = testResultInfo.at(1).toList().at(1).toString();
     }
     QString moduleStateInfo = QString();
-    foreach (const auto& info, testResultInfo.at(2).toList()) { moduleStateInfo.append(info.toString() + "\n"); }
+    for (const auto& info : testResultInfo.at(2).toList()) { moduleStateInfo.append(info.toString() + "\n"); }
 
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
@@ -618,15 +618,15 @@ void GuiMenu::updateDisplayTestReport() {
         QString title = QString();
         QList<QPair<bool, QString>> options = QList<QPair<bool, QString>>();
         if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeResult)) {
-            title = QString("Test Result");
+            title = QString("TC Report");
             options.append(QPair<bool, QString>(option1, QString("Split")));
             options.append(QPair<bool, QString>(option2, QString("Config")));
             options.append(QPair<bool, QString>(option3, QString("Excel")));
         } else {
-            title = QString("Test Coverage");
-            options.append(QPair<bool, QString>(true, QString("Line")));
+            title = QString("GCOV Report");
             options.append(QPair<bool, QString>(option2, QString("Function")));
             options.append(QPair<bool, QString>(option3, QString("Branch")));
+            // options.append(QPair<bool, QString>(true, QString("Line")));
         }
         mTestReport = new SelectReportDialog(isHandler()->getScreen(), title, state, options);
         connect(mTestReport, &SelectReportDialog::signalOptionSelected,
@@ -634,7 +634,7 @@ void GuiMenu::updateDisplayTestReport() {
                     QVariantList reportInfo = QVariantList();
                     reportInfo.append(testReportType);
                     reportInfo.append(state);
-                    foreach (const auto& option, options) { reportInfo.append(option.second); }
+                    for (const auto& option : options) { reportInfo.append(option.second); }
                     createSignal(ivis::common::EventTypeEnum::EventTypeRunTestReport, reportInfo);
                     mTestReport->hide();
                     mTestReport->finished(true);

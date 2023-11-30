@@ -138,11 +138,11 @@ void ControlMenu::updateAllModueList(const QString& filter) {
         if (filter.size() == 0) {
             sfcModules = sfcDirectory;
         } else {
-            foreach (const auto& sfc, sfcDirectory) {
+            for (const auto& sfc : sfcDirectory) {
                 QDir subDirectory(QString("%1/%2").arg(defaultPath).arg(sfc));
                 // subDirectory.setNameFilters(QStringList({".tc", ".xlsx"}));
                 bool fileFound = false;
-                foreach (const auto& file, subDirectory.entryList(QDir::Files)) {
+                for (const auto& file : subDirectory.entryList(QDir::Files)) {
                     if ((fileFound = file.contains(filter)) == true) {
                         // qDebug() << "  FileFound :" << sfc << file;
                         sfcModules.append(sfc);
@@ -219,7 +219,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             int currentCount = 0;
             QString errorString = QString();
             QString completeString = QString();
-            foreach (const auto& data, infoData) {
+            for (const auto& data : infoData) {
                 QStringList info = data.split(" : ");
                 if (info.size() != 2) {
                     continue;
@@ -362,8 +362,8 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             QString option2 = (options.at(1).toBool()) ? (" -o C") : ("");
             QString option3 = (options.at(2).toBool()) ? (" -t E") : ("");
             if (runType == ivis::common::RunTypeEnum::RunTypeGcovReport) {
-                option1 = (options.at(0).toBool()) ? (" -b ON") : ("");
-                option2 = (options.at(1).toBool()) ? (" -f ON") : ("");
+                option1 = (options.at(0).toBool()) ? (" -b ON") : (" -b OFF");
+                option2 = (options.at(1).toBool()) ? (" -f ON") : (" -f OFF");
                 option3 = QString();  // (line) ? (" -n ON") : ("");     -> Not define
             }
             cmd.append(QString("%1%2%3").arg(option1).arg(option2).arg(option3));
@@ -381,12 +381,12 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             qDebug() << "Fail to select module list : 0";
             return;
         }
-        foreach (const auto& module, infoList[0].toList()) {
+        for (const auto& module : infoList[0].toList()) {
             moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
         }
 
         QString checkList = QString();
-        foreach (const auto& check, infoList[1].toList()) {
+        for (const auto& check : infoList[1].toList()) {
             checkList.append(QString("%1%2").arg((checkList.size() == 0) ? ("") : (" ")).arg(check.toString()));
         }
 
@@ -481,14 +481,14 @@ void ControlMenu::cancelScript(const bool& complete) {
         "sfc_validator",
         "gen_tc.sh",
         "run_tc.sh",
-        "gen_tcreport",
-        "gen_gcov_report",
+        "gen_tcreport.sh",
+        "gen_gcov_report.sh",
     });
     QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
     if (complete == false) {
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, "");
     }
-    foreach (const auto& info, killProcess) {
+    for (const auto& info : killProcess) {
         QStringList log;
         ivis::common::ExcuteProgram process(false);
         bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
@@ -518,7 +518,7 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
     int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeResult)
                          ? (ConfigInfo::ConfigTypeReportResult)
                          : (ConfigInfo::ConfigTypeReportCoverage);
-    foreach (const auto& configValue, value) {
+    for (const auto& configValue : value) {
         ConfigSetting::instance().data()->writeConfig((configType + count), configValue);
         count++;
     }

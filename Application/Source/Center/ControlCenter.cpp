@@ -149,7 +149,7 @@ bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
     bool fileNotFound = (vsmFile.size() == 0);
 
-    foreach (const auto& file, vsmFile) {
+    for (const auto& file : vsmFile) {
         QFile filePath = QString("%1/%2").arg(vsmPath.toString()).arg(file.toString());
         if (filePath.exists() == false) {
             fileNotFound = true;
@@ -175,10 +175,10 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
     QStringList vsmList = QStringList();
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
 
-    foreach (const auto& file, vsmFile) {
+    for (const auto& file : vsmFile) {
         QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + "/" + file.toString());
         QStringList list = QStringList();
-        foreach (QString lineStr, readData) {
+        for (QString lineStr : readData) {
             if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
                 lineStr.remove(" ");
                 lineStr.remove("-");
@@ -221,8 +221,8 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 
     if (selectModule.size() > 0) {
         QStringList vsmTemp = QStringList();
-        foreach (const auto& moudleName, selectModule) {
-            foreach (const auto& vsmInfo, vsmList) {
+        for (const auto& moudleName : selectModule) {
+            for (const auto& vsmInfo : vsmList) {
                 if (vsmInfo.contains(moudleName.toString())) {
                     vsmTemp.append(vsmInfo);
                 }

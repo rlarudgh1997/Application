@@ -21,7 +21,7 @@ ScreenInfo::ScreenInfo() {
 
 ScreenInfo::~ScreenInfo() {
     delete mTranslator;
-    // foreach(const auto& screen, mSubScreens) {
+    // for(const auto& screen, mSubScreens) {
     //     delete screen;
     // }
     // delete mRootScreen;
@@ -68,7 +68,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
 
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
-        foreach (const auto& screen, mSubScreens) {
+        for (const auto& screen : mSubScreens) {
             try {
                 if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
                     continue;
@@ -147,7 +147,7 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
     if (mRootScreen) {
         mRootScreen->resize(resizeEvent.size().width(), resizeEvent.size().height());
     }
-    foreach (const auto& widget, mSubScreens) {
+    for (const auto& widget : mSubScreens) {
         try {
             if (widget == mAlwaysTopScreen) {
                 widget->setGeometry(0, 0, resizeEvent.size().width(), SCREEN_HEIGHT_MARGIN);

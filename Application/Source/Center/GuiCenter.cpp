@@ -146,20 +146,20 @@ void GuiCenter::updateDisplayConfigInfo() {
         ivis::common::widgetVisible(mNodeAddressSearch, false);
 
         if (mConfigValue == configValue) {
-            foreach (const auto& item, mConfigListItem) { item->initStyle(); }
+            for (const auto& item : mConfigListItem) { item->initStyle(); }
             return;
         }
     }
 
     bool newItem = (mConfigValue.size() != configValue.size());
     if (newItem) {
-        foreach (const auto& item, mConfigListItem) { item->clear(); }
+        for (const auto& item : mConfigListItem) { item->clear(); }
         mConfigListItem.clear();
     }
 
     int index = 0;
     mConfigValue = configValue;
-    foreach (const auto& info, configValue) {
+    for (const auto& info : configValue) {
         QVariantList config = info.toList();
         if (config.size() != 3) {
             continue;
@@ -170,12 +170,12 @@ void GuiCenter::updateDisplayConfigInfo() {
         QString realValue = QString();
         switch (value.type()) {
             case QVariant::Type::List: {
-                foreach (const auto& v, value.toList()) { realValue.append(QString("%1, ").arg(v.toString())); }
+                for (const auto& v : value.toList()) { realValue.append(QString("%1, ").arg(v.toString())); }
                 realValue.resize(realValue.size() - 2);
                 break;
             }
             case QVariant::Type::StringList: {
-                foreach (const auto& v, value.toStringList()) { realValue.append(QString("%1, ").arg(v)); }
+                for (const auto& v : value.toStringList()) { realValue.append(QString("%1, ").arg(v)); }
                 realValue.resize(realValue.size() - 2);
                 break;
             }
@@ -261,7 +261,7 @@ void GuiCenter::updateDisplayTestReport() {
         QMap<int, QPair<int, bool>> config = QMap<int, QPair<int, bool>>();
         int configInfo = static_cast<int>(ReportItemInfo::Config::On);
         bool status = false;
-        foreach (const auto& data, reportData) {
+        for (const auto& data : reportData) {
             QVariantList info = data.toList();
             if (info.size() != 2) {
                 continue;
@@ -350,7 +350,7 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("Search"), nodeAddressName);
         connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& selectNodeName) {
             int rowIndex = 0;
-            foreach (const auto& nodeName, nodeAddressName) {
+            for (const auto& nodeName : nodeAddressName) {
                 if (selectNodeName == nodeName) {
                     break;
                 }
@@ -393,7 +393,7 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
                     [=](const QList<QPair<int, QString>>& selectModule) {
                         mSelectModule->hide();
                         QVariantList moduleSelect = QVariantList();
-                        foreach (const auto& select, selectModule) { moduleSelect.append(QVariant(select.second)); }
+                        for (const auto& select : selectModule) { moduleSelect.append(QVariant(select.second)); }
                         createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
                         // mSelectModule->finished(true);
                     });

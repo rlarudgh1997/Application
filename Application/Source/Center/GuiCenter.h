@@ -330,7 +330,7 @@ public:
         mModel.setRowCount(moduleList.size());
         mModel.setHorizontalHeaderLabels(title);
         int rowIndex = 0;
-        foreach (const auto& name, moduleList) {
+        for (const auto& name : moduleList) {
             mModel.setItem(rowIndex, 0, new QStandardItem(name));
             mModel.item(rowIndex, 0)->setCheckable(true);
             // mModel.item(rowIndex, 0)->setCheckState(Qt::Checked);

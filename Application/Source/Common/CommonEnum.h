@@ -274,12 +274,6 @@ public:
         Merge,
         Split,
     };
-    // enum class MenuItemRight {
-    //     Invalid = 0,
-    //     RowInsert,
-    //     RowDelete,
-    //     CellMergeSplit,
-    // };
     enum class AutoComplete {
         Draw = 0,
         Update,

@@ -21,7 +21,7 @@ ScreenInfo::ScreenInfo() {
 
 ScreenInfo::~ScreenInfo() {
     delete mTranslator;
-    // foreach(const auto& screen, mSubScreens) {
+    // for(const auto& screen, mSubScreens) {
     //     delete screen;
     // }
     // delete mRootScreen;
@@ -69,7 +69,7 @@ QQuickItem* ScreenInfo::drawScreen(const int& displayType, const QString& qml, c
 
 void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
     if (mSubScreens[displayType]) {
-        foreach (const auto& screen, mSubScreens) {
+        for (const auto& screen : mSubScreens) {
             try {
                 if ((screen == mAlwaysTopScreen) || (screen == mSubScreens[displayType])) {
                     continue;

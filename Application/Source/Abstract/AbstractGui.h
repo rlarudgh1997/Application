@@ -2,6 +2,7 @@
 #define ABSTRACT_GUI_H
 
 #include <QWidget>
+
 #include "AbstractHandler.h"
 #include "CommonEnum.h"
 

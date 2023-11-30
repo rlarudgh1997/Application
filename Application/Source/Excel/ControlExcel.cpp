@@ -62,7 +62,7 @@ void ControlExcel::initNormalData() {
     QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
     QStringList vsmListTemp = vsmList;
     vsmList.clear();
-    foreach (const auto& vsm, vsmListTemp) {
+    for (const auto& vsm : vsmListTemp) {
         QStringList temp = vsm.split("\t");
         vsmList.append(temp[0]);
     }
@@ -194,7 +194,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
     if (excelOpen) {
         int sheetIndex = 0;
 
-        foreach (const auto& sheet, sheetName) {
+        for (const auto& sheet : sheetName) {
             QVariantList sheetData = QVariantList();
             QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath.toString()).arg(sheetIndex).arg(sheet);
             QStringList readData = ivis::common::FileInfo::readFile(filePath);
@@ -225,7 +225,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
         }
     } else {
         int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
-        foreach (const auto& sheet, sheetName) { rowCount.append(rowMax); }
+        for (const auto& sheet : sheetName) { rowCount.append(rowMax); }
     }
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
@@ -251,16 +251,16 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath) {
     int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     int writeSize = 0;
 
-    foreach (const auto& sheet, sheetName) {
+    for (const auto& sheet : sheetName) {
         int sheetIndex = (propertyType - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription);
         QString file = QString("%1_%2.toExcel").arg(sheetIndex).arg(sheet);
         QString writeData = QString();
         QVariantList sheetData = getData(propertyType++).toList();
 
-        foreach (const auto& dataInfo, sheetData) {
+        for (const auto& dataInfo : sheetData) {
             QString rowData = QString();
             int count = 0;
-            foreach (QVariant info, dataInfo.toList()) {
+            for (QVariant info : dataInfo.toList()) {
                 rowData.append(info.toString());
                 if (count++ < (dataInfo.toList().size() - 1)) {
                     rowData.append("\t");
@@ -311,7 +311,7 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     int writeSize = 0;
 
-    foreach (const auto& sheet, sheetName) { excelDataInfo[sheetIndex++] = getData(sheetIndex).toList(); }
+    for (const auto& sheet : sheetName) { excelDataInfo[sheetIndex++] = getData(sheetIndex).toList(); }
 
     QStringList fileInfo = filePath.toString().split("/");
     QString savePath = QString();
@@ -329,16 +329,16 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
 
     QString file = QString();
     sheetIndex = 0;
-    foreach (const auto& detailInfo, excelDataInfo) {
+    for (const auto& detailInfo : excelDataInfo) {
         int index = 0;
         QString writeData = QString();
-        foreach (const auto& detail, detailInfo) {
+        for (const auto& detail : detailInfo) {
             if (index == ivis::common::CellInfoEnum::ListInfoExcel::Sheet) {
                 file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(detail.toString());
             } else if (index >= ivis::common::CellInfoEnum::ListInfoExcel::Title) {
                 QString infoData = QString();
                 int count = 0;
-                foreach (QVariant info, detail.toList()) {
+                for (QVariant info : detail.toList()) {
                     infoData.append(info.toString());
                     if (count++ < (detail.toList().size() - 1)) {
                         infoData.append("\t");
@@ -400,7 +400,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
     qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
-    foreach (const auto& d, log) { qDebug() << "LogData  :" << d; }
+    for (const auto& d : log) { qDebug() << "LogData  :" << d; }
     qDebug() << "*************************************************************************************************\n";
 
     return dirPath;
