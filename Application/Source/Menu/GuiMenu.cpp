@@ -626,7 +626,7 @@ void GuiMenu::updateDisplayTestReport() {
             title = QString("GCOV Report");
             options.append(QPair<bool, QString>(option2, QString("Function")));
             options.append(QPair<bool, QString>(option3, QString("Branch")));
-            // options.append(QPair<bool, QString>(true, QString("Line")));
+            options.append(QPair<bool, QString>(true, QString("Line")));
         }
         mTestReport = new SelectReportDialog(isHandler()->getScreen(), title, state, options);
         connect(mTestReport, &SelectReportDialog::signalOptionSelected,
