@@ -178,27 +178,36 @@ void GuiExcel::readAllExcelSheet() {
     createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, saveFielPath);
 }
 
-void GuiExcel::updateMergeInfo(const int& sheetIndex, const int& columnIndex, const int& rowStart, const int& rowEnd) {
+bool GuiExcel::updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
+                               const int& rowEnd) {
     if (mExcelSheet[sheetIndex] == nullptr) {
         qDebug() << "Fail to - excel sheet nullptr :" << sheetIndex;
-        return;
+        return false;
     }
-    qDebug() << "updateMergeInfo :" << columnIndex << rowStart << rowEnd;
+    qDebug() << "updateMergeInfo :" << erase << "," << sheetIndex << columnIndex << rowStart << rowEnd;
 
-    if (mMergeInfo[sheetIndex].isCellStateMerge(columnIndex, rowStart, rowEnd)) {
-        mExcelSheet[sheetIndex]->clearSpans();
-        mMergeInfo[sheetIndex].updateMergeInfo(columnIndex, rowStart, rowEnd);
-        qDebug() << "\t ClearSpans";
-    } else {
-        mMergeInfo[sheetIndex].insertMergeInfo(columnIndex, rowStart, rowEnd);
+    if (erase) {
+        mMergeInfo[sheetIndex].erase(columnIndex, rowStart, rowEnd);
+        return false;
     }
+
+    if (mMergeInfo[sheetIndex].isContains(columnIndex, rowStart, rowEnd)) {
+        // mExcelSheet[sheetIndex]->clearSpans();
+        mMergeInfo[sheetIndex].append(columnIndex, rowStart, rowEnd);
+        qDebug() << "\t Cells need to be split";
+        return true;
+    }
+
+    mMergeInfo[sheetIndex].insert(columnIndex, rowStart, rowEnd);
+    return false;
 }
 
-void GuiExcel::constructMergeInfo(const int& sheetIndex, const QMap<int, QVariantList>& sheetData) {
+QMap<int, QList<QPair<int, int>>> GuiExcel::findMergeInfo(const QMap<int, QVariantList>& sheetData) {
     QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
     QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
     QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
 
+    QMap<int, QList<QPair<int, int>>> mergeInfo = QMap<int, QList<QPair<int, int>>>();
     QMapIterator<int, QVariantList> iter(sheetData);
     while (iter.hasNext()) {
         iter.next();
@@ -223,15 +232,77 @@ void GuiExcel::constructMergeInfo(const int& sheetIndex, const QMap<int, QVarian
             rowIndex++;
 
             if ((mergeRowStart >= 0) && (mergeRowEnd >= 0)) {
-                updateMergeInfo(sheetIndex, mergeColumnIndex, mergeRowStart, mergeRowEnd);
+                mergeInfo[mergeColumnIndex].append(QPair<int, int>(mergeRowStart, mergeRowEnd));
                 mergeRowStart = (-1);
                 mergeRowEnd = (-1);
             }
         }
     }
+    return mergeInfo;
+}
+
+void GuiExcel::constructMergeInfo(const int& sheetIndex, const QMap<int, QVariantList>& sheetData) {
+    QMap<int, QList<QPair<int, int>>> mergeInfo = findMergeInfo(sheetData);
+    QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
+    while (iter.hasNext()) {
+        iter.next();
+        int columnIndex = iter.key();
+        for (const auto& v : iter.value()) {
+            updateMergeInfo(false, sheetIndex, columnIndex, v.first, v.second);
+        }
+    }
+}
+
+void GuiExcel::constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart) {
+    QMapIterator<int, QList<QPair<int, int>>> iter(findMergeInfo(sheetData));
+
+    // qDebug() << "\t Start :" << rowStart << columnStart;
+    mMergeSplitInfo.clear();
+
+    while (iter.hasNext()) {
+        iter.next();
+        int mergeColumnIndex = iter.key();
+        for (const auto& v : iter.value()) {
+            int mergeRowStart = v.first;
+            int mergeRowEnd = v.second;
+            int splitColumnIndex = columnStart + mergeColumnIndex;
+            int splitRowStart = rowStart + mergeRowStart;
+            int splitRowEnd = mergeRowEnd;
+
+            mMergeSplitInfo[static_cast<int>(CellMergeSplit::ClearSpans)].insert(splitColumnIndex, splitRowStart, splitRowEnd);
+            mMergeSplitInfo[static_cast<int>(CellMergeSplit::SetSpan)].insert(mergeColumnIndex, mergeRowStart, mergeRowEnd);
+
+            // qDebug() << "\t\t Split :" << splitColumnIndex << splitRowStart << splitRowEnd;
+            // qDebug() << "\t\t Merge :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
+        }
+    }
+}
+
+void GuiExcel::updateDisplaySplitCell(const int& sheetIndex) {
+    if (mExcelSheet.size() == 0) {
+        qDebug() << "Fail to - excel sheet was not created";
+        return;
+    }
+
+    if (mExcelSheet[sheetIndex] == nullptr) {
+        qDebug() << "Fail to - excel sheet nullptr";
+        return;
+    }
+
+    mExcelSheet[sheetIndex]->clearSpans();
 }
 
 void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
+    if (mExcelSheet.size() == 0) {
+        qDebug() << "Fail to - excel sheet was not created";
+        return;
+    }
+
+    if (mExcelSheet[sheetIndex] == nullptr) {
+        qDebug() << "Fail to - excel sheet nullptr";
+        return;
+    }
+
     QMap<int, QList<QPair<int, int>>> mergeInfo = mMergeInfo[sheetIndex].isMergeInfo();
     QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
     while (iter.hasNext()) {
@@ -245,7 +316,7 @@ void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
                     // Merge Cell Text : Clear
                     mExcelSheet[sheetIndex]->setItem(clearRowIndex, mergeColumnIndex, new QTableWidgetItem(""));
                 }
-                // qDebug() << "\t UpdateMergeCell :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
+                qDebug() << "\t UpdateMergeCell :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
                 mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowEnd, 1);
             }
         }
@@ -310,7 +381,6 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
             mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(setText));
         }
     }
-
     constructMergeInfo(sheetIndex, newSheetData);
     updateDisplayMergeCell(sheetIndex);    // Draw - Merge Cell
 }
@@ -528,45 +598,7 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
         }
     }
 
-    mCopyMergeSplit.clear();
-
-    QMapIterator<int, QVariantList> iter(newSheetData);
-    while (iter.hasNext()) {
-        iter.next();
-        int rowIndex = 0;
-        int mergeColumnIndex = iter.key();
-        int mergeRowStart = (-1);
-        int mergeRowEnd = (-1);
-
-        for (const auto& v : iter.value()) {
-            QString readText = v.toString();
-            QStringList startText = readText.split(excelMergeTextStart.toString());
-            QStringList endText = readText.split(excelMergeTextEnd.toString());
-            QStringList mergeText = readText.split(excelMergeText.toString());
-
-            if (startText.size() == 2) {
-                mergeRowStart = rowIndex;
-                mergeRowEnd = (-1);
-            } else if (endText.size() == 2) {
-                mergeRowEnd = rowIndex - mergeRowStart + 1;
-            } else {
-            }
-            rowIndex++;
-
-            if ((mergeRowStart >= 0) && (mergeRowEnd >= 0)) {
-                int splitColumnIndex = columnStart + mergeColumnIndex;
-                int splitRowStart = rowStart + mergeRowStart;
-                int splitRowEnd = mergeRowEnd;
-
-                mCopyMergeSplit[CellMergeSplit::ClearSpans].insertMergeInfo(splitColumnIndex, splitRowStart, splitRowEnd);
-                mCopyMergeSplit[CellMergeSplit::SetSpan].insertMergeInfo(mergeColumnIndex, mergeRowStart, mergeRowEnd);
-
-                mergeRowStart = (-1);
-                mergeRowEnd = (-1);
-            }
-        }
-    }
-
+    constructMergeSplitInfo(newSheetData, rowStart, columnStart);
 
     mShortcutCutCellInfo.clear();
     if (cutState) {
@@ -577,18 +609,20 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     }
 }
 
-void GuiExcel::printMergeInfo() {
-    qDebug() << "\t ----------------------------------------------------------------------------";
-    for (ExcelSheet mergerInfo : mMergeInfo) {
+void GuiExcel::printMergeInfo(const bool& mergeSplit) {
+    qDebug() << "\t ****************************************************************************";
+    QMap<int, ExcelSheet> mInfo = (mergeSplit) ? (mMergeSplitInfo) : (mMergeInfo);
+    for (ExcelSheet mergerInfo : mInfo) {
         QMapIterator<int, QList<QPair<int, int>>> iter(mergerInfo.isMergeInfo());
         while (iter.hasNext()) {
             iter.next();
             for (const auto& info : iter.value()) {
-                qDebug() << "\t MergeInfo :" << iter.key() << info.first << info.second;
+                qDebug() << "\t Info :" << iter.key() << info.first << info.second;
             }
         }
+        qDebug() << "\t ----------------------------------------------------------------------------";
     }
-    qDebug() << "\t ----------------------------------------------------------------------------";
+    qDebug() << "\t ****************************************************************************";
 }
 
 void GuiExcel::pasteClipboardInfo() {
@@ -640,10 +674,12 @@ void GuiExcel::pasteClipboardInfo() {
     }
 
 
+    qDebug() << "\t ============================================================================";
+
+#if 0  // Cut Cell Clear
     bool cutToPate = false;
     if (mShortcutCutCellInfo.size() == 4) {
         cutToPate = true;
-#if 1  // Cut Cell Clear
         int clearRowStart = mShortcutCutCellInfo.at(0);
         int clearColumnStart = mShortcutCutCellInfo.at(1);
         int clearRowEnd = mShortcutCutCellInfo.at(2);
@@ -660,25 +696,29 @@ void GuiExcel::pasteClipboardInfo() {
             }
         }
         mShortcutCutCellInfo.clear();
-#endif
     }
 
-    qDebug() << "\t ============================================================================";
-    // printMergeInfo();
+    printMergeInfo(true);
+    if (cutToPate) {
+        QMapIterator<int, QList<QPair<int, int>>> iterSplit(mMergeSplitInfo[static_cast<int>(CellMergeSplit::ClearSpans)].isMergeInfo());
+        while (iterSplit.hasNext()) {
+            iterSplit.next();
+            for (const auto& info : iterSplit.value()) {
+                updateMergeInfo(true, sheetIndex, iterSplit.key(), info.first, info.second);
+                qDebug() << "\t Split :" << iterSplit.key() << info.first << info.second;
+            }
+        }
+        qDebug() << "\t ----------------------------------------------------------------------------";
+    }
+#endif
 
-    // QMapIterator<int, QList<QPair<int, int>>> iterSplit(mCopyMergeSplit[CellMergeSplit::ClearSpans].isMergeInfo());
-    // while (iterSplit.hasNext()) {
-    //     iterSplit.next();
-    //     for (const auto& info : iterSplit.value()) {
-    //         updateMergeInfo(sheetIndex, iterSplit.key(), info.first, info.second);
-    //         qDebug() << "\t Split :" << iterSplit.key() << info.first << info.second;
-    //     }
-    // }
-    // qDebug() << "\t ----------------------------------------------------------------------------";
+    qDebug() << "\t [MergeInfo]";
+    printMergeInfo(false);
 
-    printMergeInfo();
+    qDebug() << "\t [MergeSplitInfo]";
+    printMergeInfo(true);
 
-    QMapIterator<int, QList<QPair<int, int>>> iterMerge(mCopyMergeSplit[CellMergeSplit::SetSpan].isMergeInfo());
+    QMapIterator<int, QList<QPair<int, int>>> iterMerge(mMergeSplitInfo[static_cast<int>(CellMergeSplit::SetSpan)].isMergeInfo());
     while (iterMerge.hasNext()) {
         iterMerge.next();
         int mergeColumnIndex = columnStart + iterMerge.key();
@@ -686,16 +726,21 @@ void GuiExcel::pasteClipboardInfo() {
             int mergeRowStart = rowStart + info.first;
             int mergeRowEnd = info.second;
             // mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowEnd, 1);
-            updateMergeInfo(sheetIndex, mergeColumnIndex, mergeRowStart, mergeRowEnd);
+            updateMergeInfo(false, sheetIndex, mergeColumnIndex, mergeRowStart, mergeRowEnd);
             qDebug() << "\t\t Merge :" << mergeColumnIndex << mergeRowStart << mergeRowEnd;
         }
     }
     qDebug() << "\t ----------------------------------------------------------------------------";
 
-    printMergeInfo();
+    qDebug() << "\t [MergeInfo]";
+    printMergeInfo(false);
 
-    qDebug() << "\t ----------------------------------------------------------------------------";
+    qDebug() << "\t [MergeSplitInfo]";
+    printMergeInfo(true);
+
+    updateDisplaySplitCell(sheetIndex);
     updateDisplayMergeCell(sheetIndex);
+    qDebug() << "\t ----------------------------------------------------------------------------";
 }
 
 void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
@@ -753,7 +798,9 @@ void GuiExcel::updateDisplayShortcutInfo(const int& shortcutType) {
         if (columnSelectError) {
             createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
         } else {
-            updateMergeInfo(sheetIndex, columnStart, rowStart, rowEnd);
+            if (updateMergeInfo(false, sheetIndex, columnStart, rowStart, rowEnd)) {
+                updateDisplaySplitCell(sheetIndex);
+            }
             updateDisplayMergeCell(sheetIndex);    // Draw - Merge Cell
         }
     } else {
