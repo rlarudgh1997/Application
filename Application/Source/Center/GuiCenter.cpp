@@ -146,14 +146,18 @@ void GuiCenter::updateDisplayConfigInfo() {
         ivis::common::widgetVisible(mNodeAddressSearch, false);
 
         if (mConfigValue == configValue) {
-            for (const auto& item : mConfigListItem) { item->initStyle(); }
+            for (const auto& item : mConfigListItem) {
+                item->initStyle();
+            }
             return;
         }
     }
 
     bool newItem = (mConfigValue.size() != configValue.size());
     if (newItem) {
-        for (const auto& item : mConfigListItem) { item->clear(); }
+        for (const auto& item : mConfigListItem) {
+            item->clear();
+        }
         mConfigListItem.clear();
     }
 
@@ -170,12 +174,16 @@ void GuiCenter::updateDisplayConfigInfo() {
         QString realValue = QString();
         switch (value.type()) {
             case QVariant::Type::List: {
-                for (const auto& v : value.toList()) { realValue.append(QString("%1, ").arg(v.toString())); }
+                for (const auto& v : value.toList()) {
+                    realValue.append(QString("%1, ").arg(v.toString()));
+                }
                 realValue.resize(realValue.size() - 2);
                 break;
             }
             case QVariant::Type::StringList: {
-                for (const auto& v : value.toStringList()) { realValue.append(QString("%1, ").arg(v)); }
+                for (const auto& v : value.toStringList()) {
+                    realValue.append(QString("%1, ").arg(v));
+                }
                 realValue.resize(realValue.size() - 2);
                 break;
             }
@@ -393,7 +401,9 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
                     [=](const QList<QPair<int, QString>>& selectModule) {
                         mSelectModule->hide();
                         QVariantList moduleSelect = QVariantList();
-                        for (const auto& select : selectModule) { moduleSelect.append(QVariant(select.second)); }
+                        for (const auto& select : selectModule) {
+                            moduleSelect.append(QVariant(select.second));
+                        }
                         createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
                         // mSelectModule->finished(true);
                     });

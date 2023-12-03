@@ -225,7 +225,9 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
         }
     } else {
         int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
-        for (const auto& sheet : sheetName) { rowCount.append(rowMax); }
+        for (const auto& sheet : sheetName) {
+            rowCount.append(rowMax);
+        }
     }
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
@@ -311,7 +313,9 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     int writeSize = 0;
 
-    for (const auto& sheet : sheetName) { excelDataInfo[sheetIndex++] = getData(sheetIndex).toList(); }
+    for (const auto& sheet : sheetName) {
+        excelDataInfo[sheetIndex++] = getData(sheetIndex).toList();
+    }
 
     QStringList fileInfo = filePath.toString().split("/");
     QString savePath = QString();
@@ -400,7 +404,9 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
     qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
-    for (const auto& d : log) { qDebug() << "LogData  :" << d; }
+    for (const auto& d : log) {
+        qDebug() << "LogData  :" << d;
+    }
     qDebug() << "*************************************************************************************************\n";
 
     return dirPath;

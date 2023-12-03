@@ -115,7 +115,9 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         case ConfigInfo::ConfigTypeOtherTitle: {
             QStringList value = configValue.toString().split(", ");
             QVariantList list = QVariantList();
-            for (const auto& v : value) { list.append(v); }
+            for (const auto& v : value) {
+                list.append(v);
+            }
             editValue = QVariant(list);
             break;
         }

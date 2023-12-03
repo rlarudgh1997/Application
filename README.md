@@ -114,7 +114,7 @@
 	cd ${HOME}/900_Code/620_SFC
 	mkdir build
 	cd build
-	cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV
+	cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
 	sudo cmake --build . --target install -j8
 
 - Validator 빌드

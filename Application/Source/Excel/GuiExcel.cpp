@@ -382,7 +382,7 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
         }
     }
     constructMergeInfo(sheetIndex, newSheetData);
-    updateDisplayMergeCell(sheetIndex);    // Draw - Merge Cell
+    updateDisplayMergeCell(sheetIndex);  // Draw - Merge Cell
 }
 
 void GuiExcel::updateDisplayExcelSheet() {
@@ -400,7 +400,9 @@ void GuiExcel::updateDisplayExcelSheet() {
         mExcelSheet.clear();
         mMainView->clear();
 
-        for (const auto& action : mMenuActionItem) { delete action; }
+        for (const auto& action : mMenuActionItem) {
+            delete action;
+        }
         mMenuActionItem.clear();
         mMenuRight->clear();
 
@@ -502,9 +504,7 @@ void GuiExcel::updateDisplayExcelSheet() {
         sheetIndex++;
     }
 
-    connect(mMainView, &QTabWidget::currentChanged, [=](int index) {
-        mCurrentSheetIndex = index;
-    });
+    connect(mMainView, &QTabWidget::currentChanged, [=](int index) { mCurrentSheetIndex = index; });
 
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
@@ -580,7 +580,7 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     int columnMax = (columnStart + columnEnd);
 
     qDebug() << "\t Copy/Cut Index :" << sheetIndex << ", Info :" << rowStart << columnStart << rowEnd << columnEnd << ","
-            << rowMax << columnMax;
+             << rowMax << columnMax;
 
     QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
     QString clipboardData = QString();
@@ -672,7 +672,6 @@ void GuiExcel::pasteClipboardInfo() {
             mExcelSheet[sheetIndex]->setItem(itemRowIndex, itemColumnIndex, new QTableWidgetItem(setText));
         }
     }
-
 
     qDebug() << "\t ============================================================================";
 
@@ -801,7 +800,7 @@ void GuiExcel::updateDisplayShortcutInfo(const int& shortcutType) {
             if (updateMergeInfo(false, sheetIndex, columnStart, rowStart, rowEnd)) {
                 updateDisplaySplitCell(sheetIndex);
             }
-            updateDisplayMergeCell(sheetIndex);    // Draw - Merge Cell
+            updateDisplayMergeCell(sheetIndex);  // Draw - Merge Cell
         }
     } else {
         qDebug() << "Fail to menu right selection action item";

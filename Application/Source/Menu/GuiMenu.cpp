@@ -476,7 +476,9 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 
         connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
             QVariantList moduleSelect = QVariantList();
-            for (const auto& select : selectModule) { moduleSelect.append(QVariant(select.second)); }
+            for (const auto& select : selectModule) {
+                moduleSelect.append(QVariant(select.second));
+            }
             updateDisplaySelectPT(runType, moduleSelect);
         });
         connect(mSelectModule, &QDialog::finished, [=]() {
@@ -548,13 +550,17 @@ void GuiMenu::updateDisplayTestResultInfo() {
     mProgressBar->setValue(current);
 
     QString titleInfo = QString();
-    for (const auto& info : testResultInfo.at(1).toList()) { titleInfo.append(info.toString() + "\n"); }
+    for (const auto& info : testResultInfo.at(1).toList()) {
+        titleInfo.append(info.toString() + "\n");
+    }
     QString errorInfo = QString();
     if (testResultInfo.at(1).toList().size() == 2) {
         errorInfo = testResultInfo.at(1).toList().at(1).toString();
     }
     QString moduleStateInfo = QString();
-    for (const auto& info : testResultInfo.at(2).toList()) { moduleStateInfo.append(info.toString() + "\n"); }
+    for (const auto& info : testResultInfo.at(2).toList()) {
+        moduleStateInfo.append(info.toString() + "\n");
+    }
 
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
@@ -634,7 +640,9 @@ void GuiMenu::updateDisplayTestReport() {
                     QVariantList reportInfo = QVariantList();
                     reportInfo.append(testReportType);
                     reportInfo.append(state);
-                    for (const auto& option : options) { reportInfo.append(option.second); }
+                    for (const auto& option : options) {
+                        reportInfo.append(option.second);
+                    }
                     createSignal(ivis::common::EventTypeEnum::EventTypeRunTestReport, reportInfo);
                     mTestReport->hide();
                     mTestReport->finished(true);

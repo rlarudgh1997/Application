@@ -435,7 +435,9 @@ public:
         // join();
     }
     void setLibInfo(const QStringList& libInfo) {
-        for (const auto info : libInfo) { mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false); }
+        for (const auto info : libInfo) {
+            mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false);
+        }
     }
     void check() {
         this->moveToThread(mThread);
@@ -471,7 +473,9 @@ private:
         }
         QStringList readDataList = FileInfo::readFile(filePath);
         QString readData = QString();
-        for (const auto& data : readDataList) { readData.append(data); }
+        for (const auto& data : readDataList) {
+            readData.append(data);
+        }
         for (const auto& info : mCheckInfo) {
             emit signalCheckLibResult(info.first, readData.contains(info.first, Qt::CaseInsensitive));
         }
