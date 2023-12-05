@@ -107,52 +107,23 @@ void ControlExcel::timerFunc(const int& timerId) {
 }
 
 void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
-#if 1
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
-#else
-    static bool shortcutCtrl = false;
 
     if (inputType == ivis::common::KeyTypeEnum::KeyInputTypePress) {
-        // if (inputValue == Qt::Key_Control) {
-        //     shortcutCtrl = true;
-        // }
+        updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, (inputValue == Qt::Key_Control));
     } else if (inputType == ivis::common::KeyTypeEnum::KeyInputTypeRelease) {
-        switch (inputValue) {
-#if defined(PLATFORM_X86)
-            case ivis::common::KeyTypeEnum::KeyInputValueNumOK:
-            case ivis::common::KeyTypeEnum::KeyInputValueNumOK2:
-#endif
-            case ivis::common::KeyTypeEnum::KeyInputValueOK: {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 0, true);
-                break;
-            }
-            case Qt::Key_Escape: {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 2, true);
-                break;
-            }
-            case Qt::Key_F2: {
-                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoComplete, 1, true);
-                break;
-            }
-            case Qt::Key_I:
-            case Qt::Key_D:
-            case Qt::Key_M:
-            case Qt::Key_S: {
-                if (shortcutCtrl) {
-                    qDebug() << "ShortcutKey :" << inputValue;
-                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, inputValue, true);
-                }
-                break;
-            }
-            default: {
-                break;
-            }
+        if (getData(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip).toBool()) {
+            return;
         }
-        shortcutCtrl = false;
-    } else {
+
+        if (inputValue == Qt::Key_Control) {
+            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, false);
+        } else if ((inputValue >= Qt::Key_A) && (inputValue <= Qt::Key_Z)) {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKey, inputValue, true);
+        } else {
+        }
     }
-#endif
 }
 
 void ControlExcel::resizeEvent(const int& width, const int& height) {

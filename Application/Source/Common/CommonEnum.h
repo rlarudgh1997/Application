@@ -105,6 +105,8 @@ public:
         PropertyTypeClipboardType,
         PropertyTypeShortcutType,
         PropertyTypeTestReport,
+        PropertyTypeKey,
+        PropertyTypeKeySkip,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -274,7 +276,7 @@ public:
         Merge,
         Split,
     };
-    enum class AutoComplete {
+    enum AutoComplete {
         Draw = 0,
         Update,
         Show,
