@@ -84,22 +84,15 @@ void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
 }
 
 void ScreenInfo::captureScreen(const QRect& rect) {
-#define PWD QApplication::applicationDirPath().toLatin1().data()
-#define DATE_TIME QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")).arg(QTime::currentTime().msec())
-
-#define SCREENSHOT_SAVE_NAME "/CaptureScreen_"
-#define FILE_EXTENSION_JPG ".jpg"
-#define FILE_EXTENSION_PNG ".png"
-#define FILE_EXTENSION_BMP ".bmp"
-
     // QWindowList windowList = qApp->allWindows();
     QRect screenRect = (rect.isNull()) ? (mRootScreen->geometry()) : (rect);
     QScreen* screen = QGuiApplication::screens()[0];
     QPixmap pixmap = screen->grabWindow(0, screenRect.x(), screenRect.y(), screenRect.width(), screenRect.height());
-    QString savePath = QString(PWD);
-    savePath.append(SCREENSHOT_SAVE_NAME);
-    savePath.append(DATE_TIME);
-    savePath.append(FILE_EXTENSION_PNG);
+    QString savePath = QString(QApplication::applicationDirPath().toLatin1().data());
+    savePath.append("/CaptureScreen_");
+    savePath.append(
+        QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyMMdd_hhmmss")).arg(QTime::currentTime().msec()));
+    savePath.append(".png");
 
     if (pixmap.save(savePath, nullptr, 100)) {
         qDebug() << "CaptrueScreen - OK ->" << savePath;
@@ -138,8 +131,8 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
         // result = true;
     }
 
-    qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
-             << ")->LanguageChange :" << ((result) ? ("Sucess") : ("Fail")) << "!!!!!!!\n\n\n\n";
+    // qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
+    //          << ")->LanguageChange :" << ((result) ? ("Sucess") : ("Fail")) << "!!!!!!!\n\n\n\n";
     return result;
 }
 
@@ -161,6 +154,6 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
 }
 
 void ScreenInfo::loadComplete(const int& displayType) {
-    qDebug() << "ScreenInfo::loadComplete(" << displayType << ")";
+    // qDebug() << "ScreenInfo::loadComplete(" << displayType << ")";
     emit signalLoadComplete(displayType);
 }

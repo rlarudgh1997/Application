@@ -106,7 +106,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
         columnStart = readIndexInfo.at(1).toInt();
         rowMax = readIndexInfo.at(2).toInt();
         columnMax = readIndexInfo.at(3).toInt();
-        qDebug() << "Read Cell Info :" << rowStart << columnStart << rowMax << columnMax;
+        // qDebug() << "Read Cell Info :" << rowStart << columnStart << rowMax << columnMax;
     }
 
     // Read Row Data
@@ -116,8 +116,9 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     for (int rowIndex = rowStart; rowIndex < rowMax; rowIndex++) {
         QStringList rowData = QStringList();
         for (int columnIndex = columnStart; columnIndex < columnMax; columnIndex++) {
-            QString readText = ((mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)) ?
-                                (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text()) : (QString()));
+            QString readText = ((mExcelSheet[sheetIndex]->item(rowIndex, columnIndex))
+                                    ? (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text())
+                                    : (QString()));
             QString text = readText;
 
             if (rowData.size() > 0) {
@@ -142,9 +143,9 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
             }
             rowData.append(text);
 
-            if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
-                qDebug() << "ReadText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << "] :" << text;
-            }
+            // if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
+            //     qDebug() << "ReadText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << "] :" << text;
+            // }
         }
         sheetData.append(rowData);
         allString.append("\n");
@@ -388,7 +389,7 @@ void GuiExcel::updateInitialExcelSheet() {
         mClearMergeInfo.clear();
         mClearCellInfo.clear();
 
-        qDebug() << "\t ExcelSheet : Clear";
+        // qDebug() << "\t ExcelSheet : Clear";
     }
 }
 
@@ -430,8 +431,6 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         }
     }
 #endif
-
-    qDebug() << "Sheet :" << sheetIndex << row << column << ", KeyValue :" << keyValue;
 
     if (mExcelSheet[sheetIndex]->item(row, column)) {
         if (mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column)) == false) {
@@ -534,9 +533,8 @@ void GuiExcel::updateDisplayExcelSheet() {
         sheetIndex++;
     }
 
-    connect(mMainView, &QTabWidget::currentChanged, [=](int index) {
-        mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + index;
-    });
+    connect(mMainView, &QTabWidget::currentChanged,
+            [=](int index) { mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + index; });
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
@@ -808,8 +806,8 @@ void GuiExcel::updateDisplayShortcutInfo(const int& shortcutType) {
     int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
     int rowCount = mExcelSheet[sheetIndex]->rowCount();
 #endif
-    qDebug() << "updateDisplayShortcutInfo : Index :" << sheetIndex << ", RowColumn :" << columnStart << rowStart << rowEnd
-             << columnEnd << ", RowCount :" << rowCount;
+    // qDebug() << "updateDisplayShortcutInfo : Index :" << sheetIndex << ", RowColumn :" << columnStart << rowStart << rowEnd
+    //          << columnEnd << ", RowCount :" << rowCount;
 
     if ((shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert) ||
         (shortcutType == ivis::common::ShortcutTypeEnum::ShortcutTypeDelete)) {

@@ -50,10 +50,16 @@ public:
         updateSuggestionsList(QString());
 
         connect(mInputeText, &QLineEdit::textChanged, [=](const QString& text) { updateSuggestionsList(text); });
-        connect(mInputeText, &QLineEdit::returnPressed, [=]() { emit signalAutoCompleteSelectedText(inputText()); });
+        connect(mInputeText, &QLineEdit::returnPressed, [=]() {
+            QString text = inputText();
+            emit signalAutoCompleteSelectedText(text);
+        });
         connect(mSuggestionsList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
-            mInputeText->clear();
-            emit signalAutoCompleteSelectedText(item->text());
+            if (item) {
+                QString text = item->text();
+                emit signalAutoCompleteSelectedText(text);
+                mInputeText->clear();
+            }
         });
     }
     QString inputText() {
@@ -122,6 +128,16 @@ public:
         }
         return false;
     }
+    bool isContains(const int& columnIndex, const int& rowStart) {
+        if (mInfo.contains(columnIndex)) {
+            for (const auto& v : mInfo[columnIndex]) {
+                if (v.first == rowStart) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     void insert(const int& columnIndex, const int& rowStart, const int& rowEnd) {
         mInfo[columnIndex].append(QPair<int, int>(rowStart, rowEnd));
     }
@@ -134,10 +150,10 @@ public:
             int currColumnIndex = iter.key();
             for (const auto& v : iter.value()) {
                 if ((currColumnIndex == columnIndex) && (rowStart == v.first) && (rowEnd == v.second)) {
-                    qDebug() << "\t\t 3. Erase Merge Cell :" << currColumnIndex << rowStart<< rowEnd;
+                    // qDebug() << "\t\t 3. Erase Merge Cell :" << currColumnIndex << rowStart<< rowEnd;
                     continue;
                 }
-                qDebug() << "\t\t 4. Append Merge Cell :" << currColumnIndex << v.first<< v.second;
+                // qDebug() << "\t\t 4. Append Merge Cell :" << currColumnIndex << v.first<< v.second;
                 insert(currColumnIndex, v.first, v.second);
             }
         }

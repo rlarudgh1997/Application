@@ -466,7 +466,7 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 }
 
 void GuiMenu::updateDisplaySelectModule(const int& runType) {
-    qDebug() << "updateDisplaySelectModule :" << runType;
+    // qDebug() << "updateDisplaySelectModule :" << runType;
     if (mSelectModule == nullptr) {
         QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
         QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);

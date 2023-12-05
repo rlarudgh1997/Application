@@ -131,7 +131,7 @@ void GuiCenter::updateDisplayViewType(const int& viewType, T* widget) {
 
 void GuiCenter::updateDisplayConfigInfo() {
     QVariantList configValue = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << mConfigValue.size() << "," << configValue.size();
+    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << mConfigValue.size() << "," << configValue.size();
 
     if (mConfigWidget == nullptr) {
         return;
@@ -224,7 +224,7 @@ void GuiCenter::updateDisplayConfigInfo() {
 }
 
 void GuiCenter::updateDisplayTestReport() {
-    qDebug() << "GuiCenter::updateDisplayTestReport()";
+    // qDebug() << "GuiCenter::updateDisplayTestReport()";
 
     if (mReportWidget == nullptr) {
         return;
@@ -300,7 +300,7 @@ void GuiCenter::updateDisplayTestReport() {
 
 void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
-    qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
+    // qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
 
     if (mNodeAddress == nullptr) {
         return;
