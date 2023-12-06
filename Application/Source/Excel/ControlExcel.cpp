@@ -57,20 +57,7 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd,
                       ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeTextEnd));
 
-    QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
-    QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
-    QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
-    QStringList vsmListTemp = vsmList;
-    vsmList.clear();
-    for (const auto& vsm : vsmListTemp) {
-        QStringList temp = vsm.split("\t");
-        vsmList.append(temp[0]);
-    }
-
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, sfcList, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
-
+    updateNodeAddress(true, QStringList(), QStringList());
 #if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)  // Firt Booting : new excel sheet
     updateExcelSheet(false, QVariant());
 #endif
@@ -150,6 +137,54 @@ void ControlExcel::sendEventInfo(const int& destination, const int& eventType, c
                                                      destination, eventType, eventValue);
 }
 
+void ControlExcel::updateNodeAddress(const bool& all, const QStringList& privateList, const QStringList& interList) {
+    if (all) {
+        QVariant nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath);
+        QStringList sfcList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressSFC.info");
+        QStringList vsmList = ivis::common::FileInfo::readFile(nodeAddressPath.toString() + "/NodeAddressVSM.info");
+        QStringList vsmListTemp = vsmList;
+        vsmList.clear();
+        for (const auto& vsm : vsmListTemp) {
+            QStringList temp = vsm.split("\t");
+            vsmList.append(temp[0]);
+        }
+
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, sfcList, true);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
+    }
+
+    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
+    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
+    QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    QString prefixText = QString("[Sheet]");
+    QMap<int, QStringList> nodeAddres = QMap<int, QStringList>();
+    nodeAddres[ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate] = privateList;
+    nodeAddres[ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter] = interList;
+
+    QMapIterator<int, QStringList> iter(nodeAddres);
+    while (iter.hasNext()) {
+        iter.next();
+        int propertyType = iter.key();
+        QStringList dataList = QStringList();
+        for (const auto& infoData : iter.value()) {
+            QStringList startText = infoData.split(excelMergeTextStart.toString());
+            if (startText.size() == 2) {
+                dataList.append(QString("%1%2").arg(prefixText).arg(startText.at(1)));
+            } else {
+                QStringList endText = infoData.split(excelMergeTextEnd.toString());
+                QStringList mergeText = infoData.split(excelMergeText.toString());
+                if (endText.size() == 2) {
+                } else if (mergeText.size() == 2) {
+                } else {
+                    dataList.append(QString("%1%2").arg(prefixText).arg(infoData));
+                }
+            }
+        }
+        updateDataHandler(propertyType, dataList, true);
+    }
+}
+
 void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPath) {
     qDebug() << "ControlExcel::updateExcelSheet() ->" << excelOpen << "," << dirPath;
 
@@ -157,6 +192,8 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
     QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
     QStringList otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
     QVariantList rowCount = QVariantList();
+    QStringList privateList = QStringList();
+    QStringList interList = QStringList();
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, sheetName);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, descTitle);
@@ -171,7 +208,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
             QStringList readData = ivis::common::FileInfo::readFile(filePath);
 
             for (int rowIndex = 0; rowIndex < readData.size(); rowIndex++) {
-                if (rowIndex <= 1) {
+                if (rowIndex < 2) {
                     // RowIndex 0 : column 인덱스 정보
                     // RowIndex 1 : title(desc, other) 정보
                     continue;
@@ -179,13 +216,25 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                 QStringList rowDataList = readData[rowIndex].split("\t");
                 // qDebug() << "rowDataList :" << rowDataList.size() << "," << rowDataList;
                 sheetData.append(rowDataList);
+
+                // Sheet : Privates, Inters -> 자동 완성 리스트 구성
+                if (rowDataList.size() < 2) {
+                    continue;
+                }
+                if (sheet.compare("Privates") == false) {
+                    privateList.append(rowDataList.at(0));
+                } else if (sheet.compare("Inters") == false) {
+                    interList.append(rowDataList.at(0));
+                } else {
+                }
             }
             rowCount.append(sheetData.size());
-            updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + sheetIndex++), sheetData);
+            updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + sheetIndex), sheetData);
 
             // qDebug() << "File Open :" << filePath << ", Length :" << sheetData.size();
             // qDebug() << sheet << ":" << sheetData;
             // qDebug() << "==================================================================================================\n";
+            sheetIndex++;
         }
 
         // Delete : Folder(TC)
@@ -201,6 +250,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
         }
     }
 
+    updateNodeAddress(false, privateList, interList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
 }
@@ -563,6 +613,23 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeEditExcelSheet: {
+            QVariantList nodeAddress = value.toList();
+            if (nodeAddress.size() == 2) {
+                // qDebug() << "SheetIndex :" << nodeAddress.at(0);
+                // qDebug() << "Data :" << nodeAddress.at(1);
+                QStringList privateList = QStringList();
+                QStringList interList = QStringList();
+                int sheetIndex = nodeAddress.at(0).toInt();
+                if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates) {
+                    privateList = nodeAddress.at(1).toStringList();
+                    interList = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter).toStringList();
+                } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters) {
+                    privateList = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate).toStringList();
+                    interList = nodeAddress.at(1).toStringList();
+                } else {
+                }
+                updateNodeAddress(false, privateList, interList);
+            }
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
             break;
         }

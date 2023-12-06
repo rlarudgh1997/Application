@@ -80,6 +80,8 @@ public:
         PropertyTypeNodeAddressAll,
         PropertyTypeNodeAddressSFC,
         PropertyTypeNodeAddressVSM,
+        PropertyTypeNodeAddressPrivate,
+        PropertyTypeNodeAddressInter,
         PropertyTypeNodeAddressModule,
         PropertyTypeAllModuleList,
         PropertyTypeUpdateSelectModule,

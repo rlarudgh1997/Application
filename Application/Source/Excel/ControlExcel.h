@@ -16,6 +16,7 @@ public:
 private:
     explicit ControlExcel();
 
+    void updateNodeAddress(const bool& all, const QStringList& privateList, const QStringList& interList);
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath);
     bool writeExcelFile(const QVariant& filePath);

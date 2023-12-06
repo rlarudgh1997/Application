@@ -480,9 +480,25 @@ void GuiExcel::updateDisplayExcelSheet() {
 
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
             QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
-            // qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
-            createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
-                         QVariant(QVariantList({sheetIndex, column, row, text})));
+            qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
+
+            QVariantList editSheetInfo = QVariantList();
+            if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates)
+                || (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters)) {
+                QString allString = QString();
+                QVariantList nodeAddress = QVariantList();
+                for (const auto& data : readExcelSheet(sheetIndex, QVariantList(), allString)) {
+                    QVariantList rowLineData = data.toList();
+                    if (rowLineData.size() > 0) {
+                        nodeAddress.append(rowLineData.at(0));
+                    }
+                }
+                if (nodeAddress.size() > 0) {
+                    nodeAddress.removeAt(0);    // nodeAddress[0] = "TCName" -> 필요없음
+                }
+                editSheetInfo = QVariantList({sheetIndex, QVariant(nodeAddress)});
+            }
+            createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant(editSheetInfo));
             updateDisplaySheetHeaderAdjust(sheetIndex);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
@@ -541,19 +557,24 @@ void GuiExcel::updateDisplayExcelSheet() {
 void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
     qDebug() << "updateDisplayAutoComplete :" << show << sheetIndex << rowIndex << columnIndex;
 
-    if (mAutoComplete == nullptr) {
+    QStringList list = QStringList();
 #if 0  // 자동완성 동작 조건 처리
-        QStringList list = QStringList();
-        if (columnIndex == 5) {
-            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();
-        } else if (columnIndex == 9) {
-            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList();
-        } else {
-            list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-        }
+    if (columnIndex == 5) {
+        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();
+    } else if (columnIndex == 9) {
+        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList();
+    } else {
+        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+    }
 #else
-        QStringList list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
+    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter).toStringList());
 #endif
+
+    if (mAutoComplete == nullptr) {
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("AutoComplete"), list);
         connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
             if (mSelectItem) {
@@ -570,6 +591,7 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
     }
 
     if (show) {
+        mAutoComplete->setAutoCompleteStringList(list);
         mAutoComplete->show();
         if (mSelectItem) {
             mAutoComplete->setInputText(mSelectItem->text());
@@ -836,8 +858,7 @@ void GuiExcel::updateDisplayShortcutInfo(const int& shortcutType) {
         return;
     }
 
-    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet,
-                 QVariant(QVariantList({sheetIndex, columnStart, rowStart, rowEnd})));
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant());
     updateDisplaySheetHeaderAdjust(sheetIndex);
 }
 
