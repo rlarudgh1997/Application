@@ -30,6 +30,7 @@ enum class PopupType {
     SelectCellColumnError,
 
     Exit,
+    New,
     NoInstallLib,
     FileNotExist,
 
@@ -77,6 +78,7 @@ public:
                 break;
             }
             case PopupType::Exit:
+            case PopupType::New:
             case PopupType::NoInstallLib:
             case PopupType::FileNotExist: {
                 button = drawPopupSelect(popupType, handler, value);
@@ -162,7 +164,7 @@ private:
             button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
             connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-        } else if ((popupType == PopupType::FileNotExist) && (list.size() == 4)) {
+        } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist)) && (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
             button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);

@@ -148,7 +148,6 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& private
             QStringList temp = vsm.split("\t");
             vsmList.append(temp[0]);
         }
-
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, sfcList, true);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
@@ -174,8 +173,7 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& private
             } else {
                 QStringList endText = infoData.split(excelMergeTextEnd.toString());
                 QStringList mergeText = infoData.split(excelMergeText.toString());
-                if (endText.size() == 2) {
-                } else if (mergeText.size() == 2) {
+                if ((endText.size() == 2) || (mergeText.size() == 2)) {
                 } else {
                     dataList.append(QString("%1%2").arg(prefixText).arg(infoData));
                 }
@@ -485,6 +483,18 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
 void ControlExcel::loadExcelFile(const int& eventType) {
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeFileNew: {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
+                qDebug() << "Because the contents of Excel are changing, a new Excel is not created.";
+
+                ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+                QVariantList text = QVariantList(
+                    {STRING_POPUP_EXCEL_EDIT, STRING_POPUP_EXCEL_EDIT_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
+                QVariant popupData = QVariant();
+                button = ivis::common::Popup::drawPopup(ivis::common::PopupType::New, isHandler(), popupData, QVariant(text));
+                if (button != ivis::common::PopupButton::Cancel) {
+                    return;
+                }
+            }
             updateExcelSheet(false, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
@@ -615,8 +625,6 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeEditExcelSheet: {
             QVariantList nodeAddress = value.toList();
             if (nodeAddress.size() == 2) {
-                // qDebug() << "SheetIndex :" << nodeAddress.at(0);
-                // qDebug() << "Data :" << nodeAddress.at(1);
                 QStringList privateList = QStringList();
                 QStringList interList = QStringList();
                 int sheetIndex = nodeAddress.at(0).toInt();

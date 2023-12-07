@@ -78,9 +78,7 @@
 #define STRING_ABOUT_TIP QString("Show the application's About box")
 #define STRING_POPUP_ABOUT QString("About Application")
 #define STRING_POPUP_ABOUT_TIP \
-    QString(                   \
-        "This <b>Application</b> is a program for <b>SFC Test</b> \
-                                                            (Excel conversion, parsing, sfc test, etc.)")
+    QString("This <b>Application</b> is a program for <b>SFC Test</b> (Excel conversion, parsing, sfc test, etc.)")
 #define STRING_ABOUT_QT QString("About Qt")
 #define STRING_ABOUT_QT_TIP QString("Show the Qt library's About box")
 #define STRING_FILE_OPEN QString("File Open")
@@ -101,10 +99,7 @@
 #define STRING_POPUP_NO_INSTALL_LIB_TIP QString("Python-related libraries are not installed.")
 #define STRING_POPUP_NOW_INSTALLING_TIP QString("Python-related libraries are being installed.")
 #define STRING_POPUP_INSTALL_COMPLETE_TIP QString("Python-related libraries have been installed.")
-#define STRING_POPUP_CELL_COLUMN_TIP \
-    QString(                         \
-        "Cell selection for merge/split is incorrect. \
-                                                            Please select again.")
+#define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect. Please select again.")
 
 #define STRING_POPUP_FILE_NOT_EXIST QString("File doesn't exist")
 #define STRING_POPUP_FILE_NOT_EXIST_TIP QString("VSM file not found. Do you want to set vsm path?")
@@ -118,6 +113,8 @@
 #define STRING_POPUP_TC_REPORT_TIP QString("TC report view value is not set.")
 #define STRING_POPUP_GCOV_REPORT QString("Gcov report error")
 #define STRING_POPUP_GCOV_REPORT_TIP QString("Gcov report view value is not set.")
+#define STRING_POPUP_EXCEL_EDIT QString("Editing Excel file")
+#define STRING_POPUP_EXCEL_EDIT_TIP QString("Would you like to create a new Excel sheet?")
 
 // =============================================================================================================
 // Image Define
