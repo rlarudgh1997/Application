@@ -78,36 +78,36 @@ private:                                                                        
 
 template <typename T>
 inline void LIMIT(T& value, T min, T max) {
-    (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
+    value = (value < min) ? (min) : ((value >= max) ? (max - 1) : (value));
 }
 
 template <typename T>
 inline void LIMIT_P(T& value, T gap, T min, T max) {
     value += gap;
-    (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
+    LIMIT(value, min, max);
 }
 
 template <typename T>
 inline void LIMIT_M(T& value, T gap, T min, T max) {
     value -= gap;
-    (value) = ((value) < (min)) ? (min) : (((value) > (max)) ? (max) : (value));
+    LIMIT(value, min, max);
 }
 
 template <typename T>
 inline void REVOLVE(T& value, T min, T max) {
-    (value) = ((value) < (min)) ? (max) : ((value > (max)) ? (min) : (value));
+    value = (value < min) ? (max - 1) : ((value >= max) ? (min) : (value));
 }
 
 template <typename T>
 inline void REVOLVE_P(T& value, T gap, T min, T max) {
     value += gap;
-    (value) = ((value) < (min)) ? (max) : ((value > (max)) ? (min) : (value));
+    REVOLVE(min, max);
 }
 
 template <typename T>
 inline void REVOLVE_M(T& value, T gap, T min, T max) {
     value -= gap;
-    (value) = ((value) < (min)) ? (max) : ((value > (max)) ? (min) : (value));
+    REVOLVE(min, max);
 }
 
 template <typename T1, typename T2, typename T3>

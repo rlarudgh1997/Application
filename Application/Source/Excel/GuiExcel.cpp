@@ -418,27 +418,26 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         return;
     }
 
-    int row = (mExcelSheet[sheetIndex]->currentRow() < 0) ? (0) : (mExcelSheet[sheetIndex]->currentRow());
-    int column = (mExcelSheet[sheetIndex]->currentColumn() < 0) ? (0) : (mExcelSheet[sheetIndex]->currentColumn());
+    bool inputKeyOK = (keyValue == ivis::common::KeyTypeEnum::KeyInputValueOK);
+    int row = mExcelSheet[sheetIndex]->currentRow();
+    int column = mExcelSheet[sheetIndex]->currentColumn();
+    int rowMax = mExcelSheet[sheetIndex]->rowCount();
+    ivis::common::LIMIT(row, 0, rowMax);
+    ivis::common::LIMIT(column, 0, mExcelSheet[sheetIndex]->columnCount());
 
-#if 0
-    qDebug() << "Sheet :" << sheetIndex << row << column << ", KeyValue :" << keyValue;
-    if (keyValue == ivis::common::KeyTypeEnum::KeyInputValueOK) {
-        if (mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column)) == false) {
-            int rowMax = mExcelSheet[sheetIndex]->rowCount();
-            ivis::common::LIMIT_P(row, 1, 0, rowMax);
-            qDebug() << "Move Cell :" << row << column;
-            mExcelSheet[sheetIndex]->setCurrentCell(row, column);
-            // return;
-        }
+    bool editState = mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column));
+    // qDebug() << "editState :" << editState << ", inputKeyOK :" << inputKeyOK;
+
+    if ((editState) && (inputKeyOK)) {
+        mExcelSheet[sheetIndex]->closePersistentEditor(mExcelSheet[sheetIndex]->item(row, column));
+    } else if ((editState == false) && (inputKeyOK == false)) {
+        mExcelSheet[sheetIndex]->openPersistentEditor(mExcelSheet[sheetIndex]->item(row, column));
+    } else {
     }
-#endif
 
-    if (mExcelSheet[sheetIndex]->item(row, column)) {
-        if (mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column)) == false) {
-            mExcelSheet[sheetIndex]->openPersistentEditor(mExcelSheet[sheetIndex]->item(row, column));
-            // mExcelSheet[sheetIndex]->editItem(mExcelSheet[sheetIndex]->item(row, column));
-        }
+    if (inputKeyOK) {
+        ivis::common::LIMIT_P(row, 1, 0, rowMax);
+        mExcelSheet[sheetIndex]->setCurrentCell(row, column);
     }
 }
 
@@ -516,7 +515,7 @@ void GuiExcel::updateDisplayExcelSheet() {
                 qDebug() << "Fail to menu right selection action item";
                 return;
             }
-            updateDisplayCellEdit(shortcutType);
+            updateDisplayEditCell(shortcutType);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
             if (((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) && (column != 3)) ||
@@ -625,7 +624,7 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     int columnEnd = modelIndexs.last().column() - columnStart + 1;
     int columnMax = (columnStart + columnEnd);
 
-    // qDebug() << "\t Copy/Cut Index :" << sheetIndex << ", Info :" << rowStart << columnStart << rowEnd << columnEnd << ","
+    // qDebug() << "\t Copy/Cut Sheet[" << sheetIndex << "] - Index :" << rowStart << columnStart << rowEnd << columnEnd << ","
     //          << rowMax << columnMax;
 
     QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
@@ -721,7 +720,6 @@ void GuiExcel::pasteClipboardInfo() {
     int rowCount = clipboardData.size() + rowStart;  // Row : 0(Header), 1 ~ Count(Item)
 
     if (rowCount >= rowMax) {
-        // qDebug() << "\t Incress Row :" << rowStart << rowCount << rowMax;
         mExcelSheet[sheetIndex]->setRowCount(rowCount);
     }
 
@@ -804,43 +802,48 @@ void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
     }
 }
 
-void GuiExcel::updateDisplayCellEdit(const int& editType) {
+void GuiExcel::updateDisplayReceiveKeyFocus() {
+    int sheetIndex = mCurrentSheetIndex;
+    if (chcekExcleSheet(sheetIndex)) {
+        return;
+    }
+
+    mExcelSheet[sheetIndex]->setFocus();  // Sheet 활성화 상태에서 화면 전화시 focus 설정 되도록
+}
+
+void GuiExcel::updateDisplayEditCell(const int& editType) {
     int sheetIndex = mCurrentSheetIndex;
     if (chcekExcleSheet(sheetIndex)) {
         return;
     }
 
     QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    bool selectInvalid = (modelIndexs.size() == 0);
-#if 1
-    int columnStart = (selectInvalid) ? (1) : (modelIndexs.at(0).column());
-    int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-    int rowStart = (selectInvalid) ? (0) : (modelIndexs.at(0).row());
-    int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-    int rowCount = mExcelSheet[sheetIndex]->rowCount();
-#else
-    int columnStart = (selectInvalid) ? (mExcelSheet[sheetIndex]->currentColumn()) : (modelIndexs.at(0).column());
-    int columnEnd = (selectInvalid) ? (1) : (modelIndexs.last().column() - columnStart + 1);
-    int rowStart = (selectInvalid) ? (mExcelSheet[sheetIndex]->currentRow()) : (modelIndexs.at(0).row());
-    int rowEnd = (selectInvalid) ? (1) : (modelIndexs.last().row() - rowStart + 1);
-    int rowCount = mExcelSheet[sheetIndex]->rowCount();
-#endif
-    // qDebug() << "updateDisplayCellEdit : Index :" << sheetIndex << ", RowColumn :" << columnStart << rowStart << rowEnd
-    //          << columnEnd << ", RowCount :" << rowCount;
+    int selectCellCount = modelIndexs.size();
+    int rowStart = (selectCellCount == 0) ? (mExcelSheet[sheetIndex]->currentRow()) : (modelIndexs.at(0).row());
+    int rowEnd = (selectCellCount == 0) ? (1) : (modelIndexs.last().row() - rowStart + 1);
+    int columnStart = (selectCellCount == 0) ? (mExcelSheet[sheetIndex]->currentColumn()) : (modelIndexs.at(0).column());
+    int columnEnd = (selectCellCount == 0) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+
+    ivis::common::LIMIT(rowStart, 0, mExcelSheet[sheetIndex]->rowCount());
+    ivis::common::LIMIT(columnStart, 0, mExcelSheet[sheetIndex]->columnCount());
+
+    qDebug() << "EditCell[" << sheetIndex << "] - Index :" << selectCellCount << rowStart << rowEnd << columnStart << columnEnd;
 
     if ((editType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert) ||
         (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeDelete)) {
-        for (int index = 0; index < rowEnd; index++) {
+        for (int rowIndex = 0; rowIndex < rowEnd; rowIndex++) {
             if (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert) {
                 mExcelSheet[sheetIndex]->insertRow(rowStart);
             } else {
                 mExcelSheet[sheetIndex]->removeRow(rowStart);
+                ivis::common::LIMIT(rowStart, 0, mExcelSheet[sheetIndex]->rowCount());
+                mExcelSheet[sheetIndex]->setCurrentCell(rowStart, columnStart);
             }
         }
-        updateDisplaySheetText(sheetIndex);
+        // updateDisplaySheetText(sheetIndex);
     } else if (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit) {
-        bool columnSelectError = (columnEnd > 1);
-        if (columnSelectError) {
+        bool columnSelectWarning = (columnEnd > 1);
+        if (columnSelectWarning) {
             createSignal(ivis::common::EventTypeEnum::EventTypeCellMergeSplitWarning, QVariant());
         } else {
             if (updateMergeInfo(false, sheetIndex, columnStart, rowStart, rowEnd)) {
@@ -886,12 +889,16 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeShortcutType: {
             int shortcutType = value.toInt();
-            updateDisplayCellEdit(shortcutType);
+            updateDisplayEditCell(shortcutType);
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeKey: {
             int keyValue = value.toInt();
             updateDisplayKey(keyValue);
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus: {
+            updateDisplayReceiveKeyFocus();
             break;
         }
         default: {

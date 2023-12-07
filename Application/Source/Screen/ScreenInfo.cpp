@@ -21,10 +21,6 @@ ScreenInfo::ScreenInfo() {
 
 ScreenInfo::~ScreenInfo() {
     delete mTranslator;
-    // for(const auto& screen, mSubScreens) {
-    //     delete screen;
-    // }
-    // delete mRootScreen;
     qDebug() << "~ScreenInfo";
 }
 
@@ -78,8 +74,9 @@ void ScreenInfo::controlScreen(const int& displayType, const bool& show) {
                 qDebug() << "Fail to hide screen :" << screen;
             }
         }
-        mSubScreens[displayType]->show();
         mSubScreens[displayType]->stackUnder(mAlwaysTopScreen);
+        // mSubScreens[displayType]->setFocus();
+        mSubScreens[displayType]->show();
     }
 }
 

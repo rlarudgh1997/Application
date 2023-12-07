@@ -19,6 +19,7 @@
 // Feature, Funtion Define
 // ===================================================================================================
 #define USE_KEY_EVENT
+#define USE_KEY_EVENT_SEND_ALL
 #define USE_SCREEN_CAPTURE
 #define USE_RESIZE_SIGNAL
 

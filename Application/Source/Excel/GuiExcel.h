@@ -205,7 +205,8 @@ private:
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void pasteClipboardInfo();
     void updateDisplayClipboardInfo(const int& clipboardType);
-    void updateDisplayCellEdit(const int& editType);
+    void updateDisplayReceiveKeyFocus();
+    void updateDisplayEditCell(const int& editType);
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

@@ -84,11 +84,18 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
 #endif
 
 #if defined(USE_KEY_EVENT)
+#if defined(USE_KEY_EVENT_SEND_ALL)
+    // qDebug() << "ControlManager::keyEvent :" << inputType << inputValue;
+    for (const auto& control : mControlInfo) {
+        control->keyEvent(inputType, inputValue);
+    }
+#else
     int displayType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeMode).toInt();
-    // qDebug() << "ControlManager::keyEvent(" << inputType << "," << inputValue << ") :" << displayType;
+    qDebug() << "ControlManager::keyEvent :" << inputType << inputValue << ", DisplayType :" << displayType;
     if (mControlInfo[displayType]) {
         mControlInfo[displayType]->keyEvent(inputType, inputValue);
     }
+#endif
 #endif
 }
 

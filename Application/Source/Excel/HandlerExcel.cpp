@@ -61,6 +61,8 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved5, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved6, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved7, QVariant(""));
+
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, QVariant(false));
 }
 
 void HandlerExcel::controlConnect(const bool& state) {

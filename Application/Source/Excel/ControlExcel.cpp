@@ -106,9 +106,11 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
 
         if (inputValue == Qt::Key_Control) {
             updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, false);
-        } else if ((inputValue >= Qt::Key_A) && (inputValue <= Qt::Key_Z)) {
+        } else if (((inputValue >= Qt::Key_A) && (inputValue <= Qt::Key_Z)) ||
+                   (inputValue == ivis::common::KeyTypeEnum::KeyInputValueOK)) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKey, inputValue, true);
         } else {
+            // qDebug() << "Excel Key Value :" << inputValue;
         }
     }
 }
@@ -484,14 +486,12 @@ void ControlExcel::loadExcelFile(const int& eventType) {
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeFileNew: {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
-                qDebug() << "Because the contents of Excel are changing, a new Excel is not created.";
-
                 ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
                 QVariantList text = QVariantList(
                     {STRING_POPUP_EXCEL_EDIT, STRING_POPUP_EXCEL_EDIT_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
                 QVariant popupData = QVariant();
                 button = ivis::common::Popup::drawPopup(ivis::common::PopupType::New, isHandler(), popupData, QVariant(text));
-                if (button != ivis::common::PopupButton::Cancel) {
+                if (button == ivis::common::PopupButton::Cancel) {
                     return;
                 }
             }
@@ -681,6 +681,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
             ControlManager::instance().data()->raise(displayType);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, true, true);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeLastFile:

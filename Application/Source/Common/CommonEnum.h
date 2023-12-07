@@ -109,6 +109,7 @@ public:
         PropertyTypeTestReport,
         PropertyTypeKey,
         PropertyTypeKeySkip,
+        PropertyTypeReceiveKeyFocus,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,

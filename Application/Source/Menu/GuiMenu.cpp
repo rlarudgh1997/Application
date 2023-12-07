@@ -184,7 +184,7 @@ void GuiMenu::drawMenuEdit() {
     for (const auto& key : mShortcut) {
         connect(key, &QShortcut::activated, [=]() {
             QString currentKey = key->key().toString();
-            qDebug() << "Key ID :" << key->id() << currentKey;
+            // qDebug() << "KeyID :" << key->id() << currentKey;
             if (currentKey == shortcutInsert) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeEditCellInsert, QVariant());
             } else if (currentKey == shortcutDelete) {

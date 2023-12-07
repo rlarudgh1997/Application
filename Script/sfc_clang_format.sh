@@ -76,7 +76,7 @@ if [ ${flag_fullformat} == true ] || [ ${#sfc_list[@]} == 0 ]; then
 			-o -path ${sfc_path}/*/generated ')' -prune \
 			-o '(' -name '*.hpp' -o -name '*.cpp' -o -name '*.h' -o -name '*.c' ')' \
 			-print0)
-	list_files+=("${sfc_path}/vsm_codegen/template_vsmnode.hpp")
+	# list_files+=("${sfc_path}/vsm_codegen/template_vsmnode.hpp")
 else
 	list_dirs=()
 	for sfc in "${sfc_list[@]}"; do
