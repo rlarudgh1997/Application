@@ -824,10 +824,20 @@ void GuiExcel::updateDisplayEditCell(const int& editType) {
     int columnStart = (selectCellCount == 0) ? (mExcelSheet[sheetIndex]->currentColumn()) : (modelIndexs.at(0).column());
     int columnEnd = (selectCellCount == 0) ? (1) : (modelIndexs.last().column() - columnStart + 1);
 
+    if (rowEnd <= 0) {
+        QList<int> rowList = QList<int>();
+        for (const auto& index : modelIndexs) {
+            rowList.append(index.row());
+        }
+        if (rowList.size() > 0) {
+            rowStart = (*std::min_element(rowList.constBegin(), rowList.constEnd()));
+            rowEnd = (*std::max_element(rowList.constBegin(), rowList.constEnd())) - rowStart + 1;
+        }
+    }
+    qDebug() << "EditCell[" << sheetIndex << "] - Index :" << selectCellCount << rowStart << rowEnd << columnStart << columnEnd;
+
     ivis::common::LIMIT(rowStart, 0, mExcelSheet[sheetIndex]->rowCount());
     ivis::common::LIMIT(columnStart, 0, mExcelSheet[sheetIndex]->columnCount());
-
-    qDebug() << "EditCell[" << sheetIndex << "] - Index :" << selectCellCount << rowStart << rowEnd << columnStart << columnEnd;
 
     if ((editType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert) ||
         (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeDelete)) {
