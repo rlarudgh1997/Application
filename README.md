@@ -435,6 +435,7 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 =====================================================================
 # Repo : 개인 저장소 및 설정 방법
+git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 git clone git@github.com.rlarudgh1997:rlarudgh1997/IVIS.git
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Personal.git
 git clone git@github.com.rlarudgh1997:rlarudgh1997/Tractor.git
