@@ -8,6 +8,8 @@
 #include "ControlGauge.h"
 #include "ControlTelltale.h"
 
+#include "Service.h"
+
 QSharedPointer<ControlManager>& ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
     if (gControl.isNull()) {
@@ -25,6 +27,9 @@ void ControlManager::init() {
     createControl(ivis::common::DisplayEnum::DisplayTypeHome);
     createControl(ivis::common::DisplayEnum::DisplayTypeGauge);
     createControl(ivis::common::DisplayEnum::DisplayTypeTelltale);
+
+    static Service* service = new Service();
+
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {

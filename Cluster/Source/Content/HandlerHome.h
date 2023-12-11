@@ -1,21 +1,21 @@
-#ifndef HANDLER_HOME_H
-#define HANDLER_HOME_H
+#ifndef HANDLER_CONTENT_H
+#define HANDLER_CONTENT_H
 
 #include "AbstractHandler.h"
 
-class HandlerHome : public AbstractHandler {
+class HandlerContent : public AbstractHandler {
 private:
-    enum { HandlerHomeTimerStart = AbstractHandler::AbstractTimerStart, };
+    enum { HandlerContentTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
-    static QSharedPointer<HandlerHome>& instance();
+    static QSharedPointer<HandlerContent>& instance();
 
 private:
-    explicit HandlerHome();
+    explicit HandlerContent();
 
     virtual void controlConnect(const bool& state = true);
     virtual void initPropertyInfo();
     virtual void timerFunc(const int& timerId);
 };
 
-#endif  // HANDLER_HOME_H
+#endif  // HANDLER_CONTENT_H

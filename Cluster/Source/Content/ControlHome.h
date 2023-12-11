@@ -1,18 +1,18 @@
-#ifndef CONTROL_HOME_H
-#define CONTROL_HOME_H
+#ifndef CONTROL_CONTENT_H
+#define CONTROL_CONTENT_H
 
 #include "AbstractControl.h"
 
-class ControlHome : public AbstractControl {
+class ControlContent : public AbstractControl {
     Q_OBJECT
 
 public:
-    static QSharedPointer<ControlHome>& instance();
+    static QSharedPointer<ControlContent>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
 private:
-    explicit ControlHome();
+    explicit ControlContent();
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -37,4 +37,4 @@ private:
     AbstractHandler* mHandler = nullptr;
 };
 
-#endif  // CONTROL_HOME_H
+#endif  // CONTROL_CONTENT_H

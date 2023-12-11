@@ -91,7 +91,7 @@ function runProcess(){
 
 
 function killProcess(){
-	kill -9 `ps -ef | grep "Tractor" | awk '{print $2}'`
+	kill -9 `ps -ef | grep $BIN_NAME | awk '{print $2}'`
 }
 
 
@@ -114,6 +114,11 @@ elif [ "$1" = xserver ] || [ "$1" = xs ]; then
 elif [ "$1" = host ] || [ "$1" = h ]; then
 	PLATFORM=host
 	ENV=host
+elif [ "$1" = xserverc ] || [ "$1" = xsc ]; then
+	PLATFORM=host
+	ENV=xserver
+	IP_ADDRESS=$2
+	BIN_NAME="Cluster"
 elif [ "$1" = cluster ] || [ "$1" = c ]; then
 	PLATFORM=host
 	ENV=host
@@ -138,3 +143,7 @@ case "$PLATFORM" in
 		killProcess
 		;;
 esac
+
+
+echo "./run.sh xs 10.45.143.71"
+echo "./run.sh xsc 10.45.143.71"

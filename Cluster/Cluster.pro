@@ -29,6 +29,14 @@ RESOURCES += \
 
 
 
+contains(DEFINES, TARGET_BUILD) {
+#    PKGCONFIG += hmiappcommon ssfs hvehicle
+#    HEADERS += $$HEADERPATH/listener/ClusterSignalListener.h
+#    SOURCES += $$SOURCEPATH/listener/ClusterSignalListener.cpp
+} else {
+    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon
+}
+
 message("==================================")
 message("==== Top-level qmake settings ====")
 message("==================================")

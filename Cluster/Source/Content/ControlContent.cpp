@@ -1,5 +1,5 @@
-#include "ControlHome.h"
-#include "HandlerHome.h"
+#include "ControlContent.h"
+#include "HandlerContent.h"
 
 #include "CommonEnum.h"
 #include "ControlManager.h"
@@ -7,26 +7,26 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
-QSharedPointer<ControlHome>& ControlHome::instance() {
-    static QSharedPointer<ControlHome> gControl;
+QSharedPointer<ControlContent>& ControlContent::instance() {
+    static QSharedPointer<ControlContent> gControl;
     if (gControl.isNull()) {
-        gControl = QSharedPointer<ControlHome>(new ControlHome());
+        gControl = QSharedPointer<ControlContent>(new ControlContent());
     }
     return gControl;
 }
 
-ControlHome::ControlHome() {
+ControlContent::ControlContent() {
     isHandler();
 }
 
-AbstractHandler* ControlHome::isHandler() {
+AbstractHandler* ControlContent::isHandler() {
     if (mHandler == nullptr) {
-        mHandler = static_cast<AbstractHandler*>(HandlerHome::instance().data());
+        mHandler = static_cast<AbstractHandler*>(HandlerContent::instance().data());
     }
     return mHandler;
 }
 
-bool ControlHome::initControl() {
+bool ControlContent::initControl() {
     if (isInitComplete() == false) {
         isHandler()->init();
         return true;
@@ -34,35 +34,35 @@ bool ControlHome::initControl() {
     return false;
 }
 
-void ControlHome::initCommonData(const int& currentMode, const int& displayType) {
+void ControlContent::initCommonData(const int& currentMode, const int& displayType) {
     Q_UNUSED(currentMode)
     updateDataHandler(ivis::common::PropertyEnum::CommonDisplay, displayType);
     updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
 }
 
-void ControlHome::initNormalData() {
+void ControlContent::initNormalData() {
     resetControl(false);
-    updateDataHandler(ivis::common::PropertyEnum::HomeType, ivis::common::HandlerHomeEnum::HomeType::Main);
+    updateDataHandler(ivis::common::PropertyEnum::ContentType, ivis::common::HandlerContentEnum::ContentType::Main);
 }
 
-void ControlHome::initControlData() {
+void ControlContent::initControlData() {
 }
 
-void ControlHome::resetControl(const bool& reset) {
+void ControlContent::resetControl(const bool& reset) {
     Q_UNUSED(reset)
 }
 
-void ControlHome::controlConnect(const bool& state) {
+void ControlContent::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerHome::signalHandlerEvent, this, &ControlHome::slotHandlerEvent, Qt::UniqueConnection);
+        connect(isHandler(), &HandlerContent::signalHandlerEvent, this, &ControlContent::slotHandlerEvent, Qt::UniqueConnection);
         connect(Service::instance().data(), &ConfigSetting::signalContentChagned(int type, QList<QVairnt> value), this,
-                &ControlHome::slotServiceChanged, updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
+                &ControlContent::slotServiceChanged, updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
 
                 Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlHome::slotConfigChanged,
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlContent::slotConfigChanged,
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
-                &ControlHome::slotEventInfoChanged, Qt::UniqueConnection);
+                &ControlContent::slotEventInfoChanged, Qt::UniqueConnection);
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged,
                 [=](const QSize& screenSize) { updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize); });
@@ -74,16 +74,16 @@ void ControlHome::controlConnect(const bool& state) {
     }
 }
 
-void ControlHome::timerFunc(const int& timerId) {
+void ControlContent::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
 }
 
-void ControlHome::keyEvent(const int& inputType, const int& inputValue) {
+void ControlContent::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
 }
 
-void ControlHome::resizeEvent(const int& width, const int& height) {
+void ControlContent::resizeEvent(const int& width, const int& height) {
 #if defined(USE_RESIZE_SIGNAL)
     Q_UNUSED(width)
     Q_UNUSED(height)
@@ -92,22 +92,22 @@ void ControlHome::resizeEvent(const int& width, const int& height) {
 #endif
 }
 
-void ControlHome::updateDataControl(const int& type, const QVariant& value) {
+void ControlContent::updateDataControl(const int& type, const QVariant& value) {
     setData(type, value, false);
 }
 
-void ControlHome::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
+void ControlContent::updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate) {
     if (setData(type, value, alwaysUpdate)) {
         createSignal(type, value, alwaysUpdate);
     }
 }
 
-void ControlHome::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
+void ControlContent::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
                                                      eventType, eventValue);
 }
 
-void ControlHome::slotConfigChanged(const int& type, const QVariant& value) {
+void ControlContent::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         default: {
             break;
@@ -115,8 +115,8 @@ void ControlHome::slotConfigChanged(const int& type, const QVariant& value) {
     }
 }
 
-void ControlHome::slotHandlerEvent(const int& type, const QVariant& value) {
-    qDebug() << "ControlHome::slotHandlerEvent() ->" << type << "," << value;
+void ControlContent::slotHandlerEvent(const int& type, const QVariant& value) {
+    qDebug() << "ControlContent::slotHandlerEvent() ->" << type << "," << value;
     ivis::common::CheckTimer checkTimer;
 
     switch (type) {
@@ -129,12 +129,12 @@ void ControlHome::slotHandlerEvent(const int& type, const QVariant& value) {
     }
 }
 
-void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
+void ControlContent::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
     if ((getData(ivis::common::PropertyEnum::CommonDisplay).toInt() & QVariant(displayType).toInt()) == false) {
         return;
     }
 
-    qDebug() << "ControlHome::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    qDebug() << "ControlContent::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         default: {
             break;
@@ -142,5 +142,5 @@ void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventT
     }
 }
 
-void ControlHome::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
+void ControlContent::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
 }

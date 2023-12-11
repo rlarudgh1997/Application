@@ -91,13 +91,13 @@ inline void REVOLVE(T& value, T min, T max) {
 template <typename T>
 inline void REVOLVE_P(T& value, T gap, T min, T max) {
     value += gap;
-    REVOLVE(min, max);
+    REVOLVE(value, min, max);
 }
 
 template <typename T>
 inline void REVOLVE_M(T& value, T gap, T min, T max) {
     value -= gap;
-    REVOLVE(min, max);
+    REVOLVE(value, min, max);
 }
 
 template <typename T1, typename T2, typename T3>

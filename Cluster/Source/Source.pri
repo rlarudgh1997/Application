@@ -6,7 +6,7 @@ include($$PWD/Manager/Manager.pri)
 include($$PWD/Home/Home.pri)
 include($$PWD/Telltale/Telltale.pri)
 include($$PWD/Gauge/Gauge.pri)
-#include($$PWD/Service/Service.pri)
+include($$PWD/Service/Service.pri)
 
 
 

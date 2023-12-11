@@ -6,12 +6,14 @@ DEFINES += __MODULE_SERVICE__
 
 
 HEADERS += \
-    $$PWD/AppService.h\
+    $$PWD/Service.h\
+#    $$PWD/AppService.h\
 #    $$PWD/CVService.h\
 #    $$PWD/PVService.h\
 
 
 SOURCES += \
-    $$PWD/AppService.cpp\
+    $$PWD/Service.cpp\
+#    $$PWD/AppService.cpp\
 #    $$PWD/CVService.cpp\
 #    $$PWD/PVService.cpp\
