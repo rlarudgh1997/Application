@@ -106,11 +106,11 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
 
         if (inputValue == Qt::Key_Control) {
             updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, false);
-        } else if (((inputValue >= Qt::Key_A) && (inputValue <= Qt::Key_Z)) ||
+        } else if (((inputValue >= Qt::Key_A) && (inputValue <= Qt::Key_Z)) || (inputValue == Qt::Key_Escape) ||
                    (inputValue == ivis::common::KeyTypeEnum::KeyInputValueOK)) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKey, inputValue, true);
         } else {
-            // qDebug() << "Excel Key Value :" << inputValue;
+            // qDebug() << "Excel Key Value :" << inputValue << std::hex << inputValue;
         }
     }
 }

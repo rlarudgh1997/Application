@@ -10,6 +10,13 @@
 
 - try/catch 구문 적용
 	: nullptr 예상 되는 코드에 적용
+		-> 기본적으로 try/catch 구문으로 nullptr 을 찾기가 어려우니, 코드적으로 예외 처리 하는 방법을 찾아야 함.
+		try {
+		} catch (const std::exception &e) {
+			qDebug() << "Fail to code - exception : " << e.what();
+		} catch (...) {
+			qDebug() << "Fail to code";
+		}
 
 - Copy & Paste 수정
 	: 복사후 붙여넣기 한버만 동작 하도록 구현되어 있음, 이슈 수정 후 계속 붙여넣기 되도록 구현

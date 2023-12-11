@@ -201,8 +201,9 @@ private:
     void updateDisplayKey(const int& keyValue);
     void updateDisplayExcelSheet();
     void updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex);
-    void copyClipboardInfo(const bool& cutState);
     void printMergeInfo(const QString& title, const bool& mergeSplit);
+    void copyClipboardInfo(const bool& cutState);
+    void clearClipboardInfo(const int& sheetIndex);
     void pasteClipboardInfo();
     void updateDisplayClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
