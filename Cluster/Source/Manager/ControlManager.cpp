@@ -28,8 +28,7 @@ void ControlManager::init() {
     createControl(ivis::common::DisplayEnum::DisplayTypeGauge);
     createControl(ivis::common::DisplayEnum::DisplayTypeTelltale);
 
-    static Service* service = new Service();
-
+    Service::instance().data();
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {

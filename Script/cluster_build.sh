@@ -6,7 +6,9 @@ PROJECT_DIR="$BASE_DIR/.."
 QT_VERSION=5.12.4
 QT_PATH=~/Qt_$QT_VERSION/$QT_VERSION/gcc_64/bin/
 #QT_PATH=~/Qt$QT_VERSION/$QT_VERSION/gcc_64/bin/
-SDK_ENVIROMENT_PATH=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
+SDK_HOST=$HOME/usr/ccos.app.sfc-testapp/host/setEnv.sh
+SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
+SDK_ENVIROMENT_PATH=""
 
 
 SET_PLATFORM=target
@@ -29,16 +31,19 @@ echo "==========================================================================
 echo
 echo
 
-#/opt/fsl-imx-xwayland/4.19-warrior
+
 function setEnvironments(){
 	unset LD_LIBRARY_PATH
 
 	if [ "$1" = target ] || [ "$1" = t ]; then
+		SDK_ENVIROMENT_PATH=$SDK_TARGET
 		source $SDK_ENVIROMENT_PATH
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
 		export PATH=$QT_PATH:$PATH
+		SDK_ENVIROMENT_PATH=$SDK_HOST
+		source $SDK_ENVIROMENT_PATH p
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit
@@ -55,6 +60,19 @@ function setEnvironments(){
 	echo "   INSTALL_PATH        = $SET_INSTALL_PATH"
 	echo "   QT_PATH             = $QT_PATH"
 	echo "   SDK_ENVIROMENT_PATH = $SDK_ENVIROMENT_PATH"
+	echo "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+	echo "   SFC_DIR                          = $SFC_DIR"
+	echo "   PKG_CONFIG_PATH                  = $PKG_CONFIG_PATH"
+	echo "   LD_LIBRARY_PATH                  = $LD_LIBRARY_PATH"
+	echo "   CCOS_LIB_DIR                     = $CCOS_LIB_DIR"
+	echo "   QML_IMPORT_PATH                  = $QML_IMPORT_PATH"
+	echo "   QML2_IMPORT_PATH                 = $QML2_IMPORT_PATH"
+	echo "   ALTON_SFC_MODEL_DIR              = $ALTON_SFC_MODEL_DIR"
+	echo "   ALTON_SFC_CONFIGURATION          = $ALTON_SFC_CONFIGURATION"
+	echo "   ALTON_HAL_DIR                    = $ALTON_HAL_DIR"
+	echo "   ALTON_HAL_NAME                   = $ALTON_HAL_NAME"
+	echo "   ALTON_EOL_VEHICLETYPE            = $ALTON_EOL_VEHICLETYPE"
+	echo "   ALTON_SFC_CONFIGURATION_FILENAME = $ALTON_SFC_CONFIGURATION_FILENAME"
 	echo "==================================================================================================================="
 	echo
 }

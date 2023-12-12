@@ -2,7 +2,7 @@ message(".......................................................................
 
 TEMPLATE = app
 
-CONFIG += c++17
+CONFIG += c++17 link_pkgconfig silent
 
 QT += \
     qml\
@@ -21,7 +21,6 @@ equals(TARGET_BUILD, 1) {
 include(deployment.pri)
 include($$PWD/Source/Source.pri)
 
-
 # Resource
 RESOURCES += \
     $$PWD/Qml/Qml.qrc\
@@ -34,7 +33,8 @@ contains(DEFINES, TARGET_BUILD) {
 #    HEADERS += $$HEADERPATH/listener/ClusterSignalListener.h
 #    SOURCES += $$SOURCEPATH/listener/ClusterSignalListener.cpp
 } else {
-    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon
+    PKGCONFIG += hmiappcommon ssfs hvehicle
+#    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon
 }
 
 message("==================================")
@@ -49,6 +49,7 @@ message("QMAKE_CXXFLAGS=$$QMAKE_CXXFLAGS")
 message("TARGET=$$TARGET")
 message("DESTDIR=$$DESTDIR")
 message("INSTALL_PATH=$$INSTALL_PATH")
+
 
 !isEmpty(INSTALL_PATH) {
     target.path = $$INSTALL_PATH
