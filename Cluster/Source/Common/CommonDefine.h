@@ -20,7 +20,6 @@
 // ===================================================================================================
 #define USE_KEY_EVENT
 #define USE_SCREEN_CAPTURE
-#define USE_RESIZE_SIGNAL
 
 #define USE_GUI_MODULE
 
@@ -29,5 +28,16 @@
 #if defined(USE_INTANCE_SINGLETON)
 #define USE_INTANCE_SINGLETON_GUI
 #endif
+
+
+
+
+
+// #define USE_SERVICE_PV
+// #define USE_SERVICE_CV
+
+
+
+
 
 #endif  // COMMON_DEFINE_H

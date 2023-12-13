@@ -7,6 +7,8 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
+#include "Service.h"
+
 QSharedPointer<ControlContent>& ControlContent::instance() {
     static QSharedPointer<ControlContent> gControl;
     if (gControl.isNull()) {
@@ -63,10 +65,14 @@ void ControlContent::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlContent::slotEventInfoChanged, Qt::UniqueConnection);
-#if defined(USE_RESIZE_SIGNAL)
-        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged,
-                [=](const QSize& screenSize) { updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize); });
-#endif
+        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
+                &ControlContent::slotServiceTelltaleChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
+                &ControlContent::slotServiceEventChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
+                &ControlContent::slotServiceSoundChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
+                &ControlContent::slotServiceEtcChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -81,15 +87,6 @@ void ControlContent::timerFunc(const int& timerId) {
 void ControlContent::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
-}
-
-void ControlContent::resizeEvent(const int& width, const int& height) {
-#if defined(USE_RESIZE_SIGNAL)
-    Q_UNUSED(width)
-    Q_UNUSED(height)
-#else
-    updateDataHandler(ivis::common::PropertyEnum::CommonRect, QSize(width, height));
-#endif
 }
 
 void ControlContent::updateDataControl(const int& type, const QVariant& value) {
@@ -142,5 +139,17 @@ void ControlContent::slotEventInfoChanged(const int& displayType, const int& eve
     }
 }
 
-void ControlContent::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
+void ControlContent::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlContent::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlContent::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlContent::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlContent::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
 }

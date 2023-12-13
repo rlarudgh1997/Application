@@ -44,6 +44,7 @@ function setEnvironments(){
 		export PATH=$QT_PATH:$PATH
 		SDK_ENVIROMENT_PATH=$SDK_HOST
 		source $SDK_ENVIROMENT_PATH p
+		# source $SDK_ENVIROMENT_PATH c
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit

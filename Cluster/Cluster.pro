@@ -1,12 +1,8 @@
 message("..................................................................................................")
 
 TEMPLATE = app
-
-CONFIG += c++17 link_pkgconfig silent
-
-QT += \
-    qml\
-    quick\
+CONFIG += c++17 link_pkgconfig
+QT += qml quick
 
 
 # Define
@@ -30,11 +26,9 @@ RESOURCES += \
 
 contains(DEFINES, TARGET_BUILD) {
 #    PKGCONFIG += hmiappcommon ssfs hvehicle
-#    HEADERS += $$HEADERPATH/listener/ClusterSignalListener.h
-#    SOURCES += $$SOURCEPATH/listener/ClusterSignalListener.cpp
 } else {
+#    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon -lhvehicle
     PKGCONFIG += hmiappcommon ssfs hvehicle
-#    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon
 }
 
 message("==================================")

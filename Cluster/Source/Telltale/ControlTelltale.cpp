@@ -7,6 +7,8 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
+#include "Service.h"
+
 QSharedPointer<ControlTelltale>& ControlTelltale::instance() {
     static QSharedPointer<ControlTelltale> gControl;
     if (gControl.isNull()) {
@@ -268,10 +270,14 @@ void ControlTelltale::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlTelltale::slotEventInfoChanged, Qt::UniqueConnection);
-#if defined(USE_RESIZE_SIGNAL)
-        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged,
-                [=](const QSize& screenSize) { updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize); });
-#endif
+        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
+                &ControlTelltale::slotServiceTelltaleChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
+                &ControlTelltale::slotServiceEventChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
+                &ControlTelltale::slotServiceSoundChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
+                &ControlTelltale::slotServiceEtcChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -286,15 +292,6 @@ void ControlTelltale::timerFunc(const int& timerId) {
 void ControlTelltale::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
-}
-
-void ControlTelltale::resizeEvent(const int& width, const int& height) {
-#if defined(USE_RESIZE_SIGNAL)
-    Q_UNUSED(width)
-    Q_UNUSED(height)
-#else
-    updateDataHandler(ivis::common::PropertyEnum::CommonRect, QSize(width, height));
-#endif
 }
 
 void ControlTelltale::updateDataControl(const int& type, const QVariant& value) {
@@ -347,5 +344,17 @@ void ControlTelltale::slotEventInfoChanged(const int& displayType, const int& ev
     }
 }
 
-void ControlTelltale::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
+void ControlTelltale::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlTelltale::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlTelltale::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlTelltale::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlTelltale::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
 }

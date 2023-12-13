@@ -97,20 +97,12 @@ void ControlManager::keyEvent(const int& inputType, QKeyEvent* keyEvent) {
 }
 
 void ControlManager::mouseEvent(const int& inputType, const int& inputValue) {
+    Q_UNUSED(inputType)
+    Q_UNUSED(inputValue)
 }
 
 void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
-#if defined(USE_RESIZE_SIGNAL)
-    setScreenSize(QSize(resizeEvent.size().width(), resizeEvent.size().height()));
-    // connect(this, &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
-    //     qDebug() << "ControlManager::ScreeSize:" << screenSize;
-    // });
-#else
-    int displayType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeMode).toInt();
-    if (mControlInfo[displayType]) {
-        mControlInfo[displayType]->resizeEvent(resizeEvent->size().width(), resizeEvent->size().height());
-    }
-#endif
+    Q_UNUSED(resizeEvent)
 }
 
 void ControlManager::createControl(const int& displayType) {
@@ -138,11 +130,6 @@ void ControlManager::createControl(const int& displayType) {
             // qDebug() << "ControlManager::createControl :" << displayType;
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeMode, displayType);
             mControlInfo[displayType]->init(getCurrentMode(), displayType);
-#if defined(USE_RESIZE_SIGNAL)
-//            emit signalScreenSizeChanged(getScreenSize());
-#else
-            mControlInfo[displayType]->resizeEvent(getScreenSize().width(), getScreenSize().height());
-#endif
             setCurrentMode(displayType);
         }
     }

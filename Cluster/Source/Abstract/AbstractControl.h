@@ -30,7 +30,6 @@ public:
     bool createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate);
 
     virtual void keyEvent(const int& inputType, const int& inputValue) = 0;
-    virtual void resizeEvent(const int& width, const int& height) = 0;
 
 protected:
     void timerEvent(QTimerEvent* event);
@@ -52,7 +51,11 @@ private slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
-    virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue) = 0;
+    virtual void slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceEventChanged(const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) = 0;
 
 private:
     QMap<int, int> mTimer = QMap<int, int>();

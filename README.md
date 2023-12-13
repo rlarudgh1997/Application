@@ -21,6 +21,12 @@
 	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.vsm.git
 	mv ccos.core.vsm VSM
 
+# [Repo 새로 받지 않고 사용하는 방법]
+	sudo rm -rf *
+	git checkout -f
+	git submodule init
+	git submodule update
+
 
 =====================================================================
 # [Bitbucket 사용]
@@ -114,8 +120,12 @@
 	cd ${HOME}/900_Code/620_SFC
 	mkdir build
 	cd build
-	cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
-	sudo cmake --build . --target install -j8
+	# PV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DSFC_BUILD_TYPE=coverage
+		sudo cmake --build . --target install -j8
+	# CV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+		sudo cmake --build . --target install -j8
 
 - Validator 빌드
 	cd ${HOME}/900_Code/620_SFC/validator
@@ -417,14 +427,38 @@ Y:\900_Code\610_Application\SFC\model\ssfs\include\generated
 
 
 
+=====================================================================
+# Test Application 설정
+
+[참조]
+	https://synergy.ccos.dev/pages/viewpage.action?pageId=79941712
+
+[SDK 설치]
+	설치 경로 : ~/usr
+	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.app.sfc-testapp.git
 
 
+[protobuf 설치]
+	설치 경로 : 아무곳이나
+	wget https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protobuf-all-3.13.0.tar.gz
+	tar -zxvf protobuf-all-3.13.0.tar.gz
+	mv protobuf-3.13.0 protobuf
+	cd protobuf
+	sudo apt-get install autoconf automake libtool curl make unzip libssl-dev
+	./autogen.sh
+	./configure
+	make; make check; sudo make install
+	sudo ldconfig
 
 
-
-
-
-
+[SFC 빌드]
+	ssfs 이동 복사 : repo 빌드시에 하나로 통합해서 나옴(확인 필요)
+		lib	: ~/usr/ccos.app.sfc-testapp/host/lib
+			620_SFC/build/model/ssfs
+		include 복사 : ~/usr/ccos.app.sfc-testapp/host/include/ssfs
+			620_SFC/model/ssfs/include/external
+			620_SFC/model/ssfs/include/generated
+			620_SFC/model/ssfs/include/public
 
 
 

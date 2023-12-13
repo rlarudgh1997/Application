@@ -7,6 +7,8 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
+#include "Service.h"
+
 QSharedPointer<ControlHome>& ControlHome::instance() {
     static QSharedPointer<ControlHome> gControl;
     if (gControl.isNull()) {
@@ -59,10 +61,14 @@ void ControlHome::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlHome::slotEventInfoChanged, Qt::UniqueConnection);
-#if defined(USE_RESIZE_SIGNAL)
-        connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged,
-                [=](const QSize& screenSize) { updateDataHandler(ivis::common::PropertyEnum::CommonRect, screenSize); });
-#endif
+        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
+                &ControlHome::slotServiceTelltaleChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
+                &ControlHome::slotServiceEventChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
+                &ControlHome::slotServiceSoundChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
+                &ControlHome::slotServiceEtcChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -77,15 +83,6 @@ void ControlHome::timerFunc(const int& timerId) {
 void ControlHome::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
-}
-
-void ControlHome::resizeEvent(const int& width, const int& height) {
-#if defined(USE_RESIZE_SIGNAL)
-    Q_UNUSED(width)
-    Q_UNUSED(height)
-#else
-    updateDataHandler(ivis::common::PropertyEnum::CommonRect, QSize(width, height));
-#endif
 }
 
 void ControlHome::updateDataControl(const int& type, const QVariant& value) {
@@ -138,5 +135,17 @@ void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventT
     }
 }
 
-void ControlHome::slotServiceDataChanged(const int& dataType, const QVariant& dataValue) {
+void ControlHome::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlHome::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlHome::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlHome::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
+}
+
+void ControlHome::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
 }

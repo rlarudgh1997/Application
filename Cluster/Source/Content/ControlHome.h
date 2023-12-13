@@ -9,7 +9,6 @@ class ControlContent : public AbstractControl {
 public:
     static QSharedPointer<ControlContent>& instance();
     virtual void keyEvent(const int& inputType, const int& inputValue);
-    virtual void resizeEvent(const int& width, const int& height);
 
 private:
     explicit ControlContent();
@@ -31,7 +30,11 @@ public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
-    virtual void slotServiceDataChanged(const int& dataType, const QVariant& dataValue);
+    virtual void slotServiceConstantChanged(const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceEventChanged(const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceSoundChanged(const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceEtcChanged(const int& signalType, const QVariant& signalValue);
 
 private:
     AbstractHandler* mHandler = nullptr;
