@@ -6,7 +6,7 @@ PROJECT_DIR="$BASE_DIR/.."
 QT_VERSION=5.12.4
 QT_PATH=~/Qt_$QT_VERSION/$QT_VERSION/gcc_64/bin/
 #QT_PATH=~/Qt$QT_VERSION/$QT_VERSION/gcc_64/bin/
-SDK_HOST=$HOME/usr/ccos.app.sfc-testapp/host/setEnv.sh
+SDK_HOST=/opt/sfc/PV/lib
 SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
 SDK_ENVIROMENT_PATH=""
 
@@ -41,15 +41,8 @@ function setEnvironments(){
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
-		export PATH=$QT_PATH:$PATH
-		# SDK_ENVIROMENT_PATH=$SDK_HOST
-		# source $SDK_ENVIROMENT_PATH p
-		# source $SDK_ENVIROMENT_PATH c
-
-		export LD_LIBRARY_PATH=/opt/sfc/PV/lib
-		export CCOS_LIB_DIR=/opt/sfc/PV
-		# export QML_IMPORT_PATH=/opt/sfc/PV/qml
-		# export QML2_IMPORT_PATH=/opt/sfc/PV/qml
+		#export PATH=$QT_PATH:$PATH
+		export LD_LIBRARY_PATH=$SDK_HOST:$LD_LIBRARY_PATH
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit
@@ -67,18 +60,16 @@ function setEnvironments(){
 	echo "   QT_PATH             = $QT_PATH"
 	echo "   SDK_ENVIROMENT_PATH = $SDK_ENVIROMENT_PATH"
 	echo "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-	echo "   SFC_DIR                          = $SFC_DIR"
-	echo "   PKG_CONFIG_PATH                  = $PKG_CONFIG_PATH"
-	echo "   LD_LIBRARY_PATH                  = $LD_LIBRARY_PATH"
-	echo "   CCOS_LIB_DIR                     = $CCOS_LIB_DIR"
-	echo "   QML_IMPORT_PATH                  = $QML_IMPORT_PATH"
-	echo "   QML2_IMPORT_PATH                 = $QML2_IMPORT_PATH"
-	echo "   ALTON_SFC_MODEL_DIR              = $ALTON_SFC_MODEL_DIR"
-	echo "   ALTON_SFC_CONFIGURATION          = $ALTON_SFC_CONFIGURATION"
-	echo "   ALTON_HAL_DIR                    = $ALTON_HAL_DIR"
-	echo "   ALTON_HAL_NAME                   = $ALTON_HAL_NAME"
-	echo "   ALTON_EOL_VEHICLETYPE            = $ALTON_EOL_VEHICLETYPE"
-	echo "   ALTON_SFC_CONFIGURATION_FILENAME = $ALTON_SFC_CONFIGURATION_FILENAME"
+	# echo "   CCOS_LIB_DIR          = $CCOS_LIB_DIR"
+	echo "   ALTON_SFC_CONFIGURATION = $ALTON_SFC_CONFIGURATION"
+	echo "   ALTON_VSM_CONFIGURATION = $ALTON_VSM_CONFIGURATION"
+	echo "   ALTON_SFC_MODEL_DIR     = $ALTON_SFC_MODEL_DIR"
+	echo "   ALTON_HAL_SCRIPT_PATH   = $ALTON_HAL_SCRIPT_PATH"
+	echo "   ALTON_HAL_DIR           = $ALTON_HAL_DIR"
+	echo "   ALTON_HAL_NAME          = $ALTON_HAL_NAME"
+	echo "   ALTON_EOL_VEHICLETYPE   = $ALTON_EOL_VEHICLETYPE"
+	echo "   LD_LIBRARY_PATH         = $LD_LIBRARY_PATH"
+	echo "   PKG_CONFIG_PATH         = $PKG_CONFIG_PATH"
 	echo "==================================================================================================================="
 	echo
 }
