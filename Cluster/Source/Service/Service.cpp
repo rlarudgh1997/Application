@@ -263,19 +263,19 @@ void Service::onTelltaleChanged(const int& signalType, const std::vector<ccos::v
     qDebug() << "onTelltaleChanged :" << signalType << signalList.size();
     QVariant signalValue = QVariant();
 
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Telltale::ConstantSpeedGaugeStart) && (signalType < Telltale::ConstantSpeedGaugeEnd)) {
-            signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
-        // } else if ((signalType > Telltale::ConstantTachometerStart) && (signalType < Telltale::ConstantTachometerEnd)) {
-        //     signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
-        } else {
-            signalValue = QVariant();
-        }
+//    for (const auto& vehicleSignal : signalList) {
+//        if ((signalType > Telltale::ConstantSpeedGaugeStart) && (signalType < Telltale::ConstantSpeedGaugeEnd)) {
+//            signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
+//        // } else if ((signalType > Telltale::ConstantTachometerStart) && (signalType < Telltale::ConstantTachometerEnd)) {
+//        //     signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
+//        } else {
+//            signalValue = QVariant();
+//        }
 
-        if (signalValue.isValid()) {
-            break;
-        }
-    }
+//        if (signalValue.isValid()) {
+//            break;
+//        }
+//    }
 
     if (signalValue.isValid()) {
         emit signalServiceTelltaleChanged(signalType, signalValue);
@@ -335,7 +335,7 @@ QVariant Service::isEtcSpeedGauge(const int& signalType, const ccos::vehicle::vs
     if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedUnit) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedUnit.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
+        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
     } else {

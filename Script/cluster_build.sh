@@ -42,9 +42,14 @@ function setEnvironments(){
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
 		export PATH=$QT_PATH:$PATH
-		SDK_ENVIROMENT_PATH=$SDK_HOST
-		source $SDK_ENVIROMENT_PATH p
+		# SDK_ENVIROMENT_PATH=$SDK_HOST
+		# source $SDK_ENVIROMENT_PATH p
 		# source $SDK_ENVIROMENT_PATH c
+
+		export LD_LIBRARY_PATH=/opt/sfc/PV/lib
+		export CCOS_LIB_DIR=/opt/sfc/PV
+		# export QML_IMPORT_PATH=/opt/sfc/PV/qml
+		# export QML2_IMPORT_PATH=/opt/sfc/PV/qml
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit

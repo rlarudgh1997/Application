@@ -25,10 +25,10 @@ RESOURCES += \
 
 
 contains(DEFINES, TARGET_BUILD) {
-#    PKGCONFIG += hmiappcommon ssfs hvehicle
-} else {
-#    LIBS += -L$$CCOS_LIB_DIR -lhmiappcommon -lhvehicle
     PKGCONFIG += hmiappcommon ssfs hvehicle
+} else {
+    PKGCONFIG += ssfs hvehicle
+#    PKGCONFIG += hmiappcommon
 }
 
 message("==================================")

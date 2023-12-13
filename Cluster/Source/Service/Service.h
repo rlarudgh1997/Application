@@ -81,14 +81,6 @@ public:
         LampIndicatorStart = 0,
         LampIndicatorEnd,
     };
-    enum Telltale {
-        // SpeedGauge
-        EtcSpeedGaugeStart = 0,
-        InterDisplaySpeedUnit,
-        InterDisplaySpeedValueKPH,
-        InterDisplaySpeedValueMPH,
-        EtcSpeedGaugeEnd,
-    };
     enum Etc {
         // SpeedGauge
         EtcSpeedGaugeStart = 0,
