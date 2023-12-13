@@ -46,7 +46,9 @@ class Service : public QObject {
 
 public:
     enum Constant {
-        SpeedAnalogStat = 0,
+        // SpeedGauge
+        ConstantSpeedGaugeStart = 0,
+        SpeedAnalogStat,
         SpeedAnalogValue,
         SpeedDigitalStat,
         SpeedDigitalValue,
@@ -59,11 +61,41 @@ public:
         NaviSpeedLimitStat,
         NaviSpeedLimitOver1ColorValue,
         NaviSpeedLimitOver2ColorValue,
+        ConstantSpeedGaugeEnd,
+
+        // Tachometer
+        ConstantTachometerStart,
+        RpmValue,
+        RedZoneExceptNbrandStat,
+        RedZoneNbrandStat,
+        MaxRpmStat,
+        RpmDampStat,
+        ConstantTachometerEnd,
+
+        // IntroOutro
+        ConstantIntroOutroStart,
+        ConstantIntroOutroEnd,
     };
-    enum Etc {
-        InterDisplaySpeedUnit = 0,
+    enum Telltale {
+        // LampIndicator
+        LampIndicatorStart = 0,
+        LampIndicatorEnd,
+    };
+    enum Telltale {
+        // SpeedGauge
+        EtcSpeedGaugeStart = 0,
+        InterDisplaySpeedUnit,
         InterDisplaySpeedValueKPH,
         InterDisplaySpeedValueMPH,
+        EtcSpeedGaugeEnd,
+    };
+    enum Etc {
+        // SpeedGauge
+        EtcSpeedGaugeStart = 0,
+        InterDisplaySpeedUnit,
+        InterDisplaySpeedValueKPH,
+        InterDisplaySpeedValueMPH,
+        EtcSpeedGaugeEnd,
     };
 
 
@@ -79,19 +111,35 @@ private:
     void addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc);
     void addSubscriptions(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
 
+    // Constant
+    QVariant isConstantSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isConstantTachometer(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isConstantIntroOutro(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onConstantChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
+    void subscribeConstantSpeedGauge();
+    void subscribeConstantTachometer();
+    void subscribeConstantIntroOutron();
     void subscribeConstant();
 
+    // Telltale
+    QVariant isTelltaleLampIndicator(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onTelltaleChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
+    void subscribeTelltaleLampIndicator();
     void subscribeTelltale();
 
+    // Event
     void onEventChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
     void subscribeEvent();
 
+    // Sount
     void onSoundChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
+    void subscribeSoundLampIndicator();
     void subscribeSound();
 
+    // Etc
+    QVariant isEtcSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onEtcChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
+    void subscribeEtcSpeedGauge();
     void subscribeEtc();
 
 signals:
