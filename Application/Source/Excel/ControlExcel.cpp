@@ -173,7 +173,7 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& private
             if (startText.size() == 2) {
                 dataList.append(QString("%1%2").arg(prefixText).arg(startText.at(1)));
             } else {
-                if (infoData.size() ==0) {
+                if (infoData.size() == 0) {
                     continue;
                 }
 

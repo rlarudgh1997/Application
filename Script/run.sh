@@ -4,6 +4,9 @@ BASE_DIR="$(dirname $(realpath $0))"
 APP_PATH="$BASE_DIR/.."
 BIN_NAME="Application"
 
+SDK_HOST=/opt/sfc/PV/environment-setup-sfc
+
+
 clear
 clear
 clear
@@ -37,7 +40,12 @@ function setEnvironments(){
 		APP_PATH=$APP_PATH/deploy_x86
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		echo "[Host]"
-		APP_PATH=$APP_PATH/deploy_x86
+		source $SDK_HOST
+		if [ "$2" = altonservice ] || [ "$2" = a ]; then
+			APP_PATH=/opt/sfc/PV/bin
+		else
+			APP_PATH=$APP_PATH/deploy_x86
+		fi
 	else
 		echo "[setEnvironments] fail - $1"
 		exit
@@ -123,6 +131,10 @@ elif [ "$1" = cluster ] || [ "$1" = c ]; then
 	PLATFORM=host
 	ENV=host
 	BIN_NAME="Cluster"
+elif [ "$1" = altonservice ] || [ "$1" = a ]; then
+	PLATFORM=host
+	ENV=host
+	BIN_NAME="altonservice"
 else
 	PLATFORM=$1
 	ENV=$1
@@ -130,7 +142,7 @@ fi
 
 case "$PLATFORM" in
 	host)
-		setEnvironments $ENV $IP_ADDRESS
+		setEnvironments $ENV $IP_ADDRESS $BIN_NAME
 		killProcess
 		runProcess $BIN_NAME $APP_PATH $2
 		;;

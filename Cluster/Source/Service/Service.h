@@ -5,28 +5,13 @@
 #include <QSharedPointer>
 #include <QVariant>
 
-#include <HSubscription.h>
 #include <HVehicleSignalModel.h>
 #include <vsm.h>
-#include <functional>
-#include "SFCHelper.h"
+// #include "SFCHelper.h"
 
-namespace ccos::vehicle::vsm {
-class HSubscription;
-class HVehicleSignal;
-class HVehicleSignalModel;
-}  // namespace ccos::vehicle::vsm
+typedef std::function<void(const std::vector<ccos::vehicle::vsm::HVehicleSignal>&)> SignalHandlingFunc;
 
-// using HVehicleSignalList = std::vector<ccos::vehicle::vsm::HVehicleSignal>;
-using ccos::vehicle::vsm::HSubscription;
-using ccos::vehicle::vsm::HVehicleSignal;
-using ccos::vehicle::vsm::HVehicleSignalModel;
-using ccos::vehicle::vsm::HSubscriptionType;
-using ccos::vehicle::vsm::IHSubscriptionListener;
-
-typedef std::function<void(const std::vector<HVehicleSignal>&)> SignalHandlingFunc;
-
-class VehicleListener : public IHSubscriptionListener {
+class VehicleListener : public ccos::vehicle::vsm::IHSubscriptionListener {
 public:
     explicit VehicleListener(const SignalHandlingFunc& handlingFunc) {
         mHandlingFunc = handlingFunc;
@@ -90,23 +75,22 @@ public:
         EtcSpeedGaugeEnd,
     };
 
-
 public:
     static QSharedPointer<Service>& instance();
 
 private:
     explicit Service();
 
-    HVehicleSignalModel& getVehicleSignalModel();
+    ccos::vehicle::vsm::HVehicleSignalModel& getVehicleSignalModel();
 
     void init();
     void addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc);
     void addSubscriptions(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
 
     // Constant
-    QVariant isConstantSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
-    QVariant isConstantTachometer(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
-    QVariant isConstantIntroOutro(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onConstantChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
     void subscribeConstantSpeedGauge();
     void subscribeConstantTachometer();
@@ -114,7 +98,7 @@ private:
     void subscribeConstant();
 
     // Telltale
-    QVariant isTelltaleLampIndicator(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onTelltaleChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
     void subscribeTelltaleLampIndicator();
     void subscribeTelltale();
@@ -129,7 +113,7 @@ private:
     void subscribeSound();
 
     // Etc
-    QVariant isEtcSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
+    QVariant isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
     void onEtcChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
     void subscribeEtcSpeedGauge();
     void subscribeEtc();
@@ -140,10 +124,6 @@ signals:
     void signalServiceEventChanged(const int& signalType, const QVariant& signalValue);
     void signalServiceSoundChanged(const int& signalType, const QVariant& signalValue);
     void signalServiceEtcChanged(const int& signalType, const QVariant& signalValue);
-
-
-private:
-    // HVehicleSignalModel* mVehicleSignalModel = nullptr;
 };
 
 #endif  // SERIVCE_H

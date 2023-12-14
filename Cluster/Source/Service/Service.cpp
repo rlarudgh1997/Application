@@ -18,10 +18,10 @@ Service::Service() {
     init();
 }
 
-HVehicleSignalModel& Service::getVehicleSignalModel() {
-    static HVehicleSignalModel* gVehicleSignalModel = nullptr;
+ccos::vehicle::vsm::HVehicleSignalModel& Service::getVehicleSignalModel() {
+    static ccos::vehicle::vsm::HVehicleSignalModel* gVehicleSignalModel = nullptr;
     if (gVehicleSignalModel == nullptr) {
-        gVehicleSignalModel = new HVehicleSignalModel;
+        gVehicleSignalModel = new ccos::vehicle::vsm::HVehicleSignalModel;
     }
     return *gVehicleSignalModel;
 }
@@ -35,13 +35,13 @@ void Service::init() {
     subscribeTelltale();
     subscribeEvent();
     subscribeSound();
-    subscribeEtc();
+    // subscribeEtc();
 }
 
 void Service::addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc) {
     std::vector<std::string> nodePaths{nodeAddress};
-    auto subscription = std::make_shared<HSubscription>(nodePaths, HSubscriptionType::VALUE_CHANGED,
-                                                        std::make_shared<VehicleListener>(handlingFunc));
+    auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
+        nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
     qDebug() << "addSubscription :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
@@ -51,8 +51,8 @@ void Service::addSubscription(const std::string& nodeAddress, const SignalHandli
 }
 
 void Service::addSubscriptions(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc) {
-    auto subscription = std::make_shared<HSubscription>(nodePaths, HSubscriptionType::VALUE_CHANGED,
-                                                        std::make_shared<VehicleListener>(handlingFunc));
+    auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
+        nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
     qDebug() << "addSubscriptions :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
@@ -68,35 +68,35 @@ void Service::addSubscriptions(const std::vector<std::string>& nodePaths, const 
 //    Constant
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isConstantSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
+QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
-    if (nodePath  == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {
+    if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedAnalog.Value) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Value.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedDigital.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedDigital.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedDigital.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedDigital.Value) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedDigital.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedDigital.Value.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedSubDigital.Value) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDigital.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDigital.Value.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value.value(vehicleSignal));
-    } else if (nodePath  == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value) {
+    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value.value(vehicleSignal));
     } else {
         value = QVariant();
@@ -105,19 +105,19 @@ QVariant Service::isConstantSpeedGauge(const int& signalType, const ccos::vehicl
     return value;
 }
 
-QVariant Service::isConstantTachometer(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
+QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
-    if (nodePath  == SFC.Tachometer.Constant.Rpm.Value) {
+    if (nodePath == SFC.Tachometer.Constant.Rpm.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.Rpm.Value.value(vehicleSignal));
-    } else if (nodePath  == SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat) {
+    } else if (nodePath == SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Tachometer.Constant.RedZoneNbrand.Stat) {
+    } else if (nodePath == SFC.Tachometer.Constant.RedZoneNbrand.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RedZoneNbrand.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Tachometer.Constant.MaxRpm.Stat) {
+    } else if (nodePath == SFC.Tachometer.Constant.MaxRpm.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.MaxRpm.Stat.value(vehicleSignal));
-    } else if (nodePath  == SFC.Tachometer.Constant.RpmDamp.Stat) {
+    } else if (nodePath == SFC.Tachometer.Constant.RpmDamp.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RpmDamp.Stat.value(vehicleSignal));
     } else {
         value = QVariant();
@@ -126,7 +126,7 @@ QVariant Service::isConstantTachometer(const int& signalType, const ccos::vehicl
     return value;
 }
 
-QVariant Service::isConstantIntroOutro(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
+QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
@@ -147,11 +147,11 @@ void Service::onConstantChanged(const int& signalType, const std::vector<ccos::v
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Constant::ConstantSpeedGaugeStart) && (signalType < Constant::ConstantSpeedGaugeEnd)) {
-            signalValue = isConstantSpeedGauge(signalType, vehicleSignal);
+            signalValue = isConstantSpeedGauge(vehicleSignal);
         } else if ((signalType > Constant::ConstantTachometerStart) && (signalType < Constant::ConstantTachometerEnd)) {
-            signalValue = isConstantTachometer(signalType, vehicleSignal);
+            signalValue = isConstantTachometer(vehicleSignal);
         } else if ((signalType > Constant::ConstantIntroOutroStart) && (signalType < Constant::ConstantIntroOutroEnd)) {
-            signalValue = isConstantIntroOutro(signalType, vehicleSignal);
+            signalValue = isConstantIntroOutro(vehicleSignal);
         } else {
             signalValue = QVariant();
         }
@@ -243,7 +243,7 @@ void Service::subscribeConstant() {
 //    Telltale
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isTelltaleLampIndicator(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
+QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
@@ -258,24 +258,23 @@ QVariant Service::isTelltaleLampIndicator(const int& signalType, const ccos::veh
     return value;
 }
 
-
 void Service::onTelltaleChanged(const int& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
     qDebug() << "onTelltaleChanged :" << signalType << signalList.size();
     QVariant signalValue = QVariant();
 
-//    for (const auto& vehicleSignal : signalList) {
-//        if ((signalType > Telltale::ConstantSpeedGaugeStart) && (signalType < Telltale::ConstantSpeedGaugeEnd)) {
-//            signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
-//        // } else if ((signalType > Telltale::ConstantTachometerStart) && (signalType < Telltale::ConstantTachometerEnd)) {
-//        //     signalValue = isTelltaleLampIndicator(signalType, vehicleSignal);
-//        } else {
-//            signalValue = QVariant();
-//        }
+    //    for (const auto& vehicleSignal : signalList) {
+    //        if ((signalType > Telltale::ConstantSpeedGaugeStart) && (signalType < Telltale::ConstantSpeedGaugeEnd)) {
+    //            signalValue = isTelltaleLampIndicator(vehicleSignal);
+    //        // } else if ((signalType > Telltale::ConstantTachometerStart) && (signalType < Telltale::ConstantTachometerEnd)) {
+    //        //     signalValue = isTelltaleLampIndicator(vehicleSignal);
+    //        } else {
+    //            signalValue = QVariant();
+    //        }
 
-//        if (signalValue.isValid()) {
-//            break;
-//        }
-//    }
+    //        if (signalValue.isValid()) {
+    //            break;
+    //        }
+    //    }
 
     if (signalValue.isValid()) {
         emit signalServiceTelltaleChanged(signalType, signalValue);
@@ -284,7 +283,6 @@ void Service::onTelltaleChanged(const int& signalType, const std::vector<ccos::v
 
 void Service::subscribeTelltaleLampIndicator() {
 }
-
 
 void Service::subscribeTelltale() {
     qDebug() << "Service - subscribeTelltale";
@@ -328,14 +326,14 @@ void Service::subscribeSound() {
 //    Etc
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isEtcSpeedGauge(const int& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
+QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedUnit) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedUnit.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH) {
-        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
+        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
     } else {
@@ -350,7 +348,7 @@ void Service::onEtcChanged(const int& signalType, const std::vector<ccos::vehicl
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Etc::EtcSpeedGaugeStart) && (signalType < Etc::EtcSpeedGaugeEnd)) {
-            signalValue = isEtcSpeedGauge(signalType, vehicleSignal);
+            signalValue = isEtcSpeedGauge(vehicleSignal);
         } else {
             signalValue = QVariant();
         }

@@ -63,12 +63,12 @@ void ControlHome::controlConnect(const bool& state) {
                 &ControlHome::slotEventInfoChanged, Qt::UniqueConnection);
         connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
                 &ControlHome::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
-                &ControlHome::slotServiceEventChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
-                &ControlHome::slotServiceSoundChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
-                &ControlHome::slotServiceEtcChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlHome::slotServiceEventChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlHome::slotServiceSoundChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlHome::slotServiceEtcChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());

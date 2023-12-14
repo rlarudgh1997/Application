@@ -5,7 +5,9 @@
 
 class HandlerCenter : public AbstractHandler {
 private:
-    enum { HandlerCenterTimerStart = AbstractHandler::AbstractTimerStart, };
+    enum {
+        HandlerCenterTimerStart = AbstractHandler::AbstractTimerStart,
+    };
 
 public:
     static QSharedPointer<HandlerCenter>& instance();

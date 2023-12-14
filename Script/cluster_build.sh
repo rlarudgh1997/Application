@@ -5,10 +5,11 @@ PROJECT_DIR="$BASE_DIR/.."
 
 QT_VERSION=5.12.4
 QT_PATH=~/Qt_$QT_VERSION/$QT_VERSION/gcc_64/bin/
-#QT_PATH=~/Qt$QT_VERSION/$QT_VERSION/gcc_64/bin/
-SDK_HOST=/opt/sfc/PV/lib
-SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
+# QT_PATH=~/Qt$QT_VERSION/$QT_VERSION/gcc_64/bin/
+
 SDK_ENVIROMENT_PATH=""
+SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
+SDK_HOST=/opt/sfc/PV/environment-setup-sfc
 
 
 SET_PLATFORM=target
@@ -33,7 +34,7 @@ echo
 
 
 function setEnvironments(){
-	unset LD_LIBRARY_PATH
+	# unset LD_LIBRARY_PATH
 
 	if [ "$1" = target ] || [ "$1" = t ]; then
 		SDK_ENVIROMENT_PATH=$SDK_TARGET
@@ -41,8 +42,8 @@ function setEnvironments(){
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
-		#export PATH=$QT_PATH:$PATH
-		export LD_LIBRARY_PATH=$SDK_HOST:$LD_LIBRARY_PATH
+		SDK_ENVIROMENT_PATH=$SDK_HOST
+		source $SDK_ENVIROMENT_PATH
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit
@@ -59,17 +60,17 @@ function setEnvironments(){
 	echo "   INSTALL_PATH        = $SET_INSTALL_PATH"
 	echo "   QT_PATH             = $QT_PATH"
 	echo "   SDK_ENVIROMENT_PATH = $SDK_ENVIROMENT_PATH"
-	echo "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+	# echo "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 	# echo "   CCOS_LIB_DIR          = $CCOS_LIB_DIR"
-	echo "   ALTON_SFC_CONFIGURATION = $ALTON_SFC_CONFIGURATION"
-	echo "   ALTON_VSM_CONFIGURATION = $ALTON_VSM_CONFIGURATION"
-	echo "   ALTON_SFC_MODEL_DIR     = $ALTON_SFC_MODEL_DIR"
-	echo "   ALTON_HAL_SCRIPT_PATH   = $ALTON_HAL_SCRIPT_PATH"
-	echo "   ALTON_HAL_DIR           = $ALTON_HAL_DIR"
-	echo "   ALTON_HAL_NAME          = $ALTON_HAL_NAME"
-	echo "   ALTON_EOL_VEHICLETYPE   = $ALTON_EOL_VEHICLETYPE"
-	echo "   LD_LIBRARY_PATH         = $LD_LIBRARY_PATH"
-	echo "   PKG_CONFIG_PATH         = $PKG_CONFIG_PATH"
+	# echo "   ALTON_SFC_CONFIGURATION = $ALTON_SFC_CONFIGURATION"
+	# echo "   ALTON_VSM_CONFIGURATION = $ALTON_VSM_CONFIGURATION"
+	# echo "   ALTON_SFC_MODEL_DIR     = $ALTON_SFC_MODEL_DIR"
+	# echo "   ALTON_HAL_SCRIPT_PATH   = $ALTON_HAL_SCRIPT_PATH"
+	# echo "   ALTON_HAL_DIR           = $ALTON_HAL_DIR"
+	# echo "   ALTON_HAL_NAME          = $ALTON_HAL_NAME"
+	# echo "   ALTON_EOL_VEHICLETYPE   = $ALTON_EOL_VEHICLETYPE"
+	# echo "   LD_LIBRARY_PATH         = $LD_LIBRARY_PATH"
+	# echo "   PKG_CONFIG_PATH         = $PKG_CONFIG_PATH"
 	echo "==================================================================================================================="
 	echo
 }
@@ -104,7 +105,7 @@ function buildAll(){
 
 	echo
 	echo "==================================================================================================================="
-	mkdir $PROJECT_DIR/$SET_DEPLOY
+	mkdir -p $PROJECT_DIR/$SET_DEPLOY
 
 	#echo "Move $PROJECT_DIR/$SET_PROJECT_NAME"
 

@@ -90,12 +90,12 @@ void ControlGauge::controlConnect(const bool& state) {
                 &ControlGauge::slotServiceConstantChanged, Qt::UniqueConnection);
         connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
                 &ControlGauge::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
-                &ControlGauge::slotServiceEventChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
-                &ControlGauge::slotServiceSoundChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
-                &ControlGauge::slotServiceEtcChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlGauge::slotServiceEventChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlGauge::slotServiceSoundChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlGauge::slotServiceEtcChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -186,16 +186,17 @@ void ControlGauge::updateGaugeInfo(const int& dataType, const QVariant& dataValu
     switch (dataType) {
         case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed: {
             int speedUnit = getData(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedUnit).toInt();
-            int gaugeType = ((speedUnit == static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::MILE_PER_HOUR)) ?
-                             (ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile) : (ivis::common::GaugeTypeEnum::GaugeTypeSpeed));
+            int gaugeType = ((speedUnit == static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::MILE_PER_HOUR))
+                                 ? (ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile)
+                                 : (ivis::common::GaugeTypeEnum::GaugeTypeSpeed));
             updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, dataValue);
             updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, isGaugeAngle(gaugeType, dataValue));
             break;
         }
         case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, dataValue);
-            updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle, isGaugeAngle(ivis::common::GaugeTypeEnum::GaugeTypeRpm,
-                              dataValue));
+            updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle,
+                              isGaugeAngle(ivis::common::GaugeTypeEnum::GaugeTypeRpm, dataValue));
             break;
         }
         case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel: {
@@ -252,11 +253,18 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 void ControlGauge::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
     qDebug() << "slotServiceConstantChanged :" << signalType << signalValue.type() << signalValue;
 
-    if (signalType == Service::Constant::SpeedAnalogStat) {
-        updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
-    } else if (signalType == Service::Constant::SpeedDigitalStat) {
-        updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
-    } else {
+    switch (signalType) {
+        case Service::Constant::SpeedAnalogStat: {
+            updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
+            break;
+        }
+        case Service::Constant::SpeedDigitalStat: {
+            updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
+            break;
+        }
+        default: {
+            break;
+        }
     }
 }
 

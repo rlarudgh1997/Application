@@ -5,7 +5,9 @@
 
 class HandlerGauge : public AbstractHandler {
 private:
-    enum { HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart, };
+    enum {
+        HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart,
+    };
 
 public:
     static QSharedPointer<HandlerGauge>& instance();

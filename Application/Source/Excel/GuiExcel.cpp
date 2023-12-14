@@ -423,7 +423,6 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         return;
     }
 
-
     bool inputKeyOK = (keyValue == ivis::common::KeyTypeEnum::KeyInputValueOK);
     int row = mExcelSheet[sheetIndex]->currentRow();
     int column = mExcelSheet[sheetIndex]->currentColumn();
@@ -765,7 +764,6 @@ void GuiExcel::pasteClipboardInfo() {
             mExcelSheet[sheetIndex]->setItem(itemRowIndex, itemColumnIndex, new QTableWidgetItem(setText));
         }
     }
-
 
     if (mClearCellInfo.size() == 5) {
         // QGuiApplication::clipboard()->clear();

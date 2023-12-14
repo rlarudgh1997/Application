@@ -29,15 +29,7 @@
 #define USE_INTANCE_SINGLETON_GUI
 #endif
 
-
-
-
-
 // #define USE_SERVICE_PV
 // #define USE_SERVICE_CV
-
-
-
-
 
 #endif  // COMMON_DEFINE_H

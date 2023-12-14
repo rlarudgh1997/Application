@@ -272,12 +272,12 @@ void ControlTelltale::controlConnect(const bool& state) {
                 &ControlTelltale::slotEventInfoChanged, Qt::UniqueConnection);
         connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
                 &ControlTelltale::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this,
-                &ControlTelltale::slotServiceEventChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this,
-                &ControlTelltale::slotServiceSoundChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this,
-                &ControlTelltale::slotServiceEtcChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlTelltale::slotServiceEventChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlTelltale::slotServiceSoundChanged,
+                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlTelltale::slotServiceEtcChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
