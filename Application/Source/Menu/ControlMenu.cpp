@@ -477,8 +477,8 @@ void ControlMenu::cancelScript(const bool& complete) {
     const QStringList killProcess = QStringList({
         "python",
         "python3",
-        "altonservice",
-        "sfc_validator",
+        // "altonservice",
+        // "sfc_validator",
         "gen_tc.sh",
         "run_tc.sh",
         "gen_tcreport.sh",
