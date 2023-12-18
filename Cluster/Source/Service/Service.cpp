@@ -67,9 +67,7 @@ void Service::addSubscriptions(const std::vector<std::string>& nodePaths, const 
 //     auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
 //         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
 
-
 //     auto result = getVehicleSignalModel().subscribe(subscription);
-
 
 //     getVehicleSignalModel().subscribe(std::make_shared<HSubscription>(
 //         addressList, HSubscriptionType::VALUE_CHANGED,
@@ -644,8 +642,7 @@ void Service::subscribeEventIntroOutro() {
 }
 
 void Service::subscribeEventOAT() {
-    addSubscription(SFC.OAT.Event.IceWarn.ID,
-                    std::bind(&Service::onEventChanged, this, Event::IceWarnID, std::placeholders::_1));
+    addSubscription(SFC.OAT.Event.IceWarn.ID, std::bind(&Service::onEventChanged, this, Event::IceWarnID, std::placeholders::_1));
     addSubscription(SFC.OAT.Event.IceWarn.Stat,
                     std::bind(&Service::onEventChanged, this, Event::IceWarnStat_, std::placeholders::_1));
     addSubscription(SFC.OAT.Event.IceWarn.LinkedSound.ID,
@@ -680,15 +677,15 @@ void Service::subscribeEventDriveMode() {
                     std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.Stat,
                     std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundType,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundType, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.RepeatCount,
                     std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundRepeatCount,
-                             std::placeholders::_1));
+                              std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.ID,
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.Stat,
@@ -697,22 +694,22 @@ void Service::subscribeEventDriveMode() {
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.ID,
                     std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.Stat,
                     std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundType,
-                              std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundType, std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.ID,
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.Stat,
@@ -721,9 +718,9 @@ void Service::subscribeEventDriveMode() {
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundRepeatCount, std::placeholders::_1));
 }
 
 void Service::subscribeEventADASParking_New() {
@@ -739,9 +736,9 @@ void Service::subscribeEventADASParking_New() {
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.ID,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.Stat,
@@ -750,21 +747,21 @@ void Service::subscribeEventADASParking_New() {
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.ID,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureID, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureStat, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.ID,
                     std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundType,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundType, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event2Group.ID,
                     std::bind(&Service::onEventChanged, this, Event::Event2GroupID, std::placeholders::_1));
     addSubscription(SFC.ADAS_PARKING_NEW.Event.Event2Group.Stat,
@@ -824,9 +821,9 @@ void Service::subscribeEventHighPerformanceForNBrand() {
                     std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundRepeatCount, std::placeholders::_1));
 }
 
 void Service::subscribeEventADASDrivingNew() {
@@ -846,9 +843,9 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.Stat,
@@ -857,19 +854,19 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundRepeatCount,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundType,
-                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundType, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52100ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.Stat,
@@ -878,25 +875,25 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundType,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundRepeatCount,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundType, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundID,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundType,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundType, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52106ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.Stat,
@@ -905,15 +902,15 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundID,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundType,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundRepeatCount,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundType, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.Stat,
@@ -922,53 +919,52 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundRepeatCount,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureID,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureStat,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundRepeatCount, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.Stat,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureStat, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundID,
-                               std::placeholders::_1));
+                              std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundType,
-                               std::placeholders::_1));
+                              std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.RepeatCount,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundRepeatCount,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureID,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureStat,
-                               std::placeholders::_1));
+                              std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.Stat,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureStat, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundID,
-                               std::placeholders::_1));
+                              std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundType,
-                               std::placeholders::_1));
+                              std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.RepeatCount,
                     std::bind(&Service::onEventChanged, this,
-                               Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundRepeatCount,
-                               std::placeholders::_1));
+                              Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.Stat,
                     std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundID,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundType,
-                               std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundRepeatCount,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.ID,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundID, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.Type,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundType, std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group2MiniPopup1_1ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.Stat,
@@ -985,9 +981,9 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundRepeatCount,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.ID,
                     std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.Stat,
@@ -996,9 +992,9 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.Type,
                     std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundRepeatCount,
-                               std::placeholders::_1));
+    addSubscription(
+        SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.RepeatCount,
+        std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundRepeatCount, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.HDPOperProhibit.ID,
                     std::bind(&Service::onEventChanged, this, Event::HDPOperProhibitID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.HDPOperProhibit.Stat,

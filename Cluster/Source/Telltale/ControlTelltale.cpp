@@ -128,8 +128,8 @@ void ControlTelltale::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlTelltale::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceDataChanged, this,
-                &ControlTelltale::slotServiceDataChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceDataChanged, this, &ControlTelltale::slotServiceDataChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
