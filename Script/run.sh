@@ -40,9 +40,13 @@ function setEnvironments(){
 		APP_PATH=$APP_PATH/deploy_x86
 	elif [ "$1" = host ] || [ "$1" = h ]; then
 		echo "[Host]"
-		source $SDK_HOST
-		if [ "$2" = altonservice ] || [ "$2" = a ]; then
+		if [ "$BIN_NAME" = altonservice ]; then
+			source $SDK_HOST
 			APP_PATH=/opt/sfc/PV/bin
+		elif [ "$BIN_NAME" = Cluster ]; then
+			source $SDK_HOST
+			unset ALTON_HAL_SCRIPT_PATH
+			APP_PATH=$APP_PATH/deploy_x86
 		else
 			APP_PATH=$APP_PATH/deploy_x86
 		fi

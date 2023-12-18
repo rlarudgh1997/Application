@@ -46,16 +46,14 @@ private:
     virtual void updateDataControl(const int& type, const QVariant& value) = 0;
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false) = 0;
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant()) = 0;
+    virtual void updateDataService(const int& type, const QVariant& value) = 0;
 
 private slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
-    virtual void slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) = 0;
-    virtual void slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) = 0;
-    virtual void slotServiceEventChanged(const int& signalType, const QVariant& signalValue) = 0;
-    virtual void slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) = 0;
-    virtual void slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) = 0;
+
 
 private:
     QMap<int, int> mTimer = QMap<int, int>();

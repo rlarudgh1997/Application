@@ -34,16 +34,13 @@ protected:
     virtual void updateDataControl(const int& type, const QVariant& value);
     virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate = false);
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
+    virtual void updateDataService(const int& type, const QVariant& value);
 
 public slots:
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
-    virtual void slotServiceConstantChanged(const int& signalType, const QVariant& signalValue);
-    virtual void slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue);
-    virtual void slotServiceEventChanged(const int& signalType, const QVariant& signalValue);
-    virtual void slotServiceSoundChanged(const int& signalType, const QVariant& signalValue);
-    virtual void slotServiceEtcChanged(const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
 
 private:
     AbstractHandler* mHandler = nullptr;

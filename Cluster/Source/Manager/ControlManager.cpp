@@ -22,13 +22,14 @@ ControlManager::ControlManager() {
 }
 
 void ControlManager::init() {
+    Service::instance().data();
     setCurrentMode(ivis::common::DisplayEnum::DisplayTypeHome);
 
     createControl(ivis::common::DisplayEnum::DisplayTypeHome);
     createControl(ivis::common::DisplayEnum::DisplayTypeGauge);
     createControl(ivis::common::DisplayEnum::DisplayTypeTelltale);
 
-    Service::instance().data();
+    Service::instance().data()->init();
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {

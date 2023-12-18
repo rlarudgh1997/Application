@@ -61,14 +61,8 @@ void ControlHome::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlHome::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
-                &ControlHome::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlHome::slotServiceEventChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlHome::slotServiceSoundChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlHome::slotServiceEtcChanged,
-                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceDataChanged, this,
+                &ControlHome::slotServiceDataChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -98,6 +92,10 @@ void ControlHome::updateDataHandler(const int& type, const QVariant& value, cons
 void ControlHome::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
                                                      eventType, eventValue);
+}
+
+void ControlHome::updateDataService(const int& type, const QVariant& value) {
+    // updateDataService
 }
 
 void ControlHome::slotConfigChanged(const int& type, const QVariant& value) {
@@ -135,17 +133,8 @@ void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventT
     }
 }
 
-void ControlHome::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlHome::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlHome::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlHome::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlHome::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
+void ControlHome::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
+    if (dataType == static_cast<int>(DataType::Constant)) {
+        // Constant
+    }
 }

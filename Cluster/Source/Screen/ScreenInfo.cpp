@@ -63,7 +63,7 @@ QQuickItem* ScreenInfo::drawScreen(const int& displayType, const QString& qml, c
         }
     }
 
-    qDebug() << "QQuickItem :" << mSubScreens[displayType] << "\n\n";
+    qDebug() << "QQuickItem :" << mSubScreens[displayType];
     return mSubScreens[displayType];
 }
 
@@ -164,6 +164,7 @@ void ScreenInfo::resizeScreenInfo(QResizeEvent& resizeEvent) {
 }
 
 void ScreenInfo::loadComplete(const int& displayType) {
-    qDebug() << "ScreenInfo::loadComplete(" << displayType << ")";
     emit signalLoadComplete(displayType);
+    qDebug() << "ScreenInfo::loadComplete(" << displayType << ")";
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
 }

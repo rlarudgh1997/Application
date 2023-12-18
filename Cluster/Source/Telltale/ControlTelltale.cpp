@@ -44,9 +44,10 @@ void ControlTelltale::initCommonData(const int& currentMode, const int& displayT
 
 void ControlTelltale::initNormalData() {
     resetControl(false);
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleType, 0);  // 0 : PV, 1 : CV
 
-#if 1
+#if 0
+    updateDataHandler(ivis::common::PropertyEnum::TelltaleKeySystemStat,
+                      static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat.ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleSeatbeltStat,
                       static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltalexEVSystemReadyStat,
@@ -101,157 +102,14 @@ void ControlTelltale::initNormalData() {
                       static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::GREEN));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleADASDrivingNewLFAStat,
                       static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::GREEN));
-
-#if 0  // QML 에서 사용하지 않음
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleDualPowerStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleDualPowerOptional,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLiftgateStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleBEQStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTachographStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleHeatedMirrorStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleWorkingLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleASRStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleASRBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleASRBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEBSAmberLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEBSRedLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLWSStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLWSBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLWSBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASOptionalStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASBlinkValueAOptional,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASAxleMotionStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleECASAxleMotionStatOptional,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleBrakeAirLowLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEHSAmberLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEHSAmberLampBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEHSAmberLampBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleEAPULampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAutoGreaseLowLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleCabTiltingStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTMPTOStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleDifferencialLockStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTMHighStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleWheelLockStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleRetarderLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleRetarderMalLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleHighVoltageBatteryChargeStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTPMSCVStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTPMSCVBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleTPMSCVBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleABSTrailerLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleNoABSTrailerLamp,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleABSCVStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleVDCStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleVDCBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleVDCBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleVDCOFFStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleStreeingWarningLampStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleParkingBrakeCVStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleSrvLmpEvStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+                      static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat.ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleSrvLmpHevStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+                      static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleSrvLmpFcevStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleOATIceWarnStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleOATIceWarnStatOptional,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAirBagBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAirBagBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleKeySystemStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAFSDBLStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAFSDBLBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleAFSDBLBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
+                      static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
     updateDataHandler(ivis::common::PropertyEnum::TelltaleEvPwrDnStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLDWLKABlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLDWLKABlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleFCABlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleFCABlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleELKBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleELKBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLowFuelWarnStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLowFuelWarnStatOptional,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLowFuelWarnBlinkValueA,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleLowFuelWarnBlinkValueB,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltalexEVServiceLampCVSrvLmpEvStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltalexEVServiceLampCVSrvLmpFcevStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltalexEVPowerLimitEvPwrDnStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-    updateDataHandler(ivis::common::PropertyEnum::TelltaleGFDWarningGFDStat,
-                        static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
-#endif
+                      static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat::ON));
 #endif
 }
 
@@ -270,14 +128,8 @@ void ControlTelltale::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlTelltale::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
-                &ControlTelltale::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlTelltale::slotServiceEventChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlTelltale::slotServiceSoundChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlTelltale::slotServiceEtcChanged,
-                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceDataChanged, this,
+                &ControlTelltale::slotServiceDataChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -307,6 +159,10 @@ void ControlTelltale::updateDataHandler(const int& type, const QVariant& value, 
 void ControlTelltale::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
                                                      eventType, eventValue);
+}
+
+void ControlTelltale::updateDataService(const int& type, const QVariant& value) {
+    // updateDataService
 }
 
 void ControlTelltale::slotConfigChanged(const int& type, const QVariant& value) {
@@ -344,17 +200,45 @@ void ControlTelltale::slotEventInfoChanged(const int& displayType, const int& ev
     }
 }
 
-void ControlTelltale::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
-}
+void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
+    int propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleInvalid;
 
-void ControlTelltale::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
-}
+    switch (static_cast<DataType>(dataType)) {
+        case DataType::Constant: {
+            Constant constantType = static_cast<Constant>(signalType);
+            break;
+        }
+        case DataType::Telltale: {
+            Telltale telltaleType = static_cast<Telltale>(signalType);
+            if (telltaleType == Telltale::FrontFogStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorFrontFogStat;
+            } else if (telltaleType == Telltale::HighBeamStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorHighBeamStat;
+            } else if (telltaleType == Telltale::RearFogStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorRearFogStat;
+            } else if (telltaleType == Telltale::TailLampStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTailLampStat;
+            } else if (telltaleType == Telltale::TurnSignalLeftStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTurnSignalLeftStat;
+            } else if (telltaleType == Telltale::TurnSignalRightStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTurnSignalRightStat;
+            } else if (telltaleType == Telltale::LowBeamStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
+            } else if (telltaleType == Telltale::IceWarnStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
+            } else if (telltaleType == Telltale::IceWarnStatOptional) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
 
-void ControlTelltale::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
-}
+            } else {
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 
-void ControlTelltale::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlTelltale::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
+    if (propertyType != ivis::common::PropertyEnum::TelltaleType::TelltaleInvalid) {
+        updateDataHandler(propertyType, signalValue);
+    }
 }

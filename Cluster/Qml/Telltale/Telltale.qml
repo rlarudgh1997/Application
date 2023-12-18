@@ -394,11 +394,38 @@ DataModelTelltale {
     }
 
 
-    // TelltaleCV {
-    //     anchors.fill: parent
+    // DummyTelltale {
+    //     id: srvLmpEv
+    //     xPosition: 0
+    //     yPosition: 270
+    //     telltaleName: "srv\nLmp\nEv"
+    //     fontsize: 15
+    //     visible: dataModelTelltale.telltaleSrvLmpEvStat === TelltaleStat.ON
     // }
 
-    // TelltalePV {
-    //     anchors.fill: parent
+    // DummyTelltale {
+    //     id: srvLmpHev
+    //     xPosition: 0
+    //     yPosition: 270
+    //     telltaleName: "srv\nLmp\nHev"
+    //     fontsize: 15
+    //     visible: dataModelTelltale.telltaleSrvLmpHevStat === TelltaleStat.ON
     // }
+
+    // DummyTelltale {
+    //     id: srvLmpFcev
+    //     xPosition: 0
+    //     yPosition: 270
+    //     telltaleName: "srv\nLmp\nFcev"
+    //     fontsize: 15
+    //     visible: dataModelTelltale.telltaleSrvLmpFcevStat === TelltaleStat.ON
+    // }
+
+    // EV_Power_Down
+    Image {
+        id: evPowerDown
+        x: 628; y: 0
+        source: "qrc:/images/Telltale/Telltale_PowerDown.png"
+        visible: dataModelTelltale.telltaleEvPwrDnStat === TelltaleStat.ON
+    }
 }

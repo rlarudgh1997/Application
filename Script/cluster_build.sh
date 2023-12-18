@@ -34,7 +34,7 @@ echo
 
 
 function setEnvironments(){
-	# unset LD_LIBRARY_PATH
+	unset LD_LIBRARY_PATH
 
 	if [ "$1" = target ] || [ "$1" = t ]; then
 		SDK_ENVIROMENT_PATH=$SDK_TARGET

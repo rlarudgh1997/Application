@@ -65,14 +65,6 @@ void ControlContent::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlContent::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
-                &ControlContent::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlContent::slotServiceEventChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlContent::slotServiceSoundChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlContent::slotServiceEtcChanged,
-                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -102,6 +94,10 @@ void ControlContent::updateDataHandler(const int& type, const QVariant& value, c
 void ControlContent::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
                                                      eventType, eventValue);
+}
+
+void ControlContent::updateDataService(const int& type, const QVariant& value) {
+    // updateDataService
 }
 
 void ControlContent::slotConfigChanged(const int& type, const QVariant& value) {
@@ -139,17 +135,8 @@ void ControlContent::slotEventInfoChanged(const int& displayType, const int& eve
     }
 }
 
-void ControlContent::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlContent::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlContent::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlContent::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlContent::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
+void ControlContent::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
+    if (dataType == static_cast<int>(DataType::Constant)) {
+        // Constant
+    }
 }

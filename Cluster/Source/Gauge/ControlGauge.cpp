@@ -6,7 +6,6 @@
 #include "ConfigSetting.h"
 #include "CommonUtil.h"
 #include "CommonResource.h"
-#include "Service.h"
 
 #include "Service.h"
 
@@ -86,16 +85,8 @@ void ControlGauge::controlConnect(const bool& state) {
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlGauge::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceConstantChanged, this,
-                &ControlGauge::slotServiceConstantChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceTelltaleChanged, this,
-                &ControlGauge::slotServiceTelltaleChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEventChanged, this, &ControlGauge::slotServiceEventChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceSoundChanged, this, &ControlGauge::slotServiceSoundChanged,
-                Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceEtcChanged, this, &ControlGauge::slotServiceEtcChanged,
-                Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceDataChanged, this,
+                &ControlGauge::slotServiceDataChanged, Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -111,11 +102,11 @@ void ControlGauge::timerFunc(const int& timerId) {
     if (timerId == getTimerId(ControlGaugeTimerSpeed)) {
         int speed = getData(ivis::common::PropertyEnum::GaugeSpeed).toInt();
         ivis::common::REVOLVE_P(speed, 10, 0, 260);
-        slotServiceConstantChanged(Service::Contant::SpeedAnalogStat, speed);
+        slotServiceDataChanged(static_cast<int>(DataType::Constant), static_cast<int>(Contant::SpeedAnalogStat), speed);
     } else if (timerId == getTimerId(ControlGaugeTimerRpm)) {
         int rpm = getData(ivis::common::PropertyEnum::GaugeRpm).toInt();
         ivis::common::REVOLVE_P(rpm, 100, 0, 6000);
-        slotServiceConstantChanged(Service::Contant::SpeedDigitalStat, rpm);
+        slotServiceDataChanged(static_cast<int>(DataType::Constant), static_cast<int>(Contant::SpeedDigitalStat), rpm);
     } else {
     }
 #endif
@@ -139,6 +130,10 @@ void ControlGauge::updateDataHandler(const int& type, const QVariant& value, con
 void ControlGauge::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyEnum::CommonDisplay).toInt(), destination,
                                                      eventType, eventValue);
+}
+
+void ControlGauge::updateDataService(const int& type, const QVariant& value) {
+    // updateDataService
 }
 
 qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValue) {
@@ -250,32 +245,20 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
     }
 }
 
-void ControlGauge::slotServiceConstantChanged(const int& signalType, const QVariant& signalValue) {
-    qDebug() << "slotServiceConstantChanged :" << signalType << signalValue.type() << signalValue;
-
-    switch (signalType) {
-        case Service::Constant::SpeedAnalogStat: {
-            updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
-            break;
-        }
-        case Service::Constant::SpeedDigitalStat: {
-            updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
-            break;
-        }
-        default: {
-            break;
+void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
+    if (dataType == static_cast<int>(DataType::Constant)) {
+        switch (static_cast<Constant>(signalType)) {
+            case Constant::SpeedAnalogStat: {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
+                break;
+            }
+            case Constant::SpeedDigitalStat: {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
-}
-
-void ControlGauge::slotServiceTelltaleChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlGauge::slotServiceEventChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlGauge::slotServiceSoundChanged(const int& signalType, const QVariant& signalValue) {
-}
-
-void ControlGauge::slotServiceEtcChanged(const int& signalType, const QVariant& signalValue) {
 }
