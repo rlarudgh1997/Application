@@ -1,0 +1,27 @@
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 18 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 1100
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 39 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 2200
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 63 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 3300
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 95 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 4400
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 158 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 5500
+../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 160 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 6000
+
+
+
+
+
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 2
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 2
+
+
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 1
+../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 1
