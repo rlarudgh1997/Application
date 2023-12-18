@@ -34,8 +34,8 @@ RESOURCES += \
 #    $$PWD/Resource/Language.qrc\
 
 
-FORMS += \
-    test.ui
+# FORMS += \
+#    test.ui
 
 
 message("==================================")

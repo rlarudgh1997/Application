@@ -70,15 +70,8 @@ function platformClean(){
 }
 
 function cleanAll(){
-	#find -name "deploy_target" -type d -exec rm -rfv {} \;
-	#find -name "deploy_x86" -type d -exec rm -rfv {} \;
-
-	#find -name $PROJECT_DIR/deploy_target -type d -exec rm -rfv {} \;
-	#find -name $PROJECT_DIR/deploy_x86 -type d -exec rm -rfv {} \;
-
-	rm -rf $PROJECT_DIR/deploy_target
-	rm -rf $PROJECT_DIR/deploy_x86
-
+	find "$PROJECT_DIR" -name "deploy_target" -type d -exec rm -rfv {} \;
+	find "$PROJECT_DIR" -name "deploy_x86" -type d -exec rm -rfv {} \;
 
 	platformClean
 }

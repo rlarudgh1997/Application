@@ -251,8 +251,8 @@ def readFromText(path, saveFilePath) :
                         # text = ""
                         text = readText    # 시트내에 숫자만 있는 경우 파일로 저장 안되는 이슈 수정 : 자료형 <class 'numpy.float64'>
 
-                    if sheetIndex == 0 :
-                        print("Data Type :", type(readText), "->", readText)
+                    # if sheetIndex == 0 :
+                    #    print("Data Type :", type(readText), "->", readText)
 
                     read.iloc[rowIndex, columnIndex] = text
                     # read.loc[rowIndex][columnIndex] = text

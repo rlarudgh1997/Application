@@ -5,9 +5,7 @@
 
 class HandlerMenu : public AbstractHandler {
 private:
-    enum {
-        HandlerMenuTimerStart = AbstractHandler::AbstractTimerStart,
-    };
+    enum { HandlerMenuTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
     static QSharedPointer<HandlerMenu>& instance();

@@ -5,9 +5,7 @@
 
 class HandlerExcel : public AbstractHandler {
 private:
-    enum {
-        HandlerExcelTimerStart = AbstractHandler::AbstractTimerStart,
-    };
+    enum { HandlerExcelTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
     static QSharedPointer<HandlerExcel>& instance();

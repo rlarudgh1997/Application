@@ -61,14 +61,12 @@ private:                                                                        
     QMutex mMutex##name;                                                              \
     type m##name;
 
-#define QML_ENUM_CLASS(name, ...) \
-    class name : public QObject { \
-        Q_GADGET                  \
-    public:                       \
-        enum Type {               \
-            __VA_ARGS__           \
-        };                        \
-        Q_ENUMS(Type)             \
+#define QML_ENUM_CLASS(name, ...)  \
+    class name : public QObject {  \
+        Q_GADGET                   \
+    public:                        \
+        enum Type { __VA_ARGS__ }; \
+        Q_ENUMS(Type)              \
     };
 
 #define INIT_BUTTON_WIEDGET(info, widget, index)                       \
