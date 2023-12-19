@@ -5,9 +5,7 @@
 
 class HandlerTelltale : public AbstractHandler {
 private:
-    enum {
-        HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart,
-    };
+    enum { HandlerTelltaleTimerStart = AbstractHandler::AbstractTimerStart, };
 
 public:
     static QSharedPointer<HandlerTelltale>& instance();

@@ -41,7 +41,8 @@ public:
         DisplayTypeHome = 0x000001,
         DisplayTypeGauge = 0x000002,
         DisplayTypeTelltale = 0x000004,
-        DisplayTypePopup = 0x000008,
+        DisplayTypeContent = 0x000008,
+        DisplayTypeEvent = 0x000010,
 
         DisplayTypeAll = 0xFFFFFF,
     };

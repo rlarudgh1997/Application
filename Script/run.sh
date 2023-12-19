@@ -45,7 +45,7 @@ function setEnvironments(){
 			APP_PATH=/opt/sfc/PV/bin
 		elif [ "$BIN_NAME" = Cluster ]; then
 			source $SDK_HOST
-			unset ALTON_HAL_SCRIPT_PATH
+			unset $ALTON_HAL_SCRIPT_PATH
 			APP_PATH=$APP_PATH/deploy_x86
 		else
 			APP_PATH=$APP_PATH/deploy_x86
