@@ -48,6 +48,8 @@ enum class Constant : u_int32_t {
 
     // OAT
     OATStart,
+    OutTempDisplayStat,
+    OutTempDisplayUnitStat,
     OATEnd,
 
     // TransmissionIndicator

@@ -4,7 +4,8 @@ BASE_DIR="$(dirname $(realpath $0))"
 APP_PATH="$BASE_DIR/.."
 BIN_NAME="Application"
 
-SDK_HOST=/opt/sfc/PV/environment-setup-sfc
+# SDK_HOST=/opt/sfc/PV/environment-setup-sfc
+SDK_HOST=$CCOS_LIB_DIR/environment-setup-sfc
 
 
 clear
@@ -88,10 +89,10 @@ function runProcess(){
 
 		sleep 0.1
 
-	if pgrep -x $SERVICE > /dev/null
-	then
-		echo "Launching [$SERVICE] is completed"
-	fi
+		if pgrep -x $SERVICE > /dev/null
+		then
+			echo "Launching [$SERVICE] is completed"
+		fi
 	else
 		echo "[$FULL_PATH] not FOUND!!"
 	fi
@@ -116,6 +117,7 @@ function killProcess(){
 
 
 #Application Exec
+RUN_BACKGROND=""
 if [ "$1" = target ] || [ "$1" = t ]; then
 	PLATFORM=target
 	ENV=target
@@ -139,6 +141,7 @@ elif [ "$1" = altonservice ] || [ "$1" = a ]; then
 	PLATFORM=host
 	ENV=host
 	BIN_NAME="altonservice"
+	RUN_BACKGROND="true"
 else
 	PLATFORM=$1
 	ENV=$1
@@ -148,7 +151,7 @@ case "$PLATFORM" in
 	host)
 		setEnvironments $ENV $IP_ADDRESS $BIN_NAME
 		killProcess
-		runProcess $BIN_NAME $APP_PATH $2
+		runProcess $BIN_NAME $APP_PATH $2 $RUN_BACKGROND
 		;;
 	target)
 		setEnvironments $ENV

@@ -22,9 +22,10 @@ namespace common {
 #define PROPETRY_START_LIST 2000
 #define PROPETRY_START_HOME 3000
 #define PROPETRY_START_GAUGE 4000
-#define PROPETRY_START_CONTENT 5000
-#define PROPETRY_START_TELLTALE 6000
-#define PROPETRY_START_POPUP 7000
+#define PROPETRY_START_TELLTALE 5000
+#define PROPETRY_START_CONTENT 6000
+#define PROPETRY_START_EVENT 7000
+#define PROPETRY_START_POPUP 9000
 
 class DisplayEnum : public QObject {
     Q_OBJECT
@@ -130,12 +131,6 @@ public:
     };
     Q_ENUMS(GaugeType)
 
-    enum ContentType {
-        ContentInvalid = PROPETRY_START_CONTENT,
-        ContentType,
-    };
-    Q_ENUMS(GaugeType)
-
     enum TelltaleType {
         TelltaleInvalid = PROPETRY_START_TELLTALE,
         TelltaleKeySystemStat,
@@ -173,6 +168,18 @@ public:
         TelltaleEvPwrDnStat,
     };
     Q_ENUMS(TelltaleType)
+
+    enum ContentType {
+        ContentInvalid = PROPETRY_START_CONTENT,
+        ContentID,
+    };
+    Q_ENUMS(GaugeType)
+
+    enum EventType {
+        EventInvalid = PROPETRY_START_EVENT,
+        EventID,
+    };
+    Q_ENUMS(GaugeType)
 
     enum PopupType {
         PopupInvalid = PROPETRY_START_POPUP,

@@ -44,7 +44,7 @@ void ControlContent::initCommonData(const int& currentMode, const int& displayTy
 
 void ControlContent::initNormalData() {
     resetControl(false);
-    updateDataHandler(ivis::common::PropertyEnum::ContentType, ivis::common::HandlerContentEnum::ContentType::Main);
+    updateDataHandler(ivis::common::PropertyEnum::ContentID, 0);
 }
 
 void ControlContent::initControlData() {
@@ -56,19 +56,20 @@ void ControlContent::resetControl(const bool& reset) {
 
 void ControlContent::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerContent::signalHandlerEvent, this, &ControlContent::slotHandlerEvent, Qt::UniqueConnection);
-        connect(Service::instance().data(), &ConfigSetting::signalContentChagned(int type, QList<QVairnt> value), this,
-                &ControlContent::slotServiceChanged, updateDataHandler(ivis::common::PropertyEnum::CommonVisible, true);
-
+        connect(isHandler(), &HandlerContent::signalHandlerEvent, this, &ControlContent::slotHandlerEvent,
                 Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlContent::slotConfigChanged,
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
                 &ControlContent::slotEventInfoChanged, Qt::UniqueConnection);
+        connect(Service::instance().data(), &Service::signalServiceDataChanged, this, &ControlContent::slotServiceDataChanged,
+                Qt::UniqueConnection);
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
+        disconnect(Service::instance().data());
+        disconnect(Service::instance().data());
     }
 }
 

@@ -3,14 +3,10 @@
 BASE_DIR="$(dirname $(realpath $0))"
 PROJECT_DIR="$BASE_DIR/.."
 
-QT_VERSION=5.12.4
-QT_PATH=~/Qt_$QT_VERSION/$QT_VERSION/gcc_64/bin/
-# QT_PATH=~/Qt$QT_VERSION/$QT_VERSION/gcc_64/bin/
-
 SDK_ENVIROMENT_PATH=""
 SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
-SDK_HOST=/opt/sfc/PV/environment-setup-sfc
-
+#SDK_HOST=/opt/sfc/PV/environment-setup-sfc
+SDK_HOST=$CCOS_LIB_DIR/environment-setup-sfc
 
 SET_PLATFORM=target
 SET_TARGET_BUILD=1
@@ -54,14 +50,14 @@ function setEnvironments(){
 
 	echo
 	echo "[Set Environments]"
-	echo "   PROJECT_NAME        = $SET_PROJECT_NAME"
-	echo "   PLATFORM            = $SET_PLATFORM"
-	echo "   TARGET_BUILD        = $SET_TARGET_BUILD"
-	echo "   INSTALL_PATH        = $SET_INSTALL_PATH"
-	echo "   QT_PATH             = $QT_PATH"
-	echo "   SDK_ENVIROMENT_PATH = $SDK_ENVIROMENT_PATH"
+	echo "   PROJECT_NAME            = $SET_PROJECT_NAME"
+	echo "   PLATFORM                = $SET_PLATFORM"
+	echo "   TARGET_BUILD            = $SET_TARGET_BUILD"
+	echo "   INSTALL_PATH            = $SET_INSTALL_PATH"
+	echo "   SDK_ENVIROMENT_PATH     = $SDK_ENVIROMENT_PATH"
+	echo
 	# echo "   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-	# echo "   CCOS_LIB_DIR          = $CCOS_LIB_DIR"
+	echo "   CCOS_LIB_DIR            = $CCOS_LIB_DIR"
 	# echo "   ALTON_SFC_CONFIGURATION = $ALTON_SFC_CONFIGURATION"
 	# echo "   ALTON_VSM_CONFIGURATION = $ALTON_VSM_CONFIGURATION"
 	# echo "   ALTON_SFC_MODEL_DIR     = $ALTON_SFC_MODEL_DIR"
@@ -70,7 +66,7 @@ function setEnvironments(){
 	# echo "   ALTON_HAL_NAME          = $ALTON_HAL_NAME"
 	# echo "   ALTON_EOL_VEHICLETYPE   = $ALTON_EOL_VEHICLETYPE"
 	# echo "   LD_LIBRARY_PATH         = $LD_LIBRARY_PATH"
-	# echo "   PKG_CONFIG_PATH         = $PKG_CONFIG_PATH"
+	echo "   PKG_CONFIG_PATH         = $PKG_CONFIG_PATH"
 	echo "==================================================================================================================="
 	echo
 }

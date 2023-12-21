@@ -40,7 +40,7 @@ private:
     ccos::vehicle::vsm::HVehicleSignalModel& getVehicleSignalModel();
 
     void addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc);
-    void addSubscriptions(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
+    void addSubscriptionGroup(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
 
     // Constant
     QVariant isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal);
@@ -55,7 +55,8 @@ private:
     void onConstantChanged(const Constant& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
     void subscribeConstantSpeedGauge();
     void subscribeConstantTachometer();
-    void subscribeConstantIntroOutron();
+    void subscribeConstantIntroOutro();
+    void subscribeConstantOAT();
     void subscribeConstant();
 
     // Telltale
@@ -117,12 +118,8 @@ private:
     void subscribeEtc();
 
 signals:
-    void signalServiceConstantChanged(const int& signalType, const QVariant& signalValue);
-    void signalServiceTelltaleChanged(const int& signalType, const QVariant& signalValue);
-    void signalServiceEventChanged(const int& signalType, const QVariant& signalValue);
-    void signalServiceSoundChanged(const int& signalType, const QVariant& signalValue);
-    void signalServiceEtcChanged(const int& signalType, const QVariant& signalValue);
     void signalServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
+    void signalServiceDatasChanged(const int& dataType, const int& signalType, const QPair<QString, QVariant>& signalValue);
 };
 
 #endif  // SERIVCE_H

@@ -19,8 +19,6 @@ void HandlerHome::initPropertyInfo() {
     // Common
     registerProperty(ivis::common::PropertyEnum::CommonDisplay, QString("display"), QVariant(0));
     registerProperty(ivis::common::PropertyEnum::CommonVisible, QString("visible"), QVariant(true));
-    registerProperty(ivis::common::PropertyEnum::CommonRect, QString("rect"), QVariant());
-    registerProperty(ivis::common::PropertyEnum::CommonVehicleType, QString("vehicleType"), QVariant(0));
 
     // Home
     registerProperty(ivis::common::PropertyEnum::HomeType, QString("homeType"), QVariant(0));

@@ -134,6 +134,8 @@ void ControlTelltale::controlConnect(const bool& state) {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
+        disconnect(Service::instance().data());
+        disconnect(Service::instance().data());
     }
 }
 
@@ -224,11 +226,13 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
                 propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTurnSignalRightStat;
             } else if (telltaleType == Telltale::LowBeamStat) {
                 propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-            } else if (telltaleType == Telltale::IceWarnStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-            } else if (telltaleType == Telltale::IceWarnStatOptional) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-
+            } else if ((telltaleType == Telltale::IceWarnStat) || (telltaleType == Telltale::IceWarnStatOptional)) {
+                // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
+            } else if ((telltaleType == Telltale::HandsOnOffStat) || (telltaleType == Telltale::HandsOnOffStatOptional)) {
+                // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
+                qDebug() << "==============================================================";
+                qDebug() << "\t HandsOnOffStatOptional :" << static_cast<int>(telltaleType) << signalValue;
+                qDebug() << "==============================================================";
             } else {
             }
             break;

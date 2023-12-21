@@ -43,18 +43,19 @@ void Service::addSubscription(const std::string& nodeAddress, const SignalHandli
         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
-    qDebug() << "\t addSubscription :" << ((result == ccos::HResult::OK) ? ("Sucess ->") : ("Fail   ->")) << nodeAddress.c_str();
+    // qDebug() << "\t addSubscription :" << ((result == ccos::HResult::OK) ? ("Sucess ->") : ("Fail   ->"))
+    //          << nodeAddress.c_str();
     if (result != ccos::HResult::OK) {
         qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
     }
 }
 
-void Service::addSubscriptions(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc) {
+void Service::addSubscriptionGroup(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc) {
     auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
-    qDebug() << "\t addSubscriptions :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
+    // qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
     if (result != ccos::HResult::OK) {
         for (const std::string& nodeAddress : nodePaths) {
             qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
@@ -73,7 +74,7 @@ void Service::addSubscriptions(const std::vector<std::string>& nodePaths, const 
 //         addressList, HSubscriptionType::VALUE_CHANGED,
 //         std::make_shared<sfc::SubscriptionListener>(std::bind(&AppService::onEventFunc, this, std::placeholders::_1))));
 
-//     qDebug() << "\t addSubscriptions :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
+//     qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
 //     if (result != ccos::HResult::OK) {
 //         for (const std::string& nodeAddress : nodePaths) {
 //             qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
@@ -155,7 +156,7 @@ QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal&
     } else if (nodePath == SFC.Intro_Outro.Constant.PurificationAir.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.PurificationAir.Stat.value(vehicleSignal));
     } else if (nodePath == SFC.Intro_Outro.Constant.PurificationAir.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.MaxRpm.Stat.value(vehicleSignal));
+        value = static_cast<ccos::HDouble>(SFC.Intro_Outro.Constant.PurificationAir.Value.value(vehicleSignal));
     } else if (nodePath == SFC.Intro_Outro.Constant.CO2Reduction.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.CO2Reduction.Stat.value(vehicleSignal));
     } else if (nodePath == SFC.Intro_Outro.Constant.CO2Reduction.Value) {
@@ -170,6 +171,14 @@ QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal&
 QVariant Service::isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
+
+    // if (nodePath == SFC.OAT.Constant.OutTempDisplay.Stat) {
+    //     value = static_cast<ccos::HUInt64>(SFC.OAT.Constant.OutTempDisplay.Stat.value(vehicleSignal));
+    // } else if (nodePath == SFC.OAT.Constant.OutTempDisplayUnit.Stat) {
+    //     value = static_cast<ccos::HUInt64>(SFC.OAT.Constant.OutTempDisplayUnit.Stat.value(vehicleSignal));
+    // } else {
+    //     value = QVariant();
+    // }
 
     return value;
 }
@@ -308,7 +317,7 @@ void Service::subscribeConstantTachometer() {
                     std::bind(&Service::onConstantChanged, this, Constant::RpmDampStat, std::placeholders::_1));
 }
 
-void Service::subscribeConstantIntroOutron() {
+void Service::subscribeConstantIntroOutro() {
     addSubscription(SFC.Intro_Outro.Constant.ResvCharge.Stat,
                     std::bind(&Service::onConstantChanged, this, Constant::ResvChargeStat, std::placeholders::_1));
     addSubscription(SFC.Intro_Outro.Constant.ResvClimate.Stat,
@@ -323,12 +332,25 @@ void Service::subscribeConstantIntroOutron() {
                     std::bind(&Service::onConstantChanged, this, Constant::CO2ReductionValue, std::placeholders::_1));
 }
 
+void Service::subscribeConstantOAT() {
+    addSubscription(SFC.OAT.Constant.OutTempDisplay.Stat,
+                    std::bind(&Service::onConstantChanged, this, Constant::OutTempDisplayStat, std::placeholders::_1));
+    addSubscription(SFC.OAT.Constant.OutTempDisplayUnit.Stat,
+                    std::bind(&Service::onConstantChanged, this, Constant::OutTempDisplayUnitStat, std::placeholders::_1));
+}
+
 void Service::subscribeConstant() {
     qDebug() << "Service - subscribeConstant";
 
     subscribeConstantSpeedGauge();
     subscribeConstantTachometer();
-    subscribeConstantIntroOutron();
+    subscribeConstantIntroOutro();
+    subscribeConstantOAT();
+    // subscribeConstant();
+    // subscribeConstant();
+    // subscribeConstant();
+    // subscribeConstant();
+    // subscribeConstant();
 }
 
 // ==================================================================================================================
@@ -372,16 +394,6 @@ QVariant Service::isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicl
     } else {
         value = QVariant();
     }
-    // if (vehicleSignal.getNodePath() == SFC.OAT.Telltale.IceWarn.Stat) {
-    //     emit signalTelltaleValueChanged(TelltaleType::TelltaleOATIceWarnStat,
-    //                                     static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.Stat.value(vehicleSignal)));
-    //     valueCnt++;
-    // } else if (vehicleSignal.getNodePath() == SFC.OAT.Telltale.IceWarn.StatOptional) {
-    //     emit signalTelltaleValueChanged(
-    //         TelltaleType::TelltaleOATIceWarnStatOptional,
-    //         static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.StatOptional.value(vehicleSignal)));
-    //     valueCnt++;
-    // }
 
     return value;
 }
@@ -404,37 +416,50 @@ QVariant Service::isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSig
     QVariant value = QVariant();
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional.value(vehicleSignal));
+    } else {
+        value = QVariant();
+    }
+
     return value;
 }
 
 void Service::onTelltaleChanged(const Telltale& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
     qDebug() << "onTelltaleChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant signalValue = QVariant();
+    QMap<int, QVariant> signalValues = QMap<int, QVariant>();
+    int type = static_cast<int>(signalType);
 
     for (const auto& vehicleSignal : signalList) {
+        QVariant isValue = QVariant();
         if ((signalType > Telltale::LampIndicatorStart) && (signalType < Telltale::LampIndicatorEnd)) {
-            signalValue = isTelltaleLampIndicator(vehicleSignal);
-        } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {
-            signalValue = isTelltaleOAT(vehicleSignal);
+            isValue = isTelltaleLampIndicator(vehicleSignal);
+        } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {    // Group
+            isValue = isTelltaleOAT(vehicleSignal);
         } else if ((signalType > Telltale::DriveModeStart) && (signalType < Telltale::DriveModeEnd)) {
-            signalValue = isTelltaleDriveMode(vehicleSignal);
+            isValue = isTelltaleDriveMode(vehicleSignal);
         } else if ((signalType > Telltale::HighPerformanceForNBrandStart) &&
-                   (signalType < Telltale::HighPerformanceForNBrandEnd)) {
-            signalValue = isTelltaleHighPerformanceForNBrand(vehicleSignal);
+                (signalType < Telltale::HighPerformanceForNBrandEnd)) {
+            isValue = isTelltaleHighPerformanceForNBrand(vehicleSignal);
         } else if ((signalType > Telltale::ADASDrivingNewStart) && (signalType < Telltale::ADASDrivingNewEnd)) {
-            signalValue = isTelltaleADASDrivingNew(vehicleSignal);
+            isValue = isTelltaleADASDrivingNew(vehicleSignal);
         } else {
-            signalValue = QVariant();
         }
 
-        if (signalValue.isValid()) {
-            break;
-        }
+        signalValues[type] = isValue;
+        type++;
     }
 
-    if (signalValue.isValid()) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), signalValue);
+    QMapIterator<int, QVariant> iter(signalValues);
+    while (iter.hasNext()) {
+        iter.next();
+        emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), iter.key(), iter.value());
     }
+    // if (signalValue.isValid()) {
+    //     emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), signalValue);
+    // }
 }
 
 void Service::subscribeTelltaleLampIndicator() {
@@ -455,13 +480,15 @@ void Service::subscribeTelltaleLampIndicator() {
 }
 
 void Service::subscribeTelltaleOAT() {
+#if 0
     addSubscription(SFC.OAT.Telltale.IceWarn.Stat,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
     addSubscription(SFC.OAT.Telltale.IceWarn.StatOptional,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStatOptional, std::placeholders::_1));
-
-    // addSubscriptions(std::vector<std::string>({SFC.OAT.Telltale.IceWarn.Stat, SFC.OAT.Telltale.IceWarn.StatOptional}),
-    //                  std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
+#else
+    addSubscriptionGroup(std::vector<std::string>({SFC.OAT.Telltale.IceWarn.Stat, SFC.OAT.Telltale.IceWarn.StatOptional}),
+                     std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
+#endif
 }
 
 void Service::subscribeTelltaleDriveMode() {
@@ -509,10 +536,16 @@ void Service::subscribeTelltaleADASDrivingNew() {
                     std::bind(&Service::onTelltaleChanged, this, Telltale::LCALeftStat, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Telltale.LCARight.Stat,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::LCARightStat, std::placeholders::_1));
+#if 0
     addSubscription(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStat, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStatOptional, std::placeholders::_1));
+#else
+    addSubscriptionGroup(std::vector<std::string>({SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat,
+                                                   SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional}),
+                         std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStat, std::placeholders::_1));
+#endif
     addSubscription(SFC.ADAS_Driving_New.Telltale.DAW.Stat,
                     std::bind(&Service::onTelltaleChanged, this, Telltale::DAWStat, std::placeholders::_1));
 }
@@ -1144,9 +1177,9 @@ QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehi
     if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedUnit) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedUnit.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
+        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
+        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
     } else {
         value = QVariant();
     }
@@ -1229,7 +1262,7 @@ void Service::subscribeEtcADASDrivingNew() {
 void Service::subscribeEtc() {
     qDebug() << "Service - subscribeEtc";
 
-    subscribeEtcSpeedGauge();
-    subscribeEtcDriveMode();
-    subscribeEtcADASDrivingNew();
+    // subscribeEtcSpeedGauge();
+    // subscribeEtcDriveMode();
+    // subscribeEtcADASDrivingNew();
 }

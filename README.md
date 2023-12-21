@@ -39,6 +39,10 @@
 	## 에러 발생시 :  modified: model/VSM (new commits)
 	# git submodule update
 
+
+	https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/pull-requests/3524/overview
+
+
 - Log
 	ENH: TC_Creator Application Implement
 

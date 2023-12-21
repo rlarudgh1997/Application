@@ -7,6 +7,8 @@
 #include "ControlHome.h"
 #include "ControlGauge.h"
 #include "ControlTelltale.h"
+#include "ControlContent.h"
+#include "ControlEvent.h"
 
 #include "Service.h"
 
@@ -28,6 +30,8 @@ void ControlManager::init() {
     createControl(ivis::common::DisplayEnum::DisplayTypeHome);
     createControl(ivis::common::DisplayEnum::DisplayTypeGauge);
     createControl(ivis::common::DisplayEnum::DisplayTypeTelltale);
+    createControl(ivis::common::DisplayEnum::DisplayTypeContent);
+    createControl(ivis::common::DisplayEnum::DisplayTypeEvent);
 
     Service::instance().data()->init();
 }
@@ -119,6 +123,14 @@ void ControlManager::createControl(const int& displayType) {
             }
             case ivis::common::DisplayEnum::DisplayTypeTelltale: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTelltale::instance().data());
+                break;
+            }
+            case ivis::common::DisplayEnum::DisplayTypeContent: {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlContent::instance().data());
+                break;
+            }
+            case ivis::common::DisplayEnum::DisplayTypeEvent: {
+                mControlInfo[displayType] = static_cast<AbstractControl*>(ControlEvent::instance().data());
                 break;
             }
             default: {

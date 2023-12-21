@@ -67,6 +67,7 @@ void ControlHome::controlConnect(const bool& state) {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
+        disconnect(Service::instance().data());
     }
 }
 

@@ -1,6 +1,5 @@
 // import QtQuick
 import QtQuick 2.12
-import TelltaleEnum 1.0
 
 DataModel {
     objectName: "dataModelTelltale"
