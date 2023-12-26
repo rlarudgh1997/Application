@@ -32,7 +32,7 @@
 # [Bitbucket 사용]
 - Repo 개인 추가 : bitbucket 내부(https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/browse)에서 Create fork 후 생성
 	git clone https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git --recursive
-	git checkout feature/EXNCP-38725-tc_creator-app
+	git checkout feature/EXNCP-39278-test-application
 	# git remote add ivis.kkh https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git
 	# git fetch ivis.kkh
 	# git checkout [branch name]

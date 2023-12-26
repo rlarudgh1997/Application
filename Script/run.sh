@@ -43,7 +43,7 @@ function setEnvironments(){
 		echo "[Host]"
 		if [ "$BIN_NAME" = altonservice ]; then
 			source $SDK_HOST
-			APP_PATH=/opt/sfc/PV/bin
+			APP_PATH=$CCOS_LIB_DIR/bin
 		elif [ "$BIN_NAME" = Cluster ]; then
 			source $SDK_HOST
 			unset $ALTON_HAL_SCRIPT_PATH
