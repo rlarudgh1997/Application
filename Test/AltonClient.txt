@@ -1,43 +1,46 @@
 
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 18 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 1100
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 39 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 2200
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 63 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 3300
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 95 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 4400
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 158 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 5500
-../Alton/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 160 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 6000
+[Gauge - Speed]
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 18 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 1100
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 39 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 2200
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 63 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 3300
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 95 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 4400
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 158 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 5500
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Speed_Gauge.Constant.SpeedAnalog.Stat 160 SFC.Speed_Gauge.Constant.SpeedDigital.Stat 6000
 
 
-
-
-
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 2
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 2
-
-
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 1
-../Alton/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 1
-
-
-
-
-../Alton/alton_client inject SFC.OAT.Telltale.IceWarn.Stat 2
-../Alton/alton_client inject SFC.OAT.Telltale.IceWarn.StatOptional 1
-
-../Alton/alton_client inject SFC.OAT.Telltale.IceWarn.Stat 1
-../Alton/alton_client inject SFC.OAT.Telltale.IceWarn.StatOptional 0
 
 
 [HandsOnOffStatOptional]
-../Alton/alton_client inject HardWire_HardWireIgnition1 1
-../Alton/alton_client set SFC.Extension.AEM.Inter_AEMInitializeComplete bool true
-../Alton/alton_client inject MV_DrvrHandsOnOffSta 1
+    $CCOS_LIB_DIR/bin/alton_client inject HardWire_HardWireIgnition1 1
+    $CCOS_LIB_DIR/bin/alton_client set SFC.Extension.AEM.Inter_AEMInitializeComplete bool true
+    $CCOS_LIB_DIR/bin/alton_client inject MV_DrvrHandsOnOffSta 1
+
+
+[Telltale - On]
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 2
+
+[Telltale - Off]
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.FrontFog.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.HighBeam.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.RearFog.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TailLamp.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.Lamp_Indicator.Telltale.LowBeam.Stat 1
+
+
+
+
+
+[Other]
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.OAT.Telltale.IceWarn.Stat 2
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.OAT.Telltale.IceWarn.StatOptional 1
+
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.OAT.Telltale.IceWarn.Stat 1
+    $CCOS_LIB_DIR/bin/alton_client inject SFC.OAT.Telltale.IceWarn.StatOptional 0
