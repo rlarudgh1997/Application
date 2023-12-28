@@ -13,6 +13,7 @@
 	- 이경우 다른 사람이 요청한 PR 정보의 REPO 접근 권한이 없는 경우에 fetch 하여 사용하는 방법임
 	git fetch origin refs/pull-requests/65/from:ivis.kkh
 	git fetch origin refs/pull-requests/3376/from:ivis.kkh
+	git fetch origin refs/pull-requests/39907/from:ccos.core.sfc.work
 	git checkout ivis.kkh
 
 # [VSM 모듈 pull 안될경우]
@@ -33,6 +34,7 @@
 - Repo 개인 추가 : bitbucket 내부(https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/browse)에서 Create fork 후 생성
 	git clone https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git --recursive
 	git checkout feature/EXNCP-39278-test-application
+	git checkout feature/EXNCP-39907-improvement-function-of-generate-tc_report-gcov_repor
 	# git remote add ivis.kkh https://repo.ccos.dev/scm/~kkh1997_ivis.ai/ccos.core.sfc.ivis.kkh.git
 	# git fetch ivis.kkh
 	# git checkout [branch name]
