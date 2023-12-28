@@ -340,7 +340,7 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         return;
     }
 
-    qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    // qDebug() << "ControlCenter::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewConfig: {
             updateConfigInfo();

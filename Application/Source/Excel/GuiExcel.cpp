@@ -182,6 +182,13 @@ void GuiExcel::readAllExcelSheet() {
     createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, saveFielPath);
 }
 
+int GuiExcel::isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart) {
+    if (chcekExcleSheet(sheetIndex)) {
+        return 0;
+    }
+    return mMergeInfo[sheetIndex].isMergeCellCount(columnIndex, rowStart);
+}
+
 bool GuiExcel::updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                                const int& rowEnd) {
     if (chcekExcleSheet(sheetIndex)) {
@@ -419,7 +426,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
     }
 
     if (keyValue == Qt::Key_Escape) {
-        clearClipboardInfo(sheetIndex);
+        clearClipboardInfo(true);
         return;
     }
 
@@ -539,6 +546,10 @@ void GuiExcel::updateDisplayExcelSheet() {
             mExcelSheet[sheetIndex]->clearFocus();
         });
 #if 0
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
+            QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+            qDebug() << "cellClicked :" << row << column << modelIndexs.size();
+        });
         connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
                                                                 [=](int logicalIndex, int oldSize, int newSize) {
             qDebug() << sheetIndex << ". H_sectionResized :" << logicalIndex << oldSize << newSize;
@@ -656,6 +667,15 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     int columnEnd = modelIndexs.last().column() - columnStart + 1;
     int columnMax = (columnStart + columnEnd);
 
+    if (rowEnd == 1) {    // 병합된 셀의 경우 다시 선택시 셀 선택한 카운트(rowEnd) 값이 1로 나오는 경우 발생함
+        int mergeCount = isMergeCell(sheetIndex, columnStart, rowStart);
+        if (mergeCount > 0) {
+            rowEnd = mergeCount;
+            rowMax = (rowStart + rowEnd);
+            // qDebug() << "isMergeCell :" << mergeCount << rowEnd << rowMax;
+        }
+    }
+
     // qDebug() << "\t Copy/Cut Sheet[" << sheetIndex << "] - Index :" << rowStart << columnStart << rowEnd << columnEnd << ","
     //          << rowMax << columnMax;
 
@@ -691,7 +711,6 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
         for (int clearRowIndex = rowStart; clearRowIndex < rowMax; clearRowIndex++) {
             for (int clearColumnIndex = columnStart; clearColumnIndex < columnMax; clearColumnIndex++) {
                 if (mExcelSheet[sheetIndex]->item(clearRowIndex, clearColumnIndex) == nullptr) {
-                    // continue;
                     mExcelSheet[sheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
                 }
                 mExcelSheet[sheetIndex]->item(clearRowIndex, clearColumnIndex)->setBackground(QColor(200, 200, 200));
@@ -700,27 +719,31 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     }
 }
 
-void GuiExcel::clearClipboardInfo(const int& sheetIndex) {
-    if (mClearCellInfo.size() == 5) {
-        int clearSheetIndex = mClearCellInfo.at(0);
+int GuiExcel::clearClipboardInfo(const bool& escapeKeyClear) {
+    int clearSheetIndex = ((mClearCellInfo.size() == 5) ? (mClearCellInfo.at(0)) : (-1));
+
+    if (clearSheetIndex != (-1)) {
         int clearRowStart = mClearCellInfo.at(1);
         int clearColumnStart = mClearCellInfo.at(2);
         int clearRowEnd = mClearCellInfo.at(3);
         int clearColumnEnd = mClearCellInfo.at(4);
+
         for (int clearRowIndex = clearRowStart; clearRowIndex < clearRowEnd; clearRowIndex++) {
             for (int clearColumnIndex = clearColumnStart; clearColumnIndex < clearColumnEnd; clearColumnIndex++) {
-                if (mExcelSheet[clearSheetIndex]->item(clearRowIndex, clearColumnIndex) == nullptr) {
-                    // continue;
-                    mExcelSheet[clearSheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
-                }
+                mExcelSheet[clearSheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
                 mExcelSheet[clearSheetIndex]->item(clearRowIndex, clearColumnIndex)->setBackground(QColor(255, 255, 255));
             }
         }
         mClearCellInfo.clear();
     }
-    mClearMergeInfo.clear();
-    mCopyMergeInfo.clear();
-    QGuiApplication::clipboard()->clear();
+
+    if (escapeKeyClear) {
+        mClearMergeInfo.clear();
+        mCopyMergeInfo.clear();
+        QGuiApplication::clipboard()->clear();
+    }
+
+    return clearSheetIndex;
 }
 
 void GuiExcel::pasteClipboardInfo() {
@@ -765,24 +788,8 @@ void GuiExcel::pasteClipboardInfo() {
         }
     }
 
-    if (mClearCellInfo.size() == 5) {
-        // QGuiApplication::clipboard()->clear();
-        int clearSheetIndex = mClearCellInfo.at(0);
-        int clearRowStart = mClearCellInfo.at(1);
-        int clearColumnStart = mClearCellInfo.at(2);
-        int clearRowEnd = mClearCellInfo.at(3);
-        int clearColumnEnd = mClearCellInfo.at(4);
-        for (int clearRowIndex = clearRowStart; clearRowIndex < clearRowEnd; clearRowIndex++) {
-            for (int clearColumnIndex = clearColumnStart; clearColumnIndex < clearColumnEnd; clearColumnIndex++) {
-                if (mExcelSheet[clearSheetIndex]->item(clearRowIndex, clearColumnIndex) == nullptr) {
-                    // continue;
-                    mExcelSheet[clearSheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
-                }
-                mExcelSheet[clearSheetIndex]->item(clearRowIndex, clearColumnIndex)->setBackground(QColor(255, 255, 255));
-            }
-        }
-        mClearCellInfo.clear();
-
+    int clearSheetIndex = clearClipboardInfo(false);
+    if (clearSheetIndex >= 0) {
         QMapIterator<int, QList<QPair<int, int>>> iterClear(mClearMergeInfo.isMergeInfo());
         while (iterClear.hasNext()) {
             iterClear.next();

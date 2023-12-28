@@ -681,7 +681,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         return;
     }
 
-    qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    // qDebug() << "ControlExcel::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
             ControlManager::instance().data()->raise(displayType);

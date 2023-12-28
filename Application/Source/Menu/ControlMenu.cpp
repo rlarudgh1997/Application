@@ -692,7 +692,7 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
         return;
     }
 
-    qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
+    // qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeExitProgram:
         case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {

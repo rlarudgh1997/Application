@@ -28,16 +28,16 @@ void ControlManager::init() {
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {
-    qDebug() << "[sendEventInfo] Direction :" << source << " -> " << destination << ", Type :" << eventType;
+    // qDebug() << "[sendEventInfo] Direction :" << source << " -> " << destination << ", Type :" << eventType;
     if (destination != ivis::common::ScreenEnum::DisplayTypeInvalid) {
         createControl(destination);
         emit signalEventInfoChanged(destination, eventType, eventValue);
     }
 
     if (source == ivis::common::ScreenEnum::DisplayTypeMenu) {
-        ivis::common::CheckTimer checkTimer;
+        // ivis::common::CheckTimer checkTimer;
         raise(destination);
-        checkTimer.check("RaiseScreen");
+        // checkTimer.check("RaiseScreen");
     }
 }
 

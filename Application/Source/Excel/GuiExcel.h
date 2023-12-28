@@ -138,6 +138,16 @@ public:
         }
         return false;
     }
+    int isMergeCellCount(const int& columnIndex, const int& rowStart) {
+        if (mInfo.contains(columnIndex)) {
+            for (const auto& v : mInfo[columnIndex]) {
+                if (v.first == rowStart) {
+                    return v.second;
+                }
+            }
+        }
+        return 0;
+    }
     void insert(const int& columnIndex, const int& rowStart, const int& rowEnd) {
         mInfo[columnIndex].append(QPair<int, int>(rowStart, rowEnd));
     }
@@ -187,6 +197,7 @@ private:
     bool chcekExcleSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
     void readAllExcelSheet();
+    int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
     bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                          const int& rowEnd);
     QMap<int, QList<QPair<int, int>>> findMergeInfo(const QMap<int, QVariantList>& sheetData);
@@ -203,7 +214,7 @@ private:
     void updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
-    void clearClipboardInfo(const int& sheetIndex);
+    int clearClipboardInfo(const bool& escapeKeyClear);
     void pasteClipboardInfo();
     void updateDisplayClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
