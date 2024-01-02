@@ -56,8 +56,7 @@ void ControlContent::resetControl(const bool& reset) {
 
 void ControlContent::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerContent::signalHandlerEvent, this, &ControlContent::slotHandlerEvent,
-                Qt::UniqueConnection);
+        connect(isHandler(), &HandlerContent::signalHandlerEvent, this, &ControlContent::slotHandlerEvent, Qt::UniqueConnection);
         connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlContent::slotConfigChanged,
                 Qt::UniqueConnection);
         connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,

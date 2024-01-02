@@ -436,12 +436,12 @@ void Service::onTelltaleChanged(const Telltale& signalType, const std::vector<cc
         QVariant isValue = QVariant();
         if ((signalType > Telltale::LampIndicatorStart) && (signalType < Telltale::LampIndicatorEnd)) {
             isValue = isTelltaleLampIndicator(vehicleSignal);
-        } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {    // Group
+        } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {  // Group
             isValue = isTelltaleOAT(vehicleSignal);
         } else if ((signalType > Telltale::DriveModeStart) && (signalType < Telltale::DriveModeEnd)) {
             isValue = isTelltaleDriveMode(vehicleSignal);
         } else if ((signalType > Telltale::HighPerformanceForNBrandStart) &&
-                (signalType < Telltale::HighPerformanceForNBrandEnd)) {
+                   (signalType < Telltale::HighPerformanceForNBrandEnd)) {
             isValue = isTelltaleHighPerformanceForNBrand(vehicleSignal);
         } else if ((signalType > Telltale::ADASDrivingNewStart) && (signalType < Telltale::ADASDrivingNewEnd)) {
             isValue = isTelltaleADASDrivingNew(vehicleSignal);
@@ -487,7 +487,7 @@ void Service::subscribeTelltaleOAT() {
                     std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStatOptional, std::placeholders::_1));
 #else
     addSubscriptionGroup(std::vector<std::string>({SFC.OAT.Telltale.IceWarn.Stat, SFC.OAT.Telltale.IceWarn.StatOptional}),
-                     std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
+                         std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
 #endif
 }
 

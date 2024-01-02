@@ -667,7 +667,7 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
     int columnEnd = modelIndexs.last().column() - columnStart + 1;
     int columnMax = (columnStart + columnEnd);
 
-    if (rowEnd == 1) {    // 병합된 셀의 경우 다시 선택시 셀 선택한 카운트(rowEnd) 값이 1로 나오는 경우 발생함
+    if (rowEnd == 1) {  // 병합된 셀의 경우 다시 선택시 셀 선택한 카운트(rowEnd) 값이 1로 나오는 경우 발생함
         int mergeCount = isMergeCell(sheetIndex, columnStart, rowStart);
         if (mergeCount > 0) {
             rowEnd = mergeCount;
