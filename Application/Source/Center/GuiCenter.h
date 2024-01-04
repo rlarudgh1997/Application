@@ -325,10 +325,10 @@ public:
         mButtonLayout->addWidget(mOK);
 
         mTableView = ivis::common::createWidget<QTableView>(this);
-        QStringList title = QStringList({"Module"});  // , "PT"
-        mModel.setColumnCount(title.size());
+        QStringList subTitle = QStringList({"Module"});  // , "PT"
+        mModel.setColumnCount(subTitle.size());
         mModel.setRowCount(moduleList.size());
-        mModel.setHorizontalHeaderLabels(title);
+        mModel.setHorizontalHeaderLabels(subTitle);
         int rowIndex = 0;
         for (const auto& name : moduleList) {
             mModel.setItem(rowIndex, 0, new QStandardItem(name));
@@ -349,12 +349,11 @@ public:
         mLayout->addWidget(mTableView);
         setLayout(mLayout);
 
+        updateSelectModuleCheck(mSelectAllState);
+
         connect(mALL, &QPushButton::clicked, [=]() {
             mSelectAllState = !mSelectAllState;
-            mALL->setText((mSelectAllState) ? ("Unselect All") : ("Select All"));
-            for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
-                mModel.item(rowIndex, 0)->setCheckState((mSelectAllState) ? (Qt::Checked) : (Qt::Unchecked));
-            }
+            updateSelectModuleCheck(mSelectAllState);
         });
         connect(mOK, &QPushButton::clicked, [=]() {
             QList<QPair<int, QString>> selectModule = QList<QPair<int, QString>>();
@@ -366,11 +365,32 @@ public:
             emit signalModuleSelected(selectModule);
         });
     }
+    void updateSelectModuleCheck(const bool& allCheck) {
+        mALL->setText((allCheck) ? ("Unselect All") : ("Select All"));
+        for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
+            mModel.item(rowIndex, 0)->setCheckState((allCheck) ? (Qt::Checked) : (Qt::Unchecked));
+        }
+    }
     void updateSelectModule(const QStringList& selectModuleList) {
         for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
             QString itemName = mModel.item(rowIndex, 0)->text();
             bool select = selectModuleList.contains(itemName);
             mModel.item(rowIndex, 0)->setCheckState((select) ? (Qt::Checked) : (Qt::Unchecked));
+        }
+    }
+    void updateSelectListInfo(const QString& title, const QStringList& subTitle, const QSize& size = QSize()) {
+        this->setWindowTitle(title);
+
+        if (subTitle.isEmpty() == false) {
+            mModel.setHorizontalHeaderLabels(subTitle);
+        }
+        if (size.isEmpty() == false) {
+            QRect rootWidgetRect = this->geometry();
+            QRect setRect = QRect();
+            setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - size.width()) * 0.5));
+            setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - size.height()) * 0.5));
+            setFixedSize(QSize(size.width(), size.height()));
+            setGeometry(setRect);
         }
     }
 

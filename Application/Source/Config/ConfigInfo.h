@@ -35,6 +35,9 @@ public:
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
         ConfigTypeVsmNodeAddress,
+        ConfigTypeVsmNodeAddressEV,
+        ConfigTypeVsmNodeAddressFCEV,
+        ConfigTypeVsmNodeAddressICV,
 
         // Report
         ConfigTypeReportResult,
@@ -112,6 +115,12 @@ private:
         mConfigInfoData[ConfigTypeVsmNodeAddress] = QPair<QString, QVariant>(
             "ConfigTypeVsmNodeAddress", QVariant(QVariantList({"CLU_VSM_CV_EV.Vehicle.CV.vsm", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm",
                                                                "CLU_VSM_CV_ICV.Vehicle.CV.vsm"})));
+        mConfigInfoData[ConfigTypeVsmNodeAddressEV] =
+            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressEV", "CLU_VSM_CV_EV.Vehicle.CV.vsm");
+        mConfigInfoData[ConfigTypeVsmNodeAddressFCEV] =
+            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressFCEV", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
+        mConfigInfoData[ConfigTypeVsmNodeAddressICV] =
+            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressICV", "CLU_VSM_CV_ICV.Vehicle.CV.vsm");
 
         // Report
         mConfigInfoData[ConfigTypeReportResult] = QPair<QString, QVariant>("ConfigTypeReportResult", QVariant(false));

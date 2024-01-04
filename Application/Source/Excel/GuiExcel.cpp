@@ -2,6 +2,7 @@
 #include "AbstractHandler.h"
 
 #include "CommonResource.h"
+#include "GuiCenter.h"
 
 #include <QMenu>
 #include <QLabel>
@@ -431,6 +432,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
     }
 
     bool inputKeyOK = (keyValue == ivis::common::KeyTypeEnum::KeyInputValueOK);
+    bool inputKeyDelete = (keyValue == Qt::Key::Key_Delete);
     int row = mExcelSheet[sheetIndex]->currentRow();
     int column = mExcelSheet[sheetIndex]->currentColumn();
     int rowMax = mExcelSheet[sheetIndex]->rowCount();
@@ -439,6 +441,11 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
 
     bool editState = mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column));
     // qDebug() << "editState :" << editState << ", inputKeyOK :" << inputKeyOK;
+
+    if (inputKeyDelete) {
+        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
+        return;
+    }
 
     if ((editState) && (inputKeyOK)) {
         mExcelSheet[sheetIndex]->closePersistentEditor(mExcelSheet[sheetIndex]->item(row, column));
@@ -530,9 +537,22 @@ void GuiExcel::updateDisplayExcelSheet() {
             updateDisplayEditCell(shortcutType);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
-            if (((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) && (column != 3)) ||
-                ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) &&
-                 ((column != 4) && (column != 6) && (column != 9)))) {
+            // Config_Signal : 3(Description), 9    Input_Signal : 4    Input_Data : 5    Output_Signal : 6
+            bool notSupport = false;
+            bool supportAutoCompleteVehicle = false;
+            bool supportAutoCompleteInputData = false;
+            if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
+                notSupport = (column != static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal));
+            } else {
+                notSupport = ((column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) &&
+                              (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) &&
+                              (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) &&
+                              (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)) &&
+                              (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)));
+                supportAutoCompleteInputData = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
+            }
+
+            if (notSupport) {
                 qDebug() << "Fail to not support auto complete :" << sheetIndex << column;
                 return;
             }
@@ -542,8 +562,32 @@ void GuiExcel::updateDisplayExcelSheet() {
                 mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
                 mSelectItem = mExcelSheet[sheetIndex]->item(row, column);
             }
-            updateDisplayAutoComplete(true, sheetIndex, row, column);
-            mExcelSheet[sheetIndex]->clearFocus();
+
+            if (supportAutoCompleteInputData) {
+                QString vehicleType = QString();
+                int vehicleTypeIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
+                if (mExcelSheet[sheetIndex]->item(row, vehicleTypeIndex) != nullptr) {
+                    vehicleType = mExcelSheet[sheetIndex]->item(row, vehicleTypeIndex)->text();
+                }
+
+                QString inputSignal = QString();
+                int inputSignalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
+                if (mExcelSheet[sheetIndex]->item(row, inputSignalIndex) != nullptr) {
+                    inputSignal = mExcelSheet[sheetIndex]->item(row, inputSignalIndex)->text();
+                }
+
+                if (inputSignal.size() > 0) {
+                    QVariantList inputDataInfo = QVariantList({vehicleType, inputSignal});
+                    createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
+                }
+            } else {
+                if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) {
+                    updateDisplayAutoCompleteVehicle();
+                } else {
+                    updateDisplayAutoComplete(true, column);
+                }
+                mExcelSheet[sheetIndex]->clearFocus();
+            }
         });
 #if 0
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
@@ -570,25 +614,13 @@ void GuiExcel::updateDisplayExcelSheet() {
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
-void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
-    qDebug() << "updateDisplayAutoComplete :" << show << sheetIndex << rowIndex << columnIndex;
+void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnIndex) {
+    qDebug() << "updateDisplayAutoComplete :" << show << columnIndex;
 
     QStringList list = QStringList();
-#if 0  // 자동완성 동작 조건 처리
-    if (columnIndex == 5) {
-        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList();
-    } else if (columnIndex == 9) {
-        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList();
-    } else {
-        list = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-    }
-#else
-    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
-    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter).toStringList());
-#endif
 
     if (mAutoComplete == nullptr) {
         mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("AutoComplete"), list);
@@ -615,6 +647,73 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& sheetIndex
     } else {
         mAutoComplete->hide();
     }
+}
+
+void GuiExcel::updateDisplayAutoCompleteVehicle() {
+    if (mAutoCompleteVehicle == nullptr) {
+        QStringList itemList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList();
+        mAutoCompleteVehicle = new AutoCompleteVehicleDialog(isHandler()->getScreen(), QString("Select Vehicle"), itemList);
+
+        connect(mAutoCompleteVehicle, &AutoCompleteVehicleDialog::signalSelecteCheck, [=](const QString& vehicleTypeText) {
+            if (mSelectItem) {
+                mSelectItem->setText(vehicleTypeText);
+            }
+            mAutoCompleteVehicle->hide();
+            mAutoCompleteVehicle->finished(true);
+        });
+        connect(mAutoCompleteVehicle, &QDialog::finished, [=]() {
+            disconnect(mAutoCompleteVehicle);
+            delete mAutoCompleteVehicle;
+            mAutoCompleteVehicle = nullptr;
+        });
+    }
+    mAutoCompleteVehicle->show();
+}
+
+void GuiExcel::updateDisplayAutoCompleteInputData() {
+    if (mAutoCompleteInputData == nullptr) {
+        QStringList itemList = QStringList();
+        QVariantList valueEnum = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toList();
+        for (const auto& info : valueEnum) {
+            itemList = info.toStringList();
+            if (itemList.size() > 0) {
+                break;
+            }
+        }
+        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), itemList, false);
+        mAutoCompleteInputData->updateSelectModule(itemList);
+        mAutoCompleteInputData->updateSelectListInfo(QString("Select Data"), QStringList({"ValueEnum"}), QSize(600, 300));
+
+        connect(mAutoCompleteInputData, &SelectModuleDialog::signalModuleSelected,
+                [=](const QList<QPair<int, QString>>& selectModule) {
+                    if (mSelectItem) {
+                        QString selectValueEnum = QString();
+                        for (const auto& select : selectModule) {
+                            QStringList lineStr = select.second.split(":");
+                            if (lineStr.size() != 2) {
+                                continue;
+                            }
+                            QString temp = lineStr.at(1);
+                            temp.remove("\"");
+
+                            if (selectValueEnum.size() > 0) {
+                                selectValueEnum.append(", ");
+                            }
+                            selectValueEnum.append(temp);
+                            qDebug() << "Select ValueEnum :" << temp.toLatin1().data();
+                        }
+                        mSelectItem->setText(selectValueEnum);
+                    }
+                    mAutoCompleteInputData->hide();
+                    mAutoCompleteInputData->finished(true);
+                });
+        connect(mAutoCompleteInputData, &QDialog::finished, [=]() {
+            disconnect(mAutoCompleteInputData);
+            delete mAutoCompleteInputData;
+            mAutoCompleteInputData = nullptr;
+        });
+    }
+    mAutoCompleteInputData->show();
 }
 
 void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {
@@ -943,6 +1042,17 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus: {
             updateDisplayReceiveKeyFocus();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum: {
+            updateDisplayAutoCompleteInputData();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTable: {
+            // QVariantList matchingTable = value.toList();
+            // for (const auto& info : matchingTable) {
+            //     qDebug() << "\t MatchingTable :" << info.toStringList();
+            // }
             break;
         }
         default: {

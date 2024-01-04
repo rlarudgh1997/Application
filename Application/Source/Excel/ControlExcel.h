@@ -28,6 +28,8 @@ private:
     void saveExcelFile(const bool& saveAs);
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
+    QPair<QVariantList, QVariantList> isVsmSignalInputDataInfo(const QMap<int, QString>& vsmFileInfo, const QString& signalName);
+    void updateAutoCompleteInputData(const QString& vehicleTypeStr, QString& signalName);
 
 protected:
     virtual AbstractHandler* isHandler();

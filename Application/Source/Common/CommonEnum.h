@@ -3,6 +3,7 @@
 
 #include "CommonDefine.h"
 #include <QObject>
+#include <qnamespace.h>
 
 namespace ivis {
 namespace common {
@@ -44,20 +45,20 @@ public:
     };
     enum KeyInputValue {
         KeyInputValueInvalid = 0,
-        KeyInputValueUp = Qt::Key_Up,
-        KeyInputValueDown = Qt::Key_Down,
-        KeyInputValueLeft = Qt::Key_Left,
-        KeyInputValueRight = Qt::Key_Right,
-        KeyInputValueOK = Qt::Key_Enter,
-        KeyInputValueCancel = Qt::Key_Escape,
-        KeyInputValueCapture = Qt::Key_F12,
+        KeyInputValueUp = Qt::Key::Key_Up,
+        KeyInputValueDown = Qt::Key::Key_Down,
+        KeyInputValueLeft = Qt::Key::Key_Left,
+        KeyInputValueRight = Qt::Key::Key_Right,
+        KeyInputValueOK = Qt::Key::Key_Enter,
+        KeyInputValueCancel = Qt::Key::Key_Escape,
+        KeyInputValueCapture = Qt::Key::Key_F12,
 #if defined(PLATFORM_X86)
-        KeyInputValueNumUp = Qt::Key_8,       // KeyInputValueUp
-        KeyInputValueNumDown = Qt::Key_2,     // KeyInputValueDown
-        KeyInputValueNumLeft = Qt::Key_4,     // KeyInputValueLeft
-        KeyInputValueNumRight = Qt::Key_6,    // KeyInputValueRight
-        KeyInputValueNumOK = Qt::Key_Return,  // KeyInputValueOK
-        KeyInputValueNumOK2 = Qt::Key_Alt,    // KeyInputValueOK
+        KeyInputValueNumUp = Qt::Key::Key_8,       // Numlock Key_8      - KeyInputValueUp
+        KeyInputValueNumDown = Qt::Key::Key_2,     // Numlock Key_2      - KeyInputValueDown
+        KeyInputValueNumLeft = Qt::Key::Key_4,     // Numlock Key_4      - KeyInputValueLeft
+        KeyInputValueNumRight = Qt::Key::Key_6,    // Numlock Key_6      - KeyInputValueRight
+        KeyInputValueNumOK = Qt::Key::Key_Return,  // Numlock Key_Return - KeyInputValueOK
+        KeyInputValueNumOK2 = Qt::Key::Key_Alt,    // Numlock Key_Alt    -  KeyInputValueOK
 #endif
     };
 };
@@ -77,6 +78,7 @@ public:
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeViewType,
         PropertyTypeConfigInfo,
+        PropertyTypeVehicleType,
         PropertyTypeNodeAddressAll,
         PropertyTypeNodeAddressSFC,
         PropertyTypeNodeAddressVSM,
@@ -84,6 +86,8 @@ public:
         PropertyTypeNodeAddressInter,
         PropertyTypeNodeAddressModule,
         PropertyTypeAllModuleList,
+        PropertyTypeInputDataValuEnum,
+        PropertyTypeInputDataMatchingTable,
         PropertyTypeUpdateSelectModule,
         PropertyTypeEnterScriptText,
         PropertyTypeShowSelectModule,
@@ -102,7 +106,6 @@ public:
         PropertyTypeExcelMergeTextStart,
         PropertyTypeExcelMergeText,
         PropertyTypeExcelMergeTextEnd,
-        PropertyTypeAutoComplete,
         PropertyTypeReadExcelSheetBeforeSave,
         PropertyTypeClipboardType,
         PropertyTypeShortcutType,
@@ -192,6 +195,7 @@ public:
         EventTypeUpdateSheetInfo,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
+        EventTypeAutoCompleteInputData,
         EventTypeCellMergeSplit,
         EventTypeCellMergeSplitWarning,
         EventTypeViewInfoClose,
@@ -270,6 +274,31 @@ public:
     };
 };
 
+class ExcelSheetTitle {
+public:
+    enum class Description {
+        Test = 0,
+        Version,
+        Description,
+        ConfigSignal,
+        Data,
+    };
+    enum class Other {
+        TCName = 0,
+        VehicleType,
+        Result,
+        Case,
+        InputSignal,
+        InputData,
+        OutputSignal,
+        IsInitialize,
+        OutputValue,
+        ConfigSignal,
+        Data,
+        NegativeTest,
+    };
+};
+
 class EditCellEnum {
 public:
     enum EditCellInfo {
@@ -288,12 +317,12 @@ public:
     };
 };
 
-class VsmTypeEnum {
+class VehicleTypeEnum {
 public:
-    enum VsmType {
-        VsmTypeEV = 0,
-        VsmTypeFCEV,
-        VsmTypeICV,
+    enum VehicleType {
+        VehicleTypeEV = 0,
+        VehicleTypeFCEV,
+        VehicleTypeICV,
     };
 };
 

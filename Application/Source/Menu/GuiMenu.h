@@ -148,7 +148,7 @@ class CheckBoxGroupDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit CheckBoxGroupDialog(QWidget* parent, const QString& title, const QString& item, QStringList& itemList)
+    explicit CheckBoxGroupDialog(QWidget* parent, const QString& title, const QString& item, const QStringList& itemList)
         : QDialog(parent) {
         setWindowTitle(title);
         setWindowFlag(Qt::WindowContextHelpButtonHint, true);

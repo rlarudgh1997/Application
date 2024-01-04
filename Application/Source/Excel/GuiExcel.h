@@ -14,8 +14,14 @@
 #include <QMenu>
 
 #include <QDialog>
+#include <QCheckBox>
+#include <QLabel>
+#include <QPushButton>
 #include <QListWidget>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+
+class SelectModuleDialog;
 
 class AutoCompleteDialog : public QDialog {
     Q_OBJECT
@@ -105,6 +111,78 @@ private:
     QLineEdit* mInputeText = nullptr;
     QListWidget* mSuggestionsList = nullptr;
     QStringList mAutoCompleteStringList;
+};
+
+class AutoCompleteVehicleDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit AutoCompleteVehicleDialog(QWidget* parent, const QString& title, QStringList& itemList) : QDialog(parent) {
+        setWindowTitle(title);
+        setWindowFlag(Qt::WindowContextHelpButtonHint, true);
+        setWindowFlag(Qt::WindowCloseButtonHint, true);
+        setParent(parent);
+        setModal(true);
+
+        QRect rootWidgetRect = static_cast<QWidget*>(parent->parent())->geometry();
+        QRect setRect = QRect();
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
+        setGeometry(setRect);
+        setFocus();
+
+        mLayout = new QVBoxLayout(this);
+
+        if (itemList.size() > 0) {
+            mCheckLayout = new QHBoxLayout(mLayout->widget());
+            for (const auto& info : itemList) {
+                int index = mCheckBox.size();
+                mCheckBox[index] = ivis::common::createWidget<QCheckBox>(mCheckLayout->widget(), true);
+                mCheckBox[index]->setText(info);
+                mCheckLayout->addWidget(mCheckBox[index]);
+            }
+            mLayout->addLayout(mCheckLayout);
+        }
+
+        mButtonLayout = new QHBoxLayout(mLayout->widget());
+        mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mOK->setText("OK");
+        mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mCancel->setText("Cancel");
+        mButtonLayout->addWidget(mOK);
+        mButtonLayout->addWidget(mCancel);
+        mLayout->addLayout(mButtonLayout);
+
+        setLayout(mLayout);
+
+        connect(mOK, &QPushButton::clicked, [=]() {
+            QString vehicleTypeText = QString();
+            for (const auto& check : mCheckBox) {
+                if (check->checkState() == Qt::CheckState::Checked) {
+                    if (vehicleTypeText.size() > 0) {
+                        vehicleTypeText.append(", ");
+                    }
+                    vehicleTypeText.append(check->text());
+                }
+            }
+            emit signalSelecteCheck(vehicleTypeText);
+        });
+        connect(mCancel, &QPushButton::clicked, [=]() { finished(true); });
+    }
+
+signals:
+    void signalSelecteCheck(const QString& vehicleTypeText);
+
+private:
+    const int mWidth = 400;
+    const int mHeight = 100;
+    QVBoxLayout* mLayout = nullptr;
+    QHBoxLayout* mCheckLayout = nullptr;
+    QHBoxLayout* mButtonLayout = nullptr;
+    QMap<int, QCheckBox*> mCheckBox = QMap<int, QCheckBox*>();
+    QPushButton* mOK = nullptr;
+    QPushButton* mCancel = nullptr;
 };
 
 class ExcelSheet {
@@ -211,7 +289,9 @@ private:
     void updateInitialExcelSheet();
     void updateDisplayKey(const int& keyValue);
     void updateDisplayExcelSheet();
-    void updateDisplayAutoComplete(const bool& show, const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    void updateDisplayAutoComplete(const bool& show, const int& columnIndex);
+    void updateDisplayAutoCompleteVehicle();
+    void updateDisplayAutoCompleteInputData();
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);
@@ -233,6 +313,8 @@ private:
     QMenu* mMenuRight = nullptr;
     QMap<int, QAction*> mMenuActionItem = QMap<int, QAction*>();
     AutoCompleteDialog* mAutoComplete = nullptr;
+    AutoCompleteVehicleDialog* mAutoCompleteVehicle = nullptr;
+    SelectModuleDialog* mAutoCompleteInputData = nullptr;
     QTableWidgetItem* mSelectItem = nullptr;
     int mCurrentSheetIndex = 0;
 };

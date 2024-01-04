@@ -492,13 +492,15 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
 
 void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
     if (mCheckBoxGroup == nullptr) {
+        QString title = QString("Select Negative");
         QString item = QString("Negative");
         QStringList itemList = QStringList();
         if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
+            title = QString("Select PT");
             item = QString("Docker");
-            itemList = QStringList({"ICV", "FCEV", "EV"});
+            itemList = QStringList({"EV", "FCEV", "ICV"});
         }
-        mCheckBoxGroup = new CheckBoxGroupDialog(isHandler()->getScreen(), QString("Select PT"), item, itemList);
+        mCheckBoxGroup = new CheckBoxGroupDialog(isHandler()->getScreen(), title, item, itemList);
 
         connect(mCheckBoxGroup, &CheckBoxGroupDialog::signalPtSelected,
                 [=](const bool& option1, const QList<QPair<QString, bool>>& checkStateList) {

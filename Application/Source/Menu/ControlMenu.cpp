@@ -316,7 +316,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
 
 void ControlMenu::excuteScript(const int& runType, const bool& state, const QVariantList& infoList) {
     static int totalCount = 10;
-    QString fileName = QString("TCResult.Info");
+    QString fileName = QString("TCResult.info");
     QString cmd = QString();
     QString subPath = QString();
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
@@ -329,10 +329,10 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         } else if (cmd.contains("run_tc.sh")) {
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_tcreport.sh")) {
-            fileName = QString("TCReport.Info");
+            fileName = QString("TCReport.info");
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_gcov_report.sh")) {
-            fileName = QString("GCOVReport.Info");
+            fileName = QString("GCOVReport.info");
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
@@ -350,7 +350,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             return;
         }
 
-        fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.Info") : ("GCOVReport.Info"));
+        fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.info") : ("GCOVReport.info"));
         subPath = QString("/../../../validator");
         // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
         // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
@@ -401,7 +401,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
             subPath = QString("/../../../validator");
             int ptCount = infoList[1].toList().size();
-            totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(ICV, EV, FCEV) = 3
+            totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(EV, FCEV, ICV) = 3
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
             return;
@@ -417,7 +417,8 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         qDebug() << "Fail to change folder :" << defaultRunPath;
         return;
     }
-    qDebug() << "Default Run Path :" << defaultRunPath;
+    qDebug() << "Default :" << defaultRunPath;
+    qDebug() << "Command :" << cmd;
 
     if (mWatcher.isNull() == false) {
         qDebug() << "Running Watcher File -> Request Stop";

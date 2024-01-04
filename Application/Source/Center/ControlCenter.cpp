@@ -199,9 +199,9 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
                     vehicleType.append(", ");
                 }
 
-                if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeEV)) {
+                if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeEV)) {
                     vehicleType.append("EV");
-                } else if (listIndex == static_cast<int>(ivis::common::VsmTypeEnum::VsmTypeFCEV)) {
+                } else if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeFCEV)) {
                     vehicleType.append("FCEV");
                 } else {
                     vehicleType.append("ICV");
@@ -236,16 +236,24 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 
 void ControlCenter::updateNodeAddress(const bool& check) {
     QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+#if 0
     QVariantList vsmFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddress).toList();
+#else
+    QVariantList vsmFile = QVariantList();
+    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressEV));
+    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressFCEV));
+    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressICV));
+#endif
 
     if ((check) && (checkNodeAddress(vsmPath, vsmFile))) {
-        qDebug() << "Fail to vsm file not found.";
+        qDebug() << "Fail to vsm file not found :" << vsmPath;
         return;
     }
 
     QStringList vsmListAll = isNodeAddressAll(vsmPath, vsmFile);
     QStringList vsmList = isNodeAddressMatchingModule(vsmListAll);
 
+    // qDebug() << "VSM List Count :" << vsmListAll.size() << vsmList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNodeAddress);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
