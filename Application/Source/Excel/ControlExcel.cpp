@@ -640,7 +640,7 @@ QPair<QVariantList, QVariantList> ControlExcel::isVsmSignalInputDataInfo(const Q
                     break;
                 } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) || (lineStr.contains(PREFIX_SIGNAL_NAME)) ||
                            (lineStr.contains(PREFIX_DATA_TYPE)) || (lineStr.contains(PREFIX_ABSTRACTION_NAME))) {
-                           continue;
+                    continue;
                 } else {
                     QString text = lineStr.remove(" ");
                     vsmInfo.append(text);
@@ -678,6 +678,12 @@ QPair<QVariantList, QVariantList> ControlExcel::isVsmSignalInputDataInfo(const Q
         vsmInputData[vehicleType] = QPair<QStringList, QStringList>(valueEunm, matchingTable);
     }
 
+    qDebug() << "\t ValueEnum     :" << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeEV].first.size()
+             << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeFCEV].first.size()
+             << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeICV].first.size();
+    qDebug() << "\t MatchingTable :" << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeEV].second.size()
+             << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeFCEV].second.size()
+             << vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeICV].second.size();
 #if 0
     QMapIterator<int, QPair<QStringList, QStringList>> iter2(vsmInputData);
     while (iter2.hasNext()) {
@@ -692,9 +698,9 @@ QPair<QVariantList, QVariantList> ControlExcel::isVsmSignalInputDataInfo(const Q
     QVariantList valueEnum = QVariantList({vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeEV].first,
                                            vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeFCEV].first,
                                            vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeICV].first});
-    QVariantList matchingTable = QVariantList({vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeEV].first,
-                                               vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeFCEV].first,
-                                               vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeICV].first});
+    QVariantList matchingTable = QVariantList({vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeEV].second,
+                                               vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeFCEV].second,
+                                               vsmInputData[ivis::common::VehicleTypeEnum::VehicleTypeICV].second});
     return QPair<QVariantList, QVariantList>(valueEnum, matchingTable);
 }
 
@@ -725,8 +731,9 @@ void ControlExcel::updateAutoCompleteInputData(const QString& vehicleTypeStr, QS
     }
 
     QPair<QVariantList, QVariantList> vsmInputData = isVsmSignalInputDataInfo(vsmFileInfo, signalName);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, vsmInputData.first, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTable, vsmInputData.second, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, vsmInputData.first);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTable, vsmInputData.second);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible, true, true);
 }
 
 void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {

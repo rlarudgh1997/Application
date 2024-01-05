@@ -86,6 +86,7 @@ public:
         PropertyTypeNodeAddressInter,
         PropertyTypeNodeAddressModule,
         PropertyTypeAllModuleList,
+        PropertyTypeInputDataVisible,
         PropertyTypeInputDataValuEnum,
         PropertyTypeInputDataMatchingTable,
         PropertyTypeUpdateSelectModule,

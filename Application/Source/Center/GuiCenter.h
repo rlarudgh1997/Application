@@ -326,22 +326,23 @@ public:
 
         mTableView = ivis::common::createWidget<QTableView>(this);
         QStringList subTitle = QStringList({"Module"});  // , "PT"
+        mModel.setHorizontalHeaderLabels(subTitle);
         mModel.setColumnCount(subTitle.size());
         mModel.setRowCount(moduleList.size());
-        mModel.setHorizontalHeaderLabels(subTitle);
         int rowIndex = 0;
         for (const auto& name : moduleList) {
             mModel.setItem(rowIndex, 0, new QStandardItem(name));
             mModel.item(rowIndex, 0)->setCheckable(true);
             // mModel.item(rowIndex, 0)->setCheckState(Qt::Checked);
+            mModel.item(rowIndex, 0)->setFlags(mModel.item(rowIndex, 0)->flags() & ~Qt::ItemFlag::ItemIsEditable);
             rowIndex++;
         }
         mTableView->setModel(&mModel);
         mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         mTableView->verticalHeader()->setHidden(true);
-        for (int i = 0; i < mModel.rowCount(); ++i) {
-            mTableView->verticalHeader()->setSectionResizeMode(i, QHeaderView::Fixed);
-            mTableView->verticalHeader()->resizeSection(i, 20);
+        for (rowIndex = 0; rowIndex < mModel.rowCount(); ++rowIndex) {
+            mTableView->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
+            mTableView->verticalHeader()->resizeSection(rowIndex, 20);
         }
         mTableView->show();
 
@@ -358,6 +359,9 @@ public:
         connect(mOK, &QPushButton::clicked, [=]() {
             QList<QPair<int, QString>> selectModule = QList<QPair<int, QString>>();
             for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
+                if (mModel.item(rowIndex, 0) == nullptr) {
+                    continue;
+                }
                 if (mModel.item(rowIndex, 0)->checkState() == Qt::Checked) {
                     selectModule.append(QPair<int, QString>(rowIndex, mModel.item(rowIndex, 0)->text()));
                 }
@@ -368,20 +372,47 @@ public:
     void updateSelectModuleCheck(const bool& allCheck) {
         mALL->setText((allCheck) ? ("Unselect All") : ("Select All"));
         for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
+            if (mModel.item(rowIndex, 0) == nullptr) {
+                continue;
+            }
             mModel.item(rowIndex, 0)->setCheckState((allCheck) ? (Qt::Checked) : (Qt::Unchecked));
         }
     }
     void updateSelectModule(const QStringList& selectModuleList) {
         for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
+            // if (mModel.item(rowIndex, 0) == nullptr) {
+            //     continue;
+            // }
             QString itemName = mModel.item(rowIndex, 0)->text();
             bool select = selectModuleList.contains(itemName);
             mModel.item(rowIndex, 0)->setCheckState((select) ? (Qt::Checked) : (Qt::Unchecked));
         }
     }
-    void updateSelectListInfo(const QString& title, const QStringList& subTitle, const QSize& size = QSize()) {
+    void updateSelectListInfo(const QStringList& selectList, const QStringList& infoList) {
+        int maxCount = (selectList.size() > mModel.rowCount())
+                           ? (selectList.size())
+                           : ((mModel.rowCount() > infoList.size()) ? (mModel.rowCount()) : (infoList.size()));
+        // qDebug() << "List Count :" << mModel.rowCount() << selectList.size() << infoList.size() << maxCount;
+        for (int rowIndex = 0; rowIndex < maxCount; rowIndex++) {
+            if (rowIndex < selectList.size()) {
+                mModel.setItem(rowIndex, 0, new QStandardItem(selectList[rowIndex]));
+                mModel.item(rowIndex, 0)->setCheckable(true);
+                mModel.item(rowIndex, 0)->setFlags(mModel.item(rowIndex, 0)->flags() & ~Qt::ItemFlag::ItemIsEditable);
+            }
+            if (rowIndex < infoList.size()) {
+                mModel.setItem(rowIndex, 1, new QStandardItem(infoList[rowIndex]));
+                mModel.item(rowIndex, 1)->setFlags(mModel.item(rowIndex, 1)->flags() & ~Qt::ItemFlag::ItemIsEditable);
+            }
+
+            mTableView->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
+            mTableView->verticalHeader()->resizeSection(rowIndex, 20);
+        }
+    }
+    void updateSelectWidgetInfo(const QString& title, const QStringList& subTitle, const QSize& size = QSize()) {
         this->setWindowTitle(title);
 
         if (subTitle.isEmpty() == false) {
+            mModel.setColumnCount(subTitle.size());
             mModel.setHorizontalHeaderLabels(subTitle);
         }
         if (size.isEmpty() == false) {
