@@ -577,9 +577,11 @@ void GuiExcel::updateDisplayExcelSheet() {
                 int inputSignalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
                 if (mExcelSheet[sheetIndex]->item(row, inputSignalIndex) != nullptr) {
                     inputSignal = mExcelSheet[sheetIndex]->item(row, inputSignalIndex)->text();
+                    // inputSignal.remove("_MCAN");
+                    // inputSignal.remove("_CCAN");
                 }
 
-                if (inputSignal.size() > 0) {
+                if ((inputSignal.size() > 0) && (inputSignal.indexOf("Vehicle.") == 0)) {
                     QVariantList inputDataInfo = QVariantList({vehicleType, inputSignal});
                     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
                 }

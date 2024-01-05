@@ -628,6 +628,7 @@ QPair<QVariantList, QVariantList> ControlExcel::isVsmSignalInputDataInfo(const Q
     QString signal = temp.at(temp.size() - 1);
     QMap<int, QPair<QStringList, QStringList>> vsmInputData = QMap<int, QPair<QStringList, QStringList>>();
     QMapIterator<int, QString> iter(vsmFileInfo);
+    qDebug() << "Found Signal :" << signal;
     while (iter.hasNext()) {
         iter.next();
         int vehicleType = iter.key();
