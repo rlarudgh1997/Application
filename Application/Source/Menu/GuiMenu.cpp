@@ -471,7 +471,7 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
         QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
         QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);
         bool allState = (moduleList.toStringList().size() == selectModule.toStringList().size());
-        mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList.toStringList(), allState);
+        mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList.toStringList(), allState, true);
         mSelectModule->updateSelectModule(selectModule.toStringList());
 
         connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {

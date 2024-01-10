@@ -1,0 +1,798 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- CLU_INFOTAINMENT:
+  type: branch
+
+
+- CLU_INFOTAINMENT.Output_DriveModeChangeStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "NORMAL"
+    0x2: "ECO"
+    0x3: "SPORT"
+    0x4: "SPORT_PLUS"
+    0x5: "SMART"
+    0x6: "CUSTOM1"
+    0x7: "N_MODE"
+    0x8: "SNOW"
+    0x9: "SAND"
+    0xA: "MUD"
+    0xB: "READY"
+    0xC: "AUTO"
+    0xD: "CUSTOM2"
+    0xE: "DEEP_SNOW"
+
+
+- NAVIGATION_DIS:
+  type: branch
+
+
+- NAVIGATION_TBT:
+  type: branch
+
+
+- VESS:
+  type: branch
+
+
+- CLU_INFOTAINMENT.Output_DriveModeChangeStatus.Output_DriveModeChangeStatus_MCAN:
+  type: actuator
+  signalName:
+  dataType: HUInt64
+  abstractionName: Output_DriveModeChangeStatus.Output_DriveModeChangeStatus_MCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "NORMAL"
+    0x2: "ECO"
+    0x3: "SPORT"
+    0x4: "SPORT_PLUS"
+    0x5: "SMART"
+    0x6: "CUSTOM1"
+    0x7: "N_MODE"
+    0x8: "SNOW"
+    0x9: "SAND"
+    0xA: "MUD"
+    0xB: "READY"
+    0xC: "AUTO"
+    0xD: "CUSTOM2"
+    0xE: "DEEP_SNOW"
+  matchingTable:
+
+
+- NAVIGATION_DIS.Input_DisCameraSafetyAlertStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_DisCameraSafetyAlertStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FIXEDCAMERA"
+    0x2: "PORTABLECAMERA"
+    0x3: "SPEED_SIGNAL"
+    0x4: "BUSCAMERA"
+    0x5: "SCHOOLZONEFIXEDCAMERA"
+    0x6: "SCHOOLZONESPEEL_SIGNALCAMERA"
+    0x7: "CUTINLINE"
+    0x8: "ROADSHOULDERVIOLATION"
+    0x9: "TRAFFICINFORMATION"
+    0xA: "INTERSECTIONJAMMING"
+    0xB: "RAMPMETERING"
+    0xC: "LANECHANGE"
+    0xD: "AVERAGESPEEDCAMERA"
+    0xE: "AVERAGESPEEDCAMERAZONE"
+    0xF: "SPEEDENFORCEMET"
+    0x10: "SPEEDENFORCEMETZONE"
+    0x11: "MOBILEHOTSPOT"
+    0x12: "MOBILEHOTSPOTZONE"
+    0x13: "ACCIDENTBLACKSPOT1"
+    0x14: "ACCIDENTBLACKSPOTZONE"
+    0x15: "DANGERZONE"
+    0x16: "RISKZONE"
+    0x17: "RESTRICTED"
+    0x18: "OTHERS"
+    0x19: "BUSLANENOTAVAILABLE"
+    0x1A: "BUSLANEAVAILABLE"
+    0x1B: "ILLEGALPARKING"
+    0x1C: "DONOTENTER"
+    0x1D: "ACCIDENTBLACKSPOT2"
+    0x1E: "SCHOOLZONE"
+    0x1F: "FALLINGROCKS"
+    0x20: "RAILROADCROSSING"
+    0x21: "FOGGYAREA"
+    0x22: "STEEPSLOPE"
+    0x23: "ROADKILL"
+    0x24: "SPEEDBUMP"
+    0x25: "NARROWROAD"
+    0x26: "HIGHWAYCONSTRUCTIONZONE"
+    0x27: "ROADSLIPDETECTION"
+    0x28: "ROADDAMAGEDETECTION"
+    0x29: "ZONE_30"
+    0x2A: "STOP"
+    0x2B: "BLINDSLOPE_CONTINUOUS"
+    0x2C: "CROSSWIND"
+    0x2D: "HILLSIDEDANGEROUS"
+    0x2E: "HUMP_BRIDG"
+    0x2F: "JOINT_LEFT"
+    0x30: "JOINT_RIGHT"
+    0x31: "LOWSPEED"
+    0x32: "NARROW_BOTH"
+    0x33: "NARROWBRIDGE"
+    0x34: "NARROW_LEFT"
+    0x35: "NARROW_RIGHT"
+    0x36: "ROCKFALL_LEFT"
+    0x37: "ROCKFALL_RIGHT"
+    0x38: "SLIP"
+    0x39: "BLINDSLOPE_UP"
+    0x3A: "BLINDSLOPE_DOWN"
+    0x3B: "TUNNEL"
+    0x3C: "UNDERWATER"
+    0x3D: "UNEVEN"
+    0x3E: "UNMANAGED_RAILWAY_CROSS"
+    0x3F: "ZIPPASS"
+    0x40: "SLOPE_CONTINUOUSDOWN"
+    0x41: "SLOPE_UP"
+    0x42: "SLOPE_DOWN"
+    0x43: "RAILWAY_MANAGED"
+    0x44: "VILLAGE"
+    0x45: "AUDIBLEWARNING"
+    0x46: "OVERTAKING_LANE"
+    0x47: "FALLING_HAZARD"
+    0x48: "LANE_MOVE_REGULATION"
+    0x49: "DROWSY"
+  matchingTable:
+
+
+- NAVIGATION_DIS.Input_DisSpeedLimitValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_DisSpeedLimitValue
+  matchingTable:
+
+
+- NAVIGATION_DIS.Input_HeadUnitNaviStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitNaviStatus
+  valueEnum:
+    0x0: "BOOTING"
+    0x1: "NORMAL"
+    0x2: "NO_SDCARD"
+    0x3: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_DIS.Input_NaviDisplayCountryStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDisplayCountryStatus
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "USA"
+    0x2: "CANADA"
+    0x3: "MEXICO"
+    0x4: "EUROPE"
+    0x5: "MIDDLE_EAST"
+    0x6: "AUSTRALIA"
+    0x7: "SOUTH_AMERICA"
+    0x8: "CHINA"
+    0x9: "INDIA"
+    0xA: "JAPAN"
+    0xB: "SOUTH_EAST_ASIA_E"
+    0xC: "SOUTH_EAST_ASIA_N"
+    0xD: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_DIS.Input_IslaOptionStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_IslaOptionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING"
+    0x2: "ASSIST"
+    0x3: "ERROR"
+    0x4: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_HeadUnitAliveStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitAliveStatus
+  valueEnum:
+    0x0: "NOT_READY"
+    0x1: "ON_MODE"
+    0x2: "UPDATE_MODE"
+    0x3: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_HeadUnitLangugeStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitLangugeStatus
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "OLD_VALUE"
+    0x30: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_HeadUnitNaviStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitNaviStatus
+  valueEnum:
+    0x0: "BOOTING"
+    0x1: "NORMAL"
+    0x2: "NO_SDCARD"
+    0x3: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToDestValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToDestValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToDestUnit:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToDestUnit
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToDestUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToDestUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnFirstUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnFirstUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnFirstUnitStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnFirstUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnFirstValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnFirstValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnSecondUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnSecondUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnSecondUnitStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnSecondUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviDistToTurnSecondValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviDistToTurnSecondValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtDistToTurnPointUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtDistToTurnPointUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviLaneRemainDistUnitStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviLaneRemainDistUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviLaneRemainDistValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviLaneRemainDistValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviPointFlagTypeStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviPointFlagTypeStatus
+  valueEnum:
+    0x0: "DESTINATION"
+    0x1: "WAYPOINT1"
+    0x2: "WAYPOINT2"
+    0x3: "WAYPOINT3"
+    0x4: "WAYPOINT4"
+    0x5: "CHARGING_STATION"
+    0x6: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviPopupDistOverDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviPopupDistOverDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviPopupDistUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviPopupDistUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviPopupDistUnitStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviPopupDistUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviPopupReqStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviPopupReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ROADSLIP_WRNG1"
+    0x2: "ROADSLIP_WRNG2"
+    0x3: "ROADDMG_WRNG1"
+    0x4: "ROADDMG_WRNG2"
+    0x5: "DO_NOT_ENTER"
+    0x6: "DANGEROUS_DRIVING"
+    0x7: "SECOND_COLLISION"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtBarGraphLevelValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtBarGraphLevelValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtCombinedSideStreetStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtCombinedSideStreetStatus
+  valueEnum:
+    0x0: "NO_COMBINED"
+    0x1: "RIGHT_COMBINED"
+    0x2: "LEFT_COMBINED"
+    0x3: "BOTH_COMBINED"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtDirectionValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtDirectionValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtDisplayTypeStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtDisplayTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DIRECTION_TO_DESTINATION"
+    0x2: "ARRIVED"
+    0x3: "NO_ROUTE_GUIDANCE"
+    0x4: "CALC_ROUTE"
+    0x5: "RECALC_ROUTE"
+    0x6: "TURN"
+    0x7: "EXIT_R"
+    0x8: "EXIT_L"
+    0x9: "EXIT_COMBINATION_R"
+    0xA: "EXIT_COMBINATION_L"
+    0xB: "SERVICE_ROAD_R"
+    0xC: "SERVICE_ROAD_L"
+    0xD: "FORK2"
+    0xE: "U_TURN"
+    0xF: "EXIT_ROUNDABOUT_TRS_R"
+    0x10: "EXIT_ROUNDABOUT_TRS_L"
+    0x11: "OVERPASS_R"
+    0x12: "OVERPASS_L"
+    0x13: "UNDERPASS_R"
+    0x14: "UNDERPASS_L"
+    0x15: "TOLL"
+    0x16: "PRE_NODIRECTION"
+    0x17: "PRE_STRAIGHT"
+    0x18: "PRE_TURN1OCLOCK"
+    0x19: "PRE_TURN_R"
+    0x1A: "PRE_TURN4OCLOCK"
+    0x1B: "PRE_TURN8OCLOCK"
+    0x1C: "PRE_TURN_LEFT"
+    0x1D: "PRE_TURN11OCLOCK"
+    0x1E: "PRE_U_TURN_L"
+    0x1F: "PRE_U_TURN_R"
+    0x20: "PRE_PERMITTED_TUNR_L"
+    0x21: "PRE_ASIDE_OVERPASS_R"
+    0x22: "PRE_ASIDE_OVERPASS_L"
+    0x23: "PRE_ASIDE_UNDERPASS_R"
+    0x24: "PRE_ASIDE_UNDERPASS_L"
+    0x25: "PRE_INTO_OVERPASS_C"
+    0x26: "PRE_INTO_OVERPASS_R"
+    0x27: "PRE_INTO_OVERPASS_L"
+    0x28: "PRE_INTO_UNDERPASS_R"
+    0x29: "PRE_INTO_UNDERPASS_L"
+    0x2A: "PRE_ROUNDABOUT_R12"
+    0x2B: "PRE_ROUNDABOUT_R1"
+    0x2C: "PRE_ROUNDABOUT_R2"
+    0x2D: "PRE_ROUNDABOUT_R3"
+    0x2E: "PRE_ROUNDABOUT_R4"
+    0x2F: "PRE_ROUNDABOUT_R5"
+    0x30: "PRE_ROUNDABOUT_R6"
+    0x31: "PRE_ROUNDABOUT_R7"
+    0x32: "PRE_ROUNDABOUT_R8"
+    0x33: "PRE_ROUNDABOUT_R9"
+    0x34: "PRE_ROUNDABOUT_R10"
+    0x35: "PRE_ROUNDABOUT_R11"
+    0x36: "PRE_CHARGINGSTATION_C"
+    0x37: "PRE_CHARGINGSTATION_R"
+    0x38: "PRE_CHARGINGSTATION_L"
+    0x39: "PRE_DEST_C"
+    0x3A: "PRE_DEST_R"
+    0x3B: "PRE_DEST_L"
+    0x3C: "PRE_WAY_POINT1_C"
+    0x3D: "PRE_WAY_POINT1_R"
+    0x3E: "PRE_WAY_POINT1_L"
+    0x3F: "PRE_WAY_POINT2_C"
+    0x40: "PRE_WAY_POINT2_R"
+    0x41: "PRE_WAY_POINT2_L"
+    0x42: "PRE_WAY_POINT3_C"
+    0x43: "PRE_WAY_POINT3_R"
+    0x44: "PRE_WAY_POINT3_L"
+    0x45: "PRE_WAY_POINT4_C"
+    0x46: "PRE_WAY_POINT4_R"
+    0x47: "PRE_WAY_POINT4_L"
+    0x48: "PRE_WALK_TO_DEST"
+    0x49: "PRE_WALK_TO_WAY_POINT1"
+    0x4A: "PRE_FORK2_R"
+    0x4B: "PRE_FORK2_L"
+    0x4C: "PRE_FORK_S_R_STRAIGHT"
+    0x4D: "PRE_FORK_S_R_R"
+    0x4E: "PRE_FORK_S_L_STRAIGHT"
+    0x4F: "PRE_FORK_S_L_L"
+    0x50: "PRE_FWY_ENTRANCE_C"
+    0x51: "PRE_FWY_ENTRANCE_R"
+    0x52: "PRE_FWY_ENTRANCE_L"
+    0x53: "PRE_FWY_EXIT_C"
+    0x54: "PRE_FWY_EXIT_R"
+    0x55: "PRE_FWY_EXIT_L"
+    0x56: "PRE_MAIN_ROAD_ENTRANCE_C"
+    0x57: "PRE_MAIN_ROAD_ENTRANCE_R"
+    0x58: "PRE_MAIN_ROAD_ENTRANCE_L"
+    0x59: "PRE_FERRY"
+    0x5A: "PRE_TUNNEL"
+    0x5B: "PRE_TOLL"
+    0x5C: "PRE_S_A_ENTRANCE"
+    0x5D: "PRE_COIN_TOLL"
+    0x5E: "PRE_ROUNDABOUT_L12"
+    0x5F: "PRE_ROUNDABOUT_L1"
+    0x60: "PRE_ROUNDABOUT_L2"
+    0x61: "PRE_ROUNDABOUT_L3"
+    0x62: "PRE_ROUNDABOUT_L4"
+    0x63: "PRE_ROUNDABOUT_L5"
+    0x64: "PRE_ROUNDABOUT_L6"
+    0x65: "PRE_ROUNDABOUT_L7"
+    0x66: "PRE_ROUNDABOUT_L8"
+    0x67: "PRE_ROUNDABOUT_L9"
+    0x68: "PRE_ROUNDABOUT_L10"
+    0x69: "PRE_ROUNDABOUT_L11"
+    0x6A: "PRE_ENTER_ROUNDABOUT"
+    0x6B: "PRE_EXIT_ROUNDABOUT"
+    0x6C: "PRE_MOST_LEFT_OF_LINE"
+    0x6D: "PRE_MOST_RIGHT_OF_LINE"
+    0x6E: "PRE_MIDDLE_OF_LINE"
+    0x6F: "PRE_MOST_LEFT_OF3_NORMAL"
+    0x70: "PRE_MOST_RIGHT_OF3_NORMAL"
+    0x71: "PRE_ENTER_FERRY"
+    0x72: "PRE_EXIT_FERRY"
+    0x73: "PRE_LEFT2_BRANCH_LEFT_BASE"
+    0x74: "PRE_LEFT2_BRANCH_RIGHT_BASE"
+    0x75: "PRE_RIGHT2_BRANCH_LEFT_BASE"
+    0x76: "PRE_RIGHT2_BRANCH_RIGHT_BASE"
+    0x77: "PRE_STRAIGHT_FRONT"
+    0x78: "PRE_MIDLE_OF3_NORMAL"
+    0x79: "PRE_STARTING_POINT"
+    0x7A: "PRE_I_C2_ON_LEFT_STRAIGHT_WALK_I_C"
+    0x7B: "PRE_I_C2_ON_RIGHT_STRAIGHT_WALK_I_C"
+    0x7C: "PRE_NORMAL2_ON_LEFT_STRAIGHT_LINE"
+    0x7D: "PRE_NORMAL2_ON_RIGHT_STRAIGHT_LINE"
+    0x7E: "PRE_NORMAL3_ON_LEFT_STRAIGHT_LINE"
+    0x7F: "PRE_NORMAL3_ON_MIDDLE_STRAIGHT_LINE"
+    0x80: "PRE_NORMAL3_ON_RIGHT_STRAIGHT_LINE"
+    0x81: "PRE_I_C3_ON_LEFT_OF_I_C"
+    0x82: "PRE_I_C3_ON_MIDDLE_OF_I_C"
+    0x83: "PRE_I_C3_ON_RIGHT_OF_I_C"
+    0x84: "PRE_I_C3_ON_LEFT_STRAIGHT_LINE"
+    0x85: "PRE_I_C3_ON_MIDDLE_STRAIGHT_LINE"
+    0x86: "PRE_I_C3_ON_RIGHT_STRAIGHT_LINE"
+    0x87: "PRE8_DIRECTION_STRAIGHT_L"
+    0x88: "PRE8_DIRECTION_STRAIGHT_R"
+    0x89: "PRE8_DIRECTION_MOST_LEFT_STRAIGHT_LINE"
+    0x8A: "PRE8_DIRECTION_MOST_MIDDLE_STRAIGHT_LINE"
+    0x8B: "PRE8_DIRECTION_MOST_RIGHT_STRAIGHT_LINE"
+    0x8C: "PRE_LEFT3_BRANCH_LEFT_BASE"
+    0x8D: "PRE_LEFT3_BRANCH_MIDDLE_BASE"
+    0x8E: "PRE_LEFT3_BRANCH_RIGHT_BASE"
+    0x8F: "PRE_RIGHT3_BRANCH_LEFT_BASE"
+    0x90: "PRE_RIGHT3_BRANCH_MIDDLE_BASE"
+    0x91: "PRE_RIGHT3_BRANCH_RIGHT_BASE"
+    0x92: "PRE8_DIRECTION_TURN_AROUND_LEFT"
+    0x93: "PRE8_DIRECTION_TURN_AROUND_RIGHT"
+    0x94: "PRE8_DIRECTION_TURN_AROUND_MOST_LEFT"
+    0x95: "PRE8_DIRECTION_TURN_AROUND_MIDDLE"
+    0x96: "PRE8_DIRECTION_TURN_AROUND_MOST_RIGHT"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtDistToTurnPointValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtDistToTurnPointValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtDstanceUnit:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtDstanceUnit
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TbtSideStreetStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TbtSideStreetStatus
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviEstTimeDisplayFormat:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviEstTimeDisplayFormat
+  valueEnum:
+    0x0: "HOUR_12TYPE"
+    0x1: "HOUR_24TYPE"
+    0x2: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviEstTimeHourValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviEstTimeHourValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviEstTimeMinValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviEstTimeMinValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviEstTimeType:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviEstTimeType
+  valueEnum:
+    0x0: "ARRIVAL_TIME"
+    0x1: "REMAIN_TIME"
+    0x2: "INVALID"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviLaneRemainDistUnderDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviLaneRemainDistUnderDecimalValue
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_TBTGuideColorStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_TBTGuideColorStatus
+  valueEnum:
+    0x0: "NO_DATA"
+    0x1: "PINK"
+    0x2: "LIGHT_GREEN"
+    0x3: "GREEN"
+    0x4: "YELLOW"
+    0x5: "ORANGE"
+    0x6: "BLUE"
+    0x7: "WHITE"
+  matchingTable:
+
+
+- NAVIGATION_TBT.Input_NaviRoadEventDistOverDecimalValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_NaviRoadEventDistOverDecimalValue
+  matchingTable:
+
+
+- VESS.Input_VessFailWarnStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  abstractionName: Input_VessFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+
+

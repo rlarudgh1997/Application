@@ -1,0 +1,345 @@
+# Copyright (c) 2020 IVIS, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable IVIS license agreement.
+
+# Note -
+# This VSM mode is provided for define EOL/Variant variables
+# SignalName for NodeAddress should be same as NodeAddress to avoid duplicate.
+
+# Node Prefix : Vehicle.System.Micom
+
+- Input_TelltaleStat:
+  type: branch
+  description: "Telltale Stats To SafetyIC"
+
+- Inter_EventRheoDisplayStatus:
+  type: actuator
+  signalName: Inter_EventRheoDisplayStatus
+  description: "status of Rheo event display"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: ON
+    0x3: MAX
+
+- Inter_EventROADisplayStatus:
+  type: actuator
+  signalName: Inter_EventROADisplayStatus
+  description: "status of ROA event display"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: ON
+    0x3: MAX
+
+- Inter_EventOpenningEndingDisplayStatus:
+  type: actuator
+  signalName: Inter_EventOpenningEndingDisplayStatus
+  description: "status of openning and endding event"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: ON
+    0x3: MAX
+
+- Inter_EventEOLErrorStatus:
+  type: sensor
+  signalName: Inter_EventEOLErrorStatus
+  description: "status of eol eeror status"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: EOL_ERROR
+    0x3: MAX
+
+- Inter_PrivateWelcomeProcessStatus:
+  type: sensor
+  signalName: Inter_PrivateWelcomeProcessStatus
+  description: "status of private welcome process status"
+  dataType: HUInt64
+  valueEnum:
+    0x0: READY
+    0x1: UNLOCK
+    0x2: OPEN
+    0x3: WELCOME
+    0x4: OFF
+
+- Output_EventFGUpdateStatus:
+  type: actuator
+  signalName: Output_EventFGUpdateStatus
+  description: "FG Update Status"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: ON
+    0x3: MAX
+
+- Output_EventFGUpdateFusingStatus:
+  type: actuator
+  signalName: Output_EventFGUpdateFusingStatus
+  description: "FG Update Fusing Status"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: ON
+    0x3: MAX
+
+- Output_EventUpdateNotiToSafetyICStatus:
+  type: actuator
+  signalName: Output_EventUpdateNotiToSafetyICStatus
+  description: "Update Notification to Safety IC"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NORMAL
+    0x1: UPDATE_STARTED_BACKLIGHT_OFF
+    0x2: UPDATE_STARTED_BACKLIGHT_ON
+    0x3: MAX
+
+- Output_BLFBlueColorValue:
+  type: actuator
+  signalName: Output_BLFBlueColorValue
+  description: "Blue light filter blue color value for LCD"
+  dataType: HUInt64
+  matchingTable:
+    VALUE:
+
+- Output_BLFGreenColorValue:
+  type: actuator
+  signalName: Output_BLFGreenColorValue
+  description: "Blue light filter green color value for LCD"
+  dataType: HUInt64
+  matchingTable:
+    VALUE:
+
+- Output_BLFRedColorValue:
+  type: actuator
+  signalName: Output_BLFRedColorValue
+  description: "Blue light filter red color value for LCD"
+  dataType: HUInt64
+  matchingTable:
+    VALUE:
+
+- Output_SoundActiveNotification:
+  type: actuator
+  signalName: Output_SoundActiveNotification
+  description: "External AMP Sound Active Notification"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: OFF
+    0x2: EXTERNAL_AMP_SOUND_NOTIFICATION
+    0x3: MAX
+
+- Inter_EnergyFlowSocDisplayType:
+  type: actuator
+  signalName: Inter_EnergyFlowSocDisplayType
+  description: "Display Status for Energy Flow Soc Display Type"
+  dataType: HUInt64
+  valueEnum:
+    0x0: NONE
+    0x1: EIGHT
+    0x2: HUNDRED
+    0x3: MAX
+
+- Inter_FoDDisplayThemeSupport:
+  type: actuator
+  signalName: Inter_FoDDisplayThemeSupport
+  description: "Indicates whether the FoD Display Theme is supported."
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+
+- Input_TelltaleStat.ABS:
+  type: sensor
+  signalName: Input_TelltaleStat_ABS
+  description: "safety IC Telltale ABS Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Input_TelltaleStat.AFS_DBL:
+  type: sensor
+  signalName: Input_TelltaleStat_AFS_DBL
+  description: "safety IC Telltale AFS_DBL Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK2
+    0x3: BLINK1
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+
+- Input_TelltaleStat.EPB:
+  type: sensor
+  signalName: Input_TelltaleStat_EPB
+  description: "safety IC Telltale EPB Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK2
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Input_TelltaleStat.ESC:
+  type: sensor
+  signalName: Input_TelltaleStat_ESC
+  description: "safety IC Telltale ESC Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK1
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Input_TelltaleStat.ESC_OFF:
+  type: sensor
+  signalName: Input_TelltaleStat_ESC_OFF
+  description: "safety IC Telltale ESC_OFF Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Input_TelltaleStat.MASTER_WARNING:
+  type: sensor
+  signalName: Input_TelltaleStat_MASTER_WARNING
+  description: "safety IC Telltale MASTER_WARNING Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Input_TelltaleStat.SBR:
+  type: sensor
+  signalName: Input_TelltaleStat_SBR
+  description: "safety IC Telltale SBR Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Input_TelltaleStat.MDPS:
+  type: sensor
+  signalName: Input_TelltaleStat_MDPS
+  description: "safety IC Telltale MDPS Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK2
+    0x3: BLINK1
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+
+- Input_TelltaleStat.PARKING_BRAKE:
+  type: sensor
+  signalName: Input_TelltaleStat_PARKING_BRAKE
+  description: "safety IC Telltale PARKING_BRAKE Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK2
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Input_TelltaleStat.AIR_BAG:
+  type: sensor
+  signalName: Input_TelltaleStat_AIR_BAG
+  description: "safety IC Telltale AIR_BAG Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+    0x2: BLINK2
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Input_TelltaleStat.AUTO_HOLD:
+  type: sensor
+  signalName: Input_TelltaleStat_AUTO_HOLD
+  description: "safety IC Telltale AUTO_HOLD Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: GREEN
+    0x2: WHITE
+    0x3: YELLOW
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+- Input_TelltaleStat.DOOR_OPEN:
+  type: sensor
+  signalName: Input_TelltaleStat_DOOR_OPEN
+  description: "safety IC Telltale DOOR_OPEN Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Input_TelltaleStat.BATTERY_CHARGE:
+  type: sensor
+  signalName: Input_TelltaleStat_BATTERY_CHARGE
+  description: "safety IC Telltale BATTERY_CHARGE Stat"
+  dataType: HUInt64
+  valueEnum:
+    0x0: OFF
+    0x1: ON
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1

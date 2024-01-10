@@ -236,14 +236,10 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 
 void ControlCenter::updateNodeAddress(const bool& check) {
     QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
-#if 0
-    QVariantList vsmFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddress).toList();
-#else
     QVariantList vsmFile = QVariantList();
     vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressEV));
     vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressFCEV));
     vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressICV));
-#endif
 
     if ((check) && (checkNodeAddress(vsmPath, vsmFile))) {
         qDebug() << "Fail to vsm file not found :" << vsmPath;

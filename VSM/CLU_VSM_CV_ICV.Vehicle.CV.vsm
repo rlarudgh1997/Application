@@ -1,0 +1,8879 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- ABS_CV:
+  type: branch
+
+
+- ABS_NO_ABS_Trailer:
+  type: branch
+
+
+- ADAS_Driving_CV:
+  type: branch
+
+
+- ADAS_PARKING_CV:
+  type: branch
+
+
+- AFS:
+  type: branch
+
+
+- ASR:
+  type: branch
+
+
+- AVH:
+  type: branch
+
+
+- Air_Bag_CV:
+  type: branch
+
+
+- Air_Bag_CV.Output_AirBagIndictorStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "INDI_OFF"
+    0x1: "INDI_ON"
+    0x2: "INDI_FLASHING"
+    0x3: "MESSAGE_ERROR"
+    0x4: "CIRCUIT_FAILURE"
+
+
+- Auto_Grease:
+  type: branch
+
+
+- BCM_Warning_CV:
+  type: branch
+
+
+- BEQ:
+  type: branch
+
+
+- Brake_Air:
+  type: branch
+
+
+- Brake_System_Malfunction:
+  type: branch
+
+
+- CNG_Fuel_System_CV:
+  type: branch
+
+
+- Cab_Tilting:
+  type: branch
+
+
+- Cooling_System:
+  type: branch
+
+
+- CruiseControl_CV:
+  type: branch
+
+
+- Curb_Mode:
+  type: branch
+
+
+- DEA:
+  type: branch
+
+
+- DPF_CV:
+  type: branch
+
+
+- DSW:
+  type: branch
+
+
+- Differential_Lock:
+  type: branch
+
+
+- Digital_Clock:
+  type: branch
+
+
+- Digital_Clock.Output_CLUHoursValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Digital_Clock.Output_CLUMinutesValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Digital_Clock.Output_CLUSecondsValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Door_Open_CV:
+  type: branch
+
+
+- Down_Hill_Cruise:
+  type: branch
+
+
+- Dual_Power:
+  type: branch
+
+
+- Dust_Indicator:
+  type: branch
+
+
+- EAPU:
+  type: branch
+
+
+- EBS:
+  type: branch
+
+
+- ECAS:
+  type: branch
+
+
+- EDG:
+  type: branch
+
+
+- EHS:
+  type: branch
+
+
+- Emergency_Door:
+  type: branch
+
+
+- Energy_Flow_CV:
+  type: branch
+
+
+- Energy_Flow_CV.Output_SocDisplayLevelStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "SEG0"
+    0x1: "SEG1"
+    0x2: "SEG2"
+    0x3: "SEG3"
+    0x4: "SEG4"
+    0x5: "SEG5"
+    0x6: "SEG6"
+    0x7: "SEG7"
+    0x8: "SEG8"
+    0x9: "INVALID"
+
+
+- EngineRPM_CV:
+  type: branch
+
+
+- Engine_Check:
+  type: branch
+
+
+- Engine_Oil_Warning_CV:
+  type: branch
+
+
+- Engine_PTO:
+  type: branch
+
+
+- Engine_Room_Warning:
+  type: branch
+
+
+- Exhaust_Brake:
+  type: branch
+
+
+- Glow_CV:
+  type: branch
+
+
+- High_Voltage_Battery_Charge:
+  type: branch
+
+
+- ISG_CV:
+  type: branch
+
+
+- Illumination_CV:
+  type: branch
+
+
+- Illumination_CV.Output_DetentStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- Illumination_CV.Output_RheostatLevelStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP5"
+    0x5: "STEP6"
+    0x6: "STEP7"
+    0x7: "STEP8"
+    0x8: "STEP9"
+    0x9: "STEP10"
+    0xA: "STEP11"
+    0xB: "STEP12"
+    0xC: "STEP13"
+    0xD: "STEP14"
+    0xE: "STEP15"
+    0xF: "STEP16"
+    0x10: "STEP17"
+    0x11: "STEP18"
+    0x12: "STEP19"
+    0x13: "STEP20"
+    0x14: "STEP21"
+    0x15: "INVALID"
+
+
+- Illumination_CV.Output_IlluminationLevelValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Illumination_CV.Output_RheostatMaxInfo:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "STEP20"
+    0x1: "STEP21"
+    0x2: "INVALID"
+
+
+- Illumination_CV.Output_NotMinIlluminationLevelValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Input_Output_Processing_CV:
+  type: branch
+
+
+- Input_Output_Processing_CV.Output_OkSwitchStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+
+
+- Input_Output_Processing_CV.Output_SrvReminderRemainDistValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Input_Output_Processing_CV.Output_SrvReminderRemainPeriodValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Inter_Diff_Lock:
+  type: branch
+
+
+- Intro_Outro_CV:
+  type: branch
+
+
+- Jake_Brake_CV:
+  type: branch
+
+
+- Key_System_CV:
+  type: branch
+
+
+- LWS:
+  type: branch
+
+
+- Lamp_Fail_Warning_CV:
+  type: branch
+
+
+- Lamp_Indicator_CV:
+  type: branch
+
+
+- Luggage_Door:
+  type: branch
+
+
+- MIL_OBD_Lamp:
+  type: branch
+
+
+- Option_Classification_Logic_CV:
+  type: branch
+
+
+- PDC:
+  type: branch
+
+
+- Parking_Brake_CV:
+  type: branch
+
+
+- Retarder:
+  type: branch
+
+
+- Screen_Control_Logic_CV:
+  type: branch
+
+
+- Screen_Control_Logic_CV.Output_AdasSettingMenuOnReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "MENU_ON"
+
+
+- Screen_Control_Logic_CV.Output_ClusterLanguageStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "INVALID"
+
+
+- Screen_Control_Logic_CV.Output_EDGScoreResetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET_REQ"
+    0x2: "INVALID"
+
+
+- Settings_CV:
+  type: branch
+
+
+- Settings_CV.Output_AdasWarnSoundAutoOnReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "ON_REQUEST"
+
+
+- Settings_CV.Output_AdasWarnVolStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "VOL_OFF"
+    0x2: "LEVEL1"
+    0x3: "LEVEL2"
+    0x4: "LEVEL3"
+
+
+- Settings_CV.Output_DisWarnSetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Settings_CV.Output_FuelEconomyUnitKmStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KM_PER_LITTER"
+    0x1: "LITTER_PER_KM"
+    0x2: "INVALID"
+
+
+- Settings_CV.Output_FuelEconomyUnitMiStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "US_GALLON"
+    0x1: "UK_GALLON"
+    0x2: "INVALID"
+
+
+- Settings_CV.Output_MfswPopupSetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Settings_CV.Output_SrvReminderModeSetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "CUSTOM_MODE"
+    0x1: "WORKSHOP_MODE"
+    0x2: "DEFAULT"
+
+
+- Settings_CV.Output_SrvReminderRemainDistValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Settings_CV.Output_SrvReminderRemainPeriodValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Settings_CV.Output_SrvReminderSetDistValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Settings_CV.Output_SrvReminderSetPeriodValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Settings_CV.Output_SrvReminderSetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "OFF"
+    0x2: "ON"
+
+
+- Settings_CV.Output_ClusterDetailThemeListStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "A_B_C"
+    0x3: "AUTO_A_B_C"
+
+
+- Settings_CV.Output_ClusterDetailThemeStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "SELECT1"
+    0x3: "SELECT2"
+    0x4: "SELECT3"
+    0x5: "AUTO"
+
+
+- Settings_CV.Output_ClusterMainThemeListStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "CLASSIC_SIMPLE"
+    0x3: "CLASSIC_SIMPLE_N"
+    0x4: "CIRCLE_SIMPLE"
+    0x5: "MODERN_SIMPLE_NEOCLASSIC"
+
+
+- Settings_CV.Output_ClusterMainThemeStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "THEME_A"
+    0x3: "THEME_B"
+    0x4: "THEME_C"
+    0x5: "THEME_D"
+
+
+- Settings_CV.Output_WelcomeSoundSetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Settings_CV.Output_AdasWarnVolFeedbackReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "VOL1"
+    0x3: "VOL2"
+    0x4: "VOL3"
+
+
+- Sliding_Ramp:
+  type: branch
+
+
+- Sound_CV:
+  type: branch
+
+
+- Sound_CV.Output_AdasWarnSoundStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "WARN_ON"
+
+
+- Special_Vehicle:
+  type: branch
+
+
+- Steering_Warning_Lamp:
+  type: branch
+
+
+- Stop_Lamp:
+  type: branch
+
+
+- TM_High_Low_Range:
+  type: branch
+
+
+- TPMS_CV:
+  type: branch
+
+
+- Tachograph:
+  type: branch
+
+
+- Transmission_Indicator_CV:
+  type: branch
+
+
+- Transmission_Warning_CV:
+  type: branch
+
+
+- Trip_Info_CV:
+  type: branch
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyDigitStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyUnitStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KM_PER_LITTER"
+    0x1: "LITTER_PER_KM"
+    0x2: "MPG_US"
+    0x3: "MPG_UK"
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsDigit:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsResetStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET"
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_EvDTEValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_OdometerValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_TotalDTEValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsSyncCounter:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "TIME0"
+    0x1: "TIME1"
+    0x2: "TIME2"
+    0x3: "TIME3"
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsValueDigit:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+    0x2: "INVALID"
+
+
+- Trip_Info_CV.Output_TripUnitStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KM"
+    0x1: "MILE"
+    0x2: "INVALID"
+
+
+- Urea_System:
+  type: branch
+
+
+- VCU:
+  type: branch
+
+
+- VDC:
+  type: branch
+
+
+- WPC_CV:
+  type: branch
+
+
+- Working_Lamp:
+  type: branch
+
+
+- xEV_Service_Lamp_CV:
+  type: branch
+
+
+- ABS_CV.Input_ABSEBSAmberWarningSignal:
+  type: sensor
+  signalName: ABS_EBSAmberWarningSignal
+  dataType: HUInt64
+  abstractionName: Input_ABSEBSAmberWarningSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ABS_CV.Input_ABSFullyOperationalSignal:
+  type: sensor
+  signalName: ABSFullyOperational
+  dataType: HUInt64
+  abstractionName: Input_ABSFullyOperationalSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ABS_CV.Input_ABSWarningLampStatus:
+  type: sensor
+  signalName: ABSWarningLamp
+  dataType: HUInt64
+  abstractionName: Input_ABSWarningLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ABS_NO_ABS_Trailer.Input_ABSTrailerLampStatus:
+  type: sensor
+  signalName: TrailerABSWarning
+  dataType: HUInt64
+  abstractionName: Input_ABSTrailerLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ABS_NO_ABS_Trailer.Input_NoABSTrailerLampStatus:
+  type: sensor
+  signalName: NoABSTrailerWarning
+  dataType: HUInt64
+  abstractionName: Input_NoABSTrailerLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_ForwardSafetySymbolStatus:
+  type: sensor
+  signalName: TT_FwdSftySymbSta
+  dataType: HUInt64
+  abstractionName: Input_ForwardSafetySymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "RED"
+    0x3: "RED_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_LaneSafetySymbolStatus:
+  type: sensor
+  signalName: TT_LnSftySymbSta
+  dataType: HUInt64
+  abstractionName: Input_LaneSafetySymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "AMBER_BLINK"
+    0x3: "GRAY"
+    0x4: "GREEN"
+    0x5: "GREEN_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_HbaSymbolStatus:
+  type: sensor
+  signalName: TT_HBA_SymbSta
+  dataType: HUInt64
+  abstractionName: Input_HbaSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY_WHITE"
+    0x2: "GREEN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_DriveAttentionWarningSymbolStatus:
+  type: sensor
+  signalName: TT_DAW_SymbSta
+  dataType: HUInt64
+  abstractionName: Input_DriveAttentionWarningSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_IslaTrafficSignCountryInformationStatus:
+  type: sensor
+  signalName: TT_ISLA_TrffcSgnCntryInfoSta
+  dataType: HUInt64
+  abstractionName: Input_IslaTrafficSignCountryInformationStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DOMESTIC"
+    0x2: "GENERAL"
+    0x3: "MIDDLE_EAST"
+    0x4: "EUROPE"
+    0x5: "AUSTRALIA"
+    0x6: "CANADA"
+    0x7: "USA"
+    0x8: "CHINA"
+    0x9: "RUSSIA"
+    0xA: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    ELSE: 0xA
+
+
+- ADAS_Driving_CV.Input_IslaSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_SpdLimTrffcSgnSta
+  dataType: HUInt64
+  abstractionName: Input_IslaSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "BLACK_TEXT"
+    0x3: "BLACK_TEXT_BLINK"
+    0x4: "RED_TEXT"
+    0x5: "RED_TEXT_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_IslaSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: TT_ISLA_SpdLimTrffcSgnVal
+  dataType: HUInt64
+  abstractionName: Input_IslaSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ADAS_Driving_CV.Input_IslaAdditionalTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_AddtnlTrffcSgnSta
+  dataType: HUInt64
+  abstractionName: Input_IslaAdditionalTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCHOOL_CROSSING"
+    0x2: "PEDESTRIAN_CROSSING"
+    0x3: "BICYCLE_CROSSING"
+    0x4: "STOP"
+    0x5: "YIELD"
+    0x6: "STOP_AHEAD"
+    0x7: "YIELD_AHEAD"
+    0x8: "ROAD_CONSTRUCTION_AHEAD"
+    0x9: "LANE_REDUCTION"
+    0xA: "DO_NOT_PASS_LHD"
+    0xB: "DO_NOT_PASS_RHD"
+    0xC: "DO_NOT_ENTER"
+    0xD: "ROUNDABOUT_LHD"
+    0xE: "ROUNDABOUT_RHD"
+    0xF: "RIGHT_CURVE"
+    0x10: "LEFT_CURVE"
+    0x11: "RIGHT_LEFT_CURVES"
+    0x12: "LEFT_RIGHT_CURVES"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x08: 0x4
+    0x09: 0x5
+    0x0A: 0x6
+    0x0B: 0x7
+    0x0C: 0x8
+    0x0D: 0x9
+    0x10: 0xA
+    0x11: 0xB
+    0x13: 0xC
+    0x18: 0xD
+    0x19: 0xE
+    0x1A: 0xF
+    0x1B: 0x10
+    0x1C: 0x11
+    0x1D: 0x12
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_IslaSupplementaryTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_SuppTrffcSgnSta
+  dataType: HUInt64
+  abstractionName: Input_IslaSupplementaryTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvFrontObjectStatus:
+  type: sensor
+  signalName: SMV_FrObjSta
+  dataType: HUInt64
+  abstractionName: Input_SmvFrontObjectStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DARK"
+    0x2: "BRIGHT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvHostVehicleStatus:
+  type: sensor
+  signalName: SMV_HostVehSta
+  dataType: HUInt64
+  abstractionName: Input_SmvHostVehicleStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DARK"
+    0x2: "BRIGHT"
+    0x3: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvVehicleDistanceLevelStatus:
+  type: sensor
+  signalName: SMV_VehDstLvlSta
+  dataType: HUInt64
+  abstractionName: Input_SmvVehicleDistanceLevelStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BRAND"
+    0x2: "BRAND_BLINK"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+    0x6: "CYAN_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvVehicleDistanceLevelValue:
+  type: sensor
+  signalName: SMV_VehDstLvlVal
+  dataType: HUInt64
+  abstractionName: Input_SmvVehicleDistanceLevelValue
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LEVEL1"
+    0x2: "LEVEL2"
+    0x3: "LEVEL3"
+    0x4: "LEVEL4"
+    0x5: "LEVEL4_SOLID"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvSetSpeedValue:
+  type: sensor
+  signalName: SMV_SetSpdVal
+  dataType: HUInt64
+  abstractionName: Input_SmvSetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- ADAS_Driving_CV.Input_SmvSetSpeedStatus:
+  type: sensor
+  signalName: SMV_SetSpdSta
+  dataType: HUInt64
+  abstractionName: Input_SmvSetSpeedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvHdaSymbolStatus:
+  type: sensor
+  signalName: SMV_HDA_SymbSta
+  dataType: HUInt64
+  abstractionName: Input_SmvHdaSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvIslaSetSpeedSymbolStatus:
+  type: sensor
+  signalName: SMV_ISLA_SetSpdSymbSta
+  dataType: HUInt64
+  abstractionName: Input_SmvIslaSetSpeedSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PLUS_WHITE"
+    0x2: "MINUS_WHITE"
+    0x3: "PLUS_GREEN"
+    0x4: "MINUS_GREEN"
+    0x5: "PLUS_GREEN_BLINK"
+    0x6: "MINUS_GREEN_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvNsccSymbolStatus:
+  type: sensor
+  signalName: SMV_NSCC_SymbSta
+  dataType: HUInt64
+  abstractionName: Input_SmvNsccSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "GREEN_BLINK"
+    0x4: "WHITE"
+    0x5: "WHITE_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SmvLfaSymbolStatus:
+  type: sensor
+  signalName: SMV_LFA_SymbSta
+  dataType: HUInt64
+  abstractionName: Input_SmvLfaSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvDrivingLaneCenterLineStatus:
+  type: sensor
+  signalName: MV_DrvLnCtLnSta
+  dataType: HUInt64
+  abstractionName: Input_MvDrivingLaneCenterLineStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GREEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvVehicleDistanceStatus:
+  type: sensor
+  signalName: MV_VehDstSta
+  dataType: HUInt64
+  abstractionName: Input_MvVehicleDistanceStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MAIN"
+    0x2: "MAIN_BLINK"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvVehicleDistanceValue:
+  type: sensor
+  signalName: MV_VehDstVal
+  dataType: HUInt64
+  abstractionName: Input_MvVehicleDistanceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ADAS_Driving_CV.Input_MvLeftLineStatus:
+  type: sensor
+  signalName: MV_LtLnSta
+  dataType: HUInt64
+  abstractionName: Input_MvLeftLineStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "WHITE"
+    0x3: "WHITE_BLINK"
+    0x4: "AMBER"
+    0x5: "AMBER_BLINK"
+    0x6: "GREEN"
+    0x7: "GREEN_BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvLeftLineOffsetValue:
+  type: sensor
+  signalName: MV_LtLnOffstVal
+  dataType: HUInt64
+  abstractionName: Input_MvLeftLineOffsetValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ADAS_Driving_CV.Input_MvRightLineStatus:
+  type: sensor
+  signalName: MV_RtLnSta
+  dataType: HUInt64
+  abstractionName: Input_MvRightLineStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "WHITE"
+    0x3: "WHITE_BLINK"
+    0x4: "AMBER"
+    0x5: "AMBER_BLINK"
+    0x6: "GREEN"
+    0x7: "GREEN_BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvRightLineOffsetValue:
+  type: sensor
+  signalName: MV_RtLnOffstVal
+  dataType: HUInt64
+  abstractionName: Input_MvRightLineOffsetValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ADAS_Driving_CV.Input_MvHostVehicle1Status:
+  type: sensor
+  signalName: MV_HostVeh1Sta
+  dataType: HUInt64
+  abstractionName: Input_MvHostVehicle1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvFrontObjectStatus:
+  type: sensor
+  signalName: MV_FrObjSta
+  dataType: HUInt64
+  abstractionName: Input_MvFrontObjectStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DARK"
+    0x2: "BRIGHT"
+    0x3: "DARK_PASSENGER_VEHICLE"
+    0x4: "BRIGHT_PASSENGER_VEHICLE"
+    0x5: "DARK_COMMERCIAL_VEHICLE"
+    0x6: "BRIGHT_COMMERCIAL_VEHICLE"
+    0x7: "DARK_PEDESTRIAN"
+    0x8: "BRIGHT_PEDESTRIAN"
+    0x9: "DARK_CYCLIST"
+    0xA: "BRIGHT_CYCLIST"
+    0xB: "DARK_MOTORCYCLE_PTW"
+    0xC: "BRIGHT_MOTORCYCLE_PTW"
+    0xD: "DARK_RUBBER_CONE"
+    0xE: "BRIGHT_RUBBER_CONE"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvFrontObjectLongitudinalPositionValue:
+  type: sensor
+  signalName: MV_FrObjLongPosVal
+  dataType: HUInt64
+  abstractionName: Input_MvFrontObjectLongitudinalPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7FF
+
+
+- ADAS_Driving_CV.Input_MvFrontObjectLateralPositionValue:
+  type: sensor
+  signalName: MV_FrObjLatPosVal
+  dataType: HUInt64
+  abstractionName: Input_MvFrontObjectLateralPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x41
+
+
+- ADAS_Driving_CV.Input_PuFGroup1AdasWarning1_1Status:
+  type: sensor
+  signalName: PU_F_Group1_ADASWarn1_1Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup1AdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_FRONT"
+    0x2: "WARNING_FRONT_LEFT"
+    0x3: "WARNING_FRONT_RIGHT"
+    0x4: "WARNING_FRONT_LEFT_CROSSING"
+    0x5: "WARNING_FRONT_RIGHT_CROSSING"
+    0x6: "BRAKING_FRONT"
+    0x7: "BRAKING_FRONT_LEFT"
+    0x8: "BRAKING_FRONT_RIGHT"
+    0x9: "BRAKING_FRONT_LEFT_CROSSING"
+    0xA: "BRAKING_FRONT_RIGHT_CROSSING"
+    0xB: "STEERING_FRONT_LEFT"
+    0xC: "STEERING_FRONT_RIGHT"
+    0xD: "STEERING_FRONT_LEFT_PATH"
+    0xE: "STEERING_FRONT_RIGHT_PATH"
+    0xF: "STEERING_REAR_LEFT"
+    0x10: "STEERING_REAR_RIGHT"
+    0x11: "END_OF_ASSIST"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x0B: 0x6
+    0x0C: 0x7
+    0x0D: 0x8
+    0x0E: 0x9
+    0x0F: 0xA
+    0x15: 0xB
+    0x16: 0xC
+    0x17: 0xD
+    0x18: 0xE
+    0x19: 0xF
+    0x1A: 0x10
+    0x21: 0x11
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup1AdasWarning1_2Status:
+  type: sensor
+  signalName: PU_F_Group1_ADASWarn1_2Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup1AdasWarning1_2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HANDS_OFF_WARN_LV1"
+    0x2: "HANDS_OFF_WARN_LV2"
+    0x3: "LFA_AUTOMATIC_OFF"
+    0x4: "HDA_AUTOMATIC_OFF"
+    0x5: "DAW_TAKE_REST"
+    0x6: "HDP_EM"
+    0x7: "HDP_MRM"
+    0x8: "HDP_TD_LV1"
+    0x9: "HDP_TD_LV2"
+    0xA: "HDP_INACTIVE"
+    0xB: "HDP_WARNING"
+    0xC: "HDP_CONDITION_NO_MET"
+    0xD: "LCA_MANUAL_ON_REQUEST"
+    0xE: "HDP_EM_IN_DDT"
+    0xF: "HDP_SET_THE_WIPER_LIGHT_AUTO"
+    0x10: "HDP_BE_PREPARED_TO_TAKEOVER"
+    0x11: "EMERGENCY_STOP"
+    0x12: "EMERGENCY_STOP_INACTIVE"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0xD
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xE
+    0x0F: 0xF
+    0x10: 0x10
+    0x15: 0x11
+    0x16: 0x12
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup4AdasWarning1_1Status:
+  type: sensor
+  signalName: PU_F_Group4_ADASWarn1_1Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup4AdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCC_MRM"
+    0x2: "SCC_ATTENTION_WARNING"
+    0x3: "SCC_AUTOMATIC_OFF"
+    0x4: "SCC_CONDITION_NOT_MET"
+    0x5: "SCC_STOP_CONTROL"
+    0x6: "DAW_TAKE_REST"
+    0x7: "DAW_LEAD_VEHICLE_DEPARTURE"
+    0x8: "COMMON_INHIBIT_OFF_IN_REGULATIONS"
+    0x9: "LCA_MANUAL_ON_REQUEST"
+    0xA: "HDP_INHIBIT_OFF_DRIVING_SAFETY"
+    0xB: "HDP_INHIBIT_OFF_DRIVING_CONV"
+    0xC: "HDP_INITIAL_ACTIVATION"
+    0xD: "HDP_CHECK_PATH"
+    0xE: "CONNECTING_TRAILER_OFF"
+    0xF: "HDP_INACTIVE"
+    0x10: "HDP_NOT_APPLIED"
+    0x11: "HDP_LV2_CONDITION_NOT_MET"
+    0x12: "OFF_DUE_TO_LIMITATION_ON_DRIVER_MONITORING"
+    0x13: "SCC_CONDITION_NOT_MET_BY_MRM"
+    0x14: "HDA_START_POP_UP"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0xE
+    0x07: 0x12
+    0x08: 0x13
+    0x0A: 0x6
+    0x0B: 0x7
+    0x0C: 0x8
+    0x10: 0x9
+    0x11: 0xA
+    0x12: 0xB
+    0x13: 0xC
+    0x14: 0xD
+    0x15: 0xF
+    0x16: 0x10
+    0x17: 0x11
+    0x18: 0x14
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7ForwardSafetyFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_FwdSftyFlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7ForwardSafetyFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7LaneSafetyFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_LnSftyFlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7LaneSafetyFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7IslaFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_ISLA_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7IslaFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7DawFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_DAW_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7DawFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7HbaFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_HBA_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7HbaFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7SccFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_SCC_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7SccFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7LfaFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_LFA_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7LfaFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7HdaFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_HDA_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7HdaFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7DriverAssistFailure1Status:
+  type: sensor
+  signalName: PU_F_Group7_DrvrAsstFlr1Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7DriverAssistFailure1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+    0x4: "CAMERA_RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvHostVehicle2Status:
+  type: sensor
+  signalName: MV_HostVeh2Sta
+  dataType: HUInt64
+  abstractionName: Input_MvHostVehicle2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvRearLeftRadarWave2Status:
+  type: sensor
+  signalName: MV_RrLtRdrWave2Sta
+  dataType: HUInt64
+  abstractionName: Input_MvRearLeftRadarWave2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RED_WAVE"
+    0x2: "RED_WAVE_WARNING_SYMBOL"
+    0x3: "RED_WAVE_WARNING_SYMBOL_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvRearRightRadarWave2Status:
+  type: sensor
+  signalName: MV_RrRtRdrWave2Sta
+  dataType: HUInt64
+  abstractionName: Input_MvRearRightRadarWave2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RED_WAVE"
+    0x2: "RED_WAVE_WARNING_SYMBOL"
+    0x3: "RED_WAVE_WARNING_SYMBOL_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7BlindSpotSafetyFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_BlndSptSftyFlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7BlindSpotSafetyFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "RADAR_BLOCKAGE"
+    0x3: "CONNECTING_TRAILER_OFF"
+    0x4: "DISPLAY_OFF"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuMGroup2AdasWarning1_1Status:
+  type: sensor
+  signalName: PU_M_Group2_ADASWarn1_1Sta
+  dataType: HUInt64
+  abstractionName: Input_PuMGroup2AdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MSLA_AUTOSET_ON"
+    0x2: "MSLA_AUTOSET_SPEED_CHANGED"
+    0x3: "SCC_AUTOSET_ON"
+    0x4: "SCC_AUTOSET_SPEED_CHANGED"
+    0x5: "SCC_DISTANCE_LV1"
+    0x6: "SCC_DISTANCE_LV2"
+    0x7: "SCC_DISTANCE_LV3"
+    0x8: "SCC_DISTANCE_LV4"
+    0x9: "NSCC_WARNING"
+    0xA: "LCA_COLLISION"
+    0xB: "LCA_CONDITION_NOT_MET"
+    0xC: "LCA_DRIVING_LANE_ANALYZING"
+    0xD: "LCA_CURVED_ROAD"
+    0xE: "LCA_NARROW_LANE"
+    0xF: "LCA_NOT_OPERATIONAL_SECTION"
+    0x10: "LCA_HAZARD_LIGHT"
+    0x11: "LCA_LOW_SPEED"
+    0x12: "LCA_HANDS_OFF"
+    0x13: "LCA_UNAVAILABLE_LANE"
+    0x14: "LCA_STEERING_CONTROL_DETECTED"
+    0x15: "SCC_ML_DISTANCE_LV1"
+    0x16: "SCC_ML_DISTANCE_LV2"
+    0x17: "SCC_ML_DISTANCE_LV3"
+    0x18: "SCC_ML_DISTANCE_LV4"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x07: 0x5
+    0x08: 0x6
+    0x09: 0x7
+    0x0A: 0x8
+    0x0B: 0x15
+    0x0C: 0x16
+    0x0D: 0x17
+    0x0E: 0x18
+    0x11: 0x9
+    0x12: 0xA
+    0x13: 0xB
+    0x14: 0xC
+    0x15: 0xD
+    0x16: 0xE
+    0x17: 0xF
+    0x18: 0x10
+    0x19: 0x11
+    0x1A: 0x12
+    0x1B: 0x13
+    0x1C: 0x14
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning1_1Status:
+  type: sensor
+  signalName: SND_ADASWarn1_1Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_SOUND_2_LOW"
+    0x2: "WARNING_SOUND_2_MEDIUM"
+    0x3: "WARNING_SOUND_2_AUTO"
+    0x4: "WARNING_SOUND_3_LOW"
+    0x5: "WARNING_SOUND_3_MEDIUM"
+    0x6: "WARNING_SOUND_3_AUTO"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning1_2Status:
+  type: sensor
+  signalName: SND_ADASWarn1_2Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning1_2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_SOUND_1_LOW"
+    0x2: "WARNING_SOUND_1_MEDIUM"
+    0x3: "WARNING_SOUND_1_AUTO"
+    0x4: "WARNING_SOUND_2_LOW"
+    0x5: "WARNING_SOUND_2_MEDIUM"
+    0x6: "WARNING_SOUND_2_AUTO"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning1_3Status:
+  type: sensor
+  signalName: SND_ADASWarn1_3Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning1_3Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPECIAL_SOUND_1_LOW"
+    0x2: "SPECIAL_SOUND_1_MEDIUM"
+    0x3: "SPECIAL_SOUND_1_AUTO"
+    0x4: "ALARM_SOUND_1_LOW"
+    0x5: "ALARM_SOUND_1_MEDIUM"
+    0x6: "ALARM_SOUND_1_AUTO"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning1_4Status:
+  type: sensor
+  signalName: SND_ADASWarn1_4Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning1_4Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ALARM_SOUND_2_LOW"
+    0x2: "ALARM_SOUND_2_MEDIUM"
+    0x3: "ALARM_SOUND_2_AUTO"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning1_5Status:
+  type: sensor
+  signalName: SND_ADASWarn1_5Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning1_5Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPECIAL_SOUND_4_LOW"
+    0x2: "SPECIAL_SOUND_4_MEDIUM"
+    0x3: "SPECIAL_SOUND_4_AUTO"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_FCWNearSymbolStatus:
+  type: sensor
+  signalName: TT_FwdNearSftySymbSta
+  dataType: HUInt64
+  abstractionName: Input_FCWNearSymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "RED"
+    0x3: "RED_BLINK"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_BlindSpotSafetySymbolStatus:
+  type: sensor
+  signalName: TT_BlndSptSftySymbSta
+  dataType: HUInt64
+  abstractionName: Input_BlindSpotSafetySymbolStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "RED"
+    0x3: "RED_BLINK"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup1AdasWarningA_AStatus:
+  type: sensor
+  signalName: PU_F_Group1_ADASWarnA_ASta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup1AdasWarningA_AStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FRONT_WARNING1"
+    0x2: "FRONT_WARNING2"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7FCWNearFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_FCW_Near_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7FCWNearFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_SoundAdasWarning2_1Status:
+  type: sensor
+  signalName: SND_ADASWarn2_1Sta
+  dataType: HUInt64
+  abstractionName: Input_SoundAdasWarning2_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPECIAL_SOUND_5_LOW"
+    0x2: "SPECIAL_SOUND_5_MEDIUM"
+    0x3: "SPECIAL_SOUND_5_AUTO"
+    0x4: "SPECIAL_SOUND_5_AUTO_SEW"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvFrontLeftRadarWaveStatus:
+  type: sensor
+  signalName: MV_FrLtRdrWaveSta_CV
+  dataType: HUInt64
+  abstractionName: Input_MvFrontLeftRadarWaveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RED_WAVE"
+    0x2: "RED_WAVE_WARNING_SYMBOL"
+    0x3: "RED_WAVE_WARNING_SYMBOL_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_MvFrontRightRadarWaveStatus:
+  type: sensor
+  signalName: MV_FrRtRdrWaveSta_CV
+  dataType: HUInt64
+  abstractionName: Input_MvFrontRightRadarWaveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RED_WAVE"
+    0x2: "RED_WAVE_WARNING_SYMBOL"
+    0x3: "RED_WAVE_WARNING_SYMBOL_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_IFSIndLampStatus:
+  type: sensor
+  signalName: CF_IFS_Lamp
+  dataType: HUInt64
+  abstractionName: Input_IFSIndLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "ON"
+  matchingTable:
+    0x1: 0x3
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7MRMFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_MRM_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7MRMFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+    0x4: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    TIMEOUT: 0x4
+    ELSE: 0x0
+
+
+- ADAS_Driving_CV.Input_PuFGroup7OutsideMirrorSymbolFailureStatus:
+  type: sensor
+  signalName: PU_F_Group7_OSMrrSymbFlrSta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7OutsideMirrorSymbolFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasCarBodyDisplayStatus:
+  type: sensor
+  signalName: CV_PDW_CrBdDis
+  dataType: HUInt64
+  abstractionName: Input_AdasCarBodyDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearSystemFailureStatus:
+  type: sensor
+  signalName: CV_SEW_SysFlrSta
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearSystemFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEW_NEAR_FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasPdwSystemFailureStatus:
+  type: sensor
+  signalName: CV_PDW_SysFlrSta
+  dataType: HUInt64
+  abstractionName: Input_AdasPdwSystemFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ULTRASONIC_SENSOR_BLOCKAGE"
+    0x2: "PDW_FAILURE"
+  matchingTable:
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasPopupBoundaryLaneColorStatus:
+  type: sensor
+  signalName: CV_PDW_SEW_Pop_BrdrLnClr
+  dataType: HUInt64
+  abstractionName: Input_AdasPopupBoundaryLaneColorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE"
+    0x2: "RED"
+    0x3: "AMBER"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasRearCenterWarning3PartDisplayStatus:
+  type: sensor
+  signalName: CV_PA_RrCtWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasRearCenterWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasRearLeftWarning3PartDisplayStatus:
+  type: sensor
+  signalName: CV_PA_RrLtWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasRearLeftWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasRearMasterWarningDisplayStatus:
+  type: sensor
+  signalName: CV_PDW_RrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasRearMasterWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+    0x2: "FAILURE_BLOCKAGE"
+  matchingTable:
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasRearRightWarning3PartDisplayStatus:
+  type: sensor
+  signalName: CV_PA_RrRtWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasRearRightWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasRightMasterWarningDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_WrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasRightMasterWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+    0x2: "FAILURE_BLOCKAGE"
+  matchingTable:
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearFrontRightWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_FrRtWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearFrontRightWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearFrontDoorWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_FrDrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearFrontDoorWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearMidDoorWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_MdlDrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearMidDoorWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearRearDoorWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_RrDrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearRearDoorWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuCarBodyDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_CRBdDis
+  dataType: HUInt64
+  abstractionName: Input_IbuCarBodyDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuFrontCenterWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_FrCtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuFrontCenterWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuFrontLeftWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_FrLtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuFrontLeftWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuFrontMasterWarningDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_FrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_IbuFrontMasterWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE_BLOCKAGE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuPdwSystemFailureStatus:
+  type: sensor
+  signalName: IBU_PDW_SysFlrSta
+  dataType: HUInt64
+  abstractionName: Input_IbuPdwSystemFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ULTRASONIC_SENSOR_BLOCKAGE"
+    0x2: "PDW_FAILURE"
+  matchingTable:
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuPopupBoundaryLaneColorStatus:
+  type: sensor
+  signalName: IBU_PDW_Pop_BrdrLnClr
+  dataType: HUInt64
+  abstractionName: Input_IbuPopupBoundaryLaneColorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE"
+    0x2: "RED"
+    0x3: "AMBER"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuRearCenterWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_RrCtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuRearCenterWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuRearLeftWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_RrLtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuRearLeftWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuRearMasterWarningDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_RrWrngDis
+  dataType: HUInt64
+  abstractionName: Input_IbuRearMasterWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE_BLOCKAGE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuRearRightWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_RrRtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuRearRightWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_IbuFrontRightWarning3PartDisplayStatus:
+  type: sensor
+  signalName: IBU_PDW_FrRtWrngLvlDis
+  dataType: HUInt64
+  abstractionName: Input_IbuFrontRightWarning3PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "WARN_3RD"
+    0x4: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_PaFrontCenterWarnSoundStatus:
+  type: sensor
+  signalName: CV_PA_FrCtWrngAlrmReq
+  dataType: HUInt64
+  abstractionName: Input_PaFrontCenterWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FIRST_WARN"
+    0x2: "SECOND_WARN"
+    0x3: "THIRD_WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_PuFGroup7DriverAssistFailure10Status:
+  type: sensor
+  signalName: CV_PU_F_Group7_DrvrAsstFlr10Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7DriverAssistFailure10Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "ULTRASONIC_SENSOR_BLOCKAGE"
+    0x4: "LIDAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_PuFGroup7DriverAssistFailure11Status:
+  type: sensor
+  signalName: IBU_PU_F_Group7_DrvrAsstFlr11Sta
+  dataType: HUInt64
+  abstractionName: Input_PuFGroup7DriverAssistFailure11Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "ULTRASONIC_SENSOR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_PdwFrontCenterWarnSoundStatus:
+  type: sensor
+  signalName: IBU_PDW_FrSnsrWrngLvlSta
+  dataType: HUInt64
+  abstractionName: Input_PdwFrontCenterWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FIRST_WARN"
+    0x2: "SECOND_WARN"
+    0x3: "THIRD_WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearFrontLeftWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_FrLtWrngDis_RHD
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearFrontLeftWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearFrontDoorRHDWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_FrDrWrngDis_RHD
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearFrontDoorRHDWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearMidDoorRHDWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_MdlDrWrngDis_RHD
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearMidDoorRHDWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasSewNearRearDoorRHDWarning2PartDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_RrDrWrngDis_RHD
+  dataType: HUInt64
+  abstractionName: Input_AdasSewNearRearDoorRHDWarning2PartDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_1ST"
+    0x2: "WARN_2ND"
+    0x3: "GRAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_CV.Input_AdasLeftMasterWarningDisplayStatus:
+  type: sensor
+  signalName: CV_SEW_WrngDis_RHD
+  dataType: HUInt64
+  abstractionName: Input_AdasLeftMasterWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+    0x2: "FAILURE_BLOCKAGE"
+  matchingTable:
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AFS.Input_AFLSAmberWarnLampStatus:
+  type: sensor
+  signalName: AFS_Warning_Sta
+  dataType: HUInt64
+  abstractionName: Input_AFLSAmberWarnLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK"
+    0x2: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- AFS.Input_IFSAfsWarnStatus:
+  type: sensor
+  signalName: AFS_Warning_State
+  dataType: HUInt64
+  abstractionName: Input_IFSAfsWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK"
+    0x2: "ON"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2~0x3: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- AFS.Input_IFSIndLampStatus:
+  type: sensor
+  signalName: CF_IFS_Lamp
+  dataType: HUInt64
+  abstractionName: Input_IFSIndLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "ON"
+  matchingTable:
+    0x1: 0x3
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- AFS.Input_IFSSystemStatus:
+  type: sensor
+  signalName: CF_IFS_SysState
+  dataType: HUInt64
+  abstractionName: Input_IFSSystemStatus
+  valueEnum:
+    0x0: "BLOCKAGE"
+    0x1: "OFF"
+  matchingTable:
+    0x2: 0x0
+    ELSE: 0x1
+
+
+- ASR.Input_ASRBrakeCtrlActiveStatus:
+  type: sensor
+  signalName: ASRBrakeCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_ASRBrakeCtrlActiveStatus
+  valueEnum:
+    0x0: "ACTIVE"
+    0x1: "INACTIVE"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- ASR.Input_ASREngCtrlActiveStatus:
+  type: sensor
+  signalName: ASREngCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_ASREngCtrlActiveStatus
+  valueEnum:
+    0x0: "ACTIVE"
+    0x1: "INACTIVE"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x0
+    TIMEOUT: 0x2
+    ELSE: 0x1
+
+
+- ASR.Input_ASROffroadSwitchStatus:
+  type: sensor
+  signalName: ASROffroadSwitch
+  dataType: HUInt64
+  abstractionName: Input_ASROffroadSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ASR.Input_TCSOffLampStatus:
+  type: sensor
+  signalName: TCSOffLamp
+  dataType: HUInt64
+  abstractionName: Input_TCSOffLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ASR.Input_TCSWarningAndInfoLampStatus:
+  type: sensor
+  signalName: TCSWarningAndInformationLamp
+  dataType: HUInt64
+  abstractionName: Input_TCSWarningAndInfoLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- AVH.Input_AVHStatus:
+  type: sensor
+  signalName: AVH_CLU_Signal
+  dataType: HUInt64
+  abstractionName: Input_AVHStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVE"
+    0x3: "WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AVH.Input_AVHInfo:
+  type: sensor
+  signalName: AVH_CLU_Inform
+  dataType: HUInt64
+  abstractionName: Input_AVHInfo
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RELEASE"
+    0x2: "INHIBIT_AVH"
+    0x3: "AUTO_PARKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Air_Bag_CV.Input_AcuSysWarnLampStatus:
+  type: sensor
+  signalName: ACU_SysWrngLmpDis
+  dataType: HUInt64
+  abstractionName: Input_AcuSysWarnLampStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "FLASH"
+    0x2: "INVALID"
+    0x3: "MESSAGE_TIMEOUT"
+    0x4: "OFF"
+  matchingTable:
+    0x0: 0x4
+    0x1: 0x0
+    0x2: 0x1
+    TIMEOUT: 0x3
+    ELSE: 0x2
+
+
+- Air_Bag_CV.Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_SRSWrngLmpSta
+  dataType: HUInt64
+  abstractionName: Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN
+  valueEnum:
+    0x0: "INDI_OFF"
+    0x1: "INDI_ON"
+    0x2: "INDI_FLASHING"
+    0x3: "MESSAGE_ERROR"
+    0x4: "CIRCUIT_FAILURE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+
+
+- Auto_Grease.Input_AutoGreaseWarnStatus:
+  type: sensor
+  signalName: AutoGreaseState
+  dataType: HUInt64
+  abstractionName: Input_AutoGreaseWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- BCM_Warning_CV.Input_BcmWarningStatus:
+  type: sensor
+  signalName: Warn_BCMWrngSta
+  dataType: HUInt64
+  abstractionName: Input_BcmWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "POWER_OFF"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- BCM_Warning_CV.Input_NotParkingWarnStatus:
+  type: sensor
+  signalName: Warn_NotParkingSta
+  dataType: HUInt64
+  abstractionName: Input_NotParkingWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- BCM_Warning_CV.Input_BcmSndWarningStatus:
+  type: sensor
+  signalName: Warn_BzrWrngSta
+  dataType: HUInt64
+  abstractionName: Input_BcmSndWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KEY_REMIND"
+    0x2: "PARKING_WARN"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- BEQ.Input_BEQOperatingStatus:
+  type: sensor
+  signalName: OperatingStatus_BEQ
+  dataType: HUInt64
+  abstractionName: Input_BEQOperatingStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x6: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Brake_Air.Input_FrontAxleBrakeAirValue:
+  type: sensor
+  signalName: ServiceBrakeCircuit2AirPressure
+  dataType: HUInt64
+  abstractionName: Input_FrontAxleBrakeAirValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Brake_Air.Input_RearAxleBrakeAirValue:
+  type: sensor
+  signalName: ServiceBrakeCircuit1AirPressure
+  dataType: HUInt64
+  abstractionName: Input_RearAxleBrakeAirValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Brake_System_Malfunction.Input_BrakeAirStatus:
+  type: sensor
+  signalName: LowAirState
+  dataType: HUInt64
+  abstractionName: Input_BrakeAirStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "LOW"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Brake_System_Malfunction.Input_BrakeOilStatus:
+  type: sensor
+  signalName: BrakeOilState
+  dataType: HUInt64
+  abstractionName: Input_BrakeOilStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "LOW"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Brake_System_Malfunction.Input_EBDLampStatus:
+  type: sensor
+  signalName: EBDWarningLamp
+  dataType: HUInt64
+  abstractionName: Input_EBDLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- CNG_Fuel_System_CV.Input_EngineLowFuelWarnStatus:
+  type: sensor
+  signalName: VehicleFuelLevelLowLampCmd
+  dataType: HUInt64
+  abstractionName: Input_EngineLowFuelWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CNG_Fuel_System_CV.Input_EngineFuelGauge_CNG:
+  type: sensor
+  signalName: NGTP_Voltage
+  dataType: HUInt64
+  abstractionName: Input_EngineFuelGauge_CNG
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Cab_Tilting.Input_CabTiltWarnStatus:
+  type: sensor
+  signalName: TiltLockSWStatus
+  dataType: HUInt64
+  abstractionName: Input_CabTiltWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Cooling_System.Input_EngineCoolingWaterTemperature:
+  type: sensor
+  signalName: EngCoolantTemp
+  dataType: HUInt64
+  abstractionName: Input_EngineCoolingWaterTemperature
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Cooling_System.Input_LowEngineCoolantWarningLampStatus:
+  type: sensor
+  signalName: WaterLevelSwState
+  dataType: HUInt64
+  abstractionName: Input_LowEngineCoolantWarningLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Cooling_System.Input_EngineCoolantWarningStatus:
+  type: sensor
+  signalName: EngCoolantTempHighLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineCoolantWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CruiseControl_CV.Input_EngineCcActive:
+  type: sensor
+  signalName: CruiseCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_EngineCcActive
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CruiseControl_CV.Input_EngineCcSetSpeed:
+  type: sensor
+  signalName: CruiseCtrlSetSpeed
+  dataType: HUInt64
+  abstractionName: Input_EngineCcSetSpeed
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- CruiseControl_CV.Input_EngineCcState:
+  type: sensor
+  signalName: CruiseCtrlStates
+  dataType: HUInt64
+  abstractionName: Input_EngineCcState
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVE"
+    0x2: "OVERRIDE"
+  matchingTable:
+    0x1~0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x0
+
+
+- Curb_Mode.Input_EngineCurbModeState:
+  type: sensor
+  signalName: CurbModeLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineCurbModeState
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DEA.Input_DEASymbSta:
+  type: sensor
+  signalName: TT_DEASymbSta
+  dataType: HUInt64
+  abstractionName: Input_DEASymbSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- DEA.Input_DEAWarnSta:
+  type: sensor
+  signalName: PU_F_Group1_ADASWarnD_1sta
+  dataType: HUInt64
+  abstractionName: Input_DEAWarnSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING"
+    0x2: "STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DEA.Input_DEAFailureSta:
+  type: sensor
+  signalName: PU_F_Group7_DEA_FlrSta
+  dataType: HUInt64
+  abstractionName: Input_DEAFailureSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- DEA.Input_DEASoundWarn:
+  type: sensor
+  signalName: DEA_SysSta
+  dataType: HUInt64
+  abstractionName: Input_DEASoundWarn
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x1
+    0x4: 0x1
+    ELSE: 0x0
+
+
+- DPF_CV.Input_DPFAutoRegenStatus:
+  type: sensor
+  signalName: DPFautoregenerationGreenLamp
+  dataType: HUInt64
+  abstractionName: Input_DPFAutoRegenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DPF_CV.Input_DPFManualRegenStatus:
+  type: sensor
+  signalName: DPFManRegenerAmberLamp
+  dataType: HUInt64
+  abstractionName: Input_DPFManualRegenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DPF_CV.Input_DPFCoolingFanStatus:
+  type: sensor
+  signalName: CoolingFanInd
+  dataType: HUInt64
+  abstractionName: Input_DPFCoolingFanStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DPF_CV.Input_SootLevelValue:
+  type: sensor
+  signalName: SOOTLevel
+  dataType: HUInt64
+  abstractionName: Input_SootLevelValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xA
+
+
+- DPF_CV.Input_EngineDPFRegenStopLamp:
+  type: sensor
+  signalName: DPFRegenStopLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineDPFRegenStopLamp
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DPF_CV.Input_EngineTVSRwarning:
+  type: sensor
+  signalName: TVSRWarningLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineTVSRwarning
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DSW.Input_DSWWarnStatus:
+  type: sensor
+  signalName: CV_DSW_WarningStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DISTRACTION_WARN"
+    0x2: "DROWSINESS_WARN"
+    0x3: "BLOCKAGE_WARN"
+    0x4: "FAILURE_WARN"
+    0x5: "DEGRADATION_WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x5: 0x5
+    0x6: 0x3
+    0x7: 0x4
+    ELSE: 0x0
+
+
+- DSW.Input_DSWWarnSymbolDistStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSmblDistStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSymbolDistStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- DSW.Input_DSWWarnSymbolDrowStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSmblDrowStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSymbolDrowStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- DSW.Input_DSWWarnSoundStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSndStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Differential_Lock.Input_DiffLockStatus:
+  type: sensor
+  signalName: DiffLockTT
+  dataType: HUInt64
+  abstractionName: Input_DiffLockStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Differential_Lock.Input_DiffLockInhibitStatus:
+  type: sensor
+  signalName: DiffLockEC
+  dataType: HUInt64
+  abstractionName: Input_DiffLockInhibitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INHIBIT_1"
+    0x2: "INHIBIT_2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Differential_Lock.Input_DiffLockWarningStatus:
+  type: sensor
+  signalName: DiffLockWarning
+  dataType: HUInt64
+  abstractionName: Input_DiffLockWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Digital_Clock.Input_HUTimeFormatStatus:
+  type: sensor
+  signalName: HU_TimeFormat
+  dataType: HUInt64
+  abstractionName: Input_HUTimeFormatStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HOUR_12"
+    0x2: "HOUR_24"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Digital_Clock.Input_HUHoursValue:
+  type: sensor
+  signalName: HU_DisplayHour
+  dataType: HUInt64
+  abstractionName: Input_HUHoursValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Digital_Clock.Input_HUMinutesValue:
+  type: sensor
+  signalName: HU_DisplayMinute
+  dataType: HUInt64
+  abstractionName: Input_HUMinutesValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Digital_Clock.Input_HUSecondsValue:
+  type: sensor
+  signalName: HU_DisplaySecond
+  dataType: HUInt64
+  abstractionName: Input_HUSecondsValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Digital_Clock.Output_CLUHoursValue.Output_CLUHoursValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DSP_Hours
+  dataType: HUInt64
+  abstractionName: Output_CLUHoursValue.Output_CLUHoursValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Digital_Clock.Output_CLUMinutesValue.Output_CLUMinutesValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DSP_Minutes
+  dataType: HUInt64
+  abstractionName: Output_CLUMinutesValue.Output_CLUMinutesValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Digital_Clock.Output_CLUSecondsValue.Output_CLUSecondsValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DSP_Seconds
+  dataType: HUInt64
+  abstractionName: Output_CLUSecondsValue.Output_CLUSecondsValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Door_Open_CV.Input_IMUFrDoorOpenStatus:
+  type: sensor
+  signalName: FrDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUFrDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "BLINK"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUMidDoorOpenStatus:
+  type: sensor
+  signalName: MidDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUMidDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "BLINK"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMURrDoorOpenStatus:
+  type: sensor
+  signalName: RrDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMURrDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUDrvDoorOpenStatus:
+  type: sensor
+  signalName: DRVDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUDrvDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUAstDoorOpenStatus:
+  type: sensor
+  signalName: ASTDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUAstDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMURrFlapDoorOpenStatus:
+  type: sensor
+  signalName: RrFlapOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMURrFlapDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUFrPnlOpenStatus:
+  type: sensor
+  signalName: FrPnlOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUFrPnlOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUSideLidOpenStatus:
+  type: sensor
+  signalName: SideLidOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUSideLidOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUWarningAlarmStatus:
+  type: sensor
+  signalName: IMUWarningAlarm
+  dataType: HUInt64
+  abstractionName: Input_IMUWarningAlarmStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "EMERGENCY"
+    0x2: "USER_MODE_ON"
+    0x3: "USER_MODE_OFF"
+  matchingTable:
+    0x4: 0x1
+    0x5: 0x2
+    0x6: 0x3
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_IMUChargeLidOpenStatus:
+  type: sensor
+  signalName: ChargeLidOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUChargeLidOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Door_Open_CV.Input_LuggageFlapOpenStatus:
+  type: sensor
+  signalName: LuggageFlapOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_LuggageFlapOpenStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Door_Open_CV.Input_IMUFrDoorLockStatus:
+  type: sensor
+  signalName: FrDrLockStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUFrDoorLockStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Door_Open_CV.Input_IMUMidDoorLockStatus:
+  type: sensor
+  signalName: MidDrLockStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUMidDoorLockStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Door_Open_CV.Input_EmerDoorOpenStatus:
+  type: sensor
+  signalName: EmergencyDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_EmerDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Down_Hill_Cruise.Input_DHCToleranceValue:
+  type: sensor
+  signalName: DHC_Tolerance
+  dataType: HUInt64
+  abstractionName: Input_DHCToleranceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Down_Hill_Cruise.Input_DHCToleranceSoundStatus:
+  type: sensor
+  signalName: DHC_Sound
+  dataType: HUInt64
+  abstractionName: Input_DHCToleranceSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Down_Hill_Cruise.Input_DHCState:
+  type: sensor
+  signalName: DHC_State
+  dataType: HUInt64
+  abstractionName: Input_DHCState
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Dual_Power.Input_EngineEcoLampStatus:
+  type: sensor
+  signalName: ECOLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineEcoLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Dual_Power.Input_SmartModeStatus:
+  type: sensor
+  signalName: C_PowerModeSW
+  dataType: HUInt64
+  abstractionName: Input_SmartModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PERFORMANCE"
+    0x2: "ECO"
+    0x3: "SMART"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    ELSE: 0x0
+
+
+- Dust_Indicator.Input_DustWarnStatus:
+  type: sensor
+  signalName: DustIndState
+  dataType: HUInt64
+  abstractionName: Input_DustWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EAPU.Input_EAPUAmberWarnStatus:
+  type: sensor
+  signalName: AmberWarningLampStatus_EAPU_C
+  dataType: HUInt64
+  abstractionName: Input_EAPUAmberWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EAPU.Input_EAPURedWarnStatus:
+  type: sensor
+  signalName: RedStopLampState_EAPU_C
+  dataType: HUInt64
+  abstractionName: Input_EAPURedWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- EAPU.Input_CartridgeStatus:
+  type: sensor
+  signalName: MalfunctionIndicatorLampStatus_EAPU_C
+  dataType: HUInt64
+  abstractionName: Input_CartridgeStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "REPLACE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EBS.Input_ABSEBSAmberWarningSignal:
+  type: sensor
+  signalName: ABS_EBSAmberWarningSignal
+  dataType: HUInt64
+  abstractionName: Input_ABSEBSAmberWarningSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- EBS.Input_EBSRedWarningSignal:
+  type: sensor
+  signalName: EBSRedWarningSignal
+  dataType: HUInt64
+  abstractionName: Input_EBSRedWarningSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ECAS.Input_AxleLocation:
+  type: sensor
+  signalName: AxleLocation
+  dataType: HUInt64
+  abstractionName: Input_AxleLocation
+  valueEnum:
+    0x0: "FRONT1"
+    0x1: "REAR1"
+    0x2: "REAR2"
+    0x3: "REAR3"
+    0x4: "NOT_AVAILABLE"
+  matchingTable:
+    0x0F: 0x0
+    0x1F: 0x1
+    0x2F: 0x2
+    0x3F: 0x3
+    ELSE: 0x4
+
+
+- ECAS.Input_AxleWeight:
+  type: sensor
+  signalName: AxleWeight
+  dataType: HUInt64
+  abstractionName: Input_AxleWeight
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- ECAS.Input_ECASTelltaleStatus1:
+  type: sensor
+  signalName: ECASState1
+  dataType: HUInt64
+  abstractionName: Input_ECASTelltaleStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NORMAL"
+    0x2: "FR_UP_ON"
+    0x3: "FR_LOW_ON"
+    0x4: "RR_UP_ON"
+    0x5: "RR_LOW_ON"
+    0x6: "ALL_UP_ON"
+    0x7: "ALL_LOW_ON"
+    0x8: "FR_UP_RR_LOW_ON"
+    0x9: "FR_LOW_RR_UP_ON"
+    0xA: "TO_NORMAL_ON"
+    0xB: "FR_UP_BLINK"
+    0xC: "FR_LOW_BLINK"
+    0xD: "RR_UP_BLINK"
+    0xE: "RR_LOW_BLINK"
+    0xF: "ALL_UP_BLINK"
+    0x10: "ALL_LOW_BLINK"
+    0x11: "TO_NORMAL_BLINK"
+    0x12: "ABOVE_SPEED_LIMIT"
+    0x13: "AXLE_LOAD_LIMIT"
+    0x14: "EXCEED_TAG_AXLE_LOAD"
+    0x15: "CHECK_ON"
+    0x16: "NOT_AVAILABLE"
+    0x17: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0C: 0xB
+    0x0F: 0xC
+    0x0B: 0xD
+    0x0E: 0xE
+    0x0D: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    0x19: 0x12
+    0x1B: 0x13
+    0x1A: 0x14
+    0x1E: 0x15
+    0x1F: 0x16
+    TIMEOUT: 0x17
+    ELSE: 0x16
+
+
+- ECAS.Input_ECASTelltaleStatus2:
+  type: sensor
+  signalName: ECASState2
+  dataType: HUInt64
+  abstractionName: Input_ECASTelltaleStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AXLE_UP_ON"
+    0x2: "LOAD_TRANSFER_ON"
+  matchingTable:
+    0x0: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- ECAS.Input_WheelBasedVehicleSpeedValue:
+  type: sensor
+  signalName: WheelBasedVehicleSpeed
+  dataType: HUInt64
+  abstractionName: Input_WheelBasedVehicleSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- ECAS.Input_KneelingStatus:
+  type: sensor
+  signalName: KneelingState
+  dataType: HUInt64
+  abstractionName: Input_KneelingStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ECAS.Input_ECASTelltaleStatus3:
+  type: sensor
+  signalName: ECASState3
+  dataType: HUInt64
+  abstractionName: Input_ECASTelltaleStatus3
+  valueEnum:
+    0x0: "OFF"
+    0x1: "UP_ON"
+    0x2: "UP_BLINK"
+    0x3: "LOW_ON"
+    0x4: "LOW_BLINK"
+    0x5: "TO_NORMAL_ON"
+    0x6: "TO_NORMAL_BLINK"
+    0x7: "KNEELING_LOW_ON"
+    0x8: "KNEELING_LOW_BLINK"
+    0x9: "KNEELING_UP_BLINK"
+    0xA: "KNEELING_ABORTED"
+    0xB: "CHECK_ON"
+    0xC: "NOT_AVAILABLE"
+  matchingTable:
+    0x00: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x0B: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x1E: 0xB
+    ELSE: 0xC
+
+
+- EDG.Input_EDGTotalAvgScore:
+  type: sensor
+  signalName: TotAvgScore
+  dataType: HUInt64
+  abstractionName: Input_EDGTotalAvgScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGApsAvgScore:
+  type: sensor
+  signalName: ApsTotAvgScore
+  dataType: HUInt64
+  abstractionName: Input_EDGApsAvgScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGBrkAvgScore:
+  type: sensor
+  signalName: BrkTotAvgScore
+  dataType: HUInt64
+  abstractionName: Input_EDGBrkAvgScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGIdleAvgScore:
+  type: sensor
+  signalName: IdleTotAvgScore
+  dataType: HUInt64
+  abstractionName: Input_EDGIdleAvgScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGHillAvgScore:
+  type: sensor
+  signalName: HillTotAvgScore
+  dataType: HUInt64
+  abstractionName: Input_EDGHillAvgScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGApsCurScore:
+  type: sensor
+  signalName: ApsTotCurScore
+  dataType: HUInt64
+  abstractionName: Input_EDGApsCurScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGBrkCurScore:
+  type: sensor
+  signalName: BrkTotCurScore
+  dataType: HUInt64
+  abstractionName: Input_EDGBrkCurScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGIdleCurScore:
+  type: sensor
+  signalName: IdleTotCurScore
+  dataType: HUInt64
+  abstractionName: Input_EDGIdleCurScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGHillCurScore:
+  type: sensor
+  signalName: HillTotCurScore
+  dataType: HUInt64
+  abstractionName: Input_EDGHillCurScore
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EDG.Input_EDGApsActive:
+  type: sensor
+  signalName: ApsActive
+  dataType: HUInt64
+  abstractionName: Input_EDGApsActive
+  valueEnum:
+    0x0: "INACTIVE"
+    0x1: "ACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EDG.Input_EDGBrkActive:
+  type: sensor
+  signalName: BrkActive
+  dataType: HUInt64
+  abstractionName: Input_EDGBrkActive
+  valueEnum:
+    0x0: "INACTIVE"
+    0x1: "ACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EDG.Input_EDGIdleActive:
+  type: sensor
+  signalName: IdleActive
+  dataType: HUInt64
+  abstractionName: Input_EDGIdleActive
+  valueEnum:
+    0x0: "INACTIVE"
+    0x1: "ACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EDG.Input_EDGHillActive:
+  type: sensor
+  signalName: HillActive
+  dataType: HUInt64
+  abstractionName: Input_EDGHillActive
+  valueEnum:
+    0x0: "INACTIVE"
+    0x1: "ACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EDG.Input_EDGInfoStatus:
+  type: sensor
+  signalName: EcoDrvTipDisable
+  dataType: HUInt64
+  abstractionName: Input_EDGInfoStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DONT_ACCEL"
+    0x2: "DOWN_RPM"
+    0x3: "DOWN_SPD"
+    0x4: "SHIFT_HIGH_GEAR"
+    0x5: "USE_CC"
+    0x6: "USE_COASTING"
+    0x7: "USE_EROLL"
+    0x8: "DONT_SUDDEN_BRK"
+    0x9: "KEY_OFF"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x4: 0x1
+    0x2: 0x2
+    0x5: 0x3
+    0x6: 0x4
+    0x9: 0x4
+    0x7: 0x5
+    0xA: 0x6
+    0xB: 0x7
+    0xC: 0x8
+    0xD: 0x8
+    0xE: 0x9
+
+
+- EHS.Input_EHSStatus:
+  type: sensor
+  signalName: HillHolderMode
+  dataType: HUInt64
+  abstractionName: Input_EHSStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "RED"
+    0x3: "BLINK_RELEASE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x3
+    0x6: 0x2
+    ELSE: 0x0
+
+
+- Emergency_Door.Input_EmerDoorOpenStatus:
+  type: sensor
+  signalName: EmergencyDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_EmerDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Energy_Flow_CV.Output_SocDisplayLevelStatus.Output_SocDisplayLevelStatus_MCAN:
+  type: actuator
+  signalName: CLU_SocSegmentVal_MM
+  dataType: HUInt64
+  abstractionName: Output_SocDisplayLevelStatus.Output_SocDisplayLevelStatus_MCAN
+  valueEnum:
+    0x0: "SEG0"
+    0x1: "SEG1"
+    0x2: "SEG2"
+    0x3: "SEG3"
+    0x4: "SEG4"
+    0x5: "SEG5"
+    0x6: "SEG6"
+    0x7: "SEG7"
+    0x8: "SEG8"
+    0x9: "INVALID"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x1F: 0x9
+
+
+- EngineRPM_CV.Input_EngineLowBatteryIdleUp:
+  type: sensor
+  signalName: LowBatteryIdleUp
+  dataType: HUInt64
+  abstractionName: Input_EngineLowBatteryIdleUp
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EngineRPM_CV.Input_EngineRPMDisplayValue_CV:
+  type: sensor
+  signalName: EngSpeed
+  dataType: HUInt64
+  abstractionName: Input_EngineRPMDisplayValue_CV
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Engine_Check.Input_EngineCheckLampStatus:
+  type: sensor
+  signalName: EngAmberWarnLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineCheckLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning_CV.Input_EngineOilPressureWarningStatus:
+  type: sensor
+  signalName: EngOilPressureLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineOilPressureWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning_CV.Input_EngineOilFilterRestrictionSwitchStatus:
+  type: sensor
+  signalName: EngOilFilterRestrictionSwitch
+  dataType: HUInt64
+  abstractionName: Input_EngineOilFilterRestrictionSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning_CV.Input_EngineOilPressure:
+  type: sensor
+  signalName: EngOilPress
+  dataType: HUInt64
+  abstractionName: Input_EngineOilPressure
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Engine_Oil_Warning_CV.Input_EngineOilPressureLowSound:
+  type: sensor
+  signalName: EngineOilPressureLowSound
+  dataType: HUInt64
+  abstractionName: Input_EngineOilPressureLowSound
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Engine_PTO.Input_EnginePTOState:
+  type: sensor
+  signalName: PTOGovernorState
+  dataType: HUInt64
+  abstractionName: Input_EnginePTOState
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x01~0x11: 0x1
+    ELSE: 0x0
+
+
+- Engine_Room_Warning.Input_EngineRoomFireWarnStatus:
+  type: sensor
+  signalName: FireWarnSte
+  dataType: HUInt64
+  abstractionName: Input_EngineRoomFireWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Exhaust_Brake.Input_ExhaustBrakeStatus:
+  type: sensor
+  signalName: EngBrakeActiveLamp
+  dataType: HUInt64
+  abstractionName: Input_ExhaustBrakeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Glow_CV.Input_EngineGlowIndiReqStatus:
+  type: sensor
+  signalName: AirHeaterLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineGlowIndiReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- High_Voltage_Battery_Charge.Input_HighVoltBatChrStatus:
+  type: sensor
+  signalName: VCU_HiBatVltChg_CLU1_VF
+  dataType: HUInt64
+  abstractionName: Input_HighVoltBatChrStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ISG_CV.Input_ISGCVStatus:
+  type: sensor
+  signalName: VCU_IsgSte_VU
+  dataType: HUInt64
+  abstractionName: Input_ISGCVStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_STOP"
+    0x2: "ENFORCED_AUTO_START"
+    0x3: "ESS_ERROR"
+    0x4: "AUTO_STOP_DEACTIVATED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- Illumination_CV.Input_RheostatLevelSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluRheostatLvl
+  dataType: HUInt64
+  abstractionName: Input_RheostatLevelSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "STEP1"
+    0x2: "STEP2"
+    0x3: "STEP3"
+    0x4: "STEP4"
+    0x5: "STEP5"
+    0x6: "STEP6"
+    0x7: "STEP7"
+    0x8: "STEP8"
+    0x9: "STEP9"
+    0xA: "STEP10"
+    0xB: "STEP11"
+    0xC: "STEP12"
+    0xD: "STEP13"
+    0xE: "STEP14"
+    0xF: "STEP15"
+    0x10: "STEP16"
+    0x11: "STEP17"
+    0x12: "STEP18"
+    0x13: "STEP19"
+    0x14: "STEP20"
+    0x15: "STEP21"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    0x0F: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    0x12: 0x12
+    0x13: 0x13
+    0x14: 0x14
+    0x15: 0x15
+    ELSE: 0x0
+
+
+- Illumination_CV.Input_AutolightSensorNightStatus:
+  type: sensor
+  signalName: Lamp_AutoLtSnsrNightSta
+  dataType: HUInt64
+  abstractionName: Input_AutolightSensorNightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NIGHT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_CV.Input_AvnAutoBrightValue:
+  type: sensor
+  signalName: Input_AvnAutoBrightValue
+  dataType: HUInt64
+  abstractionName: Input_AvnAutoBrightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x3FF
+
+
+- Illumination_CV.Input_AvTailLampStatus:
+  type: sensor
+  signalName: Lamp_AvTailLmpSta
+  dataType: HUInt64
+  abstractionName: Input_AvTailLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_CV.Input_InteriorLampOnReqStatus:
+  type: sensor
+  signalName: Lamp_IntTailLmpOnReq
+  dataType: HUInt64
+  abstractionName: Input_InteriorLampOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_CV.Input_NaviMapDayNightStatus:
+  type: sensor
+  signalName: HU_DayNightState
+  dataType: HUInt64
+  abstractionName: Input_NaviMapDayNightStatus
+  valueEnum:
+    0x0: "DAY"
+    0x1: "NIGHT"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Illumination_CV.Input_CampModeOnOffStatus:
+  type: sensor
+  signalName: Input_CampModeOnOffStatus
+  dataType: HUInt64
+  abstractionName: Input_CampModeOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Illumination_CV.Input_UtilityModeOnOffStatus:
+  type: sensor
+  signalName: Input_UtilityModeOnOffStatus
+  dataType: HUInt64
+  abstractionName: Input_UtilityModeOnOffStatus
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "MODE_OFF"
+    0x2: "MODE_ON"
+    0x3: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Illumination_CV.Output_DetentStatus.Output_DetentStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_DtntOutSta
+  dataType: HUInt64
+  abstractionName: Output_DetentStatus.Output_DetentStatus_CCAN
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Illumination_CV.Output_RheostatLevelStatus.Output_RheostatLevelStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_RhstaLvlSta
+  dataType: HUInt64
+  abstractionName: Output_RheostatLevelStatus.Output_RheostatLevelStatus_CCAN
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP5"
+    0x5: "STEP6"
+    0x6: "STEP7"
+    0x7: "STEP8"
+    0x8: "STEP9"
+    0x9: "STEP10"
+    0xA: "STEP11"
+    0xB: "STEP12"
+    0xC: "STEP13"
+    0xD: "STEP14"
+    0xE: "STEP15"
+    0xF: "STEP16"
+    0x10: "STEP17"
+    0x11: "STEP18"
+    0x12: "STEP19"
+    0x13: "STEP20"
+    0x14: "STEP21"
+    0x15: "INVALID"
+  matchingTable:
+    0x00: 0x15
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+
+
+- Illumination_CV.Output_RheostatLevelStatus.Output_RheostatLevelStatus_MCAN:
+  type: actuator
+  signalName: CLU_RhstaLvlSta
+  dataType: HUInt64
+  abstractionName: Output_RheostatLevelStatus.Output_RheostatLevelStatus_MCAN
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP5"
+    0x5: "STEP6"
+    0x6: "STEP7"
+    0x7: "STEP8"
+    0x8: "STEP9"
+    0x9: "STEP10"
+    0xA: "STEP11"
+    0xB: "STEP12"
+    0xC: "STEP13"
+    0xD: "STEP14"
+    0xE: "STEP15"
+    0xF: "STEP16"
+    0x10: "STEP17"
+    0x11: "STEP18"
+    0x12: "STEP19"
+    0x13: "STEP20"
+    0x14: "STEP21"
+    0x15: "INVALID"
+  matchingTable:
+    0x00: 0x15
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+
+
+- Illumination_CV.Output_IlluminationLevelValue.Output_IlluminationLevelValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_AutoBrightSta
+  dataType: HUInt64
+  abstractionName: Output_IlluminationLevelValue.Output_IlluminationLevelValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Illumination_CV.Output_RheostatMaxInfo.Output_RheostatMaxInfo_MCAN:
+  type: actuator
+  signalName: CLU_RhstaStepInfo_MM
+  dataType: HUInt64
+  abstractionName: Output_RheostatMaxInfo.Output_RheostatMaxInfo_MCAN
+  valueEnum:
+    0x0: "STEP20"
+    0x1: "STEP21"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Illumination_CV.Output_NotMinIlluminationLevelValue.Output_NotMinIlluminationLevelValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_NotMinModeBrightSta
+  dataType: HUInt64
+  abstractionName: Output_NotMinIlluminationLevelValue.Output_NotMinIlluminationLevelValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Input_Output_Processing_CV.Input_ClusterSwitchDownButtonStatus:
+  type: sensor
+  signalName: CV_Cluster_TripDnSwSta
+  dataType: HUInt64
+  abstractionName: Input_ClusterSwitchDownButtonStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_ClusterSwitchModeButtonStatus:
+  type: sensor
+  signalName: CV_Cluster_ModeSwSta
+  dataType: HUInt64
+  abstractionName: Input_ClusterSwitchModeButtonStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_ClusterSwitchUpButtonStatus:
+  type: sensor
+  signalName: CV_Cluster_TripUpSwSta
+  dataType: HUInt64
+  abstractionName: Input_ClusterSwitchUpButtonStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_EngineISGStatus1:
+  type: sensor
+  signalName: Input_EngineISGStatus1
+  dataType: HUInt64
+  abstractionName: Input_EngineISGStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_STOP"
+    0x2: "AUTO_RESTART"
+    0x3: "SYS_ERROR"
+    0x4: "ISG_PROHIBIT"
+    0x5: "ISG_DEACTIVATED"
+    0x6: "NOT_RESTARTABLE"
+    0x7: "ISG_OFF_SWITCH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x7
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_EngineISGStatus2:
+  type: sensor
+  signalName: Input_EngineISGStatus2
+  dataType: HUInt64
+  abstractionName: Input_EngineISGStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BAT_DISABLE"
+    0x2: "RAPID_ACCEL"
+    0x3: "TEST_MODE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_TargetFuelEconomyValue:
+  type: sensor
+  signalName: Input_TargetFuelEconomyValue
+  dataType: HUInt64
+  abstractionName: Input_TargetFuelEconomyValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Input_Output_Processing_CV.Input_TelematicsActiveStatus:
+  type: sensor
+  signalName: Input_TelematicsActiveStatus
+  dataType: HUInt64
+  abstractionName: Input_TelematicsActiveStatus
+  valueEnum:
+    0x0: "ACTIVE"
+    0x1: "INACTIVE"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- Input_Output_Processing_CV.Input_VehicleReadyStatus:
+  type: sensor
+  signalName: EngineOperationStatus
+  dataType: HUInt64
+  abstractionName: Input_VehicleReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_ClusterSwitchOkButtonStatus:
+  type: sensor
+  signalName: CV_Cluster_TripOkSwSta
+  dataType: HUInt64
+  abstractionName: Input_ClusterSwitchOkButtonStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Input_Output_Processing_CV.Input_WheelBasedVehicleSpeedValue:
+  type: sensor
+  signalName: WheelBasedVehicleSpeed
+  dataType: HUInt64
+  abstractionName: Input_WheelBasedVehicleSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- Input_Output_Processing_CV.Output_OkSwitchStatus.Output_OkSwitchStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_OKSwSta
+  dataType: HUInt64
+  abstractionName: Output_OkSwitchStatus.Output_OkSwitchStatus_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Input_Output_Processing_CV.Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrRemainDstSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Input_Output_Processing_CV.Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrRemainPrdSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Inter_Diff_Lock.Input_InterDiffLockStatus:
+  type: sensor
+  signalName: InterDiffLockTT
+  dataType: HUInt64
+  abstractionName: Input_InterDiffLockStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inter_Diff_Lock.Input_InterDiffLockInhibitStatus:
+  type: sensor
+  signalName: InterDiffLockEC
+  dataType: HUInt64
+  abstractionName: Input_InterDiffLockInhibitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INHIBIT_1"
+    0x2: "INHIBIT_2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Intro_Outro_CV.Input_IMUDrvDoorOpenStatus:
+  type: sensor
+  signalName: DRVDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUDrvDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Intro_Outro_CV.Input_DoorPassiveUnlockReqStatus:
+  type: sensor
+  signalName: DoorLock_PsvDrUnLkReq
+  dataType: HUInt64
+  abstractionName: Input_DoorPassiveUnlockReqStatus
+  valueEnum:
+    0x0: "UNLOCK_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x0
+    ELSE: 0x1
+
+
+- Intro_Outro_CV.Input_DoorRKELockUnlockReqStatus:
+  type: sensor
+  signalName: C_SMKRkeCmd
+  dataType: HUInt64
+  abstractionName: Input_DoorRKELockUnlockReqStatus
+  valueEnum:
+    0x0: "LOCK_REQ"
+    0x1: "UNLOCK_REQ"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Intro_Outro_CV.Input_HeadUnitWelcomeReadyStatus:
+  type: sensor
+  signalName: HU_WelcomeReady
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitWelcomeReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WELCOME_READY"
+    0x2: "GOODBYE_READY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Intro_Outro_CV.Input_IMUFrDoorOpenStatus:
+  type: sensor
+  signalName: FrDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUFrDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "BLINK"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- Jake_Brake_CV.Input_JakeBrakeStatus:
+  type: sensor
+  signalName: JakeBrakeLamp
+  dataType: HUInt64
+  abstractionName: Input_JakeBrakeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_CV.Input_ImmoIndStatus:
+  type: sensor
+  signalName: C_IMMO_Indicator
+  dataType: HUInt64
+  abstractionName: Input_ImmoIndStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "BLINK"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Key_System_CV.Input_SMKPicWarnStatus:
+  type: sensor
+  signalName: C_PicWarningInd
+  dataType: HUInt64
+  abstractionName: Input_SMKPicWarnStatus
+  valueEnum:
+    0x0: "KEY_BAT_DISCHARGE"
+    0x1: "ESCL_NOT_UNLOCKED"
+    0x2: "ESCL_NOT_LOCKED"
+    0x3: "ESCL_FAIL"
+    0x4: "ENGINE_START_OPERATION1"
+    0x5: "AUTH_FAIL1"
+    0x6: "KEY_OUT_LAMP"
+    0x7: "SSB_FAIL"
+    0x8: "AUTH_FAIL2"
+    0x9: "VEHICLE_NOT_N"
+    0xA: "ENGINE_START_OPERATION2"
+    0xB: "ENGINE_FAIL"
+    0xC: "ENGINE_RESTARTING"
+    0xD: "PREHEAT"
+    0xE: "MODE_CHANGE"
+    0xF: "EMERGENCY_STOP"
+    0x10: "ENGINE_ROOM_SAFETYSW"
+    0x11: "OFF"
+  matchingTable:
+    0x2: 0x0
+    0x3: 0x1
+    0x4: 0x2
+    0x5: 0x3
+    0x6: 0x4
+    0x7: 0x5
+    0x8: 0x6
+    0x9: 0x7
+    0xA: 0x8
+    0xB: 0x9
+    0xC: 0xA
+    0xD: 0xB
+    0xE: 0xC
+    0xF: 0xD
+    0x10: 0xE
+    0x11: 0xF
+    0x13: 0x10
+    ELSE: 0x11
+
+
+- Key_System_CV.Input_EsclFailSoundStatus:
+  type: sensor
+  signalName: C_EsclFailWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_EsclFailSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_EsclNotLockedSoundStatus:
+  type: sensor
+  signalName: C_EsclNotLockedWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_EsclNotLockedSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_EsclNotUnlockedSoundStatus:
+  type: sensor
+  signalName: C_EsclNotUnlockedWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_EsclNotUnlockedSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_SsbFailSoundStatus:
+  type: sensor
+  signalName: C_SsbFailWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_SsbFailSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_IdOutWarnSoundStatus:
+  type: sensor
+  signalName: C_IDoutWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_IdOutWarnSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_KeyBatDischargeSoundStatus:
+  type: sensor
+  signalName: C_KeyBATDischargeWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_KeyBatDischargeSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_DeactivationWarnSoundStatus:
+  type: sensor
+  signalName: C_DeactivationWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_DeactivationWarnSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_EngRestartWarnSoundStatus:
+  type: sensor
+  signalName: C_EngRestartingWarnBzr
+  dataType: HUInt64
+  abstractionName: Input_EngRestartWarnSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+
+
+- Key_System_CV.Input_AccIndStatus:
+  type: sensor
+  signalName: C_AccINDforCLU
+  dataType: HUInt64
+  abstractionName: Input_AccIndStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- LWS.Input_LWS1AxleLeftValue:
+  type: sensor
+  signalName: LWS1AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS1AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS1AxleRightValue:
+  type: sensor
+  signalName: LWS1AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS1AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS2AxleLeftValue:
+  type: sensor
+  signalName: LWS2AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS2AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS2AxleRightValue:
+  type: sensor
+  signalName: LWS2AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS2AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS3AxleLeftValue:
+  type: sensor
+  signalName: LWS3AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS3AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS3AxleRightValue:
+  type: sensor
+  signalName: LWS3AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS3AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS4AxleLeftValue:
+  type: sensor
+  signalName: LWS4AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS4AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS4AxleRightValue:
+  type: sensor
+  signalName: LWS4AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS4AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS5AxleLeftValue:
+  type: sensor
+  signalName: LWS5AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS5AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS5AxleRightValue:
+  type: sensor
+  signalName: LWS5AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS5AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWSWarningSignalStatus:
+  type: sensor
+  signalName: LWSFault
+  dataType: HUInt64
+  abstractionName: Input_LWSWarningSignalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK1"
+    0x3: "BLINK2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- LWS.Input_LWSPageStatus:
+  type: sensor
+  signalName: VehicleType
+  dataType: HUInt64
+  abstractionName: Input_LWSPageStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x1
+    0x3: 0x1
+    0x4: 0x1
+    0x5: 0x1
+    0x6: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning_CV.Input_AFLSLedLampWarnStatus:
+  type: sensor
+  signalName: LED_Warning_Sta
+  dataType: HUInt64
+  abstractionName: Input_AFLSLedLampWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning_CV.Input_PDCExtLampWarnStatus:
+  type: sensor
+  signalName: ExtLpMalfunc
+  dataType: HUInt64
+  abstractionName: Input_PDCExtLampWarnStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Lamp_Indicator_CV.Input_FrFogLmpReqStatus:
+  type: sensor
+  signalName: Lamp_FrFogLmpOnReq
+  dataType: HUInt64
+  abstractionName: Input_FrFogLmpReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator_CV.Input_HdLmpHiReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpHiOnReq
+  dataType: HUInt64
+  abstractionName: Input_HdLmpHiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator_CV.Input_HdLmpLoReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoOnReq
+  dataType: HUInt64
+  abstractionName: Input_HdLmpLoReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator_CV.Input_RrFogLmpReqStatus:
+  type: sensor
+  signalName: Lamp_RrFogLmpOnReq
+  dataType: HUInt64
+  abstractionName: Input_RrFogLmpReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator_CV.Input_ExtrnlTailLmpReqStatus:
+  type: sensor
+  signalName: Lamp_ExtrnlTailLmpOnReq
+  dataType: HUInt64
+  abstractionName: Input_ExtrnlTailLmpReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator_CV.Input_LeftTurnSignalLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpLftOnReq
+  dataType: HUInt64
+  abstractionName: Input_LeftTurnSignalLampStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "ON_WITH_TRAILER"
+    0x2: "OFF"
+  matchingTable:
+    0x2: 0x0
+    0x3: 0x1
+    ELSE: 0x2
+
+
+- Lamp_Indicator_CV.Input_RightTurnSignalLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpRtOnReq
+  dataType: HUInt64
+  abstractionName: Input_RightTurnSignalLampStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "ON_WITH_TRAILER"
+    0x2: "OFF"
+  matchingTable:
+    0x2: 0x0
+    0x3: 0x1
+    ELSE: 0x2
+
+
+- Luggage_Door.Input_LuggageFlapOpenStatus:
+  type: sensor
+  signalName: LuggageFlapOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_LuggageFlapOpenStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Luggage_Door.Input_LuggageFlapLockStatus:
+  type: sensor
+  signalName: LuggageFlapLockStatus
+  dataType: HUInt64
+  abstractionName: Input_LuggageFlapLockStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- MIL_OBD_Lamp.Input_MILLampStatus:
+  type: sensor
+  signalName: OBDMalfunctionLamp
+  dataType: HUInt64
+  abstractionName: Input_MILLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Option_Classification_Logic_CV.Input_ECASTelltaleStatus1:
+  type: sensor
+  signalName: ECASState1
+  dataType: HUInt64
+  abstractionName: Input_ECASTelltaleStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NORMAL"
+    0x2: "FR_UP_ON"
+    0x3: "FR_LOW_ON"
+    0x4: "RR_UP_ON"
+    0x5: "RR_LOW_ON"
+    0x6: "ALL_UP_ON"
+    0x7: "ALL_LOW_ON"
+    0x8: "FR_UP_RR_LOW_ON"
+    0x9: "FR_LOW_RR_UP_ON"
+    0xA: "TO_NORMAL_ON"
+    0xB: "FR_UP_BLINK"
+    0xC: "FR_LOW_BLINK"
+    0xD: "RR_UP_BLINK"
+    0xE: "RR_LOW_BLINK"
+    0xF: "ALL_UP_BLINK"
+    0x10: "ALL_LOW_BLINK"
+    0x11: "TO_NORMAL_BLINK"
+    0x12: "ABOVE_SPEED_LIMIT"
+    0x13: "AXLE_LOAD_LIMIT"
+    0x14: "EXCEED_TAG_AXLE_LOAD"
+    0x15: "CHECK_ON"
+    0x16: "NOT_AVAILABLE"
+    0x17: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0C: 0xB
+    0x0F: 0xC
+    0x0B: 0xD
+    0x0E: 0xE
+    0x0D: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    0x19: 0x12
+    0x1B: 0x13
+    0x1A: 0x14
+    0x1E: 0x15
+    0x1F: 0x16
+    TIMEOUT: 0x17
+    ELSE: 0x16
+
+
+- PDC.Input_PDCBatteryDischargeStatus:
+  type: sensor
+  signalName: Bat_dischrg
+  dataType: HUInt64
+  abstractionName: Input_PDCBatteryDischargeStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1~0x3: 0x0
+    ELSE: 0x1
+
+
+- PDC.Input_PDCPowerAutoCutModeStatus:
+  type: sensor
+  signalName: ICU_PowerAutoCutModSta
+  dataType: HUInt64
+  abstractionName: Input_PDCPowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DELIVERY_MODE"
+    0x2: "OFF"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- PDC.Input_PDC24VSocValue:
+  type: sensor
+  signalName: IBS24_SOC
+  dataType: HUInt64
+  abstractionName: Input_PDC24VSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- PDC.Input_PDC12VSocValue:
+  type: sensor
+  signalName: IBS12_SOC
+  dataType: HUInt64
+  abstractionName: Input_PDC12VSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- PDC.Input_WaterPumpStatus:
+  type: sensor
+  signalName: WaterPumpStatus
+  dataType: HUInt64
+  abstractionName: Input_WaterPumpStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_ParkingSwitchStatus:
+  type: sensor
+  signalName: PrkTelltale
+  dataType: HUInt64
+  abstractionName: Input_ParkingSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBCheckStatus:
+  type: sensor
+  signalName: AmberWarningLampStatus_EPB
+  dataType: HUInt64
+  abstractionName: Input_EPBCheckStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBWarningStatus:
+  type: sensor
+  signalName: FlashRedStopLamp_EPB
+  dataType: HUInt64
+  abstractionName: Input_EPBWarningStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBReleaseInhibitReasonStatus:
+  type: sensor
+  signalName: ReleaseInhibitionReason
+  dataType: HUInt64
+  abstractionName: Input_EPBReleaseInhibitReasonStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_StateOfEPBStatus:
+  type: sensor
+  signalName: StateOfEPB
+  dataType: HUInt64
+  abstractionName: Input_StateOfEPBStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBExtnAppRqStatus:
+  type: sensor
+  signalName: ExtnAppRq_EPB
+  dataType: HUInt64
+  abstractionName: Input_EPBExtnAppRqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBNotReleasedStatus:
+  type: sensor
+  signalName: EPB2CLU_PopUp1
+  dataType: HUInt64
+  abstractionName: Input_EPBNotReleasedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake_CV.Input_EPBExtnAppRqStatusFromVCU:
+  type: sensor
+  signalName: ExtnAppRq_VCU
+  dataType: HUInt64
+  abstractionName: Input_EPBExtnAppRqStatusFromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Retarder.Input_RetarderMalStatus:
+  type: sensor
+  signalName: AmberWarningLampStatus_RTD_C
+  dataType: HUInt64
+  abstractionName: Input_RetarderMalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Retarder.Input_RetarderPercentTorque_DR:
+  type: sensor
+  signalName: ActualRetarderPercentTorque_DR
+  dataType: HUInt64
+  abstractionName: Input_RetarderPercentTorque_DR
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Retarder.Input_RTDOverHeatWarningStatus:
+  type: sensor
+  signalName: DrivelineRTDOverheatIND
+  dataType: HUInt64
+  abstractionName: Input_RTDOverHeatWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Retarder.Input_RetarderPercentTorque_ER:
+  type: sensor
+  signalName: ActualRet_DrivelinePercentTorque_ER
+  dataType: HUInt64
+  abstractionName: Input_RetarderPercentTorque_ER
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Retarder.Input_RTDPGNumberStatus:
+  type: sensor
+  signalName: PGNumber_RetDriveline
+  dataType: HUInt64
+  abstractionName: Input_RTDPGNumberStatus
+  valueEnum:
+    0x0: "DM1"
+    0x1: "NOT_DM1"
+  matchingTable:
+    0xFECA: 0x0
+    ELSE: 0x1
+
+
+- Screen_Control_Logic_CV.Input_TbtDisplayTypeStatus:
+  type: sensor
+  signalName: TBT_Display_Type
+  dataType: HUInt64
+  abstractionName: Input_TbtDisplayTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DIRECTION_TO_DESTINATION"
+    0x2: "ARRIVED"
+    0x3: "NO_ROUTE_GUIDANCE"
+    0x4: "CALC_ROUTE"
+    0x5: "RECALC_ROUTE"
+    0x6: "TURN"
+    0x7: "EXIT_R"
+    0x8: "EXIT_L"
+    0x9: "EXIT_COMBINATION_R"
+    0xA: "EXIT_COMBINATION_L"
+    0xB: "SERVICE_ROAD_R"
+    0xC: "SERVICE_ROAD_L"
+    0xD: "FORK2"
+    0xE: "U_TURN"
+    0xF: "EXIT_ROUNDABOUT_TRS_R"
+    0x10: "EXIT_ROUNDABOUT_TRS_L"
+    0x11: "OVERPASS_R"
+    0x12: "OVERPASS_L"
+    0x13: "UNDERPASS_R"
+    0x14: "UNDERPASS_L"
+    0x15: "TOLL"
+    0x16: "PRE_NODIRECTION"
+    0x17: "PRE_STRAIGHT"
+    0x18: "PRE_TURN1OCLOCK"
+    0x19: "PRE_TURN_R"
+    0x1A: "PRE_TURN4OCLOCK"
+    0x1B: "PRE_TURN8OCLOCK"
+    0x1C: "PRE_TURN_LEFT"
+    0x1D: "PRE_TURN11OCLOCK"
+    0x1E: "PRE_U_TURN_L"
+    0x1F: "PRE_U_TURN_R"
+    0x20: "PRE_PERMITTED_TUNR_L"
+    0x21: "PRE_ASIDE_OVERPASS_R"
+    0x22: "PRE_ASIDE_OVERPASS_L"
+    0x23: "PRE_ASIDE_UNDERPASS_R"
+    0x24: "PRE_ASIDE_UNDERPASS_L"
+    0x25: "PRE_INTO_OVERPASS_C"
+    0x26: "PRE_INTO_OVERPASS_R"
+    0x27: "PRE_INTO_OVERPASS_L"
+    0x28: "PRE_INTO_UNDERPASS_R"
+    0x29: "PRE_INTO_UNDERPASS_L"
+    0x2A: "PRE_ROUNDABOUT_R12"
+    0x2B: "PRE_ROUNDABOUT_R1"
+    0x2C: "PRE_ROUNDABOUT_R2"
+    0x2D: "PRE_ROUNDABOUT_R3"
+    0x2E: "PRE_ROUNDABOUT_R4"
+    0x2F: "PRE_ROUNDABOUT_R5"
+    0x30: "PRE_ROUNDABOUT_R6"
+    0x31: "PRE_ROUNDABOUT_R7"
+    0x32: "PRE_ROUNDABOUT_R8"
+    0x33: "PRE_ROUNDABOUT_R9"
+    0x34: "PRE_ROUNDABOUT_R10"
+    0x35: "PRE_ROUNDABOUT_R11"
+    0x36: "PRE_CHARGINGSTATION_C"
+    0x37: "PRE_CHARGINGSTATION_R"
+    0x38: "PRE_CHARGINGSTATION_L"
+    0x39: "PRE_DEST_C"
+    0x3A: "PRE_DEST_R"
+    0x3B: "PRE_DEST_L"
+    0x3C: "PRE_WAY_POINT1_C"
+    0x3D: "PRE_WAY_POINT1_R"
+    0x3E: "PRE_WAY_POINT1_L"
+    0x3F: "PRE_WAY_POINT2_C"
+    0x40: "PRE_WAY_POINT2_R"
+    0x41: "PRE_WAY_POINT2_L"
+    0x42: "PRE_WAY_POINT3_C"
+    0x43: "PRE_WAY_POINT3_R"
+    0x44: "PRE_WAY_POINT3_L"
+    0x45: "PRE_WAY_POINT4_C"
+    0x46: "PRE_WAY_POINT4_R"
+    0x47: "PRE_WAY_POINT4_L"
+    0x48: "PRE_WALK_TO_DEST"
+    0x49: "PRE_WALK_TO_WAY_POINT1"
+    0x4A: "PRE_FORK2_R"
+    0x4B: "PRE_FORK2_L"
+    0x4C: "PRE_FORK_S_R_STRAIGHT"
+    0x4D: "PRE_FORK_S_R_R"
+    0x4E: "PRE_FORK_S_L_STRAIGHT"
+    0x4F: "PRE_FORK_S_L_L"
+    0x50: "PRE_FWY_ENTRANCE_C"
+    0x51: "PRE_FWY_ENTRANCE_R"
+    0x52: "PRE_FWY_ENTRANCE_L"
+    0x53: "PRE_FWY_EXIT_C"
+    0x54: "PRE_FWY_EXIT_R"
+    0x55: "PRE_FWY_EXIT_L"
+    0x56: "PRE_MAIN_ROAD_ENTRANCE_C"
+    0x57: "PRE_MAIN_ROAD_ENTRANCE_R"
+    0x58: "PRE_MAIN_ROAD_ENTRANCE_L"
+    0x59: "PRE_FERRY"
+    0x5A: "PRE_TUNNEL"
+    0x5B: "PRE_TOLL"
+    0x5C: "PRE_S_A_ENTRANCE"
+    0x5D: "PRE_COIN_TOLL"
+    0x5E: "PRE_ROUNDABOUT_L12"
+    0x5F: "PRE_ROUNDABOUT_L1"
+    0x60: "PRE_ROUNDABOUT_L2"
+    0x61: "PRE_ROUNDABOUT_L3"
+    0x62: "PRE_ROUNDABOUT_L4"
+    0x63: "PRE_ROUNDABOUT_L5"
+    0x64: "PRE_ROUNDABOUT_L6"
+    0x65: "PRE_ROUNDABOUT_L7"
+    0x66: "PRE_ROUNDABOUT_L8"
+    0x67: "PRE_ROUNDABOUT_L9"
+    0x68: "PRE_ROUNDABOUT_L10"
+    0x69: "PRE_ROUNDABOUT_L11"
+    0x6A: "PRE_ENTER_ROUNDABOUT"
+    0x6B: "PRE_EXIT_ROUNDABOUT"
+    0x6C: "PRE_MOST_LEFT_OF_LINE"
+    0x6D: "PRE_MOST_RIGHT_OF_LINE"
+    0x6E: "PRE_MIDDLE_OF_LINE"
+    0x6F: "PRE_MOST_LEFT_OF3_NORMAL"
+    0x70: "PRE_MOST_RIGHT_OF3_NORMAL"
+    0x71: "PRE_ENTER_FERRY"
+    0x72: "PRE_EXIT_FERRY"
+    0x73: "PRE_LEFT2_BRANCH_LEFT_BASE"
+    0x74: "PRE_LEFT2_BRANCH_RIGHT_BASE"
+    0x75: "PRE_RIGHT2_BRANCH_LEFT_BASE"
+    0x76: "PRE_RIGHT2_BRANCH_RIGHT_BASE"
+    0x77: "PRE_STRAIGHT_FRONT"
+    0x78: "PRE_MIDLE_OF3_NORMAL"
+    0x79: "PRE_STARTING_POINT"
+    0x7A: "PRE_I_C2_ON_LEFT_STRAIGHT_WALK_I_C"
+    0x7B: "PRE_I_C2_ON_RIGHT_STRAIGHT_WALK_I_C"
+    0x7C: "PRE_NORMAL2_ON_LEFT_STRAIGHT_LINE"
+    0x7D: "PRE_NORMAL2_ON_RIGHT_STRAIGHT_LINE"
+    0x7E: "PRE_NORMAL3_ON_LEFT_STRAIGHT_LINE"
+    0x7F: "PRE_NORMAL3_ON_MIDDLE_STRAIGHT_LINE"
+    0x80: "PRE_NORMAL3_ON_RIGHT_STRAIGHT_LINE"
+    0x81: "PRE_I_C3_ON_LEFT_OF_I_C"
+    0x82: "PRE_I_C3_ON_MIDDLE_OF_I_C"
+    0x83: "PRE_I_C3_ON_RIGHT_OF_I_C"
+    0x84: "PRE_I_C3_ON_LEFT_STRAIGHT_LINE"
+    0x85: "PRE_I_C3_ON_MIDDLE_STRAIGHT_LINE"
+    0x86: "PRE_I_C3_ON_RIGHT_STRAIGHT_LINE"
+    0x87: "PRE8_DIRECTION_STRAIGHT_L"
+    0x88: "PRE8_DIRECTION_STRAIGHT_R"
+    0x89: "PRE8_DIRECTION_MOST_LEFT_STRAIGHT_LINE"
+    0x8A: "PRE8_DIRECTION_MOST_MIDDLE_STRAIGHT_LINE"
+    0x8B: "PRE8_DIRECTION_MOST_RIGHT_STRAIGHT_LINE"
+    0x8C: "PRE_LEFT3_BRANCH_LEFT_BASE"
+    0x8D: "PRE_LEFT3_BRANCH_MIDDLE_BASE"
+    0x8E: "PRE_LEFT3_BRANCH_RIGHT_BASE"
+    0x8F: "PRE_RIGHT3_BRANCH_LEFT_BASE"
+    0x90: "PRE_RIGHT3_BRANCH_MIDDLE_BASE"
+    0x91: "PRE_RIGHT3_BRANCH_RIGHT_BASE"
+    0x92: "PRE8_DIRECTION_TURN_AROUND_LEFT"
+    0x93: "PRE8_DIRECTION_TURN_AROUND_RIGHT"
+    0x94: "PRE8_DIRECTION_TURN_AROUND_MOST_LEFT"
+    0x95: "PRE8_DIRECTION_TURN_AROUND_MIDDLE"
+    0x96: "PRE8_DIRECTION_TURN_AROUND_MOST_RIGHT"
+  matchingTable:
+    0x02: 0x1
+    0x03: 0x2
+    0x08: 0x3
+    0x09: 0x4
+    0x0A: 0x5
+    0x0D: 0x6
+    0x11: 0x7
+    0x12: 0x8
+    0x13: 0x9
+    0x14: 0xA
+    0x17: 0xB
+    0x18: 0xC
+    0x19: 0xD
+    0x1F: 0xE
+    0x20: 0xF
+    0x21: 0x10
+    0x2B: 0x11
+    0x2C: 0x12
+    0x2D: 0x13
+    0x2E: 0x14
+    0x30: 0x15
+    0x40: 0x16
+    0x41: 0x17
+    0x42: 0x18
+    0x43: 0x19
+    0x44: 0x1A
+    0x45: 0x1B
+    0x46: 0x1C
+    0x47: 0x1D
+    0x48: 0x1E
+    0x49: 0x1F
+    0x4C: 0x20
+    0x51: 0x21
+    0x52: 0x22
+    0x54: 0x23
+    0x55: 0x24
+    0x56: 0x25
+    0x57: 0x26
+    0x58: 0x27
+    0x5A: 0x28
+    0x5B: 0x29
+    0x60: 0x2A
+    0x61: 0x2B
+    0x62: 0x2C
+    0x63: 0x2D
+    0x64: 0x2E
+    0x65: 0x2F
+    0x66: 0x30
+    0x67: 0x31
+    0x68: 0x32
+    0x69: 0x33
+    0x6A: 0x34
+    0x6B: 0x35
+    0x6D: 0x36
+    0x6E: 0x37
+    0x6F: 0x38
+    0x70: 0x39
+    0x71: 0x3A
+    0x72: 0x3B
+    0x73: 0x3C
+    0x74: 0x3D
+    0x75: 0x3E
+    0x76: 0x3F
+    0x77: 0x40
+    0x78: 0x41
+    0x79: 0x42
+    0x7A: 0x43
+    0x7B: 0x44
+    0x7C: 0x45
+    0x7D: 0x46
+    0x7E: 0x47
+    0x89: 0x48
+    0x8A: 0x49
+    0x90: 0x4A
+    0x91: 0x4B
+    0x92: 0x4C
+    0x93: 0x4D
+    0x94: 0x4E
+    0x95: 0x4F
+    0xA0: 0x50
+    0xA1: 0x51
+    0xA2: 0x52
+    0xA3: 0x53
+    0xA4: 0x54
+    0xA5: 0x55
+    0xAC: 0x56
+    0xAD: 0x57
+    0xAE: 0x58
+    0xB0: 0x59
+    0xB1: 0x5A
+    0xB2: 0x5B
+    0xB7: 0x5C
+    0xB8: 0x5D
+    0xC0: 0x5E
+    0xC1: 0x5F
+    0xC2: 0x60
+    0xC3: 0x61
+    0xC4: 0x62
+    0xC5: 0x63
+    0xC6: 0x64
+    0xC7: 0x65
+    0xC8: 0x66
+    0xC9: 0x67
+    0xCA: 0x68
+    0xCB: 0x69
+    0xCC: 0x6A
+    0xCD: 0x6B
+    0xCE: 0x6C
+    0xCF: 0x6D
+    0xD0: 0x6E
+    0xD1: 0x6F
+    0xD2: 0x70
+    0xD3: 0x71
+    0xD4: 0x72
+    0xD5: 0x73
+    0xD6: 0x74
+    0xD7: 0x75
+    0xD8: 0x76
+    0xD9: 0x77
+    0xDA: 0x78
+    0xDB: 0x79
+    0xDC: 0x7A
+    0xDD: 0x7B
+    0xDE: 0x7C
+    0xDF: 0x7D
+    0xE0: 0x7E
+    0xE1: 0x7F
+    0xE2: 0x80
+    0xE3: 0x81
+    0xE4: 0x82
+    0xE5: 0x83
+    0xE6: 0x84
+    0xE7: 0x85
+    0xE8: 0x86
+    0xE9: 0x87
+    0xEA: 0x88
+    0xEB: 0x89
+    0xEC: 0x8A
+    0xED: 0x8B
+    0xEE: 0x8C
+    0xEF: 0x8D
+    0xF0: 0x8E
+    0xF1: 0x8F
+    0xF2: 0x90
+    0xF3: 0x91
+    0xF8: 0x92
+    0xF9: 0x93
+    0xFA: 0x94
+    0xFB: 0x95
+    0xFC: 0x96
+    ELSE: 0x0
+
+
+- Screen_Control_Logic_CV.Input_HeadUnitDisplayOnOffStatus:
+  type: sensor
+  signalName: HU_LCDState
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitDisplayOnOffStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "OFF"
+    0x2: "ON"
+  matchingTable:
+    0x1: 0x2
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Screen_Control_Logic_CV.Input_LWSPageStatus:
+  type: sensor
+  signalName: VehicleType
+  dataType: HUInt64
+  abstractionName: Input_LWSPageStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x1
+    0x3: 0x1
+    0x4: 0x1
+    0x5: 0x1
+    0x6: 0x1
+    ELSE: 0x0
+
+
+- Screen_Control_Logic_CV.Output_AdasSettingMenuOnReq.Output_AdasSettingMenuOnReq_MCAN:
+  type: actuator
+  signalName: CLU_ADASSetShortcut_Req_MM
+  dataType: HUInt64
+  abstractionName: Output_AdasSettingMenuOnReq.Output_AdasSettingMenuOnReq_MCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "MENU_ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Screen_Control_Logic_CV.Output_ClusterLanguageStatus.Output_ClusterLanguageStatus_MCAN:
+  type: actuator
+  signalName: CLU_LanguageInfo_NEW
+  dataType: HUInt64
+  abstractionName: Output_ClusterLanguageStatus.Output_ClusterLanguageStatus_MCAN
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "INVALID"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+    0x16: 0x15
+    0x17: 0x16
+    0x18: 0x17
+    0x19: 0x18
+    0x1A: 0x19
+    0x1B: 0x1A
+    0x1C: 0x1B
+    0x1D: 0x1C
+    0x1E: 0x1D
+    0x1F: 0x1E
+    0x20: 0x1F
+    0x21: 0x20
+    0x22: 0x21
+    0x23: 0x22
+    0x24: 0x23
+    0x25: 0x24
+    0x26: 0x25
+    0x27: 0x26
+    0x28: 0x27
+    0x29: 0x28
+    0x2A: 0x29
+    0x2B: 0x2A
+    0x2C: 0x2B
+    0x2D: 0x2C
+    0x2E: 0x2D
+    0x2F: 0x2E
+    0xFF: 0x2F
+
+
+- Screen_Control_Logic_CV.Output_EDGScoreResetStatus.Output_EDGScoreResetStatus_CCAN:
+  type: actuator
+  signalName: CV_EDGReset
+  dataType: HUInt64
+  abstractionName: Output_EDGScoreResetStatus.Output_EDGScoreResetStatus_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET_REQ"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2~0x3: 0x2
+
+
+- Settings_CV.Input_AdasWarnVolumeSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_AdasVolumeNValueSet
+  dataType: HUInt64
+  abstractionName: Input_AdasWarnVolumeSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "VOL_OFF"
+    0x2: "LEVEL1"
+    0x3: "LEVEL2"
+    0x4: "LEVEL3"
+  matchingTable:
+    0x6: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    ELSE: 0x0
+
+
+- Settings_CV.Input_DisWarnSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluRoadInfoGuide
+  dataType: HUInt64
+  abstractionName: Input_DisWarnSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_FuelEcoUnitKmSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluFuelEconUnit_km
+  dataType: HUInt64
+  abstractionName: Input_FuelEcoUnitKmSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "KM_PER_LITTER"
+    0x2: "LITTER_PER_KM"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_FuelEcoUnitMiSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluFuelEconUnit_mi
+  dataType: HUInt64
+  abstractionName: Input_FuelEcoUnitMiSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "US_GALLON"
+    0x2: "UK_GALLON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_HapticOnOffStatus:
+  type: sensor
+  signalName: Haptic_USMCurState_OnOff
+  dataType: HUInt64
+  abstractionName: Input_HapticOnOffStatus
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+    0x3: "ERROR"
+  matchingTable:
+    0x1: 0x2
+    0x2: 0x1
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Settings_CV.Input_MfswPopupSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluWiperLight
+  dataType: HUInt64
+  abstractionName: Input_MfswPopupSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_SrvReminderDistanceSetReqValue:
+  type: sensor
+  signalName: CF_AVN_CluUserSettingDistance
+  dataType: HUInt64
+  abstractionName: Input_SrvReminderDistanceSetReqValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x1FFFF
+
+
+- Settings_CV.Input_SrvReminderPeriodSetReqValue:
+  type: sensor
+  signalName: CF_AVN_CluUserSettingPeriod
+  dataType: HUInt64
+  abstractionName: Input_SrvReminderPeriodSetReqValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- Settings_CV.Input_SrvReminderResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluServiceReminderReset
+  dataType: HUInt64
+  abstractionName: Input_SrvReminderResetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET_REQ"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Settings_CV.Input_SrvReminderSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluServiceReminderSet
+  dataType: HUInt64
+  abstractionName: Input_SrvReminderSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_UnitResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_UnitReset
+  dataType: HUInt64
+  abstractionName: Input_UnitResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Settings_CV.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Settings_CV.Input_WelcomeSoundSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluWelcomeSnd
+  dataType: HUInt64
+  abstractionName: Input_WelcomeSoundSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Settings_CV.Input_HeadUnitDistanceUnitStatus:
+  type: sensor
+  signalName: HU_DistanceUnit
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitDistanceUnitStatus
+  valueEnum:
+    0x0: "KM"
+    0x1: "MILE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Settings_CV.Input_HeadUnitLangugeStatus:
+  type: sensor
+  signalName: HU_LanguageInfo
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitLangugeStatus
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "OLD_VALUE"
+    0x30: "INVALID"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+    0x16: 0x15
+    0x17: 0x16
+    0x18: 0x17
+    0x19: 0x18
+    0x1A: 0x19
+    0x1B: 0x1A
+    0x1C: 0x1B
+    0x1D: 0x1C
+    0x1E: 0x1D
+    0x1F: 0x1E
+    0x20: 0x1F
+    0x21: 0x20
+    0x22: 0x21
+    0x23: 0x22
+    0x24: 0x23
+    0x25: 0x24
+    0x26: 0x25
+    0x27: 0x26
+    0x28: 0x27
+    0x29: 0x28
+    0x2A: 0x29
+    0x2B: 0x2A
+    0x2C: 0x2B
+    0x2D: 0x2C
+    0x2E: 0x2D
+    0x2F: 0x2E
+    0x00: 0x2F
+    0xFF: 0x2F
+    TIMEOUT: 0x2F
+    ELSE: 0x30
+
+
+- Settings_CV.Input_ClusterMainThemeSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluThmSet_New
+  dataType: HUInt64
+  abstractionName: Input_ClusterMainThemeSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "SELECT1"
+    0x2: "SELECT2"
+    0x3: "SELECT3"
+    0x4: "SELECT4"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Settings_CV.Input_UserProfileIDFromAVN:
+  type: sensor
+  signalName: CF_AVN_ProfileIDRValue
+  dataType: HUInt64
+  abstractionName: Input_UserProfileIDFromAVN
+  valueEnum:
+    0x0: "GUEST"
+    0x1: "PROFILE1"
+    0x2: "PROFILE2"
+    0x3: "PROFILE3"
+    0x4: "PROFILE4"
+    0x5: "PROFILE5"
+    0x6: "PROFILE6"
+    0x7: "PROFILE7"
+    0x8: "PROFILE8"
+    0x9: "PROFILE9"
+    0xA: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    0xA: 0x9
+    ELSE: 0xA
+
+
+- Settings_CV.Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_CCAN:
+  type: actuator
+  signalName: CV_CLU_AdasVolAutoOnSetReq_MM
+  dataType: HUInt64
+  abstractionName: Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "ON_REQUEST"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Settings_CV.Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_MCAN:
+  type: actuator
+  signalName: CLU_AdasVolAutoOnSetReq_MM
+  dataType: HUInt64
+  abstractionName: Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_MCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "ON_REQUEST"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Settings_CV.Output_AdasWarnVolStatus.Output_AdasWarnVolStatus_CCAN:
+  type: actuator
+  signalName: USM_CluAdasVolSta
+  dataType: HUInt64
+  abstractionName: Output_AdasWarnVolStatus.Output_AdasWarnVolStatus_CCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "VOL_OFF"
+    0x2: "LEVEL1"
+    0x3: "LEVEL2"
+    0x4: "LEVEL3"
+  matchingTable:
+    0x0: 0x0
+    0x6: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+
+
+- Settings_CV.Output_DisWarnSetStatus.Output_DisWarnSetStatus_MCAN:
+  type: actuator
+  signalName: USM_CluDISWrngSta_MM
+  dataType: HUInt64
+  abstractionName: Output_DisWarnSetStatus.Output_DisWarnSetStatus_MCAN
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_FuelEconomyUnitKmStatus.Output_FuelEconomyUnitKmStatus_MCAN:
+  type: actuator
+  signalName: USM_CluFuelEconUnitkmSta_MM
+  dataType: HUInt64
+  abstractionName: Output_FuelEconomyUnitKmStatus.Output_FuelEconomyUnitKmStatus_MCAN
+  valueEnum:
+    0x0: "KM_PER_LITTER"
+    0x1: "LITTER_PER_KM"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_FuelEconomyUnitMiStatus.Output_FuelEconomyUnitMiStatus_MCAN:
+  type: actuator
+  signalName: USM_CluFuelEconUnitmiSta_MM
+  dataType: HUInt64
+  abstractionName: Output_FuelEconomyUnitMiStatus.Output_FuelEconomyUnitMiStatus_MCAN
+  valueEnum:
+    0x0: "US_GALLON"
+    0x1: "UK_GALLON"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_MfswPopupSetStatus.Output_MfswPopupSetStatus_MCAN:
+  type: actuator
+  signalName: USM_CluMFSWPopupSta_MM
+  dataType: HUInt64
+  abstractionName: Output_MfswPopupSetStatus.Output_MfswPopupSetStatus_MCAN
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_SrvReminderModeSetStatus.Output_SrvReminderModeSetStatus_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrMdeSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderModeSetStatus.Output_SrvReminderModeSetStatus_MCAN
+  valueEnum:
+    0x0: "CUSTOM_MODE"
+    0x1: "WORKSHOP_MODE"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrRemainDstSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Settings_CV.Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrRemainPrdSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Settings_CV.Output_SrvReminderSetDistValue.Output_SrvReminderSetDistValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrUsrSetDstSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderSetDistValue.Output_SrvReminderSetDistValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Settings_CV.Output_SrvReminderSetPeriodValue.Output_SrvReminderSetPeriodValue_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrUsrSetPrdSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderSetPeriodValue.Output_SrvReminderSetPeriodValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Settings_CV.Output_SrvReminderSetStatus.Output_SrvReminderSetStatus_MCAN:
+  type: actuator
+  signalName: USM_CluSrvRmndrSetSta_MM
+  dataType: HUInt64
+  abstractionName: Output_SrvReminderSetStatus.Output_SrvReminderSetStatus_MCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "OFF"
+    0x2: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Settings_CV.Output_ClusterDetailThemeListStatus.Output_ClusterDetailThemeListStatus_MCAN:
+  type: actuator
+  signalName: USM_CluThmDtlListType_New
+  dataType: HUInt64
+  abstractionName: Output_ClusterDetailThemeListStatus.Output_ClusterDetailThemeListStatus_MCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "A_B_C"
+    0x3: "AUTO_A_B_C"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x2
+    0x2: 0x3
+    0xF: 0x1
+
+
+- Settings_CV.Output_ClusterDetailThemeStatus.Output_ClusterDetailThemeStatus_MCAN:
+  type: actuator
+  signalName: USM_CluThmDtlSetSta_New
+  dataType: HUInt64
+  abstractionName: Output_ClusterDetailThemeStatus.Output_ClusterDetailThemeStatus_MCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "SELECT1"
+    0x3: "SELECT2"
+    0x4: "SELECT3"
+    0x5: "AUTO"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x6: 0x5
+    0x7: 0x1
+
+
+- Settings_CV.Output_ClusterMainThemeListStatus.Output_ClusterMainThemeListStatus_MCAN:
+  type: actuator
+  signalName: USM_CluThmListType_New
+  dataType: HUInt64
+  abstractionName: Output_ClusterMainThemeListStatus.Output_ClusterMainThemeListStatus_MCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "CLASSIC_SIMPLE"
+    0x3: "CLASSIC_SIMPLE_N"
+    0x4: "CIRCLE_SIMPLE"
+    0x5: "MODERN_SIMPLE_NEOCLASSIC"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    0xF: 0x1
+
+
+- Settings_CV.Output_ClusterMainThemeStatus.Output_ClusterMainThemeStatus_MCAN:
+  type: actuator
+  signalName: USM_CluThmSta_New
+  dataType: HUInt64
+  abstractionName: Output_ClusterMainThemeStatus.Output_ClusterMainThemeStatus_MCAN
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "INVALID"
+    0x2: "THEME_A"
+    0x3: "THEME_B"
+    0x4: "THEME_C"
+    0x5: "THEME_D"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    0x7: 0x1
+
+
+- Settings_CV.Output_WelcomeSoundSetStatus.Output_WelcomeSoundSetStatus_MCAN:
+  type: actuator
+  signalName: USM_WelcomeSndSta_MM
+  dataType: HUInt64
+  abstractionName: Output_WelcomeSoundSetStatus.Output_WelcomeSoundSetStatus_MCAN
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Settings_CV.Output_AdasWarnVolFeedbackReq.Output_AdasWarnVolFeedbackReq_CCAN:
+  type: actuator
+  signalName: Wrn_Snd_AdasVolFdbck
+  dataType: HUInt64
+  abstractionName: Output_AdasWarnVolFeedbackReq.Output_AdasWarnVolFeedbackReq_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "VOL1"
+    0x3: "VOL2"
+    0x4: "VOL3"
+  matchingTable:
+    0x0: 0x0
+    0x6: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+
+
+- Sliding_Ramp.Input_SlidingRampOpenStatus:
+  type: sensor
+  signalName: StepOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_SlidingRampOpenStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Sound_CV.Output_AdasWarnSoundStatus.Output_AdasWarnSoundStatus_CCAN:
+  type: actuator
+  signalName: CLU_AdasWarnSndStat
+  dataType: HUInt64
+  abstractionName: Output_AdasWarnSoundStatus.Output_AdasWarnSoundStatus_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "WARN_ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Special_Vehicle.Input_EPTOStatus:
+  type: sensor
+  signalName: VCU_Epto_VU
+  dataType: HUInt64
+  abstractionName: Input_EPTOStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GREEN"
+    0x2: "RED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Special_Vehicle.Input_TMPTOStatus:
+  type: sensor
+  signalName: TMPTOState
+  dataType: HUInt64
+  abstractionName: Input_TMPTOStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Special_Vehicle.Input_UpperBodyStatus:
+  type: sensor
+  signalName: UpperBodyState
+  dataType: HUInt64
+  abstractionName: Input_UpperBodyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Special_Vehicle.Input_PTOFaultECStatus:
+  type: sensor
+  signalName: PTOFaultEC
+  dataType: HUInt64
+  abstractionName: Input_PTOFaultECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning1Status_EHPS1:
+  type: sensor
+  signalName: RedStopLampState_EHPS1
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning1Status_EHPS1
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning1Status_EHPS2:
+  type: sensor
+  signalName: RedStopLampState_EHPS2
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning1Status_EHPS2
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning1Status_MAHS:
+  type: sensor
+  signalName: RedStopLampState_DM01_MAHS
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning1Status_MAHS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning1Status_RAS:
+  type: sensor
+  signalName: RedStopLampState_RAS
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning1Status_RAS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning2Status_EHPS1:
+  type: sensor
+  signalName: FlashRedStopLamp_EHPS1
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning2Status_EHPS1
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning2Status_EHPS2:
+  type: sensor
+  signalName: FlashRedStopLamp_EHPS2
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning2Status_EHPS2
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning2Status_MAHS:
+  type: sensor
+  signalName: FlashRedStopLamp_MAHS
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning2Status_MAHS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringWarning2Status_RAS:
+  type: sensor
+  signalName: FlashRedStopLamp_RAS
+  dataType: HUInt64
+  abstractionName: Input_SteeringWarning2Status_RAS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARNING"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck1Status_EHPS1:
+  type: sensor
+  signalName: AmberWarningLampStatus_EHPS1
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck1Status_EHPS1
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck1Status_EHPS2:
+  type: sensor
+  signalName: AmberWarningLampStatus_EHPS2
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck1Status_EHPS2
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck1Status_MAHS:
+  type: sensor
+  signalName: AmberWarningLampStatus_DM01_MAHS
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck1Status_MAHS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck1Status_EPSO1:
+  type: sensor
+  signalName: AmberWarningLampStatus_EPSO1
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck1Status_EPSO1
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck1Status_RAS:
+  type: sensor
+  signalName: AmberWarningLampStatus_RAS
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck1Status_RAS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck2Status_EHPS1:
+  type: sensor
+  signalName: FlashAmberWarningLamp_EHPS1
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck2Status_EHPS1
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck2Status_EHPS2:
+  type: sensor
+  signalName: FlashAmberWarningLamp_EHPS2
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck2Status_EHPS2
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck2Status_MAHS:
+  type: sensor
+  signalName: FlashAmberWarningLamp_MAHS
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck2Status_MAHS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringCheck2Status_RAS:
+  type: sensor
+  signalName: FlashAmberWarningLamp_RAS
+  dataType: HUInt64
+  abstractionName: Input_SteeringCheck2Status_RAS
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "CHECK"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_SteeringModeChangeStatus:
+  type: sensor
+  signalName: SteerFeelVariant
+  dataType: HUInt64
+  abstractionName: Input_SteeringModeChangeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "COMFORT"
+    0x2: "HARD"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- Steering_Warning_Lamp.Input_PSTROilReserverSwitchStatus:
+  type: sensor
+  signalName: PSTROilRsvSwSte
+  dataType: HUInt64
+  abstractionName: Input_PSTROilReserverSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Stop_Lamp.Input_StopStatus:
+  type: sensor
+  signalName: CallBzSWStatus
+  dataType: HUInt64
+  abstractionName: Input_StopStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TM_High_Low_Range.Input_TMHighStatus:
+  type: sensor
+  signalName: TMSplitterHighState
+  dataType: HUInt64
+  abstractionName: Input_TMHighStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TM_High_Low_Range.Input_LowRangeStatus:
+  type: sensor
+  signalName: LowRangeSWState
+  dataType: HUInt64
+  abstractionName: Input_LowRangeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TPMSVehicleType:
+  type: sensor
+  signalName: TPMS_Vehicle_Type
+  dataType: HUInt64
+  abstractionName: Input_TPMSVehicleType
+  valueEnum:
+    0x0: "NOT_CONFIGURE"
+    0x1: "T4X2"
+    0x2: "T6X2"
+    0x3: "T6X4"
+    0x4: "T8X4"
+    0x5: "T10X4_PUSHER"
+    0x6: "T8X4_PUSHER"
+    0x7: "T10X4_TAG"
+    0x8: "T6X2_TAG"
+    0x9: "NOT_AVAILABLE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x1
+    0x3: 0x2
+    0xB: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    ELSE: 0x9
+
+
+- TPMS_CV.Input_TPMSWheelLocation:
+  type: sensor
+  signalName: Wheel_Location_ID
+  dataType: HUInt64
+  abstractionName: Input_TPMSWheelLocation
+  valueEnum:
+    0x0: "AXLE1_IL"
+    0x1: "AXLE1_IR"
+    0x2: "AXLE2_OL"
+    0x3: "AXLE2_IL"
+    0x4: "AXLE2_IR"
+    0x5: "AXLE2_OR"
+    0x6: "AXLE3_OL"
+    0x7: "AXLE3_IL"
+    0x8: "AXLE3_IR"
+    0x9: "AXLE3_OR"
+    0xA: "AXLE4_OL"
+    0xB: "AXLE4_IL"
+    0xC: "AXLE4_IR"
+    0xD: "AXLE4_OR"
+    0xE: "AXLE5_OL"
+    0xF: "AXLE5_IL"
+    0x10: "AXLE5_IR"
+    0x11: "AXLE5_OR"
+    0x12: "NOT_AVAILABLE"
+  matchingTable:
+    0x17: 0x0
+    0x19: 0x1
+    0x26: 0x2
+    0x27: 0x3
+    0x29: 0x4
+    0x2A: 0x5
+    0x36: 0x6
+    0x37: 0x7
+    0x39: 0x8
+    0x3A: 0x9
+    0x46: 0xA
+    0x47: 0xB
+    0x49: 0xC
+    0x4A: 0xD
+    0x56: 0xE
+    0x57: 0xF
+    0x59: 0x10
+    0x5A: 0x11
+    ELSE: 0x12
+
+
+- TPMS_CV.Input_LowTirePressureStatus:
+  type: sensor
+  signalName: Tyre_Pressure_Status
+  dataType: HUInt64
+  abstractionName: Input_LowTirePressureStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "LOW"
+  matchingTable:
+    0x5: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_HighTireTemperatureStatus:
+  type: sensor
+  signalName: Tyre_Over_Temp_Status
+  dataType: HUInt64
+  abstractionName: Input_HighTireTemperatureStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "HIGH"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TirePressureValue:
+  type: sensor
+  signalName: Tyre_Pressure
+  dataType: HUInt64
+  abstractionName: Input_TirePressureValue
+  matchingTable:
+    VALUE:
+
+
+- TPMS_CV.Input_TireTemperatureValue:
+  type: sensor
+  signalName: Tyre_Temperature
+  dataType: HUInt64
+  abstractionName: Input_TireTemperatureValue
+  matchingTable:
+    VALUE:
+
+
+- TPMS_CV.Input_TPMSSensorBatterySOCValue:
+  type: sensor
+  signalName: WU_Battery_Status
+  dataType: HUInt64
+  abstractionName: Input_TPMSSensorBatterySOCValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- TPMS_CV.Input_TPMSWarningStatus:
+  type: sensor
+  signalName: TPMS_Malf_Ind
+  dataType: HUInt64
+  abstractionName: Input_TPMSWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TPMSLowPressWarnStatus:
+  type: sensor
+  signalName: TPMS_Low_Press_Warn_Ind
+  dataType: HUInt64
+  abstractionName: Input_TPMSLowPressWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "LOW"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TPMSHighTempWarnStatus:
+  type: sensor
+  signalName: TPMS_High_Temp_Warn_Ind
+  dataType: HUInt64
+  abstractionName: Input_TPMSHighTempWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "HIGH"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TPMSLearnStatus:
+  type: sensor
+  signalName: Sensor_ID_Learn_Status
+  dataType: HUInt64
+  abstractionName: Input_TPMSLearnStatus
+  valueEnum:
+    0x0: "LEARNED"
+    0x1: "UNLEARNED"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- TPMS_CV.Input_TrailerTPMSStatus1:
+  type: sensor
+  signalName: TyrePressureStatus1
+  dataType: HUInt64
+  abstractionName: Input_TrailerTPMSStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TrailerTPMSStatus2:
+  type: sensor
+  signalName: TyrePressureStatus2
+  dataType: HUInt64
+  abstractionName: Input_TrailerTPMSStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TrailerTPMSStatus3:
+  type: sensor
+  signalName: TyrePressureStatus3
+  dataType: HUInt64
+  abstractionName: Input_TrailerTPMSStatus3
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TrailerTPMSStatus4:
+  type: sensor
+  signalName: TyrePressureStatus4
+  dataType: HUInt64
+  abstractionName: Input_TrailerTPMSStatus4
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- TPMS_CV.Input_TrailerTPMSStatus5:
+  type: sensor
+  signalName: TyrePressureStatus5
+  dataType: HUInt64
+  abstractionName: Input_TrailerTPMSStatus5
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- Tachograph.Input_TachographSysFailStatus:
+  type: sensor
+  signalName: SystemEvent
+  dataType: HUInt64
+  abstractionName: Input_TachographSysFailStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_TransmissionCurrentGearStatus:
+  type: sensor
+  signalName: TransCurrentGear
+  dataType: HUInt64
+  abstractionName: Input_TransmissionCurrentGearStatus
+  valueEnum:
+    0x0: "IND_1"
+    0x1: "IND_2"
+    0x2: "IND_3"
+    0x3: "IND_4"
+    0x4: "IND_5"
+    0x5: "IND_6"
+    0x6: "IND_7"
+    0x7: "IND_8"
+    0x8: "IND_9"
+    0x9: "IND_10"
+    0xA: "IND_11"
+    0xB: "IND_12"
+    0xC: "IND_N"
+    0xD: "IND_R1"
+    0xE: "IND_R2"
+    0xF: "IND_R3"
+    0x10: "IND_R4"
+    0x11: "NO_DISPLAY"
+  matchingTable:
+    0x7E: 0x0
+    0x7F: 0x1
+    0x80: 0x2
+    0x81: 0x3
+    0x82: 0x4
+    0x83: 0x5
+    0x84: 0x6
+    0x85: 0x7
+    0x86: 0x8
+    0x87: 0x9
+    0x88: 0xA
+    0x89: 0xB
+    0x7D: 0xC
+    0x7C: 0xD
+    0x7B: 0xE
+    0x7A: 0xF
+    0x79: 0x10
+    ELSE: 0x11
+
+
+- Transmission_Indicator_CV.Input_TransmissionRequestedRangeStatus:
+  type: sensor
+  signalName: TransRqedRange
+  dataType: HUInt64
+  abstractionName: Input_TransmissionRequestedRangeStatus
+  valueEnum:
+    0x0: "IND_1"
+    0x1: "IND_2"
+    0x2: "IND_3"
+    0x3: "IND_4"
+    0x4: "IND_5"
+    0x5: "IND_6"
+    0x6: "IND_D"
+    0x7: "NO_BRAKE_INPUT"
+    0x8: "NO_SHIFT_COND"
+    0x9: "NO_DISPLAY"
+  matchingTable:
+    0x31: 0x0
+    0x32: 0x1
+    0x33: 0x2
+    0x34: 0x3
+    0x35: 0x4
+    0x36: 0x5
+    0x44: 0x6
+    0x21: 0x7
+    0x40: 0x8
+    ELSE: 0x9
+
+
+- Transmission_Indicator_CV.Input_TMAutomaticManualStatus:
+  type: sensor
+  signalName: StatusAutomaticManual
+  dataType: HUInt64
+  abstractionName: Input_TMAutomaticManualStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MANUAL"
+    0x2: "AUTOMATIC"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_TruckEcoRollStatus:
+  type: sensor
+  signalName: ECO_ROLL
+  dataType: HUInt64
+  abstractionName: Input_TruckEcoRollStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_BusEcoRollStatus:
+  type: sensor
+  signalName: transmission_mode_3_indicator
+  dataType: HUInt64
+  abstractionName: Input_BusEcoRollStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_SwitchRequestedGearStatus:
+  type: sensor
+  signalName: TransmissionRequestedGear
+  dataType: HUInt64
+  abstractionName: Input_SwitchRequestedGearStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DOWN_1"
+    0x2: "DOWN_2"
+    0x3: "DOWN_3"
+  matchingTable:
+    0xF3: 0x1
+    0xF4: 0x2
+    0xF5: 0x3
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_ManoueveringStatus:
+  type: sensor
+  signalName: StatusManoueveringMode
+  dataType: HUInt64
+  abstractionName: Input_ManoueveringStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_AllisonPowerMode:
+  type: sensor
+  signalName: TRANSMISSION_MODE2
+  dataType: HUInt64
+  abstractionName: Input_AllisonPowerMode
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_ZFPowerMode:
+  type: sensor
+  signalName: POWERMODE
+  dataType: HUInt64
+  abstractionName: Input_ZFPowerMode
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ECO"
+    0x2: "POWER"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_OffRoadStatus:
+  type: sensor
+  signalName: off_road
+  dataType: HUInt64
+  abstractionName: Input_OffRoadStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_RockingFreeStatus:
+  type: sensor
+  signalName: Rocking_free
+  dataType: HUInt64
+  abstractionName: Input_RockingFreeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_ATMOverHeatLampStatus:
+  type: sensor
+  signalName: OverheatIndicator
+  dataType: HUInt64
+  abstractionName: Input_ATMOverHeatLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_ATMWarningLampStatus:
+  type: sensor
+  signalName: AmberWarningLampStatus_TCU_C
+  dataType: HUInt64
+  abstractionName: Input_ATMWarningLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_ATMRangeInhibitStatus:
+  type: sensor
+  signalName: TransShiftInhibitIndicator
+  dataType: HUInt64
+  abstractionName: Input_ATMRangeInhibitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMAirlessStatus:
+  type: sensor
+  signalName: Airless
+  dataType: HUInt64
+  abstractionName: Input_TMAirlessStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMCheckPhaseStatus:
+  type: sensor
+  signalName: CheckPhase
+  dataType: HUInt64
+  abstractionName: Input_TMCheckPhaseStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMClutchLoadStatus:
+  type: sensor
+  signalName: ClutchLoad
+  dataType: HUInt64
+  abstractionName: Input_TMClutchLoadStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMClutchWearStatus:
+  type: sensor
+  signalName: ClutchWear
+  dataType: HUInt64
+  abstractionName: Input_TMClutchWearStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMFailureModeSpannerStatus:
+  type: sensor
+  signalName: FailureModeSpanner
+  dataType: HUInt64
+  abstractionName: Input_TMFailureModeSpannerStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMFailureModeStopStatus:
+  type: sensor
+  signalName: FailureModeStop
+  dataType: HUInt64
+  abstractionName: Input_TMFailureModeStopStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMHighTemperatureStatus:
+  type: sensor
+  signalName: HighTemperature
+  dataType: HUInt64
+  abstractionName: Input_TMHighTemperatureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMPTO1OnOffStatus:
+  type: sensor
+  signalName: PTO1OnOff
+  dataType: HUInt64
+  abstractionName: Input_TMPTO1OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMReleaseAccPedalStatus:
+  type: sensor
+  signalName: ReleaseAccPedal
+  dataType: HUInt64
+  abstractionName: Input_TMReleaseAccPedalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TCUPGNumberStatus_Allison:
+  type: sensor
+  signalName: PGNumber_TCU_ALLISON
+  dataType: HUInt64
+  abstractionName: Input_TCUPGNumberStatus_Allison
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0xEFCA: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_LeverPosUnsuitStatus:
+  type: sensor
+  signalName: Driver_Information_Lever_Position_Unsuitable
+  dataType: HUInt64
+  abstractionName: Input_LeverPosUnsuitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_PressBrakePedalStatus:
+  type: sensor
+  signalName: Press_brake_pedal
+  dataType: HUInt64
+  abstractionName: Input_PressBrakePedalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning_CV.Input_TMWarningBuzzerStatus:
+  type: sensor
+  signalName: WarningBuzzer
+  dataType: HUInt64
+  abstractionName: Input_TMWarningBuzzerStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_IMUDrvDoorOpenStatus:
+  type: sensor
+  signalName: DRVDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUDrvDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvDTEValuePerKm:
+  type: sensor
+  signalName: VCU_DistEmpt_CLU3_VU
+  dataType: HUInt64
+  abstractionName: Input_EvDTEValuePerKm
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_FuelConsumptionValue:
+  type: sensor
+  signalName: EngFuelRate
+  dataType: HUInt64
+  abstractionName: Input_FuelConsumptionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_HeadUnitFuelEcoGraphResetStatus:
+  type: sensor
+  signalName: HU_Graphreset_Info
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitFuelEcoGraphResetStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvDTEAvnCalcStatus:
+  type: sensor
+  signalName: Input_EvDTEAvnCalcStatus
+  dataType: HUInt64
+  abstractionName: Input_EvDTEAvnCalcStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvDTEDisplayOffReqStatus:
+  type: sensor
+  signalName: Input_EvDTEDisplayOffReqStatus
+  dataType: HUInt64
+  abstractionName: Input_EvDTEDisplayOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "OFF_REQUEST"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvInstFuelEcoValuePerMPG:
+  type: sensor
+  signalName: Input_EvInstFuelEcoValuePerMPG
+  dataType: HUInt64
+  abstractionName: Input_EvInstFuelEcoValuePerMPG
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_VehicleReadyStatus:
+  type: sensor
+  signalName: EngineOperationStatus
+  dataType: HUInt64
+  abstractionName: Input_VehicleReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvDteGuideCoachPositionValue:
+  type: sensor
+  signalName: Input_EvDteGuideCoachPositionValue
+  dataType: HUInt64
+  abstractionName: Input_EvDteGuideCoachPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_EvDteGuideDtePositionValue:
+  type: sensor
+  signalName: Input_EvDteGuideDtePositionValue
+  dataType: HUInt64
+  abstractionName: Input_EvDteGuideDtePositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_EvDteGuidePageInfoStatus:
+  type: sensor
+  signalName: Input_EvDteGuidePageInfoStatus
+  dataType: HUInt64
+  abstractionName: Input_EvDteGuidePageInfoStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "NORMAL"
+    0x2: "RECALCULATE"
+    0x3: "LOW_DTE"
+    0x4: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Trip_Info_CV.Input_EvDteLowBoundValue:
+  type: sensor
+  signalName: Input_EvDteLowBoundValue
+  dataType: HUInt64
+  abstractionName: Input_EvDteLowBoundValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Input_EvDteUpperBoundValue:
+  type: sensor
+  signalName: Input_EvDteUpperBoundValue
+  dataType: HUInt64
+  abstractionName: Input_EvDteUpperBoundValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyDigitStatus.Output_AvgFuelEconomyDigitStatus_MCAN:
+  type: actuator
+  signalName: CLU_AvgFuelCnsmptnVal_Digit_MM
+  dataType: HUInt64
+  abstractionName: Output_AvgFuelEconomyDigitStatus.Output_AvgFuelEconomyDigitStatus_MCAN
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyUnitStatus.Output_AvgFuelEconomyUnitStatus_MCAN:
+  type: actuator
+  signalName: CLU_AvgFuelCnsmptnUnitSta_MM
+  dataType: HUInt64
+  abstractionName: Output_AvgFuelEconomyUnitStatus.Output_AvgFuelEconomyUnitStatus_MCAN
+  valueEnum:
+    0x0: "KM_PER_LITTER"
+    0x1: "LITTER_PER_KM"
+    0x2: "MPG_US"
+    0x3: "MPG_UK"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+
+- Trip_Info_CV.Output_AvgFuelEconomyValue.Output_AvgFuelEconomyValue_MCAN:
+  type: actuator
+  signalName: CLU_AvgFuelCnsmptnVal_MM
+  dataType: HUInt64
+  abstractionName: Output_AvgFuelEconomyValue.Output_AvgFuelEconomyValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsDigit.Output_DrvInfoAvgFuelConsDigit_MCAN:
+  type: actuator
+  signalName: CLU_AvgFCL_DrvInfo_Digit_MM
+  dataType: HUInt64
+  abstractionName: Output_DrvInfoAvgFuelConsDigit.Output_DrvInfoAvgFuelConsDigit_MCAN
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsResetStatus.Output_DrvInfoAvgFuelConsResetStatus_MCAN:
+  type: actuator
+  signalName: CLU_AvgFCL_DrvInfo_reset_MM
+  dataType: HUInt64
+  abstractionName: Output_DrvInfoAvgFuelConsResetStatus.Output_DrvInfoAvgFuelConsResetStatus_MCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Trip_Info_CV.Output_DrvInfoAvgFuelConsValue.Output_DrvInfoAvgFuelConsValue_MCAN:
+  type: actuator
+  signalName: CLU_AvgFCL_DrvInfo_MM
+  dataType: HUInt64
+  abstractionName: Output_DrvInfoAvgFuelConsValue.Output_DrvInfoAvgFuelConsValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_EvDTEValue.Output_EvDTEValue_MCAN:
+  type: actuator
+  signalName: CLU_EVDTEDisp_MM
+  dataType: HUInt64
+  abstractionName: Output_EvDTEValue.Output_EvDTEValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_OdometerValue.Output_OdometerValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_OdoVal
+  dataType: HUInt64
+  abstractionName: Output_OdometerValue.Output_OdometerValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_OdometerValue.Output_OdometerValue_MCAN:
+  type: actuator
+  signalName: CLU_OdoVal
+  dataType: HUInt64
+  abstractionName: Output_OdometerValue.Output_OdometerValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_TotalDTEValue.Output_TotalDTEValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DTEVal
+  dataType: HUInt64
+  abstractionName: Output_TotalDTEValue.Output_TotalDTEValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_TotalDTEValue.Output_TotalDTEValue_MCAN:
+  type: actuator
+  signalName: CLU_DTEVal
+  dataType: HUInt64
+  abstractionName: Output_TotalDTEValue.Output_TotalDTEValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsSyncCounter.Output_TermAvgFuelConsSyncCounter_MCAN:
+  type: actuator
+  signalName: CLU_TermAvgSync_MM
+  dataType: HUInt64
+  abstractionName: Output_TermAvgFuelConsSyncCounter.Output_TermAvgFuelConsSyncCounter_MCAN
+  valueEnum:
+    0x0: "TIME0"
+    0x1: "TIME1"
+    0x2: "TIME2"
+    0x3: "TIME3"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsValue.Output_TermAvgFuelConsValue_MCAN:
+  type: actuator
+  signalName: CLU_TermAvgFuelCnsmptnVal_MM
+  dataType: HUInt64
+  abstractionName: Output_TermAvgFuelConsValue.Output_TermAvgFuelConsValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Trip_Info_CV.Output_TermAvgFuelConsValueDigit.Output_TermAvgFuelConsValueDigit_MCAN:
+  type: actuator
+  signalName: CLU_TermAvgFCL_Digit_MM
+  dataType: HUInt64
+  abstractionName: Output_TermAvgFuelConsValueDigit.Output_TermAvgFuelConsValueDigit_MCAN
+  valueEnum:
+    0x0: "DIGIT2"
+    0x1: "DIGIT3"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Trip_Info_CV.Output_TripUnitStatus.Output_TripUnitStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_TripUnitSta
+  dataType: HUInt64
+  abstractionName: Output_TripUnitStatus.Output_TripUnitStatus_CCAN
+  valueEnum:
+    0x0: "KM"
+    0x1: "MILE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Trip_Info_CV.Output_TripUnitStatus.Output_TripUnitStatus_MCAN:
+  type: actuator
+  signalName: CLU_TripUnitSta
+  dataType: HUInt64
+  abstractionName: Output_TripUnitStatus.Output_TripUnitStatus_MCAN
+  valueEnum:
+    0x0: "KM"
+    0x1: "MILE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x0: 0x2
+
+
+- Urea_System.Input_UreaTankLevelStatus:
+  type: sensor
+  signalName: Urea_Tank_Level_Satus
+  dataType: HUInt64
+  abstractionName: Input_UreaTankLevelStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0~0x1: 0x0
+    0x6~0x7: 0x0
+    0x2: 0x1
+    0x3~0x5: 0x2
+
+
+- Urea_System.Input_UreaSystemWarnStatus:
+  type: sensor
+  signalName: SCR_error_lamp_status_which_leads_to_inducement
+  dataType: HUInt64
+  abstractionName: Input_UreaSystemWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x0: 0x0
+    0x3: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- Urea_System.Input_UreaLevelDisplayValue:
+  type: sensor
+  signalName: Catalyst_tank_level
+  dataType: HUInt64
+  abstractionName: Input_UreaLevelDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Urea_System.Input_EngineUreaSystemWarnStatus:
+  type: sensor
+  signalName: DrvWarningLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineUreaSystemWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- VCU.Input_ServiceIndiReqStatusFromVCU:
+  type: sensor
+  signalName: VCU_VcuFlt_CLU2_VF
+  dataType: HUInt64
+  abstractionName: Input_ServiceIndiReqStatusFromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- VCU.Input_TransmissionRequestedRangeStatus:
+  type: sensor
+  signalName: TransRqedRange
+  dataType: HUInt64
+  abstractionName: Input_TransmissionRequestedRangeStatus
+  valueEnum:
+    0x0: "IND_1"
+    0x1: "IND_2"
+    0x2: "IND_3"
+    0x3: "IND_4"
+    0x4: "IND_5"
+    0x5: "IND_6"
+    0x6: "IND_D"
+    0x7: "NO_BRAKE_INPUT"
+    0x8: "NO_SHIFT_COND"
+    0x9: "NO_DISPLAY"
+  matchingTable:
+    0x31: 0x0
+    0x32: 0x1
+    0x33: 0x2
+    0x34: 0x3
+    0x35: 0x4
+    0x36: 0x5
+    0x44: 0x6
+    0x21: 0x7
+    0x40: 0x8
+    ELSE: 0x9
+
+
+- VCU.Input_ChangeParkingOffStatus:
+  type: sensor
+  signalName: VCU_ChgPakOff_CLU3_VF
+  dataType: HUInt64
+  abstractionName: Input_ChangeParkingOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_VCUFaultECStatus:
+  type: sensor
+  signalName: VCUFaultEC
+  dataType: HUInt64
+  abstractionName: Input_VCUFaultECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_BusOffECStatus:
+  type: sensor
+  signalName: BusOffEC
+  dataType: HUInt64
+  abstractionName: Input_BusOffECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_EBSCtoECStatus:
+  type: sensor
+  signalName: EBSCtoEC
+  dataType: HUInt64
+  abstractionName: Input_EBSCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_TCUCtoECStatus:
+  type: sensor
+  signalName: TCUCtoEC
+  dataType: HUInt64
+  abstractionName: Input_TCUCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_EMSCtoECStatus:
+  type: sensor
+  signalName: EMSCtoEC
+  dataType: HUInt64
+  abstractionName: Input_EMSCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_IBUCtoECStatus:
+  type: sensor
+  signalName: IBUCtoEC
+  dataType: HUInt64
+  abstractionName: Input_IBUCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_IMUCtoECStatus:
+  type: sensor
+  signalName: IMUCtoEC
+  dataType: HUInt64
+  abstractionName: Input_IMUCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_IOBXCtoECStatus:
+  type: sensor
+  signalName: IOBXCtoEC
+  dataType: HUInt64
+  abstractionName: Input_IOBXCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_IPSMCtoECStatus:
+  type: sensor
+  signalName: IPSMCtoEC
+  dataType: HUInt64
+  abstractionName: Input_IPSMCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_MFSMCtoECStatus:
+  type: sensor
+  signalName: MFSMCtoEC
+  dataType: HUInt64
+  abstractionName: Input_MFSMCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_PDCCtoECStatus:
+  type: sensor
+  signalName: PDCCtoEC
+  dataType: HUInt64
+  abstractionName: Input_PDCCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_SPACtoECStatus:
+  type: sensor
+  signalName: SPACtoEC
+  dataType: HUInt64
+  abstractionName: Input_SPACtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_ADAS_DRVCtoECStatus:
+  type: sensor
+  signalName: ADAS_DRVCtoEC
+  dataType: HUInt64
+  abstractionName: Input_ADAS_DRVCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_DTGCtoECStatus:
+  type: sensor
+  signalName: DTGCtoEC
+  dataType: HUInt64
+  abstractionName: Input_DTGCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_EAPUCtoECStatus:
+  type: sensor
+  signalName: EAPUCtoEC
+  dataType: HUInt64
+  abstractionName: Input_EAPUCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VCU.Input_EPBCtoECStatus:
+  type: sensor
+  signalName: EPBCtoEC
+  dataType: HUInt64
+  abstractionName: Input_EPBCtoECStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_VDCInformationalSignal:
+  type: sensor
+  signalName: VDCInformationSignal
+  dataType: HUInt64
+  abstractionName: Input_VDCInformationalSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ZF_ON_KNORR_BLINK"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- VDC.Input_VDCFullyOperationalSignal:
+  type: sensor
+  signalName: VDCFullyOperational
+  dataType: HUInt64
+  abstractionName: Input_VDCFullyOperationalSignal
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_ASROffroadSwitchStatus:
+  type: sensor
+  signalName: ASROffroadSwitch
+  dataType: HUInt64
+  abstractionName: Input_ASROffroadSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- VDC.Input_TCSWarningAndInfoLampStatus:
+  type: sensor
+  signalName: TCSWarningAndInformationLamp
+  dataType: HUInt64
+  abstractionName: Input_TCSWarningAndInfoLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- VDC.Input_ROPEngineControlActiveStatus:
+  type: sensor
+  signalName: ROPEngCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_ROPEngineControlActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK2"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x2: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- VDC.Input_ROPBrakeControlActiveStatus:
+  type: sensor
+  signalName: ROPBrakeCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_ROPBrakeControlActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK2"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_YCEngineControlActiveStatus:
+  type: sensor
+  signalName: YCEngCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_YCEngineControlActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK2"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_YCBrakeControlActiveStatus:
+  type: sensor
+  signalName: YCBrakeCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_YCBrakeControlActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK2"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_EBSDTCActiveStatus:
+  type: sensor
+  signalName: DTC1_EBS_C
+  dataType: HUInt64
+  abstractionName: Input_EBSDTCActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVE"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x000000: 0x0
+    0xFFFFFF: 0x0
+    TIMEOUT: 0x2
+    ELSE: 0x1
+
+
+- VDC.Input_TCSOffLampStatus:
+  type: sensor
+  signalName: TCSOffLamp
+  dataType: HUInt64
+  abstractionName: Input_TCSOffLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- VDC.Input_TCSOffSoundStatus:
+  type: sensor
+  signalName: TCSOffBuzzer
+  dataType: HUInt64
+  abstractionName: Input_TCSOffSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_EBSPGNumberStatus:
+  type: sensor
+  signalName: PGNumber_EBS
+  dataType: HUInt64
+  abstractionName: Input_EBSPGNumberStatus
+  valueEnum:
+    0x0: "DM1"
+    0x1: "NOT_DM1"
+  matchingTable:
+    0xFECA: 0x0
+    ELSE: 0x1
+
+
+- VDC.Input_ESPErrorStatus:
+  type: sensor
+  signalName: AuxIO11_ESP_error_status_information
+  dataType: HUInt64
+  abstractionName: Input_ESPErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- VDC.Input_ESPModeStatus:
+  type: sensor
+  signalName: ESPModeStatus
+  dataType: HUInt64
+  abstractionName: Input_ESPModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "VDC_ON"
+    0x2: "VDCOFF_ON"
+  matchingTable:
+    0x2: 0x2
+    0x3: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- WPC_CV.Input_WPCPopUpStatus:
+  type: sensor
+  signalName: WPC_PhnLftWrngSta
+  dataType: HUInt64
+  abstractionName: Input_WPCPopUpStatus
+  valueEnum:
+    0x0: "CELLPHONE_ON_PAD"
+    0x1: "CELLPHONE_REMIND"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x4: 0x1
+    ELSE: 0x2
+
+
+- WPC_CV.Input_IMUDrvDoorOpenStatus:
+  type: sensor
+  signalName: DRVDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUDrvDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- WPC_CV.Input_IMUAstDoorOpenStatus:
+  type: sensor
+  signalName: ASTDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUAstDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- WPC_CV.Input_IMUFrDoorOpenStatus:
+  type: sensor
+  signalName: FrDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUFrDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "BLINK"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- WPC_CV.Input_IMUMidDoorOpenStatus:
+  type: sensor
+  signalName: MidDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMUMidDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "BLINK"
+    0x3: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    TIMEOUT: 0x3
+    ELSE: 0x0
+
+
+- WPC_CV.Input_IMURrDoorOpenStatus:
+  type: sensor
+  signalName: RrDrOpenStatus
+  dataType: HUInt64
+  abstractionName: Input_IMURrDoorOpenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- Working_Lamp.Input_WorkingLampStatus:
+  type: sensor
+  signalName: C_WorkingLampOut
+  dataType: HUInt64
+  abstractionName: Input_WorkingLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp_CV.Input_ServiceIndiReqStatusFromVCU:
+  type: sensor
+  signalName: VCU_VcuFlt_CLU2_VF
+  dataType: HUInt64
+  abstractionName: Input_ServiceIndiReqStatusFromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+

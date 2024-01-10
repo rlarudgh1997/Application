@@ -28,7 +28,9 @@ private:
     void saveExcelFile(const bool& saveAs);
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
-    QPair<QVariantList, QVariantList> isVsmSignalInputDataInfo(const QMap<int, QString>& vsmFileInfo, const QString& signalName);
+    QMap<int, QStringList> isVsmSignalInputDataInfo(const QString& signalName, const QMap<int, QStringList>& vsmFileList);
+
+    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& categoryName);
     void updateAutoCompleteInputData(const QString& vehicleTypeStr, QString& signalName);
 
 protected:

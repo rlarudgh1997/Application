@@ -88,7 +88,10 @@ public:
         PropertyTypeAllModuleList,
         PropertyTypeInputDataVisible,
         PropertyTypeInputDataValuEnum,
-        PropertyTypeInputDataMatchingTable,
+        PropertyTypeInputDataMatchingTableEV,
+        PropertyTypeInputDataMatchingTableFCEV,
+        PropertyTypeInputDataMatchingTableICV,
+        PropertyTypeInputDataMatchingTableSystem,
         PropertyTypeUpdateSelectModule,
         PropertyTypeEnterScriptText,
         PropertyTypeShowSelectModule,
@@ -324,6 +327,18 @@ public:
         VehicleTypeEV = 0,
         VehicleTypeFCEV,
         VehicleTypeICV,
+    };
+};
+
+class InputDataTypeEnum {
+public:
+    enum InputDataType {
+        InputDataTypeValueEnum = 0,
+        InputDataTypeMatchingTableEV,
+        InputDataTypeMatchingTableFCEV,
+        InputDataTypeMatchingTableICV,
+        InputDataTypeMatchingTableSystem,
+        InputDataTypeMax,
     };
 };
 

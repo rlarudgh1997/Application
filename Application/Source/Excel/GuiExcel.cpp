@@ -677,29 +677,22 @@ void GuiExcel::updateDisplayAutoCompleteVehicle() {
 
 void GuiExcel::updateDisplayAutoCompleteInputData() {
     if (mAutoCompleteInputData == nullptr) {
-        QStringList valueEnum = QStringList();
-        for (const auto& value :
-             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toList()) {
-            valueEnum = value.toStringList();
-            if (valueEnum.size() > 0) {
-                // qDebug() << "matchingTable :" << valueEnum.size() << valueEnum;
-                break;
-            }
-        }
-        QStringList matchingTable = QStringList();
-        for (const auto& matching :
-             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTable).toList()) {
-            matchingTable = matching.toStringList();
-            if (matchingTable.size() > 0) {
-                // qDebug() << "matchingTable :" << matchingTable.size() << matchingTable;
-                break;
-            }
-        }
-        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, false);
-        mAutoCompleteInputData->updateSelectListInfo(valueEnum, matchingTable);
-        mAutoCompleteInputData->updateSelectWidgetInfo(QString("Select Data"), QStringList({"Value Enum", "Matching Table"}),
-                                                       QSize(600, 300));
+        QStringList valueEnum =
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
+        QList<QStringList> matchingTable = QList<QStringList>();
+        matchingTable.append(
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV).toStringList());
+        matchingTable.append(
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV).toStringList());
+        matchingTable.append(
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV).toStringList());
+        matchingTable.append(
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem).toStringList());
 
+        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, false, true);
+        mAutoCompleteInputData->updateSelectListInfo(valueEnum, matchingTable);
+        mAutoCompleteInputData->updateSelectWidgetInfo(
+            QString("Select Data"), QStringList({"Value Enum", "EV", "FCEV", "ICV", "System"}), QSize(664, 300));
         connect(mAutoCompleteInputData, &SelectModuleDialog::signalModuleSelected,
                 [=](const QList<QPair<int, QString>>& selectModule) {
                     if (mSelectItem) {

@@ -1,0 +1,156 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- Aux_Battery_Warning:
+  type: branch
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromEMS:
+  type: sensor
+  signalName: BatteryChargeWarningStatus
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryWarnReqFromEMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC:
+  type: sensor
+  signalName: Input_AuxBatteryWarnReqFromLDC
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryWarnReqFromLDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryResetOnReqStatus:
+  type: sensor
+  signalName: Input_AuxBatteryResetOnReqStatus
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryResetOnReqStatus
+  valueEnum:
+    0x0: "ON_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryRelayOffWarnStatus:
+  type: sensor
+  signalName: Input_AuxBatteryRelayOffWarnStatus
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryRelayOffWarnStatus
+  valueEnum:
+    0x0: "WARN_ON"
+    0x1: "WARN_OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryRelayOnWarnStatus:
+  type: sensor
+  signalName: Input_AuxBatteryRelayOnWarnStatus
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryRelayOnWarnStatus
+  valueEnum:
+    0x0: "WARN_ON"
+    0x1: "WARN_OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnStatus:
+  type: sensor
+  signalName: Input_AuxBatteryWarnStatus
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_EvAuxBatteryWarnStatus:
+  type: sensor
+  signalName: Input_EvAuxBatteryWarnStatus
+  dataType: HUInt64
+  abstractionName: Input_EvAuxBatteryWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC48V:
+  type: sensor
+  signalName: Input_AuxBatteryWarnReqFromLDC48V
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryWarnReqFromLDC48V
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromALDC:
+  type: sensor
+  signalName: Input_AuxBatteryWarnReqFromALDC
+  dataType: HUInt64
+  abstractionName: Input_AuxBatteryWarnReqFromALDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_EvAuxBatteryWarnStatusFromALDC:
+  type: sensor
+  signalName: Input_EvAuxBatteryWarnStatusFromALDC
+  dataType: HUInt64
+  abstractionName: Input_EvAuxBatteryWarnStatusFromALDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+

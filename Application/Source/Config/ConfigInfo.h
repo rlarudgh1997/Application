@@ -34,10 +34,15 @@ public:
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
-        ConfigTypeVsmNodeAddress,
         ConfigTypeVsmNodeAddressEV,
         ConfigTypeVsmNodeAddressFCEV,
         ConfigTypeVsmNodeAddressICV,
+        ConfigTypeCVVsmFileNameBase,
+        ConfigTypeCVVsmTypeAV,
+        ConfigTypeCVVsmTypeCD,
+        ConfigTypeCVVsmTypeCV,
+        ConfigTypeCVVsmTypeEC,
+        ConfigTypeCVVsmTypePT,
 
         // Report
         ConfigTypeReportResult,
@@ -112,15 +117,20 @@ private:
             QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("ExcelMergeText"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] =
             QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd", QVariant("ExcelMergeTextEnd"));
-        mConfigInfoData[ConfigTypeVsmNodeAddress] = QPair<QString, QVariant>(
-            "ConfigTypeVsmNodeAddress", QVariant(QVariantList({"CLU_VSM_CV_EV.Vehicle.CV.vsm", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm",
-                                                               "CLU_VSM_CV_ICV.Vehicle.CV.vsm"})));
         mConfigInfoData[ConfigTypeVsmNodeAddressEV] =
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressEV", "CLU_VSM_CV_EV.Vehicle.CV.vsm");
         mConfigInfoData[ConfigTypeVsmNodeAddressFCEV] =
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressFCEV", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
         mConfigInfoData[ConfigTypeVsmNodeAddressICV] =
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressICV", "CLU_VSM_CV_ICV.Vehicle.CV.vsm");
+
+        mConfigInfoData[ConfigTypeCVVsmFileNameBase] =
+            QPair<QString, QVariant>("ConfigTypeCVVsmFileNameBase", "CLU_VSM_CV_%1.Vehicle.%2.vsm");
+        mConfigInfoData[ConfigTypeCVVsmTypeAV] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeAV", "AV");
+        mConfigInfoData[ConfigTypeCVVsmTypeCD] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeCD", "CD");
+        mConfigInfoData[ConfigTypeCVVsmTypeCV] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeCV", "CV");
+        mConfigInfoData[ConfigTypeCVVsmTypeEC] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeEC", "EC");
+        mConfigInfoData[ConfigTypeCVVsmTypePT] = QPair<QString, QVariant>("ConfigTypeCVVsmTypePT", "PT");
 
         // Report
         mConfigInfoData[ConfigTypeReportResult] = QPair<QString, QVariant>("ConfigTypeReportResult", QVariant(false));

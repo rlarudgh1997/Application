@@ -20,6 +20,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLayout>
+//  #include <QCoreApplication>
 
 class AutoCompleteDialog;
 
@@ -297,7 +298,7 @@ class SelectModuleDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SelectModuleDialog(QWidget* parent, const QStringList& moduleList, const bool& allState)
+    explicit SelectModuleDialog(QWidget* parent, const QStringList& moduleList, const bool& allState, const bool& cellWidthFix)
         : QDialog(parent), mSelectAllState(allState) {
         setWindowTitle("Select Module");
         setWindowFlag(Qt::WindowContextHelpButtonHint, false);
@@ -338,7 +339,12 @@ public:
             rowIndex++;
         }
         mTableView->setModel(&mModel);
-        mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        if (cellWidthFix) {
+            mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
+        } else {
+            mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
+            // mTableView->resizeColumnsToContents();
+        }
         mTableView->verticalHeader()->setHidden(true);
         for (rowIndex = 0; rowIndex < mModel.rowCount(); ++rowIndex) {
             mTableView->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
@@ -388,24 +394,54 @@ public:
             mModel.item(rowIndex, 0)->setCheckState((select) ? (Qt::Checked) : (Qt::Unchecked));
         }
     }
-    void updateSelectListInfo(const QStringList& selectList, const QStringList& infoList) {
-        int maxCount = (selectList.size() > mModel.rowCount())
-                           ? (selectList.size())
-                           : ((mModel.rowCount() > infoList.size()) ? (mModel.rowCount()) : (infoList.size()));
-        // qDebug() << "List Count :" << mModel.rowCount() << selectList.size() << infoList.size() << maxCount;
+    void updateSelectListInfo(const QStringList& selectList, const QList<QStringList>& infoLists) {
+        int maxCount = selectList.size();
+        int columnCount = 1;
+        for (const auto& infoList : infoLists) {
+            columnCount++;
+            maxCount = qMax(maxCount, infoList.size());
+        }
+        mModel.setRowCount(maxCount);
+
         for (int rowIndex = 0; rowIndex < maxCount; rowIndex++) {
             if (rowIndex < selectList.size()) {
                 mModel.setItem(rowIndex, 0, new QStandardItem(selectList[rowIndex]));
                 mModel.item(rowIndex, 0)->setCheckable(true);
                 mModel.item(rowIndex, 0)->setFlags(mModel.item(rowIndex, 0)->flags() & ~Qt::ItemFlag::ItemIsEditable);
             }
-            if (rowIndex < infoList.size()) {
-                mModel.setItem(rowIndex, 1, new QStandardItem(infoList[rowIndex]));
-                mModel.item(rowIndex, 1)->setFlags(mModel.item(rowIndex, 1)->flags() & ~Qt::ItemFlag::ItemIsEditable);
+
+            for (int columnIndex = 0; columnIndex < infoLists.size(); columnIndex++) {
+                const QStringList& infoList = infoLists[columnIndex];
+                if (rowIndex < infoList.size()) {
+                    int infoColumnIndex = columnIndex + 1;
+                    mModel.setItem(rowIndex, infoColumnIndex, new QStandardItem(infoList[rowIndex]));
+                    mModel.item(rowIndex, infoColumnIndex)
+                        ->setFlags(mModel.item(rowIndex, infoColumnIndex)->flags() & ~Qt::ItemFlag::ItemIsEditable);
+                }
+
+                // mTableView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
+                // if (columnIndex == 0) {
+                //     mTableView->horizontalHeader()->resizeSection(columnIndex, 240);
+                // } else {
+                //     mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
+                // }
             }
 
+            // 높이 고정
             mTableView->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
             mTableView->verticalHeader()->resizeSection(rowIndex, 20);
+        }
+
+        // 너비 고정
+        for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+            mTableView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
+            if (columnIndex == 0) {
+                mTableView->horizontalHeader()->resizeSection(columnIndex, 240);
+            } else {
+                mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
+            }
+
+            qDebug() << "Column Size :" << mTableView->horizontalHeader()->sectionSize(columnIndex);
         }
     }
     void updateSelectWidgetInfo(const QString& title, const QStringList& subTitle, const QSize& size = QSize()) {
@@ -415,6 +451,7 @@ public:
             mModel.setColumnCount(subTitle.size());
             mModel.setHorizontalHeaderLabels(subTitle);
         }
+
         if (size.isEmpty() == false) {
             QRect rootWidgetRect = this->geometry();
             QRect setRect = QRect();
