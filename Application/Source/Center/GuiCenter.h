@@ -402,6 +402,7 @@ public:
             maxCount = qMax(maxCount, infoList.size());
         }
         mModel.setRowCount(maxCount);
+        mModel.setColumnCount(5);   // ValueEnum, EV, FCEV, ICV, System
 
         for (int rowIndex = 0; rowIndex < maxCount; rowIndex++) {
             if (rowIndex < selectList.size()) {
@@ -418,13 +419,6 @@ public:
                     mModel.item(rowIndex, infoColumnIndex)
                         ->setFlags(mModel.item(rowIndex, infoColumnIndex)->flags() & ~Qt::ItemFlag::ItemIsEditable);
                 }
-
-                // mTableView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
-                // if (columnIndex == 0) {
-                //     mTableView->horizontalHeader()->resizeSection(columnIndex, 240);
-                // } else {
-                //     mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
-                // }
             }
 
             // 높이 고정
@@ -440,8 +434,6 @@ public:
             } else {
                 mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
             }
-
-            qDebug() << "Column Size :" << mTableView->horizontalHeader()->sectionSize(columnIndex);
         }
     }
     void updateSelectWidgetInfo(const QString& title, const QStringList& subTitle, const QSize& size = QSize()) {

@@ -38,11 +38,6 @@ public:
         ConfigTypeVsmNodeAddressFCEV,
         ConfigTypeVsmNodeAddressICV,
         ConfigTypeCVVsmFileNameBase,
-        ConfigTypeCVVsmTypeAV,
-        ConfigTypeCVVsmTypeCD,
-        ConfigTypeCVVsmTypeCV,
-        ConfigTypeCVVsmTypeEC,
-        ConfigTypeCVVsmTypePT,
 
         // Report
         ConfigTypeReportResult,
@@ -63,6 +58,7 @@ public:
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
+        ConfigTypeAllModule,
         ConfigTypeSelectModule,
         ConfigTypeDefaultRunPath,
         ConfigTypeWindowTitle,
@@ -123,14 +119,8 @@ private:
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressFCEV", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
         mConfigInfoData[ConfigTypeVsmNodeAddressICV] =
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressICV", "CLU_VSM_CV_ICV.Vehicle.CV.vsm");
-
         mConfigInfoData[ConfigTypeCVVsmFileNameBase] =
             QPair<QString, QVariant>("ConfigTypeCVVsmFileNameBase", "CLU_VSM_CV_%1.Vehicle.%2.vsm");
-        mConfigInfoData[ConfigTypeCVVsmTypeAV] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeAV", "AV");
-        mConfigInfoData[ConfigTypeCVVsmTypeCD] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeCD", "CD");
-        mConfigInfoData[ConfigTypeCVVsmTypeCV] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeCV", "CV");
-        mConfigInfoData[ConfigTypeCVVsmTypeEC] = QPair<QString, QVariant>("ConfigTypeCVVsmTypeEC", "EC");
-        mConfigInfoData[ConfigTypeCVVsmTypePT] = QPair<QString, QVariant>("ConfigTypeCVVsmTypePT", "PT");
 
         // Report
         mConfigInfoData[ConfigTypeReportResult] = QPair<QString, QVariant>("ConfigTypeReportResult", QVariant(false));
@@ -150,9 +140,10 @@ private:
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));
-        mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
+        mConfigInfoData[ConfigTypeAllModule] = QPair<QString, QVariant>("ConfigTypeAllModule", QVariant(""));
+        mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
         mConfigInfoData[ConfigTypeDefaultRunPath] = QPair<QString, QVariant>("ConfigTypeDefaultRunPath", QVariant(""));
-        mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(""));
+        mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
     }
 
 private:

@@ -526,7 +526,7 @@ void GuiExcel::updateDisplayExcelSheet() {
 
             if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
                 shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
                 shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
                 shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
@@ -1003,7 +1003,7 @@ void GuiExcel::updateDisplayEditCell(const int& editType) {
             updateDisplayMergeCell(sheetIndex);
         }
     } else {
-        qDebug() << "Fail to menu right selection action item";
+        qDebug() << "Fail to edit type :" << editType;
         return;
     }
 

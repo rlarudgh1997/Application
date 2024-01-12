@@ -397,6 +397,7 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
             mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList.toStringList(), allState, true);
             mSelectModule->updateSelectModule(selectModule.toStringList());
 
+            qDebug() << "ModuleList :" << moduleList.toStringList().size() << selectModule.toStringList().size();
             connect(mSelectModule, &SelectModuleDialog::signalModuleSelected,
                     [=](const QList<QPair<int, QString>>& selectModule) {
                         mSelectModule->hide();

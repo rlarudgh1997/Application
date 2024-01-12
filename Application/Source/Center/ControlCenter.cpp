@@ -44,8 +44,8 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 void ControlCenter::initNormalData() {
     resetControl(false);
 
-    QStringList sfcModules = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toStringList();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(sfcModules));
+    QStringList allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(allModule));
 }
 
 void ControlCenter::initControlData() {
@@ -219,6 +219,7 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
     QStringList vsmMatchingList = vsmList;
     QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
 
+    // qDebug() << "MatchingModule Count :" << vsmList.size() << selectModule.size();
     if (selectModule.size() > 0) {
         QStringList vsmTemp = QStringList();
         for (const auto& moudleName : selectModule) {
@@ -230,7 +231,6 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
         }
         vsmMatchingList = vsmTemp;
     }
-
     return vsmMatchingList;
 }
 
@@ -259,6 +259,8 @@ void ControlCenter::updateNodeAddress(const bool& check) {
 
 void ControlCenter::updateSelectModueList(const bool& show) {
     QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toStringList();
+
+    // qDebug() << "\t moduleList :" << moduleList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, show, true);
 }

@@ -155,8 +155,9 @@ void ControlMenu::updateAllModueList(const QString& filter) {
         path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
         sfcModules = ivis::common::FileInfo::readFile(path + "/DefaultModule.info");
     }
-    // qDebug() << "\t SFC modules load path :" << sfcModules.size() << path;
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, sfcModules);
+    qDebug() << "SFC modules load path :" << sfcModules.size() << path;
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, sfcModules);
+    // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, sfcModules);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(sfcModules));
 }
 
@@ -176,10 +177,6 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
     }
 
     QStringList moduleList = getData(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList();
-    // if (moduleList.size() == 0) {
-    //     moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toStringList();
-    // }
-
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
     updateAllModueList(filter);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, runType, true);

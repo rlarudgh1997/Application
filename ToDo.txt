@@ -1,4 +1,51 @@
 ====================================================================
+# [릴리즈 노트]
+	: 기능 보완 사항 반영
+		- New 기능 보완
+		- 저장 기능 보완
+		- Cut & Paste 오류 수정
+		- TC_Report / GCOV_Report 진행 사항 info 파일 출력
+		- new 파일 생성후 node view - select module 시 모듈 정보 표시 되지 않는 이슈 수정
+
+
+
+	: 자동 완성 추가
+		- Privates, Inters 시트의 TCName 셀 입력 항목 자동완성(Singal) 으로 제공 기능 추가
+		- vehicle type : EV, FCEV, ICV 표시
+		- input data : valueEnum, MatchingTable(EV, FCEV, ICV, System) 표시
+
+	: 단축키 기능 추가
+		- Ctrl + N : 엑셀 파일 생성
+		- Ctrl + O : 엑셀 파일 오픈
+		- Ctrl + I : 선택된 셀 하위에 셀 추가
+		- Ctrl + D : 선택된 셀 삭제
+		- Ctrl + G : 선택된 셀 병합/해제
+
+	: 셀 편집 기능
+		- 셀 복사, 잘라내기, 붙여넣기 기능 추가
+
+	: 텍스트 입력 기능 보완
+		- 자동 완성 기능 제공 가능 셀에서 타이핑시 입력 가능 하도록 수정
+		- 선택 셀 편집 상태에서 엔터키 동작 추가
+		- 선택 셀 에서 삭제키 동작 추가
+
+	: 로그 출력 정보 최적화
+		- 불필요 로그 삭제
+
+	: clang-format 적용
+
+	: TC_Creator 가이드 문서 업데이트
+		- docker 사용 시 docket stop 후 start 하도록 가이드 추가
+
+
+
+
+
+
+
+
+
+
 # [ToDo 정보]
 - run tc 동작 수정
 	: docket 선택 - /usr/local/bin/altonservice 로 설정 되도록

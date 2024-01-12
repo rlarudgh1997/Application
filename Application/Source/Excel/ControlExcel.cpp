@@ -505,10 +505,12 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                 }
             }
             updateExcelSheet(false, QVariant());
+            // Open, Edit 시 사용된 정보 초기화
+            QVariant allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, allModule);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, QString());
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, QVariant());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, QVariant());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen: {
@@ -687,7 +689,7 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const QString& sig
                 if (foundMatchingTable) {
                     foundValueEnum = false;
                     matchingTable.append(info);
-                    qDebug() << "\t MatchingTable :" << info;
+                    // qDebug() << "\t MatchingTable :" << info;
                 } else {
                     foundMatchingTable = (info.contains(PREFIX_MATCHING_TABLE));
                 }
@@ -698,7 +700,7 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const QString& sig
                             continue;
                         }
                         valueEunm.append(info);
-                        qDebug() << "\t ValueEnum     :" << info;
+                        // qDebug() << "\t ValueEnum     :" << info;
                     } else {
                         foundValueEnum = info.contains(PREFIX_VALUE_ENUM);
                     }
@@ -707,14 +709,13 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const QString& sig
         }
 
         if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            qDebug() << "\t Value    Size :" << valueEunm.size();
+            // qDebug() << "\t Value    Size :" << valueEunm.size();
             inputDataInfo[inputDataType] = valueEunm;
         } else {
-            qDebug() << "\t Matching Size :" << matchingTable.size();
+            // qDebug() << "\t Matching Size :" << matchingTable.size();
             inputDataInfo[inputDataType] = matchingTable;
-
             if ((valueEunm.size() > 0) && (vehiclSystem)) {
-                qDebug() << "\t Value    Size :" << valueEunm.size();
+                // qDebug() << "\t Value    Size :" << valueEunm.size();
                 inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
             }
         }
@@ -771,13 +772,13 @@ void ControlExcel::updateAutoCompleteInputData(const QString& vehicleTypeStr, QS
 
     QMap<int, QStringList> inputDataInfo = isVsmSignalInputDataInfo(signalName, vsmFileList);
 
-    qDebug() << "=============================================================================================";
-    QMapIterator<int, QStringList> iter(inputDataInfo);
-    while (iter.hasNext()) {
-        iter.next();
-        qDebug() << "\t InputDataSize :" << iter.key() << iter.value().size();
-    }
-    qDebug() << "=============================================================================================\n\n\n\n";
+    // qDebug() << "=============================================================================================";
+    // QMapIterator<int, QStringList> iter(inputDataInfo);
+    // while (iter.hasNext()) {
+    //     iter.next();
+    //     qDebug() << "\t InputDataSize :" << iter.key() << iter.value().size();
+    // }
+    // qDebug() << "=============================================================================================\n\n\n\n";
 
     for (int inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
          inputDataType < ivis::common::InputDataTypeEnum::InputDataTypeMax; inputDataType++) {
