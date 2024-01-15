@@ -211,6 +211,7 @@ public:
         EventTypeTestReportResult,
         EventTypeTestReportCoverage,
         EventTypeEnterScriptText,
+        EventTypeInitModule,
         EventTypeShowModule,
         EventTypeSelectModule,
         EventTypeSelectModuleOfRun,

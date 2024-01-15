@@ -17,6 +17,7 @@ private:
 
     void updateConfigInfo();
     void updateTestReport();
+    void updateAllModuleList();
     bool checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile);
     QStringList isNodeAddressAll(const QVariant& vsmPath, const QVariantList& vsmFile);
     QStringList isNodeAddressMatchingModule(const QStringList& vsmList);

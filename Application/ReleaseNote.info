@@ -1,0 +1,59 @@
+# [Release Note]
+
+[2024-01-16]
+	PR 정보
+		-
+
+	이슈 수정
+		- new 파일 생성후 node view - select module 선택시 모듈 정보 표시 되지 않는 이슈 수정
+		- 쉘 추가 후 삭제시 미 동작
+			: https://jira.ccos.dev/browse/EXNCP-40265
+		- VSM의 Enum값 확인
+			: input data 자동 완성 : valueEnum, MatchingTable(EV, FCEV, ICV, System) 표시
+			: https://jira.ccos.dev/browse/EXNCP-39537
+
+	텍스트 입력 기능 보완
+		- 자동 완성 기능 제공 가능 셀에서 타이핑시 텍스트 입력 가능 하도록 수정
+		- 선택 셀 편집 상태에서 엔터키 동작 추가
+		- 선택 셀 에서 삭제키 동작 추가
+
+
+
+[2024-01-02]
+	PR 정보
+		- https://jira.ccos.dev/browse/EXNCP-39873
+
+	기능 보완 사항 반영
+		- New 기능 보완
+		- 저장 기능 보완
+		- Cut & Paste 오류 수정
+		- TC_Report / GCOV_Report 진행 사항 info 파일 출력
+		- 로그 출력 정보 최적화 : 불필요 로그 삭제
+		- clang-format 적용
+
+	자동 완성 추가
+		- Privates, Inters 시트의 TCName 셀 입력 항목 자동완성(Singal) 으로 제공 기능 추가
+		- vehicle type : EV, FCEV, ICV 표시
+
+	단축키 기능 추가
+		- Ctrl + N : 엑셀 파일 생성
+		- Ctrl + O : 엑셀 파일 열기
+		- Ctrl + S : 엑셀 파일 저장
+		- Ctrl + I : 선택된 셀 하위에 셀 추가
+		- Ctrl + D : 선택된 셀 삭제
+		- Ctrl + G : 선택된 셀 병합/해제
+		- Ctrl + C : 선택된 셀 복사
+		- Ctrl + X : 선택된 셀 잘라내기
+		- Ctrl + V : 선택된 셀 붙여넣기
+		- Ctrl + Q : 어플리케이션 종료
+
+	셀 편집 기능
+		- 셀 복사, 잘라내기, 붙여넣기 기능 추가
+
+	텍스트 입력 기능 보완
+		- 자동 완성 기능 제공 가능 셀에서 타이핑시 입력 가능 하도록 수정
+		- 선택 셀 편집 상태에서 엔터키 동작 추가
+		- 선택 셀 에서 삭제키 동작 추가
+
+	TC_Creator 가이드 문서 업데이트
+		- docker 사용 시 docket stop 후 start 하도록 가이드 추가

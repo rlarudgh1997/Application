@@ -44,8 +44,7 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 void ControlCenter::initNormalData() {
     resetControl(false);
 
-    QStringList allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(allModule));
+    updateAllModuleList();
 }
 
 void ControlCenter::initControlData() {
@@ -109,7 +108,7 @@ void ControlCenter::sendEventInfo(const int& destination, const int& eventType, 
 
 void ControlCenter::updateConfigInfo() {
     QVariantList allConfigData = QVariantList();
-    for (int type = (ConfigInfo::ConfigTypeInvalid + 1); type < ConfigInfo::ConfigTypeReportResult; type++) {
+    for (int type = (ConfigInfo::ConfigTypeInvalid + 1); type < ConfigInfo::ConfigTypeMaxDoNotSave; type++) {
         QVariant name = ConfigSetting::instance().data()->isConfigName(type);
         QVariant value = ConfigSetting::instance().data()->readConfig(type);
         allConfigData.append(QVariant(QVariantList({type, name, value})));
@@ -143,6 +142,11 @@ void ControlCenter::updateTestReport() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, true, true);
+}
+
+void ControlCenter::updateAllModuleList() {
+    QStringList allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(allModule));
 }
 
 bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile) {
@@ -217,7 +221,7 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
 
 QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmList) {
     QStringList vsmMatchingList = vsmList;
-    QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
+    QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toList());
 
     // qDebug() << "MatchingModule Count :" << vsmList.size() << selectModule.size();
     if (selectModule.size() > 0) {
@@ -354,6 +358,10 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case ivis::common::EventTypeEnum::EventTypeViewNodeAddress: {
             updateNodeAddress(true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeInitModule: {
+            updateAllModuleList();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModule: {

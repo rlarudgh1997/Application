@@ -615,7 +615,6 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
                 text = STRING_VSM_PATH;
                 configType = ConfigInfo::ConfigTypeVsmPath;
             } else {
-                // ivis::common::EventTypeEnum::EventTypeSettingDevPath
             }
 
             QVariant path = ConfigSetting::instance().data()->readConfig(configType);
@@ -624,6 +623,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
                                                QVariantList({text, path})) == ivis::common::PopupButton::OK) {
                 ConfigSetting::instance().data()->writeConfig(configType, popupData);
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeInitModule);
             }
             break;
         }

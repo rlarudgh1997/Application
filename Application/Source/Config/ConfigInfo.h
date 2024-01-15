@@ -37,7 +37,12 @@ public:
         ConfigTypeVsmNodeAddressEV,
         ConfigTypeVsmNodeAddressFCEV,
         ConfigTypeVsmNodeAddressICV,
-        ConfigTypeCVVsmFileNameBase,
+        ConfigTypeVsmFileNameBase,
+
+        // ==========================================================================
+        // Do not save config file : The setting information is not saved as a file.
+        // ==========================================================================
+        ConfigTypeMaxDoNotSave,
 
         // Report
         ConfigTypeReportResult,
@@ -49,10 +54,7 @@ public:
         ConfigTypeReportCoverageFunction,
         ConfigTypeReportCoverageBranch,
 
-        // ==========================================================================
-        // Do not save config file : The setting information is not saved as a file.
-        // ==========================================================================
-        ConfigTypeMaxDoNotSave,
+        // ETC
         ConfigTypeInit,
         ConfigTypeMode,
         ConfigTypeCheckLibOpenpyxl,
@@ -119,8 +121,8 @@ private:
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressFCEV", "CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
         mConfigInfoData[ConfigTypeVsmNodeAddressICV] =
             QPair<QString, QVariant>("ConfigTypeVsmNodeAddressICV", "CLU_VSM_CV_ICV.Vehicle.CV.vsm");
-        mConfigInfoData[ConfigTypeCVVsmFileNameBase] =
-            QPair<QString, QVariant>("ConfigTypeCVVsmFileNameBase", "CLU_VSM_CV_%1.Vehicle.%2.vsm");
+        mConfigInfoData[ConfigTypeVsmFileNameBase] =
+            QPair<QString, QVariant>("ConfigTypeVsmFileNameBase", "CLU_VSM_CV_%1.Vehicle.%2.vsm");
 
         // Report
         mConfigInfoData[ConfigTypeReportResult] = QPair<QString, QVariant>("ConfigTypeReportResult", QVariant(false));

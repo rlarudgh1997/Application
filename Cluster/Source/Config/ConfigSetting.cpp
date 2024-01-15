@@ -160,7 +160,6 @@ void ConfigSetting::resetConfig(const int& resetType) {
         mMutex.unlock();
     }
     writeConfig();
-    qDebug() << "resetConfig :" << resetType;
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
 }
 

@@ -727,7 +727,7 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const QString& sig
 QStringList ControlExcel::isVsmFileInfo(const QString& vehicleName, const QStringList& categoryName) {
     QStringList fileName = QStringList();
     QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath).toString();
-    QString fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCVVsmFileNameBase).toString();
+    QString fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBase).toString();
 
     for (const auto& category : categoryName) {
         if (vehicleName.compare("System") == false) {
