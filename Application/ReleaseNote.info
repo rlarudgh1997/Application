@@ -2,15 +2,18 @@
 
 [2024-01-16]
 	PR 정보
-		-
+		- https://jira.ccos.dev/browse/EXNCP-39873
 
-	이슈 수정
-		- new 파일 생성후 node view - select module 선택시 모듈 정보 표시 되지 않는 이슈 수정
+	Jira 이슈 수정
 		- 쉘 추가 후 삭제시 미 동작
 			: https://jira.ccos.dev/browse/EXNCP-40265
 		- VSM의 Enum값 확인
 			: input data 자동 완성 : valueEnum, MatchingTable(EV, FCEV, ICV, System) 표시
 			: https://jira.ccos.dev/browse/EXNCP-39537
+
+	기타 이슈 수정
+		- 파일 저장시 시트 내용이 숫자로만 이루어진 경우 저장시 공백인 이슈 수정
+		- new 파일 생성후 node view - select module 선택시 모듈 정보 표시 되지 않는 이슈 수정
 
 	텍스트 입력 기능 보완
 		- 자동 완성 가능 셀에서 타이핑시 텍스트 입력 되도록 수정
