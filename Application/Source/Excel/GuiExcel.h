@@ -291,7 +291,7 @@ private:
     void updateDisplayExcelSheet();
     void updateDisplayAutoComplete(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
-    void updateDisplayAutoCompleteInputData();
+    void updateDisplayAutoCompleteInputData(const bool& sfcDataType);
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);

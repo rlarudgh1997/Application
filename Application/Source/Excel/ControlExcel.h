@@ -29,9 +29,10 @@ private:
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
     QMap<int, QStringList> isVsmSignalInputDataInfo(const QString& signalName, const QMap<int, QStringList>& vsmFileList);
-
+    QString isStaticFixedPath(const QString& defaultPath, const QString& moduleName);
+    QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& categoryName);
-    void updateAutoCompleteInputData(const QString& vehicleTypeStr, QString& signalName);
+    void updateAutoCompleteInputData(const bool& sfcSignal, const QString& vehicleType, QString& signalName);
 
 protected:
     virtual AbstractHandler* isHandler();

@@ -395,6 +395,7 @@ public:
         }
     }
     void updateSelectListInfo(const QStringList& selectList, const QList<QStringList>& infoLists) {
+        bool vehicleDataType = (infoLists.size() > 0);
         int maxCount = selectList.size();
         int columnCount = 1;
         for (const auto& infoList : infoLists) {
@@ -402,7 +403,7 @@ public:
             maxCount = qMax(maxCount, infoList.size());
         }
         mModel.setRowCount(maxCount);
-        mModel.setColumnCount(5);   // ValueEnum, EV, FCEV, ICV, System
+        mModel.setColumnCount((vehicleDataType) ? (5) : (1));  // SFC : ValueEnum, Vehicle : ValueEnum, EV, FCEV, ICV, System
 
         for (int rowIndex = 0; rowIndex < maxCount; rowIndex++) {
             if (rowIndex < selectList.size()) {
@@ -426,13 +427,15 @@ public:
             mTableView->verticalHeader()->resizeSection(rowIndex, 20);
         }
 
-        // 너비 고정
-        for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-            mTableView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
-            if (columnIndex == 0) {
-                mTableView->horizontalHeader()->resizeSection(columnIndex, 240);
-            } else {
-                mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
+        if (vehicleDataType) {
+            // 너비 고정
+            for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                mTableView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
+                if (columnIndex == 0) {
+                    mTableView->horizontalHeader()->resizeSection(columnIndex, 240);
+                } else {
+                    mTableView->horizontalHeader()->resizeSection(columnIndex, 100);
+                }
             }
         }
     }

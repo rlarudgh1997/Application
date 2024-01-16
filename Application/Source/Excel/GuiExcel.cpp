@@ -540,16 +540,15 @@ void GuiExcel::updateDisplayExcelSheet() {
             // Config_Signal : 3(Description), 9    Input_Signal : 4    Input_Data : 5    Output_Signal : 6
             bool notSupport = false;
             bool supportAutoCompleteVehicle = false;
-            bool supportAutoCompleteInputData = false;
             if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
                 notSupport = (column != static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal));
             } else {
                 notSupport = ((column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) &&
+                              // (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)));
-                supportAutoCompleteInputData = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
             }
 
             if (notSupport) {
@@ -563,34 +562,44 @@ void GuiExcel::updateDisplayExcelSheet() {
                 mSelectItem = mExcelSheet[sheetIndex]->item(row, column);
             }
 
-            if (supportAutoCompleteInputData) {
+            if ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData))) {
+                // (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue))) {
                 QString vehicleType = QString();
                 int vehicleTypeIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
                 if (mExcelSheet[sheetIndex]->item(row, vehicleTypeIndex) != nullptr) {
                     vehicleType = mExcelSheet[sheetIndex]->item(row, vehicleTypeIndex)->text();
                 }
+
                 if (vehicleType.isEmpty()) {
                     vehicleType = QString("EV, FCEV, ICV");
                 }
 
                 QString inputSignal = QString();
-                int inputSignalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
+                int inputSignalIndex = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData))
+                                            ? static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)
+                                            : static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
                 if (mExcelSheet[sheetIndex]->item(row, inputSignalIndex) != nullptr) {
                     inputSignal = mExcelSheet[sheetIndex]->item(row, inputSignalIndex)->text();
-                    // inputSignal.remove("_MCAN");
-                    // inputSignal.remove("_CCAN");
                 }
 
-                if ((inputSignal.size() > 0) && (inputSignal.indexOf("Vehicle.") == 0)) {
-                    QVariantList inputDataInfo = QVariantList({vehicleType, inputSignal});
+                if (inputSignal.size() == 0) {
+                    return;
+                }
+
+                QVariantList inputDataInfo = QVariantList();
+                if (inputSignal.indexOf("Vehicle.") == 0) {
+                    inputDataInfo = QVariantList({false, vehicleType, inputSignal});
                     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
-                }
-            } else {
-                if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) {
-                    updateDisplayAutoCompleteVehicle();
+                    // } else if (inputSignal.indexOf("SFC.") == 0) {
+                    //     inputDataInfo = QVariantList({true, vehicleType, inputSignal});
+                    //     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
                 } else {
-                    updateDisplayAutoComplete(true, column);
                 }
+            } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) {
+                updateDisplayAutoCompleteVehicle();
+                mExcelSheet[sheetIndex]->clearFocus();
+            } else {
+                updateDisplayAutoComplete(true, column);
                 mExcelSheet[sheetIndex]->clearFocus();
             }
         });
@@ -613,7 +622,6 @@ void GuiExcel::updateDisplayExcelSheet() {
         updateDisplaySheetHeaderAdjust(sheetIndex);
         sheetIndex++;
     }
-
     connect(mMainView, &QTabWidget::currentChanged,
             [=](int index) { mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + index; });
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
@@ -675,24 +683,29 @@ void GuiExcel::updateDisplayAutoCompleteVehicle() {
     mAutoCompleteVehicle->show();
 }
 
-void GuiExcel::updateDisplayAutoCompleteInputData() {
+void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcDataType) {
     if (mAutoCompleteInputData == nullptr) {
+        QStringList subTitle = QStringList({"Value Enum"});
+        QSize widgetSize = QSize(500, 300);
         QStringList valueEnum =
             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
         QList<QStringList> matchingTable = QList<QStringList>();
-        matchingTable.append(
-            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV).toStringList());
-        matchingTable.append(
-            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV).toStringList());
-        matchingTable.append(
-            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV).toStringList());
-        matchingTable.append(
-            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem).toStringList());
+        if (sfcDataType == false) {
+            QVariant data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV);
+            matchingTable.append(data.toStringList());
+            data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV);
+            matchingTable.append(data.toStringList());
+            data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV);
+            matchingTable.append(data.toStringList());
+            data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem);
+            matchingTable.append(data.toStringList());
 
+            subTitle = QStringList({"Value Enum", "EV", "FCEV", "ICV", "System"});
+            widgetSize = QSize(664, 300);
+        }
         mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, false, true);
         mAutoCompleteInputData->updateSelectListInfo(valueEnum, matchingTable);
-        mAutoCompleteInputData->updateSelectWidgetInfo(
-            QString("Select Data"), QStringList({"Value Enum", "EV", "FCEV", "ICV", "System"}), QSize(664, 300));
+        mAutoCompleteInputData->updateSelectWidgetInfo(QString("Select Data"), subTitle, widgetSize);
         connect(mAutoCompleteInputData, &SelectModuleDialog::signalModuleSelected,
                 [=](const QList<QPair<int, QString>>& selectModule) {
                     if (mSelectItem) {
@@ -1053,7 +1066,8 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible: {
-            updateDisplayAutoCompleteInputData();
+            int sfcDataType = value.toBool();
+            updateDisplayAutoCompleteInputData(sfcDataType);
             break;
         }
         default: {
