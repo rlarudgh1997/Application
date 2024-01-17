@@ -20,7 +20,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLayout>
-//  #include <QCoreApplication>
+#include <QShowEvent>
 
 class AutoCompleteDialog;
 
@@ -299,7 +299,24 @@ class SelectModuleDialog : public QDialog {
 
 public:
     explicit SelectModuleDialog(QWidget* parent, const QStringList& moduleList, const bool& allState, const bool& cellWidthFix)
-        : QDialog(parent), mSelectAllState(allState) {
+        : QDialog(parent), mSelectAllState(allState), mCellWidthFix(cellWidthFix), mSingleCheck(false) {
+        init(parent);
+        initWidget(moduleList);
+        controlConnect();
+        updateSelectModuleCheck(allState);
+    }
+    explicit SelectModuleDialog(QWidget* parent, const QStringList& moduleList, const bool& singleCheck)
+        : QDialog(parent), mSelectAllState(false), mCellWidthFix(true), mSingleCheck(singleCheck) {
+        init(parent);
+        initWidget(moduleList);
+        controlConnect();
+        // updateSelectModuleCheck(false);
+    }
+    ~SelectModuleDialog() {
+        delete mCurrentItem;
+        mCurrentItem = nullptr;
+    }
+    void init(QWidget* parent) {
         setWindowTitle("Select Module");
         setWindowFlag(Qt::WindowContextHelpButtonHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
@@ -313,20 +330,25 @@ public:
         setFixedSize(QSize(mWidth, mHeight));
         setGeometry(setRect);
         setFocus();
-
+    }
+    void initWidget(const QStringList& moduleList) {
         mLayout = new QVBoxLayout(this);
         mButtonLayout = new QHBoxLayout(mLayout->widget());
-
-        mALL = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true, QRect(11, 0, 282, 30));
-        mALL->setText((mSelectAllState) ? ("Unselect All") : ("Select All"));
-        mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true, QRect(293, 0, 281, 30));
-        mOK->setText("OK");
-
-        mButtonLayout->addWidget(mALL);
-        mButtonLayout->addWidget(mOK);
+        if (mSingleCheck) {
+            mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true, QRect(11, 0, 563, 30));
+            mOK->setText("OK");
+            mButtonLayout->addWidget(mOK);
+        } else {
+            mALL = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true, QRect(11, 0, 282, 30));
+            mALL->setText((mSelectAllState) ? ("Unselect All") : ("Select All"));
+            mButtonLayout->addWidget(mALL);
+            mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true, QRect(293, 0, 281, 30));
+            mOK->setText("OK");
+            mButtonLayout->addWidget(mOK);
+        }
 
         mTableView = ivis::common::createWidget<QTableView>(this);
-        QStringList subTitle = QStringList({"Module"});  // , "PT"
+        QStringList subTitle = QStringList({"Module"});
         mModel.setHorizontalHeaderLabels(subTitle);
         mModel.setColumnCount(subTitle.size());
         mModel.setRowCount(moduleList.size());
@@ -339,7 +361,8 @@ public:
             rowIndex++;
         }
         mTableView->setModel(&mModel);
-        if (cellWidthFix) {
+
+        if (mCellWidthFix) {
             mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
         } else {
             mTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
@@ -355,28 +378,46 @@ public:
         mLayout->addLayout(mButtonLayout);
         mLayout->addWidget(mTableView);
         setLayout(mLayout);
-
-        updateSelectModuleCheck(mSelectAllState);
-
-        connect(mALL, &QPushButton::clicked, [=]() {
-            mSelectAllState = !mSelectAllState;
-            updateSelectModuleCheck(mSelectAllState);
-        });
-        connect(mOK, &QPushButton::clicked, [=]() {
-            QList<QPair<int, QString>> selectModule = QList<QPair<int, QString>>();
-            for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
-                if (mModel.item(rowIndex, 0) == nullptr) {
-                    continue;
+    }
+    void controlConnect() {
+        if ((mSingleCheck) && (mModel.rowCount() > 0)) {
+            connect(&mModel, &QStandardItemModel::dataChanged,
+                    [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
+                        if (mDialogShow) {
+                            int currentRowIndex = topLeft.row();    // bottomRight.row()
+                            if ((mPreviousRowIndex != currentRowIndex) && (mPreviousRowIndex >= 0)) {
+                                mModel.item(mPreviousRowIndex, 0)->setCheckState(Qt::Unchecked);
+                            }
+                            mPreviousRowIndex = currentRowIndex;
+                        }
+                    });
+        }
+        if (mALL) {
+            connect(mALL, &QPushButton::clicked, [=]() {
+                mSelectAllState = !mSelectAllState;
+                updateSelectModuleCheck(mSelectAllState);
+            });
+        }
+        if (mOK) {
+            connect(mOK, &QPushButton::clicked, [=]() {
+                QList<QPair<int, QString>> selectModule = QList<QPair<int, QString>>();
+                for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
+                    if (mModel.item(rowIndex, 0) == nullptr) {
+                        continue;
+                    }
+                    if (mModel.item(rowIndex, 0)->checkState() == Qt::Checked) {
+                        selectModule.append(QPair<int, QString>(rowIndex, mModel.item(rowIndex, 0)->text()));
+                    }
                 }
-                if (mModel.item(rowIndex, 0)->checkState() == Qt::Checked) {
-                    selectModule.append(QPair<int, QString>(rowIndex, mModel.item(rowIndex, 0)->text()));
-                }
-            }
-            emit signalModuleSelected(selectModule);
-        });
+                emit signalModuleSelected(selectModule);
+            });
+        }
     }
     void updateSelectModuleCheck(const bool& allCheck) {
-        mALL->setText((allCheck) ? ("Unselect All") : ("Select All"));
+        if (mALL) {
+            mALL->setText((allCheck) ? ("Unselect All") : ("Select All"));
+        }
+
         for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
             if (mModel.item(rowIndex, 0) == nullptr) {
                 continue;
@@ -386,9 +427,6 @@ public:
     }
     void updateSelectModule(const QStringList& selectModuleList) {
         for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
-            // if (mModel.item(rowIndex, 0) == nullptr) {
-            //     continue;
-            // }
             QString itemName = mModel.item(rowIndex, 0)->text();
             bool select = selectModuleList.contains(itemName);
             mModel.item(rowIndex, 0)->setCheckState((select) ? (Qt::Checked) : (Qt::Unchecked));
@@ -457,6 +495,11 @@ public:
         }
     }
 
+protected:
+    void showEvent(QShowEvent* event) override {
+        mDialogShow = true;
+    }
+
 signals:
     void signalModuleSelected(const QList<QPair<int, QString>>& selectModule);
 
@@ -465,11 +508,16 @@ private:
     const int mHeight = 800;
     QVBoxLayout* mLayout = nullptr;
     QHBoxLayout* mButtonLayout = nullptr;
-    bool mSelectAllState = true;
     QTableView* mTableView = nullptr;
     QPushButton* mALL = nullptr;
     QPushButton* mOK = nullptr;
     QStandardItemModel mModel;
+    QStandardItem* mCurrentItem = nullptr;
+    bool mSelectAllState = true;
+    bool mCellWidthFix = false;
+    bool mSingleCheck = false;
+    bool mDialogShow = false;
+    int mPreviousRowIndex = (-1);
 };
 
 class GuiCenter : public AbstractGui {

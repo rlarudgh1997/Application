@@ -546,8 +546,8 @@ void GuiExcel::updateDisplayExcelSheet() {
                 notSupport = ((column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) &&
-                              // (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)) &&
+                              (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) &&
                               (column != static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)));
             }
 
@@ -562,8 +562,8 @@ void GuiExcel::updateDisplayExcelSheet() {
                 mSelectItem = mExcelSheet[sheetIndex]->item(row, column);
             }
 
-            if ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData))) {
-                // (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue))) {
+            if ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue))) {
                 QString vehicleType = QString();
                 int vehicleTypeIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
                 if (mExcelSheet[sheetIndex]->item(row, vehicleTypeIndex) != nullptr) {
@@ -574,25 +574,26 @@ void GuiExcel::updateDisplayExcelSheet() {
                     vehicleType = QString("EV, FCEV, ICV");
                 }
 
-                QString inputSignal = QString();
-                int inputSignalIndex = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData))
-                                            ? static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)
-                                            : static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
-                if (mExcelSheet[sheetIndex]->item(row, inputSignalIndex) != nullptr) {
-                    inputSignal = mExcelSheet[sheetIndex]->item(row, inputSignalIndex)->text();
+                QString signalName = QString();
+                int signalColumnIndex = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData))
+                                             ? static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)
+                                             : static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
+                if (mExcelSheet[sheetIndex]->item(row, signalColumnIndex) != nullptr) {
+                    signalName = mExcelSheet[sheetIndex]->item(row, signalColumnIndex)->text();
                 }
 
-                if (inputSignal.size() == 0) {
+                if (signalName.size() == 0) {
                     return;
                 }
 
                 QVariantList inputDataInfo = QVariantList();
-                if (inputSignal.indexOf("Vehicle.") == 0) {
-                    inputDataInfo = QVariantList({false, vehicleType, inputSignal});
+                bool outputState = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
+                if (signalName.indexOf("Vehicle.") == 0) {
+                    inputDataInfo = QVariantList({false, outputState, vehicleType, signalName});
                     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
-                    // } else if (inputSignal.indexOf("SFC.") == 0) {
-                    //     inputDataInfo = QVariantList({true, vehicleType, inputSignal});
-                    //     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
+                } else if (signalName.indexOf("SFC.") == 0) {
+                    inputDataInfo = QVariantList({true, outputState, vehicleType, signalName});
+                    createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
                 } else {
                 }
             } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) {
@@ -683,14 +684,14 @@ void GuiExcel::updateDisplayAutoCompleteVehicle() {
     mAutoCompleteVehicle->show();
 }
 
-void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcDataType) {
+void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcSignal, const bool& outputState) {
     if (mAutoCompleteInputData == nullptr) {
         QStringList subTitle = QStringList({"Value Enum"});
         QSize widgetSize = QSize(500, 300);
         QStringList valueEnum =
             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
         QList<QStringList> matchingTable = QList<QStringList>();
-        if (sfcDataType == false) {
+        if (outputState == false) {
             QVariant data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV);
             matchingTable.append(data.toStringList());
             data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV);
@@ -703,7 +704,7 @@ void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcDataType) {
             subTitle = QStringList({"Value Enum", "EV", "FCEV", "ICV", "System"});
             widgetSize = QSize(664, 300);
         }
-        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, false, true);
+        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, outputState);
         mAutoCompleteInputData->updateSelectListInfo(valueEnum, matchingTable);
         mAutoCompleteInputData->updateSelectWidgetInfo(QString("Select Data"), subTitle, widgetSize);
         connect(mAutoCompleteInputData, &SelectModuleDialog::signalModuleSelected,
@@ -716,8 +717,12 @@ void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcDataType) {
                                 continue;
                             }
 
-                            QString temp = lineStr.at(1);
+                            QString temp = ((sfcSignal) ? (lineStr.at(0)) : (lineStr.at(1)));
+                            if (outputState) {
+                                temp = ((sfcSignal) ? (lineStr.at(1)) : (lineStr.at(0)));
+                            }
                             temp.remove("\"");
+
                             if (selectValueEnum.size() > 0) {
                                 selectValueEnum.append(", ");
                             }
@@ -1066,8 +1071,12 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible: {
-            int sfcDataType = value.toBool();
-            updateDisplayAutoCompleteInputData(sfcDataType);
+            QVariantList info = value.toList();
+            if (info.size() == 2) {
+                bool sfcSignal = info.at(0).toBool();
+                bool outputState = info.at(1).toBool();
+                updateDisplayAutoCompleteInputData(sfcSignal, outputState);
+            }
             break;
         }
         default: {
