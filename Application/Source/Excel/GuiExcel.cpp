@@ -431,8 +431,17 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         return;
     }
 
+    if (keyValue == Qt::Key::Key_Delete) {
+        QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+        if (modelIndexs.size() > 0) {
+            for (const auto& model : modelIndexs) {
+                mExcelSheet[sheetIndex]->setItem(model.row(), model.column(), new QTableWidgetItem(""));
+            }
+        }
+        return;
+    }
+
     bool inputKeyOK = (keyValue == ivis::common::KeyTypeEnum::KeyInputValueOK);
-    bool inputKeyDelete = (keyValue == Qt::Key::Key_Delete);
     int row = mExcelSheet[sheetIndex]->currentRow();
     int column = mExcelSheet[sheetIndex]->currentColumn();
     int rowMax = mExcelSheet[sheetIndex]->rowCount();
@@ -441,11 +450,6 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
 
     bool editState = mExcelSheet[sheetIndex]->isPersistentEditorOpen(mExcelSheet[sheetIndex]->item(row, column));
     // qDebug() << "editState :" << editState << ", inputKeyOK :" << inputKeyOK;
-
-    if (inputKeyDelete) {
-        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
-        return;
-    }
 
     if ((editState) && (inputKeyOK)) {
         mExcelSheet[sheetIndex]->closePersistentEditor(mExcelSheet[sheetIndex]->item(row, column));
@@ -469,6 +473,9 @@ void GuiExcel::updateDisplayExcelSheet() {
     updateInitialExcelSheet();
 
     // Create : Action Item
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut] = mMenuRight->addAction("Cut");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy] = mMenuRight->addAction("Copy");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste] = mMenuRight->addAction("Paste");
     mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert] = mMenuRight->addAction("Insert");
     mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete] = mMenuRight->addAction("Delete");
     mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit] = mMenuRight->addAction("Merge/Split");
@@ -522,19 +529,21 @@ void GuiExcel::updateDisplayExcelSheet() {
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
             QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
-            int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
-
-            if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
+            if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut]) {
+                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCut);
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy]) {
+                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCopy);
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
+                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypePaste);
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
+                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
+                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeDelete);
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
+                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit);
             } else {
                 qDebug() << "Fail to menu right selection action item";
-                return;
             }
-            updateDisplayEditCell(shortcutType);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
             // Config_Signal : 3(Description), 9    Input_Signal : 4    Input_Data : 5    Output_Signal : 6
@@ -691,7 +700,7 @@ void GuiExcel::updateDisplayAutoCompleteInputData(const bool& sfcSignal, const b
         QStringList valueEnum =
             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
         QList<QStringList> matchingTable = QList<QStringList>();
-        if (outputState == false) {
+        if ((sfcSignal == false) && (outputState == false)) {
             QVariant data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV);
             matchingTable.append(data.toStringList());
             data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV);
@@ -954,9 +963,9 @@ void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
     } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypePaste) {
         pasteClipboardInfo();
     } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeUndo) {
-        qDebug() << "\t\t ShortcutTypeUndo";
+        qDebug() << "\t\t Shortcut not implemented : Undo";
     } else if (clipboardType == ivis::common::ShortcutTypeEnum::ShortcutTypeRedo) {
-        qDebug() << "\t\t ShortcutTypeRedo";
+        qDebug() << "\t\t Shortcut not implemented : Redo";
     } else {
     }
 }

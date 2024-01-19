@@ -384,7 +384,7 @@ public:
             connect(&mModel, &QStandardItemModel::dataChanged,
                     [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
                         if (mDialogShow) {
-                            int currentRowIndex = topLeft.row();    // bottomRight.row()
+                            int currentRowIndex = topLeft.row();  // bottomRight.row()
                             if ((mPreviousRowIndex != currentRowIndex) && (mPreviousRowIndex >= 0)) {
                                 mModel.item(mPreviousRowIndex, 0)->setCheckState(Qt::Unchecked);
                             }

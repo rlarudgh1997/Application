@@ -614,116 +614,6 @@ void ControlExcel::updateShortcutInfo(const int& eventType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, shortcutType, true);
 }
 
-QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const QString& signalName,
-                                                              const QMap<int, QStringList>& vsmFileList) {
-    const QString PREFIX_TYPE = QString("type:");
-    const QString PREFIX_SIGNAL_NAME = QString("signalName:");
-    const QString PREFIX_DATA_TYPE = QString("dataType:");
-    const QString PREFIX_DESCRIPTION = QString("description:");
-    const QString PREFIX_ABSTRACTION_NAME = QString("abstractionName:");
-    const QString PREFIX_VALUE_ENUM = QString("valueEnum:");
-    const QString PREFIX_MATCHING_TABLE = QString("matchingTable:");
-    const QString PREFIX_CODE_COMMENTING = QString("# ");
-    const QString PREFIX_HYPHEN = QString("-");
-    const QString PREFIX_DOT = QString(".");
-    const QString PREFIX_COLON = QString(":");
-    // const QString PREFIX_MCAN = QString("_MCAN");
-    // const QString PREFIX_CCAN = QString("_CCAN");
-
-    QMap<int, QStringList> inputDataInfo = QMap<int, QStringList>();
-    QString signal = QString();
-    bool vehiclSystem = signalName.contains("Vehicle.System.");
-    int startAppendIndex = ((vehiclSystem) ? (3) : (2));
-    int index = 0;
-    for (const auto& splitText : signalName.split(PREFIX_DOT)) {
-        if (index >= startAppendIndex) {
-            signal.append((signal.size() > 0) ? (".") : (""));
-            signal.append(splitText);
-        }
-        index++;
-    }
-    if (signal.size() == 0) {
-        qDebug() << "Fail to signal name size : 0";
-        return inputDataInfo;
-    }
-
-    qDebug() << "Input  Signal      :" << signalName;
-    qDebug() << "Parser Signal      :" << signal;
-    QMapIterator<int, QStringList> iter(vsmFileList);
-    while (iter.hasNext()) {
-        iter.next();
-        int inputDataType = iter.key();
-        QStringList fileName = iter.value();
-        // qDebug() << inputDataType << ". Size :" << fileName.size() << ", File :" << fileName;
-        QStringList valueEunm = QStringList();
-        QStringList matchingTable = QStringList();
-        for (const auto& file : fileName) {
-            QStringList readData = ivis::common::FileInfo::readFile(file);
-            QStringList vsmInfo = QStringList();
-            bool foundSignal = false;
-            for (QString lineStr : readData) {
-                if (foundSignal) {
-                    if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                        if ((startAppendIndex) || (lineStr.contains(PREFIX_DOT))) {
-                            break;
-                        }
-                    } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) || (lineStr.contains(PREFIX_DATA_TYPE)) ||
-                               (lineStr.contains(PREFIX_SIGNAL_NAME)) || (lineStr.contains(PREFIX_ABSTRACTION_NAME)) ||
-                               (lineStr.contains(PREFIX_DESCRIPTION)) || (lineStr.contains(PREFIX_CODE_COMMENTING))) {
-                        continue;
-                    } else {
-                        QString text = lineStr.remove(" ");
-                        vsmInfo.append(text);
-                    }
-                } else {
-                    if ((lineStr.contains(signal)) && (lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                        foundSignal = ((startAppendIndex) ? (true) : ((lineStr.contains(PREFIX_DOT))));
-                        qDebug() << "Found Signal[" << inputDataType << "]  :" << lineStr;
-                    }
-                }
-            }
-
-            bool foundValueEnum = false;
-            bool foundMatchingTable = false;
-            for (const auto& info : vsmInfo) {
-                if (foundMatchingTable) {
-                    foundValueEnum = false;
-                    matchingTable.append(info);
-                    // qDebug() << "\t MatchingTable :" << info;
-                } else {
-                    foundMatchingTable = (info.contains(PREFIX_MATCHING_TABLE));
-                }
-
-                if ((vehiclSystem) || (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum)) {
-                    if (foundValueEnum) {
-                        if (info.contains(PREFIX_MATCHING_TABLE)) {
-                            continue;
-                        }
-                        valueEunm.append(info);
-                        // qDebug() << "\t ValueEnum     :" << info;
-                    } else {
-                        foundValueEnum = info.contains(PREFIX_VALUE_ENUM);
-                    }
-                }
-            }
-        }
-
-        if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            // qDebug() << "\t Value    Size :" << valueEunm.size();
-            inputDataInfo[inputDataType] = valueEunm;
-        } else {
-            // qDebug() << "\t Matching Size :" << matchingTable.size();
-            inputDataInfo[inputDataType] = matchingTable;
-            if ((valueEunm.size() > 0) && (vehiclSystem)) {
-                // qDebug() << "\t Value    Size :" << valueEunm.size();
-                inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
-            }
-        }
-    }
-
-    return inputDataInfo;
-}
-
 QString ControlExcel::isStaticFixedPath(const QString& defaultPath, const QString& moduleName) {
     QString specType = QString();
     if ((moduleName.compare("Event_Control_Logic") == false) || (moduleName.compare("Master_Warning") == false) ||
@@ -791,6 +681,124 @@ QStringList ControlExcel::isVsmFileInfo(const QString& vehicleName, const QStrin
     return fileName;
 }
 
+QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName,
+                                                              const QMap<int, QStringList>& vsmFileList) {
+    const QString PREFIX_TYPE = QString("type:");
+    const QString PREFIX_SIGNAL_NAME = QString("signalName:");
+    const QString PREFIX_DATA_TYPE = QString("dataType:");
+    const QString PREFIX_DESCRIPTION = QString("description:");
+    const QString PREFIX_ABSTRACTION_NAME = QString("abstractionName:");
+    const QString PREFIX_VALUE_ENUM = QString("valueEnum:");
+    const QString PREFIX_MATCHING_TABLE = QString("matchingTable:");
+    const QString PREFIX_CODE_COMMENTING = QString("# ");
+    const QString PREFIX_HYPHEN = QString("-");
+    const QString PREFIX_DOT = QString(".");
+    const QString PREFIX_COLON = QString(":");
+    const QString PREFIX_SPACE = QString(" ");
+    // const QString PREFIX_MCAN = QString("_MCAN");
+    // const QString PREFIX_CCAN = QString("_CCAN");
+
+    QMap<int, QStringList> inputDataInfo = QMap<int, QStringList>();
+    QString signal = QString();
+    bool vehiclSystem = signalName.contains("Vehicle.System.");
+    int startAppendIndex = ((vehiclSystem) ? (3) : (2));
+    int index = 0;
+    for (const auto& splitText : signalName.split(PREFIX_DOT)) {
+        if (index >= startAppendIndex) {
+            signal.append((signal.size() > 0) ? (".") : (""));
+            signal.append(splitText);
+        }
+        index++;
+    }
+    if (signal.size() == 0) {
+        qDebug() << "Fail to signal name size : 0";
+        return inputDataInfo;
+    }
+
+    qDebug() << "Input  Signal      :" << signalName;
+    qDebug() << "Parser Signal      :" << signal;
+    QMapIterator<int, QStringList> iter(vsmFileList);
+    while (iter.hasNext()) {
+        iter.next();
+        int inputDataType = iter.key();
+        QStringList fileName = iter.value();
+        // qDebug() << inputDataType << ". Size :" << fileName.size() << ", File :" << fileName;
+        QStringList valueEunm = QStringList();
+        QStringList matchingTable = QStringList();
+        for (const auto& file : fileName) {
+            QStringList readData = ivis::common::FileInfo::readFile(file);
+            QStringList vsmInfo = QStringList();
+            bool foundSignal = false;
+            for (QString lineStr : readData) {
+                if (foundSignal) {
+                    if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
+                        qDebug() << "\t Next  Signal[" << inputDataType << "] :" << lineStr;
+                        break;
+                    } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) || (lineStr.contains(PREFIX_DATA_TYPE)) ||
+                               (lineStr.contains(PREFIX_SIGNAL_NAME)) || (lineStr.contains(PREFIX_ABSTRACTION_NAME)) ||
+                               (lineStr.contains(PREFIX_DESCRIPTION)) || (lineStr.contains(PREFIX_CODE_COMMENTING))) {
+                        // Skip : type, signalName, dataType, description, abstractionName, #(주석)
+                        continue;
+                    } else {
+                        // Append : ValueEnum, MatchingTable
+                        lineStr.remove(PREFIX_SPACE);
+                        vsmInfo.append(lineStr);
+                    }
+                } else {
+                    if ((lineStr.contains(signal)) && (lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
+                        // Input Signal : (Vehicle.Speed_Gauge.Output_DisplaySpeedUnit)
+                        // Read  Signal : (- Speed_Gauge.Output_DisplaySpeedUnit:)
+                        lineStr.remove(PREFIX_HYPHEN);
+                        lineStr.remove(PREFIX_COLON);
+                        lineStr.remove(PREFIX_SPACE);
+                        foundSignal = ((sfcSignal) ? (true) : (lineStr.compare(signal) == false));
+                        qDebug() << ((foundSignal) ? ("\t Found") : ("\t Skip ")) << "Signal[" << inputDataType
+                                 << "] :" << lineStr;
+                    }
+                }
+            }
+
+            bool foundValueEnum = false;
+            bool foundMatchingTable = false;
+            for (const auto& info : vsmInfo) {
+                if (foundMatchingTable) {
+                    foundValueEnum = false;
+                    matchingTable.append(info);
+                    // qDebug() << "\t MatchingTable :" << info;
+                } else {
+                    foundMatchingTable = (info.contains(PREFIX_MATCHING_TABLE));
+                }
+
+                if ((vehiclSystem) || (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum)) {
+                    if (foundValueEnum) {
+                        if (info.contains(PREFIX_MATCHING_TABLE)) {
+                            continue;
+                        }
+                        valueEunm.append(info);
+                        // qDebug() << "\t ValueEnum     :" << info;
+                    } else {
+                        foundValueEnum = info.contains(PREFIX_VALUE_ENUM);
+                    }
+                }
+            }
+        }
+
+        if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
+            // qDebug() << "\t Value    Size :" << valueEunm.size();
+            inputDataInfo[inputDataType] = valueEunm;
+        } else {
+            // qDebug() << "\t Matching Size :" << matchingTable.size();
+            inputDataInfo[inputDataType] = matchingTable;
+            if ((valueEunm.size() > 0) && (vehiclSystem)) {
+                // qDebug() << "\t Value    Size :" << valueEunm.size();
+                inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
+            }
+        }
+    }
+
+    return inputDataInfo;
+}
+
 void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                                QString& signalName) {
     qDebug() << "updateAutoCompleteInputData :" << sfcSignal << outputState << vehicleType << signalName;
@@ -800,7 +808,7 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
 
     if (sfcSignal) {
         vsmFileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
-        inputDataInfo = isVsmSignalInputDataInfo(signalName, vsmFileList);
+        inputDataInfo = isVsmSignalInputDataInfo(sfcSignal, signalName, vsmFileList);
     } else {
         QStringList categoryName = QStringList({"AV", "CD", "CV", "EC", "PT"});
 
@@ -828,7 +836,7 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
             vsmFileList[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] =
                 isVsmFileInfo(QString("System"), categoryName);
         }
-        inputDataInfo = isVsmSignalInputDataInfo(signalName, vsmFileList);
+        inputDataInfo = isVsmSignalInputDataInfo(sfcSignal, signalName, vsmFileList);
     }
 
     // qDebug() << "=============================================================================================";
@@ -843,7 +851,7 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
     for (int inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
          inputDataType < ivis::common::InputDataTypeEnum::InputDataTypeMax; inputDataType++) {
         if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            update = (inputDataInfo[inputDataType].size() != 0);
+            update = (inputDataInfo[inputDataType].size() > 0);
         }
         updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum + inputDataType),
                           inputDataInfo[inputDataType]);
