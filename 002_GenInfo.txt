@@ -1,0 +1,50 @@
+[MODULE_NAME]
+	ASR BEQ
+[ALTON_PATH]
+	/usr/local/bin/altonservice
+[PT_SELECT]
+	ICV FCEV EV
+
+========================================================================================
+[Gen TC - All]	
+	# gen_tc.sh -c CV
+
+[Gen TC - Select Module]
+	gen_tc.sh -c CV -m "MODULE_NAME"
+	gen_tc.sh -c CV -m "MODULE_NAME" -o Negative
+	
+	: Negative  옵션 선택창 필요
+	
+	
+========================================================================================
+[Run TC - All]
+	# run_tc.sh -b [ALTON_PATH] -c CV -d -g
+	run_tc.sh -b [ALTON_PATH] -c CV -d -g [PT_SELECT]
+	
+[Run TC - Select Module]
+	# run_tc.sh -b [ALTON_PATH] -c CV -d -g -m
+	run_tc.sh -b [ALTON_PATH] -c CV -d -g -m "MODULE_NAME" [PT_SELECT]
+	
+	run_tc.sh -b /usr/local/bin/altonservice -c CV -d -g -m "ADAS_PARKING_CV" [PT_SELECT]
+	
+	
+	[OPTION]
+		-g : 옵션 추후에 설정 문의
+	
+
+========================================================================================
+[Gen TC - Report]
+	gen_tcreport.sh 
+	
+	
+	
+	
+[Gen GCOV - Report]
+	gen_gcov_report.sh 
+	
+	
+	
+CV : Multi Docker 동작 관련 정의 필요
+	
+	
+	

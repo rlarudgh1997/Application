@@ -1,0 +1,377 @@
+[주소 변경]
+	sudo vi /etc/hosts
+		10.45.143.170   dcp.ivis.tech
+
+
+[우분투 22.04 사용시 수정]
+	sudo vi /etc/ssh/ssh_config
+		# ssh key : 22.04
+		PubkeyAcceptedKeyTypes +ssh-rsa
+		HostKeyAlgorithms +ssh-rsa
+
+		
+[ssh key 등록 확인]
+	ssh dcp.ivis.tech
+	- 하기 메세지 출력시 정상동작
+		  ****    Welcome to Gerrit Code Review    ****
+
+		  Hi Kyeongho Kim, you have successfully connected over SSH.
+
+		  Unfortunately, interactive shells are disabled.
+		  To clone a hosted Git repository, use:
+
+		  git clone ssh://kkh1997@dcp.ivis.tech:29418/REPOSITORY_NAME.git
+
+		  
+[repo init]		  
+	repo init -u ssh://dcp.ivis.tech/repo-cluster
+	repo sync
+	
+
+[lib 설치]
+	sudo apt-get update
+	sudo apt-get install build-essential vim git gitk python-is-python3 python2 python2.7 python3 python3.8
+
+
+[repo 설치]
+	sudo apt install curl
+	mkdir ~/buildenv
+	cd ~/buildenv
+	curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+	chmod 755 repo
+	sudo mv repo /usr/bin
+
+
+====================================================================================================
+환경 변수 설정
+	- Repo 사용시만 설정
+====================================================================================================
+[확인 사항]
+	- PV, CV 빌드 변경시
+		기존 install path 확인 하여 전체 삭제후 다시 빌드 인스톨 하는 방안으로 개발
+
+
+[~./bashrc]
+	vi ~./bashrc
+		USER_SFC_REPO=yes
+		if [ "$USER_SFC_REPO" = yes ]; then
+			SFC_TYPE=PV
+			
+			INSTALL_PATH=/opt/sfc
+			#INSTALL_PATH=$HOME/usr
+
+			if [ "$SFC_TYPE" = CV ]; then	
+				ALTON_INSTALL_PATH=$INSTALL_PATH/CV
+				export ALTON_SFC_CONFIGURATION_FILENAME=CV
+			else
+				ALTON_INSTALL_PATH=$INSTALL_PATH/PV
+				export ALTON_SFC_CONFIGURATION_FILENAME=platform
+			fi
+			
+			SFC_SOURCE_PATH=$HOME/900_Code/700_Cluster
+			export ALTON_SFC_CONFIGURATION=$SFC_SOURCE_PATH/srcs/SFC/model/SFC/config
+			export ALTON_VSM_CONFIGURATION=$ALTON_INSTALL_PATH/bin/config/vsm/
+			export ALTON_SFC_MODEL_DIR=$SFC_SOURCE_PATH/srcs/SFC/model/SFC/compiled
+			export ALTON_HAL_SCRIPT_PATH=$ALTON_INSTALL_PATH/lib/dummy.txt
+			export ALTON_HAL_DIR=$ALTON_INSTALL_PATH/lib
+			export ALTON_HAL_NAME=ccos.hal.vehiclehal-ssfs
+			export ALTON_EOL_VEHICLETYPE=ICV
+			export LD_LIBRARY_PATH=$ALTON_INSTALL_PATH/lib:$LD_LIBRARY_PATH
+			export PKG_CONFIG_PATH=$ALTON_INSTALL_PATH/lib/pkgconfig
+		fi
+
+[cmake 변경]
+	- PV
+		#cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=$HOME/usr -DSFC=SFC -DSFC_BUILD_TYPE=coverage
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/PV -DSFC=SFC -DSFC_BUILD_TYPE=coverage
+	- CV
+		#cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=$HOME/usr -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/CV -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+
+		
+		
+[build 방법]
+	cd $HOME/900_Code/700_Cluster/
+	sudo rm -rf srcs
+	repo sync
+		에러 발생시 repo sync 다시 한번더 수행
+
+	cd $HOME/900_Code/700_Cluster/srcs
+	
+	- PV
+		mkdir build_PV
+		cd build_PV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/PV -DSFC=SFC -DSFC_BUILD_TYPE=coverage
+	- CV
+		mkdir build_CV
+		cd build_CV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/CV -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+
+	sudo make -j8
+
+	
+[라이브러리 정보 파일 생성 방법]
+	echo "[SDK 생성시 라이브러리 버전]"     > LibraryVersion.info
+	date +"%Y-%m-%d %H:%M:%S"        >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	cat /etc/issue                   >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	python --version                 >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	gcc --version                    >> LibraryVersion.info
+	g++ --version                    >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	cmake --version | head -n 1      >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	protoc --version                 >> LibraryVersion.info
+	echo ""                          >> LibraryVersion.info
+	clang-format-13 --version        >> LibraryVersion.info
+	
+	sudo mv LibraryVersion.info /opt/sfc/PV
+	cat /opt/sfc/PV/LibraryVersion.info
+
+
+[hmiappcommon 별도 컴파일 방법]
+	cd $HOME/900_Code/700_Cluster/srcs/apptemplate/
+	
+	- cmake 파일 수정
+		chmod +w CMakeLists.txt
+		vi CMakeLists.txt
+		
+		- 주석 해제 : hmiappcommon 관련 주석
+	        set(DependencyList "${DependencyList};hmiappcommon")
+			BuildQtProject(windowguicomponents "${DependencyList}")
+	
+	mkdir build
+	cd build
+
+	- PV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/PV -DSFC=SFC -DSFC_BUILD_TYPE=coverage
+	- CV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/CV -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+
+	sudo make -j8
+
+	
+[alton 실행 방법]
+	cd $HOME/900_Code/700_Cluster/srcs/build/alton/AltonService
+	./altonservice &
+
+
+
+====================================================================================================
+개발 환경 설정
+====================================================================================================
+[python 설치]
+	- 3.8 이상
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 0
+	sudo update-alternatives --config python
+	python --version
+
+
+[gcc, g++ 설치]
+	- 9.4 이상 : 우분투 22.04 에 설치시 9.5 로 설치됨
+	gcc --version
+	g++ --version
+
+	sudo apt install gcc-9 g++-9
+	sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 40
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 40
+	
+[cmake 설치]
+	- 3.15 이상
+	cmake --version
+	
+	sudo apt-get install cmake
+
+	wget https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz
+	tar zxf cmake-3.16.2.tar.gz
+	cd cmake-3.16.2
+	./bootstrap
+	make
+	sudo make install
+
+
+[protobuf 설치]
+	- 3.11.4 (test app 빌드시 docker 버전과 통일화 위해서 추천) of 3.13.0(버전명만 변경하여 진행하면됨) 사용
+	protoc --version
+
+	cd ~/buildenv
+	wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz
+	tar -xzvf protobuf-all-3.11.4.tar.gz
+	cd protobuf-3.11.4
+	./configure
+
+	make -j$(nproc)
+	make check -j$(nproc)
+
+	sudo make install
+	sudo ldconfig
+
+
+[boost 설치]
+	sudo apt install libboost-dev libboost-all-dev
+
+
+[nlohmanjson 설치]
+	cd ~/buildenv
+	git clone https://github.com/nlohmann/json.git
+	cd json/
+	mkdir build
+	cd build/
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+[yaml-cpp 설치]
+	cd ~/buildenv
+	git clone https://github.com/jbeder/yaml-cpp.git
+	cd yaml-cpp/
+	mkdir build
+	cd build/
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+[yaml 설치]
+	cd ~/buildenv
+	git clone https://github.com/yaml/libyaml.git
+	cd libyaml/
+	./bootstrap
+	./configure
+	make -j$(nproc)
+	sudo make install
+
+
+[libglibmm-2.4 설치]
+	sudo apt-get install -y libglibmm-2.4
+
+
+[기타 설치]
+	sudo apt-get update
+	sudo apt-get install python3-pip libxml2-utils libgtest-dev libgmock-dev lcov
+	pip install --upgrade pip
+	pip install openpyxl
+	pip install numpy
+
+	
+[clang-format-13 설치]
+	cd ~/buildenv/
+	wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+	sudo apt-get update
+	sudo apt-get install clang-format-13
+	clang-format-13 --version
+	
+	sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 100
+
+	
+	
+	
+	
+====================================================================================================
+설치된 라이브러리 버전 확인
+====================================================================================================
+	python --version
+	gcc --version
+	g++ --version
+	cmake --version
+	protoc --version
+	clang-format-13 --version
+
+
+[Docker lib Version]
+	Python 3.8.18
+
+	gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+	Copyright (C) 2019 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	g++ (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+	Copyright (C) 2019 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	cmake version 3.22.1
+	CMake suite maintained and supported by Kitware (kitware.com/cmake).
+
+	libprotoc 3.11.4
+
+	clang-format : not isntall
+
+
+[WSL(22.04) lib Version]
+	Python 3.8.18
+	
+	gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+	Copyright (C) 2019 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	g++ (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+	Copyright (C) 2019 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	cmake version 3.22.1
+	CMake suite maintained and supported by Kitware (kitware.com/cmake).
+	
+	libprotoc 3.11.4
+	
+	Ubuntu clang-format version 13.0.1-2ubuntu2.2
+
+	
+	
+
+====================================================================================================
+설치 불필요 : 기존 설치 내용
+====================================================================================================
+[automotive-dlt 설치]
+	cd ~/buildenv
+	sudo apt-get install zlib1g-dev libdbus-glib-1-dev
+	git clone https://github.com/GENIVI/dlt-daemon.git
+	cd dlt-daemon/
+	mkdir build
+	cd build/
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+[gdbus-codegen_glibmm 설치]
+	cd ~/buildenv
+	sudo apt install python3-pip
+	pip3 install jinja2
+	git clone https://github.com/Pelagicore/gdbus-codegen-glibmm.git
+	cd gdbus-codegen-glibmm/
+	sudo python3 ./setup.py install
+
+
+[vsomeip 설치]
+	cd ~/buildenv
+	sudo apt install libboost-dev libboost-all-dev
+	git clone https://github.com/GENIVI/vsomeip.git
+	cd vsomeip
+	mkdir build
+	cd build
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
