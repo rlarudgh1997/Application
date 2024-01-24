@@ -114,7 +114,7 @@
 
 
 =====================================================================
-# [도커 내부에서 검증 동작 수행시]
+# [Docker 사용 하여 PV, CV 빌드 방법]
 - Alton 환경 변수
 	export ALTON_SFC_CONFIGURATION=${HOME}/900_Code/620_SFC/model/SFC/compiled/config
 	export ALTON_SFC_MODEL_DIR=${HOME}/900_Code/620_SFC//model/SFC/compiled
@@ -149,6 +149,27 @@
 	VCU
 	Transmission_Warning_CV
 
+
+
+=====================================================================
+# [Repo 사용 및 PV, CV 별로 빌드 방법]
+	cd $HOME/900_Code/700_Cluster/
+	sudo rm -rf srcs
+	repo sync
+		에러 발생시 repo sync 다시 한번더 수행
+
+	cd $HOME/900_Code/700_Cluster/srcs
+
+	- PV
+		mkdir build_PV
+		cd build_PV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/PV -DSFC=SFC -DSFC_BUILD_TYPE=coverage
+	- CV
+		mkdir build_CV
+		cd build_CV
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/CV -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
+
+	sudo make -j8
 
 
 =====================================================================
