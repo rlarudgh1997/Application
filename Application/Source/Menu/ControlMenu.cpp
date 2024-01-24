@@ -260,6 +260,13 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             moduleStateInfo = readInfo.at(2).toList();
             break;
         }
+        case ivis::common::TestReultTypeEnum::TestReultTypeCheckError: {
+            countInfo = QVariantList({0, totalCount, true});
+            QString detailInfo = ((infoData.size() == 1) ? (infoData.at(0))
+                                                         : (QString("ERROR_INFO : Detailed error information is not defined")));
+            titleInfo = QVariantList({"Test Case : Completed(FAIL)", detailInfo});
+            break;
+        }
 #if defined(USE_TEST_RESULT_TEMP)
         case ivis::common::TestReultTypeEnum::TestReultTypeTest: {
             static QVariantList tempState = QVariantList({
@@ -301,7 +308,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     // qDebug() << "\t   0 :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t   1 :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
     // qDebug() << "\t   2 :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo), true);
 
     if (complete) {
         QVariant popupData = QVariant();
@@ -316,6 +323,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QString fileName = QString("TCResult.info");
     QString cmd = QString();
     QString subPath = QString();
+    bool checkSfcValidator = false;
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
         if (infoList.size() == 1) {
             cmd = infoList.at(0).toString();
@@ -334,7 +342,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
             QVariant popupData = QVariant();
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
                                            QVariantList({STRING_POPUP_INPUT_TEXT_ERROR, STRING_POPUP_INPUT_TEXT_ERROR_TIP}));
             return;
         }
@@ -399,6 +407,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             subPath = QString("/../../../validator");
             int ptCount = infoList[1].toList().size();
             totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(EV, FCEV, ICV) = 3
+            checkSfcValidator = true;
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
             return;
@@ -407,13 +416,24 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
 
     QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     QString defaultRunPath = QString("%1%2").arg(currentPath).arg(subPath);
+    QVariant popupData = QVariant();
     if (QDir::setCurrent(defaultRunPath) == false) {
-        QVariant popupData = QVariant();
-        ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_DEFAULT_PATH_ERROR_TIP}));
         qDebug() << "Fail to change folder :" << defaultRunPath;
         return;
     }
+
+    if (checkSfcValidator) {
+        QString checkFile = QString("%1%2").arg(defaultRunPath).arg("/build/sfc_validator");
+        if (QFile::exists(checkFile) == false) {
+            updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeCheckError, totalCount,
+                                 QStringList({QString("Can't find binary(sfc validator) file.")}));
+            qDebug() << "Fail to sfc validator binary not exists :" << checkFile;
+            return;
+        }
+    }
+
     qDebug() << "Default :" << defaultRunPath;
     qDebug() << "Command :" << cmd;
 

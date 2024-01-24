@@ -362,6 +362,7 @@ public:
         TestReultTypeCompleted,
         TestReultTypeCancel,
         TestReultTypeError,
+        TestReultTypeCheckError,
         TestReultTypeTest,
     };
 };

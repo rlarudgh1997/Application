@@ -4,15 +4,24 @@
 		-
 
 	Jira 이슈 수정
-		-
-			:
+		- 자동완성 항목
+			: https://jira.ccos.dev/browse/EXNCP-39535
 
 	기타 이슈 수정
 		- 셀 다중 선택 상태에서 삭제키 동작 추가
 		- Right Menu 기능 추가 : Copy, Cut, Paste
 
 
+수정 진행 중
+	- validator 바이너리 존 유무 체크 하여 스트립터 실행 에러 표시 되도록
+	- run_tc.sh 실행시 docker 에서 실행 유무 체크에 따라서 altonserivce 실행 경로 변경 가능 하도록
+		: altonserivce 경로 Config 설정으로 제공
+		: docker 실행이 아닌경우
+			- 실행시 마다 altonserivce 경로 지정
+			- Config 설정 : altonserivce 경로 지정
 
+	- run_tc.sh 실행
+		: 모듈 선택이 없는경우 모듈 선택이 되지 않았다고 팝업 표시
 
 
 
