@@ -28,6 +28,7 @@ enum class PopupType {
     TCReportError,
     GcovReportError,
     RunPathError,
+    ModuleSelectError,
     SelectCellColumnError,
 
     Exit,
@@ -71,6 +72,7 @@ public:
             case PopupType::TCReportError:
             case PopupType::GcovReportError:
             case PopupType::RunPathError:
+            case PopupType::ModuleSelectError:
             case PopupType::SelectCellColumnError: {
                 QVariantList infoData = value.toList();
                 if (infoData.size() == 2) {

@@ -83,6 +83,7 @@
 #define STRING_ABOUT_QT_TIP QString("Show the Qt library's About box")
 #define STRING_FILE_OPEN QString("File Open")
 #define STRING_FILE_OPEN_FAIL QString("Fail to file open")
+#define STRING_BINARY_NOT_EXISTS_ERROR QString("Can't find binary file : ")
 
 // Popup
 #define STRING_POPUP_SAVE QString("Save")
@@ -115,6 +116,10 @@
 #define STRING_POPUP_GCOV_REPORT_TIP QString("Gcov report view value is not set.")
 #define STRING_POPUP_EXCEL_EDIT QString("Editing Excel file")
 #define STRING_POPUP_EXCEL_EDIT_TIP QString("Would you like to create a new Excel sheet?")
+#define STRING_POPUP_MODULE_SELECT_ERROR QString("Module select error")
+#define STRING_POPUP_MODULE_SELECT_ERROR_TIP QString("Please select one or more modules.")
+#define STRING_POPUP_BINARY_NOT_EXISTS QString("Binary not exists")
+#define STRING_POPUP_BINARY_NOT_EXISTS_TIP QString("Can't find binary(altonservice) file.")
 
 // =============================================================================================================
 // Image Define

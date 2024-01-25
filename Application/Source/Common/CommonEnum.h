@@ -218,6 +218,7 @@ public:
         EventTypeGenRunTCCancel,
         EventTypeEnterScriptTextCompleted,
         EventTypeRunTestReport,
+        EventTypeSelectModuleError,
 
         EventTypeTest = 3000,
         EventTypeLastFile,
@@ -354,16 +355,16 @@ public:
     };
 };
 
-class TestReultTypeEnum {
+class TestResultTypeEnum {
 public:
-    enum TestReultType {
-        TestReultTypeStart = 0,
-        TestReultTypeUpdate,
-        TestReultTypeCompleted,
-        TestReultTypeCancel,
-        TestReultTypeError,
-        TestReultTypeCheckError,
-        TestReultTypeTest,
+    enum TestResultType {
+        TestResultTypeStart = 0,
+        TestResultTypeUpdate,
+        TestResultTypeCompleted,
+        TestResultTypeCancel,
+        TestResultTypeError,
+        TestResultTypeCheckError,
+        TestResultTypeTest,
     };
 };
 

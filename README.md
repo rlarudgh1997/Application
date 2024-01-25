@@ -117,7 +117,13 @@
 # [Docker 사용 하여 PV, CV 빌드 방법]
 - Alton 환경 변수
 	export ALTON_SFC_CONFIGURATION=${HOME}/900_Code/620_SFC/model/SFC/compiled/config
-	export ALTON_SFC_MODEL_DIR=${HOME}/900_Code/620_SFC//model/SFC/compiled
+	export ALTON_SFC_MODEL_DIR=${HOME}/900_Code/620_SFC/model/SFC/compiled
+	export ALTON_EOL_VEHICLETYPE=ICV
+	export ALTON_SFC_CONFIGURATION_FILENAME=CV
+	export ALTON_ENG_SKIP_DUMMYCALL=ON
+
+	export ALTON_SFC_CONFIGURATION=${HOME}/900_Code/700_Cluster/srcs/SFC/model/SFC/compiled/config
+	export ALTON_SFC_MODEL_DIR=${HOME}/900_Code/700_Cluster/srcs/SFC/model/SFC/compiled
 	export ALTON_EOL_VEHICLETYPE=ICV
 	export ALTON_SFC_CONFIGURATION_FILENAME=CV
 	export ALTON_ENG_SKIP_DUMMYCALL=ON
@@ -126,10 +132,21 @@
 	cd ${HOME}/900_Code/620_SFC
 	mkdir build
 	cd build
+
 	# PV
+		unset LD_LIBRARY_PATH
+		source /opt/sfc/CV/environment-setup-sfc PV
+		export LD_LIBRARY_PATH="/opt/sfc/PV/lib:$LD_LIBRARY_PATH"
+		export CCOS_LIB_DIR="/opt/sfc/PV"
+
 		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DSFC_BUILD_TYPE=coverage
 		sudo cmake --build . --target install -j8
 	# CV
+		unset LD_LIBRARY_PATH
+		source /opt/sfc/CV/environment-setup-sfc CV
+		export LD_LIBRARY_PATH="/opt/sfc/CV/lib:$LD_LIBRARY_PATH"
+		export CCOS_LIB_DIR="/opt/sfc/CV"
+
 		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
 		sudo cmake --build . --target install -j8
 
@@ -137,6 +154,18 @@
 	cd ${HOME}/900_Code/620_SFC/validator
 	mkdir build
 	cd build
+
+	# PV
+		unset LD_LIBRARY_PATH
+		source /opt/sfc/CV/environment-setup-sfc PV
+		export LD_LIBRARY_PATH="/opt/sfc/PV/lib:$LD_LIBRARY_PATH"
+		export CCOS_LIB_DIR="/opt/sfc/PV"
+	# CV
+		unset LD_LIBRARY_PATH
+		source /opt/sfc/CV/environment-setup-sfc CV
+		export LD_LIBRARY_PATH="/opt/sfc/CV/lib:$LD_LIBRARY_PATH"
+		export CCOS_LIB_DIR="/opt/sfc/CV"
+
 	cmake ..
 	make -j8
 

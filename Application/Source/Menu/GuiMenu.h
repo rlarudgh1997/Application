@@ -388,7 +388,7 @@ private:
     void drawMenuHelp();
     void drawMenuEtc(const bool& update = false);
     void updateDisplaySelectModule(const int& runType);
-    void updateDisplaySelectPT(const int& runType, const QVariantList& moduleList);
+    void updateDisplaySelectOption(const int& runType, const QVariantList& moduleList);
     void updateDisplayTestResultInfo();
     void updateDisplayEnterScriptText();
     void updateDisplayTestReport();

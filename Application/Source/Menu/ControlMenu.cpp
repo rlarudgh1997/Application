@@ -57,7 +57,7 @@ void ControlMenu::initNormalData() {
 
 #if defined(USE_TEST_RESULT_TEMP)
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
-    updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, 30);
+    updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 30);
 #endif
 }
 
@@ -92,7 +92,7 @@ void ControlMenu::timerFunc(const int& timerId) {
 
 #if defined(USE_TEST_RESULT_TEMP)
     if (getTimerId(AbstractControl::AbstractTimerStart) == timerId) {
-        if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeTest, 30)) {
+        if (updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeTest, 30)) {
             controlTimer(AbstractControl::AbstractTimerStart);
         }
     }
@@ -207,12 +207,12 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     bool complete = false;
 
     switch (testReultType) {
-        case ivis::common::TestReultTypeEnum::TestReultTypeStart: {
+        case ivis::common::TestResultTypeEnum::TestResultTypeStart: {
             countInfo = QVariantList({0, totalCount, false});
             titleInfo = QVariantList({"Test Case : Start"});
             break;
         }
-        case ivis::common::TestReultTypeEnum::TestReultTypeUpdate: {
+        case ivis::common::TestResultTypeEnum::TestResultTypeUpdate: {
             int currentCount = 0;
             QString errorString = QString();
             QString completeString = QString();
@@ -248,11 +248,11 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             }
             break;
         }
-        case ivis::common::TestReultTypeEnum::TestReultTypeCancel:
-        case ivis::common::TestReultTypeEnum::TestReultTypeError: {
+        case ivis::common::TestResultTypeEnum::TestResultTypeCancel:
+        case ivis::common::TestResultTypeEnum::TestResultTypeError: {
             QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
             countInfo = QVariantList({0, totalCount, true});
-            if (testReultType == ivis::common::TestReultTypeEnum::TestReultTypeCancel) {
+            if (testReultType == ivis::common::TestResultTypeEnum::TestResultTypeCancel) {
                 titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Request cancel"});
             } else {
                 titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Script running error"});
@@ -260,15 +260,15 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             moduleStateInfo = readInfo.at(2).toList();
             break;
         }
-        case ivis::common::TestReultTypeEnum::TestReultTypeCheckError: {
+        case ivis::common::TestResultTypeEnum::TestResultTypeCheckError: {
             countInfo = QVariantList({0, totalCount, true});
-            QString detailInfo = ((infoData.size() == 1) ? (infoData.at(0))
-                                                         : (QString("ERROR_INFO : Detailed error information is not defined")));
+            QString detailInfo =
+                ((infoData.size() == 1) ? (infoData.at(0)) : (QString("ERROR_INFO : Detailed error information is not defined")));
             titleInfo = QVariantList({"Test Case : Completed(FAIL)", detailInfo});
             break;
         }
 #if defined(USE_TEST_RESULT_TEMP)
-        case ivis::common::TestReultTypeEnum::TestReultTypeTest: {
+        case ivis::common::TestResultTypeEnum::TestResultTypeTest: {
             static QVariantList tempState = QVariantList({
                 "ABS_CV : PASS",
                 "ABS_NO_ABS_Trailer : PASS",
@@ -323,11 +323,10 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QString fileName = QString("TCResult.info");
     QString cmd = QString();
     QString subPath = QString();
-    bool checkSfcValidator = false;
+    QStringList checkBinary = QStringList();
+
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
-        if (infoList.size() == 1) {
-            cmd = infoList.at(0).toString();
-        }
+        cmd = (infoList.size() == 1) ? (infoList.at(0).toString()) : (QString());
 
         if (cmd.contains("gen_tc.sh")) {
             subPath = QString("/../../../tc_generator");
@@ -400,14 +399,17 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             cmd = QString("./gen_tc.sh -c CV -m \"%1\"%2").arg(moduleList).arg(negative);
             subPath = QString("/../../../tc_generator");
         } else if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
-            QString altonPath = QString("/usr/local/bin/altonservice");
+            QString altonPath = (state) ? (QString("/usr/local/bin/altonservice"))
+                                        : (QString("%1%2").arg(ivis::common::APP_PWD()).arg("/../Alton/altonservice"));
             QString docker = (state) ? (QString("-d ")) : (QString());
             QString ptList = (checkList.size() == 0) ? (QString()) : (QString(" %1").arg(checkList));
             cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
             subPath = QString("/../../../validator");
             int ptCount = infoList[1].toList().size();
             totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(EV, FCEV, ICV) = 3
-            checkSfcValidator = true;
+
+            checkBinary.append(altonPath);
+            checkBinary.append("/build/sfc_validator");
         } else {
             qDebug() << "Fail to excute script - runType :" << runType;
             return;
@@ -419,18 +421,22 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QVariant popupData = QVariant();
     if (QDir::setCurrent(defaultRunPath) == false) {
         ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
-                                       QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_DEFAULT_PATH_ERROR_TIP}));
+                                       QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_BINARY_NOT_EXISTS_TIP}));
         qDebug() << "Fail to change folder :" << defaultRunPath;
         return;
     }
 
-    if (checkSfcValidator) {
-        QString checkFile = QString("%1%2").arg(defaultRunPath).arg("/build/sfc_validator");
-        if (QFile::exists(checkFile) == false) {
-            updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeCheckError, totalCount,
-                                 QStringList({QString("Can't find binary(sfc validator) file.")}));
-            qDebug() << "Fail to sfc validator binary not exists :" << checkFile;
-            return;
+    if (checkBinary.size() > 0) {
+        int index = 0;
+        for (const auto& binary : checkBinary) {
+            QString checkFile = (index == 0) ? (binary) : (QString("%1%2").arg(defaultRunPath).arg(binary));
+            if (QFile::exists(checkFile) == false) {
+                updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCheckError, totalCount,
+                                     QStringList({STRING_BINARY_NOT_EXISTS_ERROR + binary}));
+                qDebug() << "Fail to binary not exists :" << checkFile;
+                return;
+            }
+            index++;
         }
     }
 
@@ -447,7 +453,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     mWatcher.data()->start();
     connect(mWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
             [=](const QStringList& fileData) {
-                if (updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeUpdate, totalCount, fileData)) {
+                if (updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeUpdate, totalCount, fileData)) {
                     emit mWatcher.data()->signalWatcherFileFail(20);
                 }
             });
@@ -470,7 +476,7 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     mProcess.data()->start();
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramStarted,
-            [=]() { updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeStart, totalCount); });
+            [=]() { updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, totalCount); });
 
     connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [=](const bool& result) {
         qDebug() << "*************************************************************************************************";
@@ -483,9 +489,9 @@ void ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
 
         if (result == false) {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString().size() == 0) {
-                updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeCancel, totalCount);
+                updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCancel, totalCount);
             } else {
-                updateTestResultInfo(ivis::common::TestReultTypeEnum::TestReultTypeError, totalCount);
+                updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeError, totalCount);
             }
         }
     });
@@ -495,12 +501,12 @@ void ControlMenu::cancelScript(const bool& complete) {
     const QStringList killProcess = QStringList({
         "python",
         "python3",
-        // "altonservice",
-        // "sfc_validator",
         "gen_tc.sh",
         "run_tc.sh",
         "gen_tcreport.sh",
         "gen_gcov_report.sh",
+        "sfc_validator",
+        "altonservice",
     });
     QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
     if (complete == false) {
@@ -510,11 +516,11 @@ void ControlMenu::cancelScript(const bool& complete) {
         QStringList log;
         ivis::common::ExcuteProgram process(false);
         bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
-        qDebug() << "cancelScript - process :" << info;  // << result;
+        qDebug() << "Terminate - process :" << info << ", result :" << result;
     }
 
     if (complete == false) {
-        qDebug() << "cancelScript - file write path :" << defaultRunPath;
+        qDebug() << "Terminate - file write path :" << defaultRunPath;
         ivis::common::FileInfo::writeFile(defaultRunPath, QString("ERROR_INFO : User Request  - Process Exit"), true);
     }
 
@@ -697,6 +703,13 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel: {
             cancelScript(value.toBool());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSelectModuleError: {
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(
+                ivis::common::PopupType::ModuleSelectError, isHandler(), popupData,
+                QVariantList({STRING_POPUP_MODULE_SELECT_ERROR, STRING_POPUP_MODULE_SELECT_ERROR_TIP}));
             break;
         }
         default: {

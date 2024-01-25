@@ -479,7 +479,11 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
             for (const auto& select : selectModule) {
                 moduleSelect.append(QVariant(select.second));
             }
-            updateDisplaySelectPT(runType, moduleSelect);
+            if (moduleSelect.size() == 0) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleError, QVariant());
+            } else {
+                updateDisplaySelectOption(runType, moduleSelect);
+            }
         });
         connect(mSelectModule, &QDialog::finished, [=]() {
             disconnect(mSelectModule);
@@ -490,7 +494,7 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
     mSelectModule->show();
 }
 
-void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& moduleList) {
+void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& moduleList) {
     if (mCheckBoxGroup == nullptr) {
         QString title = QString("Select Negative");
         QString item = QString("Negative");
@@ -510,13 +514,14 @@ void GuiMenu::updateDisplaySelectPT(const int& runType, const QVariantList& modu
                             checkList.append(QVariant(check.first));
                         }
                     }
-                    createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun,
-                                 QVariant({runType, option1, moduleList, checkList}));
                     if (mSelectModule) {
                         mSelectModule->finished(true);
                     }
                     mCheckBoxGroup->hide();
                     mCheckBoxGroup->finished(true);
+
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun,
+                                 QVariant({runType, option1, moduleList, checkList}));
                 });
         connect(mCheckBoxGroup, &QDialog::finished, [=]() {
             disconnect(mCheckBoxGroup);

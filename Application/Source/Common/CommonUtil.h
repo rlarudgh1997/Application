@@ -23,20 +23,6 @@
 namespace ivis {
 namespace common {
 
-#define APP_PWD QApplication::applicationDirPath().toLatin1().data()
-#define CURRENT_DATE_TIME \
-    QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec())
-#define GET_CURRENT_DATE_TIME CURRENT_DATE_TIME.toLatin1().data()
-
-#define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
-
-#define TO_STRING(A) QString("%1").arg(A)
-#define STR_COMPARE(str1, str2) (QString::compare(str1, str2) == false) ? (true) : (false)
-#define OBJECT_NAME(widget) (widget->objectName().toLatin1().data())
-#define SWAP(a, b) \
-    { (a) ^= (b) ^= (a) ^= (b); } /*Value Switching*/
-#define BOOL_REVERSE(var) (var = (var) ? (false) : (true))
-
 // name : The first letter starts with an uppercase letter
 #define QML_WRITABLE_PROPERTY(type, name, notify)                                     \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
@@ -75,6 +61,29 @@ private:                                                                        
         connect(widget, SIGNAL(pressed()), this, SLOT(slotPressed())); \
     }                                                                  \
     connect(widget, SIGNAL(clicked()), this, SLOT(slotClicked()));
+
+inline QString APP_PWD() {
+    QString pwd = QApplication::applicationDirPath();  // .toLatin1().data()
+    return pwd;
+}
+
+inline QString GET__DATE_TIME() {
+    return QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec());
+}
+
+template <typename T>
+inline int ARRAY_SIZE(T array) {
+    return (sizeof(array) / sizeof(array[0]));
+}
+
+template <typename T1, typename T2>
+inline void SWAP(T1 a, T2 b) {
+    (a) ^= (b) ^= (a) ^= (b);
+}
+
+inline void BOOL_REVERSE(bool value) {
+    (value = (value) ? (false) : (true));
+}
 
 template <typename T>
 inline void LIMIT(T& value, T min, T max) {
@@ -454,7 +463,7 @@ private:
         }
     }
     void runThread() {
-        QString filePath = QString("%1/CheckLib.txt").arg(APP_PWD);
+        QString filePath = QString("%1/CheckLib.txt").arg(APP_PWD());
         int count = 0;
         for (const auto& info : mCheckInfo) {
             ExcuteProgram process(false);

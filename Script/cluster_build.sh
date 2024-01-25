@@ -39,7 +39,7 @@ function setEnvironments(){
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
 		SDK_ENVIROMENT_PATH=$SDK_HOST
-		source $SDK_ENVIROMENT_PATH
+		source $SDK_ENVIROMENT_PATH PV
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit

@@ -418,7 +418,8 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
         fileName.append(".xlsx");
     }
 
-    QString cmd = QString("python3 %1/ExcelParser.py %2 %3 %4").arg(APP_PWD).arg(dirPath).arg(fileName).arg(cmdType);
+    QString cmd =
+        QString("python3 %1/ExcelParser.py %2 %3 %4").arg(ivis::common::APP_PWD()).arg(dirPath).arg(fileName).arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
@@ -430,7 +431,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
     }
 
     qDebug() << "*************************************************************************************************";
-    qDebug() << "PWD      :" << APP_PWD;
+    qDebug() << "PWD      :" << ivis::common::APP_PWD();
     qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
