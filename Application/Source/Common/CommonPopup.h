@@ -61,6 +61,14 @@ public:
     static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, QVariant& popupData,
                                  const QVariant& value = QVariant()) {
         PopupButton button = PopupButton::Invalid;
+
+        qDebug() << "Popup::drawPopup() -> PopupType :" << static_cast<int>(gPopupType) << "->" << static_cast<int>(popupType);
+        if (isPopupType() == popupType) {
+            qDebug() << "\t This is the same pop-up as the previous one.";
+            return button;
+        }
+        setPopupType(popupType);
+
         switch (popupType) {
             case PopupType::About:
             case PopupType::OpenFail:
@@ -114,7 +122,7 @@ public:
                 break;
             }
         }
-        setPopupType(popupType);
+        setPopupType(PopupType::Invalid);
         popupData = isPopupData();
         qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << popupData;
         return button;

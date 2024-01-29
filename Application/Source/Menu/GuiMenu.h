@@ -85,10 +85,9 @@ public:
 
         setLayout(mLayout);
 
-        //        connect(mRadioLayout, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton*
-        //        button) {
-        //            updateStatus((button == mOn));
-        //        });
+        // connect(mRadioLayout, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton* button) {
+        //     updateStatus((button == mOn));
+        // });
         connect(mOn, &QRadioButton::clicked, [=]() {
             mOn->setChecked(true);
             mOff->setChecked(false);
@@ -166,11 +165,13 @@ public:
 
         mLayout = new QVBoxLayout(this);
 
+        // CheckBox 1
         mCheckLayout1 = new QHBoxLayout(mLayout->widget());
         mCheckBox1 = ivis::common::createWidget<QCheckBox>(mCheckLayout1->widget(), true);
         mCheckBox1->setText(item);
         mLayout->addWidget(mCheckBox1);
 
+        // CheckBox 2
         if (itemList.size() > 0) {
             mCheckLayout2 = new QHBoxLayout(mLayout->widget());
             for (const auto& info : itemList) {
@@ -183,6 +184,13 @@ public:
             mCheckBox1->setChecked(true);
         }
 
+        // // Command
+        // mCommand = ivis::common::createWidget<QLabel>(mLayout->widget(), true);
+        // // mCommand->setText("./gen_tc.sh -c CV -m [MODULE] -o Negative");
+        // mCommand->setText("./run_tc.sh -b /usr/local/bin/altonservice -c CV -d -g -m [MODULE] EV FCEV ICV");
+        // mLayout->addWidget(mCommand);
+
+        // OK, Cancel
         mButtonLayout = new QHBoxLayout(mLayout->widget());
         mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
         mOK->setText("OK");
@@ -219,6 +227,7 @@ private:
     QMap<int, QCheckBox*> mCheckBox2 = QMap<int, QCheckBox*>();
     QPushButton* mOK = nullptr;
     QPushButton* mCancel = nullptr;
+    // QLabel* mCommand = nullptr;
 };
 
 class LogDisplayDialog : public QDialog {
@@ -258,7 +267,7 @@ public:
         connect(mClose, &QPushButton::clicked, [=]() { emit signalTestResultClick(false); });
         connect(mCancel, &QPushButton::clicked, [=]() {
             emit signalTestResultClick(true);
-            finished(true);
+            // finished(true);
         });
     }
     void updateLogDisplay(const QString& info, const QString& error, const QString& content) {
@@ -295,8 +304,8 @@ private:
     QTextEdit* mInfoLabel = nullptr;
     QTextEdit* mContentLabel = nullptr;
     QPushButton* mClose = nullptr;
-    QPushButton* mManual = nullptr;
     QPushButton* mCancel = nullptr;
+    QPushButton* mDetail = nullptr;
 };
 
 class TextEnterDialog : public QDialog {
@@ -404,6 +413,7 @@ private:
     QList<QShortcut*> mShortcut = QList<QShortcut*>();
     QPushButton* mDefaultPath = nullptr;
     QProgressBar* mProgressBar = nullptr;
+    QPushButton* mTestResultInfo = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;
     CheckBoxGroupDialog* mCheckBoxGroup = nullptr;
     LogDisplayDialog* mLogDisplay = nullptr;

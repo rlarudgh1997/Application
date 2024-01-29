@@ -534,6 +534,7 @@ void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& 
 
 void GuiMenu::updateDisplayTestResultInfo() {
     QVariantList testResultInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
+    // bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
 
     if (testResultInfo.size() != 3) {
         qDebug() << "Fail to test result info size :" << testResultInfo.size();
@@ -545,16 +546,11 @@ void GuiMenu::updateDisplayTestResultInfo() {
         qDebug() << "Fail to count info size :" << countInfo.size() << countInfo;
         return;
     }
+    // Test Result Info : Parsing Value Info
     static bool complete = false;
     int current = countInfo.at(0).toInt();
     int total = countInfo.at(1).toInt();
     complete = countInfo.at(2).toBool();
-
-    if (mProgressBar == nullptr) {
-        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
-    }
-    mProgressBar->setRange(0, total);
-    mProgressBar->setValue(current);
 
     QString titleInfo = QString();
     for (const auto& info : testResultInfo.at(1).toList()) {
@@ -568,33 +564,67 @@ void GuiMenu::updateDisplayTestResultInfo() {
     for (const auto& info : testResultInfo.at(2).toList()) {
         moduleStateInfo.append(info.toString() + "\n");
     }
-
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
     // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
 
+    // Test Result Info
     if (mLogDisplay == nullptr) {
         mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"));
         connect(mLogDisplay, &LogDisplayDialog::signalTestResultClick, [=](const bool& cancel) {
             if (cancel) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCancel, complete);
+            } else {
+                bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
+                mLogDisplay->hide();
+                if ((mTestResultInfo) && (runState)) {
+                    mTestResultInfo->show();
+                }
+                if (runState == false) {
+                    mLogDisplay->finished(true);
+                }
             }
-            mLogDisplay->hide();
-            mLogDisplay->finished(true);
         });
         connect(mLogDisplay, &QDialog::finished, [=]() {
             if (mProgressBar) {
                 delete mProgressBar;
                 mProgressBar = nullptr;
             }
+            if (mTestResultInfo) {
+                delete mTestResultInfo;
+                mTestResultInfo = nullptr;
+            }
             disconnect(mLogDisplay);
             delete mLogDisplay;
             mLogDisplay = nullptr;
         });
-        mLogDisplay->show();
     }
     mLogDisplay->updateLogDisplay(titleInfo, errorInfo, moduleStateInfo);
+    mLogDisplay->show();
+
+    // Test Result Info : ProgressBar
+    if (mProgressBar == nullptr) {
+        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
+    }
+    mProgressBar->setRange(0, total);
+    mProgressBar->setValue(current);
+
+    // Test Result Info : Visible
+    if (mTestResultInfo == nullptr) {
+        mTestResultInfo = ivis::common::createWidget<QPushButton>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
+        mTestResultInfo->setText("Test Result Info");
+        connect(mTestResultInfo, &QPushButton::clicked, [=]() {
+            mTestResultInfo->hide();
+            if (mLogDisplay) {
+                mLogDisplay->show();
+            }
+            if (mProgressBar) {
+                mProgressBar->show();
+            }
+        });
+    }
+    mTestResultInfo->hide();
 }
 
 void GuiMenu::updateDisplayEnterScriptText() {

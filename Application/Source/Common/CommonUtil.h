@@ -382,10 +382,17 @@ private:
         int result = 0;
         QStringList log = QStringList();
 
-        emit signalExcuteProgramStarted();
+        emit signalExcuteProgramInfo(true, true);
 
         if (mUseProcess) {
             QStringList splitCmd = mCommand.split(" ");
+
+            // mProcess.setProcessChannelMode(QProcess::MergedChannels);
+            // connect(&mProcess, &QProcess::readyReadStandardOutput, [=]() {
+            //     QByteArray newData = mProcess.readAllStandardOutput();
+            //     QString log = QString::fromUtf8(newData);
+            //     qDebug() << "\t LogData :" << log;
+            // });
 
             if (splitCmd.size() == 0) {
                 mProcess.start(mCommand);
@@ -397,14 +404,18 @@ private:
                 }
                 mProcess.start(command, arguments);
             }
+            // disconnect(&mProcess, &QProcess::finished, nullptr, nullptr);
+            // connect(&mProcess, &QProcess::finished, [=](int exitCode, QProcess::ExitStatus exitStatus) {
+            //     qDebug() << "\t ExcuteProgramThread::finished()  -> Exit :" << exitCode << exitStatus;
+            // });
 
-            if (mProcess.waitForStarted()) {  // if (mProcess.waitForFinished()) {
+            if (mProcess.waitForStarted()) {  // waitForStarted, waitForFinished
                 while (mProcess.waitForReadyRead()) {
                     QString readAllData = mProcess.readAll();
                     QString logData = QString();
                     for (const QString& data : readAllData) {
                         if (data.compare("\n") == false) {
-                            // qDebug() << "Log :" << logData;
+                            qDebug() << "\t Log :" << logData;
                             log.append(logData);
                             logData.clear();
                         } else {
@@ -412,19 +423,19 @@ private:
                         }
                     }
                 }
+                mProcess.waitForFinished();
             } else {
                 result = (-1);
             }
         } else {
             result = system(mCommand.toLatin1());
         }
-        qDebug() << "ExcuteProgramThread::runThread() -> Result :" << result << "Command :" << mCommand;
-        emit signalExcuteProgramCompleted(result == 0);
+        qDebug() << "\t ExcuteProgramThread::runThread() -> Result :" << result << ", Command :" << mCommand;
+        emit signalExcuteProgramInfo(false, (result == 0));
     }
 
 signals:
-    void signalExcuteProgramStarted();
-    void signalExcuteProgramCompleted(const bool& result);
+    void signalExcuteProgramInfo(const bool& start, const bool& result);
 
 private:
     QThread* mThread = new QThread();
@@ -522,7 +533,7 @@ public:
         connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) {
             QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
             if (readData.first) {
-                emit signalWatcherFileReadError(true);
+                emit signalWatcherFileReadError(mWatcherFile);
             } else {
                 if (readData.second.size() > 0) {
                     emit signalWatcherFileDataChanged(readData.second);
@@ -553,15 +564,15 @@ private:
             }
         }
 
-        if (mCount == 10) {
+        if (mCount >= 10) {
             QMutexLocker lock(&mMutex);
-            emit signalWatcherFileFail(mCount);
+            emit signalWatcherFileState(-1);
         }
     }
 
 signals:
-    void signalWatcherFileFail(const int& count);
-    void signalWatcherFileReadError(const bool& error);
+    void signalWatcherFileState(const int& state);
+    void signalWatcherFileReadError(const QString& errorFile);
     void signalWatcherFileDataChanged(const QStringList& fileData);
 
 private:

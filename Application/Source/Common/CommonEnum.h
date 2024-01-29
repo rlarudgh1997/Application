@@ -117,6 +117,7 @@ public:
         PropertyTypeKey,
         PropertyTypeKeySkip,
         PropertyTypeReceiveKeyFocus,
+        PropertyTypeRunScriptState,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
