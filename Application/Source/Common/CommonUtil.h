@@ -354,9 +354,12 @@ public:
         // join();
         qDebug() << "~ExcuteProgramThread()";
     }
-    void setCommandInfo(const QString& cmd) {
+    void setCommandInfo(const QString& cmd, const QString& arg = QString()) {
         QMutexLocker lock(&mMutex);
         mCommand = cmd;
+        if (arg.size() > 0) {
+            mCommand.append(arg);
+        }
     }
     void start() {
         this->moveToThread(mThread);
@@ -415,7 +418,7 @@ private:
                     QString logData = QString();
                     for (const QString& data : readAllData) {
                         if (data.compare("\n") == false) {
-                            qDebug() << "\t Log :" << logData;
+                            // qDebug() << "\t Log :" << logData;
                             log.append(logData);
                             logData.clear();
                         } else {
@@ -530,18 +533,17 @@ public:
         connect(mThread, &QThread::started, this, &FileSystemWatcherThread::runThread);
         mThread->start();
 
-        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) {
-            QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
-            if (readData.first) {
-                emit signalWatcherFileReadError(mWatcherFile);
-            } else {
-                if (readData.second.size() > 0) {
-                    emit signalWatcherFileDataChanged(readData.second);
-                }
-            }
-        });
+        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) { readFile(false, path); });
     }
-    void clear() {
+    void readFile(const bool& init, const QString& path) {
+        QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
+        if (readData.first) {
+            emit signalWatcherFileReadError(mWatcherFile);
+        } else {
+            if (readData.second.size() > 0) {
+                emit signalWatcherFileDataChanged(init, readData.second);
+            }
+        }
     }
 
 private:
@@ -554,11 +556,12 @@ private:
     void runThread() {
         while (mCount < 10) {
             if (mWatcher.addPath(mWatcherFile)) {
-                qDebug() << "\t [Sucess] Watcher file :" << mWatcherFile;
+                qDebug() << "\t [Sucess] Watcher file :" << mCount << mWatcherFile;
                 mCount = 0;
+                // readFile(true, mWatcherFile);
                 break;
             } else {
-                qDebug() << "\t [Fail] Watcher file :" << mCount << mWatcherFile;
+                qDebug() << "\t [Fail]   Watcher file :" << mCount << mWatcherFile;
                 mCount++;
                 QThread::msleep(1000);
             }
@@ -573,7 +576,7 @@ private:
 signals:
     void signalWatcherFileState(const int& state);
     void signalWatcherFileReadError(const QString& errorFile);
-    void signalWatcherFileDataChanged(const QStringList& fileData);
+    void signalWatcherFileDataChanged(const bool& init, const QStringList& data);
 
 private:
     QThread* mThread = new QThread();

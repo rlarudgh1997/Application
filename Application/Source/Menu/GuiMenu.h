@@ -194,9 +194,9 @@ public:
         mButtonLayout = new QHBoxLayout(mLayout->widget());
         mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
         mOK->setText("OK");
+        mButtonLayout->addWidget(mOK);
         mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
         mCancel->setText("Cancel");
-        mButtonLayout->addWidget(mOK);
         mButtonLayout->addWidget(mCancel);
         mLayout->addLayout(mButtonLayout);
 
@@ -259,21 +259,29 @@ public:
         mContentLabel->setReadOnly(true);
         updateLogDisplay(info, error, content);
 
+#if 0   // USE_RUN_SCRIPT_LOG
+        mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 267, 50), mBaseStyle.arg(18));
+        mClose->setText("Close");
+        mCancel = ivis::common::createWidget<QPushButton>(this, true, QRect(267, 550, 267, 50), mBaseStyle.arg(18));
+        mCancel->setText("Cancel");
+        mDetail = ivis::common::createWidget<QPushButton>(this, true, QRect(534, 550, 266, 50), mBaseStyle.arg(18));
+        mDetail->setText("Detail");
+#else
         mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
         mClose->setText("Close");
         mCancel = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
         mCancel->setText("Cancel");
+#endif
 
         connect(mClose, &QPushButton::clicked, [=]() { emit signalTestResultClick(false); });
-        connect(mCancel, &QPushButton::clicked, [=]() {
-            emit signalTestResultClick(true);
-            // finished(true);
-        });
+        connect(mCancel, &QPushButton::clicked, [=]() { emit signalTestResultClick(true); });
+#if 0   // USE_RUN_SCRIPT_LOG
+        connect(mDetail, &QPushButton::clicked, [=]() { emit signalDetailClicked(true); });
+#endif
     }
     void updateLogDisplay(const QString& info, const QString& error, const QString& content) {
         // qDebug() << "updateLogDisplay :" << info << error << content;
         mInfoLabel->setText(info);
-
         int startIndex = mInfoLabel->toPlainText().indexOf(error);
         if (startIndex >= 0) {
             QTextCursor cursor = mInfoLabel->textCursor();
@@ -289,13 +297,13 @@ public:
                 cursor.setCharFormat(charFormat);
             }
         }
-
         mContentLabel->setText(content);
         mContentLabel->verticalScrollBar()->setValue(mContentLabel->verticalScrollBar()->maximum());
     }
 
 signals:
     void signalTestResultClick(const bool& cancel);
+    void signalDetailClicked(const bool& clicked);
 
 private:
     const QString mBaseStyle = QString("color: blue; font-size: %1px");
@@ -306,6 +314,80 @@ private:
     QPushButton* mClose = nullptr;
     QPushButton* mCancel = nullptr;
     QPushButton* mDetail = nullptr;
+};
+
+class DetailLog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit DetailLog(QWidget* parent, const QString& title) : QDialog(parent) {
+        setWindowTitle(title);
+        setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+        setWindowFlag(Qt::WindowCloseButtonHint, false);
+        // setWindowFlags(Qt::FramelessWindowHint);
+        setParent(parent);
+        setModal(true);
+
+        QRect rootWidgetRect = static_cast<QWidget*>(parent->parent())->geometry();
+        QRect setRect = QRect();
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
+        setGeometry(setRect);
+        setFocus();
+
+        mContentLabel = ivis::common::createWidget<QTextEdit>(this, true, QRect(0, 0, mWidth, 550), mBaseStyle.arg(13));
+        mContentLabel->setReadOnly(true);
+        // updateLogDisplay(info, error, content);
+
+        mClear = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
+        mClear->setText("Clear");
+        mStop = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
+        mStop->setText("Stop");
+        mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(800, 550, 400, 50), mBaseStyle.arg(18));
+        mClose->setText("Close");
+
+        connect(mClear, &QPushButton::clicked, [=]() { contentClear(); });
+        connect(mStop, &QPushButton::clicked, [=]() {
+            if (mStopState) {
+                mStop->setText("Stop");
+            } else {
+                mStop->setText("Update");
+            }
+            mStopState = !mStopState;
+        });
+        connect(mClose, &QPushButton::clicked, [=]() { emit signalCloseClicked(true); });
+    }
+    void updateLogDisplay(const QStringList& data) {
+        QString text = mContent;
+        for (const auto& d : data) {
+            text.append(d + "\n");
+        }
+        if (mStopState == false) {
+            mContentLabel->setText(text);
+            // mContentLabel->insertPlainText(text);
+            mContentLabel->verticalScrollBar()->setValue(mContentLabel->verticalScrollBar()->maximum());
+        }
+        mContent = text;
+    }
+    void contentClear() {
+        mContent.clear();
+        mContentLabel->clear();
+    }
+
+signals:
+    void signalCloseClicked(const bool& clicked);
+
+private:
+    const QString mBaseStyle = QString("color: blue; font-size: %1px");
+    const int mWidth = 1200;
+    const int mHeight = 600;
+    QTextEdit* mContentLabel = nullptr;
+    QPushButton* mClear = nullptr;
+    QPushButton* mStop = nullptr;
+    QPushButton* mClose = nullptr;
+    QString mContent = QString();
+    bool mStopState = false;
 };
 
 class TextEnterDialog : public QDialog {
@@ -399,6 +481,7 @@ private:
     void updateDisplaySelectModule(const int& runType);
     void updateDisplaySelectOption(const int& runType, const QVariantList& moduleList);
     void updateDisplayTestResultInfo();
+    void updateDisplayDetailLog(const bool& visible);
     void updateDisplayEnterScriptText();
     void updateDisplayTestReport();
 
@@ -419,6 +502,7 @@ private:
     LogDisplayDialog* mLogDisplay = nullptr;
     TextEnterDialog* mTextEnter = nullptr;
     SelectReportDialog* mTestReport = nullptr;
+    DetailLog* mDetailLog = nullptr;
 };
 
 #endif  // GUI_MENU_H

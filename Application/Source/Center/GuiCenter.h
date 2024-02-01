@@ -20,7 +20,7 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLayout>
-#include <QShowEvent>
+// #include <QShowEvent>
 
 class AutoCompleteDialog;
 

@@ -118,6 +118,8 @@ public:
         PropertyTypeKeySkip,
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
+        PropertyTypeRunScriptLogPrevious,
+        PropertyTypeRunScriptLogCurrent,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -353,6 +355,14 @@ public:
         RunTypeTCReport,
         RunTypeGcovReport,
         RunTypeEnterScriptText,
+    };
+};
+
+class WatcherTypeEnum {
+public:
+    enum WatcherType {
+        WatcherTypeRunScript = 0,
+        WatcherTypeTestResult,
     };
 };
 

@@ -586,7 +586,24 @@ void GuiMenu::updateDisplayTestResultInfo() {
                 }
             }
         });
+#if 0   // USE_RUN_SCRIPT_LOG
+        connect(mLogDisplay, &LogDisplayDialog::signalDetailClicked, [=](const bool& clicked) {
+            updateDisplayDetailLog(true);
+        });
+#endif
         connect(mLogDisplay, &QDialog::finished, [=]() {
+            bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
+            if (runState) {
+                if (mTestResultInfo) {
+                    mTestResultInfo->show();
+                }
+                return;
+            }
+
+            if (mDetailLog) {
+                delete mDetailLog;
+                mDetailLog = nullptr;
+            }
             if (mProgressBar) {
                 delete mProgressBar;
                 mProgressBar = nullptr;
@@ -625,6 +642,29 @@ void GuiMenu::updateDisplayTestResultInfo() {
         });
     }
     mTestResultInfo->hide();
+}
+
+void GuiMenu::updateDisplayDetailLog(const bool& visible) {
+    if (mDetailLog == nullptr) {
+        mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"));
+        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) {
+            mDetailLog->hide();
+        });
+        mDetailLog->hide();
+    }
+
+    QStringList detailLog =
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent).toStringList();
+
+    if (detailLog.size() == 0) {
+        mDetailLog->contentClear();
+    } else {
+        mDetailLog->updateLogDisplay(detailLog);
+    }
+
+    if (visible) {
+        mDetailLog->show();
+    }
 }
 
 void GuiMenu::updateDisplayEnterScriptText() {
@@ -732,6 +772,12 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
+#if 0   // USE_RUN_SCRIPT_LOG
+        case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
+            updateDisplayDetailLog(false);
+            break;
+        }
+#endif
         default: {
             break;
         }

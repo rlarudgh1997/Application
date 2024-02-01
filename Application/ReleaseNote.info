@@ -1,25 +1,40 @@
 # [Release Note]
-[2024--]
+[2024-02-]
 	PR 정보
 		-
 
 	Jira 이슈 수정
+		-
+
+	기타 이슈 수정
+		- Test Result Info 팝업 세부 항목 추가
+			: Detail - Run Script 로그 정보를 표시출
+		- 자동 완성 기능 추가
+			: [Sheet] Private_Test_Signal 입력시 - Private_Test_Signal 에 해당하는 Result 값만 자동 완성으로 표시 되도록 구현
+
+
+
+[2024-02-01]
+	PR 정보
+		- https://jira.ccos.dev/browse/EXNCP-40264
+
+	Jira 이슈 수정
 		- 자동완성 항목
 			: https://jira.ccos.dev/browse/EXNCP-39535
+		- Test Case Create 정보 미 표시
+			: https://jira.ccos.dev/browse/EXNCP-40264
+		- Error_Info 관련
+			: https://jira.ccos.dev/browse/EXNCP-40267
 
 	기타 이슈 수정
 		- 셀 다중 선택 상태에서 삭제키 동작 추가
 		- Right Menu 기능 추가 : Copy, Cut, Paste
-
-
-수정 진행 중
-	- sfc_validator 바이너리 존 유무 체크 하여 바이너리 파일이 없는 경우 에러 팝업 표시
-	- run_tc.sh / gen_tc.sh
-		: 동작시 모듈 선택이 없는 경우 에러 팝업 표시
-		: Test Result 팝업 표시 상태에서 Close 시 화면 사람짐 -> Test Result 팝업 표시 On, Off 기능 추가
-	- run_tc.sh
-		: 옵션 선택시 docker 선택하지 않은 경우 default : ../Alton/altonserivce 실행 되도록 구현
-			-> 이경우에도 바이너리 존재 유무 체크 하여 없는 경우 에러 팝업 표시
+		- sfc_validator, altonservice 바이너리 파일이 없는 경우 Test Result Info 팝업 정보 표시
+		- run_tc.sh / gen_tc.sh
+			: 동작시 모듈 선택이 없는 경우 에러 팝업 표시
+			: Test Result 팝업 표시 상태에서 Close 로 팝업 사라진후 팝업 다시 표시 기능 추가
+		- run_tc.sh
+			: Select PT - docker 미 선택시 ../Alton/altonserivce 바이너리 실행 되도록 구현
 
 
 

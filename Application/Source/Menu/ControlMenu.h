@@ -22,6 +22,8 @@ private:
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);
     bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());
+    void excuteWatcherFile(const bool& start, const int& type, const QString& watcherFile, const int& totalCount);
+    bool startProcess(const bool& start, const QString& command, const QString& arg, const int& totalCount);
     bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList);
     void cancelScript(const bool& complete);
     int saveTestReportInfo(const int& reportType, const QList<bool>& value);
@@ -47,7 +49,8 @@ public slots:
 private:
     AbstractHandler* mHandler = nullptr;
     QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
-    QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcher = nullptr;
+    QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcherRunScript = nullptr;
+    QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcherTestResult = nullptr;
 };
 
 #endif  // CONTROL_MENU_H
