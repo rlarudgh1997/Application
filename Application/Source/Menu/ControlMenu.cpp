@@ -403,7 +403,7 @@ bool ControlMenu::startProcess(const bool& start, const QString& command, const 
 
     mProcess =
         QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
-#if 0   // USE_RUN_SCRIPT_LOG
+#if 1   // USE_RUN_SCRIPT_LOG
     mProcess.data()->setCommandInfo(command, QString(" >> %1").arg(arg));
 #else
     mProcess.data()->setCommandInfo(command);
@@ -444,7 +444,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QStringList checkBinary = QStringList();
     QString runScriptFile = QString("%1/%2_%3").arg(currentPWD).arg(runType).arg("RunScript.log");
 
-#if 0   // USE_RUN_SCRIPT_LOG
+#if 1   // USE_RUN_SCRIPT_LOG
     if (QFile::exists(runScriptFile)) {
         bool deleteResult = QFile::remove(runScriptFile);
         qDebug() << "File exists ->" << ((deleteResult) ? ("Sucess") : ("Fail")) << "delete file :" << runScriptFile;

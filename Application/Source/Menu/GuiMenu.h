@@ -259,7 +259,7 @@ public:
         mContentLabel->setReadOnly(true);
         updateLogDisplay(info, error, content);
 
-#if 0   // USE_RUN_SCRIPT_LOG
+#if 1   // USE_RUN_SCRIPT_LOG
         mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 267, 50), mBaseStyle.arg(18));
         mClose->setText("Close");
         mCancel = ivis::common::createWidget<QPushButton>(this, true, QRect(267, 550, 267, 50), mBaseStyle.arg(18));
@@ -275,7 +275,7 @@ public:
 
         connect(mClose, &QPushButton::clicked, [=]() { emit signalTestResultClick(false); });
         connect(mCancel, &QPushButton::clicked, [=]() { emit signalTestResultClick(true); });
-#if 0   // USE_RUN_SCRIPT_LOG
+#if 1   // USE_RUN_SCRIPT_LOG
         connect(mDetail, &QPushButton::clicked, [=]() { emit signalDetailClicked(true); });
 #endif
     }

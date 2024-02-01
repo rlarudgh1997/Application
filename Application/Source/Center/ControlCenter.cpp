@@ -221,7 +221,7 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
 
 QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmList) {
     QStringList vsmMatchingList = vsmList;
-    QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toList());
+    QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
 
     // qDebug() << "MatchingModule Count :" << vsmList.size() << selectModule.size();
     if (selectModule.size() > 0) {
@@ -235,6 +235,7 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
         }
         vsmMatchingList = vsmTemp;
     }
+
     return vsmMatchingList;
 }
 
