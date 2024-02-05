@@ -22,8 +22,10 @@ private:
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);
     bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());
-    void excuteWatcherFile(const bool& start, const int& type, const QString& watcherFile, const int& totalCount);
-    bool startProcess(const bool& start, const QString& command, const QString& arg, const int& totalCount);
+    void stopWatcherFile(const int& type);
+    void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount);
+    void stopProcess();
+    void startProcess(const QString& command, const QString& arg, const int& totalCount);
     bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList);
     void cancelScript(const bool& complete);
     int saveTestReportInfo(const int& reportType, const QList<bool>& value);

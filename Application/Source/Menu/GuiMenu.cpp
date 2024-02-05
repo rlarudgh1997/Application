@@ -771,7 +771,7 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-#if 0   // USE_RUN_SCRIPT_LOG
+#if 1   // USE_RUN_SCRIPT_LOG
         case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
             updateDisplayDetailLog(false);
             break;

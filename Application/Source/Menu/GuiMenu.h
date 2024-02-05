@@ -357,6 +357,7 @@ public:
             mStopState = !mStopState;
         });
         connect(mClose, &QPushButton::clicked, [=]() { emit signalCloseClicked(true); });
+        // connect(this, &QDialog::finished, [=]() { finished(true); });
     }
     // ~DetailLog() {
     //     delete mContentLabel;
