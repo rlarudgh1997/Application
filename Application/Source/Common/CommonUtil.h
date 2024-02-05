@@ -519,8 +519,9 @@ class FileSystemWatcherThread : public QObject {
 public:
     FileSystemWatcherThread() {
     }
-    explicit FileSystemWatcherThread(const QString& filePath) {
+    explicit FileSystemWatcherThread(const QString& filePath, const int& checkCount = 0) {
         mWatcherFile = filePath;
+        mCheckCount = checkCount;
     }
     ~FileSystemWatcherThread() {
         QMutexLocker lock(&mMutex);
@@ -533,9 +534,23 @@ public:
         connect(mThread, &QThread::started, this, &FileSystemWatcherThread::runThread);
         mThread->start();
 
-        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) { readFile(false, path); });
+        connect(&mWatcher, &QFileSystemWatcher::fileChanged, [=](const QString& path) {
+            bool readState = (mCheckCount == 0) ? (true) : ((mReadCount++ % mCheckCount) == 0);
+            readFile(false, path, readState);
+        });
     }
-    void readFile(const bool& init, const QString& path) {
+    void readFinalData() {
+        if (mCheckCount > 0) {
+            readFile(false, mWatcherFile, true);
+            emit signalWatcherFileState(1);
+        }
+    }
+
+private:
+    void readFile(const bool& init, const QString& path, const bool& readState) {
+        if (readState == false) {
+            return;
+        }
         QPair<bool, QStringList> readData = ivis::common::FileInfo::readFileData(path);
         if (readData.first) {
             emit signalWatcherFileReadError(mWatcherFile);
@@ -545,20 +560,14 @@ public:
             }
         }
     }
-
-private:
-    void join() {
-        if (mThread->isRunning()) {
-            mThread->quit();
-            mThread->wait();
-        }
-    }
     void runThread() {
         while (mCount < 10) {
             if (mWatcher.addPath(mWatcherFile)) {
                 qDebug() << "\t [Sucess] Watcher file :" << mCount << mWatcherFile;
                 mCount = 0;
-                // readFile(true, mWatcherFile);
+#if 1   // USE_RUN_SCRIPT_LOG
+                readFile(true, mWatcherFile, true);
+#endif
                 break;
             } else {
                 qDebug() << "\t [Fail]   Watcher file :" << mCount << mWatcherFile;
@@ -566,10 +575,15 @@ private:
                 QThread::msleep(1000);
             }
         }
-
         if (mCount >= 10) {
             QMutexLocker lock(&mMutex);
             emit signalWatcherFileState(-1);
+        }
+    }
+    void join() {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
         }
     }
 
@@ -584,6 +598,8 @@ private:
     QFileSystemWatcher mWatcher;
     QString mWatcherFile = QString();
     int mCount = 0;
+    int mReadCount = 0;
+    int mCheckCount = 0;
 };
 
 }  // end of namespace common

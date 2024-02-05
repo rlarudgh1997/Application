@@ -358,14 +358,21 @@ public:
         });
         connect(mClose, &QPushButton::clicked, [=]() { emit signalCloseClicked(true); });
     }
+    // ~DetailLog() {
+    //     delete mContentLabel;
+    //     delete mClear;
+    //     delete mStop;
+    //     delete mClose;
+    // }
     void updateLogDisplay(const QStringList& data) {
-        QString text = mContent;
+        // QString text = mContent;
+        QString text = QString();
         for (const auto& d : data) {
             text.append(d + "\n");
         }
         if (mStopState == false) {
-            mContentLabel->setText(text);
-            // mContentLabel->insertPlainText(text);
+            // mContentLabel->setText(text);
+            mContentLabel->insertPlainText(text);
             mContentLabel->verticalScrollBar()->setValue(mContentLabel->verticalScrollBar()->maximum());
         }
         mContent = text;

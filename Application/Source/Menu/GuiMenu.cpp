@@ -599,7 +599,6 @@ void GuiMenu::updateDisplayTestResultInfo() {
                 }
                 return;
             }
-
             if (mDetailLog) {
                 delete mDetailLog;
                 mDetailLog = nullptr;
@@ -772,7 +771,7 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-#if 1   // USE_RUN_SCRIPT_LOG
+#if 0   // USE_RUN_SCRIPT_LOG
         case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
             updateDisplayDetailLog(false);
             break;
