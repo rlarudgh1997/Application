@@ -592,6 +592,8 @@ void GuiMenu::updateDisplayTestResultInfo() {
         });
 #endif
         connect(mLogDisplay, &QDialog::finished, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCompleted, true);
+
             bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
             if (runState) {
                 if (mTestResultInfo) {

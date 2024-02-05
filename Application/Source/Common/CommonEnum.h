@@ -118,6 +118,7 @@ public:
         PropertyTypeKeySkip,
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
+        PropertyTypeProcessStartPath,
         PropertyTypeRunScriptLogPrevious,
         PropertyTypeRunScriptLogCurrent,
 
@@ -219,6 +220,7 @@ public:
         EventTypeSelectModule,
         EventTypeSelectModuleOfRun,
         EventTypeGenRunTCCancel,
+        EventTypeGenRunTCCompleted,
         EventTypeEnterScriptTextCompleted,
         EventTypeRunTestReport,
         EventTypeSelectModuleError,

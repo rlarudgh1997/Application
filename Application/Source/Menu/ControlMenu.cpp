@@ -253,7 +253,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             QVariantList readInfo = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
             countInfo = QVariantList({0, totalCount, true});
             if (testReultType == ivis::common::TestResultTypeEnum::TestResultTypeCancel) {
-                titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Request cancel"});
+                titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : User request cancel"});
             } else {
                 titleInfo = QVariantList({"Test Case : Completed(FAIL)", "ERROR_INFO : Script running error"});
             }
@@ -319,28 +319,6 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     return complete;
 }
 
-void ControlMenu::stopWatcherFile(const int& type) {
-    QString infoText = QString();
-    if (type == ivis::common::WatcherTypeEnum::WatcherTypeRunScript) {
-        if (mWatcherRunScript.isNull() == false) {
-            infoText = QString("WatcherRunScript");
-            disconnect(mWatcherRunScript.data());
-            mWatcherRunScript.reset();
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, QVariant());
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, QVariant());
-        }
-    } else if (type == ivis::common::WatcherTypeEnum::WatcherTypeTestResult) {
-        if (mWatcherTestResult.isNull() == false) {
-            infoText = QString("WatcherTestResult");
-            disconnect(mWatcherTestResult.data());
-            mWatcherTestResult.reset();
-        }
-    } else {
-        return;
-    }
-    qDebug() << infoText << "is running -> stop";
-}
-
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
     if (QFile::exists(watcherFile)) {
         bool deleteResult = QFile::remove(watcherFile);
@@ -370,6 +348,7 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
                 });
         connect(mWatcherRunScript.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileState, [=](const int& state) {
             qDebug() << "\t WatcherRunScript File State :" << state << ((state >= 0) ? ("-> Complete") : ("-> Fail"));
+            // stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeRunScript);
         });
     } else if (type == ivis::common::WatcherTypeEnum::WatcherTypeTestResult) {
         mWatcherTestResult =
@@ -377,14 +356,14 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
         mWatcherTestResult.data()->start();
         connect(mWatcherTestResult.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
                 [=](const bool& init, const QStringList& data) {
-                    bool result = updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeUpdate, totalCount, data);
-                    if (result) {
+                    if (updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeUpdate, totalCount, data)) {
                         if (mWatcherRunScript.isNull() == false) {
-                            mWatcherRunScript.data()->readFinalData();  // RunScript Log : final data update
+                            mWatcherRunScript.data()->readFinalData();
                         }
-                        if (mWatcherTestResult.isNull() == false) {
-                            emit mWatcherTestResult.data()->signalWatcherFileState(0);
-                        }
+                        mWatcherTestResult.data()->readFinalData();
+                    }
+                    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath).toString().size() == 0) {
+                        updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCancel, totalCount);
                     }
                 });
         connect(mWatcherTestResult.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError,
@@ -393,17 +372,9 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
                 });
         connect(mWatcherTestResult.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileState, [=](const int& state) {
             qDebug() << "\t WatcherTestResult File State :" << state << ((state >= 0) ? ("-> Complete") : ("-> Fail"));
-            stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult);
+            // stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult);
         });
     } else {
-    }
-}
-
-void ControlMenu::stopProcess() {
-    if (mProcess.isNull() == false) {
-        qDebug() << "Process is running -> stop";
-        disconnect(mProcess.data());
-        mProcess.reset();
     }
 }
 
@@ -423,17 +394,8 @@ void ControlMenu::startProcess(const QString& command, const QString& arg, const
             if (start) {
                 updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, totalCount);
             } else {
-                if (mProcess.isNull() == false) {
-                    disconnect(mProcess.data());
-                    mProcess.reset();
-                }
                 if (result == false) {
-                    QVariant defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath);
-                    if (defaultRunPath.toString().size() == 0) {
-                        updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCancel, totalCount);
-                    } else {
-                        updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeError, totalCount);
-                    }
+                    updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeError, totalCount);
                 }
                 qDebug() << "*************************************************************************************************";
                 qDebug() << "Commnad :" << command;
@@ -459,10 +421,10 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         } else if (cmd.contains("run_tc.sh")) {
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_tcreport.sh")) {
-            fileName = QString("TCReport.info");
+            fileName = QString("TCReport.Info");
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_gcov_report.sh")) {
-            fileName = QString("GCOVReport.info");
+            fileName = QString("GCOVReport.Info");
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
@@ -573,7 +535,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QString runScriptFile = QString("%1/%2_%3").arg(currentPWD).arg(runType).arg("RunScript.log");
     QString testResultFile = QString("%1/%2").arg(defaultRunPath).arg(fileName);
 
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, testResultFile);
+    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath, testResultFile);
     startWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeRunScript, runScriptFile, totalCount);
     startWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult, testResultFile, totalCount);
     startProcess(cmd, runScriptFile, totalCount);
@@ -581,33 +543,65 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     return true;
 }
 
-void ControlMenu::cancelScript(const bool& complete) {
-    const QStringList killProcess = QStringList({
-        "python",
-        "python3",
-        "gen_tc.sh",
-        "run_tc.sh",
-        "gen_tcreport.sh",
-        "gen_gcov_report.sh",
-        "sfc_validator",
-        "altonservice",
-    });
-    for (const auto& info : killProcess) {
-        QStringList log;
-        ivis::common::ExcuteProgram process(false);
-        bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
-        qDebug() << "Terminate - process :" << info << ", result :" << result;
+void ControlMenu::stopWatcherFile(const int& type) {
+    QString infoText = QString();
+    if (type == ivis::common::WatcherTypeEnum::WatcherTypeRunScript) {
+        if (mWatcherRunScript.isNull() == false) {
+            qDebug() << "WatcherRunScript is running -> stop";
+            disconnect(mWatcherRunScript.data());
+            mWatcherRunScript.reset();
+            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, QVariant());
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, QVariant());
+        }
+    } else if (type == ivis::common::WatcherTypeEnum::WatcherTypeTestResult) {
+        if (mWatcherTestResult.isNull() == false) {
+            qDebug() << "WatcherTestResult is running -> stop";
+            disconnect(mWatcherTestResult.data());
+            mWatcherTestResult.reset();
+        }
+    } else {
+        return;
+    }
+}
+
+void ControlMenu::stopProcess() {
+    if (mProcess.isNull() == false) {
+        qDebug() << "Process is running -> stop";
+        disconnect(mProcess.data());
+        mProcess.reset();
+    }
+}
+
+void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
+    if (script) {
+        const QStringList killProcess = QStringList({
+            "python",
+            "python3",
+            "gen_tc.sh",
+            "run_tc.sh",
+            "gen_tcreport.sh",
+            "gen_gcov_report.sh",
+            "sfc_validator",
+            "altonservice",
+        });
+        for (const auto& info : killProcess) {
+            QStringList log;
+            ivis::common::ExcuteProgram process(false);
+            bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
+            qDebug() << "Terminate Process :" << info << ", result :" << result;
+        }
+
+        QString processStartPath = getData(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath).toString();
+        ivis::common::FileInfo::writeFile(processStartPath, QString("ERROR_INFO : User request cancel"), true);
+        updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath, "");
+        qDebug() << "Update test result info file :" << processStartPath;
     }
 
-    if (complete == false) {
-        QString defaultRunPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultRunPath).toString();
-        qDebug() << "Terminate - file write path :" << defaultRunPath;
-        ivis::common::FileInfo::writeFile(defaultRunPath, QString("ERROR_INFO : User Request  - Process Exit"), true);
-        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDefaultRunPath, "");
+    if (watcher) {
+        stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeRunScript);
+        stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult);
+        stopProcess();
     }
-    stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeRunScript);
-    stopWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult);
-    stopProcess();
 }
 
 int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& value) {
@@ -657,7 +651,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
 
             bool runScriptState = getData(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
             if (runScriptState) {
-                cancelScript(true);
+                cancelScript(true, true);
             }
 
             if (button != ivis::common::PopupButton::Cancel) {
@@ -785,10 +779,17 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel: {
             bool runScriptState = getData(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
             if (runScriptState) {
-                cancelScript(value.toBool());
+                cancelScript(true, false);
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, false);
             } else {
                 qDebug() << "Skip Cancel : Script is not running !!!!!!";
+            }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeGenRunTCCompleted: {
+            bool runScriptState = getData(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
+            if (runScriptState == false) {
+                cancelScript(false, true);
             }
             break;
         }

@@ -525,7 +525,7 @@ public:
     }
     ~FileSystemWatcherThread() {
         QMutexLocker lock(&mMutex);
-        mCount = 20;
+        mWatcher.removePath(mWatcherFile);
         qDebug() << "~FileSystemWatcherThread()";
     }
     void start() {

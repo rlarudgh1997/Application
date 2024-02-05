@@ -62,7 +62,6 @@ public:
         ConfigTypeDoFileSave,
         ConfigTypeAllModule,
         ConfigTypeSelectModule,
-        ConfigTypeDefaultRunPath,
         ConfigTypeWindowTitle,
 
         ConfigTypeMax,
@@ -144,7 +143,6 @@ private:
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));
         mConfigInfoData[ConfigTypeAllModule] = QPair<QString, QVariant>("ConfigTypeAllModule", QVariant(""));
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
-        mConfigInfoData[ConfigTypeDefaultRunPath] = QPair<QString, QVariant>("ConfigTypeDefaultRunPath", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
     }
 
