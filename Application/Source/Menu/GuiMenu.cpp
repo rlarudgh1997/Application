@@ -586,11 +586,9 @@ void GuiMenu::updateDisplayTestResultInfo() {
                 }
             }
         });
-#if 1   // USE_RUN_SCRIPT_LOG
         connect(mLogDisplay, &LogDisplayDialog::signalDetailClicked, [=](const bool& clicked) {
             updateDisplayDetailLog(true);
         });
-#endif
         connect(mLogDisplay, &QDialog::finished, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCompleted, true);
 
@@ -773,12 +771,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-#if 1   // USE_RUN_SCRIPT_LOG
         case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
             updateDisplayDetailLog(false);
             break;
         }
-#endif
         default: {
             break;
         }

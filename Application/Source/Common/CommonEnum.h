@@ -17,7 +17,7 @@ namespace common {
 #define PROPETRY_START_COMMON 0
 #define PROPETRY_START_NORMAL 1000
 #define PROPETRY_START_LIST 3000
-#define PROPETRY_START_ONLY_CONTROL 5000  // Only used inside the controller
+#define PROPETRY_START_CONTROL 5000  // Only used inside the controller
 
 class ScreenEnum {
 public:
@@ -115,11 +115,8 @@ public:
         PropertyTypeShortcutType,
         PropertyTypeTestReport,
         PropertyTypeKey,
-        PropertyTypeKeySkip,
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
-        PropertyTypeProcessStartPath,
-        PropertyTypeRunScriptLogPrevious,
         PropertyTypeRunScriptLogCurrent,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -143,8 +140,12 @@ public:
         PropertyTypeDetailInfoReserved9,
         PropertyTypeListMax,
 
-        PropertyTypeOnlyControl = PROPETRY_START_ONLY_CONTROL,
+        PropertyTypeOnlyControl = PROPETRY_START_CONTROL,
+        PropertyTypeKeySkip,
         PropertyTypeSaveFilePath,
+        PropertyTypeRunScriptLogPrevious,
+        PropertyTypeProcessStartPath,
+        PropertyTypeTestResultCancel,
         PropertyTypeOnlyControlMax,
     };
     enum PropertyValue {

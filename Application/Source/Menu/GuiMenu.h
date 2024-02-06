@@ -259,25 +259,16 @@ public:
         mContentLabel->setReadOnly(true);
         updateLogDisplay(info, error, content);
 
-#if 1   // USE_RUN_SCRIPT_LOG
         mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 267, 50), mBaseStyle.arg(18));
         mClose->setText("Close");
         mCancel = ivis::common::createWidget<QPushButton>(this, true, QRect(267, 550, 267, 50), mBaseStyle.arg(18));
         mCancel->setText("Cancel");
         mDetail = ivis::common::createWidget<QPushButton>(this, true, QRect(534, 550, 266, 50), mBaseStyle.arg(18));
         mDetail->setText("Detail");
-#else
-        mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
-        mClose->setText("Close");
-        mCancel = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
-        mCancel->setText("Cancel");
-#endif
 
         connect(mClose, &QPushButton::clicked, [=]() { emit signalTestResultClick(false); });
         connect(mCancel, &QPushButton::clicked, [=]() { emit signalTestResultClick(true); });
-#if 1   // USE_RUN_SCRIPT_LOG
         connect(mDetail, &QPushButton::clicked, [=]() { emit signalDetailClicked(true); });
-#endif
     }
     void updateLogDisplay(const QString& info, const QString& error, const QString& content) {
         // qDebug() << "updateLogDisplay :" << info << error << content;

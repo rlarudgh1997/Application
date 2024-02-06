@@ -565,9 +565,7 @@ private:
             if (mWatcher.addPath(mWatcherFile)) {
                 qDebug() << "\t [Sucess] Watcher file :" << mCount << mWatcherFile;
                 mCount = 0;
-#if 1   // USE_RUN_SCRIPT_LOG
                 readFile(true, mWatcherFile, true);
-#endif
                 break;
             } else {
                 qDebug() << "\t [Fail]   Watcher file :" << mCount << mWatcherFile;
