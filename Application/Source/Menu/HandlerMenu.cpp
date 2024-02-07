@@ -37,6 +37,8 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, QVariant(false));
     // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail, QVariant(""));
 }
 
 void HandlerMenu::controlConnect(const bool& state) {

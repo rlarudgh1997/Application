@@ -118,6 +118,8 @@ public:
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
         PropertyTypeRunScriptLogCurrent,
+        PropertyTypeViewRunScriptList,
+        PropertyTypeViewRunScriptDetail,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -216,6 +218,8 @@ public:
         EventTypeTestReportResult,
         EventTypeTestReportCoverage,
         EventTypeEnterScriptText,
+        EventTypeViewRunScript,
+        EventTypeViewRunScriptDetail,
         EventTypeInitModule,
         EventTypeShowModule,
         EventTypeSelectModule,
@@ -358,6 +362,7 @@ public:
         RunTypeTCReport,
         RunTypeGcovReport,
         RunTypeEnterScriptText,
+        RunTypeViewRunScriptLog,
     };
 };
 

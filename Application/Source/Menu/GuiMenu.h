@@ -311,7 +311,7 @@ class DetailLog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit DetailLog(QWidget* parent, const QString& title) : QDialog(parent) {
+    explicit DetailLog(QWidget* parent, const QString& title, const bool& buttons = true) : QDialog(parent) {
         setWindowTitle(title);
         setWindowFlag(Qt::WindowContextHelpButtonHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
@@ -331,24 +331,28 @@ public:
         mContentLabel->setReadOnly(true);
         // updateLogDisplay(info, error, content);
 
-        mClear = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
-        mClear->setText("Clear");
-        mStop = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
-        mStop->setText("Stop");
-        mClose = ivis::common::createWidget<QPushButton>(this, true, QRect(800, 550, 400, 50), mBaseStyle.arg(18));
-        mClose->setText("Close");
+        QRect closeRect = QRect(800, 550, 400, 50);
+        if (buttons) {
+            mClear = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
+            mClear->setText("Clear");
+            mStop = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
+            mStop->setText("Stop");
 
-        connect(mClear, &QPushButton::clicked, [=]() { contentClear(); });
-        connect(mStop, &QPushButton::clicked, [=]() {
-            if (mStopState) {
-                mStop->setText("Stop");
-            } else {
-                mStop->setText("Update");
-            }
-            mStopState = !mStopState;
-        });
+            connect(mClear, &QPushButton::clicked, [=]() { contentClear(); });
+            connect(mStop, &QPushButton::clicked, [=]() {
+                if (mStopState) {
+                    mStop->setText("Stop");
+                } else {
+                    mStop->setText("Update");
+                }
+                mStopState = !mStopState;
+            });
+        } else {
+            closeRect = QRect(0, 550, mWidth, 50);
+        }
+        mClose = ivis::common::createWidget<QPushButton>(this, true, closeRect, mBaseStyle.arg(18));
+        mClose->setText("Close");
         connect(mClose, &QPushButton::clicked, [=]() { emit signalCloseClicked(true); });
-        // connect(this, &QDialog::finished, [=]() { finished(true); });
     }
     // ~DetailLog() {
     //     delete mContentLabel;
@@ -483,6 +487,8 @@ private:
     void updateDisplayDetailLog(const bool& visible);
     void updateDisplayEnterScriptText();
     void updateDisplayTestReport();
+    void updateDisplayViewRunScriptList();
+    void updateDisplayViewRunScriptDetail();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
@@ -502,6 +508,8 @@ private:
     TextEnterDialog* mTextEnter = nullptr;
     SelectReportDialog* mTestReport = nullptr;
     DetailLog* mDetailLog = nullptr;
+    SelectModuleDialog* mViewRunScript = nullptr;
+
 };
 
 #endif  // GUI_MENU_H

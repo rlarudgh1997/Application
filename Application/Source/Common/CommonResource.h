@@ -69,6 +69,8 @@
 #define STRING_GENERATE_REPORT_TIP QString("Generate Report file")
 #define STRING_ENTER_SCRIPT_TEXT QString("Enter Script Text")
 #define STRING_ENTER_SCRIPT_TEXT_TIP QString("Manually entering script execution text")
+#define STRING_VIEW_RUN_SCRIPT_LOG QString("View Run Script Log")
+#define STRING_VIEW_RUN_SCRIPT_LOG_TIP QString("View of run script log file")
 #define STRING_TEST_RESULT QString("Test Result")
 #define STRING_TEST_RESULT_TIP QString("<b>Edit --></b> Test Result Tip")
 #define STRING_TEST_RESULT_COVERAGE QString("Test Coverage")

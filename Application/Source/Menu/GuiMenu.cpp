@@ -409,6 +409,17 @@ void GuiMenu::drawMenuRun() {
         connect(mAction[MainType::Run][STRING_ENTER_SCRIPT_TEXT], &QAction::triggered,
                 [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptText, QVariant()); });
     }
+
+    mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG] =
+        new QAction(QIcon::fromTheme("actionRunScrtipLog"), STRING_VIEW_RUN_SCRIPT_LOG, this);
+    if (mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG]) {
+        mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG]->setStatusTip(STRING_VIEW_RUN_SCRIPT_LOG_TIP);
+        mMenu[MainType::Run]->addAction(mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG]);
+        // mToolBar[MainType::Run]->addAction(mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG]);
+        connect(mAction[MainType::Run][STRING_VIEW_RUN_SCRIPT_LOG], &QAction::triggered, [=]() {
+            createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScript, ivis::common::RunTypeEnum::RunTypeViewRunScriptLog);
+        });
+    }
 }
 
 void GuiMenu::drawMenuHelp() {
@@ -586,9 +597,7 @@ void GuiMenu::updateDisplayTestResultInfo() {
                 }
             }
         });
-        connect(mLogDisplay, &LogDisplayDialog::signalDetailClicked, [=](const bool& clicked) {
-            updateDisplayDetailLog(true);
-        });
+        connect(mLogDisplay, &LogDisplayDialog::signalDetailClicked, [=](const bool& clicked) { updateDisplayDetailLog(true); });
         connect(mLogDisplay, &QDialog::finished, [=]() {
             createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCompleted, true);
 
@@ -646,9 +655,7 @@ void GuiMenu::updateDisplayTestResultInfo() {
 void GuiMenu::updateDisplayDetailLog(const bool& visible) {
     if (mDetailLog == nullptr) {
         mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"));
-        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) {
-            mDetailLog->hide();
-        });
+        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) { mDetailLog->hide(); });
         mDetailLog->hide();
     }
 
@@ -732,6 +739,44 @@ void GuiMenu::updateDisplayTestReport() {
     mTestReport->show();
 }
 
+void GuiMenu::updateDisplayViewRunScriptList() {
+    if (mViewRunScript == nullptr) {
+        QVariant fileList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList);
+        mViewRunScript = new SelectModuleDialog(isHandler()->getScreen(), fileList.toStringList(), true);
+        mViewRunScript->updateSelectListInfo(fileList.toStringList(), QList<QStringList>());
+        mViewRunScript->updateSelectWidgetInfo(QString("Select Log File"),
+                                               QStringList({"File List"}),
+                                               QSize(500, 300));
+        connect(mViewRunScript, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
+            if (selectModule.size() == 1) {
+                createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScriptDetail, QVariant(selectModule.at(0).first));
+            }
+            mViewRunScript->finished(true);
+        });
+        connect(mViewRunScript, &QDialog::finished, [=]() {
+            disconnect(mViewRunScript);
+            delete mViewRunScript;
+            mViewRunScript = nullptr;
+        });
+    }
+    mViewRunScript->show();
+}
+
+void GuiMenu::updateDisplayViewRunScriptDetail() {
+    QVariant detailInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail);
+    qDebug() << "detailInfo :" << detailInfo.toStringList().size();
+
+    if (mDetailLog == nullptr) {
+        mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"), false);
+        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) { mDetailLog->hide(); });
+    }
+    mDetailLog->show();
+
+    QVariant detailLog = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail);
+    mDetailLog->contentClear();
+    mDetailLog->updateLogDisplay(detailLog.toStringList());
+}
+
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth: {
@@ -773,6 +818,14 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
             updateDisplayDetailLog(false);
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList: {
+            updateDisplayViewRunScriptList();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail: {
+            updateDisplayViewRunScriptDetail();
             break;
         }
         default: {

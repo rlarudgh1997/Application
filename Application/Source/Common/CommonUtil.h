@@ -205,13 +205,13 @@ private:
 
 class FileInfo {
 public:
-    static QStringList isFileListInfo(const QString& path, QFileInfoList fileList = QFileInfoList()) {
+    static QStringList isFileListInfo(const QString& path, const QString& fileExtesion, QFileInfoList& fileList) {
         QString currentPath = path;
         if (currentPath.size() == 0) {
             currentPath.append(QApplication::applicationDirPath());
             currentPath.append("/SFC");
         }
-        return readFileListInfo(currentPath, fileList);
+        return readFileListInfo(currentPath, fileExtesion, fileList);
     }
     static QStringList readFile(const QString& filePath) {
         bool openError = false;
@@ -227,21 +227,24 @@ public:
     }
 
 private:
-    static QStringList readFileListInfo(const QString& path, QFileInfoList& fileList) {
+    static QStringList readFileListInfo(const QString& path, const QString& fileExtesion, QFileInfoList& fileList) {
         QStringList fileNames = QStringList();
         QDir directory(path);
         directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         fileList = directory.entryInfoList();
-        qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-        qDebug() << "path :" << path << ", Count :" << fileList.size();
+        // qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        // qDebug() << "path :" << path << ", Count :" << fileList.size();
         for (const QFileInfo& file : fileList) {
+            if ((fileExtesion.size() > 0) && (file.fileName().contains(fileExtesion) == false)) {
+                continue;
+            }
             fileNames.append(file.fileName());
-            qDebug() << "--------------------------------------------------------------------------------------------";
-            qDebug() << "File Name :" << file.fileName() << ", Size :" << file.size() << "byte";
-            qDebug() << "File Path :" << file.filePath();
-            // qDebug() << "File Created: " << file.created().toString();
+            // qDebug() << "--------------------------------------------------------------------------------------------";
+            // qDebug() << "File Name :" << file.fileName() << ", Size :" << file.size() << "byte";
+            // qDebug() << "File Path :" << file.filePath();
+            // // qDebug() << "File Created: " << file.created().toString();
         }
-        qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
+        // qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
         return fileNames;
     }
     static QStringList readFileDataInfo(const QString& filePath, bool& openError) {
