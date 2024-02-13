@@ -991,6 +991,7 @@ void GuiExcel::updateDisplayEditCell(const int& editType) {
     int rowEnd = (selectCellCount == 0) ? (1) : (modelIndexs.last().row() - rowStart + 1);
     int columnStart = (selectCellCount == 0) ? (mExcelSheet[sheetIndex]->currentColumn()) : (modelIndexs.at(0).column());
     int columnEnd = (selectCellCount == 0) ? (1) : (modelIndexs.last().column() - columnStart + 1);
+    bool lastRowIndex = ((rowStart + rowEnd) == mExcelSheet[sheetIndex]->rowCount());
 
     if (rowEnd <= 0) {
         QList<int> rowList = QList<int>();
@@ -1011,7 +1012,7 @@ void GuiExcel::updateDisplayEditCell(const int& editType) {
         (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeDelete)) {
         for (int rowIndex = 0; rowIndex < rowEnd; rowIndex++) {
             if (editType == ivis::common::ShortcutTypeEnum::ShortcutTypeInsert) {
-                mExcelSheet[sheetIndex]->insertRow(rowStart);
+                mExcelSheet[sheetIndex]->insertRow((lastRowIndex) ? (mExcelSheet[sheetIndex]->rowCount()) : (rowStart));
             } else {
                 mExcelSheet[sheetIndex]->removeRow(rowStart);
                 ivis::common::LIMIT(rowStart, 0, mExcelSheet[sheetIndex]->rowCount());

@@ -22,6 +22,7 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QShortcut>
+#include <QInputDialog>
 
 #include "CommonUtil.h"
 
@@ -327,15 +328,15 @@ public:
         setGeometry(setRect);
         setFocus();
 
-        mContentLabel = ivis::common::createWidget<QTextEdit>(this, true, QRect(0, 0, mWidth, 550), mBaseStyle.arg(13));
+        mContentLabel = ivis::common::createWidget<QTextEdit>(this, true, QRect(0, 0, mWidth, 550),
+                                                              mBaseStyle.arg("blue").arg(13));
         mContentLabel->setReadOnly(true);
         // updateLogDisplay(info, error, content);
 
-        QRect closeRect = QRect(800, 550, 400, 50);
         if (buttons) {
-            mClear = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg(18));
+            mClear = ivis::common::createWidget<QPushButton>(this, true, QRect(0, 550, 400, 50), mBaseStyle.arg("blue").arg(18));
             mClear->setText("Clear");
-            mStop = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg(18));
+            mStop = ivis::common::createWidget<QPushButton>(this, true, QRect(400, 550, 400, 50), mBaseStyle.arg("blue").arg(18));
             mStop->setText("Stop");
 
             connect(mClear, &QPushButton::clicked, [=]() { contentClear(); });
@@ -347,19 +348,44 @@ public:
                 }
                 mStopState = !mStopState;
             });
-        } else {
-            closeRect = QRect(0, 550, mWidth, 50);
         }
-        mClose = ivis::common::createWidget<QPushButton>(this, true, closeRect, mBaseStyle.arg(18));
+        QRect closeRect = (buttons) ? (QRect(800, 550, 400, 50)) : (QRect(0, 550, mWidth, 50));
+        mClose = ivis::common::createWidget<QPushButton>(this, true, closeRect, mBaseStyle.arg("black").arg(18));
         mClose->setText("Close");
-        connect(mClose, &QPushButton::clicked, [=]() { emit signalCloseClicked(true); });
+        connect(mClose, &QPushButton::clicked, [=]() {
+            updateFindWidget(false);
+            emit signalCloseClicked(true);
+        });
+
+        mShortcut = new QShortcut(QKeySequence(QString("Ctrl+F")), mContentLabel);
+        connect(mShortcut, &QShortcut::activated, [=]() {
+            // QString searchText = QInputDialog::getText(nullptr, "Find", "Enter text to find:");
+            // updateFindTextCursor(false, searchText);
+            updateFindWidget(!mFindInputTextVisible);
+        });
+        mFindWidget = ivis::common::createWidget<QWidget>(this, mFindInputTextVisible, QRect(0, 0, mWidth, 30));
+        mFindInputText = ivis::common::createWidget<QTextEdit>(mFindWidget, true, QRect(200, 0, 800, 30),
+                                                               mBaseStyle.arg("black").arg(15));
+        mFindPrevious = ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(0, 0, 200, 30),
+                                                                mBaseStyle.arg("black").arg(15));
+        mFindPrevious->setText("Previous");
+        mFindNext = ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(1000, 0, 200, 30),
+                                                            mBaseStyle.arg("black").arg(15));
+        mFindNext->setText("Next");
+        connect(mFindInputText, &QTextEdit::textChanged, [=]() {
+            QString inputText = mFindInputText->toPlainText();
+            if (inputText.contains("\n")) {
+                inputText.remove("\n");
+                mFindInputText->setText(inputText);
+                QTextCursor cursor = mFindInputText->textCursor();
+                cursor.movePosition(QTextCursor::End);
+                mFindInputText->setTextCursor(cursor);
+                mFindInputText->setAlignment(Qt::AlignCenter);
+            }
+        });
+        connect(mFindPrevious, &QPushButton::clicked, [=]() { updateFindTextCursor(true); });
+        connect(mFindNext, &QPushButton::clicked, [=]() { updateFindTextCursor(false); });
     }
-    // ~DetailLog() {
-    //     delete mContentLabel;
-    //     delete mClear;
-    //     delete mStop;
-    //     delete mClose;
-    // }
     void updateLogDisplay(const QStringList& data) {
         // QString text = mContent;
         QString text = QString();
@@ -377,20 +403,58 @@ public:
         mContent.clear();
         mContentLabel->clear();
     }
+    void updateFindWidget(const bool& visible) {
+        QRect contentLabelRect = (visible) ? (QRect(0, 30, mWidth, 520)) : (QRect(0, 0, mWidth, 550));
+        if (mContentLabel) {
+            mContentLabel->setGeometry(contentLabelRect);
+            // mContentLabel->verticalScrollBar()->setValue(mContentLabel->verticalScrollBar()->maximum());
+        }
+        if (mFindWidget) {
+            if (mFindInputText) {
+                mFindInputText->clear();
+                mFindInputText->setWordWrapMode(QTextOption::WrapMode::NoWrap);
+                mFindInputText->setLineWrapMode(QTextEdit::LineWrapMode::NoWrap);
+                mFindInputText->setAlignment(Qt::AlignCenter);
+                mFindInputText->setFocus(Qt::MouseFocusReason);
+            }
+            mFindWidget->setVisible(visible);
+        }
+        mFindInputTextVisible = visible;
+    }
+    void updateFindTextCursor(const bool& searchPrevious, const QString& inputSerachText = QString()) {
+        if (mContentLabel == nullptr) {
+            return;
+        }
+        QString searchText = (inputSerachText.size() == 0) ? (mFindInputText->toPlainText()) : (inputSerachText);
+        QTextCursor cursor = mContentLabel->textCursor();
+        QTextDocument::FindFlags flags = (searchPrevious) ? (QTextDocument::FindBackward) : (QTextDocument::FindFlags());
+        cursor = mContentLabel->document()->find(searchText, cursor, flags);
+        if (!cursor.isNull()) {
+            mContentLabel->setTextCursor(cursor);
+            mContentLabel->ensureCursorVisible();
+        }
+    }
 
 signals:
     void signalCloseClicked(const bool& clicked);
 
 private:
-    const QString mBaseStyle = QString("color: blue; font-size: %1px");
+    const QString mBaseStyle = QString("color: %1; font-size: %2px");
     const int mWidth = 1200;
     const int mHeight = 600;
     QTextEdit* mContentLabel = nullptr;
     QPushButton* mClear = nullptr;
     QPushButton* mStop = nullptr;
     QPushButton* mClose = nullptr;
+    QShortcut *mShortcut = nullptr;
+    QWidget* mFindWidget = nullptr;
+    QTextEdit* mFindInputText = nullptr;
+    QPushButton* mFindPrevious = nullptr;
+    QPushButton* mFindNext = nullptr;
     QString mContent = QString();
     bool mStopState = false;
+    bool mPressCtrl = false;
+    bool mFindInputTextVisible = false;
 };
 
 class TextEnterDialog : public QDialog {
@@ -509,7 +573,6 @@ private:
     SelectReportDialog* mTestReport = nullptr;
     DetailLog* mDetailLog = nullptr;
     SelectModuleDialog* mViewRunScript = nullptr;
-
 };
 
 #endif  // GUI_MENU_H

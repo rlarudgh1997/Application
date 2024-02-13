@@ -750,8 +750,8 @@ void GuiMenu::updateDisplayViewRunScriptList() {
         connect(mViewRunScript, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
             if (selectModule.size() == 1) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScriptDetail, QVariant(selectModule.at(0).first));
+                mViewRunScript->finished(true);
             }
-            mViewRunScript->finished(true);
         });
         connect(mViewRunScript, &QDialog::finished, [=]() {
             disconnect(mViewRunScript);
