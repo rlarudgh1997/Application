@@ -1,5 +1,19 @@
 ====================================================================
 # [ToDo]
+#	기능 구현 필요
+#		- 자동 완성 기능 추가
+#			: [Sheet] Private_Test_Signal 입력시 - Private_Test_Signal 에 해당하는 Result 값만 자동 완성으로 표시 되도록 구현
+#				-> 전체 시트에서 입력 시그널에 해당하는 TCName을 찾아서 Result 값을 자동완성으로 제공
+#		- GenTC Script 변경 사항 반영
+#			: 전체 모듈 선택시 negrative 선택 항목 없이 Script 실행 - sh 내부에서 자체적으로 negative, normal 판단하는 기능임
+
+
+
+
+
+
+
+
 - 단축키 Cut 상태
 	: Ctrl + X 동작후 다른셀에서 타이핑시 Ctrl + X 해제 안되는 문제
 	: esc 키 입력시 cut 정보 - 삭제 동작시 텍스트도 삭제 되는 문제

@@ -17,7 +17,7 @@
         ./bulid.sh c
 
 
-[Run : Application]
+[Run]
     ./run.sh h
 
 
@@ -26,7 +26,7 @@
     - Edit : Copy, Cut, Paste
     - View : Config, Node View
     - Setting : Default Path, VSM Path
-    - Run : Generate TC, Run TC, TC Report, Gcov Report, Enter Script Text
+    - Run : Generate TC, Run TC, TC Report, Gcov Report, Enter Script Text, View Run Script Log
     - Help : About, About QT
 
 
@@ -34,6 +34,7 @@
     - DefaultModule.info : VSM Module 리스트 정보
     - NodeAddressSFC.info : SFC 리스트 정보
     - NodeAddressVSM.info : VSM 리스트 정보
+    - Application.ini : Config 설정 파일 (앱 실행시 자동 생성)
 
 
 [Folder]
@@ -52,9 +53,13 @@
     │   ├── parser.py
     │   └── x2unit.py
     ├── tc_creator
+    │   ├── Alton
+    │   │   ├── alton_client
+    │   │   └── altonservice
     │   ├── Application
     │   │   ├── Application.pro
     │   │   ├── README.md
+    │   │   ├── ReleaseNote.info
     │   │   ├── Resource
     │   │   │   ├── Image
     │   │   │   │   ├── Menu

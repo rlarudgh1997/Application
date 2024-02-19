@@ -33,6 +33,7 @@ void GuiMenu::drawDisplayDepth0() {
     drawMenuReport();
 #endif
     drawMenuRun();
+    drawMenuDocker();
     drawMenuHelp();
     drawMenuEtc(false);
 }
@@ -422,6 +423,21 @@ void GuiMenu::drawMenuRun() {
     }
 }
 
+void GuiMenu::drawMenuDocker() {
+#if 0
+    mMenu[MainType::Docker] = mMainView->menuBar()->addMenu(STRING_DOCKER);
+
+    mAction[MainType::Docker][STRING_MULTI_DOCKER] =
+        new QAction(QIcon::fromTheme("actionMultiDocker"), STRING_MULTI_DOCKER, this);
+    if (mAction[MainType::Docker][STRING_MULTI_DOCKER]) {
+        mAction[MainType::Docker][STRING_MULTI_DOCKER]->setStatusTip(STRING_MULTI_DOCKER_TIP);
+        mMenu[MainType::Docker]->addAction(mAction[MainType::Docker][STRING_MULTI_DOCKER]);
+        connect(mAction[MainType::Docker][STRING_MULTI_DOCKER], &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeMultiDocker, QVariant()); });
+    }
+#endif
+}
+
 void GuiMenu::drawMenuHelp() {
     mMenu[MainType::Help] = mMainView->menuBar()->addMenu(STRING_HELP);
 
@@ -744,9 +760,7 @@ void GuiMenu::updateDisplayViewRunScriptList() {
         QVariant fileList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList);
         mViewRunScript = new SelectModuleDialog(isHandler()->getScreen(), fileList.toStringList(), true);
         mViewRunScript->updateSelectListInfo(fileList.toStringList(), QList<QStringList>());
-        mViewRunScript->updateSelectWidgetInfo(QString("Select Log File"),
-                                               QStringList({"File List"}),
-                                               QSize(500, 300));
+        mViewRunScript->updateSelectWidgetInfo(QString("Select Log File"), QStringList({"File List"}), QSize(500, 300));
         connect(mViewRunScript, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
             if (selectModule.size() == 1) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScriptDetail, QVariant(selectModule.at(0).first));

@@ -193,10 +193,12 @@ public:
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
 
-        EventTypeHelpAbout = 1500,
+        EventTypeMultiDocker = 1500,
+
+        EventTypeHelpAbout = 1600,
         EventTypeHelpAboutQt,
 
-        EventTypeOpenExcel = 1600,
+        EventTypeOpenExcel = 1700,
         EventTypeSaveExcel,
         EventTypeUpdateExcelSheet,
         EventTypeEditExcelSheet,

@@ -328,8 +328,8 @@ public:
         setGeometry(setRect);
         setFocus();
 
-        mContentLabel = ivis::common::createWidget<QTextEdit>(this, true, QRect(0, 0, mWidth, 550),
-                                                              mBaseStyle.arg("blue").arg(13));
+        mContentLabel =
+            ivis::common::createWidget<QTextEdit>(this, true, QRect(0, 0, mWidth, 550), mBaseStyle.arg("blue").arg(13));
         mContentLabel->setReadOnly(true);
         // updateLogDisplay(info, error, content);
 
@@ -364,13 +364,13 @@ public:
             updateFindWidget(!mFindInputTextVisible);
         });
         mFindWidget = ivis::common::createWidget<QWidget>(this, mFindInputTextVisible, QRect(0, 0, mWidth, 30));
-        mFindInputText = ivis::common::createWidget<QTextEdit>(mFindWidget, true, QRect(200, 0, 800, 30),
-                                                               mBaseStyle.arg("black").arg(15));
-        mFindPrevious = ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(0, 0, 200, 30),
-                                                                mBaseStyle.arg("black").arg(15));
+        mFindInputText =
+            ivis::common::createWidget<QTextEdit>(mFindWidget, true, QRect(200, 0, 800, 30), mBaseStyle.arg("black").arg(15));
+        mFindPrevious =
+            ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(0, 0, 200, 30), mBaseStyle.arg("black").arg(15));
         mFindPrevious->setText("Previous");
-        mFindNext = ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(1000, 0, 200, 30),
-                                                            mBaseStyle.arg("black").arg(15));
+        mFindNext =
+            ivis::common::createWidget<QPushButton>(mFindWidget, true, QRect(1000, 0, 200, 30), mBaseStyle.arg("black").arg(15));
         mFindNext->setText("Next");
         connect(mFindInputText, &QTextEdit::textChanged, [=]() {
             QString inputText = mFindInputText->toPlainText();
@@ -412,8 +412,8 @@ public:
         if (mFindWidget) {
             if (mFindInputText) {
                 mFindInputText->clear();
-                mFindInputText->setWordWrapMode(QTextOption::WrapMode::NoWrap);
-                mFindInputText->setLineWrapMode(QTextEdit::LineWrapMode::NoWrap);
+                // mFindInputText->setWordWrapMode(QTextOption::WrapMode::NoWrap);
+                // mFindInputText->setLineWrapMode(QTextEdit::LineWrapMode::NoWrap);
                 mFindInputText->setAlignment(Qt::AlignCenter);
                 mFindInputText->setFocus(Qt::MouseFocusReason);
             }
@@ -446,7 +446,7 @@ private:
     QPushButton* mClear = nullptr;
     QPushButton* mStop = nullptr;
     QPushButton* mClose = nullptr;
-    QShortcut *mShortcut = nullptr;
+    QShortcut* mShortcut = nullptr;
     QWidget* mFindWidget = nullptr;
     QTextEdit* mFindInputText = nullptr;
     QPushButton* mFindPrevious = nullptr;
@@ -521,6 +521,7 @@ private:
         Setting,
         Report,
         Run,
+        Docker,
         Help,
         Max,
     };
@@ -543,6 +544,7 @@ private:
     void drawMenuSetting();
     void drawMenuReport();
     void drawMenuRun();
+    void drawMenuDocker();
     void drawMenuHelp();
     void drawMenuEtc(const bool& update = false);
     void updateDisplaySelectModule(const int& runType);
