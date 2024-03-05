@@ -1,0 +1,31 @@
+[Description]
+    Ticket No : EXNCP-40554
+    Issue Type : Spec
+    Module : Illumination [CD050]
+    HMC : https://jira.ccos.dev/browse/EXNCP-40554
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1141
+    Info : 40554 - [CV1PE][G4]240130 1104 클러스터 조명밝기 조절시 100단계일경우 사운드 미발생
+    #Date :2024.02.13
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV, EV, FCEV, PHEV, HEV
+    #ALL
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    Vehicle.System.Config.Inter_ConfigAvnBrightLink 1
+    SFC.Input_Output_Processing.Inter_RheostatSwitchStatus u 3
+    SFC.Illumination.Inter_MinLightMode 1
+    Vehicle.CD.Illumination.Input_AvnAutoBrightValue 999
+
+[Step]
+   SFC.Input_Output_Processing.Inter_RheostatSwitchStatus 1
+   delay 160
+   Vehicle.CD.Illumination.Input_AvnAutoBrightValue 1000
+
+[Expected Result]
+    SFC.Illumination.Event.RheostatFeedbackAvnLink.Stat 2
+    SFC.Illumination.Event.RheostatFeedbackAvnLink.LinkedSound.Type 1

@@ -5,6 +5,9 @@
 #include <QSharedPointer>
 
 #include "CommonDefine.h"
+#if defined(__MODULE_SUB_WINDOW__)
+#include "SubWindow.h"
+#endif
 
 class MainWindow : public QQuickView {
     Q_OBJECT
@@ -28,6 +31,9 @@ protected:
 
 private:
     QRect mScreenInfo = QRect();
+#if defined(__MODULE_SUB_WINDOW__)
+    SubWindow* mSubWindow = nullptr;
+#endif
 };
 
 #endif  // MAIN_WINDOW_H

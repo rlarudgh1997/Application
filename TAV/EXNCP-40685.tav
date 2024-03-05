@@ -1,0 +1,36 @@
+[Description]
+    Ticket No : EXNCP-40685
+    Issue Type : Spec
+    Module : High Performance Gauge [PT280]
+    HMC : https://jira.ccos.dev/browse/EXNCP-40685
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1150
+    Info : 40685 - NX4E_Bar조건(0~1.3)에서 가속시 약 1.0bar로 바로 올라가고 감속시 0로 바로 떨러지는 현상과 천천히 감속시 900rpm까지도 터보바가 1.0bar에서 holding되는 현상이 나타남
+    #Date :2024.02.13
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV, EV, FCEV, PHEV, HEV
+    #ALL
+
+[Precondition]
+#    [Group]
+#        SFC.Private.IGNElapsed.ElapsedOn0ms 1
+#        SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus 2
+    SFC.Input_Output_Processing.Inter_EngineOnStatus 1
+#    [Group]
+#        Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue 1000 # ENG_BstPrsrVal 1000
+#        Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 10  # ENG_AtmsphPrsrVal 10
+    Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue 1000 # ENG_BstPrsrVal 1000
+    Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 10  # ENG_AtmsphPrsrVal 10
+
+[Step]
+    SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus 3
+#    [Group]
+#        SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus 3
+#        SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus 3
+
+[Expected Result]
+    SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57

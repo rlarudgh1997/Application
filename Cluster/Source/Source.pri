@@ -9,6 +9,7 @@ include($$PWD/Telltale/Telltale.pri)
 include($$PWD/Content/Content.pri)
 include($$PWD/Event/Event.pri)
 include($$PWD/Service/Service.pri)
+include($$PWD/SubWindow/SubWindow.pri)
 
 
 

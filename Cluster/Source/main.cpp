@@ -1,4 +1,6 @@
-#include <QGuiApplication>
+// #include <QGuiApplication>
+#include <QApplication>
+
 #include <QDebug>
 
 #include "MainWindow.h"
@@ -9,6 +11,10 @@
 #include <csignal>
 #include <fstream>
 #include <unistd.h>
+#endif
+
+#if defined(__SUB_WINDOW_ONLY__)
+#include "SubWindow.h"
 #endif
 
 void sigHandler(int32_t sig) {
@@ -99,7 +105,8 @@ int main(int argc, char* argv[]) {
     signal(SIGABRT, sigHandler);
     signal(SIGSEGV, sigHandler);
 
-    QGuiApplication app(argc, argv);
+    // QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     // qInstallMessageHandler(customMessageHandler);
     QString messagPattern = QString("%1 %2%3%4%5%6 %7")
@@ -115,7 +122,11 @@ int main(int argc, char* argv[]) {
     // qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");
     // qputenv("QT_LOGGING_RULES", "myApp.debug=true;myApp.info=true;myApp.warning=false;myApp.critical=false");
 
+#if defined(__SUB_WINDOW_ONLY__)
+    SubWindow subWindow;
+#else
     MainWindow mainWindow;
+#endif
 
     return app.exec();
 }

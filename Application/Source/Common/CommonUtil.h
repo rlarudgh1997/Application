@@ -235,7 +235,10 @@ private:
         // qDebug() << "\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         // qDebug() << "path :" << path << ", Count :" << fileList.size();
         for (const QFileInfo& file : fileList) {
-            if ((fileExtesion.size() > 0) && (file.fileName().contains(fileExtesion) == false)) {
+            QStringList tempList = file.fileName().split(".");
+            QString currentExtesion = QString(".%1").arg((tempList.size() == 0) ? ("") : (tempList.at(tempList.size() - 1)));
+            bool validExtension = (currentExtesion.compare(fileExtesion) == false);
+            if (validExtension == false) {
                 continue;
             }
             fileNames.append(file.fileName());

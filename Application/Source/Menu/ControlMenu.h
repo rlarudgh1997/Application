@@ -16,7 +16,7 @@ public:
     virtual void resizeEvent(const int& width, const int& height);
 
 private:
-      ControlMenu();
+    ControlMenu();
 
     void updateAllModueList(const QString& filter);
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());

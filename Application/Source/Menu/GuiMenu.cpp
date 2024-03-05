@@ -302,6 +302,15 @@ void GuiMenu::drawMenuSetting() {
                 [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant()); });
     }
 
+    mAction[MainType::Setting][STRING_APP_MODE] = new QAction(QIcon::fromTheme("actionAppMode"), STRING_APP_MODE, this);
+    if (mAction[MainType::Setting][STRING_APP_MODE]) {
+        mAction[MainType::Setting][STRING_APP_MODE]->setStatusTip(STRING_APP_MODE_TIP);
+        mMenu[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
+        // mToolBar[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
+        connect(mAction[MainType::Setting][STRING_APP_MODE], &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingAppMode, QVariant()); });
+    }
+
 #if 0
     mAction[MainType::Setting][STRING_NODE_PATH] = new QAction(QIcon::fromTheme("actionNodePath"),
                                                         STRING_NODE_PATH,

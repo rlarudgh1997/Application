@@ -10,6 +10,34 @@
 
 
 
+- *.tav 파일 파싱
+- excel -> tab 변환
+- tav -> excel 변환 : 필요시 추가 구현
+- tav -> sh 변환
+	: script 양식에 맞게
+
+- file
+	: open - tav, sh --> 파일 확장자 지정으로 치환 가능
+	: open dir : 파일 전체 리스트 업 -> 화면 리스트업시 해당 파일만 리스트업 되도록
+
+- run
+	: start - tav, sh 둘중 하나
+	: all - sh 전체 파일 변환 및 실행
+
+- setting
+	: default path : vsm 파일 폴더
+	: tav path : tav 파일 폴더
+	: alton client path : alton 실행 파일 폴더
+
+- etc
+	: 리스트 업 화면 구성 & 선택
+		- tav : sub 화면 진입가능
+		- sh : start 화면만 진입 하도록
+
+	: save 기능
+		- tav 뷰어 상태에서 edit 하면 save 버튼 활성화
+
+
 
 
 

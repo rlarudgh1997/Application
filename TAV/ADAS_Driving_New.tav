@@ -1,0 +1,31 @@
+[Description]
+    Ticket No : EXNCP-12345
+    Issue Type : N/A
+    Module : N/A
+    HMC : https://jira.ccos.dev/browse/EXNCP-12345
+    #IVIS : https://ivis.atlassian.net/browse/SFC-?????
+    Info : N/A
+    #Date :2024.02.27
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV, EV, FCEV, PHEV, HEV
+    #ALL
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    delay 0.5
+    [Group]
+        SMV_FrObjSta 2
+        SMV_VehDstLvlVal 1
+
+[Step]
+    [Group]
+        SMV_FrObjSta 0
+        SMV_VehDstLvlVal 4
+
+[Expected Result]
+    SFC.ADAS_Driving_New.Constant.FrontVehicle.Color.Stat 1
+    SFC.ADAS_Driving_New.Constant.FrontVehicle.Level.Value 5

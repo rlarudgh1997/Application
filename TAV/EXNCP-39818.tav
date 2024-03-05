@@ -1,0 +1,24 @@
+[Description]
+    Ticket No : EXNCP-39818
+    Issue Type : N/A
+    Module : ROA [EC140]
+    HMC : https://jira.ccos.dev/browse/EXNCP-39818
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1032
+    Info : 39818 - [MAR] [GL3] [EC] TcNo. 2540 E61201 팝업 B+ 리셋 시 IGN1 ON 일때 표시함.
+    #Date :2024.02.27
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV, EV, FCEV, PHEV, HEV
+    #ALL
+
+[Precondition]
+    SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    Vehicle.EC.ROA.Input_RearSeatRemindWarnStatusFromBCM 0
+
+[Step]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+
+[Expected Result]
+    SFC.ROA.Event.WarnStatus.Stat 1

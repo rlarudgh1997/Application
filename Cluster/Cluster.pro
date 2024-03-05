@@ -2,7 +2,7 @@ message(".......................................................................
 
 TEMPLATE = app
 CONFIG += c++17 link_pkgconfig
-QT += qml quick
+QT += qml quick widgets
 
 
 # Define

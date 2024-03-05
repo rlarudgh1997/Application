@@ -47,6 +47,8 @@
 #define STRING_NODE_PATH_TIP QString("Setting node address file path")
 #define STRING_VSM_PATH QString("VSM Path")
 #define STRING_VSM_PATH_TIP QString("Setting VSM file path")
+#define STRING_APP_MODE QString("App Mode")
+#define STRING_APP_MODE_TIP QString("Setting application mode")
 #define STRING_TEST_REPORT QString("Tes Report")
 #define STRING_TEST_REPORT_TIP QString("Test report setting")
 #define STRING_REPORT QString("Report")

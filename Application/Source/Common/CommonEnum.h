@@ -189,6 +189,7 @@ public:
         EventTypeSettingDevPath = 1400,
         EventTypeSettingNodePath,
         EventTypeSettingVsmPath,
+        EventTypeSettingAppMode,
         EventTypeSettingTestReport,
         EventTypeSettingTestResult,
         EventTypeSettingTestCoverage,
@@ -413,6 +414,17 @@ public:
         ShortcutTypeMergeSplit,
         ShortcutTypeUndo,
         ShortcutTypeRedo,
+    };
+};
+
+class AppModeEnum {
+public:
+    enum AppModeType {
+        AppModeTypeInvalid = 0,
+        AppModeTypeCV,
+        AppModeTypePV,
+        AppModeTypeTAV,
+        AppModeTypeCanDB,
     };
 };
 

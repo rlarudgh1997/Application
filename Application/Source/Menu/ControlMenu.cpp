@@ -452,10 +452,10 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         } else if (cmd.contains("run_tc.sh")) {
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_tcreport.sh")) {
-            fileName = QString("TCReport.Info");
+            fileName = QString("TCReport.info");
             subPath = QString("/../../../validator");
         } else if (cmd.contains("gen_gcov_report.sh")) {
-            fileName = QString("GCOVReport.Info");
+            fileName = QString("GCOVReport.info");
             subPath = QString("/../../../validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
@@ -473,7 +473,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             return false;
         }
 
-        fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.Info") : ("GCOVReport.Info"));
+        fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.info") : ("GCOVReport.info"));
         subPath = QString("/../../../validator");
         // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
         // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
@@ -749,6 +749,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
                 ConfigSetting::instance().data()->writeConfig(configType, popupData);
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeInitModule);
             }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSettingAppMode: {
+            qDebug() << "EventTypeSettingAppMode";
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenTC:
