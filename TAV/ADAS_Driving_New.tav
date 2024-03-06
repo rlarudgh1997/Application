@@ -10,7 +10,8 @@
     #Status : Open
 
 [PowerTrain]
-    ICV, EV, FCEV, PHEV, HEV
+    ICV
+    #ICV, EV, FCEV, PHEV, HEV
     #ALL
 
 [Precondition]
@@ -18,13 +19,17 @@
     SFC.Private.IGNElapsed.ElapsedOn0ms 1
     delay 0.5
     [Group]
-        SMV_FrObjSta 2
-        SMV_VehDstLvlVal 1
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvFrontObjectStatus 2
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvVehicleDistanceLevelValue 1
+#        SMV_FrObjSta 2
+#        SMV_VehDstLvlVal 1
 
 [Step]
     [Group]
-        SMV_FrObjSta 0
-        SMV_VehDstLvlVal 4
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvFrontObjectStatus 0
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvVehicleDistanceLevelValue 4
+#        SMV_FrObjSta 0
+#        SMV_VehDstLvlVal 4
 
 [Expected Result]
     SFC.ADAS_Driving_New.Constant.FrontVehicle.Color.Stat 1

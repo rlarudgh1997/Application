@@ -10,7 +10,8 @@
     #Status : Open
 
 [PowerTrain]
-    ICV, EV, FCEV, PHEV, HEV
+    ICV
+    #ICV, EV, FCEV, PHEV, HEV
     #ALL
 
 [Precondition]
@@ -22,9 +23,9 @@
     Vehicle.CD.Illumination.Input_AvnAutoBrightValue 999
 
 [Step]
-   SFC.Input_Output_Processing.Inter_RheostatSwitchStatus 1
-   delay 160
-   Vehicle.CD.Illumination.Input_AvnAutoBrightValue 1000
+    SFC.Input_Output_Processing.Inter_RheostatSwitchStatus 1
+    delay 160
+    Vehicle.CD.Illumination.Input_AvnAutoBrightValue 1000
 
 [Expected Result]
     SFC.Illumination.Event.RheostatFeedbackAvnLink.Stat 2

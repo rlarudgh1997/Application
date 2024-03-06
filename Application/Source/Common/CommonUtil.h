@@ -225,6 +225,9 @@ public:
     static int writeFile(const QString& filePath, const QString& str, const bool& append) {
         return writeFileData(filePath, str, append);
     }
+    static bool deleteFile(const QString& path, const QString& deleteInfo) {
+        return deleteFileData(path, deleteInfo);
+    }
 
 private:
     static QStringList readFileListInfo(const QString& path, const QString& fileExtesion, QFileInfoList& fileList) {
@@ -292,6 +295,25 @@ private:
         out << str;
         file.close();
         return str.size();
+    }
+    static bool deleteFileData(const QString& path, const QString& deleteInfo) {
+        QFile file;
+        if (deleteInfo.contains("*.")) {
+            QString fileExtenstion = deleteInfo;
+            fileExtenstion.remove("*");
+            QFileInfoList fileList = QFileInfoList();
+            for (const auto& fileName : isFileListInfo(path, fileExtenstion, fileList)) {
+                file.setFileName(QString("%1/%2").arg(path).arg(fileName));
+                bool result = file.remove();
+                // qDebug() << ((result) ? ("Delete Sucess :") : ("1 Delete Fail :")) << file.fileName();
+            }
+            return true;
+        } else {
+            file.setFileName(QString("%1/%2").arg(path).arg(deleteInfo));
+            bool result = file.remove();
+            // qDebug() << ((result) ? ("Delete Sucess :") : ("2 Delete Fail :")) << file.fileName();
+            return result;
+        }
     }
 };
 

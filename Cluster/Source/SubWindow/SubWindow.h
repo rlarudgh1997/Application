@@ -11,19 +11,6 @@ class SubWindow;
 }
 QT_END_NAMESPACE
 
-// class DetailInfo {
-// public:
-//     DetailInfo() {}
-//     DetailInfo(const bool& state, const QString& date) : mState(state), mData(date) {}
-//     ~DetailInfo() {}
-//     bool isDetailInfoState() { return mState; }
-//     QString isDetailInfoData() { return mData; }
-
-// private:
-//     bool mState = false;
-//     QString mData = QString();
-// };
-
 class SubWindow : public QMainWindow {
     Q_OBJECT
 
@@ -65,29 +52,31 @@ private:
     void drawDisplay(const int& type, const QString& text = QString());
     void updateFileList();
     void updateDetailFileInfo(const int& viewType, const QString& info);
-    QString isDataType(const QString& value);
+    void updateDetailDataInfo(const QString& filePath);
+    void writeOriginalData(const QString& filePath, const QMap<int, QPair<QString, QString>>& mergeDataInfo);
     QString createToScript(const QString& file);
-    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& categoryName);
     QStringList isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList);
-    QList<QPair<QString, QString>> isCanSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
-    QMap<int, QStringList> isCanSignal(const bool& sfcSignal, const QString& signalName,
-                                       const QMap<int, QStringList>& vsmFileList);
+    QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
+    QString isDataType(const QString& value);
+    QMap<int, QPair<QString, QString>> isMergeDataInfo(const QString& oldData, const QString& newData);
 
-protected:
-    void mousePressEvent(QMouseEvent* mouseEvent) override;
-    void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
-    void mouseMoveEvent(QMouseEvent* mouseEvent) override;
-    void keyPressEvent(QKeyEvent* keyEvent) override;
-    void keyReleaseEvent(QKeyEvent* keyEvent) override;
-    void moveEvent(QMoveEvent* moveEvent) override;
-    void resizeEvent(QResizeEvent* resizeEvent) override;
+// protected:
+//     void mousePressEvent(QMouseEvent* mouseEvent) override;
+//     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
+//     void mouseMoveEvent(QMouseEvent* mouseEvent) override;
+//     void keyPressEvent(QKeyEvent* keyEvent) override;
+//     void keyReleaseEvent(QKeyEvent* keyEvent) override;
+//     void moveEvent(QMoveEvent* moveEvent) override;
+//     void resizeEvent(QResizeEvent* resizeEvent) override;
 
 private:
     Ui::SubWindow* mGui;
     bool mInit = false;
     QStandardItemModel mModel;
+    bool mTavSave = false;
     bool mStart = false;
     QMap<int, QString> mDetailInfo = QMap<int, QString>();
+    QStringList mOriginalData = QStringList();
     QString mSelectFile = QString();
     QString mPreviousTavData = QString();
 };

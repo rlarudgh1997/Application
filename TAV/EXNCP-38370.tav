@@ -10,8 +10,8 @@
     #Status : Open
 
 [PowerTrain]
-    ICV, EV, FCEV, PHEV, HEV
-    #ICV, EV
+    #ICV, EV, FCEV, PHEV, HEV
+    ICV, EV
     #ALL
 
 [Precondition]

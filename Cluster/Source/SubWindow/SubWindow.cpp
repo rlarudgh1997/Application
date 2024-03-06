@@ -28,34 +28,6 @@ SubWindow::~SubWindow() {
     delete mGui;
 }
 
-void SubWindow::mousePressEvent(QMouseEvent* mouseEvent) {
-    Q_UNUSED(mouseEvent)
-}
-
-void SubWindow::mouseReleaseEvent(QMouseEvent* mouseEvent) {
-    Q_UNUSED(mouseEvent)
-}
-
-void SubWindow::mouseMoveEvent(QMouseEvent* mouseEvent) {
-    Q_UNUSED(mouseEvent)
-}
-
-void SubWindow::keyPressEvent(QKeyEvent* keyEvent) {
-    Q_UNUSED(keyEvent)
-}
-
-void SubWindow::keyReleaseEvent(QKeyEvent* keyEvent) {
-    Q_UNUSED(keyEvent)
-}
-
-void SubWindow::moveEvent(QMoveEvent* moveEvent) {
-    Q_UNUSED(moveEvent)
-}
-
-void SubWindow::resizeEvent(QResizeEvent* resizeEvent) {
-    Q_UNUSED(resizeEvent)
-}
-
 void SubWindow::init() {
     qDebug() << "Service :" << Service::instance().data();
 
@@ -78,6 +50,7 @@ void SubWindow::controlConnect(const bool& state) {
             mPreviousTavData.clear();
             drawDisplay(DisplayTypeListSub, mSelectFile);
             updateDetailFileInfo(ViewTypeTAV, mSelectFile);
+            mGui->detailContent->setReadOnly(false);
         }
     });
     connect(mGui->detailBack, &QPushButton::clicked, [=]() {
@@ -85,6 +58,12 @@ void SubWindow::controlConnect(const bool& state) {
         drawDisplay(DisplayTypeListMain);
     });
     connect(mGui->detailStart, &QPushButton::clicked, [=]() {
+        if (mTavSave) {
+            mTavSave = false;
+            mGui->detailSave->setVisible(false);
+            updateDetailDataInfo(QString());
+        }
+
         mStart = !mStart;
         if (mStart) {
             mGui->detailBack->hide();
@@ -97,9 +76,29 @@ void SubWindow::controlConnect(const bool& state) {
             mGui->detailStart->setText("Start");
             updateDetailFileInfo(ViewTypeRedrawTAV, mPreviousTavData);
         }
+        mGui->detailContent->setReadOnly(mStart);
     });
+    connect(mGui->detailContent, &QPlainTextEdit::textChanged, [=]() {
+        if (mStart) {
+            return;
+        }
+        mTavSave = (mPreviousTavData != mGui->detailContent->toPlainText());
+        mGui->detailSave->setVisible(mTavSave);
+    });
+    connect(mGui->detailSave, &QPushButton::clicked, [=]() {
+        mTavSave = false;
+        mGui->detailSave->setVisible(mTavSave);
+        updateDetailDataInfo(mSelectFile);
+    });
+
     connect(mGui->altonServiceClear, &QPushButton::clicked, [=]() { mGui->altonServiceContent->hide(); });
     connect(mGui->hmiClear, &QPushButton::clicked, [=]() { mGui->hmiContent->hide(); });
+
+    connect(mGui->actionDelete, &QAction::triggered, [=]() {
+        QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+        bool result = ivis::common::FileInfo::deleteFile(path, QString("*.sh"));
+        qDebug() << "Delete Script File :" << ((result) ? ("Sucess") : ("Fail"));
+    });
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {
@@ -108,6 +107,7 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             mGui->menubar->show();
             mGui->statusbar->hide();
             mGui->altonClient->setCurrentIndex(1);
+            mGui->detailSave->hide();
             mGui->altonServiceContent->hide();
             mGui->hmiContent->hide();
             break;
@@ -166,12 +166,12 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
     if (viewType == ViewTypeTAV) {
         QString file = info;
         QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(file);
-        QStringList fileData = ivis::common::FileInfo::readFile(path);
         QString content = QString();
         int foundType = DetailInfoInvalid;
+        mOriginalData = ivis::common::FileInfo::readFile(path);
 
         mDetailInfo.clear();
-        for (const auto& data : fileData) {
+        for (const auto& data : mOriginalData) {
             if (data.contains("#")) {
                 // ex) data = #Info : test 1235                    => 주석 처리 기능 완료
                 // ex) data = Info : test 1235  # test info define => 중간 주석 처리 기능 구현 필요
@@ -243,24 +243,71 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
     }
 }
 
-QString SubWindow::isDataType(const QString& value) {
-    bool result;
-    value.toULongLong(&result);
-    if (result) {
-        return "uint64_t";
+void SubWindow::updateDetailDataInfo(const QString& filePath) {
+    QString oldDetailContent = mPreviousTavData;
+    QString newDetailContent = mGui->detailContent->toPlainText();
+    QMap<int, QPair<QString, QString>> mergeDataInfo = isMergeDataInfo(oldDetailContent, newDetailContent);
+
+    for (int index = DetailInfoInvalid; index < DetailInfoMax; index++) {
+        if ((mDetailInfo[index].size() == 0) || (index == DetailInfoListen)) {
+            continue;
+        }
+
+        bool changed = false;
+        QStringList detailList = mDetailInfo[index].split("\n");
+        for (int lineIndex = 0; lineIndex < detailList.size(); lineIndex++) {
+            for (auto iter = mergeDataInfo.begin(); iter != mergeDataInfo.end(); ++iter) {
+                if (detailList[lineIndex] == iter.value().first) {
+                    changed = true;
+                    detailList[lineIndex] = iter.value().second;
+                    qDebug() << "Changed Data[" << iter.key() << "] :" << iter.value().first << "->" << iter.value().second;
+                    break;
+                }
+            }
+        }
+        if (changed) {
+            QString data = QString();
+            for (const auto& detail : detailList) {
+                data.append(detail);
+                data.append("\n");
+            }
+            mDetailInfo[index] = data;
+        }
     }
-    value.toLongLong(&result);
-    if (result) {
-        return "int64_t";
+    mPreviousTavData = newDetailContent;
+    writeOriginalData(filePath, mergeDataInfo);
+}
+
+void SubWindow::writeOriginalData(const QString& filePath, const QMap<int, QPair<QString, QString>>& mergeDataInfo) {
+    if ((filePath.size() == 0) || (mergeDataInfo.size() == 0)) {
+        return;
     }
-    value.toDouble(&result);
-    if (result) {
-        return "double";
+
+    QStringList tempData = mOriginalData;
+    for (int index = 0; index < tempData.size(); index++) {
+        if ((tempData[index].size() == 0) || (index == DetailInfoListen)) {
+            continue;
+        }
+
+        for (auto iter = mergeDataInfo.begin(); iter != mergeDataInfo.end(); ++iter) {
+            if (tempData[index] == iter.value().first) {
+                tempData[index] = iter.value().second;
+                qDebug() << "Saved   Data[" << iter.key() << "] :" << iter.value().first << "->" << iter.value().second;
+            }
+        }
     }
-    if ((value.toLower() == QString("true")) || (value.toLower() == QString("false"))) {
-        return "bool";
+
+    if (mOriginalData != tempData) {
+        QString writeContent = QString();
+        QString path = QString("%1/../TAV/_%2").arg(ivis::common::APP_PWD()).arg(filePath);
+        for (const auto& data : tempData) {
+            writeContent.append(data);
+            writeContent.append("\n");
+        }
+        qDebug() << "Save Path :" << path;
+        ivis::common::FileInfo::writeFile(path, writeContent, false);
+        mOriginalData = tempData;
     }
-    return "string";
 }
 
 QString SubWindow::createToScript(const QString& file) {
@@ -280,7 +327,10 @@ QString SubWindow::createToScript(const QString& file) {
         for (const auto& data : mDetailInfo[index].split("\n")) {
             bool appendSkip = true;
             QString removeSpaceValue = data;
-            removeSpaceValue.remove("    ");    // Space : 4
+            removeSpaceValue.remove("    ");    // Space : 4 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("   ");     // Space : 3 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("  ");      // Space : 2 (공백 한칸을 제외한 공백 제거)
+
 
             if (data.size() == 0) {
                 // scriptInfo.append("\n");
@@ -306,6 +356,9 @@ QString SubWindow::createToScript(const QString& file) {
             } else if ((index == DetailInfoPreconditionGroup) || (index == DetailInfoStepGroup)) {
                 newLine = false;
                 groupValue.append(QString(" %1").arg(removeSpaceValue));
+                if (data.contains("   Vehicle.")) {
+                    abstractionList.append(removeSpaceValue);
+                }
             } else if (index == DetailInfoListen) {
                 newLine = false;
                 listenValue.append(QString(" %1").arg(removeSpaceValue));
@@ -363,7 +416,8 @@ QString SubWindow::createToScript(const QString& file) {
         QString writeContent = scriptInfo;
 
         // Replace : Abstraction -> CAN
-        for (const auto& replaceInfo : isCanSignal(abstractionList, pasingFileList)) {
+        writeContent.replace(ptValue, pt);
+        for (const auto& replaceInfo : isReplaceSignal(abstractionList, pasingFileList)) {
             writeContent.replace(replaceInfo.first, replaceInfo.second);
         }
 
@@ -379,6 +433,10 @@ QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QS
     QString fileNameBase = QString("CLU_VSM_%1.Vehicle.%2.vsm");
 
     for (const auto& signal : signalList) {
+        if (signal.contains("Vehicle.") == false) {
+            continue;
+        }
+
         QStringList temp = signal.split(".");
         if (temp.size() < 2) {
             continue;
@@ -399,205 +457,131 @@ QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QS
     return fileList;
 }
 
-QList<QPair<QString, QString>> SubWindow::isCanSignal(const QStringList& abstractionList, const QStringList& vsmFileList) {
-    const QString PREFIX_TYPE = QString("type:");
+QList<QPair<QString, QString>> SubWindow::isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList) {
+    // const QString PREFIX_TYPE = QString("type:");
     const QString PREFIX_SIGNAL_NAME = QString("signalName:");
-    const QString PREFIX_DATA_TYPE = QString("dataType:");
-    const QString PREFIX_DESCRIPTION = QString("description:");
-    const QString PREFIX_ABSTRACTION_NAME = QString("abstractionName:");
-    const QString PREFIX_VALUE_ENUM = QString("valueEnum:");
-    const QString PREFIX_MATCHING_TABLE = QString("matchingTable:");
-    const QString PREFIX_CODE_COMMENTING = QString("# ");
+    // const QString PREFIX_DATA_TYPE = QString("dataType:");
+    // const QString PREFIX_DESCRIPTION = QString("description:");
+    // const QString PREFIX_ABSTRACTION_NAME = QString("abstractionName:");
+    // const QString PREFIX_VALUE_ENUM = QString("valueEnum:");
+    // const QString PREFIX_MATCHING_TABLE = QString("matchingTable:");
+    // const QString PREFIX_CODE_COMMENTING = QString("# ");
     const QString PREFIX_HYPHEN = QString("-");
-    const QString PREFIX_DOT = QString(".");
+    // const QString PREFIX_DOT = QString(".");
     const QString PREFIX_COLON = QString(":");
-    const QString PREFIX_SPACE = QString(" ");
+    // const QString PREFIX_SPACE = QString(" ");
 
-    QList<QPair<QString, QString>> canSignalList = QList<QPair<QString, QString>>();
+    QList<QPair<QString, QString>> signalList = QList<QPair<QString, QString>>();
 
-    qDebug() << "======================================================================================================";
-    QStringList signalList = QStringList();
+    if (vsmFileList.size() == 0) {
+        return signalList;
+    }
+
+    int index = 0;
     for (const auto& abstraction : abstractionList) {
+        // qDebug() << index << ". >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         QStringList temp = abstraction.split(" ");
         if (temp.size() < 2) {
             continue;
         }
-
         QString value = temp[1];
         temp = temp[0].split(".");
         if (temp.size() < 3) {
             continue;
         }
-        QString signal = QString();
+
+        QString sfcSignal = QString();
         if (abstraction.contains("Vehicle.System.")) {
-            signal = temp.at(3);
+            sfcSignal = temp.at(3);
         } else {
-            signal = QString("%1.%2").arg(temp.at(2)).arg(temp.at(3));
+            sfcSignal = QString("%1.%2").arg(temp.at(2)).arg(temp.at(3));
         }
-        signalList.append(signal);
 
-        QString replaceData = QString("%1 %2").arg(signal).arg(value);
-        qDebug() << "\t Abstraction :" << abstraction;
-        qDebug() << "\t            ->" << replaceData;
-        // canSignalList.append(QPair<QString, QString>(abstraction, replaceData));
-
-        bool foundCanSignal = false;
-        qDebug() << "======================================================================================================";
+        QString signalName = QString();
         for (const auto& file : vsmFileList) {
-            qDebug() << "\t File        :" << file;
             QStringList readData = ivis::common::FileInfo::readFile(file);
-            QStringList vsmInfo = QStringList();
-            bool foundSignal = false;
-            for (QString lineStr : readData) {
-                if (foundSignal) {
+            bool foundAbstractionName = false;
+            for (const auto& lineStr : readData) {
+                if (foundAbstractionName) {
                     if ((lineStr.contains(PREFIX_SIGNAL_NAME))) {
-                        lineStr.remove(" ");
-                        lineStr.remove(PREFIX_SIGNAL_NAME);
-                        qDebug() << "]t Found CAN :" << lineStr;
-                        foundCanSignal = true;
+                        signalName = lineStr;
+                        signalName.remove(" ");
+                        signalName.remove(PREFIX_SIGNAL_NAME);
                         break;
-                    // } else if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                    //     break;
+                    } else if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
+                        break;
                     } else {
                     }
                     continue;
                 }
 
-                if ((lineStr.contains(signal)) && (lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                    foundSignal = true;
+                if ((lineStr.contains(sfcSignal)) && (lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
+                    foundAbstractionName = true;
                 }
             }
 
-            if (foundCanSignal) {
+            if (signalName.size() > 0) {
+                QString replaceData = QString("%1 %2").arg(signalName).arg(value);
+                signalList.append(QPair<QString, QString>(abstraction, replaceData));
+                // qDebug() << "\t File :" << file;
+                // qDebug() << "\t      :" << abstraction << "->" << replaceData;
                 break;
             }
         }
-
+        index++;
     }
+    // qDebug() << "==================================================================================================\n\n";
 
-    return canSignalList;
+    return signalList;
+}
+
+QString SubWindow::isDataType(const QString& value) {
+    bool result;
+    value.toULongLong(&result);
+    if (result) {
+        return "uint64_t";
+    }
+    value.toLongLong(&result);
+    if (result) {
+        return "int64_t";
+    }
+    value.toDouble(&result);
+    if (result) {
+        return "double";
+    }
+    if ((value.toLower() == QString("true")) || (value.toLower() == QString("false"))) {
+        return "bool";
+    }
+    return "string";
 }
 
 
+QMap<int, QPair<QString, QString>> SubWindow::isMergeDataInfo(const QString& oldData, const QString& newData) {
+    QMap<int, QPair<QString, QString>> mergeData = QMap<int, QPair<QString, QString>>();
 
-QMap<int, QStringList> SubWindow::isCanSignal(const bool& sfcSignal, const QString& signalName,
-                                                              const QMap<int, QStringList>& vsmFileList) {
-    const QString PREFIX_TYPE = QString("type:");
-    const QString PREFIX_SIGNAL_NAME = QString("signalName:");
-    const QString PREFIX_DATA_TYPE = QString("dataType:");
-    const QString PREFIX_DESCRIPTION = QString("description:");
-    const QString PREFIX_ABSTRACTION_NAME = QString("abstractionName:");
-    const QString PREFIX_VALUE_ENUM = QString("valueEnum:");
-    const QString PREFIX_MATCHING_TABLE = QString("matchingTable:");
-    const QString PREFIX_CODE_COMMENTING = QString("# ");
-    const QString PREFIX_HYPHEN = QString("-");
-    const QString PREFIX_DOT = QString(".");
-    const QString PREFIX_COLON = QString(":");
-    const QString PREFIX_SPACE = QString(" ");
-    // const QString PREFIX_MCAN = QString("_MCAN");
-    // const QString PREFIX_CCAN = QString("_CCAN");
-
-    QMap<int, QStringList> inputDataInfo = QMap<int, QStringList>();
-#if 1
-
-#else
-    QString signal = QString();
-    bool vehiclSystem = signalName.contains("Vehicle.System.");
-    int startAppendIndex = ((vehiclSystem) ? (3) : (2));
-    int index = 0;
-    for (const auto& splitText : signalName.split(PREFIX_DOT)) {
-        if (index >= startAppendIndex) {
-            signal.append((signal.size() > 0) ? (".") : (""));
-            signal.append(splitText);
-        }
-        index++;
-    }
-    if (signal.size() == 0) {
-        qDebug() << "Fail to signal name size : 0";
-        return inputDataInfo;
+    if (oldData == newData) {
+        return mergeData;
     }
 
-    qDebug() << "Input  Signal      :" << signalName;
-    qDebug() << "Parser Signal      :" << signal;
-    QMapIterator<int, QStringList> iter(vsmFileList);
-    while (iter.hasNext()) {
-        iter.next();
-        int inputDataType = iter.key();
-        QStringList fileName = iter.value();
-        // qDebug() << inputDataType << ". Size :" << fileName.size() << ", File :" << fileName;
-        QStringList valueEunm = QStringList();
-        QStringList matchingTable = QStringList();
-        for (const auto& file : fileName) {
-            QStringList readData = ivis::common::FileInfo::readFile(file);
-            QStringList vsmInfo = QStringList();
-            bool foundSignal = false;
-            for (QString lineStr : readData) {
-                if (foundSignal) {
-                    if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                        qDebug() << "\t Next  Signal[" << inputDataType << "] :" << lineStr;
-                        break;
-                    } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) || (lineStr.contains(PREFIX_DATA_TYPE)) ||
-                               (lineStr.contains(PREFIX_SIGNAL_NAME)) || (lineStr.contains(PREFIX_ABSTRACTION_NAME)) ||
-                               (lineStr.contains(PREFIX_DESCRIPTION)) || (lineStr.contains(PREFIX_CODE_COMMENTING))) {
-                        // Skip : type, signalName, dataType, description, abstractionName, #(주석)
-                        continue;
-                    } else {
-                        // Append : ValueEnum, MatchingTable
-                        lineStr.remove(PREFIX_SPACE);
-                        vsmInfo.append(lineStr);
-                    }
-                } else {
-                    if ((lineStr.contains(signal)) && (lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                        // Input Signal : (Vehicle.Speed_Gauge.Output_DisplaySpeedUnit)
-                        // Read  Signal : (- Speed_Gauge.Output_DisplaySpeedUnit:)
-                        lineStr.remove(PREFIX_HYPHEN);
-                        lineStr.remove(PREFIX_COLON);
-                        lineStr.remove(PREFIX_SPACE);
-                        foundSignal = ((sfcSignal) ? (true) : (lineStr.compare(signal) == false));
-                        qDebug() << ((foundSignal) ? ("\t Found") : ("\t Skip ")) << "Signal[" << inputDataType
-                                 << "] :" << lineStr;
-                    }
-                }
-            }
+    QStringList oldDataList = oldData.split("\n");
+    QStringList newDataList = newData.split("\n");
+    int minLength = qMin(oldDataList.size(), newDataList.size());
 
-            bool foundValueEnum = false;
-            bool foundMatchingTable = false;
-            for (const auto& info : vsmInfo) {
-                if (foundMatchingTable) {
-                    foundValueEnum = false;
-                    matchingTable.append(info);
-                    // qDebug() << "\t MatchingTable :" << info;
-                } else {
-                    foundMatchingTable = (info.contains(PREFIX_MATCHING_TABLE));
-                }
-
-                if ((vehiclSystem) || (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum)) {
-                    if (foundValueEnum) {
-                        if (info.contains(PREFIX_MATCHING_TABLE)) {
-                            continue;
-                        }
-                        valueEunm.append(info);
-                        // qDebug() << "\t ValueEnum     :" << info;
-                    } else {
-                        foundValueEnum = info.contains(PREFIX_VALUE_ENUM);
-                    }
-                }
-            }
-        }
-
-        if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            // qDebug() << "\t Value    Size :" << valueEunm.size();
-            inputDataInfo[inputDataType] = valueEunm;
-        } else {
-            // qDebug() << "\t Matching Size :" << matchingTable.size();
-            inputDataInfo[inputDataType] = matchingTable;
-            if ((valueEunm.size() > 0) && (vehiclSystem)) {
-                // qDebug() << "\t Value    Size :" << valueEunm.size();
-                inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
-            }
+    for (int i = 0; i < minLength; ++i) {
+        if (oldDataList[i] != newDataList[i]) {
+            mergeData[i] = qMakePair(oldDataList[i], newDataList[i]);
         }
     }
-#endif
 
-    return inputDataInfo;
+    if (newDataList.size() > oldDataList.size()) {
+        for (int i = oldDataList.size(); i < newDataList.size(); ++i) {
+            mergeData[i] = qMakePair(QString(), newDataList[i]);
+        }
+    }
+
+    // for (auto iter = mergeData.begin(); iter != mergeData.end(); ++iter) {
+    //     qDebug() << "MergeData[" << iter.key() << "] :" << iter.value().first << "->" << iter.value().second;
+    // }
+
+    return mergeData;
 }

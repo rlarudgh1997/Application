@@ -160,6 +160,24 @@
        </font>
       </property>
      </widget>
+     <widget class="QPushButton" name="detailSave">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>60</y>
+        <width>60</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Save</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="altonService" native="true">
@@ -397,6 +415,7 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     </widget>
     <addaction name="menuOpen"/>
     <addaction name="actionOpen_Dir"/>
+    <addaction name="actionDelete"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuRun">
@@ -479,6 +498,11 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
   <action name="actionAltonClient_Path">
    <property name="text">
     <string>Alton Client Path</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete(*.sh)</string>
    </property>
   </action>
  </widget>
