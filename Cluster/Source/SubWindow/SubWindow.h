@@ -60,14 +60,14 @@ private:
     QString isDataType(const QString& value);
     QMap<int, QPair<QString, QString>> isMergeDataInfo(const QString& oldData, const QString& newData);
 
-// protected:
-//     void mousePressEvent(QMouseEvent* mouseEvent) override;
-//     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
-//     void mouseMoveEvent(QMouseEvent* mouseEvent) override;
-//     void keyPressEvent(QKeyEvent* keyEvent) override;
-//     void keyReleaseEvent(QKeyEvent* keyEvent) override;
-//     void moveEvent(QMoveEvent* moveEvent) override;
-//     void resizeEvent(QResizeEvent* resizeEvent) override;
+    // protected:
+    //     void mousePressEvent(QMouseEvent* mouseEvent) override;
+    //     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
+    //     void mouseMoveEvent(QMouseEvent* mouseEvent) override;
+    //     void keyPressEvent(QKeyEvent* keyEvent) override;
+    //     void keyReleaseEvent(QKeyEvent* keyEvent) override;
+    //     void moveEvent(QMoveEvent* moveEvent) override;
+    //     void resizeEvent(QResizeEvent* resizeEvent) override;
 
 private:
     Ui::SubWindow* mGui;

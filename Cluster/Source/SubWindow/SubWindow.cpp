@@ -164,11 +164,16 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
     mGui->detailContent->show();
 
     if (viewType == ViewTypeTAV) {
-        QString file = info;
-        QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(file);
+        if (info.size() > 0) {
+            QString file = info;
+            QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(file);
+            mOriginalData = ivis::common::FileInfo::readFile(path);
+        } else {
+            // mOriginalData = ivis::common::FileInfo::readFile(path);
+        }
+
         QString content = QString();
         int foundType = DetailInfoInvalid;
-        mOriginalData = ivis::common::FileInfo::readFile(path);
 
         mDetailInfo.clear();
         for (const auto& data : mOriginalData) {
@@ -231,6 +236,43 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
             }
 #endif
         }
+
+        int powerTrainSize = mDetailInfo[DetailInfoPowerTrain].split("\n").size();
+        if (powerTrainSize != 3) {
+            QString oldData = mDetailInfo[DetailInfoPowerTrain];
+            QString newData = QString();
+
+            if (powerTrainSize < 3) {
+                mDetailInfo[DetailInfoPowerTrain].append("    ALL\n");
+                newData = mDetailInfo[DetailInfoPowerTrain];
+                if (powerTrainSize == 2) {
+                    newData.append("\n");
+                }
+            } else {
+                QStringList powerTrainInfo = mDetailInfo[DetailInfoPowerTrain].split("\n");
+                int count = 0;
+                for (const auto& powerTrain : powerTrainInfo) {
+                    if (count < 2) {
+                        newData.append((count <= 1) ? (QString("%1\n").arg(powerTrain)) : ("\n"));
+                    } else {
+                        break;
+                    }
+                    count++;
+                }
+                mDetailInfo[DetailInfoPowerTrain] = newData;
+            }
+            content.replace(oldData, newData);
+        }
+
+        for (const auto& detailInfo : mDetailInfo) {
+            qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+            int count = 0;
+            for (QString info : detailInfo.split("\n")) {
+                qDebug() << count++ << ":" << info;
+            }
+            qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+        }
+
         mPreviousTavData = content;
         mGui->detailContent->setPlainText(content);
     } else if (viewType == ViewTypeScript) {
@@ -299,7 +341,7 @@ void SubWindow::writeOriginalData(const QString& filePath, const QMap<int, QPair
 
     if (mOriginalData != tempData) {
         QString writeContent = QString();
-        QString path = QString("%1/../TAV/_%2").arg(ivis::common::APP_PWD()).arg(filePath);
+        QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(filePath);
         for (const auto& data : tempData) {
             writeContent.append(data);
             writeContent.append("\n");
@@ -327,15 +369,15 @@ QString SubWindow::createToScript(const QString& file) {
         for (const auto& data : mDetailInfo[index].split("\n")) {
             bool appendSkip = true;
             QString removeSpaceValue = data;
-            removeSpaceValue.remove("    ");    // Space : 4 (공백 한칸을 제외한 공백 제거)
-            removeSpaceValue.remove("   ");     // Space : 3 (공백 한칸을 제외한 공백 제거)
-            removeSpaceValue.remove("  ");      // Space : 2 (공백 한칸을 제외한 공백 제거)
 
+            removeSpaceValue.remove("    ");  // Space : 4 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("   ");   // Space : 3 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("  ");    // Space : 2 (공백 한칸을 제외한 공백 제거)
 
             if (data.size() == 0) {
                 // scriptInfo.append("\n");
-            } else if ((data.contains("[Description]")) || (data.contains("[Precondition]")) || (data.contains("[Step]"))
-                || (data.contains("[Expected Result]")) || (data.contains("[Listen]")) || (data.contains("[PowerTrain]"))) {
+            } else if ((data.contains("[Description]")) || (data.contains("[Precondition]")) || (data.contains("[Step]")) ||
+                       (data.contains("[Expected Result]")) || (data.contains("[Listen]")) || (data.contains("[PowerTrain]"))) {
                 scriptInfo.append(QString("#%1\n").arg(removeSpaceValue));
             } else if (data.contains("[Group]")) {
                 scriptInfo.append(QString("##%1\n").arg(removeSpaceValue));
@@ -366,9 +408,10 @@ QString SubWindow::createToScript(const QString& file) {
                 QStringList tempList = removeSpaceValue.split(" ");
                 if (data.contains("    SFC.")) {
                     if (tempList.size() == 2) {
-                        scriptInfo.append(QString("./alton_client set %1 %2 %3\n").arg(tempList.at(0))
-                                                                                  .arg(isDataType(tempList.at(1)))
-                                                                                  .arg(tempList.at(1)));
+                        scriptInfo.append(QString("./alton_client set %1 %2 %3\n")
+                                              .arg(tempList.at(0))
+                                              .arg(isDataType(tempList.at(1)))
+                                              .arg(tempList.at(1)));
                     } else {
                         scriptInfo.append(QString("./alton_client set %1\n").arg(removeSpaceValue));
                     }
@@ -403,15 +446,25 @@ QString SubWindow::createToScript(const QString& file) {
         }
     }
 
-
     // Save : power train type
-    QString ptTemp = ptValue;
-    QString fileName = file;
-    QStringList ptlist = ((ptTemp.toUpper() == QString("ALL")) || (ptTemp.size() == 0)) ?
-                          (QStringList({"ICV", "EV", "FCEV", "HEV", "PHEV"})) : (ptTemp.remove(" ").split(","));
+    const QStringList ptListInfo = QStringList({"ICV", "EV", "FCEV", "HEV", "PHEV"});
+    QString ptTemp = (ptValue.size() == 0) ? (QString("ALL")) : (ptValue);
+    QStringList ptlist = (ptTemp.toUpper() == QString("ALL")) ? (ptListInfo) : (ptTemp.remove(" ").split(","));
     QStringList pasingFileList = isVsmFileInfo(ptlist, abstractionList);
-
+    QString fileName = file;
     for (const auto& pt : ptlist) {
+        QString ptValid = QString();
+        for (const auto& ptInfo : ptListInfo) {
+            if (pt == ptInfo) {
+                ptValid = pt;
+                break;
+            }
+        }
+        if (ptValid.size() == 0) {
+            qDebug() << "Fail to validate power train :" << pt;
+            continue;
+        }
+
         QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
         QString writeContent = scriptInfo;
 
@@ -554,7 +607,6 @@ QString SubWindow::isDataType(const QString& value) {
     }
     return "string";
 }
-
 
 QMap<int, QPair<QString, QString>> SubWindow::isMergeDataInfo(const QString& oldData, const QString& newData) {
     QMap<int, QPair<QString, QString>> mergeData = QMap<int, QPair<QString, QString>>();
