@@ -11,8 +11,6 @@
 
 [PowerTrain]
     #ICV, EV, FCEV, PHEV, HEV
-    ICV, EV
-    #ALL
 
 [Precondition]
     SFC.Private.IGNElapsed.ElapsedOn0ms 1
@@ -33,3 +31,5 @@
     SFC.ISG.Constant.IsgAbleTimeHour.Value 0
     SFC.ISG.Constant.IsgAbleTimeMin.Value 0
     SFC.ISG.Constant.IsgAbleTimeSec.Value 59
+
+

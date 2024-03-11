@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <QTimer>
 #include <QRect>
 #include <QStandardItemModel>
 
@@ -29,6 +31,8 @@ private:
         DetailInfoPowerTrain,
         DetailInfoPrecondition,
         DetailInfoPreconditionGroup,
+        DetailInfoPeriod,
+        DetailInfoPeriodGroup,
         DetailInfoListen,
         DetailInfoStep,
         DetailInfoStepGroup,
@@ -53,7 +57,7 @@ private:
     void updateFileList();
     void updateDetailFileInfo(const int& viewType, const QString& info);
     void updateDetailDataInfo(const QString& filePath);
-    void writeOriginalData(const QString& filePath, const QMap<int, QPair<QString, QString>>& mergeDataInfo);
+    void writeOriginalData(const QString& filePath, const QStringList& saveData);
     QString createToScript(const QString& file);
     QStringList isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList);
     QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
@@ -69,8 +73,12 @@ private:
     //     void moveEvent(QMoveEvent* moveEvent) override;
     //     void resizeEvent(QResizeEvent* resizeEvent) override;
 
+signals:
+    void signalTimerEvent();
+
 private:
     Ui::SubWindow* mGui;
+    QTimer* mTimerTouch = nullptr;
     bool mInit = false;
     QStandardItemModel mModel;
     bool mTavSave = false;

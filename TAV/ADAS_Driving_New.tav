@@ -10,14 +10,12 @@
     #Status : Open
 
 [PowerTrain]
-    ICV
-    #ICV, EV, FCEV, PHEV, HEV
-    #ALL
+    EV
 
 [Precondition]
     SFC.Extension.AEM.Inter_AEMInitializeComplete true
-    SFC.Private.IGNElapsed.ElapsedOn0ms 1
-    delay 0.5
+    SFC.Private.IGNElapsed.ElapsedOn0ms   1
+    delay 500
     [Group]
         Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvFrontObjectStatus 2
         Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvVehicleDistanceLevelValue 1

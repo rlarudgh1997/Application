@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QMapIterator>
 
-SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWindow) {
+SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWindow), mTimerTouch(new QTimer) {
     mGui->setupUi(this);
     QRect rect = QRect();
 #if defined(__SUB_WINDOW_ONLY__)
@@ -43,6 +43,28 @@ void SubWindow::controlConnect(const bool& state) {
         return;
     }
     mInit = true;
+
+    connect(mGui->fileList, &QListWidget::itemPressed, [=](QListWidgetItem* item) {
+        if (item) {
+            qDebug() << "itemPressed :" << item;
+            // QTimer::singleShot(1500, this, [&]() {
+            //     emit signalTimerEvent();
+            // });
+            mTimerTouch->start(1000);
+        }
+    });
+    connect(mGui->fileList, &QListWidget::itemClicked, [=](QListWidgetItem *item) {
+        if (item) {
+            qDebug() << "itemClicked :" << item;
+            mTimerTouch->stop();
+        }
+    });
+    connect(mTimerTouch, &QTimer::timeout, [=]() {
+        qDebug() << "timeout";
+    });
+    connect(this, &SubWindow::signalTimerEvent, [=]() {
+        qDebug() << "signalTimerEvent";
+    });
 
     connect(mGui->fileList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
         if (item) {
@@ -164,24 +186,17 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
     mGui->detailContent->show();
 
     if (viewType == ViewTypeTAV) {
+        int foundType = DetailInfoInvalid;
+        QString content = QString();
+        QStringList tavData = mOriginalData;
         if (info.size() > 0) {
             QString file = info;
             QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(file);
-            mOriginalData = ivis::common::FileInfo::readFile(path);
-        } else {
-            // mOriginalData = ivis::common::FileInfo::readFile(path);
+            tavData = ivis::common::FileInfo::readFile(path);
         }
 
-        QString content = QString();
-        int foundType = DetailInfoInvalid;
-
         mDetailInfo.clear();
-        for (const auto& data : mOriginalData) {
-            if (data.contains("#")) {
-                // ex) data = #Info : test 1235                    => 주석 처리 기능 완료
-                // ex) data = Info : test 1235  # test info define => 중간 주석 처리 기능 구현 필요
-                continue;
-            }
+        for (const auto& data : tavData) {
             if (data.size() == 0) {
                 foundType = DetailInfoInvalid;
             }
@@ -192,10 +207,20 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
                 foundType = DetailInfoPowerTrain;
             } else if (data.contains("[Precondition]")) {
                 foundType = DetailInfoPrecondition;
+            } else if (data.contains("[Period]")) {
+                foundType = DetailInfoPeriod;
             } else if (data.contains("[Step]")) {
                 foundType = DetailInfoStep;
             } else if (data.contains("[Group]")) {
-                foundType = (foundType == DetailInfoPrecondition) ? (DetailInfoPreconditionGroup) : (DetailInfoStepGroup);
+                if (foundType == DetailInfoPrecondition) {
+                    foundType = DetailInfoPreconditionGroup;
+                } else if (foundType == DetailInfoPeriod) {
+                    foundType = DetailInfoPeriodGroup;
+                } else if (foundType == DetailInfoStep) {
+                    foundType = DetailInfoStepGroup;
+                } else {
+                    qDebug() << "Fail to found keyword [Group]";
+                }
             } else if (data.contains("[Expected Result]")) {
                 foundType = DetailInfoExpectedResult;
             } else {
@@ -213,7 +238,7 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
                         QString temp = data;
                         QStringList tempList = temp.remove("    ").split(" ");
                         if (tempList.size() == 2) {
-                            mDetailInfo[DetailInfoListen].append(QString("%1\n").arg(tempList.at(0)));
+                            mDetailInfo[DetailInfoListen].append(QString("    %1\n").arg(tempList.at(0)));
                             // qDebug() << "\t [" << DetailInfoListen << "] " << tempList.at(0);
                         }
                     }
@@ -264,14 +289,14 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
             content.replace(oldData, newData);
         }
 
-        for (const auto& detailInfo : mDetailInfo) {
-            qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-            int count = 0;
-            for (QString info : detailInfo.split("\n")) {
-                qDebug() << count++ << ":" << info;
-            }
-            qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
-        }
+        // for (const auto& detailInfo : mDetailInfo) {
+        //     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        //     int count = 0;
+        //     for (QString info : detailInfo.split("\n")) {
+        //         qDebug() << count++ << ":" << info;
+        //     }
+        //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+        // }
 
         mPreviousTavData = content;
         mGui->detailContent->setPlainText(content);
@@ -286,76 +311,41 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
 }
 
 void SubWindow::updateDetailDataInfo(const QString& filePath) {
-    QString oldDetailContent = mPreviousTavData;
-    QString newDetailContent = mGui->detailContent->toPlainText();
-    QMap<int, QPair<QString, QString>> mergeDataInfo = isMergeDataInfo(oldDetailContent, newDetailContent);
+    QStringList newDetailContent = mGui->detailContent->toPlainText().split("\n");
+    // QString oldDetailContent = mPreviousTavData;
 
-    for (int index = DetailInfoInvalid; index < DetailInfoMax; index++) {
-        if ((mDetailInfo[index].size() == 0) || (index == DetailInfoListen)) {
-            continue;
-        }
-
-        bool changed = false;
-        QStringList detailList = mDetailInfo[index].split("\n");
-        for (int lineIndex = 0; lineIndex < detailList.size(); lineIndex++) {
-            for (auto iter = mergeDataInfo.begin(); iter != mergeDataInfo.end(); ++iter) {
-                if (detailList[lineIndex] == iter.value().first) {
-                    changed = true;
-                    detailList[lineIndex] = iter.value().second;
-                    qDebug() << "Changed Data[" << iter.key() << "] :" << iter.value().first << "->" << iter.value().second;
-                    break;
-                }
-            }
-        }
-        if (changed) {
-            QString data = QString();
-            for (const auto& detail : detailList) {
-                data.append(detail);
-                data.append("\n");
-            }
-            mDetailInfo[index] = data;
-        }
+    if (mOriginalData != newDetailContent) {
+        qDebug() << "updateDetailDataInfo :" << mOriginalData.size() << "->" << newDetailContent.size();
+        mOriginalData = newDetailContent;
+        updateDetailFileInfo(ViewTypeTAV, QString());
+        writeOriginalData(filePath, newDetailContent);
     }
-    mPreviousTavData = newDetailContent;
-    writeOriginalData(filePath, mergeDataInfo);
 }
 
-void SubWindow::writeOriginalData(const QString& filePath, const QMap<int, QPair<QString, QString>>& mergeDataInfo) {
-    if ((filePath.size() == 0) || (mergeDataInfo.size() == 0)) {
+void SubWindow::writeOriginalData(const QString& filePath, const QStringList& saveData) {
+    if ((filePath.size() == 0) || (saveData.size() == 0)) {
         return;
     }
 
-    QStringList tempData = mOriginalData;
-    for (int index = 0; index < tempData.size(); index++) {
-        if ((tempData[index].size() == 0) || (index == DetailInfoListen)) {
-            continue;
-        }
-
-        for (auto iter = mergeDataInfo.begin(); iter != mergeDataInfo.end(); ++iter) {
-            if (tempData[index] == iter.value().first) {
-                tempData[index] = iter.value().second;
-                qDebug() << "Saved   Data[" << iter.key() << "] :" << iter.value().first << "->" << iter.value().second;
-            }
-        }
+    QString writeContent = QString();
+    QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(filePath);
+    for (const auto& data : saveData) {
+        writeContent.append(data);
+        writeContent.append("\n");
     }
-
-    if (mOriginalData != tempData) {
-        QString writeContent = QString();
-        QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(filePath);
-        for (const auto& data : tempData) {
-            writeContent.append(data);
-            writeContent.append("\n");
-        }
-        qDebug() << "Save Path :" << path;
-        ivis::common::FileInfo::writeFile(path, writeContent, false);
-        mOriginalData = tempData;
-    }
+    qDebug() << "writeOriginalData :" << saveData.size() << path;
+    ivis::common::FileInfo::writeFile(path, writeContent, false);
 }
 
 QString SubWindow::createToScript(const QString& file) {
+    const QString groupKeyword = QString("    ##[Group]\n");
     QString scriptInfo("#!/bin/bash\n\n");
+    QString altonClient = QString("./alton_client");
     QString ptValue = QString();
     QString groupValue = QString();
+    QString periodValue = QString();
+    QString periodGroupValue = QString();
+    QString periodGroupInfo = QString();
     QString listenValue = QString();
     QStringList abstractionList = QStringList();
 
@@ -366,20 +356,22 @@ QString SubWindow::createToScript(const QString& file) {
         }
 
         bool newLine = true;
+        int periodCycle = 0;
+        int periodDuration = 0;
         for (const auto& data : mDetailInfo[index].split("\n")) {
             bool appendSkip = true;
             QString removeSpaceValue = data;
+            removeSpaceValue.replace("\t", "    ");  // Replace : Tab -> Space 4
+            removeSpaceValue.remove("    ");    // Space : 4 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("   ");     // Space : 3 (공백 한칸을 제외한 공백 제거)
+            removeSpaceValue.remove("  ");      // Space : 2 (공백 한칸을 제외한 공백 제거)
 
-            removeSpaceValue.remove("    ");  // Space : 4 (공백 한칸을 제외한 공백 제거)
-            removeSpaceValue.remove("   ");   // Space : 3 (공백 한칸을 제외한 공백 제거)
-            removeSpaceValue.remove("  ");    // Space : 2 (공백 한칸을 제외한 공백 제거)
-
-            if (data.size() == 0) {
-                // scriptInfo.append("\n");
+            if ((data.size() == 0) || (data.trimmed().startsWith('#'))) {
+                // 공백, 주석 제거
             } else if ((data.contains("[Description]")) || (data.contains("[Precondition]")) || (data.contains("[Step]")) ||
                        (data.contains("[Expected Result]")) || (data.contains("[Listen]")) || (data.contains("[PowerTrain]"))) {
                 scriptInfo.append(QString("#%1\n").arg(removeSpaceValue));
-            } else if (data.contains("[Group]")) {
+            } else if ((data.contains("[Group]")) || (data.contains("[Period]"))) {
                 scriptInfo.append(QString("##%1\n").arg(removeSpaceValue));
             } else {
                 appendSkip = false;
@@ -389,37 +381,89 @@ QString SubWindow::createToScript(const QString& file) {
                 continue;
             }
 
+            if (data.contains("#")) {
+                removeSpaceValue.remove(removeSpaceValue.indexOf("#"), removeSpaceValue.size());
+            }
+
             // Parsing -> Append
+            QStringList tempList = QStringList();
             if ((index == DetailInfoDescription) || (index == DetailInfoExpectedResult)) {
                 scriptInfo.append(QString("#    %1\n").arg(removeSpaceValue));
             } else if (index == DetailInfoPowerTrain) {
                 scriptInfo.append(QString("#    %1\n").arg(removeSpaceValue));
                 ptValue.append(removeSpaceValue);
-            } else if ((index == DetailInfoPreconditionGroup) || (index == DetailInfoStepGroup)) {
-                newLine = false;
-                groupValue.append(QString(" %1").arg(removeSpaceValue));
-                if (data.contains("   Vehicle.")) {
-                    abstractionList.append(removeSpaceValue);
-                }
             } else if (index == DetailInfoListen) {
                 newLine = false;
                 listenValue.append(QString(" %1").arg(removeSpaceValue));
-            } else {
-                QStringList tempList = removeSpaceValue.split(" ");
+            } else if ((index == DetailInfoPreconditionGroup) || (index == DetailInfoStepGroup) ||
+                       (index == DetailInfoPeriodGroup)) {
+                newLine = false;
                 if (data.contains("    SFC.")) {
+                    tempList = removeSpaceValue.split(" ");
                     if (tempList.size() == 2) {
-                        scriptInfo.append(QString("./alton_client set %1 %2 %3\n")
+                        scriptInfo.append(QString("%1 set %2 %3 %4\n")
+                                              .arg(altonClient)
                                               .arg(tempList.at(0))
                                               .arg(isDataType(tempList.at(1)))
                                               .arg(tempList.at(1)));
                     } else {
-                        scriptInfo.append(QString("./alton_client set %1\n").arg(removeSpaceValue));
+                        scriptInfo.append(QString("%1 set %2\n").arg(altonClient).arg(removeSpaceValue));
                     }
-                } else if (data.contains("   delay")) {
+                } else {
+                    if (index == DetailInfoPeriodGroup) {
+                        periodGroupValue.append(QString(" %1").arg(removeSpaceValue));
+                    } else {
+                        groupValue.append(QString(" %1").arg(removeSpaceValue));
+                    }
+                    if (data.contains("   Vehicle.")) {
+                        abstractionList.append(removeSpaceValue);
+                    }
+                }
+            } else if (index == DetailInfoPeriod) {
+                if (data.contains("    SFC.")) {
+                    tempList = removeSpaceValue.split(" ");
+                    if (tempList.size() == 2) {
+                        scriptInfo.append(QString("%1 set %2 %3 %4\n")
+                                              .arg(altonClient)
+                                              .arg(tempList.at(0))
+                                              .arg(isDataType(tempList.at(1)))
+                                              .arg(tempList.at(1)));
+                    } else {
+                        scriptInfo.append(QString("%1 set %2\n").arg(altonClient).arg(removeSpaceValue));
+                    }
+                } else if (data.contains("   Info :")) {
+                    tempList = removeSpaceValue.remove("Info :").split("/");
+                    if (tempList.size() == 2) {
+                        periodCycle = tempList.at(0).toInt();
+                        periodDuration = tempList.at(1).toInt();
+                    } else {
+                        qDebug() << "Fail to period info parsing - size :"<< tempList.size();
+                    }
+                } else {
+                    newLine = false;
+                    // periodValue.append(QString(" %1").arg(removeSpaceValue));
+                    periodValue.append(QString("    %1 inject %2\n").arg(altonClient).arg(removeSpaceValue));
+                    if (data.contains("   Vehicle.")) {
+                        abstractionList.append(removeSpaceValue);
+                    }
+                }
+            } else {
+                tempList = removeSpaceValue.split(" ");
+                if (data.contains("    SFC.")) {
+                    if (tempList.size() == 2) {
+                        scriptInfo.append(QString("%1 set %2 %3 %4\n")
+                                              .arg(altonClient)
+                                              .arg(tempList.at(0))
+                                              .arg(isDataType(tempList.at(1)))
+                                              .arg(tempList.at(1)));
+                    } else {
+                        scriptInfo.append(QString("%1 set %2\n").arg(altonClient).arg(removeSpaceValue));
+                    }
+                } else if (data.contains("    delay")) {
                     if (tempList.size() == 2) {
                         bool isDouble = false;
                         double value = tempList.at(1).toDouble(&isDouble);
-                        scriptInfo.append(QString("sleep %1\n").arg(value * (double)1000));
+                        scriptInfo.append(QString("sleep %1\n").arg(value * (double)0.001));
                     } else {
                         scriptInfo.append(QString("#### Check Error -> %1\n").arg(removeSpaceValue));
                     }
@@ -427,7 +471,7 @@ QString SubWindow::createToScript(const QString& file) {
                     if (data.contains("   Vehicle.")) {
                         abstractionList.append(removeSpaceValue);
                     }
-                    scriptInfo.append(QString("./alton_client inject %1\n").arg(removeSpaceValue));
+                    scriptInfo.append(QString("%1 inject %2\n").arg(altonClient).arg(removeSpaceValue));
                 }
             }
         }
@@ -435,13 +479,34 @@ QString SubWindow::createToScript(const QString& file) {
         if (newLine) {
             scriptInfo.append("\n");
         }
-
         if (groupValue.size() > 0) {
-            scriptInfo.append(QString("./alton_client inject%1\n\n").arg(groupValue));
+            scriptInfo.append(QString("%1 inject%2\n\n").arg(altonClient).arg(groupValue));
             groupValue.clear();
         }
+        if (periodValue.size() > 0) {
+            if (periodGroupInfo.size() == 0) {
+                scriptInfo.append(QString("for i in `seq 1 %1`\n").arg(periodCycle));
+                scriptInfo.append(QString("do\n"));
+                // scriptInfo.append(QString("    %1 inject%2\n").arg(altonClient).arg(periodValue));
+                scriptInfo.append(QString("%1").arg(periodValue));
+                scriptInfo.append(QString("%1").arg(groupKeyword));
+                scriptInfo.append(QString("    sleep %1\n").arg(periodDuration * (double)0.001));
+                scriptInfo.append(QString("done\n\n\n"));
+                periodGroupInfo = groupKeyword;
+            } else {
+                if (periodGroupValue.size() > 0) {
+                    scriptInfo.replace(groupKeyword,
+                                       QString("%1    %2 inject%3\n").arg(groupKeyword).arg(altonClient).arg(periodGroupValue));
+                    periodGroupValue.clear();
+                } else {
+                    scriptInfo.replace(groupKeyword, "");
+                    periodGroupInfo.clear();
+                }
+                periodValue.clear();
+            }
+        }
         if (listenValue.size() > 0) {
-            scriptInfo.append(QString("./alton_client listen%1\n\n").arg(listenValue));
+            scriptInfo.append(QString("%1 listen%2 &\n\n").arg(altonClient).arg(listenValue));
             listenValue.clear();
         }
     }
@@ -469,14 +534,31 @@ QString SubWindow::createToScript(const QString& file) {
         QString writeContent = scriptInfo;
 
         // Replace : Abstraction -> CAN
-        writeContent.replace(ptValue, pt);
-        for (const auto& replaceInfo : isReplaceSignal(abstractionList, pasingFileList)) {
-            writeContent.replace(replaceInfo.first, replaceInfo.second);
+        if (ptValue.size() == 0) {
+            writeContent.replace(QString("[PowerTrain]\n"), QString("[PowerTrain]\n#    %1\n").arg(pt));
+        } else {
+            writeContent.replace(ptValue, pt);
         }
 
+        for (const auto& replaceInfo : isReplaceSignal(abstractionList, pasingFileList)) {
+            writeContent.replace(replaceInfo.first, replaceInfo.second);
+            scriptInfo.replace(replaceInfo.first, replaceInfo.second);
+        }
+
+        // for (const auto& detailInfo : writeContent.split("\n")) {
+        //     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        //     int count = 0;
+        //     for (QString info : detailInfo.split("\n")) {
+        //         qDebug() << count++ << ":" << info;
+        //     }
+        //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+        // }
         ivis::common::FileInfo::writeFile(path, writeContent, false);
     }
 
+    if (ptValue.size() == 0) {
+        scriptInfo.replace(QString("[PowerTrain]\n"), QString("[PowerTrain]\n#    ALL\n"));
+    }
     return scriptInfo;
 }
 
