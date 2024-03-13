@@ -17,6 +17,7 @@
     HardWire_HardWireIgnition1 1
     SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus 2
     SFC.Input_Output_Processing.Inter_EngineOnStatus 1
+
     [Group]
         Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue 2222
         Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 22
@@ -28,6 +29,13 @@
         [Group]
             Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue 3333
             Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 33
+
+#    SFC.IVIS.KKH1 11
+#    SFC.IVIS.KKH2 22
+#    [Group]
+#        SFC.IVIS.KKH3 33
+#        SFC.IVIS.KKH4 44
+
 
 [Step]
     delay 1000

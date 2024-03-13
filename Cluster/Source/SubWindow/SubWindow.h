@@ -7,6 +7,8 @@
 #include <QRect>
 #include <QStandardItemModel>
 
+#define USE_TAV_PARSING_NEW
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class SubWindow;
@@ -26,10 +28,25 @@ private:
         DisplayTypeETC,
     };
     enum {
+        ViewTypeInvalid = 0,
+        ViewTypeTAV,
+        ViewTypeScript,
+        ViewTypeRedrawTAV,
+    };
+    enum {
         DetailInfoInvalid = 0,
         DetailInfoDescription,
         DetailInfoPowerTrain,
         DetailInfoPrecondition,
+#if defined(USE_TAV_PARSING_NEW)
+        DetailInfoListen,
+        DetailInfoStep,
+        DetailInfoExpectedResult,
+        // DetailInfoPreconditionGroup,
+        // DetailInfoPeriod,
+        // DetailInfoPeriodGroup,
+        // DetailInfoStepGroup,
+#else
         DetailInfoPreconditionGroup,
         DetailInfoPeriod,
         DetailInfoPeriodGroup,
@@ -37,13 +54,14 @@ private:
         DetailInfoStep,
         DetailInfoStepGroup,
         DetailInfoExpectedResult,
+#endif
         DetailInfoMax,
     };
     enum {
-        ViewTypeInvalid = 0,
-        ViewTypeTAV,
-        ViewTypeScript,
-        ViewTypeRedrawTAV,
+        DetailSubInfoNormal,
+        DetailSubInfoGroup,
+        DetailSubInfoPeriod,
+        DetailSubInfoPeriodGroup,
     };
 
 public:
@@ -58,6 +76,10 @@ private:
     void updateDetailFileInfo(const int& viewType, const QString& info);
     void updateDetailDataInfo(const QString& filePath);
     void writeOriginalData(const QString& filePath, const QStringList& saveData);
+    bool isDetailInfo(const int& type, QPair<QString, QStringList>& detailInfo);
+    void isSubDetailInfo(const QStringList& inputStr, QMap<int, QStringList>& subDetialInfo);
+    QString isDetailSignalInfo(const int& type, const QString& inputStr, QString& convertStr);
+    QString isToScriptInfo(const int& type, QStringList& infoList);
     QString createToScript(const QString& file);
     QStringList isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList);
     QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);

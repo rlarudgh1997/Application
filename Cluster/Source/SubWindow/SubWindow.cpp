@@ -7,6 +7,19 @@
 #include <QDebug>
 #include <QMapIterator>
 
+const QString KeyWordDescription = QString("[Description]");
+const QString KeyWordPowerTrain = QString("[PowerTrain]");
+const QString KeyWordPrecondition = QString("[Precondition]");
+const QString KeyWordStep = QString("[Step]");
+const QString KeyWordExpectedResult = QString("[Expected Result]");
+const QString KeyWordGroup = QString("    [Group]");
+const QString KeyWordPeriod = QString("    [Period]");
+const QString KeyWordPeriodGroup = QString("        [Group]");
+const QString KeyWordListen = QString("[Listen]");
+const QString AltonClient = QString("./alton_client");
+const QString PowerTrainList = QString("ICV, EV, FCEV, HEV, PHEV");
+
+
 SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWindow), mTimerTouch(new QTimer) {
     mGui->setupUi(this);
     QRect rect = QRect();
@@ -195,6 +208,35 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
             tavData = ivis::common::FileInfo::readFile(path);
         }
 
+#if defined(USE_TAV_PARSING_NEW)
+        QMap<int, QString> detailInfo = QMap<int, QString>();
+        for (const auto& data : tavData) {
+            if (data.contains(KeyWordDescription)) {
+                foundType = DetailInfoDescription;
+            } else if (data.contains(KeyWordPowerTrain)) {
+                foundType = DetailInfoPowerTrain;
+            } else if (data.contains(KeyWordPrecondition)) {
+                foundType = DetailInfoPrecondition;
+            } else if (data.contains(KeyWordStep)) {
+                foundType = DetailInfoStep;
+            } else if (data.contains(KeyWordExpectedResult)) {
+                foundType = DetailInfoExpectedResult;
+            } else {
+            }
+            QString lineStr = QString("%1\n").arg(data);
+            content.append(lineStr);
+            detailInfo[foundType].append(lineStr);
+        }
+        detailInfo[DetailInfoListen] = detailInfo[DetailInfoExpectedResult];
+        mDetailInfo = detailInfo;
+
+        // for (auto iter = mDetailInfo.begin(); iter != mDetailInfo.end(); ++iter) {
+        //     int index = 0;
+        //     for (const auto& data : iter.value().split("\n")) {
+        //         qDebug() << iter.key() << ". Data[" << index++ << "] :" << data;
+        //     }
+        // }
+#else
         mDetailInfo.clear();
         for (const auto& data : tavData) {
             if (data.size() == 0) {
@@ -297,6 +339,7 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
         //     }
         //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
         // }
+#endif
 
         mPreviousTavData = content;
         mGui->detailContent->setPlainText(content);
@@ -337,10 +380,373 @@ void SubWindow::writeOriginalData(const QString& filePath, const QStringList& sa
     ivis::common::FileInfo::writeFile(path, writeContent, false);
 }
 
+bool SubWindow::isDetailInfo(const int& type, QPair<QString, QStringList>& detailInfo) {
+    detailInfo = QPair<QString, QStringList>();
+
+    if (mDetailInfo[type].size() == 0) {
+        qDebug() << "Fail to detail info size : 0";
+        return false;
+    }
+
+    for (auto& lineStr : mDetailInfo[type].split("\n")) {
+        if ((lineStr.size() == 0) || (lineStr.trimmed().startsWith("#"))) {
+            // 공백, 주석 제거
+            continue;
+        }
+        lineStr.replace("\t", "    ");  // Replace : Tab -> Space 4
+
+        if (lineStr.contains("#")) {
+            lineStr.remove(lineStr.indexOf("#"), lineStr.size());
+        }
+
+        if (detailInfo.first.size() == 0) {
+            detailInfo.first = lineStr;
+        } else {
+            detailInfo.second.append(lineStr);
+        }
+    }
+
+    if (detailInfo.first.size() == 0) {
+        if (type == DetailInfoDescription) {
+            detailInfo.first = KeyWordDescription;
+        } else if (type == DetailInfoPowerTrain) {
+            detailInfo.first = KeyWordPowerTrain;
+        } else if (type == DetailInfoPrecondition) {
+            detailInfo.first = KeyWordPrecondition;
+        } else if (type == DetailInfoStep) {
+            detailInfo.first = KeyWordStep;
+        } else if (type == DetailInfoExpectedResult) {
+            detailInfo.first = KeyWordExpectedResult;
+        } else {
+        }
+    }
+
+    // for (const auto& detail : detailInfo.second) {
+    //     qDebug() << detailInfo.first << ":" << detail;
+    // }
+    return true;
+}
+
+void SubWindow::isSubDetailInfo(const QStringList& inputStr, QMap<int, QStringList>& subDetialInfo) {
+    int subDetailType = DetailSubInfoNormal;
+    QString normalSpace = QString("    ");                 // Space : 4
+    QString groupSpace = QString("        ");              // Space : 8
+    QString periodSpace = groupSpace;                      // Space : 8
+    QString periodGroupSpace = QString("            ");    // Space : 12
+
+    subDetialInfo.clear();
+    for (const auto lineStr : inputStr) {
+        bool appendState = false;
+        if (lineStr.contains(KeyWordPeriodGroup)) {
+            subDetailType = DetailSubInfoPeriodGroup;
+        } else if (lineStr.contains(KeyWordPeriod)) {
+            subDetailType = DetailSubInfoPeriod;
+        } else if (lineStr.contains(KeyWordGroup)) {
+            subDetailType = DetailSubInfoGroup;
+        } else {
+            appendState = true;
+        }
+
+        if (appendState == false) {
+            continue;
+        }
+
+        if (subDetailType == DetailSubInfoNormal) {
+            appendState = (lineStr.contains(normalSpace));
+        } else if (subDetailType == DetailSubInfoGroup) {
+            appendState = (lineStr.contains(groupSpace));
+        } else if (subDetailType == DetailSubInfoPeriod) {
+            appendState = (lineStr.contains(periodSpace));
+        } else if (subDetailType == DetailSubInfoPeriodGroup) {
+            appendState = (lineStr.contains(periodGroupSpace));
+        } else {
+            appendState = false;
+        }
+
+        if (appendState) {
+            subDetialInfo[subDetailType].append(lineStr);
+        }
+    }
+
+#if 0
+    qDebug() << "=====================================================================================";
+    for (const auto& normal : subDetialInfo[DetailSubInfoNormal]) {
+        qDebug() << "\t Normal :" << normal;
+    }
+    qDebug() << "=====================================================================================";
+    for (const auto& group : subDetialInfo[DetailSubInfoGroup]) {
+        qDebug() << "\t Group :" << group;
+    }
+    qDebug() << "=====================================================================================";
+    for (const auto& period : subDetialInfo[DetailSubInfoPeriod]) {
+        qDebug() << "\t Period :" << period;
+    }
+    qDebug() << "=====================================================================================";
+    for (const auto& periodGroup : subDetialInfo[DetailSubInfoPeriodGroup]) {
+        qDebug() << "\t PeriodGroup :" << periodGroup;
+    }
+    qDebug() << "=====================================================================================";
+#endif
+}
+
+QString SubWindow::isDetailSignalInfo(const int& type, const QString& inputStr, QString& convertStr) {
+    QStringList inputList = inputStr.split(" ");
+    QString abstractionSignal = QString();
+    QString signal = QString();
+    QString value = QString();
+
+    convertStr.clear();
+    if (inputList.size() >= 2) {
+        for (int index = 0; index < inputList.size(); index++) {
+            if (inputList[index].size() == 0) {
+                continue;
+            }
+            if (signal.size() == 0) {
+                signal = inputList[index];
+                continue;
+            }
+            value = inputList[index];
+        }
+    }
+
+    if (value.size() == 0) {
+        convertStr = QString("#### Check Input : %1").arg(inputStr);
+        // qDebug() << "Fail to check input string :" << inputStr;
+    } else {
+        if (type == DetailSubInfoNormal) {
+            if (inputStr.contains("SFC.")) {
+                convertStr = QString("%1 set %2 %3 %4").arg(AltonClient)
+                                                    .arg(signal)
+                                                    .arg(isDataType(value))
+                                                    .arg(value);
+            } else if (inputStr.contains("delay")) {
+                convertStr = QString("sleep %1").arg(value.toDouble() * (double)0.001);
+            } else {
+                if (inputStr.contains("Vehicle.")) {
+                    abstractionSignal = inputStr;
+                }
+                convertStr = QString("%1 inject %2").arg(AltonClient).arg(inputStr);
+            }
+        } else {
+            if (inputStr.contains("Vehicle.")) {
+                abstractionSignal = inputStr;
+            }
+            convertStr = QString("%1").arg(inputStr);
+        }
+    }
+    convertStr.remove("    ");
+    abstractionSignal.remove("    ");
+
+    // qDebug() << "\t Input :" << inputList.size() << signal << ":" << signal;
+    // qDebug() << "\t Signal :" << inputStr << "->" << convertStr << abstractionSignal;
+
+    return abstractionSignal;
+}
+
+QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
+    QPair<QString, QStringList> detailInfo = QPair<QString, QStringList>();
+    if (isDetailInfo(type, detailInfo) == false) {
+        return QString();
+    }
+
+    QString scriptInfo = QString();
+
+    infoList.clear();
+    if ((type == DetailInfoDescription) || (type == DetailInfoExpectedResult)) {
+        scriptInfo.append(QString("#%1\n").arg(detailInfo.first));
+        for (const auto& detail : detailInfo.second) {
+            scriptInfo.append(QString("#%1\n").arg(detail));
+        }
+    } else if (type == DetailInfoPowerTrain) {
+        QString currPowerTrain = QString("ALL");
+        if (detailInfo.second.size() > 0) {
+            currPowerTrain = detailInfo.second.at(0);
+        }
+        if (currPowerTrain.toUpper().contains("ALL")) {
+            currPowerTrain = PowerTrainList;
+        }
+        currPowerTrain.remove("    ");
+        infoList = currPowerTrain.split(", ");
+        scriptInfo.append(QString("#%1\n").arg(detailInfo.first));
+        scriptInfo.append(QString("#    %1\n").arg(currPowerTrain));
+    } else if ((type == DetailInfoPrecondition) || (type == DetailInfoStep)) {
+        QString signalInfo = QString();
+        QMap<int, QStringList> subDetialInfo = QMap<int, QStringList>();
+        isSubDetailInfo(detailInfo.second, subDetialInfo);
+
+        // Noraml
+        scriptInfo.append(QString("#%1\n").arg(detailInfo.first));
+        for (const auto& normal : subDetialInfo[DetailSubInfoNormal]) {
+            QString abstractionSignal = isDetailSignalInfo(DetailSubInfoNormal, normal, signalInfo);
+            if (abstractionSignal.size() > 0) {
+               infoList.append(abstractionSignal);
+            }
+            scriptInfo.append(QString("%1\n").arg(signalInfo));
+        }
+
+        // Group
+        QString groupSignal = QString();
+        for (const auto& group : subDetialInfo[DetailSubInfoGroup]) {
+            QString abstractionSignal = isDetailSignalInfo(DetailSubInfoGroup, group, signalInfo);
+            if (abstractionSignal.size() > 0) {
+               infoList.append(abstractionSignal);
+            }
+            groupSignal.append(QString(" %1").arg(signalInfo));
+        }
+        if (groupSignal.size() > 0) {
+            scriptInfo.append(QString("%1 inject%2\n").arg(AltonClient).arg(groupSignal));
+        }
+
+        // Period
+        int periodCycle = 0;
+        int periodDuration = 0;
+        QString periodSignal = QString();
+        for (const auto& period : subDetialInfo[DetailSubInfoPeriod]) {
+            QString abstractionSignal = isDetailSignalInfo(DetailSubInfoPeriod, period, signalInfo);
+            if (abstractionSignal.size() > 0) {
+               infoList.append(abstractionSignal);
+            }
+
+            if (signalInfo.contains("Info :")) {
+                QStringList temp = signalInfo.remove("Info :").remove(" ").split("/");
+                if (temp.size() == 2) {
+                    periodCycle = temp.at(0).toInt();
+                    periodDuration = temp.at(1).toInt();
+                } else {
+                    qDebug() << "Fail to period info parsing :"<< temp;
+                }
+            } else {
+                periodSignal.append(QString("    %1 inject%2\n").arg(AltonClient).arg(signalInfo));
+            }
+        }
+
+        if (periodSignal.size() > 0) {
+            scriptInfo.append("\n");
+            scriptInfo.append(QString("for i in `seq 1 %1`\n").arg(periodCycle));
+            scriptInfo.append(QString("do\n"));
+            scriptInfo.append(QString("%1").arg(periodSignal));
+            scriptInfo.append(QString("#%1\n").arg(KeyWordPeriodGroup));
+            scriptInfo.append(QString("    sleep %1\n").arg(periodDuration * (double)0.001));
+            scriptInfo.append(QString("done\n"));
+
+            // PeriodGroup
+            QString periodGroupSignal = QString();
+            for (const auto& periodGroup : subDetialInfo[DetailSubInfoGroup]) {
+                QString abstractionSignal = isDetailSignalInfo(DetailSubInfoPeriodGroup, periodGroup, signalInfo);
+                if (abstractionSignal.size() > 0) {
+                    infoList.append(abstractionSignal);
+                }
+                periodGroupSignal.append(QString(" %1").arg(signalInfo));
+            }
+            QString replaceBase = QString("#%1\n").arg(KeyWordPeriodGroup);
+            QString replaceNew = QString();
+            if (periodGroupSignal.size() > 0) {
+                replaceNew = QString("    %1 inject %2\n").arg(AltonClient).arg(periodGroupSignal);
+            }
+            scriptInfo.replace(replaceBase, replaceNew);
+        }
+    } else if (type == DetailInfoListen) {
+        QString listenSignal = QString();
+        for (auto& detail : detailInfo.second) {
+            detail.remove("    ");
+            QStringList temp = detail.split(" ");
+            if (temp.size() == 2) {
+                listenSignal.append(QString(" %1").arg(temp.at(0)));
+            }
+        }
+        scriptInfo.append(QString("#%1\n").arg(KeyWordListen));
+        scriptInfo.append(QString("%1 listen%2 &\n").arg(AltonClient).arg(listenSignal));
+    } else {
+    }
+
+    return scriptInfo;
+}
+
 QString SubWindow::createToScript(const QString& file) {
-    const QString groupKeyword = QString("    ##[Group]\n");
     QString scriptInfo("#!/bin/bash\n\n");
-    QString altonClient = QString("./alton_client");
+
+#if defined(USE_TAV_PARSING_NEW)
+    QPair<QString, QStringList> detailInfo = QPair<QString, QStringList>();
+    QStringList powerTrain = QStringList();    // PowerTrainList.split(", ");
+    QStringList abstractionSignalList = QStringList();
+    QStringList signalList = QStringList();
+
+    // Description
+    scriptInfo.append(isToScriptInfo(DetailInfoDescription, signalList));
+
+    // PowerTrain
+    scriptInfo.append("\n\n");
+    scriptInfo.append(isToScriptInfo(DetailInfoPowerTrain, powerTrain));
+
+    // Precondition
+    scriptInfo.append("\n\n");
+    scriptInfo.append(isToScriptInfo(DetailInfoPrecondition, signalList));
+    abstractionSignalList.append(signalList);
+
+    // Listen
+    scriptInfo.append("\n\n");
+    scriptInfo.append(isToScriptInfo(DetailInfoListen, signalList));
+
+    // Step
+    scriptInfo.append("\n\n");
+    scriptInfo.append(isToScriptInfo(DetailInfoStep, signalList));
+    abstractionSignalList.append(signalList);
+
+    // ExpectedResult
+    scriptInfo.append("\n\n");
+    scriptInfo.append(isToScriptInfo(DetailInfoExpectedResult, signalList));
+
+    // AbstractionSignalList
+    // for (const auto& signal : abstractionSignalList) {
+    //     qDebug() << "AbstractionSignal :" << signal;
+    // }
+
+    // Save : power train type
+    QStringList pasingFileList = isVsmFileInfo(powerTrain, abstractionSignalList);
+    QString fileName = file;
+    QString repacePowerTrain = QString();
+    for (const auto& pt : powerTrain) {
+        if (repacePowerTrain.size() == 0) {
+            repacePowerTrain.append(QString("%1").arg(pt));
+        } else {
+            repacePowerTrain.append(QString(", %1").arg(pt));
+        }
+    }
+    for (auto& pt : powerTrain) {
+        QString ptValid = QString();
+        for (const auto& ptInfo : PowerTrainList.split(", ")) {
+            if (pt == ptInfo) {
+                ptValid = pt;
+                break;
+            }
+        }
+        if (ptValid.size() == 0) {
+            qDebug() << "Fail to validate power train :" << repacePowerTrain << "->" << pt;
+            continue;
+        }
+        QString writeContent = scriptInfo;
+        writeContent.replace(repacePowerTrain, pt);
+
+        for (const auto& replaceInfo : isReplaceSignal(abstractionSignalList, pasingFileList)) {
+            writeContent.replace(replaceInfo.first, replaceInfo.second);
+            scriptInfo.replace(replaceInfo.first, replaceInfo.second);
+        }
+        // for (const auto& detailInfo : writeContent.split("\n")) {
+        //     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        //     int count = 0;
+        //     for (QString info : detailInfo.split("\n")) {
+        //         qDebug() << count++ << ":" << info;
+        //     }
+        //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+        // }
+
+        QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
+        ivis::common::FileInfo::writeFile(path, writeContent, false);
+    }
+
+
+#else
+    const QString groupKeyword = QString("    ##[Group]\n");
     QString ptValue = QString();
     QString groupValue = QString();
     QString periodValue = QString();
@@ -559,6 +965,8 @@ QString SubWindow::createToScript(const QString& file) {
     if (ptValue.size() == 0) {
         scriptInfo.replace(QString("[PowerTrain]\n"), QString("[PowerTrain]\n#    ALL\n"));
     }
+#endif
+
     return scriptInfo;
 }
 
