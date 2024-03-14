@@ -7,8 +7,6 @@
 #include <QRect>
 #include <QStandardItemModel>
 
-#define USE_TAV_PARSING_NEW
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class SubWindow;
@@ -19,7 +17,7 @@ class SubWindow : public QMainWindow {
     Q_OBJECT
 
 private:
-    enum {
+    enum DisplayType {
         DisplayTypeInvalid = 0,
         DisplayTypeListMain,
         DisplayTypeListSub,
@@ -27,37 +25,23 @@ private:
         DisplayTypeListHmi,
         DisplayTypeETC,
     };
-    enum {
+    enum ViewType {
         ViewTypeInvalid = 0,
         ViewTypeTAV,
         ViewTypeScript,
         ViewTypeRedrawTAV,
     };
-    enum {
+    enum DetailInfo {
         DetailInfoInvalid = 0,
         DetailInfoDescription,
         DetailInfoPowerTrain,
         DetailInfoPrecondition,
-#if defined(USE_TAV_PARSING_NEW)
         DetailInfoListen,
         DetailInfoStep,
         DetailInfoExpectedResult,
-        // DetailInfoPreconditionGroup,
-        // DetailInfoPeriod,
-        // DetailInfoPeriodGroup,
-        // DetailInfoStepGroup,
-#else
-        DetailInfoPreconditionGroup,
-        DetailInfoPeriod,
-        DetailInfoPeriodGroup,
-        DetailInfoListen,
-        DetailInfoStep,
-        DetailInfoStepGroup,
-        DetailInfoExpectedResult,
-#endif
         DetailInfoMax,
     };
-    enum {
+    enum DetailSubInfo {
         DetailSubInfoNormal,
         DetailSubInfoGroup,
         DetailSubInfoPeriod,
@@ -84,16 +68,6 @@ private:
     QStringList isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList);
     QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
     QString isDataType(const QString& value);
-    QMap<int, QPair<QString, QString>> isMergeDataInfo(const QString& oldData, const QString& newData);
-
-    // protected:
-    //     void mousePressEvent(QMouseEvent* mouseEvent) override;
-    //     void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
-    //     void mouseMoveEvent(QMouseEvent* mouseEvent) override;
-    //     void keyPressEvent(QKeyEvent* keyEvent) override;
-    //     void keyReleaseEvent(QKeyEvent* keyEvent) override;
-    //     void moveEvent(QMoveEvent* moveEvent) override;
-    //     void resizeEvent(QResizeEvent* resizeEvent) override;
 
 signals:
     void signalTimerEvent();

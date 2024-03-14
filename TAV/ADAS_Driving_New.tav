@@ -10,7 +10,7 @@
     #Status : Open
 
 [PowerTrain]
-    EV
+    ALL
 
 [Precondition]
     SFC.Extension.AEM.Inter_AEMInitializeComplete true
