@@ -3,6 +3,7 @@
 #include "CommonEnum.h"
 #include "CommonUtil.h"
 #include "Service.h"
+#include "ConfigSetting.h"
 
 #include <QDebug>
 #include <QMapIterator>
@@ -16,7 +17,6 @@ const QString KEYWORD_GROUP = QString("    [Group]");
 const QString KEYWORD_PERIOD = QString("    [Period]");
 const QString KEYWORD_PERIOD_GROUP = QString("        [Group]");
 const QString KEYWORD_LISTEN = QString("[Listen]");
-const QString ALTON_CLIENT = QString("./alton_client");
 const QString POWERTRAIN_LIST = QString("ICV, EV, FCEV, HEV, PHEV");
 
 SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWindow), mTimerTouch(new QTimer) {
@@ -42,6 +42,7 @@ SubWindow::~SubWindow() {
 
 void SubWindow::init() {
     qDebug() << "Service :" << Service::instance().data();
+    ConfigSetting::instance();
 
     drawDisplay(DisplayTypeListMain);
     drawDisplay(DisplayTypeETC);
@@ -65,18 +66,14 @@ void SubWindow::controlConnect(const bool& state) {
             mTimerTouch->start(1000);
         }
     });
-    connect(mGui->fileList, &QListWidget::itemClicked, [=](QListWidgetItem *item) {
+    connect(mGui->fileList, &QListWidget::itemClicked, [=](QListWidgetItem* item) {
         if (item) {
             qDebug() << "itemClicked :" << item;
             mTimerTouch->stop();
         }
     });
-    connect(mTimerTouch, &QTimer::timeout, [=]() {
-        qDebug() << "itemLongPressed : Select item !!!!!";
-    });
-    connect(this, &SubWindow::signalTimerEvent, [=]() {
-        qDebug() << "signalTimerEvent";
-    });
+    connect(mTimerTouch, &QTimer::timeout, [=]() { qDebug() << "itemLongPressed : Select item !!!!!"; });
+    connect(this, &SubWindow::signalTimerEvent, [=]() { qDebug() << "signalTimerEvent"; });
 
     connect(mGui->fileList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
         if (item) {
@@ -323,10 +320,10 @@ bool SubWindow::isDetailInfo(const int& type, QPair<QString, QStringList>& detai
 
 void SubWindow::isSubDetailInfo(const QStringList& inputStr, QMap<int, QStringList>& subDetialInfo) {
     int subDetailType = DetailSubInfoNormal;
-    QString normalSpace = QString("    ");                 // Space:4(Description, PowerTrain Precondition, Step, Expected Result)
-    QString groupSpace = QString("        ");              // Space:8(Group)
-    QString periodSpace = groupSpace;                      // Space:8(Period)
-    QString periodGroupSpace = QString("            ");    // Space:12(Period -> Group)
+    QString normalSpace = QString("    ");               // Space:4(Description, PowerTrain Precondition, Step, Expected Result)
+    QString groupSpace = QString("        ");            // Space:8(Group)
+    QString periodSpace = groupSpace;                    // Space:8(Period)
+    QString periodGroupSpace = QString("            ");  // Space:12(Period -> Group)
 
     subDetialInfo.clear();
     for (const auto lineStr : inputStr) {
@@ -417,19 +414,18 @@ QString SubWindow::isDetailSignalInfo(const int& type, const QString& inputStr, 
         convertStr = QString("#### Check Input : %1").arg(inputStr);
         qDebug() << "Fail to check input string (value is invalid) :" << inputStr;
     } else {
+        QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
+
         if (type == DetailSubInfoNormal) {
             if (inputStr.contains("SFC.")) {
-                convertStr = QString("%1 set %2 %3 %4").arg(ALTON_CLIENT)
-                                                    .arg(signal)
-                                                    .arg(isDataType(value))
-                                                    .arg(value);
+                convertStr = QString("%1 set %2 %3 %4").arg(altonClient).arg(signal).arg(isDataType(value)).arg(value);
             } else if (inputStr.contains("delay")) {
                 convertStr = QString("sleep %1").arg(value.toDouble() * (double)0.001);
             } else {
                 if (inputStr.contains("Vehicle.")) {
                     abstractionSignal = inputStr;
                 }
-                convertStr = QString("%1 inject %2").arg(ALTON_CLIENT).arg(inputStr);
+                convertStr = QString("%1 inject %2").arg(altonClient).arg(inputStr);
             }
         } else {
             if (inputStr.contains("Vehicle.")) {
@@ -450,6 +446,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
         return QString();
     }
 
+    QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
     QString scriptInfo = QString();
 
     infoList.clear();
@@ -480,7 +477,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
         for (const auto& normal : subDetialInfo[DetailSubInfoNormal]) {
             QString abstractionSignal = isDetailSignalInfo(DetailSubInfoNormal, normal, signalInfo);
             if (abstractionSignal.size() > 0) {
-               infoList.append(abstractionSignal);
+                infoList.append(abstractionSignal);
             }
             scriptInfo.append(QString("%1\n").arg(signalInfo));
         }
@@ -490,12 +487,12 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
         for (const auto& group : subDetialInfo[DetailSubInfoGroup]) {
             QString abstractionSignal = isDetailSignalInfo(DetailSubInfoGroup, group, signalInfo);
             if (abstractionSignal.size() > 0) {
-               infoList.append(abstractionSignal);
+                infoList.append(abstractionSignal);
             }
             groupSignal.append(QString(" %1").arg(signalInfo));
         }
         if (groupSignal.size() > 0) {
-            scriptInfo.append(QString("%1 inject%2\n").arg(ALTON_CLIENT).arg(groupSignal));
+            scriptInfo.append(QString("%1 inject%2\n").arg(altonClient).arg(groupSignal));
         }
 
         // Period
@@ -506,7 +503,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             QString abstractionSignal = isDetailSignalInfo(DetailSubInfoPeriod, period, signalInfo);
             // qDebug() << "Period  :"<< signalInfo;
             if (abstractionSignal.size() > 0) {
-               infoList.append(abstractionSignal);
+                infoList.append(abstractionSignal);
             }
 
             if (signalInfo.contains("Info :")) {
@@ -515,10 +512,10 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
                     periodCycle = temp.at(0).toInt();
                     periodDuration = temp.at(1).toInt();
                 } else {
-                    qDebug() << "Fail to period info parsing :"<< temp;
+                    qDebug() << "Fail to period info parsing :" << temp;
                 }
             } else {
-                periodSignal.append(QString("    %1 inject %2\n").arg(ALTON_CLIENT).arg(signalInfo));
+                periodSignal.append(QString("    %1 inject %2\n").arg(altonClient).arg(signalInfo));
             }
         }
 
@@ -545,7 +542,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             if (periodGroupSignal.size() == 0) {
                 scriptInfo.replace(replacePeriodGroup, QString());
             } else {
-                scriptInfo.replace(replacePeriodGroup, QString("    %1 inject%2\n").arg(ALTON_CLIENT).arg(periodGroupSignal));
+                scriptInfo.replace(replacePeriodGroup, QString("    %1 inject%2\n").arg(altonClient).arg(periodGroupSignal));
             }
         }
     } else if (type == DetailInfoListen) {
@@ -558,7 +555,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             }
         }
         scriptInfo.append(QString("#%1\n").arg(KEYWORD_LISTEN));
-        scriptInfo.append(QString("%1 listen%2 &\n").arg(ALTON_CLIENT).arg(listenSignal));
+        scriptInfo.append(QString("%1 listen%2 &\n").arg(altonClient).arg(listenSignal));
     } else {
     }
 

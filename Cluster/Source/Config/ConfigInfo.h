@@ -15,6 +15,7 @@ public:
 
         // General
         ConfigTypeScreenInfo,
+        ConfigTypeAltonClientPath,
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -46,6 +47,8 @@ private:
         // General
         mConfigInfoData[ConfigTypeScreenInfo] =
             QPair<QString, QVariant>("ConfigTypeScreenInfo", QVariant(QRect(0, 0, 1440, 900)));
+        mConfigInfoData[ConfigTypeAltonClientPath] =
+            QPair<QString, QVariant>("ConfigTypeAltonClientPath", QVariant("./alton_client"));
 
         // Common : The setting information is not saved as a file. (Do not save config file)
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
