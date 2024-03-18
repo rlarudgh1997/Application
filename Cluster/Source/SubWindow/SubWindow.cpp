@@ -414,18 +414,16 @@ QString SubWindow::isDetailSignalInfo(const int& type, const QString& inputStr, 
         convertStr = QString("#### Check Input : %1").arg(inputStr);
         qDebug() << "Fail to check input string (value is invalid) :" << inputStr;
     } else {
-        QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
-
         if (type == DetailSubInfoNormal) {
             if (inputStr.contains("SFC.")) {
-                convertStr = QString("%1 set %2 %3 %4").arg(altonClient).arg(signal).arg(isDataType(value)).arg(value);
+                convertStr = QString("$ALTON_CLIENT set %1 %2 %3").arg(signal).arg(isDataType(value)).arg(value);
             } else if (inputStr.contains("delay")) {
                 convertStr = QString("sleep %1").arg(value.toDouble() * (double)0.001);
             } else {
                 if (inputStr.contains("Vehicle.")) {
                     abstractionSignal = inputStr;
                 }
-                convertStr = QString("%1 inject %2").arg(altonClient).arg(inputStr);
+                convertStr = QString("$ALTON_CLIENT inject %1").arg(inputStr);
             }
         } else {
             if (inputStr.contains("Vehicle.")) {
@@ -446,7 +444,6 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
         return QString();
     }
 
-    QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
     QString scriptInfo = QString();
 
     infoList.clear();
@@ -492,7 +489,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             groupSignal.append(QString(" %1").arg(signalInfo));
         }
         if (groupSignal.size() > 0) {
-            scriptInfo.append(QString("%1 inject%2\n").arg(altonClient).arg(groupSignal));
+            scriptInfo.append(QString("$ALTON_CLIENT inject%1\n").arg(groupSignal));
         }
 
         // Period
@@ -515,7 +512,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
                     qDebug() << "Fail to period info parsing :" << temp;
                 }
             } else {
-                periodSignal.append(QString("    %1 inject %2\n").arg(altonClient).arg(signalInfo));
+                periodSignal.append(QString("    $ALTON_CLIENT inject %1\n").arg(signalInfo));
             }
         }
 
@@ -542,7 +539,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             if (periodGroupSignal.size() == 0) {
                 scriptInfo.replace(replacePeriodGroup, QString());
             } else {
-                scriptInfo.replace(replacePeriodGroup, QString("    %1 inject%2\n").arg(altonClient).arg(periodGroupSignal));
+                scriptInfo.replace(replacePeriodGroup, QString("    $ALTON_CLIENT inject%1\n").arg(periodGroupSignal));
             }
         }
     } else if (type == DetailInfoListen) {
@@ -555,7 +552,7 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             }
         }
         scriptInfo.append(QString("#%1\n").arg(KEYWORD_LISTEN));
-        scriptInfo.append(QString("%1 listen%2 &\n").arg(altonClient).arg(listenSignal));
+        scriptInfo.append(QString("$ALTON_CLIENT listen%1 &\n").arg(listenSignal));
     } else {
     }
 
@@ -566,7 +563,20 @@ QString SubWindow::createToScript(const QString& file) {
     QStringList powerTrain = QStringList();
     QStringList abstractionSignalList = QStringList();
     QStringList signalList = QStringList();
+    QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
     QString scriptInfo("#!/bin/bash");
+
+    // AltonClient Path
+    scriptInfo.append("\n\n");
+    scriptInfo.append("#[AltonClient]\n");
+#if 1
+    scriptInfo.append("ALTON_CLIENT=\"$1\"\n");
+    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1\"\nfi\n").arg(altonClient));
+#else
+    scriptInfo.append(QString("ALTON_CLIENT=\"%1\"\n").arg(altonClient));
+    scriptInfo.append(QString("if [ -n \"$1\" ]; then\n    ALTON_CLIENT=\"$1\"\nfi\n"));
+#endif
+    scriptInfo.append(QString("echo \"ALTON_CLIENT=$ALTON_CLIENT\"\n"));
 
     // Description
     scriptInfo.append("\n\n");
