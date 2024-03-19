@@ -32,7 +32,7 @@ private:
 
 public:
     static QSharedPointer<ConfigSetting>& instance();
-    ~ConfigSetting();
+    // ~ConfigSetting();
     QVariant readConfig(const int& configType);
     void writeConfig(const int& configType, const QVariant& configValue);
     QVariant isConfigName(const int& configType);

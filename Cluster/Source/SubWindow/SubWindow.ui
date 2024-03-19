@@ -27,7 +27,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="invalid">
      <widget class="QPushButton" name="invalidOpen">
@@ -81,6 +81,42 @@
         <width>640</width>
         <height>580</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="checkCancel">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>10</y>
+        <width>80</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="checkDelete">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>60</y>
+        <width>80</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Delete</string>
       </property>
      </widget>
     </widget>
@@ -163,9 +199,9 @@
      <widget class="QPushButton" name="detailSave">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>540</x>
         <y>60</y>
-        <width>60</width>
+        <width>80</width>
         <height>30</height>
        </rect>
       </property>
@@ -406,15 +442,7 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuOpen">
-     <property name="title">
-      <string>Open</string>
-     </property>
-     <addaction name="actionTAV"/>
-     <addaction name="actionScript"/>
-    </widget>
-    <addaction name="menuOpen"/>
-    <addaction name="actionOpen_Dir"/>
+    <addaction name="actionOPen"/>
     <addaction name="actionDelete"/>
     <addaction name="actionExit"/>
    </widget>
@@ -429,7 +457,7 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     <property name="title">
      <string>Setting</string>
     </property>
-    <addaction name="actionDefault_Path"/>
+    <addaction name="actionVSM_Path"/>
     <addaction name="actionTAV_Path"/>
     <addaction name="actionAltonClient_Path"/>
    </widget>
@@ -450,9 +478,9 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     <string>Start</string>
    </property>
   </action>
-  <action name="actionDefault_Path">
+  <action name="actionVSM_Path">
    <property name="text">
-    <string>Default Path</string>
+    <string>VSM Path</string>
    </property>
   </action>
   <action name="actionTAV_Path">
@@ -503,6 +531,11 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
   <action name="actionDelete">
    <property name="text">
     <string>Delete(*.sh)</string>
+   </property>
+  </action>
+  <action name="actionOPen">
+   <property name="text">
+    <string>Open</string>
    </property>
   </action>
  </widget>

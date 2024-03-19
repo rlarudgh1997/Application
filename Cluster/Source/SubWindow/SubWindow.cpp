@@ -2,8 +2,10 @@
 #include "ui_SubWindow.h"
 #include "CommonEnum.h"
 #include "CommonUtil.h"
-#include "Service.h"
+#include "CommonPopup.h"
+#include "CommonResource.h"
 #include "ConfigSetting.h"
+#include "Service.h"
 
 #include <QDebug>
 #include <QMapIterator>
@@ -46,8 +48,8 @@ void SubWindow::init() {
 
     drawDisplay(DisplayTypeListMain);
     drawDisplay(DisplayTypeETC);
-    updateFileList();
     controlConnect(mInit);
+    updateFileList(ListTypeNormal, nullptr);
 }
 
 void SubWindow::controlConnect(const bool& state) {
@@ -59,23 +61,49 @@ void SubWindow::controlConnect(const bool& state) {
 
     connect(mGui->fileList, &QListWidget::itemPressed, [=](QListWidgetItem* item) {
         if (item) {
-            qDebug() << "itemPressed :" << item;
-            // QTimer::singleShot(1500, this, [&]() {
-            //     emit signalTimerEvent();
-            // });
-            mTimerTouch->start(1000);
+            if (mListType == ListTypeNormal) {
+                mTimerTouch->start(1000);
+            }
         }
     });
     connect(mGui->fileList, &QListWidget::itemClicked, [=](QListWidgetItem* item) {
         if (item) {
-            qDebug() << "itemClicked :" << item;
             mTimerTouch->stop();
+            if (mListType != ListTypeNormal) {
+                updateFileList(ListTypeUpdateCheck, (mListType == ListTypeCheck) ? (nullptr) : (item));
+            }
         }
     });
-    connect(mTimerTouch, &QTimer::timeout, [=]() { qDebug() << "itemLongPressed : Select item !!!!!"; });
-    connect(this, &SubWindow::signalTimerEvent, [=]() { qDebug() << "signalTimerEvent"; });
-
+    // connect(mGui->fileList, &QListWidget::itemChanged, [=](QListWidgetItem* item) {
+    //     if (item) {
+    //         updateFileList(ListTypeUpdateCheck, nullptr);
+    //     }
+    // });
+    connect(mTimerTouch, &QTimer::timeout, [=]() {
+        updateFileList(ListTypeCheck, nullptr);
+    });
+    connect(mGui->checkCancel, &QPushButton::clicked, [=]() {
+        updateFileList(ListTypeNormal, nullptr);
+    });
+    connect(mGui->checkDelete, &QPushButton::clicked, [=]() {
+        QVariantList text = QVariantList(
+            {STRING_FILE_DELETE, STRING_FILE_DELETE_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
+        QVariant popupData = QVariant();
+        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DeleteFile, this, popupData, QVariant(text)) ==
+            ivis::common::PopupButton::Cancel) {
+            return;
+        }
+        for (const auto& file : mDeleteFileList) {
+            QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+            bool result = ivis::common::FileInfo::deleteFile(path, file);
+            qDebug() << "Delete TAV File :" << ((result) ? ("Sucess") : ("Fail")) << file;
+        }
+        updateFileList(ListTypeNormal, nullptr);
+    });
     connect(mGui->fileList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
+        if (mListType != ListTypeNormal) {
+            return;
+        }
         if (item) {
             mSelectFile = item->text();
             mPreviousTavData.clear();
@@ -97,17 +125,19 @@ void SubWindow::controlConnect(const bool& state) {
 
         mStart = !mStart;
         if (mStart) {
+            mScriptFileList.clear();
             mGui->detailBack->hide();
             mGui->detailStart->setText("Stop");
             drawDisplay(DisplayTypeListAltonService);
             drawDisplay(DisplayTypeListHmi);
-            updateDetailFileInfo(ViewTypeScript, createToScript(mSelectFile));
+            updateDetailFileInfo(ViewTypeScript, createToScript(mSelectFile, mScriptFileList));
         } else {
             mGui->detailBack->show();
             mGui->detailStart->setText("Start");
             updateDetailFileInfo(ViewTypeRedrawTAV, mPreviousTavData);
         }
         mGui->detailContent->setReadOnly(mStart);
+        excuteScript(mStart, mSelectFile, mScriptFileList);
     });
     connect(mGui->detailContent, &QPlainTextEdit::textChanged, [=]() {
         if (mStart) {
@@ -130,6 +160,24 @@ void SubWindow::controlConnect(const bool& state) {
         bool result = ivis::common::FileInfo::deleteFile(path, QString("*.sh"));
         qDebug() << "Delete Script File :" << ((result) ? ("Sucess") : ("Fail"));
     });
+    connect(mGui->actionAbout, &QAction::triggered, [=]() {
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::About, this, popupData,
+                                        QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
+    });
+    connect(mGui->actionAbout_QT, &QAction::triggered, [=]() {
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, this, popupData);
+    });
+    connect(mGui->actionVSM_Path, &QAction::triggered, [=]() {
+        settingPath(PathTypeVSM);
+    });
+    connect(mGui->actionTAV_Path, &QAction::triggered, [=]() {
+        settingPath(PathTypeTAV);
+    });
+    connect(mGui->actionAltonClient_Path, &QAction::triggered, [=]() {
+        settingPath(PathTypeAltonClient);
+    });
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {
@@ -138,6 +186,8 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             mGui->menubar->show();
             mGui->statusbar->hide();
             mGui->altonClient->setCurrentIndex(1);
+            mGui->checkCancel->hide();
+            mGui->checkDelete->hide();
             mGui->detailSave->hide();
             mGui->altonServiceContent->hide();
             mGui->hmiContent->hide();
@@ -171,24 +221,65 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
         }
     }
 }
-void SubWindow::updateFileList() {
-    if (mGui->fileList->count() > 0) {
+
+void SubWindow::updateFileList(const int& type, QListWidgetItem* updateItem) {
+    if (mGui->fileList == nullptr) {
         return;
     }
-    QFileInfoList fileList = QFileInfoList();
-    QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
-    QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(path, QString(".tav"), fileList);
-    mGui->fileList->clear();
-    for (const auto& file : fileInfo) {
-        QListWidgetItem* item = new QListWidgetItem(file);
-        QFont font;
-        font.setPointSize(20);
-        item->setFont(font);
-        item->setSizeHint(QSize(638, 50));
-        mGui->fileList->addItem(item);
+
+    mDeleteFileList.clear();
+    mListType = type;
+    switch (type) {
+        case ListTypeNormal: {
+            QFileInfoList fileList = QFileInfoList();
+            QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+            QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(path, QString(".tav"), fileList);
+            mGui->fileList->clear();
+            for (const auto& file : fileInfo) {
+                QListWidgetItem* item = new QListWidgetItem(file);
+                QFont font;
+                font.setPointSize(20);
+                item->setFont(font);
+                item->setSizeHint(QSize(638, 50));
+                mGui->fileList->addItem(item);
+            }
+            mGui->fileList->setCurrentRow(0);
+            mGui->fileList->show();
+            break;
+        }
+        case ListTypeCheck: {
+            for (int rowIndex = 0; rowIndex < mGui->fileList->count(); rowIndex++) {
+                QListWidgetItem* item = mGui->fileList->item(rowIndex);
+                if (item) {
+                    item->setCheckState(Qt::Unchecked);
+                }
+            }
+            break;
+        }
+        case ListTypeUpdateCheck: {
+            if (updateItem) {
+                updateItem->setCheckState((updateItem->checkState() == Qt::Checked) ? (Qt::Unchecked) : (Qt::Checked));
+            }
+            break;
+        }
+        default: {
+            break;
+        }
     }
-    mGui->fileList->setCurrentRow(0);
-    mGui->fileList->show();
+
+    for (int rowIndex = 0; rowIndex < mGui->fileList->count(); rowIndex++) {
+        QListWidgetItem* item = mGui->fileList->item(rowIndex);
+        if ((item) && (item->checkState() == Qt::Checked)) {
+            mDeleteFileList.append(item->text());
+        }
+    }
+
+    if (mGui->checkCancel) {
+        mGui->checkCancel->setVisible(type != ListTypeNormal);
+    }
+    if (mGui->checkDelete) {
+        mGui->checkDelete->setVisible(mDeleteFileList.size() > 0);
+    }
 }
 
 void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
@@ -559,11 +650,12 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
     return scriptInfo;
 }
 
-QString SubWindow::createToScript(const QString& file) {
+QString SubWindow::createToScript(const QString& file, QStringList& scriptFileList) {
     QStringList powerTrain = QStringList();
     QStringList abstractionSignalList = QStringList();
     QStringList signalList = QStringList();
-    QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
+    QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClient).toString();
+    QString altonClientPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
     QString scriptInfo("#!/bin/bash");
 
     // AltonClient Path
@@ -571,7 +663,7 @@ QString SubWindow::createToScript(const QString& file) {
     scriptInfo.append("#[AltonClient]\n");
 #if 1
     scriptInfo.append("ALTON_CLIENT=\"$1\"\n");
-    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1\"\nfi\n").arg(altonClient));
+    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1/%2\"\nfi\n").arg(altonClientPath).arg(altonClient));
 #else
     scriptInfo.append(QString("ALTON_CLIENT=\"%1\"\n").arg(altonClient));
     scriptInfo.append(QString("if [ -n \"$1\" ]; then\n    ALTON_CLIENT=\"$1\"\nfi\n"));
@@ -650,8 +742,62 @@ QString SubWindow::createToScript(const QString& file) {
 
         QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
         ivis::common::FileInfo::writeFile(path, writeContent, false);
+        scriptFileList.append(path);
     }
     return scriptInfo;
+}
+
+void SubWindow::excuteScript(const bool& start, const QString& file, const QStringList& scriptFileList) {
+    qDebug() << "excuteScript :" << ((start) ? ("[Start]") : ("[Stop]")) << ", ScriptFile :" << file << scriptFileList.size();
+
+    int index = 0;
+    if (start) {
+        QString logFile = file;
+        logFile.remove(".tav");
+
+        qDebug() << "\t 1. start : altonservice";
+        qDebug() << "\t 2. start : watcher -" << QString("%1.info").arg(logFile);
+        qDebug() << "\t 3. start : chmod -R 777 *.sh";
+        for (const auto& script : scriptFileList) {
+            // startProcess(script, QString("./%1.info").arg(logFile));
+            qDebug() << "\t" << QString("4-%1. start : %2 >> %3.info").arg(index++).arg(script).arg(logFile);
+        }
+    } else {
+        qDebug() << "\t 1. stop : altonservice";
+        qDebug() << "\t 2. stop : watcher";
+        for (const auto& script : scriptFileList) {
+            qDebug() << "\t" << QString("3-%1. stop : %2").arg(index++).arg(script);
+        }
+        qDebug() << "\t 4. stop : delete watcher info file";
+    }
+}
+
+void SubWindow::startProcess(const QString& command, const QString& arg) {
+    stopProcess();
+    QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
+
+    mProcess =
+        QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
+    mProcess.data()->setCommandInfo(command, QString(" >> %1").arg(arg));
+    mProcess.data()->start();
+    connect(
+        mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramInfo, [=](const bool& start, const bool& result) {
+            if (start == false) {
+                qDebug() << "*************************************************************************************************";
+                qDebug() << "Commnad :" << command;
+                qDebug() << "Result  :" << ((result) ? ("sucess") : ("fail"));
+                qDebug() << "*************************************************************************************************\n";
+            }
+        });
+}
+
+void SubWindow::stopProcess() {
+}
+
+void SubWindow::startWatcherFile(const int& type, const QString& watcherFile) {
+}
+
+void SubWindow::stopWatcherFile(const int& type) {
 }
 
 QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList) {
@@ -780,4 +926,44 @@ QString SubWindow::isDataType(const QString& value) {
         return "bool";
     }
     return "string";
+}
+
+void SubWindow::settingPath(const int& pathType) {
+    int configType = ConfigInfo::ConfigTypeInvalid;
+    QString popupText = QString();
+
+    switch (pathType) {
+        case PathTypeVSM: {
+            configType = ConfigInfo::ConfigTypeVsmPath;
+            popupText = STRING_VSM_PATH;
+            break;
+        }
+        case PathTypeTAV: {
+            configType = ConfigInfo::ConfigTypeTavPath;
+            popupText = STRING_TAV_PATH;
+            break;
+        }
+        case PathTypeAltonClient: {
+            configType = ConfigInfo::ConfigTypeAltonClientPath;
+            popupText = STRING_ALTON_CLIENT_PATH;
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    if (configType != ConfigInfo::ConfigTypeInvalid) {
+        QVariant popupData = QVariant();
+        QVariant path = ConfigSetting::instance().data()->readConfig(configType);
+        if (path.isNull()) {
+            path = ivis::common::APP_PWD();
+        }
+        QVariantList info = QVariantList({popupText, path});
+        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, this, popupData, QVariant(info)) ==
+            ivis::common::PopupButton::OK) {
+            qDebug() << "Path :" << popupData;
+            ConfigSetting::instance().data()->writeConfig(configType, popupData);
+        }
+    }
 }

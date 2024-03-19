@@ -31,11 +31,11 @@ ConfigSetting::ConfigSetting() : mSetting(new QSettings(CONFIG_FILE, QSettings::
     init();
 }
 
-ConfigSetting::~ConfigSetting() {
-    mThreadRun = false;
-    delete mSetting;
-    qDebug() << "~ConfigSetting";
-}
+// ConfigSetting::~ConfigSetting() {
+//     mThreadRun = false;
+//     delete mSetting;
+//     qDebug() << "~ConfigSetting";
+// }
 
 void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
@@ -145,7 +145,7 @@ void ConfigSetting::readConfig() {
     for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
         QString configName =
             mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName).toString();
-        if (configType > ConfigInfo::ConfigTypeMaxDoNotSave) {
+        if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             mConfigData[configType] =
                 mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeValue);
         } else {
@@ -158,7 +158,9 @@ void ConfigSetting::readConfig() {
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
-            mConfigData[configType] = mSetting->value(configName);
+            QVariant configName =
+                mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName);
+            mConfigData[configType] = mSetting->value(configName.toString());
             mSetting->endGroup();
         }
     }
@@ -168,7 +170,7 @@ void ConfigSetting::readConfig() {
 void ConfigSetting::writeConfig() {
     mMutex.lock();
     for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        if (configType > ConfigInfo::ConfigTypeMaxDoNotSave) {
+        if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             continue;
         }
 
@@ -195,7 +197,7 @@ void ConfigSetting::writeConfig() {
 }
 
 void ConfigSetting::resetConfig(const int& resetType) {
-    int start = ConfigInfo::ConfigTypeInvalid;
+    int start = ConfigInfo::ConfigTypeInvalid + 1;
     int end = ConfigInfo::ConfigTypeMax;
     int startSkip = (-1);
     int endSkip = (-1);

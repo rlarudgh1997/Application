@@ -9,14 +9,17 @@
 #include <QDebug>
 
 // Q_LOGGING_CATEGORY(CONFIG, "ConfigSetting")
+// #define USE_MULTI_GROUP_NAME
 
 #define CONFIG_PATH QGuiApplication::applicationDirPath().toLatin1().data()
 #define CONFIG_NAME "Cluster.ini"
 #define CONFIG_FILE (QString("%1/%2").arg(CONFIG_PATH).arg(CONFIG_NAME))
 
 #define GROUP_NAME_COMMON "Common"
+#if defined(USE_MULTI_GROUP_NAME)
 #define GROUP_NAME_GENERAL "Gernal"
 #define GROUP_NAME_ETC "Etc"
+#endif
 
 QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
     static QSharedPointer<ConfigSetting> gConfigSetting;
@@ -30,11 +33,11 @@ ConfigSetting::ConfigSetting() : mSetting(new QSettings(CONFIG_FILE, QSettings::
     init();
 }
 
-ConfigSetting::~ConfigSetting() {
-    mThreadRun = false;
-    delete mSetting;
-    qDebug() << "~ConfigSetting";
-}
+// ConfigSetting::~ConfigSetting() {
+//     mThreadRun = false;
+//     delete mSetting;
+//     qDebug() << "~ConfigSetting";
+// }
 
 void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
@@ -97,12 +100,11 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
 
 void ConfigSetting::readConfig() {
     for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QString configName =
-            mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName).toString();
-        if (configType > ConfigInfo::ConfigTypeMaxDoNotSave) {
+        if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             mConfigData[configType] =
                 mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeValue);
         } else {
+#if defined(USE_MULTI_GROUP_NAME)
             if (configType < ConfigInfo::ConfigTypeMaxDoNotSave) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
@@ -110,7 +112,12 @@ void ConfigSetting::readConfig() {
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
-            mConfigData[configType] = mSetting->value(configName);
+#else
+            mSetting->beginGroup(GROUP_NAME_COMMON);
+#endif
+            QVariant configName =
+                mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName);
+            mConfigData[configType] = mSetting->value(configName.toString());
             mSetting->endGroup();
         }
     }
@@ -119,8 +126,8 @@ void ConfigSetting::readConfig() {
 
 void ConfigSetting::writeConfig() {
     mMutex.lock();
-    for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        if (configType > ConfigInfo::ConfigTypeMaxDoNotSave) {
+    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
+        if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             continue;
         }
 
@@ -128,6 +135,7 @@ void ConfigSetting::writeConfig() {
             QString configName =
                 mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName)
                     .toString();
+#if defined(USE_MULTI_GROUP_NAME)
             if (configType < ConfigInfo::ConfigTypeMaxDoNotSave) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
@@ -135,6 +143,9 @@ void ConfigSetting::writeConfig() {
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
+#else
+            mSetting->beginGroup(GROUP_NAME_COMMON);
+#endif
             mConfigBackup[configType] = mConfigData[configType];
             mSetting->setValue(configName, mConfigData[configType]);
             mSetting->endGroup();
@@ -145,7 +156,7 @@ void ConfigSetting::writeConfig() {
 }
 
 void ConfigSetting::resetConfig(const int& resetType) {
-    int start = ConfigInfo::ConfigTypeInvalid;
+    int start = ConfigInfo::ConfigTypeInvalid + 1;
     int end = ConfigInfo::ConfigTypeMax;
     int startSkip = (-1);
     int endSkip = (-1);

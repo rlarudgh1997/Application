@@ -1,7 +1,6 @@
 #ifndef COMMON_POPUP_H
 #define COMMON_POPUP_H
 
-#if 0
 #include <QObject>
 #include <QDebug>
 
@@ -10,8 +9,7 @@
 #include <QFileDialog>
 #include <QPushButton>
 
-#include "AbstractHandler.h"
-#include "CommonEnum.h"
+// #include "CommonEnum.h"
 
 namespace ivis {
 namespace common {
@@ -20,26 +18,8 @@ enum class PopupType {
     Invalid = 0,
 
     About,
-    OpenFail,
-    NowInstalling,
-    InstallComplete,
-    DefaultPathError,
-    InputTextError,
-    ScriptRunnigCompleted,
-    TCReportError,
-    GcovReportError,
-    RunPathError,
-    ModuleSelectError,
-    SelectCellColumnError,
-
-    Exit,
-    New,
-    NoInstallLib,
-    FileNotExist,
-
     AboutQt,
-    Open,
-    Save,
+    DeleteFile,
     SettingPath,
 };
 
@@ -59,6 +39,126 @@ class Popup : public QObject {
     Q_OBJECT
 
 public:
+#if 1
+    static PopupButton drawPopup(const PopupType& popupType, QWidget* handler, QVariant& popupData,
+                                 const QVariant& value = QVariant()) {
+        PopupButton button = PopupButton::Invalid;
+
+        qDebug() << "Popup::drawPopup() -> PopupType :" << static_cast<int>(gPopupType) << "->" << static_cast<int>(popupType);
+        if (isPopupType() == popupType) {
+            qDebug() << "\t This is the same pop-up as the previous one.";
+            return button;
+        }
+        setPopupType(popupType);
+
+        switch (popupType) {
+            case PopupType::About: {
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 2) {
+                    bool warning = false;
+                    button = drawPopupNoraml(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
+                }
+                break;
+            }
+            case PopupType::AboutQt: {
+                button = drawPopupAboutQt(handler);
+                break;
+            }
+            case PopupType::DeleteFile: {
+                button = drawPopupSelect(popupType, handler, value);
+                break;
+            }
+            case PopupType::SettingPath: {
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 2) {
+                    button = drawPopupSettingPath(handler, infoData.at(0).toString(), infoData.at(1).toString());
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        setPopupType(PopupType::Invalid);
+        popupData = isPopupData();
+        qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << popupData;
+        return button;
+    }
+
+private:
+    static PopupType isPopupType() {
+        return gPopupType;
+    }
+    static QVariant isPopupData() {
+        return gPopupData;
+    }
+    static void setPopupType(const PopupType& type) {
+        gPopupType = type;
+    }
+    static void setPopupData(const QVariant& data) {
+        gPopupData = data;
+    }
+    static PopupButton drawPopupAboutQt(QWidget* handler) {
+        PopupButton button = PopupButton::Invalid;
+        if (handler) {
+            QMessageBox::aboutQt(handler);
+            button = PopupButton::OK;
+        }
+        return button;
+    }
+    static PopupButton drawPopupNoraml(QWidget* handler, const bool& warning, const QString& title, const QString& tip) {
+        PopupButton button = PopupButton::Invalid;
+        if (handler) {
+            if (warning) {
+                QMessageBox::warning(handler, title, tip);
+            } else {
+                QMessageBox::information(handler, title, tip);
+            }
+            button = PopupButton::OK;
+        }
+        return button;
+    }
+    static PopupButton drawPopupSettingPath(QWidget* handler, const QString& title, const QString& path) {
+        PopupButton button = PopupButton::Invalid;
+        if (handler) {
+            QString showPath = path;
+            if (showPath.size() == 0) {
+                showPath = QApplication::applicationDirPath();
+            }
+            qDebug() << "Path :" << showPath;
+            QString path = QFileDialog::getExistingDirectory(handler, title, showPath,
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+            if (path.size() > 0) {
+                setPopupData(path);
+                button = PopupButton::OK;
+            }
+        }
+        return button;
+    }
+    static PopupButton drawPopupSelect(const PopupType& popupType, QWidget* handler, const QVariant& textList) {
+        PopupButton buttonType = PopupButton::Invalid;
+        QMessageBox selectBox(handler);
+        QVariantList list = textList.toList();
+        QMap<PopupButton, QPushButton*> button = QMap<PopupButton, QPushButton*>();
+
+        if ((popupType == PopupType::DeleteFile) && (list.size() == 4)) {
+            selectBox.setWindowTitle(list[0].toString());
+            selectBox.setText(list[1].toString());
+            button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+            button[PopupButton::Cancel] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+            connect(button[PopupButton::OK], &QPushButton::clicked, [&]() { buttonType = PopupButton::OK; });
+            connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() { buttonType = PopupButton::Cancel; });
+        } else {
+        }
+
+        if (button.size() == 0) {
+            return PopupButton::Invalid;
+        }
+
+        selectBox.exec();
+        return buttonType;
+    }
+#else
     static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, QVariant& popupData,
                                  const QVariant& value = QVariant()) {
         PopupButton button = PopupButton::Invalid;
@@ -251,11 +351,10 @@ private:
         }
         return button;
     }
+#endif
 };
 
 }  // end of namespace common
 }  // end of namespace ivis
 
 #endif  // COMMON_POPUP_H
-
-#endif

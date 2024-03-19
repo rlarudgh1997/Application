@@ -15,7 +15,10 @@ public:
 
         // General
         ConfigTypeScreenInfo,
+        ConfigTypeAltonClient,
         ConfigTypeAltonClientPath,
+        ConfigTypeTavPath,
+        ConfigTypeVsmPath,
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -47,8 +50,14 @@ private:
         // General
         mConfigInfoData[ConfigTypeScreenInfo] =
             QPair<QString, QVariant>("ConfigTypeScreenInfo", QVariant(QRect(0, 0, 1440, 900)));
+        mConfigInfoData[ConfigTypeAltonClient] =
+            QPair<QString, QVariant>("ConfigTypeAltonClient", QVariant("alton_client"));
         mConfigInfoData[ConfigTypeAltonClientPath] =
-            QPair<QString, QVariant>("ConfigTypeAltonClientPath", QVariant("./alton_client"));
+            QPair<QString, QVariant>("ConfigTypeAltonClientPath", QVariant("../Alton"));
+        mConfigInfoData[ConfigTypeTavPath] =
+            QPair<QString, QVariant>("ConfigTypeTavPath", QVariant("../TAV"));
+        mConfigInfoData[ConfigTypeVsmPath] =
+            QPair<QString, QVariant>("ConfigTypeVsmPath", QVariant("../../model/VSM"));
 
         // Common : The setting information is not saved as a file. (Do not save config file)
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));

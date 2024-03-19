@@ -10,7 +10,7 @@
     #Status : Open
 
 [PowerTrain]
-    ICV
+    ICV, EV
 
 [Precondition]
     SFC.Extension.AEM.Inter_AEMInitializeComplete true
@@ -21,7 +21,7 @@
     [Period]
         Info : 20/10 # Cycle 20, Duration 10
         Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue 1000
-        Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 100
+        Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue 10
 
 [Step]
     delay 1000
@@ -29,3 +29,4 @@
 
 [Expected Result]
     SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
+
