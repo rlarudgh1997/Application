@@ -1,7 +1,6 @@
 #include "SubWindow.h"
 #include "ui_SubWindow.h"
 #include "CommonEnum.h"
-#include "CommonUtil.h"
 #include "CommonPopup.h"
 #include "CommonResource.h"
 #include "ConfigSetting.h"
@@ -48,20 +47,21 @@ void SubWindow::init() {
 
     drawDisplay(DisplayTypeListMain);
     drawDisplay(DisplayTypeETC);
-    controlConnect(mInit);
+    controlConnect(true);
+    setCurrentTavPath(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString());
     updateFileList(ListTypeNormal, nullptr);
 }
 
 void SubWindow::controlConnect(const bool& state) {
-    if (mInit) {
+    if (getInit()) {
         qDebug() << "ControlConnect : Completed";
         return;
     }
-    mInit = true;
+    setInit(true);
 
     connect(mGui->fileList, &QListWidget::itemPressed, [=](QListWidgetItem* item) {
         if (item) {
-            if (mListType == ListTypeNormal) {
+            if (getListType() == ListTypeNormal) {
                 mTimerTouch->start(1000);
             }
         }
@@ -69,8 +69,8 @@ void SubWindow::controlConnect(const bool& state) {
     connect(mGui->fileList, &QListWidget::itemClicked, [=](QListWidgetItem* item) {
         if (item) {
             mTimerTouch->stop();
-            if (mListType != ListTypeNormal) {
-                updateFileList(ListTypeUpdateCheck, (mListType == ListTypeCheck) ? (nullptr) : (item));
+            if (getListType() != ListTypeNormal) {
+                updateFileList(ListTypeUpdateCheck, (getListType() == ListTypeCheck) ? (nullptr) : (item));
             }
         }
     });
@@ -79,105 +79,97 @@ void SubWindow::controlConnect(const bool& state) {
     //         updateFileList(ListTypeUpdateCheck, nullptr);
     //     }
     // });
-    connect(mTimerTouch, &QTimer::timeout, [=]() {
-        updateFileList(ListTypeCheck, nullptr);
-    });
-    connect(mGui->checkCancel, &QPushButton::clicked, [=]() {
-        updateFileList(ListTypeNormal, nullptr);
-    });
+    connect(mTimerTouch, &QTimer::timeout, [=]() { updateFileList(ListTypeCheck, nullptr); });
+    connect(mGui->checkCancel, &QPushButton::clicked, [=]() { updateFileList(ListTypeNormal, nullptr); });
     connect(mGui->checkDelete, &QPushButton::clicked, [=]() {
-        QVariantList text = QVariantList(
-            {STRING_FILE_DELETE, STRING_FILE_DELETE_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
-        QVariant popupData = QVariant();
-        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DeleteFile, this, popupData, QVariant(text)) ==
-            ivis::common::PopupButton::Cancel) {
-            return;
+        if (deleteFile(DeleteTypeSelectTAV)) {
+            updateFileList(ListTypeNormal, nullptr);
         }
-        for (const auto& file : mDeleteFileList) {
-            QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
-            bool result = ivis::common::FileInfo::deleteFile(path, file);
-            qDebug() << "Delete TAV File :" << ((result) ? ("Sucess") : ("Fail")) << file;
-        }
-        updateFileList(ListTypeNormal, nullptr);
     });
     connect(mGui->fileList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
-        if (mListType != ListTypeNormal) {
+        if (getListType() != ListTypeNormal) {
             return;
         }
         if (item) {
-            mSelectFile = item->text();
-            mPreviousTavData.clear();
-            drawDisplay(DisplayTypeListSub, mSelectFile);
-            updateDetailFileInfo(ViewTypeTAV, mSelectFile);
+            setSelectFile(item->text());
+            setPreviousTavData("");
+            drawDisplay(DisplayTypeListSub, getSelectFile());
+            updateDetailFileInfo(ViewTypeTAV, getSelectFile());
             mGui->detailContent->setReadOnly(false);
         }
     });
     connect(mGui->detailBack, &QPushButton::clicked, [=]() {
-        mSelectFile.clear();
+        setSelectFile("");
         drawDisplay(DisplayTypeListMain);
     });
     connect(mGui->detailStart, &QPushButton::clicked, [=]() {
-        if (mTavSave) {
-            mTavSave = false;
+        if (getTavSave()) {
+            setTavSave(false);
             mGui->detailSave->setVisible(false);
             updateDetailDataInfo(QString());
         }
 
-        mStart = !mStart;
-        if (mStart) {
+        setScriptStart((getScriptStart()) ? (false) : (true));
+
+        if (getScriptStart()) {
             mScriptFileList.clear();
             mGui->detailBack->hide();
             mGui->detailStart->setText("Stop");
             drawDisplay(DisplayTypeListAltonService);
             drawDisplay(DisplayTypeListHmi);
-            updateDetailFileInfo(ViewTypeScript, createToScript(mSelectFile, mScriptFileList));
+            updateDetailFileInfo(ViewTypeScript, createToScript(getSelectFile(), mScriptFileList));
         } else {
             mGui->detailBack->show();
             mGui->detailStart->setText("Start");
-            updateDetailFileInfo(ViewTypeRedrawTAV, mPreviousTavData);
+            updateDetailFileInfo(ViewTypeRedrawTAV, getPreviousTavData());
         }
-        mGui->detailContent->setReadOnly(mStart);
-        excuteScript(mStart, mSelectFile, mScriptFileList);
+        mGui->detailContent->setReadOnly(getScriptStart());
+        excuteScript(getScriptStart(), getSelectFile(), mScriptFileList);
     });
     connect(mGui->detailContent, &QPlainTextEdit::textChanged, [=]() {
-        if (mStart) {
+        if (getScriptStart()) {
             return;
         }
-        mTavSave = (mPreviousTavData != mGui->detailContent->toPlainText());
-        mGui->detailSave->setVisible(mTavSave);
+        setTavSave(getPreviousTavData() != mGui->detailContent->toPlainText());
+        mGui->detailSave->setVisible(getTavSave());
     });
     connect(mGui->detailSave, &QPushButton::clicked, [=]() {
-        mTavSave = false;
-        mGui->detailSave->setVisible(mTavSave);
-        updateDetailDataInfo(mSelectFile);
+        setTavSave(false);
+        mGui->detailSave->setVisible(getTavSave());
+        updateDetailDataInfo(getSelectFile());
     });
 
     connect(mGui->altonServiceClear, &QPushButton::clicked, [=]() { mGui->altonServiceContent->hide(); });
     connect(mGui->hmiClear, &QPushButton::clicked, [=]() { mGui->hmiContent->hide(); });
 
-    connect(mGui->actionDelete, &QAction::triggered, [=]() {
-        QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
-        bool result = ivis::common::FileInfo::deleteFile(path, QString("*.sh"));
-        qDebug() << "Delete Script File :" << ((result) ? ("Sucess") : ("Fail"));
+    connect(mGui->actionOpen, &QAction::triggered, [=]() {
+        if (getCurrentDisplay() == DisplayTypeListSub) {
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenError, this, popupData,
+                                           QVariant(QVariantList({STRING_POPUP_OPEN_ERROR, STRING_POPUP_OPEN_ERROR_TIP})));
+            qDebug() << "Can't open file on current screen :" << getCurrentDisplay();
+            return;
+        }
+        QString openPath = openTavFile();
+        if (openPath.size() > 0) {
+            setCurrentTavPath(openPath);
+            updateFileList(ListTypeNormal, nullptr);
+        }
     });
+    connect(mGui->actionTAV_Delete, &QAction::triggered, [=]() { deleteFile(DeleteTypeTAV); });
+    connect(mGui->actionScript_Delete, &QAction::triggered, [=]() { deleteFile(DeleteTypeScript); });
     connect(mGui->actionAbout, &QAction::triggered, [=]() {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::About, this, popupData,
-                                        QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
+                                       QVariant(QVariantList({STRING_POPUP_ABOUT, STRING_POPUP_ABOUT_TIP})));
     });
     connect(mGui->actionAbout_QT, &QAction::triggered, [=]() {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, this, popupData);
     });
-    connect(mGui->actionVSM_Path, &QAction::triggered, [=]() {
-        settingPath(PathTypeVSM);
-    });
-    connect(mGui->actionTAV_Path, &QAction::triggered, [=]() {
-        settingPath(PathTypeTAV);
-    });
-    connect(mGui->actionAltonClient_Path, &QAction::triggered, [=]() {
-        settingPath(PathTypeAltonClient);
-    });
+    connect(mGui->actionVSM_Path, &QAction::triggered, [=]() { settingPath(PathTypeVSM); });
+    connect(mGui->actionTAV_Path, &QAction::triggered, [=]() { settingPath(PathTypeTAV); });
+    connect(mGui->actionAltonClient_Path, &QAction::triggered, [=]() { settingPath(PathTypeAltonClient); });
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {
@@ -220,6 +212,7 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             break;
         }
     }
+    setCurrentDisplay(type);
 }
 
 void SubWindow::updateFileList(const int& type, QListWidgetItem* updateItem) {
@@ -227,12 +220,12 @@ void SubWindow::updateFileList(const int& type, QListWidgetItem* updateItem) {
         return;
     }
 
+    setListType(type);
     mDeleteFileList.clear();
-    mListType = type;
     switch (type) {
         case ListTypeNormal: {
             QFileInfoList fileList = QFileInfoList();
-            QString path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+            QString path = getCurrentTavPath();
             QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(path, QString(".tav"), fileList);
             mGui->fileList->clear();
             for (const auto& file : fileInfo) {
@@ -283,15 +276,16 @@ void SubWindow::updateFileList(const int& type, QListWidgetItem* updateItem) {
 }
 
 void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
-    mGui->detailContent->show();
+    QString title = mGui->detailTitle->text();
 
+    mGui->detailContent->show();
     if (viewType == ViewTypeTAV) {
         int foundType = DetailInfoInvalid;
         QString content = QString();
         QStringList tavData = mOriginalData;
         if (info.size() > 0) {
             QString file = info;
-            QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(file);
+            QString path = QString("%1/%2").arg(getCurrentTavPath()).arg(file);
             tavData = ivis::common::FileInfo::readFile(path);
         }
 
@@ -323,21 +317,23 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
         //     }
         // }
 
-        mPreviousTavData = content;
+        setPreviousTavData(content);
         mGui->detailContent->setPlainText(content);
+        mGui->detailTitle->setText(title.replace(".sh", ".tav"));
     } else if (viewType == ViewTypeScript) {
         QString scriptInfo = info;
         mGui->detailContent->setPlainText(scriptInfo);
+        mGui->detailTitle->setText(title.replace(".tav", ".sh"));
     } else if (viewType == ViewTypeRedrawTAV) {
         QString detailInfo = info;
         mGui->detailContent->setPlainText(detailInfo);
+        mGui->detailTitle->setText(title.replace(".sh", ".tav"));
     } else {
     }
 }
 
 void SubWindow::updateDetailDataInfo(const QString& filePath) {
     QStringList newDetailContent = mGui->detailContent->toPlainText().split("\n");
-    // QString oldDetailContent = mPreviousTavData;
 
     if (mOriginalData != newDetailContent) {
         qDebug() << "updateDetailDataInfo :" << mOriginalData.size() << "->" << newDetailContent.size();
@@ -353,7 +349,7 @@ void SubWindow::writeOriginalData(const QString& filePath, const QStringList& sa
     }
 
     QString writeContent = QString();
-    QString path = QString("%1/../TAV/%2").arg(ivis::common::APP_PWD()).arg(filePath);
+    QString path = QString("%1/%2").arg(getCurrentTavPath()).arg(filePath);
     for (const auto& data : saveData) {
         writeContent.append(data);
         writeContent.append("\n");
@@ -740,7 +736,8 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
         //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
         // }
 
-        QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
+        // QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
+        QString path = QString("%1/%2.%3.sh").arg(getCurrentTavPath()).arg(fileName.remove(".tav")).arg(pt);
         ivis::common::FileInfo::writeFile(path, writeContent, false);
         scriptFileList.append(path);
     }
@@ -802,8 +799,17 @@ void SubWindow::stopWatcherFile(const int& type) {
 
 QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList) {
     QStringList fileList = QStringList();
-    QString vsmPath = QString("%1").arg("../../../620_SFC/model/VSM");
-    QString fileNameBase = QString("CLU_VSM_%1.Vehicle.%2.vsm");
+    QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath).toString();
+
+    QFileInfoList vsmFileList = QFileInfoList();
+    QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(vsmPath, QString(".vsm"), vsmFileList);
+    if (fileInfo.size() == 0) {
+        qDebug() << "Vsm path error :" << vsmPath;
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::PathError, this, popupData,
+                                       QVariant(QVariantList({STRING_POPUP_VSM_PATH_ERROR, STRING_POPUP_VSM_PATH_ERROR_TIP})));
+        return QStringList();
+    }
 
     for (const auto& signal : signalList) {
         if (signal.contains("Vehicle.") == false) {
@@ -821,7 +827,7 @@ QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QS
                 if (pt.size() == 0) {
                     continue;
                 }
-                fileList.append(QString("%1/%2").arg(vsmPath).arg(fileNameBase.arg(pt).arg(temp.at(1))));
+                fileList.append(QString("%1/CLU_VSM_%2.Vehicle.%3.vsm").arg(vsmPath).arg(pt).arg(temp.at(1)));
             }
         }
     }
@@ -966,4 +972,72 @@ void SubWindow::settingPath(const int& pathType) {
             ConfigSetting::instance().data()->writeConfig(configType, popupData);
         }
     }
+}
+
+QString SubWindow::openTavFile() {
+    QVariant popupData = QVariant();
+    QVariant path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath);
+    QString openPath = QString();
+
+    if (path.isNull()) {
+        path = ivis::common::APP_PWD();
+    }
+
+    QVariantList info = QVariantList({STRING_OPEN_FOLDER, path});
+    if (ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFolder, this, popupData, QVariant(info)) ==
+        ivis::common::PopupButton::OK) {
+        openPath = popupData.toString();
+        qDebug() << "Open Folder :" << openPath;
+    }
+
+    return openPath;
+}
+
+bool SubWindow::deleteFile(const int& deleteType) {
+    bool result = false;
+    QVariant popupData = QVariant();
+    QVariantList text = QVariantList();
+    QString path = getCurrentTavPath();
+
+    switch (deleteType) {
+        case DeleteTypeSelectTAV: {
+            text = QVariantList({STRING_FILE_DELETE_TAV, STRING_FILE_DELETE_TAV_TIP, STRING_POPUP_OK, STRING_POPUP_CANCEL});
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DeleteFile, this, popupData, QVariant(text)) ==
+                ivis::common::PopupButton::OK) {
+                for (const auto& file : mDeleteFileList) {
+                    // path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+                    result = ivis::common::FileInfo::deleteFile(path, file);
+                    qDebug() << "DeleteTypeSelectTAV :" << ((result) ? ("Sucess") : ("Fail")) << file;
+                }
+            }
+            break;
+        }
+        case DeleteTypeTAV: {
+            updateFileList(ListTypeCheck, nullptr);
+            break;
+        }
+        case DeleteTypeScript: {
+            text = QVariantList({STRING_FILE_DELETE_SCRIPT, STRING_FILE_DELETE_SCRIPT_TIP, STRING_POPUP_OK, STRING_POPUP_CANCEL});
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::DeleteFile, this, popupData, QVariant(text)) ==
+                ivis::common::PopupButton::OK) {
+                QString extensions = QString("*.sh");
+                // path = QString("%1/../TAV").arg(ivis::common::APP_PWD());
+                result = ivis::common::FileInfo::deleteFile(path, extensions);
+                qDebug() << "DeleteTypeScript :" << ((result) ? ("Sucess") : ("Fail")) << extensions;
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    if (result) {
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(
+            ivis::common::PopupType::DeleteFileComplete, this, popupData,
+            QVariant(QVariantList({STRING_POPUP_DELETE_FILE_COMPLETE, STRING_POPUP_DELETE_FILE_COMPLETE_TIP})));
+    }
+
+    return result;
 }

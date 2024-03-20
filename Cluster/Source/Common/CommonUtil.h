@@ -24,7 +24,7 @@ namespace ivis {
 namespace common {
 
 // name : The first letter starts with an uppercase letter
-#define QML_WRITABLE_PROPERTY(type, name, notify)                                     \
+#define REGISTER_WRITABLE_PROPERTY(type, name, value, notify)                         \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
 public:                                                                               \
     type get##name() const {                                                          \
@@ -45,7 +45,7 @@ Q_SIGNALS:                                                                      
                                                                                       \
 private:                                                                              \
     QMutex mMutex##name;                                                              \
-    type m##name;
+    type m##name = value;
 
 #define QML_ENUM_CLASS(name, ...)  \
     class name : public QObject {  \

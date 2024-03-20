@@ -8,6 +8,8 @@
 #include <QStandardItemModel>
 #include <QListWidgetItem>
 
+#include "CommonUtil.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class SubWindow;
@@ -16,6 +18,15 @@ QT_END_NAMESPACE
 
 class SubWindow : public QMainWindow {
     Q_OBJECT
+
+    REGISTER_WRITABLE_PROPERTY(bool, Init, false, false)
+    REGISTER_WRITABLE_PROPERTY(int, CurrentDisplay, 0, false)
+    REGISTER_WRITABLE_PROPERTY(QString, CurrentTavPath, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, SelectFile, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, PreviousTavData, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(bool, ScriptStart, false, false)
+    REGISTER_WRITABLE_PROPERTY(bool, TavSave, false, false)
+    REGISTER_WRITABLE_PROPERTY(int, ListType, 0, false)
 
 private:
     enum DisplayType {
@@ -58,6 +69,11 @@ private:
         PathTypeTAV,
         PathTypeAltonClient,
     };
+    enum DeleteType {
+        DeleteTypeSelectTAV,
+        DeleteTypeTAV,
+        DeleteTypeScript,
+    };
 
 public:
     SubWindow(QWidget* parent = nullptr);
@@ -85,19 +101,15 @@ private:
     QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
     QString isDataType(const QString& value);
     void settingPath(const int& pathType);
+    QString openTavFile();
+    bool deleteFile(const int& deleteType);
 
 private:
     Ui::SubWindow* mGui;
     QTimer* mTimerTouch = nullptr;
-    bool mInit = false;
-    QStandardItemModel mModel;
-    int mListType = ListTypeNormal;
-    bool mTavSave = false;
-    bool mStart = false;
+    QStandardItemModel mModel = QStandardItemModel();
     QMap<int, QString> mDetailInfo = QMap<int, QString>();
     QStringList mOriginalData = QStringList();
-    QString mSelectFile = QString();
-    QString mPreviousTavData = QString();
     QStringList mScriptFileList = QStringList();
     QStringList mDeleteFileList = QStringList();
 };
