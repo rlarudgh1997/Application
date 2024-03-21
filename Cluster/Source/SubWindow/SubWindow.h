@@ -5,8 +5,9 @@
 #include <QDebug>
 #include <QTimer>
 #include <QRect>
-#include <QStandardItemModel>
 #include <QListWidgetItem>
+#include <QMultiMap>
+// #include <QStandardItemModel>
 
 #include "CommonUtil.h"
 
@@ -27,6 +28,8 @@ class SubWindow : public QMainWindow {
     REGISTER_WRITABLE_PROPERTY(bool, ScriptStart, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, TavSave, false, false)
     REGISTER_WRITABLE_PROPERTY(int, ListType, 0, false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, OriginalData, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, DeleteFileList, QStringList(), false)
 
 private:
     enum DisplayType {
@@ -73,10 +76,11 @@ private:
         DeleteTypeSelectTAV,
         DeleteTypeTAV,
         DeleteTypeScript,
+        DeleteTypeInfo,
     };
 
 public:
-    SubWindow(QWidget* parent = nullptr);
+    explicit SubWindow(QWidget* parent = nullptr);
     ~SubWindow();
 
 private:
@@ -107,11 +111,8 @@ private:
 private:
     Ui::SubWindow* mGui;
     QTimer* mTimerTouch = nullptr;
-    QStandardItemModel mModel = QStandardItemModel();
     QMap<int, QString> mDetailInfo = QMap<int, QString>();
-    QStringList mOriginalData = QStringList();
-    QStringList mScriptFileList = QStringList();
-    QStringList mDeleteFileList = QStringList();
+    // QStandardItemModel mModel = QStandardItemModel();
 };
 
 #endif  // MAINWINDOW_H
