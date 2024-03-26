@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SUB_WINDOW_H
+#define SUB_WINDOW_H
 
 #include <QMainWindow>
 #include <QDebug>
@@ -21,17 +21,19 @@ class SubWindow : public QMainWindow {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(bool, Init, false, false)
-    REGISTER_WRITABLE_PROPERTY(int, CurrentDisplay, 0, false)
-    REGISTER_WRITABLE_PROPERTY(QString, CurrentTavPath, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(int, DisplayType, 0, false)
+    REGISTER_WRITABLE_PROPERTY(QString, TavPath, QString(), false)
     REGISTER_WRITABLE_PROPERTY(QString, SelectFile, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, PreviousTavData, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, ScriptStart, false, false)
+    REGISTER_WRITABLE_PROPERTY(QString, TavData, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(int, ScriptStart, 0, false)
     REGISTER_WRITABLE_PROPERTY(bool, TavSave, false, false)
     REGISTER_WRITABLE_PROPERTY(int, ListType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, OriginalData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, DeleteFileList, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QString, AllDetailInfo, false)
 
 private:
+    // TO_ENUM(DisplayType, ListMain, ListSub, ListAltonService, ListHmi, ETC)
     enum DisplayType {
         DisplayTypeInvalid = 0,
         DisplayTypeListMain,
@@ -50,6 +52,12 @@ private:
         ViewTypeTAV,
         ViewTypeScript,
         ViewTypeRedrawTAV,
+    };
+    enum StartScriptType {
+        StartScriptTypeStop = 0,
+        StartScriptTypeStart,
+        StartScriptTypeMenuStop,
+        StartScriptTypeMenuStart,
     };
     enum DetailInfo {
         DetailInfoInvalid = 0,
@@ -107,12 +115,12 @@ private:
     void settingPath(const int& pathType);
     QString openTavFile();
     bool deleteFile(const int& deleteType);
+    void controlScript(const int& scriptStart);
 
 private:
     Ui::SubWindow* mGui;
     QTimer* mTimerTouch = nullptr;
-    QMap<int, QString> mDetailInfo = QMap<int, QString>();
     // QStandardItemModel mModel = QStandardItemModel();
 };
 
-#endif  // MAINWINDOW_H
+#endif  // SUB_WINDOW_H

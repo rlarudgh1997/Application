@@ -1,54 +1,52 @@
 ====================================================================
 # [ToDo]
-#	기능 구현 필요
-#		- 자동 완성 기능 추가
-#			: [Sheet] Private_Test_Signal 입력시 - Private_Test_Signal 에 해당하는 Result 값만 자동 완성으로 표시 되도록 구현
-#				-> 전체 시트에서 입력 시그널에 해당하는 TCName을 찾아서 Result 값을 자동완성으로 제공
-#		- GenTC Script 변경 사항 반영
-#			: 전체 모듈 선택시 negrative 선택 항목 없이 Script 실행 - sh 내부에서 자체적으로 negative, normal 판단하는 기능임
+- Script 파일 관련 기능
+	: Script  Start 기능
+	: Script 실행 & 로그 파일 생성(*.info)
+	: altonservice 실행 & 로그 파일 생성(*.info)
 
+- 로그 파일 watcher 실행
+	: Script  Stop 기능
+	: Script 종료
+	: altonservice 종료
+	: 로그 파일 watcher 종료
 
+- 로그 파일 화면 표시
+	: alton_client listen 로그 정보
+	: altonservice 로그 정보
+	: hmi 로그 정보
 
-- Period 주기 추가
-	: cycle, duration 기능 추가 하여 반복 주기 작성
-
-- 특정 키워드 변환
-	: 공백 기준(4칸) +1이 되는경우 데이터 처리 이상
-	: 카테고리 기워드 다음에 주석(#) 이 위치하는 경우 데이터 이상 처리됨
-	: tab 입력된 경우에 대한 처리 필요 -> 공백 4칸으로 변환
-
-
-- *.tav 파일 파싱
-- excel -> tab 변환
-- tav -> excel 변환 : 필요시 추가 구현
-- tav -> sh 변환
-	: script 양식에 맞게
-
-- file
-	: open - tav, sh --> 파일 확장자 지정으로 치환 가능
-	: open dir : 파일 전체 리스트 업 -> 화면 리스트업시 해당 파일만 리스트업 되도록
-
-- run
-	: start - tav, sh 둘중 하나
-	: all - sh 전체 파일 변환 및 실행
-
-- setting
-	: default path : vsm 파일 폴더
-	: tav path : tav 파일 폴더
-	: alton client path : alton 실행 파일 폴더
-
-- etc
-	: 리스트 업 화면 구성 & 선택
-		- tav : sub 화면 진입가능
-		- sh : start 화면만 진입 하도록
-
-	: save 기능
-		- tav 뷰어 상태에서 edit 하면 save 버튼 활성화
+-판단 기준 확립
+	: altonservice 로그 중 판단 근거 키워드 추출 및 판단 기준 정립
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- 기능 구현 필요
+	: 자동 완성 기능 추가
+		- [Sheet] Private_Test_Signal 입력시 - Private_Test_Signal 에 해당하는 Result 값만 자동 완성으로 표시 되도록 구현
+			-> 전체 시트에서 입력 시그널에 해당하는 TCName을 찾아서 Result 값을 자동완성으로 제공
+	: GenTC Script 변경 사항 반영
+		- 전체 모듈 선택시 negrative 선택 항목 없이 Script 실행 - sh 내부에서 자체적으로 negative, normal 판단하는 기능임
 
 - 단축키 Cut 상태
 	: Ctrl + X 동작후 다른셀에서 타이핑시 Ctrl + X 해제 안되는 문제

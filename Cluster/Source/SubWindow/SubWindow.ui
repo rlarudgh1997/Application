@@ -459,7 +459,7 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
      <string>Run</string>
     </property>
     <addaction name="actionStart"/>
-    <addaction name="actionAll"/>
+    <addaction name="actionStop"/>
    </widget>
    <widget class="QMenu" name="menuSetting">
     <property name="title">
@@ -506,9 +506,9 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     <string>About QT</string>
    </property>
   </action>
-  <action name="actionAll">
+  <action name="actionStop">
    <property name="text">
-    <string>All</string>
+    <string>Stop</string>
    </property>
   </action>
   <action name="actionOpen_Dir">

@@ -26,28 +26,58 @@ namespace common {
 // name : The first letter starts with an uppercase letter
 #define REGISTER_WRITABLE_PROPERTY(type, name, value, notify)                         \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
-public:                                                                               \
-    type get##name() const {                                                          \
-        return m##name;                                                               \
-    }                                                                                 \
-public Q_SLOTS:                                                                       \
-    void set##name(const type& name) {                                                \
-        QMutexLocker lock(&mMutex##name);                                             \
-        if (m##name != name) {                                                        \
-            m##name = name;                                                           \
-            if (notify) {                                                             \
-                emit signal##name##Changed(m##name);                                  \
+    public:                                                                           \
+        type get##name() const {                                                      \
+            return m##name;                                                           \
+        }                                                                             \
+    public Q_SLOTS:                                                                   \
+        void set##name(const type& name) {                                            \
+            QMutexLocker lock(&mMutex##name);                                         \
+            if (m##name != name) {                                                    \
+                m##name = name;                                                       \
+                if (notify) {                                                         \
+                    emit signal##name##Changed(m##name);                              \
+                }                                                                     \
             }                                                                         \
         }                                                                             \
-    }                                                                                 \
-Q_SIGNALS:                                                                            \
-    void signal##name##Changed(const type& name);                                     \
-                                                                                      \
-private:                                                                              \
-    QMutex mMutex##name;                                                              \
-    type m##name = value;
+    Q_SIGNALS:                                                                        \
+        void signal##name##Changed(const type& name);                                 \
+    private:                                                                          \
+        QMutex mMutex##name;                                                          \
+        type m##name = value;
 
-#define QML_ENUM_CLASS(name, ...)  \
+// continer : QMap, QPair ....
+#define REGISTER_WRITABLE_PROPERTY_CONTAINER(container, key, value, name, notify)                      \
+    Q_PROPERTY(container<key, value> name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
+    public:                                                                                            \
+        container<key, value> get##name() const {                                                      \
+            return m##name;                                                                            \
+        }                                                                                              \
+    public Q_SLOTS:                                                                                    \
+        void set##name(const container<key, value>& name) {                                            \
+            QMutexLocker lock(&mMutex##name);                                                          \
+            if (m##name != name) {                                                                     \
+                m##name = name;                                                                        \
+                if (notify) {                                                                          \
+                    emit signal##name##Changed(m##name);                                               \
+                }                                                                                      \
+            }                                                                                          \
+        }                                                                                              \
+    Q_SIGNALS:                                                                                         \
+        void signal##name##Changed(const container<key, value>& name);                                 \
+    private:                                                                                           \
+        QMutex mMutex##name;                                                                           \
+        container<key, value> m##name = container<key, value>();
+
+// enum
+#define TO_ENUM(name, ...) \
+    enum name {            \
+        name##Invalid = 0, \
+        name##__VA_ARGS__, \
+    };
+
+// enum clss
+#define TO_ENUM_CLASS(name, ...)   \
     class name : public QObject {  \
         Q_GADGET                   \
     public:                        \
@@ -55,6 +85,7 @@ private:                                                                        
         Q_ENUMS(Type)              \
     };
 
+// button -> connect() : signal - slot
 #define INIT_BUTTON_WIEDGET(info, widget, index)                       \
     if (index >= 0) {                                                  \
         info.insert(widget->objectName(), index);                      \
@@ -67,7 +98,7 @@ inline QString APP_PWD() {
     return pwd;
 }
 
-inline QString GET__DATE_TIME() {
+inline QString GET_DATE_TIME() {
     return QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec());
 }
 
