@@ -288,7 +288,7 @@ private:
         QStringList fileContent = QStringList();
         QFile file(filePath);
         openError = false;
-        // qDebug() << "filePath :" << filePath;
+        // qDebug() << "readFileDataInfo :" << filePath;
         if (file.open(QFile::ReadOnly | QFile::Text)) {
             QTextStream readData(&file);
             while (!readData.atEnd()) {
@@ -307,7 +307,7 @@ private:
         return fileContent;
     }
     static int writeFileData(const QString& filePath, const QString& str, const bool& append) {
-        // qDebug() << "filePath :" << filePath;
+        // qDebug() << "writeFileData :" << filePath;
         QStringList readData = QStringList();
         if (append) {
             bool openError = false;

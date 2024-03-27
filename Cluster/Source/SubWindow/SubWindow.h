@@ -10,6 +10,7 @@
 // #include <QStandardItemModel>
 
 #include "CommonUtil.h"
+#include "LogWatcher.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,11 +37,9 @@ private:
     // TO_ENUM(DisplayType, ListMain, ListSub, ListAltonService, ListHmi, ETC)
     enum DisplayType {
         DisplayTypeInvalid = 0,
-        DisplayTypeListMain,
-        DisplayTypeListSub,
-        DisplayTypeListAltonService,
-        DisplayTypeListHmi,
-        DisplayTypeETC,
+        DisplayTypeMain,
+        DisplayTypeViewTav,
+        DisplayTypeViewScript,
     };
     enum ListType {
         ListTypeNormal = 0,
@@ -97,6 +96,7 @@ private:
     void drawDisplay(const int& type, const QString& text = QString());
     void updateFileList(const int& type, QListWidgetItem* updateItem);
     void updateDetailFileInfo(const int& viewType, const QString& info);
+    void updateDetailContent(const QString& content);
     void updateDetailDataInfo(const QString& filePath);
     void writeOriginalData(const QString& filePath, const QStringList& saveData);
     bool isDetailInfo(const int& type, QPair<QString, QStringList>& detailInfo);
@@ -115,11 +115,15 @@ private:
     void settingPath(const int& pathType);
     QString openTavFile();
     bool deleteFile(const int& deleteType);
-    void controlScript(const int& scriptStart);
+    void controlScript(const int& scriptStart, const QString& fileName);
+
+    void controlFileWatcher(const bool& start);
+    void onFileDataChanged(const std::string& data);
 
 private:
     Ui::SubWindow* mGui;
     QTimer* mTimerTouch = nullptr;
+    std::unique_ptr<LogWatcher> mFileWatcher = nullptr;
     // QStandardItemModel mModel = QStandardItemModel();
 };
 

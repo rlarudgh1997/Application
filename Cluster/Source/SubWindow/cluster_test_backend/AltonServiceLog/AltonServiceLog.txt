@@ -1,0 +1,304 @@
+2024-03-27 14:09:44.976 139796041443200  E/MessageTrace: Failed to open trace control node : /tmp/librpc_monitor
+2024-03-27 14:09:44.976 139796041443200  E/MessageTrace: Failed to add watch of inotify on /tmp/librpc_monitor
+2024-03-27 14:09:44.976 139796041443200  I/SFCConfiguration: VSMConfigurationCode for VSM : ICV
+2024-03-27 14:09:44.976 139796041443200  E/SFCConfiguration: config/vsm/ICV.json does not exist. using fallback configuration (VSM).
+2024-03-27 14:09:44.976 139796041443200  I/SFCConfiguration: Loading config/vsm/default.json
+2024-03-27 14:09:44.976 139796041443200  E/SFCConfiguration: Failed to open config/vsm/default.json
+2024-03-27 14:09:44.976 139796041443200  E/SFCConfiguration: VSM Configuration file is corrupted. does not have VSMConfiguration field
+2024-03-27 14:09:44.976 139796041443200  I/SignalCache: Initializing SignalCache
+2024-03-27 14:09:44.976 139796041443200  I/SignalCache: ssfs plugin library path : /home/ivis/900_Code/700_Cluster/srcs/SFC/model/SFC/compiled/./libssfs-alton-ICV.so
+2024-03-27 14:09:44.983 139796041443200  I/SignalCache: ssfs plugin library's qualified so file name : libssfs-alton-ICV.so
+2024-03-27 14:09:44.985 139796041443200  I/SignalCache:  ssfs model (VSM) populating Vehicle
+2024-03-27 14:09:44.985 139796041443200  I/SignalCache:  ssfs model (SFC) populating node addresses : count = 1786
+2024-03-27 14:09:44.990 139796041443200  I/SignalCache:  ssfs model (VSM/SFC) Ready
+2024-03-27 14:09:44.990 139796041443200  I/HALInterface: Loading HAL : ./hal/lib.so
+2024-03-27 14:09:44.990 139796041443200  E/HALInterface: Getting HAL Module Failed. : what = ./hal/lib.so: cannot open shared object file: No such file or directory
+2024-03-27 14:09:44.990 139796041443200  I/SFCConfiguration: Loading /home/ivis/900_Code/700_Cluster/srcs/SFC/model/SFC/compiled/config/./CV.json
+2024-03-27 14:09:44.990 139796041443200  I/SFCConfiguration: SFC Version = UNKNOWN VERSION
+2024-03-27 14:09:44.990 139796041443200  I/SFCConfiguration: SFC Description = NO DESCRIPTION
+2024-03-27 14:09:44.990 139796041443200  I/SFCCollection: Loading PreLoad SFC --------
+2024-03-27 14:09:44.990 139796041443200  I/SFCCollection:  IGNElapsed
+2024-03-27 14:09:44.990 139796041443200  I/SFCCollection:  IGNElapsed @ 0x56272a95da20 = libIGNElapsed.so.0.4.0
+2024-03-27 14:09:44.990 139796041443200  I/SFCCollection:  Input_Output_Processing_CV
+2024-03-27 14:09:44.991 139796041443200  I/SFCCollection:  Input_Output_Processing_CV @ 0x56272a963730 = libInput_Output_Processing_CV.so.1.0.0
+2024-03-27 14:09:44.991 139796041443200  I/SFCCollection:  Intro_Outro_CV
+2024-03-27 14:09:44.991 139796041443200  I/SFCCollection:  Intro_Outro_CV @ 0x56272a960cb0 = libIntro_Outro_CV.so.2.0.0
+2024-03-27 14:09:44.991 139796041443200  I/SFCCollection: Start Loading Ordinary SFC --------
+2024-03-27 14:09:44.991 139796041443200  I/AltonService: Initializing AltonService
+2024-03-27 14:09:44.991 139796041443200  I/ExtraNodeLink: link version information.
+2024-03-27 14:09:44.991 139796041443200  I/ExtraNodeLink:   alton version : AC-X-1-N/A
+2024-03-27 14:09:44.991 139796041443200  I/ExtraNodeLink:   ethDB version : N/A
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder: SignalRecorder Configuration
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  Enabled = 0
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  RingBufferSize = 1000
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  MaxLogFileCount = 0
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  Auto Dump = 0
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  Output Directory = 
+2024-03-27 14:09:44.991 139796041443200  I/SignalRecorder:  Pre-conditional Signals
+2024-03-27 14:09:44.991 139796041443200  I/AltonService: Starting AltonService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.hvehiclesignalmodel.HVehicleSignalModelService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.hrawcommunicator.HRawCommunicatorService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.sfcready.SFCReadyService
+2024-03-27 14:09:44.992 139796041443200  I/AltonService: AltonService is now ready.
+2024-03-27 14:09:44.992 139796041443200  I/ExtraNodeLink: HAL Working 0
+2024-03-27 14:09:44.992 139796041443200  I/HardWireService: Starting HardWireService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.hhardwire.HHardwireService
+2024-03-27 14:09:44.992 139796041443200  I/NetworkControlService: Starting NetworkControlService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.hcannetworkcontrol.HCANNetworkControlService
+2024-03-27 14:09:44.992 139796041443200  I/RPC: Listening through /tmp/ccos/librpc/ccos.cluster.alton.hethnetworkcontrol.HEthNetworkControlService
+2024-03-27 14:09:44.992 139796041443200  I/AltonService: informing SSFSReady
+2024-03-27 14:09:44.992 139796041443200  I/NetworkControlService: onSSFSReady
+2024-03-27 14:09:44.992 139796041443200  I/AltonService: informing onHALReady
+2024-03-27 14:09:44.992 139796041443200  I/AltonService: Registering HAL Interface
+2024-03-27 14:09:44.992 139796041443200  I/HALInterface: Registering signal call back
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Signal Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Signal Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Signal Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  I/AltonService: HAL registered
+2024-03-27 14:09:44.992 139796041443200  I/HardWireService: onHALReady: register callback
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Hardwire Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  I/NetworkControlService: onHALReady
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Network Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  E/HALInterface: Network Interface is not initialized
+2024-03-27 14:09:44.992 139796041443200  I/NetworkControlService: All condition were met. Will startup network
+2024-03-27 14:09:44.992 139796041443200  I/NetworkControlService: requesting startupNetwork
+2024-03-27 14:09:44.993 139796041443200  E/HALInterface: Network Interface is not initialized
+2024-03-27 14:09:44.993 139796041443200  E/NetworkControlService: startupNetwork failed. result = 8
+2024-03-27 14:09:45.001 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ABS_CV
+2024-03-27 14:09:45.002 139795944203840  I/SFCCollection:  ABS_CV @ 0x7f24c0001000 = libABS_CV.so.3.0.0
+2024-03-27 14:09:45.002 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ABS_NO_ABS_Trailer
+2024-03-27 14:09:45.002 139795944203840  I/SFCCollection:  ABS_NO_ABS_Trailer @ 0x7f24c0001ba0 = libABS_NO_ABS_Trailer.so.2.0.0
+2024-03-27 14:09:45.002 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ADAS_Driving_CV
+2024-03-27 14:09:45.003 139795944203840  I/SFCCollection:  ADAS_Driving_CV @ 0x7f24c00024e0 = libADAS_Driving_CV.so.5.0.1
+2024-03-27 14:09:45.003 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ADAS_PARKING_CV
+2024-03-27 14:09:45.003 139795944203840  I/SFCCollection:  ADAS_PARKING_CV @ 0x7f24c0002e50 = libADAS_PARKING_CV.so.3.0.0
+2024-03-27 14:09:45.003 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - AEM
+2024-03-27 14:09:45.004 139795944203840  I/SFCCollection:  AEM @ 0x7f24c0003700 = libAEM.so.0.1.0
+2024-03-27 14:09:45.004 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - AFS
+2024-03-27 14:09:45.005 139795944203840  I/SFCCollection:  AFS @ 0x7f24c0003f20 = libAFS.so.4.0.0
+2024-03-27 14:09:45.005 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Air_Bag_CV
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection:  Air_Bag_CV @ 0x7f24c00047b0 = libAir_Bag_CV.so.1.0.0
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Auto_Grease
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection:  Auto_Grease @ 0x7f24c0005060 = libAuto_Grease.so.2.0.0
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - AVH
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection:  AVH @ 0x7f24c0005910 = libAVH.so.0.0.0
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - BCM_Warning_CV
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection:  BCM_Warning_CV @ 0x7f24c00061a0 = libBCM_Warning_CV.so.0.0.0
+2024-03-27 14:09:45.006 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - BEQ
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection:  BEQ @ 0x7f24c0006ae0 = libBEQ.so.3.0.0
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Blue_Light_Filter
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection:  Blue_Light_Filter @ 0x7f24c0007320 = libBlue_Light_Filter.so.0.0.0
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Brake_Air
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection:  Brake_Air @ 0x7f24c0007c60 = libBrake_Air.so.9.0.0
+2024-03-27 14:09:45.007 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Brake_System_Malfunction
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  Brake_System_Malfunction @ 0x7f24c0008920 = libBrake_System_Malfunction.so.1.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Cab_Tilting
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  Cab_Tilting @ 0x7f24c0009290 = libCab_Tilting.so.4.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Cooling_System
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  Cooling_System @ 0x7f24c0009ae0 = libCooling_System.so.10.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - CruiseControl_CV
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  CruiseControl_CV @ 0x7f24c000a3d0 = libCruiseControl_CV.so.1.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Curb_Mode
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  Curb_Mode @ 0x7f24c000ad30 = libCurb_Mode.so.0.0.1
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - DEA
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  DEA @ 0x7f24c000b5d0 = libDEA.so.1.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Differential_Lock
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection:  Differential_Lock @ 0x7f24c000be10 = libDifferential_Lock.so.5.0.0
+2024-03-27 14:09:45.008 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Digital_Clock
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection:  Digital_Clock @ 0x7f24c000c770 = libDigital_Clock.so.1.0.0
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Door_Open_CV
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection:  Door_Open_CV @ 0x7f24c000d030 = libDoor_Open_CV.so.9.0.0
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Down_Hill_Cruise
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection:  Down_Hill_Cruise @ 0x7f24c000d910 = libDown_Hill_Cruise.so.2.0.0
+2024-03-27 14:09:45.009 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - DPF_CV
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  DPF_CV @ 0x7f24c000e250 = libDPF_CV.so.9.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - DSW
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  DSW @ 0x7f24c000eb10 = libDSW.so.2.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Dual_Power
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  Dual_Power @ 0x7f24c000f350 = libDual_Power.so.5.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Dust_Indicator
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  Dust_Indicator @ 0x7f24c000fbf0 = libDust_Indicator.so.1.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EAPU
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  EAPU @ 0x7f24c0010540 = libEAPU.so.8.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EBS
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  EBS @ 0x7f24c0010df0 = libEBS.so.3.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ECAS
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection:  ECAS @ 0x7f24c0011a50 = libECAS.so.15.0.0
+2024-03-27 14:09:45.010 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Eco_Power_Gauge_CV
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection:  Eco_Power_Gauge_CV @ 0x7f24c00123e0 = libEco_Power_Gauge_CV.so.1.0.0
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EDG
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection:  EDG @ 0x7f24c0012dd0 = libEDG.so.0.0.0
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EHS
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection:  EHS @ 0x7f24c00135e0 = libEHS.so.7.0.0
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Emergency_Door
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection:  Emergency_Door @ 0x7f24c0013e90 = libEmergency_Door.so.4.0.0
+2024-03-27 14:09:45.011 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Energy_Flow_CV
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  Energy_Flow_CV @ 0x7f24c0018750 = libEnergy_Flow_CV.so.3.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Engine_Check
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  Engine_Check @ 0x7f24c0019050 = libEngine_Check.so.0.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Engine_Oil_Warning_CV
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  Engine_Oil_Warning_CV @ 0x7f24c00198f0 = libEngine_Oil_Warning_CV.so.3.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Engine_PTO
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  Engine_PTO @ 0x7f24c001a280 = libEngine_PTO.so.0.0.1
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Engine_Room_Warning
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  Engine_Room_Warning @ 0x7f24c001aaf0 = libEngine_Room_Warning.so.3.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EngineRPM_CV
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  EngineRPM_CV @ 0x7f24c001b430 = libEngineRPM_CV.so.3.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - EV_Charging_System_CV
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection:  EV_Charging_System_CV @ 0x7f24c001bce0 = libEV_Charging_System_CV.so.6.0.0
+2024-03-27 14:09:45.012 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Exhaust_Brake
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  Exhaust_Brake @ 0x7f24c001c670 = libExhaust_Brake.so.1.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - FCEV_Fuel_System
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  FCEV_Fuel_System @ 0x7f24c001cee0 = libFCEV_Fuel_System.so.7.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - FCEV_Start
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  FCEV_Start @ 0x7f24c001d820 = libFCEV_Start.so.5.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - FCEV_Warning_CV
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  FCEV_Warning_CV @ 0x7f24c001e0b0 = libFCEV_Warning_CV.so.5.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - CNG_Fuel_System_CV
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  CNG_Fuel_System_CV @ 0x7f24c001edc0 = libCNG_Fuel_System_CV.so.1.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - GFD_Warning
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  GFD_Warning @ 0x7f24c001f6e0 = libGFD_Warning.so.6.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Glow_CV
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection:  Glow_CV @ 0x7f24c001ffa0 = libGlow_CV.so.0.0.0
+2024-03-27 14:09:45.013 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - High_Voltage_Battery_Charge
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection:  High_Voltage_Battery_Charge @ 0x7f24c0020820 = libHigh_Voltage_Battery_Charge.so.2.0.0
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Illumination_CV
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection:  Illumination_CV @ 0x7f24c00211d0 = libIllumination_CV.so.0.0.0
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Inter_Diff_Lock
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection:  Inter_Diff_Lock @ 0x7f24c0021ac0 = libInter_Diff_Lock.so.4.0.0
+2024-03-27 14:09:45.014 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - ISG_CV
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  ISG_CV @ 0x7f24c0022370 = libISG_CV.so.0.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Jake_Brake_CV
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  Jake_Brake_CV @ 0x7f24c0022c40 = libJake_Brake_CV.so.2.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Key_System_CV
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  Key_System_CV @ 0x7f24c0023510 = libKey_System_CV.so.5.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Lamp_Fail_Warning_CV
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  Lamp_Fail_Warning_CV @ 0x7f24c0023dd0 = libLamp_Fail_Warning_CV.so.1.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Lamp_Indicator_CV
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  Lamp_Indicator_CV @ 0x7f24c0024740 = libLamp_Indicator_CV.so.1.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Luggage_Door
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  Luggage_Door @ 0x7f24c0025010 = libLuggage_Door.so.3.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - LWS
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection:  LWS @ 0x7f24c00258d0 = libLWS.so.12.0.0
+2024-03-27 14:09:45.015 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Memory_CV
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  Memory_CV @ 0x7f24c0026330 = libMemory_CV.so.0.2.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Memory_IGN_CV
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  Memory_IGN_CV @ 0x7f24c0026be0 = libMemory_IGN_CV.so.0.0.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - MIL_OBD_Lamp
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  MIL_OBD_Lamp @ 0x7f24c0027500 = libMIL_OBD_Lamp.so.1.0.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Over_Speed_Warning_CV
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  Over_Speed_Warning_CV @ 0x7f24c00281c0 = libOver_Speed_Warning_CV.so.2.0.1
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Param_CV
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  Param_CV @ 0x7f24c0028b50 = libParam_CV.so.0.0.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Parking_Brake_CV
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  Parking_Brake_CV @ 0x7f24c00293a0 = libParking_Brake_CV.so.11.0.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - PDC
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection:  PDC @ 0x7f24c002aed0 = libPDC.so.2.0.0
+2024-03-27 14:09:45.016 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Regenerative_Braking_System
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Regenerative_Braking_System @ 0x7f24c002c8f0 = libRegenerative_Braking_System.so.4.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Retarder
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Retarder @ 0x7f24c002d250 = libRetarder.so.7.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Screen_Control_Logic_CV
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Screen_Control_Logic_CV @ 0x7f24c002dac0 = libScreen_Control_Logic_CV.so.1.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Settings_CV
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Settings_CV @ 0x7f24c002e430 = libSettings_CV.so.1.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Sliding_Ramp
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Sliding_Ramp @ 0x7f24c002ecb0 = libSliding_Ramp.so.0.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - SOC_Gauge_CV
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  SOC_Gauge_CV @ 0x7f24c002f5d0 = libSOC_Gauge_CV.so.4.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Special_Vehicle
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Special_Vehicle @ 0x7f24c002fe90 = libSpecial_Vehicle.so.6.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Steering_Warning_Lamp
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection:  Steering_Warning_Lamp @ 0x7f24c0030780 = libSteering_Warning_Lamp.so.8.0.0
+2024-03-27 14:09:45.017 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Stop_Lamp
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection:  Stop_Lamp @ 0x7f24c0031110 = libStop_Lamp.so.3.0.0
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Tachograph
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection:  Tachograph @ 0x7f24c0031990 = libTachograph.so.3.0.0
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - TM_High_Low_Range
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection:  TM_High_Low_Range @ 0x7f24c0032210 = libTM_High_Low_Range.so.3.0.0
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - TPMS_CV
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection:  TPMS_CV @ 0x7f24c0032b30 = libTPMS_CV.so.12.1.0
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Transmission_Indicator_CV
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection:  Transmission_Indicator_CV @ 0x7f24c0034870 = libTransmission_Indicator_CV.so.8.0.0
+2024-03-27 14:09:45.018 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Transmission_Warning_CV
+2024-03-27 14:09:45.019 139795944203840  I/SFCCollection:  Transmission_Warning_CV @ 0x7f24c00351f0 = libTransmission_Warning_CV.so.9.0.0
+2024-03-27 14:09:45.019 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Trip_Info_CV
+2024-03-27 14:09:45.019 139795944203840  I/SFCCollection:  Trip_Info_CV @ 0x7f24c0035ae0 = libTrip_Info_CV.so.3.0.1
+2024-03-27 14:09:45.019 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Urea_System
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  Urea_System @ 0x7f24c0037630 = libUrea_System.so.4.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - VCU
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  VCU @ 0x7f24c0037c10 = libVCU.so.6.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - VDC
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  VDC @ 0x7f24c0038400 = libVDC.so.9.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - WPC_CV
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  WPC_CV @ 0x7f24c0038bf0 = libWPC_CV.so.4.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - xEV_Battery_Warning
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  xEV_Battery_Warning @ 0x7f24c0039490 = libxEV_Battery_Warning.so.3.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - xEV_Motor
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection:  xEV_Motor @ 0x7f24c0039e20 = libxEV_Motor.so.2.0.0
+2024-03-27 14:09:45.020 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - xEV_Power_Limit
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection:  xEV_Power_Limit @ 0x7f24c003a6b0 = libxEV_Power_Limit.so.3.0.0
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - xEV_Service_Lamp_CV
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection:  xEV_Service_Lamp_CV @ 0x7f24c003afa0 = libxEV_Service_Lamp_CV.so.9.0.0
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - AUX_Battery_Warning
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection:  AUX_Battery_Warning @ 0x7f24c003b8b0 = libAUX_Battery_Warning.so.4.0.4
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Event_Control_Logic
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection:  Event_Control_Logic @ 0x7f24c003c1d0 = libEvent_Control_Logic.so.31.0.0
+2024-03-27 14:09:45.021 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Master_Warning
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection:  Master_Warning @ 0x7f24c003cb10 = libMaster_Warning.so.3.0.0
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Navigation_DIS
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection:  Navigation_DIS @ 0x7f24c003d370 = libNavigation_DIS.so.12.0.0
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Seatbelt_Warning
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection:  Seatbelt_Warning @ 0x7f24c003fb90 = libSeatbelt_Warning.so.3.0.4
+2024-03-27 14:09:45.022 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - Speed_Gauge
+2024-03-27 14:09:45.023 139795944203840  I/SFCCollection:  Speed_Gauge @ 0x7f24c0040910 = libSpeed_Gauge.so.11.0.4
+2024-03-27 14:09:45.023 139795944203840  I/SFCCollection: [0] Loading SFC PlugIn  - VESS
+2024-03-27 14:09:45.023 139795944203840  I/SFCCollection:  VESS @ 0x7f24c0041270 = libVESS.so.1.1.1
+2024-03-27 14:09:45.023 139796041443200  I/SFCCollection: SFCLoadingThread Finished.
+2024-03-27 14:09:45.023 139796041443200  I/SFCCollection: SFC Loading Job has finished.
+2024-03-27 14:09:45.023 139796041443200  I/AltonService: SFC Loading Finished.
+2024-03-27 14:09:45.024 139796041443200  I/RPC: onClientConnected() > Remote Handle Id = 7
+2024-03-27 14:09:45.024 139796041443200  I/Channel: attaching dispatcher ccos.cluster.alton.hvehiclesignalmodel.HVehicleSignalModelService
+2024-03-27 14:09:45.024 139796041443200  I/Channel: Starting new channel with 7
+2024-03-27 14:09:45.024 139796041443200  I/MessageCollector: addEndPoint : 7
+2024-03-27 14:09:45.024 139796041443200  I/RPC: onClientConnected() > Remote Handle Id = 14
+2024-03-27 14:09:45.024 139796041443200  I/Channel: attaching dispatcher ccos.cluster.alton.hrawcommunicator.HRawCommunicatorService
+2024-03-27 14:09:45.024 139796041443200  I/Channel: Starting new channel with 14
+2024-03-27 14:09:45.024 139796041443200  I/MessageCollector: addEndPoint : 14
+2024-03-27 14:09:45.025 139796041443200  W/SignalSubscription: Failed populating Subscription : ClientId = 7, 94197776332736
+2024-03-27 14:09:45.025 139796041443200  W/SignalSubscription:  >> SFC.High_Performance_Gauge.Constant.TurboGauge.Value
+2024-03-27 14:09:45.025 139796041443200  I/RawSubscription: Populating cache
+2024-03-27 14:09:45.025 139796041443200  D/RawSubscription:    0.57 []
+2024-03-27 14:09:45.025 139796041443200  I/SignalCache: 0.57 has created.
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: Client disconnected : GIOCondition = 17
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: removeEndPoint : 7
+2024-03-27 14:09:45.985 139796033033792  I/Channel: remote disconnected.
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: removeEndPoint : 7
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: Client disconnected : GIOCondition = 17
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: removeEndPoint : 14
+2024-03-27 14:09:45.985 139796033033792  I/Channel: remote disconnected.
+2024-03-27 14:09:45.985 139796033033792  I/MessageCollector: removeEndPoint : 14
+2024-03-27 14:09:45.985 139796041443200  I/Channel: notifyDisconnection() > (has RPCBackEnd) ask watcher onRPCDied()
+**********printBacktrace start**********
+Reason: SigNum: 11
+Stack trace (most recent call last):
+#18   Object "[0xffffffffffffffff]", at 0xffffffffffffffff, in 
+#17   Object "../../../../../Alton/altonservice", at 0x562728751dc4, in _start
+#16   Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f24cd8aae3f, in __libc_start_main
+#15   Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f24cd8aad8f, in 
+#14   Object "../../../../../Alton/altonservice", at 0x5627287512bf, in main
+#13   Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f24ce192db3, in Application::exec(int, char**)
+#12   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f24ce08d2b2, in g_main_loop_run
+#11   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f24ce0e3257, in 
+#10   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f24ce08dc43, in g_main_context_dispatch
+#9    Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f24ce08e2c7, in 
+#8    Object "/opt/sfc/PV/lib/liblibrpc.so.2", at 0x7f24cdffde96, in addTimer<ivis::rpc::Channel*, bool (ivis::rpc::Channel::*)()>(unsigned int, ivis::rpc::Channel*, bool (ivis::rpc::Channel::*)())::{lambda(void*)#2}::_FUN(void*)
+#7    Object "/opt/sfc/PV/lib/liblibrpc.so.2", at 0x7f24cdff8918, in ivis::rpc::Channel::notifyDisconnection()
+#6    Object "../../../../../Alton/altonservice", at 0x5627287701a5, in AltonServiceProxy::onRPCDied(std::shared_ptr<google::protobuf::Service>)
+#5    Object "../../../../../Alton/altonservice", at 0x56272876fd81, in 
+#4    Object "/lib/x86_64-linux-gnu/libstdc++.so.6", at 0x7f24cdb77878, in std::_Hash_bytes(void const*, unsigned long, unsigned long)
+#3    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f24cd8c351f, in 
+#2    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f24ce1946bb, in BackTraceHandler::printBackTraceNDie(int)
+#1    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f24ce1942a4, in BackTraceHandler::printBackTrace(int)
+#0    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f24ce1939f9, in BackTraceHandler::streamBackward(std::ostream&)
+**********printBacktrace end************

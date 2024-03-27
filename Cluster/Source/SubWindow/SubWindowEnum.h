@@ -9,11 +9,9 @@ class SubWindowEnum : public QObject {
 public:
     enum DisplayType {
         DisplayTypeInvalid = 0,
-        DisplayTypeListMain,
-        DisplayTypeListSub,
-        DisplayTypeListAltonService,
-        DisplayTypeListHmi,
-        DisplayTypeETC,
+        DisplayTypeMain,
+        DisplayTypeViewTav,
+        DisplayTypeViewScript,
     };
     enum ListType {
         ListTypeNormal = 0,

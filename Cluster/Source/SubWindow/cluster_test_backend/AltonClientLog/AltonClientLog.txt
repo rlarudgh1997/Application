@@ -1,0 +1,41 @@
+2024-03-27 14:09:45.989 139973151736000  E/MessageTrace: Failed to open trace control node : /tmp/librpc_monitor
+2024-03-27 14:09:45.989 139973151736000  E/MessageTrace: Failed to add watch of inotify on /tmp/librpc_monitor
+2024-03-27 14:09:45.989 139973151736000  I/Channel: attaching dispatcher ccos.cluster.alton.hvehiclesignalmodel.HSubscriptionListener
+2024-03-27 14:09:45.990 139973151736000  I/Channel: Connecting to /tmp/ccos/librpc/ccos.cluster.alton.hvehiclesignalmodel.HVehicleSignalModelService. (TryConnectionCnt = 1)
+2024-03-27 14:09:45.990 139973151736000  E/Channel: ::connect failed. errno = Connection refused
+2024-03-27 14:09:45.990 139973151736000  I/Channel: attaching dispatcher ccos.cluster.alton.hrawcommunicator.HRawCommunicatorListener
+2024-03-27 14:09:45.990 139973151736000  I/Channel: Connecting to /tmp/ccos/librpc/ccos.cluster.alton.hrawcommunicator.HRawCommunicatorService. (TryConnectionCnt = 1)
+2024-03-27 14:09:45.990 139973151736000  E/Channel: ::connect failed. errno = Connection refused
+Node Count : 2
+  SFC.High_Performance_Gauge.Constant.TurboGauge.Value
+  0.57
+interestedSignalList : 1
+  0.57
+interestedAddressList : 1
+  SFC.High_Performance_Gauge.Constant.TurboGauge.Value
+2024-03-27 14:09:45.990 139973151736000  W/Channel: (ccos.cluster.alton.hvehiclesignalmodel.HVehicleSignalModelService.subscribe) Not Connected
+call returned as failed with Not Connected
+Subscribe failed.
+**********printBacktrace start**********
+Reason: SigNum: 6
+Stack trace (most recent call last):
+#18   Object "[0xffffffffffffffff]", at 0xffffffffffffffff, in 
+#17   Object "../../../../../Alton/alton_client", at 0x55805203b034, in _start
+#16   Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a2abe3f, in __libc_start_main
+#15   Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a2abd8f, in 
+#14   Object "../../../../../Alton/alton_client", at 0x55805203a82a, in main
+#13   Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa51db3, in Application::exec(int, char**)
+#12   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f4e0a19d2b2, in g_main_loop_run
+#11   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f4e0a1f3257, in 
+#10   Object "/lib/x86_64-linux-gnu/libglib-2.0.so.0", at 0x7f4e0a19dc43, in g_main_context_dispatch
+#9    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa51fb6, in ivis::sfw::Timer::addIdleSource(std::function<void ()>*, int)::{lambda(void*)#1}::_FUN(void*)
+#8    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa51c8c, in Application::emitOnStartService()
+#7    Object "../../../../../Alton/alton_client", at 0x55805203e1f5, in VSMListenService::onStart()
+#6    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a2aa7f2, in abort
+#5    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a2c4475, in raise
+#4    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a318a7c, in pthread_kill
+#3    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7f4e0a2c451f, in 
+#2    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa536bb, in BackTraceHandler::printBackTraceNDie(int)
+#1    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa532a4, in BackTraceHandler::printBackTrace(int)
+#0    Object "/opt/sfc/PV/lib/libserviceframework.so.2", at 0x7f4e0aa529f9, in BackTraceHandler::streamBackward(std::ostream&)
+**********printBacktrace end************

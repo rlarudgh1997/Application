@@ -6,6 +6,9 @@
 #include "ConfigSetting.h"
 #include "Service.h"
 
+
+#include "LogWatcher.h"
+
 #include <QDebug>
 #include <QMapIterator>
 
@@ -41,18 +44,35 @@ SubWindow::~SubWindow() {
     delete mGui;
 }
 
+
 void SubWindow::init() {
 #if defined(__SUB_WINDOW_ONLY__)
     qDebug() << "Service :" << Service::instance().data();
 #endif
 
     ConfigSetting::instance();
-
-    drawDisplay(DisplayTypeListMain);
-    drawDisplay(DisplayTypeETC);
-    controlConnect(true);
     setTavPath(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString());
+
+    drawDisplay(DisplayTypeMain);
+    controlConnect(true);
     updateFileList(ListTypeNormal, nullptr);
+}
+
+void SubWindow::controlFileWatcher(const bool& start) {
+    if (mFileWatcher == nullptr) {
+        mFileWatcher = std::make_unique<LogWatcher>();
+    }
+
+    QString infoFilePath = QString("%1/%2").arg(getTavPath()).arg("TAV.info");
+    mFileWatcher->registerPath(infoFilePath.toStdString());
+    mFileWatcher->registerSendChangeCbk(std::bind(&SubWindow::onFileDataChanged, this, std::placeholders::_1));
+    mFileWatcher->watch();
+    // AltonServiceLogWatcherPtr->stopWatch();
+    // AltonServiceLogWatcherPtr->join();
+}
+
+void SubWindow::onFileDataChanged(const std::string& data) {
+    qDebug() << "onFileDataChanged :" << QString::fromStdString(data);
 }
 
 void SubWindow::controlConnect(const bool& state) {
@@ -94,27 +114,36 @@ void SubWindow::controlConnect(const bool& state) {
             return;
         }
         if (item) {
-            setSelectFile(item->text());
-            controlScript(StartScriptTypeStop);
+            controlScript(StartScriptTypeStop, item->text());
         }
     });
     connect(mGui->detailBack, &QPushButton::clicked, [=]() {
-        controlScript(StartScriptTypeMenuStop);
+        controlScript(StartScriptTypeMenuStop, QString());
     });
     connect(mGui->detailStart, &QPushButton::clicked, [=]() {
+        QString selectFile = QString();
         int scriptStart = getScriptStart();
         if (scriptStart == StartScriptTypeStop) {
+            if (mGui->fileList) {
+                selectFile = mGui->fileList->currentItem()->text();
+            }
             scriptStart = StartScriptTypeStart;
         } else if (scriptStart == StartScriptTypeStart) {
             scriptStart = StartScriptTypeStop;
         } else if (scriptStart == StartScriptTypeMenuStop) {
+            if (mGui->fileList) {
+                selectFile = mGui->fileList->currentItem()->text();
+            }
             scriptStart = StartScriptTypeMenuStart;
         } else if (scriptStart == StartScriptTypeMenuStart) {
             scriptStart = StartScriptTypeMenuStop;
         } else {
             return;
         }
-        controlScript(scriptStart);
+        controlScript(scriptStart, selectFile);
+
+
+        controlFileWatcher(true);
     });
     connect(mGui->detailContent, &QPlainTextEdit::textChanged, [=]() {
         int scriptStart = getScriptStart();
@@ -134,7 +163,8 @@ void SubWindow::controlConnect(const bool& state) {
     connect(mGui->hmiClear, &QPushButton::clicked, [=]() { mGui->hmiContent->hide(); });
 
     connect(mGui->actionOpen, &QAction::triggered, [=]() {
-        if (getDisplayType() == DisplayTypeListSub) {
+        int displayType = getDisplayType();
+        if ((displayType == DisplayTypeViewTav) || (displayType == DisplayTypeViewScript)) {
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenError, this, popupData,
                                            QVariant(QVariantList({STRING_POPUP_OPEN_ERROR, STRING_POPUP_OPEN_ERROR_TIP})));
@@ -153,12 +183,11 @@ void SubWindow::controlConnect(const bool& state) {
 
     connect(mGui->actionStart, &QAction::triggered, [=]() {
         if (mGui->fileList) {
-            setSelectFile(mGui->fileList->currentItem()->text());
+            controlScript(StartScriptTypeMenuStart, mGui->fileList->currentItem()->text());
         }
-        controlScript(StartScriptTypeMenuStart);
     });
     connect(mGui->actionStop, &QAction::triggered, [=]() {
-        controlScript(StartScriptTypeMenuStop);
+        controlScript(StartScriptTypeMenuStop, QString());
     });
 
     connect(mGui->actionAbout, &QAction::triggered, [=]() {
@@ -177,7 +206,7 @@ void SubWindow::controlConnect(const bool& state) {
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {
     switch (type) {
-        case DisplayTypeListMain: {
+        case DisplayTypeMain: {
             mGui->altonClient->setCurrentIndex(1);
             mGui->menubar->setVisible(true);
             mGui->statusbar->setVisible(false);
@@ -188,36 +217,44 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             mGui->hmiContent->setVisible(false);
             break;
         }
-        case DisplayTypeListSub: {
+        case DisplayTypeViewTav: {
             mGui->altonClient->setCurrentIndex(2);
+            mGui->detailBack->setVisible(true);
             mGui->detailTitle->setText(text);
             mGui->detailTitle->setAlignment(Qt::AlignCenter);
-            mGui->detailBack->setVisible(true);
+            mGui->detailStart->setText("Start");
+            mGui->detailContent->setReadOnly(false);
+            mGui->altonServiceContent->setVisible(false);
+            mGui->hmiContent->setVisible(false);
+            break;
+        }
+        case DisplayTypeViewScript: {
+            mGui->altonClient->setCurrentIndex(2);
+            mGui->detailBack->setVisible(false);
+            mGui->detailTitle->setText(text);
+            mGui->detailTitle->setAlignment(Qt::AlignCenter);
+            mGui->detailStart->setText("Stop");
+            mGui->detailContent->setReadOnly(true);
             mGui->altonServiceContent->setVisible(true);
             mGui->hmiContent->setVisible(true);
-            break;
-        }
-        case DisplayTypeListAltonService: {
-            mGui->altonServiceContent->setVisible(true);
-            break;
-        }
-        case DisplayTypeListHmi: {
-            mGui->hmiContent->setVisible(true);
-            break;
-        }
-        case DisplayTypeETC: {
-            QString compalnyText("<a href='https://ivis.ai'>(주)아이비스</a>");
-            // QString compalnyText("asreawetgsadf\nURL : <a href='https://jira.ccos.dev/browse/EXNCP-40685'>TICKET NO</a>");
-            mGui->companyInfo->setTextInteractionFlags(Qt::TextBrowserInteraction);
-            mGui->companyInfo->setOpenExternalLinks(true);
-            mGui->companyInfo->setText(compalnyText);
-            mGui->companyInfo->setVisible(true);
             break;
         }
         default: {
             break;
         }
     }
+
+#if defined(USE_IVIS_LOG)
+    QString compalnyText("<a href='https://ivis.ai'>(주)아이비스</a>");
+    // QString compalnyText("asreawetgsadf\nURL : <a href='https://jira.ccos.dev/browse/EXNCP-40685'>TICKET NO</a>");
+    mGui->companyInfo->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    mGui->companyInfo->setOpenExternalLinks(true);
+    mGui->companyInfo->setText(compalnyText);
+    mGui->companyInfo->setVisible(true);
+#else
+    mGui->companyInfo->setVisible(false);
+#endif
+
     setDisplayType(type);
 }
 
@@ -283,12 +320,10 @@ void SubWindow::updateFileList(const int& type, QListWidgetItem* updateItem) {
 }
 
 void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
-    QString title = mGui->detailTitle->text();
+    QString content = QString();
 
-    mGui->detailContent->show();
     if (viewType == ViewTypeTAV) {
         int foundType = DetailInfoInvalid;
-        QString content = QString();
         QStringList tavData = getOriginalData();
         if (info.size() > 0) {
             QString file = info;
@@ -324,25 +359,26 @@ void SubWindow::updateDetailFileInfo(const int& viewType, const QString& info) {
 
         setAllDetailInfo(detailInfo);
         setTavData(content);
-        mGui->detailContent->setPlainText(content);
-        mGui->detailTitle->setText(title.replace(".sh", ".tav"));
-    } else if (viewType == ViewTypeScript) {
-        QString scriptInfo = info;
-        mGui->detailContent->setPlainText(scriptInfo);
-        mGui->detailTitle->setText(title.replace(".tav", ".sh"));
-    } else if (viewType == ViewTypeRedrawTAV) {
-        QString detailInfo = info;
-        mGui->detailContent->setPlainText(detailInfo);
-        mGui->detailTitle->setText(title.replace(".sh", ".tav"));
+    } else if ((viewType == ViewTypeScript) || (viewType == ViewTypeRedrawTAV)) {
+        content = info;
     } else {
+        return;
+    }
+
+    updateDetailContent(content);
+}
+
+void SubWindow::updateDetailContent(const QString& content) {
+    if (mGui->detailContent) {
+        mGui->detailContent->show();
+        mGui->detailContent->setPlainText(content);
     }
 }
 
 void SubWindow::updateDetailDataInfo(const QString& filePath) {
-    QStringList newDetailContent = mGui->detailContent->toPlainText().split("\n");
+    QStringList newDetailContent = (mGui->detailContent) ? (mGui->detailContent->toPlainText().split("\n")) : (QStringList());
 
     if (getOriginalData() != newDetailContent) {
-        // qDebug() << "updateDetailDataInfo :" << getOriginalData().size() << "->" << newDetailContent.size();
         setOriginalData(newDetailContent);
         updateDetailFileInfo(ViewTypeTAV, QString());
         writeOriginalData(filePath, newDetailContent);
@@ -743,10 +779,10 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
         //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
         // }
 
-        // QString path = QString("%1/../TAV/%2.%3.sh").arg(ivis::common::APP_PWD()).arg(fileName.remove(".tav")).arg(pt);
-        QString path = QString("%1/%2.%3.sh").arg(getTavPath()).arg(fileName.remove(".tav")).arg(pt);
-        ivis::common::FileInfo::writeFile(path, writeContent, false);
-        scriptFileList.append(path);
+        QString filePath = QString("%1/%2.%3.sh").arg(getTavPath()).arg(fileName.remove(".tav")).arg(pt);
+        ivis::common::FileInfo::writeFile(filePath, writeContent, false);
+        qDebug() << "\t WriteFile :" << filePath;
+        scriptFileList.append(filePath);
     }
     return scriptInfo;
 }
@@ -1067,20 +1103,20 @@ bool SubWindow::deleteFile(const int& deleteType) {
     return result;
 }
 
-void SubWindow::controlScript(const int& scriptStart) {
+void SubWindow::controlScript(const int& scriptStart, const QString& fileName) {
     QStringList scriptFileList = QStringList();
-    QString selectFile = getSelectFile();
+    QString selectFile = fileName;
     int previousScriptStart = getScriptStart();
 
-    qDebug() << "controlScript :" << previousScriptStart << "->" << scriptStart;
+    qDebug() << "controlScript :" << previousScriptStart << "->" << scriptStart << ", SelectFile :" << fileName;
 
     setScriptStart(scriptStart);
+    setSelectFile(selectFile);
 
     switch (scriptStart) {
         case StartScriptTypeStart: {
-            mGui->detailBack->setVisible(false);
-            mGui->detailStart->setText("Stop");
-            mGui->detailContent->setReadOnly(true);
+            selectFile.replace(".tav", ".sh");
+            drawDisplay(DisplayTypeViewScript, selectFile);
             if (getTavSave()) {
                 setTavSave(false);
                 mGui->detailSave->setVisible(false);
@@ -1090,23 +1126,15 @@ void SubWindow::controlScript(const int& scriptStart) {
             break;
         }
         case StartScriptTypeMenuStart: {
-            setTavData("");
-            drawDisplay(DisplayTypeListSub, selectFile);
-            mGui->detailBack->setVisible(false);
-            mGui->detailStart->setText("Stop");
-            mGui->detailContent->setReadOnly(true);
+            selectFile.replace(".tav", ".sh");
+            drawDisplay(DisplayTypeViewScript, selectFile);
             updateDetailFileInfo(ViewTypeTAV, selectFile);
             updateDetailFileInfo(ViewTypeScript, createToScript(selectFile, scriptFileList));
             break;
         }
         case StartScriptTypeStop: {
-            mGui->detailBack->setVisible(true);
-            mGui->detailStart->setText("Start");
-            mGui->detailContent->setReadOnly(false);
+            drawDisplay(DisplayTypeViewTav, selectFile);
             if ((previousScriptStart == StartScriptTypeStop) || (previousScriptStart == StartScriptTypeMenuStop)) {
-                QString fileName = mGui->fileList->currentItem()->text();
-                setTavData("");
-                drawDisplay(DisplayTypeListSub, fileName);
                 updateDetailFileInfo(ViewTypeTAV, selectFile);
             } else {
                 updateDetailFileInfo(ViewTypeRedrawTAV, getTavData());
@@ -1114,8 +1142,7 @@ void SubWindow::controlScript(const int& scriptStart) {
             break;
         }
         case StartScriptTypeMenuStop: {
-            setSelectFile("");
-            drawDisplay(DisplayTypeListMain);
+            drawDisplay(DisplayTypeMain);
             break;
         }
         default: {
