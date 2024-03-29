@@ -33,28 +33,55 @@ void LogWatcher::run() {
     long int size = 0;
     long int prevSize = 0;
     std::string filename = mPath.substr(mPath.rfind("/"));
+    std::string prevLog;
 
     qDebug() << "Watcher File :" << QFile::exists(mPath.c_str()) << mPath.c_str();
+
+    fseek(mFile, 0, SEEK_END);
+    prevSize = ftell(mFile);
+    prevLog = getPrevLog(prevSize);
 
     while (mWatching) {
         fseek(mFile, 0, SEEK_END);
         size = ftell(mFile);
 
-        if (size != prevSize && prevSize != 0) {
-            // qDebug() << filename.c_str() << " File size Changed";
-            // qDebug() << filename.c_str() << " Prev File size: " << prevSize << "[Byte]";
-            // qDebug() << filename.c_str() << " File size: " << size << "[Byte]";
-            // qDebug() << "File Changed :" << prevSize << "->" << size << "," << mPath.c_str();
-            // if (globalLogLevel == log_level::DEBUG_LOG || globalLogLevel == log_level::RELEASE_LOG) {
-            //     std::cout << std::endl;
-            // }
+        if (size < prevSize) {
+            throwChange(prevLog.substr(static_cast<std::size_t>(size)));
+            prevLog.clear();
+            prevLog = getPrevLog(size);
+            prevSize = size;
+        } else if (size > prevSize) {
+            // cDebug() << filename << " File size Changed";
+            // cDebug() << filename << " Prev File size: " << prevSize << "[Byte]";
+            // cDebug() << filename << " File size: " << size << "[Byte]";
+            qDebug() << "File Changed :" << prevSize << "->" << size << "," << mPath.c_str();
             throwChange(getChange(static_cast<int>(size - prevSize), prevSize));
+            prevLog.clear();
+            prevLog = getPrevLog(size);
+            prevSize = size;
         } else {
-            // qDebug() << "Thread Sleep : 30ms";
-            std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
-        prevSize = size;
     }
+}
+
+std::string LogWatcher::getPrevLog(int bufSize) {
+    if ((bufSize < 0)) {
+        qDebug() << "Fail to error buffer size :" << bufSize;
+        return std::string();
+    }
+
+    std::string ret;
+    fseek(mFile, 0, SEEK_SET);
+
+    while (static_cast<int>(ret.length()) < bufSize) {
+        char str[bufSize];
+        fgets(str, bufSize, mFile);
+        ret += std::string(str);
+        // cDebug() << "bufSize: " << bufSize;
+        // cDebug() << "ret.length(): " << ret.length();
+    }
+    return ret;
 }
 
 std::string LogWatcher::getChange(int bufSize, long int prevSize) {
@@ -65,17 +92,19 @@ std::string LogWatcher::getChange(int bufSize, long int prevSize) {
         char str[bufSize];
         fgets(str, bufSize, mFile);
         ret += std::string(str);
-        // qDebug() << "bufSize: " << bufSize;
-        // qDebug() << "ret.length(): " << ret.length();
+        // cDebug() << "bufSize: " << bufSize;
+        // cDebug() << "ret.length(): " << ret.length();
     }
     return ret;
 }
 
 void LogWatcher::throwChange(std::string textChanges) {
-    if (mSendChangeCbkVector.size() != 0) {
-        for (auto& cbk : mSendChangeCbkVector) {
-            cbk(textChanges);
-        }
+    if (mSendChangeCbkVector.size() == 0) {
+        qDebug() << "Not emit signal - ata size : 0";
+        return;
+    }
+    for (auto& cbk : mSendChangeCbkVector) {
+        cbk(textChanges);
     }
 }
 
@@ -93,6 +122,7 @@ void LogWatcher::stopWatch() {
         return;
     }
     fclose(mFile);
+    join();
 }
 
 bool LogWatcher::subscribeSignal(std::string signal) {

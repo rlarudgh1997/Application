@@ -7,10 +7,12 @@
 #include <QRect>
 #include <QListWidgetItem>
 #include <QMultiMap>
-// #include <QStandardItemModel>
-
 #include "CommonUtil.h"
+
+#define USE_FILE_WATCHER_QT
+#if !defined(USE_FILE_WATCHER_QT)
 #include "LogWatcher.h"
+#endif
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +33,7 @@ class SubWindow : public QMainWindow {
     REGISTER_WRITABLE_PROPERTY(int, ListType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, OriginalData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, DeleteFileList, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, AltonServiceData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QString, AllDetailInfo, false)
 
 private:
@@ -102,10 +105,10 @@ private:
     bool isDetailInfo(const int& type, QPair<QString, QStringList>& detailInfo);
     void isSubDetailInfo(const QStringList& inputStr, QMap<int, QStringList>& subDetialInfo);
     QString isDetailSignalInfo(const int& type, const QString& inputStr, QString& convertStr);
-    QString isToScriptInfo(const int& type, QStringList& infoList);
+    QString isToScriptInfo(const int& type, QStringList& infoList, const QString& file = QString());
     QString createToScript(const QString& file, QStringList& scriptFileList);
     void excuteScript(const bool& start, const QString& file, const QStringList& scriptFile);
-    void startProcess(const QString& command, const QString& arg);
+    void startProcess(const QString& command, const QString& log);
     void stopProcess();
     void startWatcherFile(const int& type, const QString& watcherFile);
     void stopWatcherFile(const int& type);
@@ -123,8 +126,12 @@ private:
 private:
     Ui::SubWindow* mGui;
     QTimer* mTimerTouch = nullptr;
-    std::unique_ptr<LogWatcher> mFileWatcher = nullptr;
-    // QStandardItemModel mModel = QStandardItemModel();
+    QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
+#if defined(USE_FILE_WATCHER_QT)
+    QSharedPointer<ivis::common::FileSystemWatcherThread> mFileWatcher = nullptr;
+#else
+    QSharedPointer<LogWatcher> mFileWatcher = nullptr;
+#endif
 };
 
 #endif  // SUB_WINDOW_H

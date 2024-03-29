@@ -27,7 +27,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="invalid">
      <widget class="QPushButton" name="invalidOpen">
@@ -270,47 +270,18 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QWidget" name="altonServiceContent" native="true">
+    <widget class="QTextEdit" name="altonServiceContent">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>50</y>
        <width>640</width>
-       <height>530</height>
+       <height>540</height>
       </rect>
      </property>
-     <widget class="QLabel" name="altonServiceTransaction1">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>640</width>
-        <height>100</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Panel</enum>
-      </property>
-      <property name="text">
-       <string>[Transaction]
-SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
-</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-      <property name="margin">
-       <number>20</number>
-      </property>
-     </widget>
+     <property name="frameShape">
+      <enum>QFrame::Panel</enum>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="hmi" native="true">
@@ -368,47 +339,18 @@ background-color: rgb(0, 170, 0);</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QWidget" name="hmiContent" native="true">
+    <widget class="QTextEdit" name="hmiContent">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>50</y>
        <width>640</width>
-       <height>530</height>
+       <height>540</height>
       </rect>
      </property>
-     <widget class="QLabel" name="hmiSubscription1">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>640</width>
-        <height>100</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Panel</enum>
-      </property>
-      <property name="text">
-       <string>[Subscription]
-SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
-</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-      <property name="margin">
-       <number>20</number>
-      </property>
-     </widget>
+     <property name="frameShape">
+      <enum>QFrame::Panel</enum>
+     </property>
     </widget>
    </widget>
    <widget class="QLabel" name="companyInfo">
@@ -428,7 +370,6 @@ SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
     </property>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>

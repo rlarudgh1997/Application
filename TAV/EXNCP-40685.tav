@@ -10,7 +10,7 @@
     #Status : Open
 
 [PowerTrain]
-    ICV, EV
+    EV
 
 [Precondition]
     SFC.Extension.AEM.Inter_AEMInitializeComplete true
@@ -29,4 +29,5 @@
 
 [Expected Result]
     SFC.High_Performance_Gauge.Constant.TurboGauge.Value 0.57
+
 

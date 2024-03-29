@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 #include <thread>
+#include <chrono>
 
 #include <unistd.h>
 #include <stdio.h>
@@ -44,12 +45,6 @@ public:
     bool watch();
     voidToBoolCbk getWatchCbk();
 
-    void run();
-    void join();
-
-    std::string getChange(int bufSize, long int prevSize);
-    void throwChange(std::string textChanges);
-
     void stopWatch();
     voidToVoidCbk getStopWatchCbk();
 
@@ -70,6 +65,12 @@ public:
     void registerSendChangeCbk(const stringToVoidCbk& cbk);
 
 private:
+    void run();
+    std::string getPrevLog(int bufSize);
+    std::string getChange(int bufSize, long int prevSize);
+    void throwChange(std::string textChanges);
+    void join();
+
     bool mWatching;
     std::unique_ptr<std::thread> mRunTheadPtr;
     std::string mPath;

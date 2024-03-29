@@ -11,6 +11,7 @@
 
 #include <QDebug>
 #include <QMapIterator>
+#include <QScrollBar>
 
 const QString KEYWORD_DESCRIPTION = QString("[Description]");
 const QString KEYWORD_POWERTRAIN = QString("[PowerTrain]");
@@ -56,23 +57,6 @@ void SubWindow::init() {
     drawDisplay(DisplayTypeMain);
     controlConnect(true);
     updateFileList(ListTypeNormal, nullptr);
-}
-
-void SubWindow::controlFileWatcher(const bool& start) {
-    if (mFileWatcher == nullptr) {
-        mFileWatcher = std::make_unique<LogWatcher>();
-    }
-
-    QString infoFilePath = QString("%1/%2").arg(getTavPath()).arg("TAV.info");
-    mFileWatcher->registerPath(infoFilePath.toStdString());
-    mFileWatcher->registerSendChangeCbk(std::bind(&SubWindow::onFileDataChanged, this, std::placeholders::_1));
-    mFileWatcher->watch();
-    // AltonServiceLogWatcherPtr->stopWatch();
-    // AltonServiceLogWatcherPtr->join();
-}
-
-void SubWindow::onFileDataChanged(const std::string& data) {
-    qDebug() << "onFileDataChanged :" << QString::fromStdString(data);
 }
 
 void SubWindow::controlConnect(const bool& state) {
@@ -121,19 +105,13 @@ void SubWindow::controlConnect(const bool& state) {
         controlScript(StartScriptTypeMenuStop, QString());
     });
     connect(mGui->detailStart, &QPushButton::clicked, [=]() {
-        QString selectFile = QString();
+        QString selectFile = (mGui->fileList) ? (mGui->fileList->currentItem()->text()) : (QString());
         int scriptStart = getScriptStart();
         if (scriptStart == StartScriptTypeStop) {
-            if (mGui->fileList) {
-                selectFile = mGui->fileList->currentItem()->text();
-            }
             scriptStart = StartScriptTypeStart;
         } else if (scriptStart == StartScriptTypeStart) {
             scriptStart = StartScriptTypeStop;
         } else if (scriptStart == StartScriptTypeMenuStop) {
-            if (mGui->fileList) {
-                selectFile = mGui->fileList->currentItem()->text();
-            }
             scriptStart = StartScriptTypeMenuStart;
         } else if (scriptStart == StartScriptTypeMenuStart) {
             scriptStart = StartScriptTypeMenuStop;
@@ -141,9 +119,6 @@ void SubWindow::controlConnect(const bool& state) {
             return;
         }
         controlScript(scriptStart, selectFile);
-
-
-        controlFileWatcher(true);
     });
     connect(mGui->detailContent, &QPlainTextEdit::textChanged, [=]() {
         int scriptStart = getScriptStart();
@@ -209,12 +184,11 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
         case DisplayTypeMain: {
             mGui->altonClient->setCurrentIndex(1);
             mGui->menubar->setVisible(true);
-            mGui->statusbar->setVisible(false);
             mGui->checkCancel->setVisible(false);
             mGui->checkDelete->setVisible(false);
             mGui->detailSave->setVisible(false);
-            mGui->altonServiceContent->setVisible(false);
-            mGui->hmiContent->setVisible(false);
+            // mGui->altonServiceContent->setVisible(false);
+            // mGui->hmiContent->setVisible(false);
             break;
         }
         case DisplayTypeViewTav: {
@@ -224,8 +198,8 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             mGui->detailTitle->setAlignment(Qt::AlignCenter);
             mGui->detailStart->setText("Start");
             mGui->detailContent->setReadOnly(false);
-            mGui->altonServiceContent->setVisible(false);
-            mGui->hmiContent->setVisible(false);
+            // mGui->altonServiceContent->setVisible(false);
+            // mGui->hmiContent->setVisible(false);
             break;
         }
         case DisplayTypeViewScript: {
@@ -235,8 +209,10 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
             mGui->detailTitle->setAlignment(Qt::AlignCenter);
             mGui->detailStart->setText("Stop");
             mGui->detailContent->setReadOnly(true);
-            mGui->altonServiceContent->setVisible(true);
-            mGui->hmiContent->setVisible(true);
+            mGui->altonServiceContent->clear();
+            mGui->hmiContent->clear();
+            // mGui->altonServiceContent->setVisible(true);
+            // mGui->hmiContent->setVisible(true);
             break;
         }
         default: {
@@ -568,7 +544,7 @@ QString SubWindow::isDetailSignalInfo(const int& type, const QString& inputStr, 
     return abstractionSignal;
 }
 
-QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
+QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList, const QString& file) {
     QPair<QString, QStringList> detailInfo = QPair<QString, QStringList>();
     if (isDetailInfo(type, detailInfo) == false) {
         return QString();
@@ -682,7 +658,15 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList) {
             }
         }
         scriptInfo.append(QString("#%1\n").arg(KEYWORD_LISTEN));
-        scriptInfo.append(QString("$ALTON_CLIENT listen%1 &\n").arg(listenSignal));
+
+        QString tavPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString();
+        QString fileName = QString("%1/%2.Listen.info").arg(tavPath).arg(file);
+        fileName.remove(".tav");
+        fileName.remove(".sh");
+
+        scriptInfo.append(QString("TAV_FILE=%1\n").arg(fileName));
+        scriptInfo.append(QString("rm -f $TAV_FILE\n"));
+        scriptInfo.append(QString("$ALTON_CLIENT listen%1 > $TAV_FILE &\n").arg(listenSignal));
     } else {
     }
 
@@ -694,20 +678,9 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
     QStringList abstractionSignalList = QStringList();
     QStringList signalList = QStringList();
     QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClient).toString();
-    QString altonClientPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClientPath).toString();
+    QString altonPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonPath).toString();
+    QString fileName = file;
     QString scriptInfo("#!/bin/bash");
-
-    // AltonClient Path
-    scriptInfo.append("\n\n");
-    scriptInfo.append("#[AltonClient]\n");
-#if 1
-    scriptInfo.append("ALTON_CLIENT=\"$1\"\n");
-    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1/%2\"\nfi\n").arg(altonClientPath).arg(altonClient));
-#else
-    scriptInfo.append(QString("ALTON_CLIENT=\"%1\"\n").arg(altonClient));
-    scriptInfo.append(QString("if [ -n \"$1\" ]; then\n    ALTON_CLIENT=\"$1\"\nfi\n"));
-#endif
-    scriptInfo.append(QString("echo \"ALTON_CLIENT=$ALTON_CLIENT\"\n"));
 
     // Description
     scriptInfo.append("\n\n");
@@ -717,6 +690,18 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
     scriptInfo.append("\n\n");
     scriptInfo.append(isToScriptInfo(DetailInfoPowerTrain, powerTrain));
 
+    // AltonClient Path
+    scriptInfo.append("\n\n");
+    scriptInfo.append("#[AltonClient]\n");
+#if 1
+    scriptInfo.append("ALTON_CLIENT=\"$1\"\n");
+    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1/%2\"\nfi\n").arg(altonPath).arg(altonClient));
+#else
+    scriptInfo.append(QString("ALTON_CLIENT=\"%1\"\n").arg(altonClient));
+    scriptInfo.append(QString("if [ -n \"$1\" ]; then\n    ALTON_CLIENT=\"$1\"\nfi\n"));
+#endif
+    scriptInfo.append(QString("echo \"ALTON_CLIENT=$ALTON_CLIENT\"\n"));
+
     // Precondition
     scriptInfo.append("\n\n");
     scriptInfo.append(isToScriptInfo(DetailInfoPrecondition, signalList));
@@ -724,7 +709,7 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
 
     // Listen
     scriptInfo.append("\n\n");
-    scriptInfo.append(isToScriptInfo(DetailInfoListen, signalList));
+    scriptInfo.append(isToScriptInfo(DetailInfoListen, signalList, fileName));
 
     // Step
     scriptInfo.append("\n\n");
@@ -742,7 +727,6 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
 
     // Save : power train type
     QStringList pasingFileList = isVsmFileInfo(powerTrain, abstractionSignalList);
-    QString fileName = file;
     QString repacePowerTrain = QString();
     for (const auto& pt : powerTrain) {
         if (repacePowerTrain.size() == 0) {
@@ -779,7 +763,9 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
         //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
         // }
 
-        QString filePath = QString("%1/%2.%3.sh").arg(getTavPath()).arg(fileName.remove(".tav")).arg(pt);
+        fileName.remove(".tav");
+        fileName.remove(".sh");
+        QString filePath = QString("%1/%2.%3.sh").arg(getTavPath()).arg(fileName).arg(pt);
         ivis::common::FileInfo::writeFile(filePath, writeContent, false);
         qDebug() << "\t WriteFile :" << filePath;
         scriptFileList.append(filePath);
@@ -788,39 +774,81 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
 }
 
 void SubWindow::excuteScript(const bool& start, const QString& file, const QStringList& scriptFileList) {
+    qDebug() << "-------------------------------------------------------------------------------------------------------";
     qDebug() << "excuteScript :" << ((start) ? ("[Start]") : ("[Stop]")) << ", ScriptFile :" << file << scriptFileList.size();
 
-    int index = 0;
-    QString tavPath = getTavPath();
+    QString altonService = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonService).toString();
+    bool result = false;
+    QStringList log;
+    ivis::common::ExcuteProgram process(false);
+
+    stopWatcherFile(0);
+    stopProcess();
 
     if (start) {
-        QString logFile = file;
-        logFile.remove(".tav");
+        // 0. create log file name
+        QString tavPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString();
+        QString logFile = QString("%1/%2").arg(tavPath).arg(file);
+        logFile.replace(".sh", ".AltonService.info");
+        logFile.replace(".tav", ".AltonService.info");
+        qDebug() << "\t Log File :" << logFile;
 
-        qDebug() << "\t 1. start : altonservice";
-        qDebug() << "\t 2. start : watcher -" << QString("%1.info").arg(logFile);
-        qDebug() << "\t 3. start : chmod -R 777 *.sh";
+#if 1
+        // 1. rm -f ABC.*.info
+        QString deleteFileCmd = QString("rm -f %1").arg(logFile);
+        deleteFileCmd.replace(".AltonService.info", ".*.info");
+        result = process.start(deleteFileCmd, log);
+        qDebug() << "\t\t Delete :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << deleteFileCmd;
+#endif
+
+        // 2. Watcher Log file : ABC.altonservice.info
+        startWatcherFile(0, logFile);
+
+        // 3. altonservice >> ABC.altonservice.info
+        QString altonPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonPath).toString();
+        QString altonServiceCmd = QString("%1/%2 > %3 &").arg(altonPath).arg(altonService).arg(logFile);
+        result = process.start(altonServiceCmd, log);
+        qDebug() << "\t Start - AltonService :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonServiceCmd;
+
+        // 4. chmod -R 777 ABC.sh
+        QString command = QString();
         for (const auto& script : scriptFileList) {
-            // startProcess(script, QString("./%1.info").arg(logFile));
-            qDebug() << "\t" << QString("4-%1. start : %2 >> %3/%4.info").arg(index++).arg(script).arg(tavPath).arg(logFile);
+            if (command.size() == 0) {
+                command = script;
+            }
+            QString permissionCmd = QString("chmod -R 777 %1").arg(script);
+            result = process.start(permissionCmd, log);
+            qDebug() << "\t\t Permisstion :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << permissionCmd;
         }
+
+        // 5. ../TAV/ABC.sh >> ABC.sh.info
+        logFile.prepend(" > ");
+        logFile.replace(".AltonService.info", ".Script.info");
+        startProcess(command, logFile);
     } else {
-        qDebug() << "\t 1. stop : altonservice";
-        qDebug() << "\t 2. stop : watcher";
-        for (const auto& script : scriptFileList) {
-            qDebug() << "\t" << QString("3-%1. stop : %2").arg(index++).arg(script);
-        }
-        qDebug() << "\t 4. stop : delete watcher info file";
+        QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClient).toString();
+        result = process.start(QString("killall %1").arg(altonClient), log);
+        qDebug() << "\t Kill  - AltonClient  :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonClient;
+
+        result = process.start(QString("killall %1").arg(altonService), log);
+        qDebug() << "\t Kill  - AltonService :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonService;
+
+        setAltonServiceData(QStringList());
     }
 }
 
-void SubWindow::startProcess(const QString& command, const QString& arg) {
+void SubWindow::startProcess(const QString& command, const QString& log) {
     stopProcess();
-    QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
 
-    mProcess =
-        QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
-    mProcess.data()->setCommandInfo(command, QString(" >> %1").arg(arg));
+    if (command.size() == 0) {
+        qDebug() << "\t Fail to command : nullptr";
+    }
+
+    if (mProcess == nullptr) {
+        mProcess = QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false),
+            &QObject::deleteLater);
+    }
+    mProcess.data()->setCommandInfo(command, log);
     mProcess.data()->start();
     connect(
         mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramInfo, [=](const bool& start, const bool& result) {
@@ -834,12 +862,60 @@ void SubWindow::startProcess(const QString& command, const QString& arg) {
 }
 
 void SubWindow::stopProcess() {
+    if (mProcess.isNull() == false) {
+        disconnect(mProcess.data());
+        mProcess.reset();
+    }
 }
 
 void SubWindow::startWatcherFile(const int& type, const QString& watcherFile) {
+    if (watcherFile.size() == 0) {
+        qDebug() << "\t Fail to watcher file : nullptr";
+        return;
+    }
+
+    if (mFileWatcher == nullptr) {
+        mFileWatcher =
+            QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(watcherFile, 50));
+    }
+    mFileWatcher.data()->start();
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
+            [=](const bool& init, const QStringList& data) {
+                QStringList previousData = getAltonServiceData();
+                setAltonServiceData(data);
+                if ((data.size() - previousData.size()) > 0) {
+                    QString updateData = QString();
+                    const QString splitKeyWord = QString("D/SimulatorSourcer(Dummy): ");
+                    for (const auto& d : data.mid(previousData.size(), data.size())) {
+#if 0
+                        updateData.append(QString("%1\n").arg(d));
+#else
+                        QStringList temp = d.split(splitKeyWord);
+                        if (temp.size() >= 2) {
+                            updateData.append(QString("%1\n").arg(temp.at(1)));
+                        }
+#endif
+                    }
+                    if (mGui->altonServiceContent) {
+                        // qDebug() << "Update Data :" << updateData;
+                        mGui->altonServiceContent->insertPlainText(updateData);
+                        mGui->altonServiceContent->verticalScrollBar()->setValue(
+                                        mGui->altonServiceContent->verticalScrollBar()->maximum());
+                    }
+                }
+            });
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError,
+            [=](const QString& errorFile) { qDebug() << "\t\t mFileWatcher File Error :" << errorFile; });
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileState, [=](const int& state) {
+        qDebug() << "\t\t FileWatcher File State :" << state << ((state >= 0) ? ("-> Complete") : ("-> Fail"));
+    });
 }
 
 void SubWindow::stopWatcherFile(const int& type) {
+    if (mFileWatcher.isNull() == false) {
+        disconnect(mFileWatcher.data());
+        mFileWatcher.reset();
+    }
 }
 
 QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList) {
@@ -995,7 +1071,7 @@ void SubWindow::settingPath(const int& pathType) {
             break;
         }
         case PathTypeAltonClient: {
-            configType = ConfigInfo::ConfigTypeAltonClientPath;
+            configType = ConfigInfo::ConfigTypeAltonPath;
             popupText = STRING_ALTON_CLIENT_PATH;
             break;
         }
@@ -1108,6 +1184,7 @@ void SubWindow::controlScript(const int& scriptStart, const QString& fileName) {
     QString selectFile = fileName;
     int previousScriptStart = getScriptStart();
 
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     qDebug() << "controlScript :" << previousScriptStart << "->" << scriptStart << ", SelectFile :" << fileName;
 
     setScriptStart(scriptStart);
@@ -1152,4 +1229,58 @@ void SubWindow::controlScript(const int& scriptStart, const QString& fileName) {
 
     bool start = ((scriptStart == StartScriptTypeStart) || (scriptStart == StartScriptTypeMenuStart));
     excuteScript(start, selectFile, scriptFileList);
+
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
+}
+
+void SubWindow::controlFileWatcher(const bool& start) {
+    QString watcherFile = QString("%1/%2").arg(getTavPath()).arg("TAV.info");
+
+#if defined(USE_FILE_WATCHER_QT)
+    if (start == false) {
+        if (mFileWatcher.isNull() == false) {
+            disconnect(mFileWatcher.data());
+            mFileWatcher.reset();
+        }
+        return;
+    }
+
+    if (mFileWatcher == nullptr) {
+        mFileWatcher =
+            QSharedPointer<ivis::common::FileSystemWatcherThread>(new ivis::common::FileSystemWatcherThread(watcherFile, 100));
+    }
+    mFileWatcher.data()->start();
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
+            [=](const bool& init, const QStringList& data) {
+                QString str;
+                for (const auto& d : data) {
+                    str.append(QString("%1\n").arg(d));
+                }
+                onFileDataChanged(str.toStdString());
+            });
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError,
+            [=](const QString& errorFile) { qDebug() << "\t mFileWatcher File Error :" << errorFile; });
+    connect(mFileWatcher.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileState, [=](const int& state) {
+        qDebug() << "\t mFileWatcher File State :" << state << ((state >= 0) ? ("-> Complete") : ("-> Fail"));
+    });
+#else
+    if (start == false) {
+        if (mFileWatcher) {
+            mFileWatcher->stopWatch();
+        }
+        return;
+    }
+
+    if (mFileWatcher == nullptr) {
+        mFileWatcher = QSharedPointer<LogWatcher>(new LogWatcher);
+    }
+
+    mFileWatcher->registerPath(watcherFile.toStdString());
+    mFileWatcher->registerSendChangeCbk(std::bind(&SubWindow::onFileDataChanged, this, std::placeholders::_1));
+    mFileWatcher->watch();
+#endif
+}
+
+void SubWindow::onFileDataChanged(const std::string& data) {
+    qDebug() << "onFileDataChanged :" << data.c_str();
 }

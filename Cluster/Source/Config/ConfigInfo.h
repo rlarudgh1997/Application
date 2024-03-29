@@ -16,7 +16,8 @@ public:
         // General
         ConfigTypeScreenInfo,
         ConfigTypeAltonClient,
-        ConfigTypeAltonClientPath,
+        ConfigTypeAltonService,
+        ConfigTypeAltonPath,
         ConfigTypeTavPath,
         ConfigTypeVsmPath,
         ConfigTypeVsmFileBase,
@@ -52,7 +53,8 @@ private:
         mConfigInfoData[ConfigTypeScreenInfo] =
             QPair<QString, QVariant>("ConfigTypeScreenInfo", QVariant(QRect(0, 0, 1440, 900)));
         mConfigInfoData[ConfigTypeAltonClient] = QPair<QString, QVariant>("ConfigTypeAltonClient", QVariant("alton_client"));
-        mConfigInfoData[ConfigTypeAltonClientPath] = QPair<QString, QVariant>("ConfigTypeAltonClientPath", QVariant("../Alton"));
+        mConfigInfoData[ConfigTypeAltonService] = QPair<QString, QVariant>("ConfigTypeAltonService", QVariant("altonservice"));
+        mConfigInfoData[ConfigTypeAltonPath] = QPair<QString, QVariant>("ConfigTypeAltonPath", QVariant("../Alton"));
         mConfigInfoData[ConfigTypeTavPath] = QPair<QString, QVariant>("ConfigTypeTavPath", QVariant("../TAV"));
         mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>("ConfigTypeVsmPath", QVariant("../../model/VSM"));
         mConfigInfoData[ConfigTypeVsmFileBase] =
