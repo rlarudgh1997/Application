@@ -14,7 +14,7 @@
    <string>SubWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="altonClient">
+   <widget class="QStackedWidget" name="tav">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -27,7 +27,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="invalid">
      <widget class="QPushButton" name="invalidOpen">
@@ -72,7 +72,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="injectList">
+    <widget class="QWidget" name="tavList">
      <widget class="QListWidget" name="fileList">
       <property name="geometry">
        <rect>
@@ -120,7 +120,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="detailInject">
+    <widget class="QWidget" name="tavDetail">
      <widget class="QLabel" name="detailTitle">
       <property name="geometry">
        <rect>
@@ -214,6 +214,84 @@
        <string>Save</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="detailViewLog">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>90</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>View</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tavLog">
+     <widget class="QLabel" name="logTitle">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>0</y>
+        <width>460</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>EXNCP-40685</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="logBack">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>90</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="logContent">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>640</width>
+        <height>540</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Panel</enum>
+      </property>
+     </widget>
+     <zorder>logContent</zorder>
+     <zorder>logTitle</zorder>
+     <zorder>logBack</zorder>
     </widget>
    </widget>
    <widget class="QWidget" name="altonService" native="true">

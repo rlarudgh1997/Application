@@ -586,8 +586,6 @@ public:
         QMutexLocker lock(&mMutex);
         mWatcher.removePath(mWatcherFile);
         mWatcherFile.clear();
-        mCount = 100;
-        // join();
         qDebug() << "~FileSystemWatcherThread()";
     }
     void start() {
@@ -624,7 +622,6 @@ private:
     }
     void runThread() {
         while (mCount < 10) {
-            qDebug() << "\t Watcher file :" << mWatcherFile;
             if (mWatcherFile.size() == 0) {
                 qDebug() << "\t [Stop]   Watcher file :" << mCount << mWatcherFile;
                 break;
@@ -640,9 +637,6 @@ private:
                 mCount++;
                 QThread::msleep(1000);
             }
-        }
-        if (mWatcherFile.size() == 0) {
-            return;
         }
         if (mCount >= 10) {
             QMutexLocker lock(&mMutex);

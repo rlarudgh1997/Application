@@ -7,6 +7,8 @@
 #include <QRect>
 #include <QListWidgetItem>
 #include <QMultiMap>
+#include <QTextEdit>
+
 #include "CommonUtil.h"
 
 #define USE_FILE_WATCHER_QT
@@ -33,6 +35,7 @@ class SubWindow : public QMainWindow {
     REGISTER_WRITABLE_PROPERTY(int, ListType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, OriginalData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, DeleteFileList, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, AltonListenData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, AltonServiceData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QString, AllDetailInfo, false)
 
@@ -43,11 +46,18 @@ private:
         DisplayTypeMain,
         DisplayTypeViewTav,
         DisplayTypeViewScript,
+        DisplayTypeViewScriptLog,
     };
     enum ListType {
         ListTypeNormal = 0,
         ListTypeCheck,
         ListTypeUpdateCheck,
+    };
+    enum TavDisplayType {
+        TavDisplayTypeInvalid = 0,
+        TavDisplayTypeList,
+        TavDisplayTypeDetail,
+        TavDisplayTypeLog,
     };
     enum ViewType {
         ViewTypeInvalid = 0,
@@ -88,6 +98,11 @@ private:
         DeleteTypeScript,
         DeleteTypeInfo,
     };
+    enum FileWatcherType {
+        FileWatcherTypeAltonListen,
+        FileWatcherTypeAltonService,
+        FileWatcherTypeHmi,
+    };
 
 public:
     explicit SubWindow(QWidget* parent = nullptr);
@@ -101,6 +116,9 @@ private:
     void updateDetailFileInfo(const int& viewType, const QString& info);
     void updateDetailContent(const QString& content);
     void updateDetailDataInfo(const QString& filePath);
+    void updateAltonClientLog(const QString& log);
+    void updateAltonServiceLog(const QString& log);
+    void updateHmiLog(const QString& log);
     void writeOriginalData(const QString& filePath, const QStringList& saveData);
     bool isDetailInfo(const int& type, QPair<QString, QStringList>& detailInfo);
     void isSubDetailInfo(const QStringList& inputStr, QMap<int, QStringList>& subDetialInfo);
@@ -129,6 +147,8 @@ private:
     QSharedPointer<ivis::common::ExcuteProgramThread> mProcess = nullptr;
 #if defined(USE_FILE_WATCHER_QT)
     QSharedPointer<ivis::common::FileSystemWatcherThread> mFileWatcher = nullptr;
+    QMap<int, QSharedPointer<ivis::common::FileSystemWatcherThread>> mLogFileWatcher =
+                                                    QMap<int, QSharedPointer<ivis::common::FileSystemWatcherThread>>();
 #else
     QSharedPointer<LogWatcher> mFileWatcher = nullptr;
 #endif
