@@ -127,12 +127,14 @@ void SubWindow::controlConnect(const bool& state) {
         int scriptStart = getScriptStart();
         if (scriptStart == StartScriptTypeStop) {
             scriptStart = StartScriptTypeStart;
+            mGui->logContent->clear();
             mGui->altonServiceContent->clear();
             mGui->hmiContent->clear();
         } else if (scriptStart == StartScriptTypeStart) {
             scriptStart = StartScriptTypeStop;
         } else if (scriptStart == StartScriptTypeMenuStop) {
             scriptStart = StartScriptTypeMenuStart;
+            mGui->logContent->clear();
             mGui->altonServiceContent->clear();
             mGui->hmiContent->clear();
         } else if (scriptStart == StartScriptTypeMenuStart) {
@@ -703,12 +705,11 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList, const 
 
         QString tavPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString();
         QString fileName = QString("%1/%2.AltonListen.info").arg(tavPath).arg(file);
-        fileName.remove(".tav");
-        fileName.remove(".sh");
-
         scriptInfo.append(QString("TAV_FILE=%1\n").arg(fileName));
         scriptInfo.append(QString("rm -f $TAV_FILE\n"));
-        scriptInfo.append(QString("$ALTON_CLIENT listen%1 > $TAV_FILE &\n").arg(listenSignal));
+        // scriptInfo.append(QString("touch $TAV_FILE\n"));
+        // scriptInfo.append(QString("chmod -R 777 $TAV_FILE\n"));
+        scriptInfo.append(QString("$ALTON_CLIENT listen%1 >> $TAV_FILE &\n").arg(listenSignal));
     } else {
     }
 
@@ -721,7 +722,11 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
     QStringList signalList = QStringList();
     QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClient).toString();
     QString altonPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonPath).toString();
+    QString tavPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTavPath).toString();
     QString fileName = file;
+    fileName.remove(".tav");
+    fileName.remove(".sh");
+
     QString scriptInfo("#!/bin/bash");
 
     // Description
@@ -737,12 +742,13 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
     scriptInfo.append("#[AltonClient]\n");
 #if 1
     scriptInfo.append("ALTON_CLIENT=\"$1\"\n");
-    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=\"%1/%2\"\nfi\n").arg(altonPath).arg(altonClient));
+    scriptInfo.append(QString("if [ -z \"$1\" ]; then\n    ALTON_CLIENT=%1/%2\nfi\n").arg(altonPath).arg(altonClient));
 #else
     scriptInfo.append(QString("ALTON_CLIENT=\"%1\"\n").arg(altonClient));
     scriptInfo.append(QString("if [ -n \"$1\" ]; then\n    ALTON_CLIENT=\"$1\"\nfi\n"));
 #endif
     scriptInfo.append(QString("echo \"ALTON_CLIENT=$ALTON_CLIENT\"\n"));
+    scriptInfo.append("sleep 0.3\n");
 
     // Precondition
     scriptInfo.append("\n\n");
@@ -753,17 +759,14 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
     scriptInfo.append("\n\n");
     scriptInfo.append(isToScriptInfo(DetailInfoListen, signalList, fileName));
 
-    // Listen Separator
+    // DateTime
     scriptInfo.append("\n\n");
-    scriptInfo.append("#[Listen Separator]\n");
-    scriptInfo.append("sleep 1\n");
-    scriptInfo.append("echo -e \">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\" >> $TAV_FILE\n");
-    scriptInfo.append(QString("echo -e \"%1\" >> $TAV_FILE\n").arg(LOG_FILE_KEYWORD_02));
-#if 1
-    scriptInfo.append(QString("echo -e \"%1(2024-03-29 14:19:25.986)\" >> $TAV_FILE\n").arg(LOG_FILE_KEYWORD_03));
-    scriptInfo.append(QString("echo -e \"%1SFC.High_Performance_Gauge.Constant.TurboGauge.Value = 3 (U)\" >> $TAV_FILE\n")
-                        .arg(LOG_FILE_KEYWORD_04));
-#endif
+    scriptInfo.append("#[DateTime]\n");
+    scriptInfo.append(QString("DATE_TIME_FILE=%1/%2%3\n").arg(tavPath).arg(fileName).arg(".DateTime.info"));
+    scriptInfo.append(QString("rm -f $DATE_TIME_FILE\n"));
+    scriptInfo.append(QString("CURRENT_DATE_TIME=$(date +\"%Y-%m-%d %H:%M:%S.%3N\")\n"));
+    scriptInfo.append(QString("echo \"CURRENT_DATE_TIME=$CURRENT_DATE_TIME\"\n"));
+    scriptInfo.append(QString("echo -e \"$CURRENT_DATE_TIME\" >> $DATE_TIME_FILE\n"));
 
     // Step
     scriptInfo.append("\n\n");
@@ -812,8 +815,6 @@ QString SubWindow::createToScript(const QString& file, QStringList& scriptFileLi
         //     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
         // }
 
-        fileName.remove(".tav");
-        fileName.remove(".sh");
         QString filePath = QString("%1/%2.%3.sh").arg(getTavPath()).arg(fileName).arg(pt);
         ivis::common::FileInfo::writeFile(filePath, writeContent, false);
         qDebug() << "\t WriteFile :" << filePath;
@@ -841,28 +842,28 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
         filePath.replace(".sh", ".info");
         filePath.replace(".tav", ".info");
 
-        // 1. rm -f [FILE].*.info
+        // 1. rm -f ../TAV/[FILE].*.info
         QString delFile = QString("rm -f %1").arg(filePath);
         delFile.replace(".info", ".*.info");
         result = process.start(delFile, log);
         qDebug() << "\t\t Delete :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << delFile;
 
-        // 2-2. Watcher Log file : [FILE].AltonListen.info
+        // 2-2. Watcher Log file : ../TAV/[FILE].AltonListen.info
         QString altonLogFile = filePath;
         altonLogFile.replace(".info", ".AltonListen.info");
         startWatcherFile(FileWatcherTypeAltonListen, altonLogFile);
 
-        // 2-1. Watcher Log file : [FILE].AltonService.info
+        // 2-1. Watcher Log file : ../TAV/[FILE].AltonService.info
         altonLogFile.replace(".AltonListen.info", ".AltonService.info");
         startWatcherFile(FileWatcherTypeAltonService, altonLogFile);
 
-        // 3. altonservice >> [FILE].AltonService.info
+        // 3. altonservice >> ../TAV/[FILE].AltonService.info
         QString altonPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonPath).toString();
         QString altonServiceCmd = QString("%1/%2 > %3 &").arg(altonPath).arg(altonService).arg(altonLogFile);
         result = process.start(altonServiceCmd, log);
         qDebug() << "\t Start - AltonService :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonServiceCmd;
 
-        // 4. chmod -R 777 [FILE].sh
+        // 4. chmod -R 777 ../TAV/[FILE].sh
         QString command = QString();
         for (const auto& script : scriptFileList) {
             if (command.size() == 0) {
@@ -873,8 +874,9 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
             qDebug() << "\t\t Permisstion :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << permissionCmd;
         }
 
-        // 5. ../TAV/[FILE].sh >> [FILE].sh.info
+        // 5. ../TAV/[FILE].sh >> ../TAV/[FILE].Script.info
         QString scriptLogFile = QString(" > %1").arg(filePath);
+        // scriptLogFile.clear();
         scriptLogFile.replace(".info", ".Script.info");
         startProcess(command, scriptLogFile);
     } else {
@@ -933,13 +935,23 @@ void SubWindow::startWatcherFile(const int& type, const QString& watcherFile) {
     mLogFileWatcher[type].data()->start();
     connect(mLogFileWatcher[type].data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
             [=](const bool& init, const QStringList& data) {
-                qDebug() << "File Changed :" << type << data.size();
+                // qDebug() << "\t\t File Changed :" << type << data.size();
                 if (type == FileWatcherTypeAltonListen) {
                     QString updateData = QString();
                     bool valid = false;
                     for (const auto& d : data) {
-                        if (d.compare(LOG_FILE_KEYWORD_02) == false) {
-                            valid = true;
+                        if (d.contains(LOG_FILE_KEYWORD_03)) {
+                            QStringList temp = d.split(LOG_FILE_KEYWORD_03);
+                            if (temp.size() == 2) {
+                                QString fileName = watcherFile;
+                                fileName.replace(".AltonListen.info", ".DateTime.info");
+                                QStringList readData = ivis::common::FileInfo::readFile(fileName);
+                                QString baseDateTime = (readData.size() > 0) ? (readData.at(0)) : ("");
+                                QString inputDateTime = temp.at(1);
+                                inputDateTime.remove("(");
+                                inputDateTime.remove(")");
+                                valid = isDateTimeValid(baseDateTime, inputDateTime);
+                            }
                         }
                         if (valid == false) {
                             continue;
@@ -1016,6 +1028,20 @@ void SubWindow::stopWatcherFile(const int& type) {
         mFileWatcher.reset();
     }
 #endif
+}
+
+bool SubWindow::isDateTimeValid(const QString& base, const QString& input) {
+    QDateTime baseDateTime = QDateTime::fromString(base, "yyyy-MM-dd HH:mm:ss.zzz");
+    QDateTime inputDateTime = QDateTime::fromString(input, "yyyy-MM-dd HH:mm:ss.zzz");
+
+    if ((baseDateTime.isValid() == false) || (inputDateTime.isValid() == false)) {
+        qDebug() << "Fali to datetime invalid :" << baseDateTime << inputDateTime;
+        return false;
+    }
+
+    bool valid = (inputDateTime > baseDateTime);
+    qDebug() << "DateTime :" << ((valid) ? ("valid, ") : ("invalid, ")) << baseDateTime << inputDateTime;
+    return valid;
 }
 
 QStringList SubWindow::isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList) {

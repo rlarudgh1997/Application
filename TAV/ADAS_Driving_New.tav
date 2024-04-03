@@ -10,7 +10,7 @@
     #Status : Open
 
 [PowerTrain]
-    ALL
+    EV
 
 [Precondition]
     SFC.Extension.AEM.Inter_AEMInitializeComplete true
@@ -32,3 +32,4 @@
 [Expected Result]
     SFC.ADAS_Driving_New.Constant.FrontVehicle.Color.Stat 1
     SFC.ADAS_Driving_New.Constant.FrontVehicle.Level.Value 5
+

@@ -165,5 +165,12 @@ case "$PLATFORM" in
 esac
 
 
+
 echo "./run.sh xs 10.45.143.71"
 echo "./run.sh xsc 10.45.143.71"
+echo
+CURRENT_DATE_TIME=$(date +"%Y-%m-%d %H:%M:%S.%3N")
+echo "CURRENT_DATE_TIME = $CURRENT_DATE_TIME"
+echo "=========================================================================================================="
+echo
+echo

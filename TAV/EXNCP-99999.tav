@@ -1,0 +1,31 @@
+[Description]
+    Ticket No : EXNCP-9999
+    Issue Type : Spec
+    Module : High Performance Gauge [PT280]
+    HMC : https://jira.ccos.dev/browse/EXNCP-40685
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1150
+    Info : TEST - 최석흠
+    #Date :2024.02.13
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    HardWire_HardWireIgnition1 1
+    [Group]
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvFrontObjectStatus 2
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_SmvVehicleDistanceLevelValue 1
+
+[Step]
+    #delay 1000
+    [Group]
+        SMV_FrObjSta 0
+        SMV_VehDstLvlVal 4
+
+[Expected Result]
+    SFC.ADAS_Driving_New.Constant.FrontVehicle.Color.Stat 1
+    SFC.ADAS_Driving_New.Constant.FrontVehicle.Level.Value 2
+    SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.Color.Stat 3
