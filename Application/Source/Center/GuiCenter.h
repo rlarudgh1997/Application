@@ -354,6 +354,7 @@ public:
         mModel.setRowCount(moduleList.size());
         int rowIndex = 0;
         for (const auto& name : moduleList) {
+            delete mModel.item(rowIndex, 0);
             mModel.setItem(rowIndex, 0, new QStandardItem(name));
             mModel.item(rowIndex, 0)->setCheckable(true);
             // mModel.item(rowIndex, 0)->setCheckState(Qt::Checked);

@@ -288,7 +288,7 @@ private:
         QStringList fileContent = QStringList();
         QFile file(filePath);
         openError = false;
-        // qDebug() << "filePath :" << filePath;
+        // qDebug() << "readFileDataInfo :" << filePath;
         if (file.open(QFile::ReadOnly | QFile::Text)) {
             QTextStream readData(&file);
             while (!readData.atEnd()) {
@@ -307,7 +307,7 @@ private:
         return fileContent;
     }
     static int writeFileData(const QString& filePath, const QString& str, const bool& append) {
-        // qDebug() << "filePath :" << filePath;
+        // qDebug() << "writeFileData :" << filePath;
         QStringList readData = QStringList();
         if (append) {
             bool openError = false;
@@ -585,6 +585,7 @@ public:
     ~FileSystemWatcherThread() {
         QMutexLocker lock(&mMutex);
         mWatcher.removePath(mWatcherFile);
+        mWatcherFile.clear();
         qDebug() << "~FileSystemWatcherThread()";
     }
     void start() {
@@ -621,6 +622,11 @@ private:
     }
     void runThread() {
         while (mCount < 10) {
+            if (mWatcherFile.size() == 0) {
+                qDebug() << "\t [Stop]   Watcher file :" << mCount << mWatcherFile;
+                break;
+            }
+
             if (mWatcher.addPath(mWatcherFile)) {
                 qDebug() << "\t [Sucess] Watcher file :" << mCount << mWatcherFile;
                 mCount = 0;
@@ -638,7 +644,9 @@ private:
         }
     }
     void join() {
+        // if ((mThread->thread() != nullptr) && (mThread->thread() != QThread::currentThread())) {
         if (mThread->isRunning()) {
+            qDebug() << "FileSystemWatcherThread - terminate";
             mThread->quit();
             mThread->wait();
         }

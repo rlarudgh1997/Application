@@ -85,6 +85,8 @@ public:
         PropertyTypeNodeAddressPrivate,
         PropertyTypeNodeAddressInter,
         PropertyTypeNodeAddressModule,
+        PropertyTypeAppMode,
+        PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
         PropertyTypeInputDataVisible,
         PropertyTypeInputDataValuEnum,
@@ -232,6 +234,7 @@ public:
         EventTypeEnterScriptTextCompleted,
         EventTypeRunTestReport,
         EventTypeSelectModuleError,
+        EventTypeSelectAppMode,
 
         EventTypeTest = 3000,
         EventTypeLastFile,
@@ -420,8 +423,7 @@ public:
 class AppModeEnum {
 public:
     enum AppModeType {
-        AppModeTypeInvalid = 0,
-        AppModeTypeCV,
+        AppModeTypeCV = 0,
         AppModeTypePV,
         AppModeTypeTAV,
         AppModeTypeCanDB,

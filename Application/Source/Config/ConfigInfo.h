@@ -20,6 +20,7 @@ public:
 
         // General
         ConfigTypeScreenInfo,
+        ConfigTypeAppMode,
         ConfigTypeDefaultPath,
         ConfigTypeNodeAddressPath,
         ConfigTypeVsmPath,
@@ -87,9 +88,9 @@ private:
         // General
         mConfigInfoData[ConfigTypeScreenInfo] = QPair<QString, QVariant>(
             "ConfigTypeScreenInfo", QVariant(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
+        mConfigInfoData[ConfigTypeAppMode] = QPair<QString, QVariant>("ConfigTypeAppMode", QVariant(0));
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>(
             "ConfigTypeDefaultPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model/SFC/CV")));
-
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>(
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>(

@@ -25,6 +25,7 @@
 #include <QInputDialog>
 
 #include "CommonUtil.h"
+#include "Dialog.h"
 
 class SelectModuleDialog;
 
@@ -555,6 +556,7 @@ private:
     void updateDisplayTestReport();
     void updateDisplayViewRunScriptList();
     void updateDisplayViewRunScriptDetail();
+    void updateDisplayAppMode();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
@@ -575,6 +577,7 @@ private:
     SelectReportDialog* mTestReport = nullptr;
     DetailLog* mDetailLog = nullptr;
     SelectModuleDialog* mViewRunScript = nullptr;
+    Dialog* mDialog = nullptr;
 };
 
 #endif  // GUI_MENU_H

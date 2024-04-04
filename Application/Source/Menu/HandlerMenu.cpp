@@ -27,6 +27,8 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth, QVariant(-1));
 
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(""));

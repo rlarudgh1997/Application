@@ -128,6 +128,17 @@ void ControlMenu::sendEventInfo(const int& destination, const int& eventType, co
                                                      destination, eventType, eventValue);
 }
 
+void ControlMenu::updateSelectAppMode() {
+    QVariant appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode);
+    QVariantList appModeList = QVariantList({"CV", "PV"});
+#if 1   // defined(USE_APP_MODE_TAV)
+    appModeList.append("TAV");
+#endif
+
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList, QVariant(appModeList));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(appMode), true);
+}
+
 void ControlMenu::updateAllModueList(const QString& filter) {
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     QString path = defaultPath;
@@ -752,7 +763,13 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingAppMode: {
-            qDebug() << "EventTypeSettingAppMode";
+            updateSelectAppMode();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSelectAppMode: {
+            int appMode = value.toInt();
+            qDebug() << "EventTypeSelectAppMode :" << appMode;
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAppMode, appMode);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenTC:

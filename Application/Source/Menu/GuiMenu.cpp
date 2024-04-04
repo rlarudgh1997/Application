@@ -9,6 +9,7 @@
 #include <QCompleter>
 
 #include "GuiCenter.h"
+#include "ConfigSetting.h"
 
 QSharedPointer<GuiMenu>& GuiMenu::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiMenu> gGui;
@@ -284,6 +285,15 @@ void GuiMenu::drawMenuSetting() {
     mMenu[MainType::Setting] = mMainView->menuBar()->addMenu(STRING_SETTING);
     // mToolBar[MainType::Setting] = mMainView->addToolBar(STRING_SETTING);
 
+    mAction[MainType::Setting][STRING_APP_MODE] = new QAction(QIcon::fromTheme("actionAppMode"), STRING_APP_MODE, this);
+    if (mAction[MainType::Setting][STRING_APP_MODE]) {
+        mAction[MainType::Setting][STRING_APP_MODE]->setStatusTip(STRING_APP_MODE_TIP);
+        mMenu[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
+        // mToolBar[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
+        connect(mAction[MainType::Setting][STRING_APP_MODE], &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingAppMode, QVariant()); });
+    }
+
     mAction[MainType::Setting][STRING_DEFAULT_PATH] = new QAction(QIcon::fromTheme("actionDevPath"), STRING_DEFAULT_PATH, this);
     if (mAction[MainType::Setting][STRING_DEFAULT_PATH]) {
         mAction[MainType::Setting][STRING_DEFAULT_PATH]->setStatusTip(STRING_DEFAULT_PATH_TIP);
@@ -300,15 +310,6 @@ void GuiMenu::drawMenuSetting() {
         // mToolBar[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_VSM_PATH]);
         connect(mAction[MainType::Setting][STRING_VSM_PATH], &QAction::triggered,
                 [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant()); });
-    }
-
-    mAction[MainType::Setting][STRING_APP_MODE] = new QAction(QIcon::fromTheme("actionAppMode"), STRING_APP_MODE, this);
-    if (mAction[MainType::Setting][STRING_APP_MODE]) {
-        mAction[MainType::Setting][STRING_APP_MODE]->setStatusTip(STRING_APP_MODE_TIP);
-        mMenu[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
-        // mToolBar[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_APP_MODE]);
-        connect(mAction[MainType::Setting][STRING_APP_MODE], &QAction::triggered,
-                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingAppMode, QVariant()); });
     }
 
 #if 0
@@ -800,6 +801,25 @@ void GuiMenu::updateDisplayViewRunScriptDetail() {
     mDetailLog->updateLogDisplay(detailLog.toStringList());
 }
 
+void GuiMenu::updateDisplayAppMode() {
+    int appMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt();
+    QStringList appModeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList).toStringList();
+    QRect screenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+
+    if (mDialog == nullptr) {
+        mDialog = new Dialog(screenInfo, this);
+        connect(mDialog, &Dialog::signalSelectAppMode, [=](const int& appMode) {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode);
+        });
+        connect(mDialog, &QDialog::finished, [=]() {
+            disconnect(mDialog);
+            delete mDialog;
+            mDialog = nullptr;
+        });
+    }
+    mDialog->updateAppMode(appMode, appModeList);
+}
+
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth: {
@@ -849,6 +869,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail: {
             updateDisplayViewRunScriptDetail();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeAppMode: {
+            updateDisplayAppMode();
             break;
         }
         default: {
