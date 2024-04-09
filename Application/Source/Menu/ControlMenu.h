@@ -19,7 +19,7 @@ private:
     ControlMenu();
 
     void updateSelectAppMode();
-    void updateAllModueList(const QString& filter);
+    void updateAllModuleList(const QString& filter);
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);
     bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());

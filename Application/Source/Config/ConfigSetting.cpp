@@ -18,6 +18,7 @@
 #define GROUP_NAME_GENERAL "Gernal"
 #define GROUP_NAME_REPORT "Report"
 #define GROUP_NAME_FILE "File"
+#define GROUP_NAME_ETC "ETC"
 
 QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
     static QSharedPointer<ConfigSetting> gConfigSetting;
@@ -112,7 +113,9 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         }
         case ConfigInfo::ConfigTypeSheetName:
         case ConfigInfo::ConfigTypeDescTitle:
-        case ConfigInfo::ConfigTypeOtherTitle: {
+        case ConfigInfo::ConfigTypeOtherTitle:
+        case ConfigInfo::ConfigTypeVehicleSfcSpecTypePV:
+        case ConfigInfo::ConfigTypeVehicleVsmSpecTypePV: {
             QStringList value = configValue.toString().split(", ");
             QVariantList list = QVariantList();
             for (const auto& v : value) {
@@ -151,8 +154,10 @@ void ConfigSetting::readConfig() {
         } else {
             if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
+            } else if (configType < ConfigInfo::ConfigTypeVehicleSfcSpecTypePV) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
+            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
+                mSetting->beginGroup(GROUP_NAME_ETC);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {
@@ -180,8 +185,10 @@ void ConfigSetting::writeConfig() {
                     .toString();
             if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
+            } else if (configType < ConfigInfo::ConfigTypeVehicleSfcSpecTypePV) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
+            } else if (configType < ConfigInfo::ConfigTypeReportResult) {
+                mSetting->beginGroup(GROUP_NAME_ETC);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {

@@ -817,7 +817,7 @@ void GuiMenu::updateDisplayAppMode() {
             mDialog = nullptr;
         });
     }
-    mDialog->updateAppMode(appMode, appModeList);
+    mDialog->updateAppModeRadio(appMode, appModeList);
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {

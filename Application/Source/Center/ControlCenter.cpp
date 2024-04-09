@@ -241,10 +241,33 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 
 void ControlCenter::updateNodeAddress(const bool& check) {
     QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QVariantList vsmFile = QVariantList();
-    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressEV));
-    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressFCEV));
-    vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressICV));
+    QStringList vsmSpecList = QStringList();
+    QStringList vehicleTypeList = QStringList();
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        vsmSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleVsmSpecTypePV).toStringList();
+        vehicleTypeList = QStringList({"ICV", "EV", "FCEV", "PHEV", "HEV"});
+        QString vsmBase = "CLU_VSM_%1.Vehicle.%2.vsm";    // CLU_VSM_EV.Vehicle.AD.vsm
+        vsmFile.append();
+    } else {
+        vsmSpecList = QStringList({"CV"});
+        vehicleTypeList = QStringList({"ICV", "EV", "FCEV"});
+
+
+
+        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressEV));
+        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressFCEV));
+        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressICV));
+        // ConfigTypeVsmFileNameBase=CLU_VSM_CV_%1.Vehicle.%2.vsm
+        // ConfigTypeVsmNodeAddressEV=CLU_VSM_CV_EV.Vehicle.CV.vsm
+        // ConfigTypeVsmNodeAddressFCEV=CLU_VSM_CV_FCEV.Vehicle.CV.vsm
+        // ConfigTypeVsmNodeAddressICV=CLU_VSM_CV_ICV.Vehicle.CV.vsm
+    }
+
+
+    // CLU_VSM_CV_EV.Vehicle.CV.vsm
+    // CLU_VSM_EV.Vehicle.AD.vsm
 
     if ((check) && (checkNodeAddress(vsmPath, vsmFile))) {
         qDebug() << "Fail to vsm file not found :" << vsmPath;

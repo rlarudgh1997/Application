@@ -1,5 +1,24 @@
 ======================================================================================================================================================
 # [ToDo]
+- PV 기능 구현
+	: NodeView 화면
+		- .vsm 파일 파싱 : ICV, EV, FCEV, PHEV, HEV (기존 CV 만 파싱 하고 있음)
+		- void ControlCenter::updateNodeAddress(const bool& check)
+
+- App Mode 선택시 : 재부팅 해야 한다고 가이드 후 동작
+
+
+
+
+
+
+
+
+
+
+
+
+
 - 로그 파일 화면 표시
 	: alton_client listen 로그 정보
 		-> alton_client listen Vehicle.AD.ADAS_DRIVING_NEW 로 로그 출력
@@ -23,12 +42,22 @@
 		: sudo vi /opt/sfc/PV/environment-setup-sfc
 			파일 중 : export ALTON_HAL_SCRIPT_PATH=$ALTON_INSTALL_PATH/lib/dummy.txt
 				-> 주석 처리 해야함
+
+		: .Script.info / .AltonService.info 파일 생성 하지 않음
+			- 로그 출력 안되도록 >> /dev/null & 처리 필요
+			- 기존 출력 되던 로그
+				: alton_client listen alton_client listen Vehicle.AD.ADAS_DRIVING_NEW 로 로그 출력 확인
+					-> 해당 로그는 input 영역에 표시
+					-> CAN 시그널에서 찾아서 Vehicle 시그널로 변환 하는 코드 필요
+
+		: .DateTime.info 변경
+			- Precondition, Listen, Step 동작 전에 시간 기록 하여 구분자 생성
+				: 키워드를 사용 하여 기록 (Precondition, Listen, Step)
+			- 로그 기록시 참조하는 시간 코드 변경 필요
+				: Listen 키워드로 확인
 ******************************************************************************************
 ******************************************************************************************
 ******************************************************************************************
-
-
-
 
 
 

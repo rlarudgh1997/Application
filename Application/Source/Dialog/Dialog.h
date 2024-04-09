@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include <QFrame>
+#include <QRadioButton>
 
 #include "CommonUtil.h"
 
@@ -20,6 +22,7 @@ class Dialog : public QDialog {
 public:
     enum {
         DialogTypeAppMode = 0,
+        DialogTypeRadioButton,
         DialogTypeMoudleInfo,
     };
 
@@ -27,6 +30,7 @@ public:
     explicit Dialog(const QRect& rect, QWidget *parent = nullptr);
     ~Dialog();
     void updateAppMode(const int& appMode, const QStringList& appModeList);
+    void updateAppModeRadio(const int& appMode, const QStringList& appModeList);
 
 // protected:
 //     void showEvent(QShowEvent* event) override {
@@ -34,7 +38,8 @@ public:
 
 private:
     void controlConnet(const bool& state);
-    void drawDialog(const int& dialogType);
+    void drawDialog(const int& dialogType, const QString& title);
+    QList<QPair<QFrame*, QRadioButton*>> isRadioWidget() const;
 
 signals:
     void signalSelectAppMode(const int& appMode);

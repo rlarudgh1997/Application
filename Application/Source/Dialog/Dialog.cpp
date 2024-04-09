@@ -2,14 +2,12 @@
 #include "ui_Dialog.h"
 
 Dialog::Dialog(const QRect& rect, QWidget *parent) : QDialog(parent), mGui(new Ui::Dialog) {
+    this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
+    this->setModal(true);
+
     mGui->setupUi(this);
     setScreenRect(rect);
     controlConnet(true);
-
-    this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
-    this->setModal(true);
-    this->setFocus();
-    this->show();
 }
 
 Dialog::~Dialog() {
@@ -22,20 +20,25 @@ void Dialog::controlConnet(const bool& state) {
     } else {
         disconnect(&mModel);
         disconnect(mGui->AppModeOK);
+        disconnect(mGui->AppModeRadioOK);
+        for (const auto& widget : isRadioWidget()) {
+            disconnect(widget.second);
+        }
     }
 }
 
-void Dialog::drawDialog(const int& dialogType) {
-    QString title = QString();
+void Dialog::drawDialog(const int& dialogType, const QString& title) {
     QRect subRect = QRect();
     switch (dialogType) {
         case DialogTypeAppMode: {
-            title = QString("Select App Mode");
             subRect = mGui->AppModeWidget->geometry();
             break;
         }
+        case DialogTypeRadioButton: {
+            subRect = mGui->AppModeRadioWidget->geometry();
+            break;
+        }
         case DialogTypeMoudleInfo: {
-            title = QString("Select Module");
             break;
         }
         default: {
@@ -52,17 +55,32 @@ void Dialog::drawDialog(const int& dialogType) {
         this->setFixedSize(QSize(subRect.width(), subRect.height()));
         this->setGeometry(setRect);
     }
+    this->setFocus();
+    this->show();
+}
+
+QList<QPair<QFrame*, QRadioButton*>> Dialog::isRadioWidget() const {
+    QList<QPair<QFrame*, QRadioButton*>> widgetList = {
+        {mGui->FrameList1, mGui->AppModeRadioButton1},
+        {mGui->FrameList2, mGui->AppModeRadioButton2},
+        {mGui->FrameList3, mGui->AppModeRadioButton3},
+        {mGui->FrameList4, mGui->AppModeRadioButton4},
+        {mGui->FrameList5, mGui->AppModeRadioButton5},
+        {mGui->FrameList6, mGui->AppModeRadioButton6},
+        {mGui->FrameList7, mGui->AppModeRadioButton7},
+        {mGui->FrameList8, mGui->AppModeRadioButton8}
+    };
+    return widgetList;
 }
 
 void Dialog::updateAppMode(const int& appMode, const QStringList& appModeList) {
     if (mGui->AppModeTableView == nullptr) {
         return;
     }
-    drawDialog(DialogTypeAppMode);
-
-    QStringList subTitle = QStringList({"App Mode"});
-    mModel.setHorizontalHeaderLabels(subTitle);
-    mModel.setColumnCount(subTitle.size());
+    drawDialog(DialogTypeAppMode, QString("Select App Mode"));
+    QStringList columnTitle = QStringList({"App Mode"});
+    mModel.setHorizontalHeaderLabels(columnTitle);
+    mModel.setColumnCount(columnTitle.size());
     mModel.setRowCount(appModeList.size());
     int rowIndex = 0;
     for (const auto& name : appModeList) {
@@ -100,6 +118,42 @@ void Dialog::updateAppMode(const int& appMode, const QStringList& appModeList) {
                 setAppMode(rowIndex);
                 break;
             }
+        }
+        emit signalSelectAppMode(getAppMode());
+        QDialog::accept();
+    });
+}
+
+void Dialog::updateAppModeRadio(const int& appMode, const QStringList& appModeList) {
+    if (mGui->AppModeRadioWidget == nullptr) {
+        return;
+    }
+    drawDialog(DialogTypeRadioButton, QString("Select Vehicle"));
+    mGui->AppModeRadioTitle->setText("Vehicle");
+    int index = 0;
+    for (const auto& widget : isRadioWidget()) {
+        widget.first->setVisible(index < appModeList.size());
+        widget.second->setChecked(appMode == index);
+        if (widget.first->isVisible()) {
+            widget.second->setText(appModeList.at(index));
+        }
+        index++;
+
+        connect(widget.second, &QPushButton::clicked, [=]() {
+            for (const auto& widgetItem : isRadioWidget()) {
+                widgetItem.second->setChecked(false);
+            }
+            widget.second->setChecked(true);
+        });
+    }
+    connect(mGui->AppModeRadioOK, &QPushButton::clicked, [=]() {
+        int appMode = 0;
+        for (const auto& widget : isRadioWidget()) {
+            if (widget.second->isChecked()) {
+                setAppMode(appMode);
+                break;
+            }
+            appMode++;
         }
         emit signalSelectAppMode(getAppMode());
         QDialog::accept();

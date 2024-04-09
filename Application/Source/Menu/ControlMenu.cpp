@@ -53,7 +53,7 @@ void ControlMenu::initNormalData() {
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
 
-    updateAllModueList(QString());
+    updateAllModuleList(QString());
 
 #if defined(USE_TEST_RESULT_TEMP)
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
@@ -130,8 +130,8 @@ void ControlMenu::sendEventInfo(const int& destination, const int& eventType, co
 
 void ControlMenu::updateSelectAppMode() {
     QVariant appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode);
-    QVariantList appModeList = QVariantList({"CV", "PV"});
-#if 1   // defined(USE_APP_MODE_TAV)
+    QVariantList appModeList = QVariantList({"Vehicle CV", "Vehicle PV"});
+#if defined(USE_APP_MODE_TAV)
     appModeList.append("TAV");
 #endif
 
@@ -139,38 +139,61 @@ void ControlMenu::updateSelectAppMode() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(appMode), true);
 }
 
-void ControlMenu::updateAllModueList(const QString& filter) {
-    QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    QString path = defaultPath;
+void ControlMenu::updateAllModuleList(const QString& filter) {
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
+    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
+    QStringList findPath = QStringList();
     QStringList sfcModules = QStringList();
-    if (path.contains("/model/SFC/CV")) {
-        QDir directory(path);
+
+    if (appModePV) {
+        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleSfcSpecTypePV);
+        path.replace("/model/SFC/CV", "/model/SFC");
+        for (const auto& spec : sfcSpecList.toStringList()) {
+            findPath.append(QString("%1/%2").arg(path).arg(spec));
+        }
+    } else {
+        findPath.append(path);
+    }
+
+    // Find SFC Path List
+    for (const auto& sfcPath : findPath) {
+        QDir directory(sfcPath);
         QStringList sfcDirectory = directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        if (filter.size() == 0) {
-            sfcModules = sfcDirectory;
-        } else {
-            for (const auto& sfc : sfcDirectory) {
-                QDir subDirectory(QString("%1/%2").arg(defaultPath).arg(sfc));
-                // subDirectory.setNameFilters(QStringList({".tc", ".xlsx"}));
-                bool fileFound = false;
-                for (const auto& file : subDirectory.entryList(QDir::Files)) {
-                    if ((fileFound = file.contains(filter)) == true) {
-                        // qDebug() << "  FileFound :" << sfc << file;
-                        sfcModules.append(sfc);
-                        break;
-                    }
+
+        qDebug() << "Path :" << sfcPath;
+
+        for (const auto& sfc : sfcDirectory) {
+            if (filter.size() == 0) {
+                qDebug() << "\t Module :" << sfc;
+                sfcModules.append(sfc);
+                continue;
+            }
+            QDir subDirectory(QString("%1/%2").arg(sfcPath).arg(sfc));
+            for (const auto& file : subDirectory.entryList(QDir::Files)) {
+                if (file.contains(filter)) {
+                    qDebug() << "\t Module[" << filter << "] :" << sfc << file;
+                    sfcModules.append(sfc);
+                    break;
                 }
             }
         }
-    } else {
-        path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
-        sfcModules = ivis::common::FileInfo::readFile(path + "/DefaultModule.info");
     }
-    qDebug() << "SFC modules load path :" << sfcModules.size() << path;
+
+    // Not Found : Default Module List
+    if ((filter.size() == 0) && (sfcModules.size() == 0)) {
+        path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
+        if (appModePV) {
+            path.append("/PV");
+        }
+        sfcModules = ivis::common::FileInfo::readFile(QString("%1/DefaultModule.info").arg(path));
+    }
+
+    qDebug() << appMode << ". SFC Module :" << sfcModules.size() << path << filter;
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, sfcModules);
-    // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, sfcModules);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(sfcModules));
 }
+
 
 void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList& selectModule) {
     QString filter = QString();
@@ -189,7 +212,7 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
 
     QStringList moduleList = getData(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
-    updateAllModueList(filter);
+    updateAllModuleList(filter);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, runType, true);
 }
 
