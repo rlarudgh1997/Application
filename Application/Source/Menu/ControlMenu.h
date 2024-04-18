@@ -19,6 +19,7 @@ private:
     ControlMenu();
 
     void updateSelectAppMode();
+    QStringList isModuleListFromJson();
     void updateAllModuleList(const QString& filter);
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);

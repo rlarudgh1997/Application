@@ -294,6 +294,16 @@ void GuiMenu::drawMenuSetting() {
                 [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingAppMode, QVariant()); });
     }
 
+    mAction[MainType::Setting][STRING_MODEL_PATH] = new QAction(QIcon::fromTheme("actionModelPath"), STRING_MODEL_PATH, this);
+    if (mAction[MainType::Setting][STRING_MODEL_PATH]) {
+        mAction[MainType::Setting][STRING_MODEL_PATH]->setStatusTip(STRING_MODEL_PATH_TIP);
+        mMenu[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_MODEL_PATH]);
+        // mToolBar[MainType::Setting]->addAction(mAction[MainType::Setting][STRING_MODEL_PATH]);
+        connect(mAction[MainType::Setting][STRING_MODEL_PATH], &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant()); });
+    }
+
+#if defined(USE_DEFAULT_VSM_PATH)
     mAction[MainType::Setting][STRING_DEFAULT_PATH] = new QAction(QIcon::fromTheme("actionDevPath"), STRING_DEFAULT_PATH, this);
     if (mAction[MainType::Setting][STRING_DEFAULT_PATH]) {
         mAction[MainType::Setting][STRING_DEFAULT_PATH]->setStatusTip(STRING_DEFAULT_PATH_TIP);
@@ -311,6 +321,7 @@ void GuiMenu::drawMenuSetting() {
         connect(mAction[MainType::Setting][STRING_VSM_PATH], &QAction::triggered,
                 [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingVsmPath, QVariant()); });
     }
+#endif
 
 #if 0
     mAction[MainType::Setting][STRING_NODE_PATH] = new QAction(QIcon::fromTheme("actionNodePath"),
@@ -473,10 +484,21 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 
     if (mDefaultPath == nullptr) {
         mDefaultPath = ivis::common::createWidget<QPushButton>(mMainView, true, QRect(400, 25, 600, 30), styleInfo);
-        connect(mDefaultPath, &QPushButton::clicked,
-                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingDevPath, QVariant()); });
+        connect(mDefaultPath, &QPushButton::clicked, [=]() {
+#if defined(USE_DEFAULT_VSM_PATH)
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant());
+#else
+            createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant());
+#endif
+        });
     }
+
+#if defined(USE_DEFAULT_VSM_PATH)
     QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath);
+#else
+    QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath);
+#endif
+
     mDefaultPath->setText(QString("Path : %1").arg(path.toString()));
 
 #if !defined(USE_DEMO)
@@ -539,7 +561,7 @@ void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& 
         if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             title = QString("Select PT");
             item = QString("Docker");
-            itemList = QStringList({"EV", "FCEV", "ICV"});
+            itemList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList();
         }
         mCheckBoxGroup = new CheckBoxGroupDialog(isHandler()->getScreen(), title, item, itemList);
 
@@ -808,9 +830,8 @@ void GuiMenu::updateDisplayAppMode() {
 
     if (mDialog == nullptr) {
         mDialog = new Dialog(screenInfo, this);
-        connect(mDialog, &Dialog::signalSelectAppMode, [=](const int& appMode) {
-            createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode);
-        });
+        connect(mDialog, &Dialog::signalSelectAppMode,
+                [=](const int& appMode) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode); });
         connect(mDialog, &QDialog::finished, [=]() {
             disconnect(mDialog);
             delete mDialog;
@@ -834,10 +855,17 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayVisible();
             break;
         }
+#if defined(USE_DEFAULT_VSM_PATH)
         case ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath: {
             drawMenuEtc(true);
             break;
         }
+#else
+        case ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath: {
+            drawMenuEtc(true);
+            break;
+        }
+#endif
         case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun: {
             int runType = value.toInt();
             if (runType != ivis::common::RunTypeEnum::RunTypeEnterScriptText) {

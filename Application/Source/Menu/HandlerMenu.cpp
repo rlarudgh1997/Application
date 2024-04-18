@@ -27,9 +27,11 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth, QVariant(-1));
 
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun, QVariant(0));
@@ -37,7 +39,6 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, QVariant(false));
-    // registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail, QVariant(""));
@@ -46,11 +47,11 @@ void HandlerMenu::initPropertyInfo() {
 void HandlerMenu::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
-#if 1
-        connect(this, &HandlerMenu::signalPropertyChanged, GuiMenu::instance().data(), &GuiMenu::slotPropertyChanged,
+#if defined(USE_SIGNAL_SLOT)
+        connect(this, &AbstractHandler::signalPropertyChanged, GuiMenu::instance().data(), &GuiMenu::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerMenu::signalPropertyChanged,
+        connect(this, &AbstractHandler::signalPropertyChanged,
                 [=](const int& type, const QVariant& value) { GuiMenu::instance().data()->slotPropertyChanged(type, value); });
 #endif
 #endif

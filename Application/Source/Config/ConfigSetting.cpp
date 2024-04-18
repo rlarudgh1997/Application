@@ -18,7 +18,7 @@
 #define GROUP_NAME_GENERAL "Gernal"
 #define GROUP_NAME_REPORT "Report"
 #define GROUP_NAME_FILE "File"
-#define GROUP_NAME_ETC "ETC"
+#define GROUP_NAME_VEHICLE "Vehicle"
 
 QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
     static QSharedPointer<ConfigSetting> gConfigSetting;
@@ -77,6 +77,10 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 
     if (configType == ConfigInfo::ConfigTypeWindowTitle) {
         emit signalUpdateWindowTitle(configValue.toString());
+    } else if (configType == ConfigInfo::ConfigTypeInit) {
+        qDebug() << "Config - Reset All";
+        emit signalConfigReset(true);
+    } else {
     }
 }
 
@@ -114,8 +118,8 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         case ConfigInfo::ConfigTypeSheetName:
         case ConfigInfo::ConfigTypeDescTitle:
         case ConfigInfo::ConfigTypeOtherTitle:
-        case ConfigInfo::ConfigTypeVehicleSfcSpecTypePV:
-        case ConfigInfo::ConfigTypeVehicleVsmSpecTypePV: {
+        case ConfigInfo::ConfigTypeSfcSpecTypePV:
+        case ConfigInfo::ConfigTypeVsmSpecTypePV: {
             QStringList value = configValue.toString().split(", ");
             QVariantList list = QVariantList();
             for (const auto& v : value) {
@@ -154,10 +158,10 @@ void ConfigSetting::readConfig() {
         } else {
             if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeVehicleSfcSpecTypePV) {
+            } else if (configType < ConfigInfo::ConfigTypeVsmFileNameBaseCV) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
             } else if (configType < ConfigInfo::ConfigTypeReportResult) {
-                mSetting->beginGroup(GROUP_NAME_ETC);
+                mSetting->beginGroup(GROUP_NAME_VEHICLE);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {
@@ -185,10 +189,10 @@ void ConfigSetting::writeConfig() {
                     .toString();
             if (configType < ConfigInfo::ConfigTypeLastSavedFilePath) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
-            } else if (configType < ConfigInfo::ConfigTypeVehicleSfcSpecTypePV) {
+            } else if (configType < ConfigInfo::ConfigTypeVsmFileNameBaseCV) {
                 mSetting->beginGroup(GROUP_NAME_FILE);
             } else if (configType < ConfigInfo::ConfigTypeReportResult) {
-                mSetting->beginGroup(GROUP_NAME_ETC);
+                mSetting->beginGroup(GROUP_NAME_VEHICLE);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
                 mSetting->beginGroup(GROUP_NAME_REPORT);
             } else {

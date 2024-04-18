@@ -18,7 +18,7 @@
 #define GROUP_NAME_COMMON "Common"
 #if defined(USE_MULTI_GROUP_NAME)
 #define GROUP_NAME_GENERAL "Gernal"
-#define GROUP_NAME_ETC "Etc"
+#define GROUP_NAME_VEHICLE "Etc"
 #endif
 
 QSharedPointer<ConfigSetting>& ConfigSetting::instance() {
@@ -75,6 +75,10 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
 
         emit signalConfigChanged(configType, configValue);
     }
+
+    if (configType == ConfigInfo::ConfigTypeInit) {
+        emit signalConfigReset(true);
+    }
 }
 
 QVariant ConfigSetting::isConfigName(const int& configType) {
@@ -108,7 +112,7 @@ void ConfigSetting::readConfig() {
             if (configType < ConfigInfo::ConfigTypeMaxDoNotSave) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
-                mSetting->beginGroup(GROUP_NAME_ETC);
+                mSetting->beginGroup(GROUP_NAME_VEHICLE);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
@@ -139,7 +143,7 @@ void ConfigSetting::writeConfig() {
             if (configType < ConfigInfo::ConfigTypeMaxDoNotSave) {
                 mSetting->beginGroup(GROUP_NAME_GENERAL);
             } else if (configType < ConfigInfo::ConfigTypeMax) {
-                mSetting->beginGroup(GROUP_NAME_ETC);
+                mSetting->beginGroup(GROUP_NAME_VEHICLE);
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }

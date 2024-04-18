@@ -1,0 +1,7 @@
+1. CheckFileInfo.h
+	- 파일 변경 내용 체크하여 콜백
+		std::shared_ptr<CheckFileInfo> mCheckFileInfo = std::make_shared<CheckFileInfo>();
+        mCheckFileInfo->setFileInfo("/esp/early-services/locationservice/update/gps_update.json");
+        mCheckFileInfo->start();
+        mCheckFileInfo->registerChangedFileInfo(std::bind(&VariantInfoService::onChangedFileInfo,
+                                                                this, std::placeholders::_1));

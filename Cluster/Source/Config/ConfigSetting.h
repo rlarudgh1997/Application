@@ -47,6 +47,7 @@ private:
     void threadFunc();
 
 signals:
+    void signalConfigReset(const bool& resetAll);
     void signalConfigChanged(const int& type, const QVariant& value);
 
 private:

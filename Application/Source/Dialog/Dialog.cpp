@@ -1,7 +1,7 @@
 #include "Dialog.h"
 #include "ui_Dialog.h"
 
-Dialog::Dialog(const QRect& rect, QWidget *parent) : QDialog(parent), mGui(new Ui::Dialog) {
+Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new Ui::Dialog) {
     this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
     this->setModal(true);
 
@@ -61,15 +61,10 @@ void Dialog::drawDialog(const int& dialogType, const QString& title) {
 
 QList<QPair<QFrame*, QRadioButton*>> Dialog::isRadioWidget() const {
     QList<QPair<QFrame*, QRadioButton*>> widgetList = {
-        {mGui->FrameList1, mGui->AppModeRadioButton1},
-        {mGui->FrameList2, mGui->AppModeRadioButton2},
-        {mGui->FrameList3, mGui->AppModeRadioButton3},
-        {mGui->FrameList4, mGui->AppModeRadioButton4},
-        {mGui->FrameList5, mGui->AppModeRadioButton5},
-        {mGui->FrameList6, mGui->AppModeRadioButton6},
-        {mGui->FrameList7, mGui->AppModeRadioButton7},
-        {mGui->FrameList8, mGui->AppModeRadioButton8}
-    };
+        {mGui->FrameList1, mGui->AppModeRadioButton1}, {mGui->FrameList2, mGui->AppModeRadioButton2},
+        {mGui->FrameList3, mGui->AppModeRadioButton3}, {mGui->FrameList4, mGui->AppModeRadioButton4},
+        {mGui->FrameList5, mGui->AppModeRadioButton5}, {mGui->FrameList6, mGui->AppModeRadioButton6},
+        {mGui->FrameList7, mGui->AppModeRadioButton7}, {mGui->FrameList8, mGui->AppModeRadioButton8}};
     return widgetList;
 }
 

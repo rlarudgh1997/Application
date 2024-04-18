@@ -8,6 +8,9 @@
 #include "CommonPopup.h"
 
 #include <QFileSystemWatcher>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
 
@@ -48,12 +51,23 @@ void ControlMenu::initCommonData(const int& currentMode, const int& displayType)
 }
 
 void ControlMenu::initNormalData() {
-    resetControl(false);
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QStringList vehicleTypeList = QStringList();
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV).toStringList();
+    } else {
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toStringList();
+    }
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, vehicleTypeList);
 
+#if defined(USE_DEFAULT_VSM_PATH)
     QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-
-    updateAllModuleList(QString());
+#else
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, sfcModelPath);
+#endif
+    updateAllModuleList(QString(".hpp"));  // yml, hpp 파일이 있으면 모듈로 인식
 
 #if defined(USE_TEST_RESULT_TEMP)
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
@@ -65,16 +79,24 @@ void ControlMenu::initControlData() {
 }
 
 void ControlMenu::resetControl(const bool& reset) {
-    Q_UNUSED(reset)
+    if (reset) {
+        initNormalData();
+        initControlData();
+    }
 }
 
 void ControlMenu::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerMenu::signalHandlerEvent, this, &ControlMenu::slotHandlerEvent, Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlMenu::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
-                &ControlMenu::slotEventInfoChanged, Qt::UniqueConnection);
+        connect(isHandler(), &AbstractHandler::signalHandlerEvent,
+                [=](const int& type, const QVariant& value) { slotHandlerEvent(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
+                [=](const int& type, const QVariant& value) { slotConfigChanged(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigReset,
+                [=](const bool& resetAll) { resetControl(resetAll); });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
+                    slotEventInfoChanged(displayType, eventType, eventValue);
+                });
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
@@ -139,15 +161,69 @@ void ControlMenu::updateSelectAppMode() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(appMode), true);
 }
 
+QStringList ControlMenu::isModuleListFromJson() {
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
+    QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
+
+    // Json Parsing
+    QJsonParseError error;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &error);
+    if (error.error != QJsonParseError::NoError) {
+        qDebug() << "Fail to json parsing error :" << error.errorString();
+        return QStringList();
+    }
+    if (jsonDoc.isObject() == false) {
+        qDebug() << "Fail to json format invalid";
+        return QStringList();
+    }
+
+    // Read : Json Data
+    QStringList moduleList = QStringList();
+    QJsonObject jsonObj = jsonDoc.object();
+    if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {   // Read : SFCConfiguration
+        QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
+        // if (sfcConfig.contains("Version") && sfcConfig["Version"].isString()) {    // Read : Version
+        //     QString version = sfcConfig["Version"].toString();
+        // }
+        // if (sfcConfig.contains("Description") && sfcConfig["Description"].isString()) {   // Read : Description
+        //     QString description = sfcConfig["Description"].toString();
+        // }
+        if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {    // Read : SFCs
+            for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
+                if (module.isString()) {
+                    // qDebug() << "\t Module Json :" << module.toString();
+                    moduleList.append(module.toString());
+                }
+            }
+        }
+    }
+    if (appModeCV) {
+        QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
+        for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+            moduleList.append(commonModule);
+            // qDebug() << "\t Module  Dir :" << commonModule;
+        }
+    }
+    qDebug() << "Moudle Json File :" << jsonFile;
+
+    moduleList.sort();
+    moduleList.removeDuplicates();
+    return moduleList;
+}
+
 void ControlMenu::updateAllModuleList(const QString& filter) {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
-    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    QStringList findPath = QStringList();
+#if defined(USE_DEFAULT_MODULE_INFO_FILE)
     QStringList sfcModules = QStringList();
-
+    QStringList findPath = QStringList();
+#if defined(USE_DEFAULT_VSM_PATH)
+    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
     if (appModePV) {
-        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleSfcSpecTypePV);
+        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV);
         path.replace("/model/SFC/CV", "/model/SFC");
         for (const auto& spec : sfcSpecList.toStringList()) {
             findPath.append(QString("%1/%2").arg(path).arg(spec));
@@ -155,24 +231,35 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
     } else {
         findPath.append(path);
     }
+#else
+    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    if (appModePV) {
+        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV);
+        path.append("/model/SFC");
+        for (const auto& spec : sfcSpecList.toStringList()) {
+            findPath.append(QString("%1/%2").arg(path).arg(spec));
+        }
+    } else {
+        path.append("/model/SFC/CV");
+        findPath.append(path);
+    }
+#endif
 
     // Find SFC Path List
     for (const auto& sfcPath : findPath) {
         QDir directory(sfcPath);
         QStringList sfcDirectory = directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-        qDebug() << "Path :" << sfcPath;
-
+        // qDebug() << "Path :" << sfcPath << ", Filter :" << filter;
         for (const auto& sfc : sfcDirectory) {
             if (filter.size() == 0) {
-                qDebug() << "\t Module :" << sfc;
+                // qDebug() << "\t Module :" << sfc;
                 sfcModules.append(sfc);
                 continue;
             }
             QDir subDirectory(QString("%1/%2").arg(sfcPath).arg(sfc));
             for (const auto& file : subDirectory.entryList(QDir::Files)) {
                 if (file.contains(filter)) {
-                    qDebug() << "\t Module[" << filter << "] :" << sfc << file;
+                    // qDebug() << "\t Module[" << filter << "] :" << sfc << file;
                     sfcModules.append(sfc);
                     break;
                 }
@@ -185,15 +272,19 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
         path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
         if (appModePV) {
             path.append("/PV");
+        } else {
+            path.append("/CV");
         }
         sfcModules = ivis::common::FileInfo::readFile(QString("%1/DefaultModule.info").arg(path));
     }
+#else
+    QStringList sfcModules = isModuleListFromJson();
+#endif
 
-    qDebug() << appMode << ". SFC Module :" << sfcModules.size() << path << filter;
+    qDebug() << ((appModePV) ? ("[PV]") : ("[CV]")) << "SFC Module :" << sfcModules.size() << ", Filter :" << filter;
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, sfcModules);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(sfcModules));
 }
-
 
 void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList& selectModule) {
     QString filter = QString();
@@ -445,7 +536,7 @@ void ControlMenu::startProcess(const QString& command, const QString& arg, const
 
     mProcess =
         QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
-    mProcess.data()->setCommandInfo(command, QString(" >> %1").arg(arg));
+    mProcess.data()->setCommandInfo(command, QString(" > %1").arg(arg));
     mProcess.data()->start();
     connect(
         mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramInfo, [=](const bool& start, const bool& result) {
@@ -477,20 +568,23 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QString subPath = QString();
     QString currentPWD = ivis::common::APP_PWD();
     QStringList checkBinary = QStringList();
+    QStringList moduleList = QStringList();
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QString pvCvName = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("PV") : ("CV");
 
     if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
         cmd = (infoList.size() == 1) ? (infoList.at(0).toString()) : (QString());
 
         if (cmd.contains("gen_tc.sh")) {
-            subPath = QString("/../../../tc_generator");
+            subPath = QString("tc_generator");
         } else if (cmd.contains("run_tc.sh")) {
-            subPath = QString("/../../../validator");
+            subPath = QString("validator");
         } else if (cmd.contains("gen_tcreport.sh")) {
             fileName = QString("TCReport.info");
-            subPath = QString("/../../../validator");
+            subPath = QString("validator");
         } else if (cmd.contains("gen_gcov_report.sh")) {
             fileName = QString("GCOVReport.info");
-            subPath = QString("/../../../validator");
+            subPath = QString("validator");
         } else {
             qDebug() << "Input text does not contain script commands :" << cmd;
             QVariant popupData = QVariant();
@@ -508,12 +602,12 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         }
 
         fileName = QString((runType == ivis::common::RunTypeEnum::RunTypeTCReport) ? ("TCReport.info") : ("GCOVReport.info"));
-        subPath = QString("/../../../validator");
-        // ./gen_tcreport.sh -c CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
-        // ./gen_gcov_report.sh -c CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
-        cmd = QString("./%1.sh -c CV")
-                  .arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ? (QString("gen_gcov_report"))
-                                                                                 : (QString("gen_tcreport")));
+        subPath = QString("validator");
+        // ./gen_tcreport.sh -c pV, CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
+        // ./gen_gcov_report.sh -c PV, CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
+        cmd = QString("./%1.sh -c %2")
+                      .arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ? ("gen_gcov_report") : ("gen_tcreport"))
+                      .arg(pvCvName);
         if (state) {
             QString option1 = (options.at(0).toBool()) ? (" -s S") : ("");
             QString option2 = (options.at(1).toBool()) ? (" -o C") : ("");
@@ -532,14 +626,19 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             return false;
         }
 
-        QString moduleList = QString();
         totalCount = infoList[0].toList().size();
         if (totalCount == 0) {
             qDebug() << "Fail to select module list : 0";
             return false;
         }
-        for (const auto& module : infoList[0].toList()) {
-            moduleList.append(QString("%1%2").arg((moduleList.size() == 0) ? ("") : (" ")).arg(module.toString()));
+
+        QString moduleInfo = QString();
+        moduleList = infoList[0].toStringList();
+        for (const auto& module : moduleList) {
+            if (moduleInfo.size() > 0) {
+                moduleInfo.append(" ");
+            }
+            moduleInfo.append(module);
         }
 
         QString checkList = QString();
@@ -549,16 +648,27 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
 
         if (runType == ivis::common::RunTypeEnum::RunTypeGenTC) {
             QString negative = (state) ? (QString(" -o Negative")) : (QString());
-            cmd = QString("./gen_tc.sh -c CV -m \"%1\"%2").arg(moduleList).arg(negative);
-            subPath = QString("/../../../tc_generator");
+            cmd = QString("./gen_tc.sh -c %1 -m \"%2\"%3").arg(pvCvName).arg(moduleInfo).arg(negative);
+            subPath = QString("tc_generator");
         } else if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
             QString altonPath = (state) ? (QString("/usr/local/bin/altonservice"))
                                         : (QString("%1%2").arg(currentPWD).arg("/../Alton/altonservice"));
             QString docker = (state) ? (QString("-d ")) : (QString());
             QString ptList = (checkList.size() == 0) ? (QString()) : (QString(" %1").arg(checkList));
-            cmd = QString("./run_tc.sh -b %1 -c CV %2-g -m \"%3\"%4").arg(altonPath).arg(docker).arg(moduleList).arg(ptList);
-            subPath = QString("/../../../validator");
+            cmd = QString("./run_tc.sh -b %1 -c %2 %3-g -m \"%4\"%5")
+                           .arg(altonPath).arg(pvCvName).arg(docker).arg(moduleInfo).arg(ptList);
+            subPath = QString("validator");
             int ptCount = infoList[1].toList().size();
+            if (ptCount == 0) {
+                QVariantList vehicleTypeList = QVariantList();
+                if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+                    vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV).toList();
+                } else {
+                    vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toList();
+                }
+                ptCount = vehicleTypeList.size();
+            }
+
             totalCount = totalCount * ((ptCount == 0) ? (3) : (ptCount));  // No Select PT -> All(EV, FCEV, ICV) = 3
 
             checkBinary.append(altonPath);
@@ -569,13 +679,19 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         }
     }
 
+#if defined(USE_DEFAULT_VSM_PATH)
     QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    QString defaultRunPath = QString("%1%2").arg(currentPath).arg(subPath);
+    QString defaultRunPath = QString("%1/../../../%2").arg(currentPath).arg(subPath);
+#else
+    QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QString defaultRunPath = QString("%1/../%2").arg(currentPath).arg(subPath);
+#endif
+
     QVariant popupData = QVariant();
     if (QDir::setCurrent(defaultRunPath) == false) {
+        qDebug() << "Fail to change folder :" << defaultRunPath;
         ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_BINARY_NOT_EXISTS_TIP}));
-        qDebug() << "Fail to change folder :" << defaultRunPath;
         return false;
     }
 
@@ -682,6 +798,10 @@ void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
             break;
         }
+        case ConfigInfo::ConfigTypeSfcModelPath: {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, value);
+            break;
+        }
         default: {
             break;
         }
@@ -760,13 +880,17 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath:
         case ivis::common::EventTypeEnum::EventTypeSettingDevPath:
         case ivis::common::EventTypeEnum::EventTypeSettingNodePath:
         case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {
-            QString text = STRING_DEFAULT_PATH;
-            int configType = ConfigInfo::ConfigTypeDefaultPath;
+            QString text = STRING_MODEL_PATH;
+            int configType = ConfigInfo::ConfigTypeSfcModelPath;
 
-            if (type == ivis::common::EventTypeEnum::EventTypeSettingNodePath) {
+            if (type == ivis::common::EventTypeEnum::EventTypeSettingDevPath) {
+                text = STRING_DEFAULT_PATH;
+                configType = ConfigInfo::ConfigTypeDefaultPath;
+            } else if (type == ivis::common::EventTypeEnum::EventTypeSettingNodePath) {
                 text = STRING_NODE_PATH;
                 configType = ConfigInfo::ConfigTypeNodeAddressPath;
             } else if (type == ivis::common::EventTypeEnum::EventTypeSettingVsmPath) {
@@ -781,6 +905,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
                                                QVariantList({text, path})) == ivis::common::PopupButton::OK) {
                 ConfigSetting::instance().data()->writeConfig(configType, popupData);
+                // qDebug() << "SFC Model Path :" << ConfigSetting::instance().data()->readConfig(configType);
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeInitModule);
             }
             break;
@@ -790,9 +915,13 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectAppMode: {
+            int appModePrevious = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
             int appMode = value.toInt();
-            qDebug() << "EventTypeSelectAppMode :" << appMode;
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAppMode, appMode);
+            if (appModePrevious != appMode) {
+                qDebug() << "EventTypeSelectAppMode :" << appMode;
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAppMode, appMode);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeInit, true);
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenTC:

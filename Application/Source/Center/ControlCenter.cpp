@@ -42,8 +42,6 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 }
 
 void ControlCenter::initNormalData() {
-    resetControl(false);
-
     updateAllModuleList();
 }
 
@@ -51,16 +49,24 @@ void ControlCenter::initControlData() {
 }
 
 void ControlCenter::resetControl(const bool& reset) {
-    Q_UNUSED(reset)
+    if (reset) {
+        initNormalData();
+        initControlData();
+    }
 }
 
 void ControlCenter::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerCenter::signalHandlerEvent, this, &ControlCenter::slotHandlerEvent, Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlCenter::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
-                &ControlCenter::slotEventInfoChanged, Qt::UniqueConnection);
+        connect(isHandler(), &AbstractHandler::signalHandlerEvent,
+                [=](const int& type, const QVariant& value) { slotHandlerEvent(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
+                [=](const int& type, const QVariant& value) { slotConfigChanged(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigReset,
+                [=](const bool& resetAll) { resetControl(resetAll); });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
+                    slotEventInfoChanged(displayType, eventType, eventValue);
+                });
 #if defined(USE_RESIZE_SIGNAL)
         connect(ControlManager::instance().data(), &ControlManager::signalScreenSizeChanged, [=](const QSize& screenSize) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
@@ -149,12 +155,12 @@ void ControlCenter::updateAllModuleList() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(allModule));
 }
 
-bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile) {
+bool ControlCenter::checkNodeAddress(const QString& vsmPath, const QVariantList& vsmFile) {
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
     bool fileNotFound = (vsmFile.size() == 0);
 
     for (const auto& file : vsmFile) {
-        QFile filePath = QString("%1/%2").arg(vsmPath.toString()).arg(file.toString());
+        QFile filePath = QString("%1/%2").arg(vsmPath).arg(file.toString());
         if (filePath.exists() == false) {
             fileNotFound = true;
             break;
@@ -175,15 +181,37 @@ bool ControlCenter::checkNodeAddress(const QVariant& vsmPath, const QVariantList
     return fileNotFound;
 }
 
-QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVariantList& vsmFile) {
+int ControlCenter::isVehicleType(const QString& file) {
+    QList<QPair<int, QString>> vehicleInfo = {
+        {ivis::common::VehicleTypeEnum::VehicleTypeICV, QString("_ICV.")},
+        {ivis::common::VehicleTypeEnum::VehicleTypeEV, QString("_EV.")},
+        {ivis::common::VehicleTypeEnum::VehicleTypeFCEV, QString("_FCEV.")},
+        {ivis::common::VehicleTypeEnum::VehicleTypePHEV, QString("_PHEV.")},
+        {ivis::common::VehicleTypeEnum::VehicleTypeHEV, QString("_HEV.")},
+    };
+    int vehicleType = ivis::common::VehicleTypeEnum::VehicleTypeInvalid;
+    for (const auto& info : vehicleInfo) {
+        if (file.contains(info.second)) {
+            vehicleType = info.first;
+            break;
+        }
+    }
+    if (vehicleType == ivis::common::VehicleTypeEnum::VehicleTypeInvalid) {
+        qDebug() << "Fail to vehicle type : invalid";
+    }
+    return vehicleType;
+}
+
+QStringList ControlCenter::isNodeAddressAll(const QString& vsmPath, const QVariantList& vsmFile) {
     QStringList vsmList = QStringList();
     QMap<int, QStringList> vsmInfo = QMap<int, QStringList>();
 
+    int vehicleType = ivis::common::VehicleTypeEnum::VehicleTypeInvalid;
     for (const auto& file : vsmFile) {
-        QStringList readData = ivis::common::FileInfo::readFile(vsmPath.toString() + "/" + file.toString());
+        QStringList readData = ivis::common::FileInfo::readFile(vsmPath + "/" + file.toString());
         QStringList list = QStringList();
         for (QString lineStr : readData) {
-            if ((lineStr.split(".").size() == 2) && (lineStr.contains("-")) && (lineStr.contains(":"))) {
+            if ((lineStr.split(".").size() == 2) && (lineStr.trimmed().startsWith("-")) && (lineStr.trimmed().endsWith(":"))) {
                 lineStr.remove(" ");
                 lineStr.remove("-");
                 lineStr.remove(":");
@@ -191,7 +219,10 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
                 vsmList.append(lineStr);
             }
         }
-        vsmInfo[vsmInfo.size()].append(list);
+        vehicleType = isVehicleType(file.toString());
+        if (vehicleType != ivis::common::VehicleTypeEnum::VehicleTypeInvalid) {
+            vsmInfo[vehicleType].append(list);
+        }
     }
 
     for (int index = 0; index < vsmList.size(); index++) {
@@ -203,18 +234,27 @@ QStringList ControlCenter::isNodeAddressAll(const QVariant& vsmPath, const QVari
                     vehicleType.append(", ");
                 }
 
-                if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeEV)) {
+                if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeICV)) {
+                    vehicleType.append("ICV");
+                } else if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeEV)) {
                     vehicleType.append("EV");
                 } else if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeFCEV)) {
                     vehicleType.append("FCEV");
+                } else if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypePHEV)) {
+                    vehicleType.append("PHEV");
+                } else if (listIndex == static_cast<int>(ivis::common::VehicleTypeEnum::VehicleTypeHEV)) {
+                    vehicleType.append("HEV");
                 } else {
-                    vehicleType.append("ICV");
+                    vehicleType.append("");
+                    qDebug() << "Fail to append vehicle type : null";
                 }
             }
         }
         vsmList[index] = QString("%1\t%2").arg(vsmSignal).arg(vehicleType);
     }
+
     vsmList.sort();  // qSort(vsmList);
+    vsmList.removeDuplicates();
 
     return vsmList;
 }
@@ -223,7 +263,7 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
     QStringList vsmMatchingList = vsmList;
     QVariantList selectModule = (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toList());
 
-    // qDebug() << "MatchingModule Count :" << vsmList.size() << selectModule.size();
+    qDebug() << "MatchingModule Count :" << vsmList.size() << selectModule.size();
     if (selectModule.size() > 0) {
         QStringList vsmTemp = QStringList();
         for (const auto& moudleName : selectModule) {
@@ -240,34 +280,35 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 }
 
 void ControlCenter::updateNodeAddress(const bool& check) {
-    QVariant vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath);
+#if defined(USE_DEFAULT_VSM_PATH)
+    QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath).toString();
+#else
+    QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    vsmPath.append("/VSM");
+#endif
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    QVariantList vsmFile = QVariantList();
-    QStringList vsmSpecList = QStringList();
+    QString vsmBase = QString();
     QStringList vehicleTypeList = QStringList();
+    QStringList vsmSpecList = QStringList();
+
     if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-        vsmSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleVsmSpecTypePV).toStringList();
-        vehicleTypeList = QStringList({"ICV", "EV", "FCEV", "PHEV", "HEV"});
-        QString vsmBase = "CLU_VSM_%1.Vehicle.%2.vsm";    // CLU_VSM_EV.Vehicle.AD.vsm
-        vsmFile.append();
+        vsmBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBasePV).toString();
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV).toStringList();
+        vsmSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmSpecTypePV).toStringList();
     } else {
-        vsmSpecList = QStringList({"CV"});
-        vehicleTypeList = QStringList({"ICV", "EV", "FCEV"});
-
-
-
-        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressEV));
-        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressFCEV));
-        vsmFile.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmNodeAddressICV));
-        // ConfigTypeVsmFileNameBase=CLU_VSM_CV_%1.Vehicle.%2.vsm
-        // ConfigTypeVsmNodeAddressEV=CLU_VSM_CV_EV.Vehicle.CV.vsm
-        // ConfigTypeVsmNodeAddressFCEV=CLU_VSM_CV_FCEV.Vehicle.CV.vsm
-        // ConfigTypeVsmNodeAddressICV=CLU_VSM_CV_ICV.Vehicle.CV.vsm
+        vsmBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toStringList();
+        vsmSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmSpecTypeCV).toStringList();
     }
 
-
-    // CLU_VSM_CV_EV.Vehicle.CV.vsm
-    // CLU_VSM_EV.Vehicle.AD.vsm
+    QVariantList vsmFile = QVariantList();
+    for (const auto& vehicle : vehicleTypeList) {
+        for (const auto& spec : vsmSpecList) {
+            QString fileName = QString(vsmBase).arg(vehicle).arg(spec);
+            vsmFile.append(fileName);
+            // qDebug() << "VSM File :" << fileName;
+        }
+    }
 
     if ((check) && (checkNodeAddress(vsmPath, vsmFile))) {
         qDebug() << "Fail to vsm file not found :" << vsmPath;
@@ -310,7 +351,8 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 
     switch (viewType) {
         case ivis::common::ViewTypeEnum::ViewTypeConfig: {
-            if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeDefaultPath)) {
+            if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeDefaultPath) ||
+                (type == ConfigInfo::ConfigTypeSfcModelPath)) {
                 updateConfigInfo();
             }
             break;

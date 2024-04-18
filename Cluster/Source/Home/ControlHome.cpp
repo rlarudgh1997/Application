@@ -43,7 +43,6 @@ void ControlHome::initCommonData(const int& currentMode, const int& displayType)
 }
 
 void ControlHome::initNormalData() {
-    resetControl(false);
     updateDataHandler(ivis::common::PropertyEnum::HomeType, ivis::common::HandlerHomeEnum::HomeType::Main);
 }
 
@@ -51,18 +50,28 @@ void ControlHome::initControlData() {
 }
 
 void ControlHome::resetControl(const bool& reset) {
-    Q_UNUSED(reset)
+    if (reset) {
+        initNormalData();
+        initControlData();
+    }
 }
 
 void ControlHome::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerHome::signalHandlerEvent, this, &ControlHome::slotHandlerEvent, Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlHome::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
-                &ControlHome::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceDataChanged, this, &ControlHome::slotServiceDataChanged,
-                Qt::UniqueConnection);
+        connect(isHandler(), &AbstractHandler::signalHandlerEvent,
+                [=](const int& type, const QVariant& value) { slotHandlerEvent(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
+                [=](const int& type, const QVariant& value) { slotConfigChanged(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigReset,
+                [=](const bool& resetAll) { resetControl(resetAll); });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
+                    slotEventInfoChanged(displayType, eventType, eventValue);
+                });
+        connect(Service::instance().data(), &Service::signalServiceDataChanged,
+                [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
+                    slotServiceDataChanged(dataType, signalType, signalValue);
+                });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());

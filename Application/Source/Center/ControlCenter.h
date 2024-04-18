@@ -18,8 +18,9 @@ private:
     void updateConfigInfo();
     void updateTestReport();
     void updateAllModuleList();
-    bool checkNodeAddress(const QVariant& vsmPath, const QVariantList& vsmFile);
-    QStringList isNodeAddressAll(const QVariant& vsmPath, const QVariantList& vsmFile);
+    bool checkNodeAddress(const QString& vsmPath, const QVariantList& vsmFile);
+    int isVehicleType(const QString& file);
+    QStringList isNodeAddressAll(const QString& vsmPath, const QVariantList& vsmFile);
     QStringList isNodeAddressMatchingModule(const QStringList& vsmList);
     void updateNodeAddress(const bool& check);
     void updateSelectModueList(const bool& show);

@@ -6,7 +6,6 @@
 #include "ConfigSetting.h"
 #include "Service.h"
 
-
 #include "LogWatcher.h"
 
 #include <QDebug>
@@ -24,10 +23,9 @@ const QString KEYWORD_PERIOD_GROUP = QString("        [Group]");
 const QString KEYWORD_LISTEN = QString("[Listen]");
 const QString POWERTRAIN_LIST = QString("ICV, EV, FCEV, HEV, PHEV");
 const QString LOG_FILE_KEYWORD_01 = QString("D/SimulatorSourcer(Dummy): ");
-const QString LOG_FILE_KEYWORD_02 = QString("[After Signal Inject]");   // [After entering the step value, display information.]
+const QString LOG_FILE_KEYWORD_02 = QString("[After Signal Inject]");  // [After entering the step value, display information.]
 const QString LOG_FILE_KEYWORD_03 = QString("Signal Received --------------- ");
 const QString LOG_FILE_KEYWORD_04 = QString("  Received : ");
-
 
 SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWindow), mTimerTouch(new QTimer) {
     mGui->setupUi(this);
@@ -49,7 +47,6 @@ SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWin
 SubWindow::~SubWindow() {
     delete mGui;
 }
-
 
 void SubWindow::init() {
 #if defined(__SUB_WINDOW_ONLY__)
@@ -119,9 +116,7 @@ void SubWindow::controlConnect(const bool& state) {
         mGui->detailSave->setVisible(false);
         updateDetailDataInfo(getSelectFile());
     });
-    connect(mGui->detailBack, &QPushButton::clicked, [=]() {
-        controlScript(StartScriptTypeMenuStop, QString());
-    });
+    connect(mGui->detailBack, &QPushButton::clicked, [=]() { controlScript(StartScriptTypeMenuStop, QString()); });
     connect(mGui->detailStart, &QPushButton::clicked, [=]() {
         QString selectFile = (mGui->fileList) ? (mGui->fileList->currentItem()->text()) : (QString());
         int scriptStart = getScriptStart();
@@ -182,9 +177,7 @@ void SubWindow::controlConnect(const bool& state) {
             controlScript(StartScriptTypeMenuStart, mGui->fileList->currentItem()->text());
         }
     });
-    connect(mGui->actionStop, &QAction::triggered, [=]() {
-        controlScript(StartScriptTypeMenuStop, QString());
-    });
+    connect(mGui->actionStop, &QAction::triggered, [=]() { controlScript(StartScriptTypeMenuStop, QString()); });
 
     connect(mGui->actionAbout, &QAction::triggered, [=]() {
         QVariant popupData = QVariant();
@@ -900,7 +893,7 @@ void SubWindow::startProcess(const QString& command, const QString& log) {
 
     if (mProcess == nullptr) {
         mProcess = QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false),
-            &QObject::deleteLater);
+                                                                     &QObject::deleteLater);
     }
     mProcess.data()->setCommandInfo(command, log);
     mProcess.data()->start();

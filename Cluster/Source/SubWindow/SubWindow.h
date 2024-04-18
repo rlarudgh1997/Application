@@ -149,7 +149,7 @@ private:
 #if defined(USE_FILE_WATCHER_QT)
     QSharedPointer<ivis::common::FileSystemWatcherThread> mFileWatcher = nullptr;
     QMap<int, QSharedPointer<ivis::common::FileSystemWatcherThread>> mLogFileWatcher =
-                                                    QMap<int, QSharedPointer<ivis::common::FileSystemWatcherThread>>();
+        QMap<int, QSharedPointer<ivis::common::FileSystemWatcherThread>>();
 #else
     QSharedPointer<LogWatcher> mFileWatcher = nullptr;
 #endif

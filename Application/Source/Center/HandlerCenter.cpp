@@ -42,11 +42,11 @@ void HandlerCenter::initPropertyInfo() {
 void HandlerCenter::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
-#if 1
-        connect(this, &HandlerCenter::signalPropertyChanged, GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
+#if defined(USE_SIGNAL_SLOT)
+        connect(this, &AbstractHandler::signalPropertyChanged, GuiCenter::instance().data(), &GuiCenter::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerCenter::signalPropertyChanged,
+        connect(this, &AbstractHandler::signalPropertyChanged,
                 [=](const int& type, const QVariant& value) { GuiCenter::instance().data()->slotPropertyChanged(type, value); });
 #endif
 #endif

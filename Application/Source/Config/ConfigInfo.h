@@ -21,6 +21,7 @@ public:
         // General
         ConfigTypeScreenInfo,
         ConfigTypeAppMode,
+        ConfigTypeSfcModelPath,
         ConfigTypeDefaultPath,
         ConfigTypeNodeAddressPath,
         ConfigTypeVsmPath,
@@ -35,14 +36,16 @@ public:
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
-        ConfigTypeVsmNodeAddressEV,
-        ConfigTypeVsmNodeAddressFCEV,
-        ConfigTypeVsmNodeAddressICV,
-        ConfigTypeVsmFileNameBase,
 
-        // ETC
-        ConfigTypeVehicleSfcSpecTypePV,
-        ConfigTypeVehicleVsmSpecTypePV,
+        // Vehicle
+        ConfigTypeVsmFileNameBaseCV,
+        ConfigTypeVehicleTypeCV,
+        ConfigTypeSfcSpecTypeCV,
+        ConfigTypeVsmSpecTypeCV,
+        ConfigTypeVsmFileNameBasePV,
+        ConfigTypeVehicleTypePV,
+        ConfigTypeSfcSpecTypePV,
+        ConfigTypeVsmSpecTypePV,
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -93,6 +96,8 @@ private:
         mConfigInfoData[ConfigTypeScreenInfo] = QPair<QString, QVariant>(
             "ConfigTypeScreenInfo", QVariant(QRect(SCREEN_POSITION_X, SCREEN_POSITION_Y, SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT)));
         mConfigInfoData[ConfigTypeAppMode] = QPair<QString, QVariant>("ConfigTypeAppMode", QVariant(0));
+        mConfigInfoData[ConfigTypeSfcModelPath] = QPair<QString, QVariant>(
+            "ConfigTypeSfcModelPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model")));
         mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>(
             "ConfigTypeDefaultPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model/SFC/CV")));
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>(
@@ -119,20 +124,23 @@ private:
             QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("ExcelMergeText"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] =
             QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd", QVariant("ExcelMergeTextEnd"));
-        mConfigInfoData[ConfigTypeVsmNodeAddressEV] =
-            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressEV", QVariant("CLU_VSM_CV_EV.Vehicle.CV.vsm"));
-        mConfigInfoData[ConfigTypeVsmNodeAddressFCEV] =
-            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressFCEV", QVariant("CLU_VSM_CV_FCEV.Vehicle.CV.vsm"));
-        mConfigInfoData[ConfigTypeVsmNodeAddressICV] =
-            QPair<QString, QVariant>("ConfigTypeVsmNodeAddressICV", QVariant("CLU_VSM_CV_ICV.Vehicle.CV.vsm"));
-        mConfigInfoData[ConfigTypeVsmFileNameBase] =
-            QPair<QString, QVariant>("ConfigTypeVsmFileNameBase", QVariant("CLU_VSM_CV_%1.Vehicle.%2.vsm"));
 
-        // ETC
-        mConfigInfoData[ConfigTypeVehicleSfcSpecTypePV] = QPair<QString, QVariant>(
-            "ConfigTypeVehicleSfcSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC"})));
-        mConfigInfoData[ConfigTypeVehicleVsmSpecTypePV] = QPair<QString, QVariant>(
-            "ConfigTypeVehicleVsmSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "CS"})));
+        // Vehicle
+        mConfigInfoData[ConfigTypeVsmFileNameBaseCV] =
+            QPair<QString, QVariant>("ConfigTypeVsmFileNameBaseCV", QVariant("CLU_VSM_CV_%1.Vehicle.%2.vsm"));
+        mConfigInfoData[ConfigTypeVehicleTypeCV] =
+            QPair<QString, QVariant>("ConfigTypeVehicleTypeCV", QVariant(QVariantList({"ICV", "EV", "FCEV"})));
+        mConfigInfoData[ConfigTypeSfcSpecTypeCV] =
+            QPair<QString, QVariant>("ConfigTypeSfcSpecTypeCV", QVariant(QVariantList({"AV", "CD", "CV", "EC", "PT"})));
+        mConfigInfoData[ConfigTypeVsmSpecTypeCV] = QPair<QString, QVariant>("ConfigTypeVsmSpecTypeCV", QVariant("CV"));
+        mConfigInfoData[ConfigTypeVsmFileNameBasePV] =
+            QPair<QString, QVariant>("ConfigTypeVsmFileNameBasePV", QVariant("CLU_VSM_%1.Vehicle.%2.vsm"));
+        mConfigInfoData[ConfigTypeVehicleTypePV] =
+            QPair<QString, QVariant>("ConfigTypeVehicleTypePV", QVariant(QVariantList({"ICV", "EV", "FCEV", "PHEV", "HEV"})));
+        mConfigInfoData[ConfigTypeSfcSpecTypePV] = QPair<QString, QVariant>(
+            "ConfigTypeSfcSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC"})));
+        mConfigInfoData[ConfigTypeVsmSpecTypePV] = QPair<QString, QVariant>(
+            "ConfigTypeVsmSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "CS"})));
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.

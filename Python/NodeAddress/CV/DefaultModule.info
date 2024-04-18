@@ -4,7 +4,7 @@ ADAS_Driving_CV
 ADAS_PARKING_CV
 AFS
 Air_Bag_CV
-ASR
+AMS
 Auto_Grease
 AVH
 BCM_Warning_CV
@@ -13,6 +13,7 @@ Brake_Air
 Brake_System_Malfunction
 Cab_Tilting
 CNG_Fuel_System_CV
+comSFCTC
 Cooling_System
 CruiseControl_CV
 Curb_Mode
@@ -46,6 +47,7 @@ FCEV_Warning_CV
 GFD_Warning
 Glow_CV
 High_Voltage_Battery_Charge
+Illumination_CV
 Input_Output_Processing_CV
 Inter_Diff_Lock
 Intro_Outro_CV
@@ -56,13 +58,17 @@ Lamp_Fail_Warning_CV
 Lamp_Indicator_CV
 Luggage_Door
 LWS
+Memory_CV
+Memory_IGN_CV
 MIL_OBD_Lamp
 Over_Speed_Warning_CV
+Param_CV
 Parking_Brake_CV
 PDC
 Regenerative_Braking_System
 Retarder
 Screen_Control_Logic_CV
+Set_Speed
 Settings_CV
 Sliding_Ramp
 SOC_Gauge_CV
@@ -78,7 +84,7 @@ Trip_Info_CV
 Urea_System
 VCU
 VDC
-Working_Lamp
+WIPER_LIGHT_Status
 WPC_CV
 xEV_Battery_Warning
 xEV_Motor

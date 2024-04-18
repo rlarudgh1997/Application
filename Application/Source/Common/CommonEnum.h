@@ -79,6 +79,7 @@ public:
         PropertyTypeViewType,
         PropertyTypeConfigInfo,
         PropertyTypeVehicleType,
+        PropertyTypeDefaultFilePath,
         PropertyTypeNodeAddressAll,
         PropertyTypeNodeAddressSFC,
         PropertyTypeNodeAddressVSM,
@@ -90,9 +91,11 @@ public:
         PropertyTypeAllModuleList,
         PropertyTypeInputDataVisible,
         PropertyTypeInputDataValuEnum,
+        PropertyTypeInputDataMatchingTableICV,
         PropertyTypeInputDataMatchingTableEV,
         PropertyTypeInputDataMatchingTableFCEV,
-        PropertyTypeInputDataMatchingTableICV,
+        PropertyTypeInputDataMatchingTablePHEV,
+        PropertyTypeInputDataMatchingTableHEV,
         PropertyTypeInputDataMatchingTableSystem,
         PropertyTypeUpdateSelectModule,
         PropertyTypeEnterScriptText,
@@ -102,6 +105,7 @@ public:
         PropertyTypeTestReportResultInfo,
         PropertyTypeTestReportCoverageInfo,
         PropertyTypeTestReportType,
+        PropertyTypeSfcModelPath,
         PropertyTypeDefaultPath,
         PropertyTypeSignalListToMicom,
         PropertyTypeExcelSheetName,
@@ -188,7 +192,8 @@ public:
         EventTypeReportResult = 1300,
         EventTypeReportCoverage,
 
-        EventTypeSettingDevPath = 1400,
+        EventTypeSettingSfcModelPath = 1400,
+        EventTypeSettingDevPath,
         EventTypeSettingNodePath,
         EventTypeSettingVsmPath,
         EventTypeSettingAppMode,
@@ -342,9 +347,12 @@ public:
 class VehicleTypeEnum {
 public:
     enum VehicleType {
-        VehicleTypeEV = 0,
-        VehicleTypeFCEV,
+        VehicleTypeInvalid = 0,
         VehicleTypeICV,
+        VehicleTypeEV,
+        VehicleTypeFCEV,
+        VehicleTypePHEV,
+        VehicleTypeHEV,
     };
 };
 
@@ -352,9 +360,11 @@ class InputDataTypeEnum {
 public:
     enum InputDataType {
         InputDataTypeValueEnum = 0,
+        InputDataTypeMatchingTableICV,
         InputDataTypeMatchingTableEV,
         InputDataTypeMatchingTableFCEV,
-        InputDataTypeMatchingTableICV,
+        InputDataTypeMatchingTablePHEV,
+        InputDataTypeMatchingTableHEV,
         InputDataTypeMatchingTableSystem,
         InputDataTypeMax,
     };

@@ -43,8 +43,6 @@ void ControlTelltale::initCommonData(const int& currentMode, const int& displayT
 }
 
 void ControlTelltale::initNormalData() {
-    resetControl(false);
-
 #if 0
     updateDataHandler(ivis::common::PropertyEnum::TelltaleKeySystemStat,
                       static_cast<int>(ivis::common::TelltaleStatType::TelltaleStat.ON));
@@ -117,24 +115,32 @@ void ControlTelltale::initControlData() {
 }
 
 void ControlTelltale::resetControl(const bool& reset) {
-    Q_UNUSED(reset)
+    if (reset) {
+        initNormalData();
+        initControlData();
+    }
 }
 
 void ControlTelltale::controlConnect(const bool& state) {
     if (state) {
-        connect(isHandler(), &HandlerTelltale::signalHandlerEvent, this, &ControlTelltale::slotHandlerEvent,
-                Qt::UniqueConnection);
-        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, this, &ControlTelltale::slotConfigChanged,
-                Qt::UniqueConnection);
-        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged, this,
-                &ControlTelltale::slotEventInfoChanged, Qt::UniqueConnection);
-        connect(Service::instance().data(), &Service::signalServiceDataChanged, this, &ControlTelltale::slotServiceDataChanged,
-                Qt::UniqueConnection);
+        connect(isHandler(), &AbstractHandler::signalHandlerEvent,
+                [=](const int& type, const QVariant& value) { slotHandlerEvent(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
+                [=](const int& type, const QVariant& value) { slotConfigChanged(type, value); });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigReset,
+                [=](const bool& resetAll) { resetControl(resetAll); });
+        connect(ControlManager::instance().data(), &ControlManager::signalEventInfoChanged,
+                [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
+                    slotEventInfoChanged(displayType, eventType, eventValue);
+                });
+        connect(Service::instance().data(), &Service::signalServiceDataChanged,
+                [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
+                    slotServiceDataChanged(dataType, signalType, signalValue);
+                });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
-        disconnect(Service::instance().data());
         disconnect(Service::instance().data());
     }
 }

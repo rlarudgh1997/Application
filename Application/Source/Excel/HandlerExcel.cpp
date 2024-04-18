@@ -35,9 +35,11 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());
@@ -74,11 +76,11 @@ void HandlerExcel::initPropertyInfo() {
 void HandlerExcel::controlConnect(const bool& state) {
     if (state) {
 #if defined(USE_GUI_MODULE)
-#if 1
-        connect(this, &HandlerExcel::signalPropertyChanged, GuiExcel::instance().data(), &GuiExcel::slotPropertyChanged,
+#if defined(USE_SIGNAL_SLOT)
+        connect(this, &AbstractHandler::signalPropertyChanged, GuiExcel::instance().data(), &GuiExcel::slotPropertyChanged,
                 Qt::UniqueConnection);
 #else
-        connect(this, &HandlerExcel::signalPropertyChanged,
+        connect(this, &AbstractHandler::signalPropertyChanged,
                 [=](const int& type, const QVariant& value) { GuiExcel::instance().data()->slotPropertyChanged(type, value); });
 #endif
 #endif

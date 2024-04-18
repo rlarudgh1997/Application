@@ -26,48 +26,50 @@ namespace common {
 // name : The first letter starts with an uppercase letter
 #define REGISTER_WRITABLE_PROPERTY(type, name, value, notify)                         \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
-    public:                                                                           \
-        type get##name() const {                                                      \
-            return m##name;                                                           \
-        }                                                                             \
-    public Q_SLOTS:                                                                   \
-        void set##name(const type& name) {                                            \
-            QMutexLocker lock(&mMutex##name);                                         \
-            if (m##name != name) {                                                    \
-                m##name = name;                                                       \
-                if (notify) {                                                         \
-                    emit signal##name##Changed(m##name);                              \
-                }                                                                     \
+public:                                                                               \
+    type get##name() const {                                                          \
+        return m##name;                                                               \
+    }                                                                                 \
+public Q_SLOTS:                                                                       \
+    void set##name(const type& name) {                                                \
+        QMutexLocker lock(&mMutex##name);                                             \
+        if (m##name != name) {                                                        \
+            m##name = name;                                                           \
+            if (notify) {                                                             \
+                emit signal##name##Changed(m##name);                                  \
             }                                                                         \
         }                                                                             \
-    Q_SIGNALS:                                                                        \
-        void signal##name##Changed(const type& name);                                 \
-    private:                                                                          \
-        QMutex mMutex##name;                                                          \
-        type m##name = value;
+    }                                                                                 \
+Q_SIGNALS:                                                                            \
+    void signal##name##Changed(const type& name);                                     \
+                                                                                      \
+private:                                                                              \
+    QMutex mMutex##name;                                                              \
+    type m##name = value;
 
 // continer : QMap, QPair ....
 #define REGISTER_WRITABLE_PROPERTY_CONTAINER(container, key, value, name, notify)                      \
     Q_PROPERTY(container<key, value> name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
-    public:                                                                                            \
-        container<key, value> get##name() const {                                                      \
-            return m##name;                                                                            \
-        }                                                                                              \
-    public Q_SLOTS:                                                                                    \
-        void set##name(const container<key, value>& name) {                                            \
-            QMutexLocker lock(&mMutex##name);                                                          \
-            if (m##name != name) {                                                                     \
-                m##name = name;                                                                        \
-                if (notify) {                                                                          \
-                    emit signal##name##Changed(m##name);                                               \
-                }                                                                                      \
+public:                                                                                                \
+    container<key, value> get##name() const {                                                          \
+        return m##name;                                                                                \
+    }                                                                                                  \
+public Q_SLOTS:                                                                                        \
+    void set##name(const container<key, value>& name) {                                                \
+        QMutexLocker lock(&mMutex##name);                                                              \
+        if (m##name != name) {                                                                         \
+            m##name = name;                                                                            \
+            if (notify) {                                                                              \
+                emit signal##name##Changed(m##name);                                                   \
             }                                                                                          \
         }                                                                                              \
-    Q_SIGNALS:                                                                                         \
-        void signal##name##Changed(const container<key, value>& name);                                 \
-    private:                                                                                           \
-        QMutex mMutex##name;                                                                           \
-        container<key, value> m##name = container<key, value>();
+    }                                                                                                  \
+Q_SIGNALS:                                                                                             \
+    void signal##name##Changed(const container<key, value>& name);                                     \
+                                                                                                       \
+private:                                                                                               \
+    QMutex mMutex##name;                                                                               \
+    container<key, value> m##name = container<key, value>();
 
 // enum
 #define TO_ENUM(name, ...) \
@@ -253,6 +255,9 @@ public:
         QStringList readData = readFileDataInfo(filePath, openError);
         return QPair<bool, QStringList>(openError, readData);
     }
+    static QByteArray readFileByteArray(const QString& filePath) {
+        return readFileByteArrayInfo(filePath);
+    }
     static int writeFile(const QString& filePath, const QString& str, const bool& append) {
         return writeFileData(filePath, str, append);
     }
@@ -305,6 +310,16 @@ private:
             openError = true;
         }
         return fileContent;
+    }
+    static QByteArray readFileByteArrayInfo(const QString& filePath) {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text) == false) {
+            qDebug() << "Fail to open file: " << filePath;
+            return QByteArray();
+        }
+        QByteArray readData = file.readAll();
+        file.close();
+        return readData;
     }
     static int writeFileData(const QString& filePath, const QString& str, const bool& append) {
         // qDebug() << "writeFileData :" << filePath;

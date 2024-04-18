@@ -41,6 +41,8 @@
 #define STRING_PYTHON QString("Python")
 #define STRING_PYTHON_TIP QString("View python lib install infomation")
 #define STRING_SETTING QString("Setting")
+#define STRING_MODEL_PATH QString("SFC Model Path")
+#define STRING_MODEL_PATH_TIP QString("Setting SFC model foler")
 #define STRING_DEFAULT_PATH QString("Default Path")
 #define STRING_DEFAULT_PATH_TIP QString("Setting default SFC test output foler")
 #define STRING_NODE_PATH QString("Node Path")

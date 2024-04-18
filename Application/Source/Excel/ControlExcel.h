@@ -30,7 +30,7 @@ private:
     void updateShortcutInfo(const int& eventType);
     QString isStaticFixedPath(const QString& defaultPath, const QString& moduleName);
     QString isSfcFileInfo(const QString& signalName);
-    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& categoryName);
+    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
     QMap<int, QStringList> isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName,
                                                     const QMap<int, QStringList>& vsmFileList);
     void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
