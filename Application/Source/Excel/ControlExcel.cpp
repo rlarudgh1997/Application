@@ -43,11 +43,13 @@ bool ControlExcel::initControl() {
 void ControlExcel::initCommonData(const int& currentMode, const int& displayType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplay, displayType);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
 }
 
 void ControlExcel::initNormalData() {
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QStringList());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QStringList());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QStringList());
@@ -88,6 +90,8 @@ void ControlExcel::initControlData() {
 
 void ControlExcel::resetControl(const bool& reset) {
     if (reset) {
+        initCommonData(getData(ivis::common::PropertyTypeEnum::PropertyTypeMode).toInt(),
+                       getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt());
         initNormalData();
         initControlData();
     }
@@ -181,6 +185,10 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& private
         }
         QStringList sfcList = ivis::common::FileInfo::readFile(QString("%1/NodeAddressSFC.info").arg(nodeAddressPath));
         QStringList vsmList = ivis::common::FileInfo::readFile(QString("%1/NodeAddressVSM.info").arg(nodeAddressPath));
+        sfcList.sort();
+        vsmList.sort();
+        sfcList.removeDuplicates();
+        vsmList.removeDuplicates();
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, sfcList, true);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, vsmList, true);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, (sfcList + vsmList), true);
@@ -288,6 +296,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
     updateNodeAddress(false, privateList, interList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
 }
 
 bool ControlExcel::writeExcelSheet(const QVariant& filePath) {
@@ -541,17 +550,22 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen: {
-            QVariant defaultPath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
+            QVariant defaultFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
             QVariant filePath = QVariant();
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                               QVariantList({STRING_FILE_OPEN, defaultPath})) == ivis::common::PopupButton::OK) {
+                                            QVariantList({STRING_FILE_OPEN, defaultFilePath})) == ivis::common::PopupButton::OK) {
                 QStringList moduleTemp = QStringList();
                 QStringList module = QStringList();
+                int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
 
                 if (openExcelFile(filePath)) {
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
-                    moduleTemp = filePath.toString().split("/model/SFC/CV/");
+                    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+                        moduleTemp = filePath.toString().split("/model/SFC/");
+                    } else {
+                        moduleTemp = filePath.toString().split("/model/SFC/CV/");
+                    }
                 }
 
                 if (moduleTemp.size() == 2) {
@@ -570,10 +584,10 @@ void ControlExcel::loadExcelFile(const int& eventType) {
         case ivis::common::EventTypeEnum::EventTypeLastFile: {
             QVariant lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
             if (lastFilePath.toString().size() == 0) {
-                QVariant defaultPath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
+                QVariant defaultFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
                 QVariant filePath = QVariant();
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                                   QVariantList({STRING_FILE_OPEN, defaultPath})) ==
+                                                   QVariantList({STRING_FILE_OPEN, defaultFilePath})) ==
                     ivis::common::PopupButton::OK) {
                     openExcelFile(filePath);
                 }
@@ -641,90 +655,51 @@ void ControlExcel::updateShortcutInfo(const int& eventType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, shortcutType, true);
 }
 
-QString ControlExcel::isStaticFixedPath(const QString& defaultPath, const QString& moduleName) {
-    QString specType = QString();
-    if ((moduleName.compare("Event_Control_Logic") == false) || (moduleName.compare("Master_Warning") == false) ||
-        (moduleName.compare("Speed_Gauge") == false)) {
-        specType = QString("CD");
-    } else if ((moduleName.compare("MFSW") == false) || (moduleName.compare("Seatbelt_Warning") == false)) {
-        specType = QString("EC");
-    } else if ((moduleName.compare("Navigation_DIS") == false) || (moduleName.compare("VESS") == false)) {
-        specType = QString("AV");
-    } else if (moduleName.compare("AUX_Battery_Warning") == false) {
-        specType = QString("PT");
-    } else {
-    }
-
-    QString fileName = QString();
-    if (specType.size() > 0) {
-        fileName = QString("%1/../%2/%3/%4.yml").arg(defaultPath).arg(specType).arg(moduleName).arg(moduleName);
-    }
-    return fileName;
-}
-
 QString ControlExcel::isSfcFileInfo(const QString& signalName) {
-    QStringList signalSplit = signalName.split(".");
+    QString ymlFile = QString();
     QString moduleName = QString();
+    QStringList signalSplit = signalName.split(".");
     if (signalSplit.size() >= 2) {
+        // Input Signal : SFC.{MODULE_NAME}.*
         moduleName = signalSplit.at(1);
         if ((moduleName.compare("Extension") == false) || (moduleName.compare("Private") == false)) {
+            // Input Signal : SFC.Extension.{MODULE_NAME}.*  or  SFC.Private.{MODULE_NAME}.*
             moduleName = signalSplit.at(2);
         }
     }
-
-#if 0
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QStringList sfcTypeList = QStringList();
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+    bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
+    if (appModePV) {
+        sfcTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
     } else {
+        sfcTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
+        // Input Signal : SFC.ADAS_Driving_New.Telltale.FCA.Stat
+        // Found Yml    : /model/SFC/ADAS_Driving_CV/ADAS_Driving_CV.yml
+        // Module Name  : ADAS_Driving_New -> ADAS_Driving_CV
+        // moduleName.remove("_New");
+        moduleName.replace("_New", "_CV");
     }
+    for (const auto& sfc : sfcTypeList) {
+        QString file = QString("%1/SFC/%2/%3/%4.yml").arg(sfcModelPath).arg(sfc).arg(moduleName).arg(moduleName);
+        bool fileExists = QFile::exists(file);
+        if (fileExists) {
+            ymlFile = file;
+        }
+        qDebug() << ((appModePV) ? ("\t PV yml :") : ("\t CV yml :")) << fileExists << file;
 
-    QString defaultPath = getData(ivis::common::PropertyTypeEnum::ConfigTypeSfcModelPath).toString();
-    moduleName.remove("_New");
-    QString fileName = QString("%1/%2_CV/%3_CV.yml").arg(defaultPath).arg(moduleName).arg(moduleName);
-    bool fileExists = QFile::exists(fileName);
-    qDebug() << "1. yml :" << fileName;
-
-    if (fileExists == false) {
-        fileName = QString("%1/%2/%3.yml").arg(defaultPath).arg(moduleName).arg(moduleName);
-        fileExists = QFile::exists(fileName);
-        qDebug() << "2. yml :" << fileName;
+        // if ((ymlFile.size() == 0) && (appModePV == false)) {
+        if (appModePV == false) {
+            file = QString("%1/SFC/%2/%3_CV/%4_CV.yml").arg(sfcModelPath).arg(sfc).arg(moduleName).arg(moduleName);
+            if (QFile::exists(file)) {
+                ymlFile = file;
+                qDebug() << "\t -> yml :" << true << file;
+            }
+        }
     }
-    if (fileExists == false) {
-        fileName = isStaticFixedPath(defaultPath, moduleName);
-        fileExists = QFile::exists(fileName);
-        qDebug() << "3. yml :" << fileName;
-    }
-    if (fileExists == false) {
-        qDebug() << "Fail to yml file not exists :" << fileName;
-        fileName.clear();
-    } else {
-        qDebug() << "Sucess to found sfc yml file :" << fileName;
-    }
-#else
-    QString defaultPath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath).toString();
-    moduleName.remove("_New");
-    QString fileName = QString("%1/%2_CV/%3_CV.yml").arg(defaultPath).arg(moduleName).arg(moduleName);
-    bool fileExists = QFile::exists(fileName);
-    qDebug() << "1. yml :" << fileName;
-
-    if (fileExists == false) {
-        fileName = QString("%1/%2/%3.yml").arg(defaultPath).arg(moduleName).arg(moduleName);
-        fileExists = QFile::exists(fileName);
-        qDebug() << "2. yml :" << fileName;
-    }
-    if (fileExists == false) {
-        fileName = isStaticFixedPath(defaultPath, moduleName);
-        fileExists = QFile::exists(fileName);
-        qDebug() << "3. yml :" << fileName;
-    }
-    if (fileExists == false) {
-        qDebug() << "Fail to yml file not exists :" << fileName;
-        fileName.clear();
-    } else {
-        qDebug() << "Sucess to found sfc yml file :" << fileName;
-    }
-#endif
-    return fileName;
+    qDebug() << "Found yml :" << (ymlFile.size() > 0) << ymlFile;
+    return ymlFile;
 }
 
 QStringList ControlExcel::isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
@@ -1025,6 +1000,8 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
 
 void ControlExcel::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
     if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
+        qDebug() << "ControlExcel::slotEventInfoChanged :" << displayType << eventType
+                    << getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt();
         return;
     }
 

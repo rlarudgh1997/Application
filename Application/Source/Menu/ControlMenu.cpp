@@ -51,6 +51,7 @@ void ControlMenu::initCommonData(const int& currentMode, const int& displayType)
 }
 
 void ControlMenu::initNormalData() {
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QStringList vehicleTypeList = QStringList();
     if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
@@ -80,6 +81,8 @@ void ControlMenu::initControlData() {
 
 void ControlMenu::resetControl(const bool& reset) {
     if (reset) {
+        initCommonData(getData(ivis::common::PropertyTypeEnum::PropertyTypeMode).toInt(),
+                       getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt());
         initNormalData();
         initControlData();
     }

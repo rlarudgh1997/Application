@@ -74,6 +74,8 @@ void ControlGauge::initControlData() {
 
 void ControlGauge::resetControl(const bool& reset) {
     if (reset) {
+        initCommonData(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                       getData(ivis::common::PropertyTypeEnum::PropertyTypeMode).toInt());
         initNormalData();
         initControlData();
     }

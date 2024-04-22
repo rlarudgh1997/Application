@@ -49,6 +49,7 @@ private:
 signals:
     void signalConfigReset(const bool& resetAll);
     void signalConfigChanged(const int& type, const QVariant& value);
+    void signalUpdateWindowTitle(const QString& title, const int& appMode);
 
 private:
     QSettings* mSetting = nullptr;

@@ -498,7 +498,6 @@ void GuiMenu::drawMenuEtc(const bool& update) {
 #else
     QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath);
 #endif
-
     mDefaultPath->setText(QString("Path : %1").arg(path.toString()));
 
 #if !defined(USE_DEMO)

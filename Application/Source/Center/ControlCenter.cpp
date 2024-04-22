@@ -50,6 +50,8 @@ void ControlCenter::initControlData() {
 
 void ControlCenter::resetControl(const bool& reset) {
     if (reset) {
+        initCommonData(getData(ivis::common::PropertyTypeEnum::PropertyTypeMode).toInt(),
+                       getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt());
         initNormalData();
         initControlData();
     }

@@ -67,20 +67,22 @@ QVariant ConfigSetting::readConfig(const int& configType) {
 
 void ConfigSetting::writeConfig(const int& configType, const QVariant& configValue) {
     if (mConfigData[configType] != configValue) {
-        mMutex.lock();
+        QMutexLocker lock(&mMutex);
         mConfigData[configType] = configValue;
-        mThreadDataSave = (configType < ConfigInfo::ConfigTypeMaxDoNotSave);
-        mMutex.unlock();
+        if (mThreadDataSave == false) {
+            mThreadDataSave = (configType < ConfigInfo::ConfigTypeMaxDoNotSave);
+        }
 
-        emit signalConfigChanged(configType, configValue);
+        if (configType == ConfigInfo::ConfigTypeWindowTitle) {
+            emit signalUpdateWindowTitle(configValue.toString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
+        } else {
+            emit signalConfigChanged(configType, configValue);
+        }
     }
 
-    if (configType == ConfigInfo::ConfigTypeWindowTitle) {
-        emit signalUpdateWindowTitle(configValue.toString());
-    } else if (configType == ConfigInfo::ConfigTypeInit) {
-        qDebug() << "Config - Reset All";
+    if (configType == ConfigInfo::ConfigTypeInit) {
+        emit signalUpdateWindowTitle(QString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
         emit signalConfigReset(true);
-    } else {
     }
 }
 
@@ -177,8 +179,7 @@ void ConfigSetting::readConfig() {
 }
 
 void ConfigSetting::writeConfig() {
-    mMutex.lock();
-    for (int configType = 0; configType < ConfigInfo::ConfigTypeMax; configType++) {
+    for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
         if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             continue;
         }
@@ -198,12 +199,13 @@ void ConfigSetting::writeConfig() {
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
+
+            qDebug() << "\t WriteConfig[" << configType << "] :" << mConfigBackup[configType] << "->" << mConfigData[configType];
             mConfigBackup[configType] = mConfigData[configType];
             mSetting->setValue(configName, mConfigData[configType]);
             mSetting->endGroup();
         }
     }
-    mMutex.unlock();
     mSetting->sync();
 }
 
@@ -226,10 +228,8 @@ void ConfigSetting::resetConfig(const int& resetType) {
         if ((configType >= startSkip) && (configType <= endSkip)) {
             continue;
         }
-        mMutex.lock();
         mConfigData[configType] =
             mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeValue);
-        mMutex.unlock();
     }
     writeConfig();
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
@@ -238,10 +238,9 @@ void ConfigSetting::resetConfig(const int& resetType) {
 void ConfigSetting::threadFunc() {
     while (mThreadRun) {
         if (mThreadDataSave) {
+            QMutexLocker lock(&mMutex);
             writeConfig();
-            mMutex.lock();
             mThreadDataSave = false;
-            mMutex.unlock();
         }
         QThread::msleep(100);
     }

@@ -28,7 +28,6 @@ private:
     void saveExcelFile(const bool& saveAs);
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
-    QString isStaticFixedPath(const QString& defaultPath, const QString& moduleName);
     QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
     QMap<int, QStringList> isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName,

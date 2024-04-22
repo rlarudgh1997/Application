@@ -51,6 +51,8 @@ void ControlEvent::initControlData() {
 
 void ControlEvent::resetControl(const bool& reset) {
     if (reset) {
+        initCommonData(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
+                       getData(ivis::common::PropertyTypeEnum::PropertyTypeMode).toInt());
         initNormalData();
         initControlData();
     }
