@@ -25,9 +25,11 @@ QSharedPointer<GuiExcel>& GuiExcel::instance(AbstractHandler* handler) {
     return gGui;
 }
 
+// GuiExcel::GuiExcel(AbstractHandler* handler) : AbstractGui(handler), mGui(new Ui::GuiExcel) {
 GuiExcel::GuiExcel(AbstractHandler* handler) : AbstractGui(handler) {
     mMainView = new QTabWidget(isHandler()->getScreen());
     mMenuRight = new QMenu(isHandler()->getScreen());
+    // mGui->setupUi(mMainView);
     updateDisplaySize();
 }
 
@@ -60,11 +62,7 @@ void GuiExcel::updateDisplaySize() {
 }
 
 void GuiExcel::updateDisplayVisible() {
-    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        mMainView->show();
-    } else {
-        mMainView->hide();
-    }
+    mMainView->setVisible(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool());
 }
 
 bool GuiExcel::chcekExcleSheet(const int& sheetIndex) {
@@ -478,6 +476,25 @@ void GuiExcel::updateDisplayExcelSheet() {
     // Clear - Table, TableWidget, CellInfo, Menu, Action
     updateInitialExcelSheet();
 
+#if 0  // Test : New GUI
+    QMap<int, QTableWidget*> excelSheet = QMap<int, QTableWidget*>({
+        {0, mGui->Description},
+        {1, mGui->Praivates},
+        {2, mGui->Telltales},
+        {3, mGui->Constants},
+        {4, mGui->Events},
+        {5, mGui->Sounds},
+        {6, mGui->Inters},
+        {7, mGui->Outputs},
+    });
+    for (auto iter = excelSheet.begin(); iter != excelSheet.end(); ++iter) {
+        qDebug() << "Sheet :" <<iter.key() << iter.value();
+        int sheetIndex = iter.key();
+        iter.value()->setRowCount(10);
+        iter.value()->setColumnCount(5);
+    }
+#endif
+
     // Create : Action Item
     mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut] = mMenuRight->addAction("Cut");
     mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy] = mMenuRight->addAction("Copy");
@@ -533,23 +550,24 @@ void GuiExcel::updateDisplayExcelSheet() {
             createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant(editSheetInfo));
             updateDisplaySheetHeaderAdjust(sheetIndex);
         });
+        connect(mMenuRight, &QMenu::triggered, [=](QAction* action) { qDebug() << "Right Menu Action :" << action; });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
             QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
-            if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut]) {
-                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCut);
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy]) {
-                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCopy);
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
-                updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypePaste);
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeDelete);
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit);
-            } else {
-                qDebug() << "Fail to menu right selection action item";
-            }
+            //     if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut]) {
+            //         updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCut);
+            //     } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy]) {
+            //         updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypeCopy);
+            //     } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
+            //         updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypePaste);
+            //     } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
+            //         updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
+            //     } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
+            //         updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeDelete);
+            //     } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
+            //         updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit);
+            //     } else {
+            //         qDebug() << "Fail to menu right selection action item";
+            //     }
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
             // Config_Signal : 3(Description), 9    Input_Signal : 4    Input_Data : 5    Output_Signal : 6

@@ -77,6 +77,7 @@ public:
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeViewType,
+        PropertyTypeConfigInfoPrevious,
         PropertyTypeConfigInfo,
         PropertyTypeVehicleType,
         PropertyTypeDefaultFilePath,
@@ -104,7 +105,6 @@ public:
         PropertyTypeTestResultInfo,
         PropertyTypeTestReportResultInfo,
         PropertyTypeTestReportCoverageInfo,
-        PropertyTypeTestReportType,
         PropertyTypeSfcModelPath,
         PropertyTypeDefaultPath,
         PropertyTypeSignalListToMicom,
@@ -197,9 +197,6 @@ public:
         EventTypeSettingNodePath,
         EventTypeSettingVsmPath,
         EventTypeSettingAppMode,
-        EventTypeSettingTestReport,
-        EventTypeSettingTestResult,
-        EventTypeSettingTestCoverage,
 
         EventTypeMultiDocker = 1500,
 
@@ -230,6 +227,7 @@ public:
         EventTypeEnterScriptText,
         EventTypeViewRunScript,
         EventTypeViewRunScriptDetail,
+        EventTypeGenSSFS,
         EventTypeInitModule,
         EventTypeShowModule,
         EventTypeSelectModule,
@@ -277,8 +275,7 @@ class ViewTypeEnum {
 public:
     enum ViewType {
         ViewTypeConfig = 0,
-        ViewTypeReport,
-        ViewTypeNodeAddress,
+        ViewTypeNode,
     };
 };
 

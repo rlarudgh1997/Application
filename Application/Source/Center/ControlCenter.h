@@ -16,7 +16,6 @@ private:
     explicit ControlCenter();
 
     void updateConfigInfo();
-    void updateTestReport();
     void updateAllModuleList();
     bool checkNodeAddress(const QString& vsmPath, const QVariantList& vsmFile);
     int isVehicleType(const QString& file);

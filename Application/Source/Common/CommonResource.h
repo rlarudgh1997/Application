@@ -112,7 +112,7 @@
 #define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect. Please select again.")
 
 #define STRING_POPUP_FILE_NOT_EXIST QString("File doesn't exist")
-#define STRING_POPUP_FILE_NOT_EXIST_TIP QString("VSM file not found. Do you want to set vsm path?")
+#define STRING_POPUP_FILE_NOT_EXIST_TIP QString("VSM file not found.\nDo you want to set SFC model path?")
 #define STRING_POPUP_DEFAULT_PATH_ERROR QString("Default path error")
 #define STRING_POPUP_DEFAULT_PATH_ERROR_TIP QString("Please reset the default path.")
 #define STRING_POPUP_INPUT_TEXT_ERROR QString("Input text error")

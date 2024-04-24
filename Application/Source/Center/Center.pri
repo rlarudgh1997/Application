@@ -15,3 +15,7 @@ SOURCES += \
     $$PWD/GuiCenter.cpp\
     $$PWD/HandlerCenter.cpp\
     $$PWD/ControlCenter.cpp\
+
+
+FORMS += \
+    $$PWD/GuiCenter.ui\

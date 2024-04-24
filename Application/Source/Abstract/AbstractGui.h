@@ -13,7 +13,7 @@ public:
     AbstractHandler* isHandler() {
         return mHandler;
     }
-    bool createSignal(const int& type, const QVariant& value) {
+    bool createSignal(const int& type, const QVariant& value = QVariant()) {
         if (isHandler()) {
             emit isHandler()->signalHandlerEvent(type, value);
             return true;

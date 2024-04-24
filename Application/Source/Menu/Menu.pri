@@ -15,3 +15,7 @@ SOURCES += \
     $$PWD/GuiMenu.cpp\
     $$PWD/HandlerMenu.cpp\
     $$PWD/ControlMenu.cpp\
+
+
+FORMS += \
+    $$PWD/GuiMenu.ui\

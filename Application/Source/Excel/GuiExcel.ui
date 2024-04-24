@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GuiExcel</class>
+ <widget class="QTabWidget" name="GuiExcel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="QTableWidget" name="Description">
+   <attribute name="title">
+    <string>Description</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Praivates">
+   <attribute name="title">
+    <string>Praivates</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Telltales">
+   <attribute name="title">
+    <string>Telltales</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Constants">
+   <attribute name="title">
+    <string>Constants</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Events">
+   <attribute name="title">
+    <string>Events</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Sounds">
+   <attribute name="title">
+    <string>Sounds</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Inters">
+   <attribute name="title">
+    <string>Inters</string>
+   </attribute>
+  </widget>
+  <widget class="QTableWidget" name="Outputs">
+   <attribute name="title">
+    <string>Outputs</string>
+   </attribute>
+  </widget>
+  <widget class="QWidget" name="Menu">
+   <property name="title">
+    <string/>
+   </property>
+   <attribute name="title">
+    <string>Menu</string>
+   </attribute>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
+   <addaction name="actionInsert"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionMergeSplit"/>
+  </widget>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionInsert">
+   <property name="text">
+    <string>Insert</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionMergeSplit">
+   <property name="text">
+    <string>Merge/Split</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

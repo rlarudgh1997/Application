@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GuiCenter</class>
+ <widget class="QStackedWidget" name="GuiCenter">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1440</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="ConfigView">
+   <widget class="QPushButton" name="ConfigViewClose">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>5</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ConfigViewReset">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>60</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="NodeView">
+   <widget class="QPushButton" name="NodeViewSearch">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>60</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="NodeViewClose">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>5</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="NodeViewSelectModule">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>115</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Select
+Module</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="NodeViewTable">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1401</width>
+      <height>861</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>NodeViewTable</zorder>
+   <zorder>NodeViewSearch</zorder>
+   <zorder>NodeViewClose</zorder>
+   <zorder>NodeViewSelectModule</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

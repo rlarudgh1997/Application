@@ -199,8 +199,6 @@ void ConfigSetting::writeConfig() {
             } else {
                 mSetting->beginGroup(GROUP_NAME_COMMON);
             }
-
-            qDebug() << "\t WriteConfig[" << configType << "] :" << mConfigBackup[configType] << "->" << mConfigData[configType];
             mConfigBackup[configType] = mConfigData[configType];
             mSetting->setValue(configName, mConfigData[configType]);
             mSetting->endGroup();

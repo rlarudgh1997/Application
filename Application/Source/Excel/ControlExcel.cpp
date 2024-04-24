@@ -141,7 +141,7 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
         } else if (((inputValue >= Qt::Key::Key_A) && (inputValue <= Qt::Key::Key_Z)) || (inputValue == Qt::Key::Key_Escape) ||
                    (inputValue == Qt::Key::Key_Delete) || (inputValue == ivis::common::KeyTypeEnum::KeyInputValueOK)) {
             if (inputValue == Qt::Key::Key_C) {
-                qDebug() << "Input Ctrl + C";
+                qDebug() << "ControlExcel : Ctrl + C";
             }
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKey, inputValue, true);
         } else {
@@ -553,7 +553,8 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             QVariant defaultFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
             QVariant filePath = QVariant();
             if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                            QVariantList({STRING_FILE_OPEN, defaultFilePath})) == ivis::common::PopupButton::OK) {
+                                               QVariantList({STRING_FILE_OPEN, defaultFilePath})) ==
+                ivis::common::PopupButton::OK) {
                 QStringList moduleTemp = QStringList();
                 QStringList module = QStringList();
                 int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
@@ -1000,8 +1001,6 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
 
 void ControlExcel::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
     if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
-        qDebug() << "ControlExcel::slotEventInfoChanged :" << displayType << eventType
-                    << getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt();
         return;
     }
 

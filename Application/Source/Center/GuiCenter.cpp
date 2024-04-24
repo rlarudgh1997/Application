@@ -8,12 +8,6 @@
 #include <QCompleter>
 
 #include "GuiExcel.h"
-// #include "CommonFunction.h"
-#if 0
-#include "ConfigSetting.h"
-#include <QtWidgets>
-#include <QtWebEngineWidgets/QWebEngineView>
-#endif
 
 QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiCenter> gGui;
@@ -23,67 +17,27 @@ QSharedPointer<GuiCenter>& GuiCenter::instance(AbstractHandler* handler) {
     return gGui;
 }
 
-GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler) {
+GuiCenter::GuiCenter(AbstractHandler* handler) : AbstractGui(handler), mGui(new Ui::GuiCenter) {
     mMainView = new QStackedWidget(isHandler()->getScreen());
-    // mMainView = new QTableWidget(isHandler()->getScreen());
+    mGui->setupUi(mMainView);
     updateDisplaySize();
 }
 
 void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
 
-    // Draw - ViewType
-    if (mConfigWidget == nullptr) {
-        mConfigWidget = ivis::common::createWidget<QWidget>(mMainView);
-        updateDisplayViewType<QWidget>(ivis::common::ViewTypeEnum::ViewTypeConfig, mConfigWidget);
-    }
+    // Config View
+    connect(mGui->ConfigViewClose, &QPushButton::clicked,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex())); });
+    connect(mGui->ConfigViewReset, &QPushButton::clicked,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
 
-    if (mReportWidget == nullptr) {
-        mReportWidget = ivis::common::createWidget<QWidget>(mMainView);
-        updateDisplayViewType<QWidget>(ivis::common::ViewTypeEnum::ViewTypeReport, mReportWidget);
-    }
-
-    if (mNodeAddress == nullptr) {
-        mNodeAddress = ivis::common::createWidget<QTableWidget>(mMainView);
-        updateDisplayViewType<QTableWidget>(ivis::common::ViewTypeEnum::ViewTypeNodeAddress, mNodeAddress);
-    }
-
-    // ETC - Button
-    if (mConfigHideButton == nullptr) {
-        mConfigHideButton =
-            ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1250, 20, 50, 50),
-                                                    QString("background-color: white; color: black; font: bold; font-size:20px"));
-        mConfigHideButton->setText("X");
-        connect(mConfigHideButton, &QPushButton::clicked, [=]() {
-            createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex()));
-        });
-    }
-
-    if (mConfigResetButton == nullptr) {
-        mConfigResetButton =
-            ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1250, 75, 50, 50),
-                                                    QString("background-color: white; color: black; font: bold; font-size:12px"));
-        mConfigResetButton->setText("Reset");
-        connect(mConfigResetButton, &QPushButton::clicked,
-                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
-    }
-
-    if (mSelectModuleButton == nullptr) {
-        mSelectModuleButton =
-            ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1050, 20, 80, 50),
-                                                    QString("background-color: white; color: black; font: bold; font-size:12px"));
-        mSelectModuleButton->setText("Select\nModule");
-        connect(mSelectModuleButton, &QPushButton::clicked,
-                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
-    }
-
-    if (mNodeAddressSearch == nullptr) {
-        mNodeAddressSearch =
-            ivis::common::createWidget<QPushButton>(mMainView, false, QRect(1150, 20, 80, 50),
-                                                    QString("background-color: white; color: black; font: bold; font-size:12px"));
-        mNodeAddressSearch->setText("Search");
-        connect(mNodeAddressSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
-    }
+    // Node View
+    connect(mGui->NodeViewClose, &QPushButton::clicked,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex())); });
+    connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
+    connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -111,49 +65,24 @@ void GuiCenter::updateDisplaySize() {
 }
 
 void GuiCenter::updateDisplayVisible() {
-    if (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool()) {
-        mMainView->show();
-    } else {
-        mMainView->hide();
-    }
-}
-
-template <typename T>
-void GuiCenter::updateDisplayViewType(const int& viewType, T* widget) {
-    int currViewType =
-        (viewType >= 0) ? (viewType) : (isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt());
-    if ((viewType >= 0) && (widget)) {
-        mMainView->insertWidget(currViewType, widget);
-    } else {
-        mMainView->setCurrentIndex(currViewType);
-    }
+    mMainView->setVisible(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible).toBool());
 }
 
 void GuiCenter::updateDisplayConfigInfo() {
-    QVariantList configValue = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << mConfigValue.size() << "," << configValue.size();
+    QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
+    QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
+    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
 
-    if (mConfigWidget == nullptr) {
-        return;
-    } else {
-        updateDisplayViewType<QWidget>();
-        ivis::common::widgetVisible(mConfigWidget, true);
-        ivis::common::widgetVisible(mReportWidget, false);
-        ivis::common::widgetVisible(mNodeAddress, false);
-        ivis::common::widgetVisible(mConfigHideButton, true);
-        ivis::common::widgetVisible(mConfigResetButton, true);
-        ivis::common::widgetVisible(mSelectModuleButton, false);
-        ivis::common::widgetVisible(mNodeAddressSearch, false);
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeConfig);
 
-        if (mConfigValue == configValue) {
-            for (const auto& item : mConfigListItem) {
-                item->initStyle();
-            }
-            return;
+    if (prevConfig == currConfig) {
+        for (const auto& item : mConfigListItem) {
+            item->initStyle();
         }
+        return;
     }
 
-    bool newItem = (mConfigValue.size() != configValue.size());
+    bool newItem = (prevConfig.size() != currConfig.size());
     if (newItem) {
         for (const auto& item : mConfigListItem) {
             item->clear();
@@ -162,8 +91,7 @@ void GuiCenter::updateDisplayConfigInfo() {
     }
 
     int index = 0;
-    mConfigValue = configValue;
-    for (const auto& info : configValue) {
+    for (const auto& info : currConfig) {
         QVariantList config = info.toList();
         if (config.size() != 3) {
             continue;
@@ -199,7 +127,7 @@ void GuiCenter::updateDisplayConfigInfo() {
         }
 
         if (newItem) {
-            mConfigListItem[index] = new ListItem(index, type, name, realValue, mConfigWidget);
+            mConfigListItem[index] = new ListItem(index, type, name, realValue, mMainView->currentWidget());
             connect(mConfigListItem[index], &ListItem::signalValueChanged, [=](const int& type, const QVariant& value) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeUpdateConfig, QVariant(QVariantList{type, value}));
             });
@@ -212,126 +140,41 @@ void GuiCenter::updateDisplayConfigInfo() {
     }
 }
 
-void GuiCenter::updateDisplayTestReport() {
-    // qDebug() << "GuiCenter::updateDisplayTestReport()";
-
-    if (mReportWidget == nullptr) {
-        return;
-    } else {
-        updateDisplayViewType<QWidget>();
-        ivis::common::widgetVisible(mConfigWidget, false);
-        ivis::common::widgetVisible(mReportWidget, true);
-        ivis::common::widgetVisible(mNodeAddress, false);
-        ivis::common::widgetVisible(mConfigHideButton, true);
-        ivis::common::widgetVisible(mConfigResetButton, true);
-        ivis::common::widgetVisible(mSelectModuleButton, false);
-        ivis::common::widgetVisible(mNodeAddressSearch, false);
-    }
-
-    for (int reportType = ivis::common::ReportTypeEnum::ReportTypeResult;
-         reportType < ivis::common::ReportTypeEnum::ReportTypeAll; reportType++) {
-        int propertyType = 0;
-        QMap<int, QString> text = QMap<int, QString>();
-        if (reportType == ivis::common::ReportTypeEnum::ReportTypeResult) {
-            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo;
-            text[static_cast<int>(ReportItemInfo::Text::Title)] = QString("Test Result :");
-            text[static_cast<int>(ReportItemInfo::Text::On)] = QString("On");
-            text[static_cast<int>(ReportItemInfo::Text::Off)] = QString("Off");
-            text[static_cast<int>(ReportItemInfo::Text::Option)] = QString("Options :");
-            text[static_cast<int>(ReportItemInfo::Text::Option1)] = QString("Split");
-            text[static_cast<int>(ReportItemInfo::Text::Option2)] = QString("Config");
-            text[static_cast<int>(ReportItemInfo::Text::Option3)] = QString("Excel");
-        } else {
-            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo;
-            text[static_cast<int>(ReportItemInfo::Text::Title)] = QString("Test Coverage :");
-            text[static_cast<int>(ReportItemInfo::Text::On)] = QString("On");
-            text[static_cast<int>(ReportItemInfo::Text::Off)] = QString("Off");
-            text[static_cast<int>(ReportItemInfo::Text::Option)] = QString("Options :");
-            text[static_cast<int>(ReportItemInfo::Text::Option1)] = QString("Line");
-            text[static_cast<int>(ReportItemInfo::Text::Option2)] = QString("Function");
-            text[static_cast<int>(ReportItemInfo::Text::Option3)] = QString("Branch");
-        }
-        text[static_cast<int>(ReportItemInfo::Text::Apply)] = QString("Apply");
-        text[static_cast<int>(ReportItemInfo::Text::Cancel)] = QString("Cancel");
-
-        QVariantList reportData = isHandler()->getProperty(propertyType).toList();
-        QMap<int, QPair<int, bool>> config = QMap<int, QPair<int, bool>>();
-        int configInfo = static_cast<int>(ReportItemInfo::Config::On);
-        bool status = false;
-        for (const auto& data : reportData) {
-            QVariantList info = data.toList();
-            if (info.size() != 2) {
-                continue;
-            }
-            // qDebug() << "UpdateConfig :" << configInfo << info.at(0).toInt() << info.at(1).toBool();
-            if (configInfo == static_cast<int>(ReportItemInfo::Config::On)) {
-                status = info.at(1).toBool();
-            }
-            config[configInfo++] = QPair<int, bool>(info.at(0).toInt(), info.at(1).toBool());
-        }
-
-        if (mTestReport[reportType] == nullptr) {
-            mTestReport[reportType] = new ReportItem(mReportWidget, reportType, true);
-            connect(mTestReport[reportType], &ReportItem::signalReportValueChanged,
-                    [=](const int& info, const int& type, const bool& value) {
-                        // qDebug() << reportType << ". signalReportValueChanged :" << info << type << value;
-                        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateConfig, QVariant(QVariantList{type, value}));
-                        if (info == static_cast<int>(ReportItemInfo::Config::On)) {
-                            mTestReport[reportType]->updateStatus(value);
-                        }
-                    });
-        }
-        mTestReport[reportType]->updateConfig(config);
-        mTestReport[reportType]->updateText(text);
-        mTestReport[reportType]->updateStatus(status);
-    }
-}
-
 void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
     // qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
 
-    if (mNodeAddress == nullptr) {
-        return;
-    } else {
-        updateDisplayViewType<QTableWidget>();
-        ivis::common::widgetVisible(mConfigWidget, false);
-        ivis::common::widgetVisible(mReportWidget, false);
-        ivis::common::widgetVisible(mNodeAddress, true);
-        ivis::common::widgetVisible(mConfigHideButton, true);
-        ivis::common::widgetVisible(mConfigResetButton, false);
-        ivis::common::widgetVisible(mSelectModuleButton, true);
-        ivis::common::widgetVisible(mNodeAddressSearch, true);
-    }
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeNode);
 
     QStringList title = QStringList({"Node Name", "Vehicle Type"});
-    mNodeAddress->setRowCount(nodeAddress.size());
-    mNodeAddress->setColumnCount(title.size());
-    mNodeAddress->setGeometry(mNodeAddress->geometry());
-    mNodeAddress->setHorizontalHeaderLabels(title);
+    mGui->NodeViewTable->setParent(mMainView->currentWidget());
+    mGui->NodeViewTable->setRowCount(nodeAddress.size());
+    mGui->NodeViewTable->setColumnCount(title.size());
+    mGui->NodeViewTable->setGeometry(mGui->NodeViewTable->geometry());
+    mGui->NodeViewTable->setHorizontalHeaderLabels(title);
 
     for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
         QStringList text = nodeAddress[rowIndex].split("\t");
         if (text.size() == 2) {
             for (int columnIndex = 0; columnIndex < text.size(); columnIndex++) {
-                mNodeAddress->setItem(rowIndex, columnIndex, new QTableWidgetItem(text[columnIndex]));
+                mGui->NodeViewTable->setItem(rowIndex, columnIndex, new QTableWidgetItem(text[columnIndex]));
             }
         } else {
-            mNodeAddress->setItem(rowIndex, 0, new QTableWidgetItem(text[0]));
+            mGui->NodeViewTable->setItem(rowIndex, 0, new QTableWidgetItem(text[0]));
         }
     }
-    mNodeAddress->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mNodeAddress->resizeColumnsToContents();
-    mNodeAddress->resizeRowsToContents();
-    mNodeAddress->show();
+    mGui->NodeViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mGui->NodeViewTable->resizeColumnsToContents();
+    mGui->NodeViewTable->resizeRowsToContents();
+    mGui->NodeViewTable->show();
 }
 
 void GuiCenter::updateDisplayAutoComplete(const bool& show) {
     QStringList nodeAddressName = QStringList();
     QStringList nodeAddress = QStringList();
 
-    for (int rowIndex = 0; rowIndex < mNodeAddress->rowCount(); rowIndex++) {
-        nodeAddress.append(mNodeAddress->item(rowIndex, 0)->text());
+    for (int rowIndex = 0; rowIndex < mGui->NodeViewTable->rowCount(); rowIndex++) {
+        nodeAddress.append(mGui->NodeViewTable->item(rowIndex, 0)->text());
     }
 
     if (nodeAddress.size() == 0) {
@@ -353,10 +196,10 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
                 }
                 rowIndex++;
             }
-            mNodeAddress->clearSelection();
-            QTableWidgetItem* scrollItem = mNodeAddress->item(rowIndex, 0);
+            mGui->NodeViewTable->clearSelection();
+            QTableWidgetItem* scrollItem = mGui->NodeViewTable->item(rowIndex, 0);
             if (scrollItem) {
-                mNodeAddress->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
+                mGui->NodeViewTable->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
                 scrollItem->setSelected(true);
             }
 
@@ -422,10 +265,6 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo: {
             updateDisplayConfigInfo();
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeTestReportType: {
-            updateDisplayTestReport();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll: {

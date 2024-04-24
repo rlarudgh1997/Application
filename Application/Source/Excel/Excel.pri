@@ -15,3 +15,7 @@ SOURCES += \
     $$PWD/GuiExcel.cpp\
     $$PWD/HandlerExcel.cpp\
     $$PWD/ControlExcel.cpp\
+
+
+FORMS += \
+    $$PWD/GuiExcel.ui\

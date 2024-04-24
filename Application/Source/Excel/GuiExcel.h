@@ -21,6 +21,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+// #include "ui_GuiExcel.h"
+
 class SelectModuleDialog;
 
 class AutoCompleteDialog : public QDialog {
@@ -304,7 +306,9 @@ public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
 
 private:
+    // Ui::GuiExcel* mGui = nullptr;
     QTabWidget* mMainView = nullptr;
+
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, ExcelSheet> mMergeInfo = QMap<int, ExcelSheet>();
     ExcelSheet mCopyMergeInfo = ExcelSheet();

@@ -27,6 +27,8 @@
 #include "CommonUtil.h"
 #include "Dialog.h"
 
+#include "ui_GuiMenu.h"
+
 class SelectModuleDialog;
 
 class SelectReportDialog : public QDialog {
@@ -543,7 +545,6 @@ private:
     void drawMenuEdit();
     void drawMenuView();
     void drawMenuSetting();
-    void drawMenuReport();
     void drawMenuRun();
     void drawMenuDocker();
     void drawMenuHelp();
@@ -562,12 +563,9 @@ public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
 
 private:
+    Ui::GuiMenu* mGui = nullptr;
     QMainWindow* mMainView = nullptr;
-    QMap<MainType, QMenu*> mMenu = QMap<MainType, QMenu*>();
-    QMap<MainType, QToolBar*> mToolBar = QMap<MainType, QToolBar*>();
-    QMap<MainType, QMap<QString, QAction*>> mAction = QMap<MainType, QMap<QString, QAction*>>();
-    QList<QShortcut*> mShortcut = QList<QShortcut*>();
-    QPushButton* mDefaultPath = nullptr;
+
     QProgressBar* mProgressBar = nullptr;
     QPushButton* mTestResultInfo = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;

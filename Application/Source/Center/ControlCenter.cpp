@@ -121,35 +121,11 @@ void ControlCenter::updateConfigInfo() {
         QVariant value = ConfigSetting::instance().data()->readConfig(type);
         allConfigData.append(QVariant(QVariantList({type, name, value})));
     }
+    QVariantList previousConfig = getData(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeConfig);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious, previousConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
-}
-
-void ControlCenter::updateTestReport() {
-    for (int index = ivis::common::ReportTypeEnum::ReportTypeResult; index < ivis::common::ReportTypeEnum::ReportTypeAll;
-         index++) {
-        int configStart = ConfigInfo::ConfigTypeReportResult;
-        int configEnd = ConfigInfo::ConfigTypeReportResultExcel;
-        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportResultInfo;
-
-        if (index == ivis::common::ReportTypeEnum::ReportTypeCoverage) {
-            configStart = ConfigInfo::ConfigTypeReportCoverage;
-            configEnd = ConfigInfo::ConfigTypeReportCoverageBranch;
-            propertyType = ivis::common::PropertyTypeEnum::PropertyTypeTestReportCoverageInfo;
-        }
-
-        QVariantList reportData = QVariantList();
-        for (int configType = configStart; configType <= configEnd; configType++) {
-            QVariant configValue = ConfigSetting::instance().data()->readConfig(configType);
-            reportData.append(QVariant(QVariantList({configType, configValue})));
-            // qDebug() << "readConfig :" << configType << configValue;
-        }
-        updateDataHandler(propertyType, QVariant(reportData));
-    }
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeReport);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReportType, true, true);
 }
 
 void ControlCenter::updateAllModuleList() {
@@ -176,7 +152,7 @@ bool ControlCenter::checkNodeAddress(const QString& vsmPath, const QVariantList&
         QVariant popupData = QVariant();
         button = ivis::common::Popup::drawPopup(ivis::common::PopupType::FileNotExist, isHandler(), popupData, QVariant(text));
         if (button == ivis::common::PopupButton::Confirm) {
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeSettingVsmPath);
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath);
         }
     }
 
@@ -322,7 +298,7 @@ void ControlCenter::updateNodeAddress(const bool& check) {
 
     // qDebug() << "VSM List Count :" << vsmListAll.size() << vsmList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNodeAddress);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
 
     updateSelectModueList(false);
@@ -359,10 +335,6 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::ViewTypeEnum::ViewTypeReport: {
-            updateTestReport();
-            break;
-        }
         default: {
         }
     }
@@ -389,14 +361,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
             if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
                 ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
-            } else if (viewType == ivis::common::ViewTypeEnum::ViewTypeReport) {
-                ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeReport);
-            } else {
             }
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeTestReportReset: {
-            updateTestReport();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeShowModule: {
@@ -434,12 +399,6 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModule: {
             updateSelectModueNodeAddress(false, eventValue.toList());
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeSettingTestReport:
-        case ivis::common::EventTypeEnum::EventTypeReportResult:
-        case ivis::common::EventTypeEnum::EventTypeReportCoverage: {
-            updateTestReport();
             break;
         }
         default: {

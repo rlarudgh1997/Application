@@ -54,20 +54,20 @@ void MainWindow::controlConnect() {
             Qt::UniqueConnection);
     connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle,
             [=](const QString& title, const int& appMode) {
-            QString text = QString("TC Creator");
-            if (appMode == ivis::common::AppModeEnum::AppModeTypeCV) {
-                text.append("[CV]");
-            } else if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-                text.append("[PV]");
-            } else {
-            }
+                QString text = QString("TC Creator");
+                if (appMode == ivis::common::AppModeEnum::AppModeTypeCV) {
+                    text.append("[CV]");
+                } else if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+                    text.append("[PV]");
+                } else {
+                }
 
-            if (title.size() > 0) {
-                text.append(" : ");
-                text.append(title);
-            }
-            this->setWindowTitle(text);
-        });
+                if (title.size() > 0) {
+                    text.append(" : ");
+                    text.append(title);
+                }
+                this->setWindowTitle(text);
+            });
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
             qInfo() << "openpyxl :" << ((state) ? ("valid") : ("invalid"));

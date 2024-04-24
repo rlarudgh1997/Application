@@ -186,7 +186,7 @@ QStringList ControlMenu::isModuleListFromJson() {
     // Read : Json Data
     QStringList moduleList = QStringList();
     QJsonObject jsonObj = jsonDoc.object();
-    if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {   // Read : SFCConfiguration
+    if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
         QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
         // if (sfcConfig.contains("Version") && sfcConfig["Version"].isString()) {    // Read : Version
         //     QString version = sfcConfig["Version"].toString();
@@ -194,7 +194,7 @@ QStringList ControlMenu::isModuleListFromJson() {
         // if (sfcConfig.contains("Description") && sfcConfig["Description"].isString()) {   // Read : Description
         //     QString description = sfcConfig["Description"].toString();
         // }
-        if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {    // Read : SFCs
+        if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
             for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
                 if (module.isString()) {
                     // qDebug() << "\t Module Json :" << module.toString();
@@ -609,8 +609,8 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         // ./gen_tcreport.sh -c pV, CV -s S -o C -t E    (-s : Split,  -o : Config,   -t : Excel)
         // ./gen_gcov_report.sh -c PV, CV -b ON -f ON    (-b : Branch, -f : Function, -n : Line )
         cmd = QString("./%1.sh -c %2")
-                      .arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ? ("gen_gcov_report") : ("gen_tcreport"))
-                      .arg(pvCvName);
+                  .arg((runType == ivis::common::RunTypeEnum::RunTypeGcovReport) ? ("gen_gcov_report") : ("gen_tcreport"))
+                  .arg(pvCvName);
         if (state) {
             QString option1 = (options.at(0).toBool()) ? (" -s S") : ("");
             QString option2 = (options.at(1).toBool()) ? (" -o C") : ("");
@@ -659,7 +659,11 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             QString docker = (state) ? (QString("-d ")) : (QString());
             QString ptList = (checkList.size() == 0) ? (QString()) : (QString(" %1").arg(checkList));
             cmd = QString("./run_tc.sh -b %1 -c %2 %3-g -m \"%4\"%5")
-                           .arg(altonPath).arg(pvCvName).arg(docker).arg(moduleInfo).arg(ptList);
+                      .arg(altonPath)
+                      .arg(pvCvName)
+                      .arg(docker)
+                      .arg(moduleInfo)
+                      .arg(ptList);
             subPath = QString("validator");
             int ptCount = infoList[1].toList().size();
             if (ptCount == 0) {
@@ -876,10 +880,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeViewConfig:
-        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress:
-        case ivis::common::EventTypeEnum::EventTypeSettingTestReport:
-        case ivis::common::EventTypeEnum::EventTypeReportResult:
-        case ivis::common::EventTypeEnum::EventTypeReportCoverage: {
+        case ivis::common::EventTypeEnum::EventTypeViewNodeAddress: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type, value);
             break;
         }
@@ -972,6 +973,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateViewRunScript(value.toInt());
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeGenSSFS: {
+            qDebug() << "Menu - EventTypeGenSSFS";
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun: {
             if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
@@ -1022,7 +1027,7 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
     // qDebug() << "ControlMenu::slotEventInfoChanged() ->" << displayType << "," << eventType << "," << eventValue;
     switch (eventType) {
         case ivis::common::EventTypeEnum::EventTypeExitProgram:
-        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {
+        case ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath: {
             slotHandlerEvent(eventType, eventValue);
             break;
         }

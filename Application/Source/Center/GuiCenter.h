@@ -20,83 +20,62 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QLayout>
-// #include <QShowEvent>
+
+#include "ui_GuiCenter.h"
 
 class AutoCompleteDialog;
-
-class ReportItemInfo {
-public:
-    enum class Config {
-        On = 0,
-        Option1,
-        Option2,
-        Option3,
-    };
-    enum class Text {
-        Title = 0,
-        On,
-        Off,
-        Option,
-        Option1,
-        Option2,
-        Option3,
-        Apply,
-        Cancel,
-    };
-};
 
 class ListItem : public QObject {
     Q_OBJECT
 
 public:
     explicit ListItem(const int& index, const int& type, const QString& name, const QString& value, QWidget* parent = nullptr) {
-        int posY = 20 + (index * 55);
-        int height = 50;
+        int posY = 5 + (index * 35);
+        int height = 30;
 
-        mNameButton = ivis::common::createWidget<QPushButton>(parent, true, QRect(30, posY, 195, height), mStyleNormal);
-        mNameButton->setText(name);
-        connect(mNameButton, &QPushButton::clicked, [=]() { editValue(type, mEditState); });
+        mTitle = ivis::common::createWidget<QPushButton>(parent, true, QRect(5, posY, 190, height), mStyleNormal);
+        mTitle->setText(name);
+        connect(mTitle, &QPushButton::clicked, [=]() { editValue(type, mEditState); });
 
-        mValueDispaly = ivis::common::createWidget<QLabel>(parent, false, QRect(230, posY, 1000, height), mStyleNormal);
-        mValueDispaly->setFrameShape(QLabel::Shape::Panel);
-        mValueDispaly->setIndent(2);
-        mValueDispaly->setWordWrap(true);
-        mValueDispaly->setText(value);
-        mValueDispaly->show();
+        mDispaly = ivis::common::createWidget<QLabel>(parent, false, QRect(200, posY, 900, height), mStyleNormal);
+        mDispaly->setFrameShape(QLabel::Shape::Panel);
+        mDispaly->setIndent(2);
+        mDispaly->setWordWrap(true);
+        mDispaly->setText(value);
+        mDispaly->show();
 
-        mValueEdit = ivis::common::createWidget<QLineEdit>(parent, false, QRect(mValueDispaly->geometry()),
-                                                           QString("color: blue; font-size: 15px"));
-        mValueEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        mValueEdit->setText(value);
-        mValueEdit->hide();
-        connect(mValueEdit, &QLineEdit::returnPressed, [=]() { editValue(type, false); });
+        mEdit = ivis::common::createWidget<QLineEdit>(parent, false, QRect(mDispaly->geometry()),
+                                                      QString("color: blue; font-size: 13px"));
+        mEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        mEdit->setText(value);
+        mEdit->hide();
+        connect(mEdit, &QLineEdit::returnPressed, [=]() { editValue(type, false); });
     }
     ~ListItem() {
         clear();
     }
     void clear() {
-        // qDebug() << "~ListItem() ->" << mNameButton->text() << "," << mValueDispaly->text();
-        delete mNameButton;
-        delete mValueDispaly;
-        delete mValueEdit;
+        delete mTitle;
+        delete mDispaly;
+        delete mEdit;
     }
     void initStyle() {
-        mNameButton->setStyleSheet(mStyleNormal);
-        mValueDispaly->setStyleSheet(mStyleNormal);
-        mValueDispaly->show();
-        mValueEdit->setText(mValueDispaly->text());
-        mValueEdit->hide();
+        mTitle->setStyleSheet(mStyleNormal);
+        mDispaly->setStyleSheet(mStyleNormal);
+        mDispaly->show();
+        mEdit->setText(mDispaly->text());
+        mEdit->hide();
         mEditState = true;
     }
     void setData(const QString& name, const QString& value) {
-        if (mNameButton) {
-            mNameButton->setText(name);
+        if (mTitle) {
+            mTitle->setText(name);
         }
-        if (mValueDispaly) {
-            mValueDispaly->setText(value);
+        if (mDispaly) {
+            mDispaly->setText(value);
         }
-        if (mValueEdit) {
-            mValueEdit->setText(value);
+        if (mEdit) {
+            mEdit->setText(value);
         }
     }
 
@@ -104,18 +83,18 @@ private:
     void editValue(const int& type, const bool& editState) {
         QString style = QString();
         if (editState) {
-            mNameButton->setStyleSheet(mStyleEdit);
-            mValueDispaly->hide();
-            mValueEdit->show();
+            mTitle->setStyleSheet(mStyleEdit);
+            mDispaly->hide();
+            mEdit->show();
         } else {
-            QString value = mValueEdit->text();
-            if (mValueDispaly->text() != value) {
-                mValueDispaly->setText(value);
+            QString value = mEdit->text();
+            if (mDispaly->text() != value) {
+                mDispaly->setText(value);
                 emit signalValueChanged(type, value);
             }
-            mNameButton->setStyleSheet(mStyleNormal);
-            mValueDispaly->show();
-            mValueEdit->hide();
+            mTitle->setStyleSheet(mStyleNormal);
+            mDispaly->show();
+            mEdit->hide();
         }
         mEditState = !editState;
     }
@@ -124,174 +103,12 @@ signals:
     void signalValueChanged(const int& type, const QVariant& value);
 
 private:
-    QString mStyleNormal = QString("color: black; font-size: 15px");
-    QString mStyleEdit = QString("background-color: rgb(150, 150, 150); color: blue; font-size: 15px");
+    QString mStyleNormal = QString("color: black; font-size: 13px");
+    QString mStyleEdit = QString("background-color: rgb(150, 150, 150); color: blue; font-size: 13px");
     bool mEditState = true;
-    QPushButton* mNameButton = nullptr;
-    QLabel* mValueDispaly = nullptr;
-    QLineEdit* mValueEdit = nullptr;
-};
-
-class ReportItem : public QObject {
-    Q_OBJECT
-
-public:
-    ReportItem() {
-        clear();
-    }
-    explicit ReportItem(QWidget* parent, const int& index, const bool& select) {
-        initGui(parent, index, select);
-    }
-    ~ReportItem() {
-        clear();
-    }
-    void updateConfig(const QMap<int, QPair<int, bool>>& config) {
-        if ((mInit == false) && (config.size() == 0) && (mOn = nullptr) && (mOff = nullptr) && (mOption1 = nullptr) &&
-            (mOption2 = nullptr) && (mOption3 = nullptr)) {
-            return;
-        }
-        bool on = config[static_cast<int>(ReportItemInfo::Config::On)].second;
-        mOn->setChecked(on);
-        mOff->setChecked(on == false);
-        mOption1->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option1)].second);
-        mOption2->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option2)].second);
-        mOption3->setChecked(config[static_cast<int>(ReportItemInfo::Config::Option3)].second);
-
-        QMapIterator<int, QPair<int, bool>> iter(config);
-        mConfigType.clear();
-        while (iter.hasNext()) {
-            iter.next();
-            mConfigType.insert(iter.key(), iter.value().first);
-        }
-    }
-    void updateText(const QMap<int, QString>& text) {
-        if ((mInit == false) && (text.size() == 0) && (mTitle = nullptr) && (mOn = nullptr) && (mOff = nullptr) &&
-            (mOption = nullptr)
-            // && (mApply = nullptr)
-            && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
-            return;
-        }
-        mTitle->setText(text[static_cast<int>(ReportItemInfo::Text::Title)]);
-        mOn->setText(text[static_cast<int>(ReportItemInfo::Text::On)]);
-        mOff->setText(text[static_cast<int>(ReportItemInfo::Text::Off)]);
-        mOption->setText(text[static_cast<int>(ReportItemInfo::Text::Option)]);
-        mOption1->setText(text[static_cast<int>(ReportItemInfo::Text::Option1)]);
-        mOption2->setText(text[static_cast<int>(ReportItemInfo::Text::Option2)]);
-        mOption3->setText(text[static_cast<int>(ReportItemInfo::Text::Option3)]);
-        // mApply->setText(text[static_cast<int>(ReportItemInfo::Text::Apply)]);
-    }
-    void updateStatus(const bool& on) {
-        if ((mInit == false) && (mOption1 = nullptr) && (mOption2 = nullptr) && (mOption3 = nullptr)) {
-            return;
-        }
-        QString color = (on) ? (QString("black")) : (QString("gray"));
-        QString colorOption = mBaseStyle.arg(color).arg("20");
-        QString colorOption1 = mBaseStyle.arg(color).arg("15");
-        QString colorOption2 = mBaseStyle.arg(color).arg("15");
-        QString colorOption3 = mBaseStyle.arg(color).arg("15");
-
-        mOption->setStyleSheet(colorOption);
-        mOption1->setStyleSheet(colorOption1);
-        mOption2->setStyleSheet(colorOption2);
-        mOption3->setStyleSheet(colorOption3);
-
-        mOption1->setEnabled(on);
-        mOption2->setEnabled(on);
-        mOption3->setEnabled(on);
-    }
-    void clear() {
-        mConfigType.clear();
-        delete mFrame;
-        delete mTitle;
-        delete mOption;
-        delete mOn;
-        delete mOff;
-        delete mOption1;
-        delete mOption2;
-        delete mOption3;
-        delete mGroup;
-        // delete mApply;
-    }
-
-private:
-    void initGui(QWidget* parent, const int& index, const bool& select) {
-        if (mInit) {
-            return;
-        }
-
-        mFrame = ivis::common::createWidget<QFrame>(parent, true, QRect(30, (20 + index * 210), 750, 200),
-                                                    mBaseStyle.arg("balck").arg("15"));
-        mFrame->setFrameShape(QFrame::Shape::Box);
-        if (select) {
-            mFrame->setLineWidth(3);
-        } else {
-            mFrame->setLineWidth(1);
-        }
-        mFrame->setEnabled(select);
-
-        mTitle = ivis::common::createWidget<QLabel>(mFrame, true, QRect(100, 50, 200, 50), mBaseStyle.arg("balck").arg("20"));
-        mOn = ivis::common::createWidget<QRadioButton>(mFrame, true, QRect(350, 50, 100, 50), mBaseStyle.arg("balck").arg("15"));
-        mOff = ivis::common::createWidget<QRadioButton>(mFrame, true, QRect(450, 50, 100, 50), mBaseStyle.arg("balck").arg("15"));
-
-        mGroup = new QButtonGroup(mFrame);
-        mGroup->addButton(mOn, 1);
-        mGroup->addButton(mOff, 0);
-
-        mOption = ivis::common::createWidget<QLabel>(mFrame, true, QRect(130, 110, 150, 50), mBaseStyle.arg("balck").arg("20"));
-        mOption1 =
-            ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(300, 110, 100, 50), mBaseStyle.arg("balck").arg("15"));
-        mOption2 =
-            ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(400, 110, 100, 50), mBaseStyle.arg("balck").arg("15"));
-        mOption3 =
-            ivis::common::createWidget<QCheckBox>(mFrame, true, QRect(500, 110, 100, 50), mBaseStyle.arg("balck").arg("15"));
-
-#if 0  // QT6 버전 에서 미지원
-        connect(mGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), [=](int id) {
-            bool onOff = (id == 1);
-            updateStatus(onOff);
-            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
-                                            mConfigType[static_cast<int>(ReportItemInfo::Config::On)], onOff);
-        });
-#else
-        connect(mGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton* button) {
-            bool onOff = (button == mOn);
-            updateStatus(onOff);
-            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::On),
-                                          mConfigType[static_cast<int>(ReportItemInfo::Config::On)], onOff);
-        });
-#endif
-        connect(mOption1, &QCheckBox::clicked, [=](bool checked) {
-            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option1),
-                                          mConfigType[static_cast<int>(ReportItemInfo::Config::Option1)], checked);
-        });
-        connect(mOption2, &QCheckBox::clicked, [=](bool checked) {
-            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option2),
-                                          mConfigType[static_cast<int>(ReportItemInfo::Config::Option2)], checked);
-        });
-        connect(mOption3, &QCheckBox::clicked, [=](bool checked) {
-            emit signalReportValueChanged(static_cast<int>(ReportItemInfo::Config::Option3),
-                                          mConfigType[static_cast<int>(ReportItemInfo::Config::Option3)], checked);
-        });
-        mInit = true;
-    }
-
-signals:
-    void signalReportValueChanged(const int& index, const int& type, const bool& value);
-
-private:
-    const QString mBaseStyle = QString("color: %1; font: bold; font-size: %2px");
-    bool mInit = false;
-    QMap<int, int> mConfigType = QMap<int, int>();
-    QFrame* mFrame = nullptr;
-    QButtonGroup* mGroup = nullptr;
-    QLabel* mTitle = nullptr;
-    QLabel* mOption = nullptr;
-    QRadioButton* mOn = nullptr;
-    QRadioButton* mOff = nullptr;
-    QCheckBox* mOption1 = nullptr;
-    QCheckBox* mOption2 = nullptr;
-    QCheckBox* mOption3 = nullptr;
-    QPushButton* mApply = nullptr;
+    QPushButton* mTitle = nullptr;
+    QLabel* mDispaly = nullptr;
+    QLineEdit* mEdit = nullptr;
 };
 
 class SelectModuleDialog : public QDialog {
@@ -536,10 +353,7 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
-    template <typename T>
-    void updateDisplayViewType(const int& viewType = (-1), T* widget = nullptr);
     void updateDisplayConfigInfo();
-    void updateDisplayTestReport();
     void updateDisplayNodeAddress(const int& updateType);
     void updateDisplayAutoComplete(const bool& show);
     void updateDisplaySelectModule(const bool& show);
@@ -548,17 +362,10 @@ public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
 
 private:
+    Ui::GuiCenter* mGui = nullptr;
     QStackedWidget* mMainView = nullptr;
-    QWidget* mConfigWidget = nullptr;
-    QWidget* mReportWidget = nullptr;
-    QTableWidget* mNodeAddress = nullptr;
+
     QMap<int, ListItem*> mConfigListItem = QMap<int, ListItem*>();
-    QVariantList mConfigValue = QVariantList();
-    QPushButton* mConfigHideButton = nullptr;
-    QPushButton* mConfigResetButton = nullptr;
-    QPushButton* mSelectModuleButton = nullptr;
-    QPushButton* mNodeAddressSearch = nullptr;
-    QMap<int, ReportItem*> mTestReport = QMap<int, ReportItem*>();
     AutoCompleteDialog* mAutoComplete = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;
 };
