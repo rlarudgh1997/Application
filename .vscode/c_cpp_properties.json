@@ -6,14 +6,16 @@
                 "${workspaceFolder}/**",
                 "C:/mingw64/x86_64-8.1.0-release-win32-seh-rt_v6-rev0/mingw64/include",
                 "C:/Qt/Qt5.12.10/5.12.10/mingw73_64/include",
-                "Y:/900_Code/001_SDK_SFC"
+                "Y:/900_Code/001_SDK_SFC/PV/include",
+                "Y:/900_Code/001_SDK_SFC/CV/include",
                 // "C:/Qt/Qt5.12.10/5.12.10/mingw73_64/include",
                 // "Y:/Qt_5.12.4/5.12.4/gcc_64/include",
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "__USE_FILE_UI__"
             ],
             // "compilerPath": "C:/mingw64/x86_64-8.1.0-release-win32-seh-rt_v6-rev0/mingw64/bin/gcc.exe",
             "compilerPath": "C:/Qt/Qt5.12.10/Tools/mingw730_64/bin/gcc.exe",
