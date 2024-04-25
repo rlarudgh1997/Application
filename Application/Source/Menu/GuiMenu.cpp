@@ -120,12 +120,11 @@ void GuiMenu::drawMenuRun() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTestReportCoverage, QVariant()); });
     connect(mGui->actionEnterScriptText, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptText, QVariant()); });
+    connect(mGui->actionGenSSFS, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSSFS, QVariant()); });
     connect(mGui->actionViewScriptLog, &QAction::triggered, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScript, ivis::common::RunTypeEnum::RunTypeViewRunScriptLog);
     });
-    connect(mGui->actionGenSSFS, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSSFS, QVariant()); });
-    mGui->actionGenSSFS->setVisible(false);
 }
 
 void GuiMenu::drawMenuDocker() {
@@ -481,17 +480,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayVisible();
             break;
         }
-#if defined(USE_DEFAULT_VSM_PATH)
-        case ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath: {
-            drawMenuEtc(true);
-            break;
-        }
-#else
         case ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath: {
             drawMenuEtc(true);
             break;
         }
-#endif
         case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun: {
             int runType = value.toInt();
             if (runType != ivis::common::RunTypeEnum::RunTypeEnterScriptText) {

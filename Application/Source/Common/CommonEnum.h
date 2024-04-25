@@ -193,9 +193,7 @@ public:
         EventTypeReportCoverage,
 
         EventTypeSettingSfcModelPath = 1400,
-        EventTypeSettingDevPath,
         EventTypeSettingNodePath,
-        EventTypeSettingVsmPath,
         EventTypeSettingAppMode,
 
         EventTypeMultiDocker = 1500,
@@ -274,7 +272,8 @@ public:
 class ViewTypeEnum {
 public:
     enum ViewType {
-        ViewTypeConfig = 0,
+        ViewTypeInvalid = 0,
+        ViewTypeConfig,
         ViewTypeNode,
     };
 };
@@ -375,6 +374,7 @@ public:
         RunTypeTCReport,
         RunTypeGcovReport,
         RunTypeEnterScriptText,
+        RunTypeGenSSFS,
         RunTypeViewRunScriptLog,
     };
 };
@@ -390,7 +390,8 @@ public:
 class TestResultTypeEnum {
 public:
     enum TestResultType {
-        TestResultTypeStart = 0,
+        TestResultTypeInvalid = 0,
+        TestResultTypeStart,
         TestResultTypeUpdate,
         TestResultTypeCompleted,
         TestResultTypeCancel,

@@ -61,13 +61,8 @@ void ControlMenu::initNormalData() {
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, vehicleTypeList);
 
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, defaultPath);
-#else
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, sfcModelPath);
-#endif
     updateAllModuleList(QString(".hpp"));  // yml, hpp 파일이 있으면 모듈로 인식
 
 #if defined(USE_TEST_RESULT_TEMP)
@@ -223,18 +218,6 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
 #if defined(USE_DEFAULT_MODULE_INFO_FILE)
     QStringList sfcModules = QStringList();
     QStringList findPath = QStringList();
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    if (appModePV) {
-        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV);
-        path.replace("/model/SFC/CV", "/model/SFC");
-        for (const auto& spec : sfcSpecList.toStringList()) {
-            findPath.append(QString("%1/%2").arg(path).arg(spec));
-        }
-    } else {
-        findPath.append(path);
-    }
-#else
     QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     if (appModePV) {
         QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV);
@@ -246,7 +229,6 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
         path.append("/model/SFC/CV");
         findPath.append(path);
     }
-#endif
 
     // Find SFC Path List
     for (const auto& sfcPath : findPath) {
@@ -337,7 +319,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     switch (testReultType) {
         case ivis::common::TestResultTypeEnum::TestResultTypeStart: {
             countInfo = QVariantList({0, totalCount, false});
-            titleInfo = QVariantList({"Test Case : Start"});
+            titleInfo = QVariantList({"Test Case : Start", ""});
             break;
         }
         case ivis::common::TestResultTypeEnum::TestResultTypeUpdate: {
@@ -368,11 +350,9 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             }
             countInfo = QVariantList({currentCount, totalCount, complete});
             if (complete) {
-                titleInfo.append(QString("Test Case : Completed(%1)").arg(completeString));
-                titleInfo.append(errorString);
+                titleInfo.append({QString("Test Case : Completed(%1)").arg(completeString), errorString});
             } else {
-                titleInfo.append("Test Case : Progressing");
-                titleInfo.append("");
+                titleInfo.append({"Test Case : Progressing", ""});
             }
             break;
         }
@@ -467,6 +447,8 @@ void ControlMenu::updateViewRunScript(const int& viewType) {
                 name = QString("Gcov Report");
             } else if (file.compare(defaultFileName.arg(4)) == false) {
                 name = QString("Enter Script Text");
+            } else if (file.compare(defaultFileName.arg(5)) == false) {
+                name = QString("Gen SSFS");
             } else {
                 continue;
             }
@@ -517,7 +499,7 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
                     int testResultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
                     if (getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel).toBool()) {
                         testResultType = ivis::common::TestResultTypeEnum::TestResultTypeCancel;
-                        updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, false);
+                        // updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, false);
                     }
                     if (updateTestResultInfo(testResultType, totalCount, data)) {
                         if (mWatcherRunScript.isNull() == false) {
@@ -537,25 +519,59 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
 void ControlMenu::startProcess(const QString& command, const QString& arg, const int& totalCount) {
     stopProcess();
 
+    QString argument = (arg.size() == 0) ? (QString("")) : (QString(" > %1").arg(arg));
     mProcess =
         QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(false), &QObject::deleteLater);
-    mProcess.data()->setCommandInfo(command, QString(" > %1").arg(arg));
+    mProcess.data()->setCommandInfo(command, argument);
     mProcess.data()->start();
     connect(
         mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramInfo, [=](const bool& start, const bool& result) {
+            bool genSSFS = command.contains("./gen_ssfs.sh");
+            bool requestCancel = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel).toBool();
+            int testResultType = ivis::common::TestResultTypeEnum::TestResultTypeInvalid;
+            QStringList infoData = QStringList();
+            QString sfcModelPath = QString();
+
             if (start) {
-                updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, totalCount);
-            } else {
-                bool requestCancel = getData(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel).toBool();
-                if (requestCancel) {
-                    QVariant processStartPath = getData(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath);
-                    QString writeData = QString("ERROR_INFO : User request cancel");
-                    ivis::common::FileInfo::writeFile(processStartPath.toString(), writeData, true);
-                    qDebug() << "Update test result info file :" << processStartPath;
-                } else if (result == false) {
-                    updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeError, totalCount);
-                } else {
+                testResultType = ivis::common::TestResultTypeEnum::TestResultTypeStart;
+                if (genSSFS) {
+                    testResultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
+                    infoData.append(QString("Script running : %1").arg(command));
                 }
+            } else if (requestCancel) {
+                testResultType = ivis::common::TestResultTypeEnum::TestResultTypeCancel;
+                // updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, false);
+            } else if (result == false) {
+                testResultType = ivis::common::TestResultTypeEnum::TestResultTypeError;
+            } else {
+                if (genSSFS) {
+                    sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+                    testResultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
+                    infoData.append("Generated file : NodeAddressSFC.info, NodeAddressVSM.info");
+                    infoData.append("COMPLETE : PASS");
+                }
+            }
+
+            if (testResultType != ivis::common::TestResultTypeEnum::TestResultTypeInvalid) {
+                updateTestResultInfo(testResultType, totalCount, infoData);
+            }
+
+            if (sfcModelPath.size() > 0) {
+                ivis::common::ExcuteProgram process;
+                QStringList log = QStringList();
+                QString nodeAddressPath = QString("cp -rf %1/ssfs/include/generated/*.info %2/../Python/NodeAddress/%3")
+                                              .arg(sfcModelPath)
+                                              .arg(ivis::common::APP_PWD())
+                                              .arg((command.contains(" PV") ? ("PV") : ("CV")));
+                QString nodeAddressPathRun = QString("cp -rf %1/ssfs/include/generated/*.info %2/NodeAddress/%3")
+                                                 .arg(sfcModelPath)
+                                                 .arg(ivis::common::APP_PWD())
+                                                 .arg((command.contains(" PV") ? ("PV") : ("CV")));
+                process.start(nodeAddressPath, log);
+                process.start(nodeAddressPathRun, log);
+            }
+
+            if (start == false) {
                 qDebug() << "*************************************************************************************************";
                 qDebug() << "Commnad :" << command;
                 qDebug() << "Result  :" << ((result) ? ("sucess") : ("fail")) << ", RequestCancel :" << requestCancel;
@@ -572,6 +588,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     QString currentPWD = ivis::common::APP_PWD();
     QStringList checkBinary = QStringList();
     QStringList moduleList = QStringList();
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString pvCvName = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("PV") : ("CV");
 
@@ -623,6 +640,14 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
             cmd.append(QString("%1%2%3").arg(option1).arg(option2).arg(option3));
         }
         qDebug() << "RunTypeTC CMD :" << subPath << cmd << ", State :" << state << ", Options :" << options;
+    } else if (runType == ivis::common::RunTypeEnum::RunTypeGenSSFS) {
+        QStringList log;
+        ivis::common::ExcuteProgram process;
+        process.start(QString("rm -rf %1/ssfs/include/generated").arg(sfcModelPath), log);
+        process.start(QString("rm -rf %1/ssfs/src/generated").arg(sfcModelPath), log);
+        totalCount = 10;
+        cmd = QString("./gen_ssfs.sh %1").arg(pvCvName);
+        // updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 1, QStringList());
     } else {
         if (infoList.size() != 2) {
             qDebug() << "Fail to select info list size :" << infoList.size();
@@ -686,17 +711,13 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         }
     }
 
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-    QString defaultRunPath = QString("%1/../../../%2").arg(currentPath).arg(subPath);
-#else
-    QString currentPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    QString defaultRunPath = QString("%1/../%2").arg(currentPath).arg(subPath);
-#endif
-
+    QString runScriptPath = QString("%1/../%2").arg(sfcModelPath).arg(subPath);
+    if (runType == ivis::common::RunTypeEnum::RunTypeGenSSFS) {
+        runScriptPath = QString("%1/..").arg(sfcModelPath);
+    }
     QVariant popupData = QVariant();
-    if (QDir::setCurrent(defaultRunPath) == false) {
-        qDebug() << "Fail to change folder :" << defaultRunPath;
+    if (QDir::setCurrent(runScriptPath) == false) {
+        qDebug() << "Fail to change folder :" << runScriptPath;
         ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_BINARY_NOT_EXISTS_TIP}));
         return false;
@@ -705,7 +726,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     if (checkBinary.size() > 0) {
         int index = 0;
         for (const auto& binary : checkBinary) {
-            QString checkFile = (index == 0) ? (binary) : (QString("%1%2").arg(defaultRunPath).arg(binary));
+            QString checkFile = (index == 0) ? (binary) : (QString("%1%2").arg(runScriptPath).arg(binary));
             if (QFile::exists(checkFile) == false) {
                 updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCheckError, totalCount,
                                      QStringList({STRING_BINARY_NOT_EXISTS_ERROR + binary}));
@@ -716,16 +737,20 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         }
     }
 
-    // qDebug() << "Current :" << currentPath;
-    qDebug() << "Default :" << defaultRunPath;
-    qDebug() << "Command :" << cmd;
+    qDebug() << "PWD        :" << ivis::common::APP_PWD();
+    qDebug() << "SFC Model  :" << sfcModelPath;
+    qDebug() << "Run Script :" << runScriptPath;
+    qDebug() << "Command    :" << cmd;
 
     QString runScriptFile = QString("%1/%2_%3").arg(currentPWD).arg(runType).arg("RunScript.log");
-    QString testResultFile = QString("%1/%2").arg(defaultRunPath).arg(fileName);
+    QString testResultFile = QString("%1/%2").arg(runScriptPath).arg(fileName);
 
+    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, false);
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath, testResultFile);
+    if (runType != ivis::common::RunTypeEnum::RunTypeGenSSFS) {
+        startWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult, testResultFile, totalCount);
+    }
     startWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeRunScript, runScriptFile, totalCount);
-    startWatcherFile(ivis::common::WatcherTypeEnum::WatcherTypeTestResult, testResultFile, totalCount);
     startProcess(cmd, runScriptFile, totalCount);
 
     return true;
@@ -767,6 +792,7 @@ void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
             "python3",
             "gen_tc.sh",
             "run_tc.sh",
+            "gen_ssfs.sh",
             "gen_tcreport.sh",
             "gen_gcov_report.sh",
             "sfc_validator",
@@ -801,10 +827,6 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
-        case ConfigInfo::ConfigTypeDefaultPath: {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDefaultPath, value);
-            break;
-        }
         case ConfigInfo::ConfigTypeSfcModelPath: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, value);
             break;
@@ -885,24 +907,13 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath:
-        case ivis::common::EventTypeEnum::EventTypeSettingDevPath:
-        case ivis::common::EventTypeEnum::EventTypeSettingNodePath:
-        case ivis::common::EventTypeEnum::EventTypeSettingVsmPath: {
+        case ivis::common::EventTypeEnum::EventTypeSettingNodePath: {
             QString text = STRING_MODEL_PATH;
             int configType = ConfigInfo::ConfigTypeSfcModelPath;
-
-            if (type == ivis::common::EventTypeEnum::EventTypeSettingDevPath) {
-                text = STRING_DEFAULT_PATH;
-                configType = ConfigInfo::ConfigTypeDefaultPath;
-            } else if (type == ivis::common::EventTypeEnum::EventTypeSettingNodePath) {
+            if (type == ivis::common::EventTypeEnum::EventTypeSettingNodePath) {
                 text = STRING_NODE_PATH;
                 configType = ConfigInfo::ConfigTypeNodeAddressPath;
-            } else if (type == ivis::common::EventTypeEnum::EventTypeSettingVsmPath) {
-                text = STRING_VSM_PATH;
-                configType = ConfigInfo::ConfigTypeVsmPath;
-            } else {
             }
-
             QVariant path = ConfigSetting::instance().data()->readConfig(configType);
             QVariant popupData = QVariant();
 
@@ -974,7 +985,8 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenSSFS: {
-            qDebug() << "Menu - EventTypeGenSSFS";
+            bool runScriptState = excuteScript(ivis::common::RunTypeEnum::RunTypeGenSSFS, false, QVariantList());
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, runScriptState);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun: {

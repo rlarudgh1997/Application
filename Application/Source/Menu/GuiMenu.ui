@@ -82,9 +82,9 @@
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
     <addaction name="actionEnterScriptText"/>
+    <addaction name="actionGenSSFS"/>
     <addaction name="separator"/>
     <addaction name="actionViewScriptLog"/>
-    <addaction name="actionGenSSFS"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -283,7 +283,7 @@
     <string>GCOV Report</string>
    </property>
    <property name="shortcut">
-    <string>Shift+G</string>
+    <string>Shift+C</string>
    </property>
   </action>
   <action name="actionEnterScriptText">

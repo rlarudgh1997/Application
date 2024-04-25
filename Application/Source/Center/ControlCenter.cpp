@@ -42,6 +42,7 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 }
 
 void ControlCenter::initNormalData() {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeInvalid);
     updateAllModuleList();
 }
 
@@ -258,12 +259,8 @@ QStringList ControlCenter::isNodeAddressMatchingModule(const QStringList& vsmLis
 }
 
 void ControlCenter::updateNodeAddress(const bool& check) {
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath).toString();
-#else
     QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     vsmPath.append("/VSM");
-#endif
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString vsmBase = QString();
     QStringList vehicleTypeList = QStringList();
@@ -329,8 +326,7 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 
     switch (viewType) {
         case ivis::common::ViewTypeEnum::ViewTypeConfig: {
-            if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeDefaultPath) ||
-                (type == ConfigInfo::ConfigTypeSfcModelPath)) {
+            if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeSfcModelPath)) {
                 updateConfigInfo();
             }
             break;

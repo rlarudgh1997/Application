@@ -6,7 +6,8 @@
 	기타 이슈 수정
 		- App Mode 설정 기능 추가 : PV, CV
 		- Module 정보 구성 방식 변경 : platform.json, CV.json 파일에서 참조 하도록
-		- Default Path, VSM Path 설정 기능 통합 : Model Path 설정 추가
+		- Default Path, VSM Path 설정 기능 통합 : SFC Model Path 설정 방식으로 변경 ex) {$SFC_ROOT_PATH}/model
+		- Gen SSFS 기능 추가 : sfc/vsm signal 참조 파일 생성용 (NodeAddressSFC.info, NodeAddressVSM.info)
 
 
 

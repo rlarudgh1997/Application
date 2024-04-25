@@ -78,13 +78,9 @@ void ControlExcel::initNormalData() {
 }
 
 void ControlExcel::initControlData() {
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDefaultPath).toString();
-#else
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
-#endif
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath, defaultFilePath);
 }
 
@@ -705,12 +701,8 @@ QString ControlExcel::isSfcFileInfo(const QString& signalName) {
 
 QStringList ControlExcel::isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
     QStringList fileName = QStringList();
-#if defined(USE_DEFAULT_VSM_PATH)
-    QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmPath).toString();
-#else
     QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     vsmPath.append("/VSM");
-#endif
     QString fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {

@@ -13,6 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <widget class="QWidget" name="Invalid"/>
   <widget class="QWidget" name="ConfigView">
    <widget class="QPushButton" name="ConfigViewClose">
     <property name="geometry">

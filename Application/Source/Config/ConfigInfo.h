@@ -22,9 +22,7 @@ public:
         ConfigTypeScreenInfo,
         ConfigTypeAppMode,
         ConfigTypeSfcModelPath,
-        ConfigTypeDefaultPath,
         ConfigTypeNodeAddressPath,
-        ConfigTypeVsmPath,
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
@@ -98,12 +96,8 @@ private:
         mConfigInfoData[ConfigTypeAppMode] = QPair<QString, QVariant>("ConfigTypeAppMode", QVariant(0));
         mConfigInfoData[ConfigTypeSfcModelPath] = QPair<QString, QVariant>(
             "ConfigTypeSfcModelPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model")));
-        mConfigInfoData[ConfigTypeDefaultPath] = QPair<QString, QVariant>(
-            "ConfigTypeDefaultPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model/SFC/CV")));
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>(
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
-        mConfigInfoData[ConfigTypeVsmPath] = QPair<QString, QVariant>(
-            "ConfigTypeVsmPath", QVariant(QApplication::applicationDirPath() + QString("/../../../model/VSM")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
