@@ -55,6 +55,7 @@ void ControlCenter::resetControl(const bool& reset) {
                        getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt());
         initNormalData();
         initControlData();
+        qDebug() << "\t Reset - ControlCenter";
     }
 }
 

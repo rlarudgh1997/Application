@@ -1,40 +1,8 @@
 ======================================================================================================================================================
 # [ToDo]
-- PV 모드
-	: 엑셀 파일 오픈후 node view 선택시 해당 파일에 맞는 노드 정보 표시 되어야 함
-		- void ControlExcel::loadExcelFile(const int& eventType) 함수 수정
-
-
-- PV 기능 구현
-	: NodeView 화면
-		- .vsm 파일 파싱 : ICV, EV, FCEV, PHEV, HEV (기존 CV 만 파싱 하고 있음)
-		- void ControlCenter::updateNodeAddress(const bool& check)
-
-- PV 모드에서
-	: CV 폴더 엑셀 오픈 상태 -> AppMode CV 로 변경 후 NodeView 선택
-		-> 기존 엑셀 오픈한 모듈만 표시됨
-		-> init 에 대한 코드 추가 필요
-	: 모듈 선택후 OK 입력시 입력된 모듈에 대한 유효서 검증 절차 거치도록 추가
-		-> xlsx, tc 파일 2개
-
-- App Mode 선택시
-	: 재부팅 해야 한다고 가이드 후 동작
-		-> config init 으로 reset() 동작 하도록 구현
-
-
-
-- ./gen_ssfs.sh 기능 추가
-	: 메뉴에 관련 기능 추가 - 선택 모드에 따라서 동작 하도록
-		./gen_ssfs.sh PV
-		./gen_ssfs.sh CV
-
-
+- 엑셀 양식에 맞지 않은 엑셀 파일 로딩시 동작 안하도록 예외 처리 필요
 
 - Ctrl + X 여러번 동작하면 셀 하이라이트 남아 있음
-
-
-
-
 
 - 로그 파일 화면 표시
 	: alton_client listen 로그 정보

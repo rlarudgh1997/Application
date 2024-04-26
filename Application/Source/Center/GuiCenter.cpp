@@ -27,14 +27,16 @@ void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
 
     // Config View
-    connect(mGui->ConfigViewClose, &QPushButton::clicked,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex())); });
+    connect(mGui->ConfigViewClose, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeConfig));
+    });
     connect(mGui->ConfigViewReset, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
 
     // Node View
-    connect(mGui->NodeViewClose, &QPushButton::clicked,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(mMainView->currentIndex())); });
+    connect(mGui->NodeViewClose, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeNode));
+    });
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
@@ -147,34 +149,32 @@ void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeNode);
 
     QStringList title = QStringList({"Node Name", "Vehicle Type"});
-    mGui->NodeViewTable->setParent(mMainView->currentWidget());
-    mGui->NodeViewTable->setRowCount(nodeAddress.size());
-    mGui->NodeViewTable->setColumnCount(title.size());
-    mGui->NodeViewTable->setGeometry(mGui->NodeViewTable->geometry());
-    mGui->NodeViewTable->setHorizontalHeaderLabels(title);
+    mGui->NodeView->setRowCount(nodeAddress.size());
+    mGui->NodeView->setColumnCount(title.size());
+    mGui->NodeView->setGeometry(mGui->NodeView->geometry());
+    mGui->NodeView->setHorizontalHeaderLabels(title);
 
     for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
         QStringList text = nodeAddress[rowIndex].split("\t");
         if (text.size() == 2) {
             for (int columnIndex = 0; columnIndex < text.size(); columnIndex++) {
-                mGui->NodeViewTable->setItem(rowIndex, columnIndex, new QTableWidgetItem(text[columnIndex]));
+                mGui->NodeView->setItem(rowIndex, columnIndex, new QTableWidgetItem(text[columnIndex]));
             }
         } else {
-            mGui->NodeViewTable->setItem(rowIndex, 0, new QTableWidgetItem(text[0]));
+            mGui->NodeView->setItem(rowIndex, 0, new QTableWidgetItem(text[0]));
         }
     }
-    mGui->NodeViewTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mGui->NodeViewTable->resizeColumnsToContents();
-    mGui->NodeViewTable->resizeRowsToContents();
-    mGui->NodeViewTable->show();
+    mGui->NodeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mGui->NodeView->resizeColumnsToContents();
+    mGui->NodeView->resizeRowsToContents();
 }
 
 void GuiCenter::updateDisplayAutoComplete(const bool& show) {
     QStringList nodeAddressName = QStringList();
     QStringList nodeAddress = QStringList();
 
-    for (int rowIndex = 0; rowIndex < mGui->NodeViewTable->rowCount(); rowIndex++) {
-        nodeAddress.append(mGui->NodeViewTable->item(rowIndex, 0)->text());
+    for (int rowIndex = 0; rowIndex < mGui->NodeView->rowCount(); rowIndex++) {
+        nodeAddress.append(mGui->NodeView->item(rowIndex, 0)->text());
     }
 
     if (nodeAddress.size() == 0) {
@@ -196,10 +196,10 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
                 }
                 rowIndex++;
             }
-            mGui->NodeViewTable->clearSelection();
-            QTableWidgetItem* scrollItem = mGui->NodeViewTable->item(rowIndex, 0);
+            mGui->NodeView->clearSelection();
+            QTableWidgetItem* scrollItem = mGui->NodeView->item(rowIndex, 0);
             if (scrollItem) {
-                mGui->NodeViewTable->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
+                mGui->NodeView->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
                 scrollItem->setSelected(true);
             }
 

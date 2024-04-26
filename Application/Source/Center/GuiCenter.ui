@@ -54,7 +54,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QWidget" name="NodeView">
+  <widget class="QTableWidget" name="NodeView">
    <widget class="QPushButton" name="NodeViewSearch">
     <property name="geometry">
      <rect>
@@ -112,20 +112,6 @@
 Module</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="NodeViewTable">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1401</width>
-      <height>861</height>
-     </rect>
-    </property>
-   </widget>
-   <zorder>NodeViewTable</zorder>
-   <zorder>NodeViewSearch</zorder>
-   <zorder>NodeViewClose</zorder>
-   <zorder>NodeViewSelectModule</zorder>
   </widget>
  </widget>
  <resources/>
