@@ -18,6 +18,19 @@
 	: altonservice 로그 중 판단 근거 키워드 추출 및 판단 기준 정립
 
 
+
+- ExcleParser.py 에 조건 추가
+	: Config.ini 파일의 title 정보와 open 시 title 이 다르면 예외 처리 하도록
+
+
+- QT 5 지원
+	: currentDateTime() 함수 오류 발생
+	inline QString GET_DATE_TIME() {
+    	return QString("%1_%2").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss")).arg(QTime::currentTime().msec());
+	}
+
+
+
 ******************************************************************************************
 ******************************************************************************************
 ******************************************************************************************

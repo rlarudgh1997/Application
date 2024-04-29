@@ -220,6 +220,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -243,6 +244,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -252,9 +254,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -294,6 +298,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -426,6 +431,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -449,6 +455,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -458,9 +465,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -500,6 +509,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -632,6 +642,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -655,6 +666,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -664,9 +676,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -706,6 +720,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -838,6 +853,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -861,6 +877,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -870,9 +887,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -912,6 +931,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -1044,6 +1064,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -1067,6 +1088,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -1076,9 +1098,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -1118,6 +1142,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -1250,6 +1275,7 @@ Vehicle.CD.Sound.Output_AmpSoundSbwPReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltReqStatus
 Vehicle.CD.Sound.Output_AmpSoundSeatBeltStepReqStatus
 Vehicle.CD.Sound.Output_AmpSoundTikTokReqStatus
+Vehicle.CD.Sound.Output_AmpSoundVolumePopupReqStatus
 Vehicle.CD.Sound.Output_AmpSoundWelcomeReqStatus
 Vehicle.CD.Sound
 Vehicle.CD.Speed_Gauge.Output_DisplaySpeedDefaultUnit
@@ -1273,6 +1299,7 @@ Vehicle.CD.Trip_Info.Output_TermAvgFuelConsValueDigit
 Vehicle.CD.Trip_Info.Output_TotalDTEValue
 Vehicle.CD.Trip_Info.Output_TripUnitStatus
 Vehicle.CD.Trip_Info
+Vehicle.CD.USM.Output_AdasDawModNewSetReq
 Vehicle.CD.USM.Output_AdasHDPSetReq
 Vehicle.CD.USM.Output_AdasLkaWarnSetReq
 Vehicle.CD.USM.Output_AdasLvdaSetReq
@@ -1282,9 +1309,11 @@ Vehicle.CD.USM.Output_AdasWarnTimingSetReq
 Vehicle.CD.USM.Output_AllDoorOpenSetReq
 Vehicle.CD.USM.Output_AutoDoorLockModeSetReq2
 Vehicle.CD.USM.Output_AutoDoorUnlockModeSetReq
+Vehicle.CD.USM.Output_BcaWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_BlindSpotSafetySetReq
 Vehicle.CD.USM.Output_BlindSpotViewSetReq
 Vehicle.CD.USM.Output_ChargeGuideSoundSetReq
+Vehicle.CD.USM.Output_DawWarnSndOnOffSetReq
 Vehicle.CD.USM.Output_DigitalKeyEnableSetReq
 Vehicle.CD.USM.Output_DisplayOutTempUnitSetReq
 Vehicle.CD.USM.Output_DswSetReq
@@ -1324,6 +1353,7 @@ Vehicle.CD.USM.Output_PtgmAutoCloseSetReq
 Vehicle.CD.USM.Output_PtgmHeightSetReq
 Vehicle.CD.USM.Output_PtgmSetReq
 Vehicle.CD.USM.Output_PtgmSpeedSetReq
+Vehicle.CD.USM.Output_RccaWarnSndOnoffSetReq
 Vehicle.CD.USM.Output_RccwSetReq
 Vehicle.CD.USM.Output_RearSeatRemind1stSetReq
 Vehicle.CD.USM.Output_RearSeatRemindSetReq
@@ -1548,6 +1578,7 @@ Vehicle.EC.Key_System
 Vehicle.EC.Lamp_Fail_Warning
 Vehicle.EC.Lamp_Indicator
 Vehicle.EC.MFSW
+Vehicle.EC.PHEV_Fuel_Tank
 Vehicle.EC.Power_Autocut
 Vehicle.EC.ROA
 Vehicle.EC.Seatbelt_Warning
@@ -1564,6 +1595,7 @@ Vehicle.EC.Key_System
 Vehicle.EC.Lamp_Fail_Warning
 Vehicle.EC.Lamp_Indicator
 Vehicle.EC.MFSW
+Vehicle.EC.PHEV_Fuel_Tank
 Vehicle.EC.Power_Autocut
 Vehicle.EC.ROA
 Vehicle.EC.Seatbelt_Warning
@@ -1597,6 +1629,7 @@ Vehicle.EC.Key_System
 Vehicle.EC.Lamp_Fail_Warning
 Vehicle.EC.Lamp_Indicator
 Vehicle.EC.MFSW
+Vehicle.EC.PHEV_Fuel_Tank
 Vehicle.EC.Power_Autocut
 Vehicle.EC.ROA
 Vehicle.EC.Seatbelt_Warning
@@ -1613,6 +1646,7 @@ Vehicle.EC.Key_System
 Vehicle.EC.Lamp_Fail_Warning
 Vehicle.EC.Lamp_Indicator
 Vehicle.EC.MFSW
+Vehicle.EC.PHEV_Fuel_Tank
 Vehicle.EC.Power_Autocut
 Vehicle.EC.ROA
 Vehicle.EC.Seatbelt_Warning
@@ -1635,6 +1669,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode
@@ -1697,6 +1732,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode
@@ -1759,6 +1795,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode
@@ -1821,6 +1858,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode
@@ -1883,6 +1921,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode
@@ -1945,6 +1984,7 @@ Vehicle.PT.Energy_Flow
 Vehicle.PT.Engine_Oil_Warning
 Vehicle.PT.Engine_Temperature
 Vehicle.PT.Engine_Warning
+Vehicle.PT.EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus
 Vehicle.PT.EV_Accel_Boost_Mode
 Vehicle.PT.EV_Battery_Warning
 Vehicle.PT.EV_Boost_Mode

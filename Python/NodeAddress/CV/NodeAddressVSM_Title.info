@@ -66,8 +66,8 @@ Vehicle.CV.AVH
 Vehicle.CV.Air_Bag_CV.Output_AirBagIndictorStatus
 Vehicle.CV.Air_Bag_CV
 Vehicle.CV.Auto_Grease
-Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Aux_Battery_Warning_CV
+Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Brake_Air
 Vehicle.CV.Brake_System_Malfunction
 Vehicle.CV.CNG_Fuel_System_CV
@@ -77,6 +77,7 @@ Vehicle.CV.CruiseControl_CV
 Vehicle.CV.Curb_Mode
 Vehicle.CV.DEA
 Vehicle.CV.DPF_CV
+Vehicle.CV.DSM
 Vehicle.CV.DSW
 Vehicle.CV.Differential_Lock
 Vehicle.CV.Digital_Clock.Output_CLUHoursValue
@@ -129,6 +130,7 @@ Vehicle.CV.Lamp_Fail_Warning_CV
 Vehicle.CV.Lamp_Indicator_CV
 Vehicle.CV.Luggage_Door
 Vehicle.CV.MIL_OBD_Lamp
+Vehicle.CV.OAT_CV
 Vehicle.CV.Option_Classification_Logic_CV
 Vehicle.CV.PDC
 Vehicle.CV.Parking_Brake_CV
@@ -205,8 +207,8 @@ Vehicle.CV.AVH
 Vehicle.CV.Air_Bag_CV.Output_AirBagIndictorStatus
 Vehicle.CV.Air_Bag_CV
 Vehicle.CV.Auto_Grease
-Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Aux_Battery_Warning_CV
+Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Brake_Air
 Vehicle.CV.Brake_System_Malfunction
 Vehicle.CV.CNG_Fuel_System_CV
@@ -216,6 +218,7 @@ Vehicle.CV.CruiseControl_CV
 Vehicle.CV.Curb_Mode
 Vehicle.CV.DEA
 Vehicle.CV.DPF_CV
+Vehicle.CV.DSM
 Vehicle.CV.DSW
 Vehicle.CV.Differential_Lock
 Vehicle.CV.Digital_Clock.Output_CLUHoursValue
@@ -262,6 +265,7 @@ Vehicle.CV.Lamp_Fail_Warning_CV
 Vehicle.CV.Lamp_Indicator_CV
 Vehicle.CV.Luggage_Door
 Vehicle.CV.MIL_OBD_Lamp
+Vehicle.CV.OAT_CV
 Vehicle.CV.Option_Classification_Logic_CV
 Vehicle.CV.PDC
 Vehicle.CV.Parking_Brake_CV
@@ -333,14 +337,15 @@ Vehicle.CV.AVH
 Vehicle.CV.Air_Bag_CV.Output_AirBagIndictorStatus
 Vehicle.CV.Air_Bag_CV
 Vehicle.CV.Auto_Grease
-Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Aux_Battery_Warning_CV
+Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Brake_Air
 Vehicle.CV.Brake_System_Malfunction
 Vehicle.CV.Cab_Tilting
 Vehicle.CV.Cooling_System
 Vehicle.CV.CruiseControl_CV
 Vehicle.CV.DEA
+Vehicle.CV.DSM
 Vehicle.CV.DSW
 Vehicle.CV.Differential_Lock
 Vehicle.CV.Digital_Clock.Output_CLUHoursValue
@@ -381,6 +386,7 @@ Vehicle.CV.LWS
 Vehicle.CV.Lamp_Fail_Warning_CV
 Vehicle.CV.Lamp_Indicator_CV
 Vehicle.CV.Luggage_Door
+Vehicle.CV.OAT_CV
 Vehicle.CV.Option_Classification_Logic_CV
 Vehicle.CV.PDC
 Vehicle.CV.Parking_Brake_CV
@@ -456,14 +462,15 @@ Vehicle.CV.AVH
 Vehicle.CV.Air_Bag_CV.Output_AirBagIndictorStatus
 Vehicle.CV.Air_Bag_CV
 Vehicle.CV.Auto_Grease
-Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Aux_Battery_Warning_CV
+Vehicle.CV.BCM_Warning_CV
 Vehicle.CV.Brake_Air
 Vehicle.CV.Brake_System_Malfunction
 Vehicle.CV.Cab_Tilting
 Vehicle.CV.Cooling_System
 Vehicle.CV.CruiseControl_CV
 Vehicle.CV.DEA
+Vehicle.CV.DSM
 Vehicle.CV.DSW
 Vehicle.CV.Differential_Lock
 Vehicle.CV.Digital_Clock.Output_CLUHoursValue
@@ -507,6 +514,7 @@ Vehicle.CV.LWS
 Vehicle.CV.Lamp_Fail_Warning_CV
 Vehicle.CV.Lamp_Indicator_CV
 Vehicle.CV.Luggage_Door
+Vehicle.CV.OAT_CV
 Vehicle.CV.Option_Classification_Logic_CV
 Vehicle.CV.PDC
 Vehicle.CV.Parking_Brake_CV
@@ -581,15 +589,6 @@ Vehicle.EC.EC_EV
 Vehicle.EC.Seatbelt_Warning
 Vehicle.EC.EC_FCEV
 Vehicle.EC
-Vehicle.PT.Aux_Battery_Warning
-Vehicle.PT.PT_SKEL
-Vehicle.PT.Aux_Battery_Warning
-Vehicle.PT.PT_ICV
-Vehicle.PT.Aux_Battery_Warning
-Vehicle.PT.PT_EV
-Vehicle.PT.Aux_Battery_Warning
-Vehicle.PT.PT_FCEV
-Vehicle.PT
 Vehicle.System.HardWire
 Vehicle.System.Config
 Vehicle.System.Extra.Version

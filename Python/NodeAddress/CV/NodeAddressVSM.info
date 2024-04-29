@@ -37,7 +37,6 @@ Vehicle.AV.NAVIGATION_TBT.Input_NaviEstTimeMinValue
 Vehicle.AV.NAVIGATION_TBT.Input_NaviEstTimeType
 Vehicle.AV.NAVIGATION_TBT.Input_NaviLaneRemainDistUnderDecimalValue
 Vehicle.AV.NAVIGATION_TBT.Input_TBTGuideColorStatus
-Vehicle.AV.NAVIGATION_TBT.Input_NaviRoadEventDistOverDecimalValue
 Vehicle.AV.VESS.Input_VessFailWarnStatus
 Vehicle.CD.Blue_Light_Filter.Input_HeadUnitBlueLightLevelStatus
 Vehicle.CD.Blue_Light_Filter.Input_HeadUnitBlueLightOnOffStatus
@@ -84,7 +83,6 @@ Vehicle.CV.ADAS_Driving_CV.Input_MvLeftLineStatus
 Vehicle.CV.ADAS_Driving_CV.Input_MvLeftLineOffsetValue
 Vehicle.CV.ADAS_Driving_CV.Input_MvRightLineStatus
 Vehicle.CV.ADAS_Driving_CV.Input_MvRightLineOffsetValue
-Vehicle.CV.ADAS_Driving_CV.Input_MvHostVehicle1Status
 Vehicle.CV.ADAS_Driving_CV.Input_MvFrontObjectStatus
 Vehicle.CV.ADAS_Driving_CV.Input_MvFrontObjectLongitudinalPositionValue
 Vehicle.CV.ADAS_Driving_CV.Input_MvFrontObjectLateralPositionValue
@@ -100,7 +98,6 @@ Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7SccFailureStatus
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7LfaFailureStatus
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7HdaFailureStatus
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7DriverAssistFailure1Status
-Vehicle.CV.ADAS_Driving_CV.Input_MvHostVehicle2Status
 Vehicle.CV.ADAS_Driving_CV.Input_MvRearLeftRadarWave2Status
 Vehicle.CV.ADAS_Driving_CV.Input_MvRearRightRadarWave2Status
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7BlindSpotSafetyFailureStatus
@@ -121,6 +118,7 @@ Vehicle.CV.ADAS_Driving_CV.Input_IFSIndLampStatus
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7MRMFailureStatus
 Vehicle.CV.ADAS_Driving_CV.Input_PuFGroup7OutsideMirrorSymbolFailureStatus
 Vehicle.CV.ADAS_Driving_CV.Input_IslaWarningSoundSymbolStatus
+Vehicle.CV.ADAS_Driving_CV.Input_MvFrontRadarWaveStatus_CV
 Vehicle.CV.ADAS_PARKING_CV.Input_AdasCarBodyDisplayStatus
 Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearSystemFailureStatus
 Vehicle.CV.ADAS_PARKING_CV.Input_AdasPdwSystemFailureStatus
@@ -172,9 +170,6 @@ Vehicle.CV.AVH.Input_AVHInfo
 Vehicle.CV.Air_Bag_CV.Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN
 Vehicle.CV.Air_Bag_CV.Input_AcuSysWarnLampStatus
 Vehicle.CV.Auto_Grease.Input_AutoGreaseWarnStatus
-Vehicle.CV.BCM_Warning_CV.Input_BcmWarningStatus
-Vehicle.CV.BCM_Warning_CV.Input_NotParkingWarnStatus
-Vehicle.CV.BCM_Warning_CV.Input_BcmSndWarningStatus
 Vehicle.CV.Aux_Battery_Warning_CV.Input_BEQOperatingStatus
 Vehicle.CV.Aux_Battery_Warning_CV.Input_AuxBatteryWarnReqFromCVLDC
 Vehicle.CV.Aux_Battery_Warning_CV.Input_ServiceIndiReqStatusFromLDC
@@ -182,6 +177,9 @@ Vehicle.CV.Aux_Battery_Warning_CV.Input_AuxBatteryWarnReqFromEMS
 Vehicle.CV.Aux_Battery_Warning_CV.Input_AuxBatteryWarnReqFromICCU
 Vehicle.CV.Aux_Battery_Warning_CV.Input_ServiceIndiReqStatusFromICCU
 Vehicle.CV.Aux_Battery_Warning_CV.Input_ServiceIndiReqStatusFromICCU2
+Vehicle.CV.BCM_Warning_CV.Input_BcmWarningStatus
+Vehicle.CV.BCM_Warning_CV.Input_NotParkingWarnStatus
+Vehicle.CV.BCM_Warning_CV.Input_BcmSndWarningStatus
 Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue
 Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue
 Vehicle.CV.Brake_System_Malfunction.Input_BrakeAirStatus
@@ -228,6 +226,7 @@ Vehicle.CV.DPF_CV.Input_DPFCoolingFanStatus
 Vehicle.CV.DPF_CV.Input_SootLevelValue
 Vehicle.CV.DPF_CV.Input_EngineDPFRegenStopLamp
 Vehicle.CV.DPF_CV.Input_EngineTVSRwarning
+Vehicle.CV.DSM.Input_CVDSMStatus
 Vehicle.CV.DSW.Input_DSWWarnStatus
 Vehicle.CV.DSW.Input_DSWWarnSymbolDistStatus
 Vehicle.CV.DSW.Input_DSWWarnSymbolDrowStatus
@@ -305,8 +304,6 @@ Vehicle.CV.EV_Charging_System_CV.Input_VCMSPlugConnectStatus
 Vehicle.CV.Eco_Power_Gauge_CV.Input_PowerGaugeInputValue
 Vehicle.CV.Emergency_Door.Input_EmerDoorOpenStatus
 Vehicle.CV.Energy_Flow_CV.Output_SocDisplayLevelStatus.Output_SocDisplayLevelStatus_MCAN
-Vehicle.CV.Energy_Flow_CV.Input_CVEvEnergyFlowStatus
-Vehicle.CV.Energy_Flow_CV.Input_CVFcevEnergyFlowStatus
 Vehicle.CV.Energy_Flow_CV.Input_BmsDisplaySocValue
 Vehicle.CV.EngineRPM_CV.Input_EngineLowBatteryIdleUp
 Vehicle.CV.EngineRPM_CV.Input_EngineRPMDisplayValue_CV
@@ -345,6 +342,8 @@ Vehicle.CV.FCEV_Warning_CV.Input_H2LeakIndiReqStatusFromHMU
 Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultLv1StatusFromVCU
 Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultLv2StatusFromVCU
 Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnStatusFromVCU
+Vehicle.CV.FCEV_Warning_CV.Input_FcevWaterReleaseWarnStatus_FCU1
+Vehicle.CV.FCEV_Warning_CV.Input_FcevWaterReleaseWarnStatus_FCU2
 Vehicle.CV.GFD_Warning.Input_GFDFaultWarningLampStatusFromBMS
 Vehicle.CV.GFD_Warning.Input_GFDWarningStatusFromFCU
 Vehicle.CV.GFD_Warning.Input_GFDWarningStatusFromFCU2
@@ -424,12 +423,19 @@ Vehicle.CV.Lamp_Indicator_CV.Input_RightTurnSignalLampStatus
 Vehicle.CV.Luggage_Door.Input_LuggageFlapOpenStatus
 Vehicle.CV.Luggage_Door.Input_LuggageFlapLockStatus
 Vehicle.CV.MIL_OBD_Lamp.Input_MILLampStatus
+Vehicle.CV.OAT_CV.Input_OATCelsiusValue_FATC
+Vehicle.CV.OAT_CV.Input_OATFahrenheitValue_FATC
+Vehicle.CV.OAT_CV.Input_OATUnitStatus_FATC
+Vehicle.CV.OAT_CV.Input_OATCelsiusValue_CCM
+Vehicle.CV.OAT_CV.Input_OATCelsiusValue_ACP
 Vehicle.CV.Option_Classification_Logic_CV.Input_ECASTelltaleStatus1
 Vehicle.CV.PDC.Input_PDCBatteryDischargeStatus
 Vehicle.CV.PDC.Input_PDCPowerAutoCutModeStatus
 Vehicle.CV.PDC.Input_PDC24VSocValue
 Vehicle.CV.PDC.Input_PDC12VSocValue
 Vehicle.CV.PDC.Input_WaterPumpStatus
+Vehicle.CV.PDC.Input_PDC24VVoltageValue
+Vehicle.CV.PDC.Input_PDC12VVoltageValue
 Vehicle.CV.Parking_Brake_CV.Input_ParkingSwitchStatus
 Vehicle.CV.Parking_Brake_CV.Input_EPBCheckStatus
 Vehicle.CV.Parking_Brake_CV.Input_EPBWarningStatus
@@ -438,6 +444,9 @@ Vehicle.CV.Parking_Brake_CV.Input_StateOfEPBStatus
 Vehicle.CV.Parking_Brake_CV.Input_EPBExtnAppRqStatus
 Vehicle.CV.Parking_Brake_CV.Input_EPBNotReleasedStatus
 Vehicle.CV.Parking_Brake_CV.Input_EPBExtnAppRqStatusFromVCU
+Vehicle.CV.Parking_Brake_CV.Input_EPBRedStopStatus
+Vehicle.CV.Parking_Brake_CV.Input_EPBWorkingModeStatus
+Vehicle.CV.Parking_Brake_CV.Input_EPBTrailerTestStatus
 Vehicle.CV.Regenerative_Braking_System.Input_RegenBrakeStatus
 Vehicle.CV.Regenerative_Braking_System.Input_RegenLimitStatus_Lever
 Vehicle.CV.Regenerative_Braking_System.Input_RegenLimitStatus_SOC
@@ -562,6 +571,9 @@ Vehicle.CV.Transmission_Indicator_CV.Input_AllisonPowerMode
 Vehicle.CV.Transmission_Indicator_CV.Input_ZFPowerMode
 Vehicle.CV.Transmission_Indicator_CV.Input_OffRoadStatus
 Vehicle.CV.Transmission_Indicator_CV.Input_RockingFreeStatus
+Vehicle.CV.Transmission_Indicator_CV.Input_ManualModeIndcatorStatus
+Vehicle.CV.Transmission_Indicator_CV.Input_SwitchRequestedGearStatus2
+Vehicle.CV.Transmission_Indicator_CV.Input_TransmissionSelectedGearStatus
 Vehicle.CV.Transmission_Warning_CV.Input_ATMOverHeatLampStatus
 Vehicle.CV.Transmission_Warning_CV.Input_ATMWarningLampStatus
 Vehicle.CV.Transmission_Warning_CV.Input_ATMRangeInhibitStatus
@@ -646,7 +658,6 @@ Vehicle.CV.VCU.Input_StartGearInfoStatus
 Vehicle.CV.VCU.Input_StartPreChargeInfoStatus
 Vehicle.CV.VCU.Input_PlugConnStatus
 Vehicle.CV.VCU.Input_UtilityModeStatus
-Vehicle.CV.VCU.Input_TransmissionRequestedRangeStatus
 Vehicle.CV.VCU.Input_ChangeParkingOffStatus
 Vehicle.CV.VCU.Input_VCUFaultECStatus
 Vehicle.CV.VCU.Input_BusOffECStatus
@@ -664,6 +675,8 @@ Vehicle.CV.VCU.Input_ADAS_DRVCtoECStatus
 Vehicle.CV.VCU.Input_DTGCtoECStatus
 Vehicle.CV.VCU.Input_EAPUCtoECStatus
 Vehicle.CV.VCU.Input_EPBCtoECStatus
+Vehicle.CV.VCU.Input_SbwWarningStatus_VCU
+Vehicle.CV.VCU.Input_TransCurrentRangeStatus
 Vehicle.CV.VDC.Input_VDCInformationalSignal
 Vehicle.CV.VDC.Input_VDCFullyOperationalSignal
 Vehicle.CV.VDC.Input_ASROffroadSwitchStatus
@@ -728,16 +741,6 @@ Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndi3rdRightStatus
 Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearCenterStatus
 Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearLeftStatus
 Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearRightStatus
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromEMS
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryResetOnReqStatus
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryRelayOffWarnStatus
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryRelayOnWarnStatus
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnStatus
-Vehicle.PT.Aux_Battery_Warning.Input_EvAuxBatteryWarnStatus
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC48V
-Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromALDC
-Vehicle.PT.Aux_Battery_Warning.Input_EvAuxBatteryWarnStatusFromALDC
 Vehicle.System.HardWire.Ignition1
 Vehicle.System.HardWire.Ignition3
 Vehicle.System.HardWire.Input_AlternatorInput
@@ -750,6 +753,8 @@ Vehicle.System.HardWire.Input_RheostatSwUpStatus
 Vehicle.System.HardWire.Input_WaterSeparatorIndiReqStatus
 Vehicle.System.HardWire.Inter_HmiOkSwitchStatus
 Vehicle.System.HardWire.Inter_HmiMenuSwitchStatus
+Vehicle.System.HardWire.Inter_HmiUpSwitchStatus
+Vehicle.System.HardWire.Inter_HmiDownSwitchStatus
 Vehicle.System.HardWire.Inter_DrvmodeSwitchStatus
 Vehicle.System.HardWire.Inter_DriveModeOnRoadSwitchStatus
 Vehicle.System.HardWire.Inter_DriveModeTerrainSwitchStatus
@@ -908,6 +913,8 @@ Vehicle.System.Config.Inter_ConfigOffRoadContents
 Vehicle.System.Config.Inter_ConfigTowModeLongKey
 Vehicle.System.Config.Inter_ConfigChauffeurMode
 Vehicle.System.Config.Inter_ConfigTrailerBrakeController
+Vehicle.System.Config.Inter_ConfigAdasPDW
+Vehicle.System.Config.Inter_ConfigRealMapView
 Vehicle.System.Extra.SafetyTest
 Vehicle.System.Extra.Version.EthDB
 Vehicle.System.Extra.Version.Alton
@@ -990,6 +997,8 @@ Vehicle.System.Micom.Output_SoundActiveNotification
 Vehicle.System.Micom.Inter_EnergyFlowSocDisplayType
 Vehicle.System.Micom.Inter_FoDDisplayThemeSupport
 Vehicle.System.Micom.Output_FoDDisplayThemeSignature
+Vehicle.System.Micom.Input_FactoryDiagnosisModeReq
+Vehicle.System.Micom.Output_NaviMapViewScreenActiveStatus
 Vehicle.System.Undefined.Inter_ConfigAxleInfo
 Vehicle.System.Undefined.Inter_ConfigAxleWeight
 Vehicle.System.Undefined.Inter_ConfigSuspType
@@ -1040,3 +1049,4 @@ Vehicle.System.Undefined.Inter_ConfigRAS
 Vehicle.System.Undefined.Inter_ConfigICCU
 Vehicle.System.Undefined.Inter_ConfigDriveType
 Vehicle.System.Undefined.Inter_ConfigADASParkingEcuType
+Vehicle.System.Undefined.Inter_ConfigDSM

@@ -45,13 +45,18 @@
 	https://repo.ccos.dev/projects/CLU_IVIS_PRIVATE/repos/ccos.core.sfc/pull-requests/3524/overview
 
 
-- Log
+- PR 정보
 	ENH: TC_Creator Application Implement
 
 	Description:
  	- 설명
 
 	Jira: EXNCP-999999999999
+
+	* 리뷰어
+		CV : 김요환 책임, 장현성 책임, 김민옥 연구원
+		PV : 김석인 책임, 임익순 책임, 고병결 책임, 김진호 책임, 권민지 연구원
+
 
 
 - Git Push

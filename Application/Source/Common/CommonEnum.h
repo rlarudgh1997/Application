@@ -433,8 +433,6 @@ public:
     enum AppModeType {
         AppModeTypeCV = 0,
         AppModeTypePV,
-        AppModeTypeTAV,
-        AppModeTypeCanDB,
     };
 };
 

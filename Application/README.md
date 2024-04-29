@@ -55,7 +55,7 @@
     ├── tc_creator
     │   ├── Alton
     │   │   ├── alton_client
-    │   │   └── altonservice
+    │   │   └── altonservice
     │   ├── Application
     │   │   ├── Application.pro
     │   │   ├── README.md
@@ -88,6 +88,7 @@
     │   │   │   │   ├── ControlCenter.h
     │   │   │   │   ├── GuiCenter.cpp
     │   │   │   │   ├── GuiCenter.h
+    │   │   │   │   ├── GuiCenter.ui
     │   │   │   │   ├── HandlerCenter.cpp
     │   │   │   │   └── HandlerCenter.h
     │   │   │   ├── Common
@@ -105,12 +106,18 @@
     │   │   │   │   ├── ConfigInfo.h
     │   │   │   │   ├── ConfigSetting.cpp
     │   │   │   │   └── ConfigSetting.h
+    │   │   │   ├── Dialog
+    │   │   │   │   ├── Dialog.cpp
+    │   │   │   │   ├── Dialog.h
+    │   │   │   │   ├── Dialog.pri
+    │   │   │   │   └── Dialog.ui
     │   │   │   ├── Excel
     │   │   │   │   ├── ControlExcel.cpp
     │   │   │   │   ├── ControlExcel.h
     │   │   │   │   ├── Excel.pri
     │   │   │   │   ├── GuiExcel.cpp
     │   │   │   │   ├── GuiExcel.h
+    │   │   │   │   ├── GuiExcel.ui
     │   │   │   │   ├── HandlerExcel.cpp
     │   │   │   │   └── HandlerExcel.h
     │   │   │   ├── MainWindow.cpp
@@ -124,6 +131,7 @@
     │   │   │   │   ├── ControlMenu.h
     │   │   │   │   ├── GuiMenu.cpp
     │   │   │   │   ├── GuiMenu.h
+    │   │   │   │   ├── GuiMenu.ui
     │   │   │   │   ├── HandlerMenu.cpp
     │   │   │   │   ├── HandlerMenu.h
     │   │   │   │   └── Menu.pri
@@ -139,9 +147,18 @@
     │   └── Python
     │       ├── ExcelParser.py
     │       └── NodeAddress
-    │           ├── DefaultModule.info
-    │           ├── NodeAddressSFC.info
-    │           └── NodeAddressVSM.info
+    │           ├── CV
+    │           │   ├── DefaultModule.info
+    │           │   ├── NodeAddressSFC.info
+    │           │   ├── NodeAddressVSM.info
+    │           │   ├── NodeAddressVSM_Duplicate.info
+    │           │   └── NodeAddressVSM_Title.info
+    │           └── PV
+    │               ├── DefaultModule.info
+    │               ├── NodeAddressSFC.info
+    │               ├── NodeAddressVSM.info
+    │               ├── NodeAddressVSM_Duplicate.info
+    │               └── NodeAddressVSM_Title.info
     ├── tcgen
     │   ├── __init__.py
     │   └── generator.py
