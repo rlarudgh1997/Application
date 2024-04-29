@@ -19,6 +19,7 @@
 #include <QFileSystemWatcher>
 #include <QMenu>
 #include <QPair>
+#include <QDateTime>
 
 namespace ivis {
 namespace common {
