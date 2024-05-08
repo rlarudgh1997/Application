@@ -82,7 +82,11 @@
         "qjsondocument": "cpp",
         "qmenubar": "cpp",
         "qwidget": "cpp",
-        "qradiobutton": "cpp"
+        "qradiobutton": "cpp",
+        "qtablewidget": "cpp",
+        "qtabwidget": "cpp",
+        "qvboxlayout": "cpp",
+        "qhboxlayout": "cpp"
     },
     // "C_Cpp.clang_format_path": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
     // // "C_Cpp.clang_format_path": "/usr/bin/clang-format-13",

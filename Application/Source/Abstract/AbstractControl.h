@@ -47,6 +47,7 @@ private:
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant()) = 0;
 
 private slots:
+    virtual void slotControlUpdate(const int& type, const QVariant& value = QVariant()) = 0;
     virtual void slotConfigChanged(const int& type, const QVariant& value) = 0;
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;

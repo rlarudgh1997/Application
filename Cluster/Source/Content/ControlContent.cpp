@@ -110,6 +110,14 @@ void ControlContent::updateDataService(const int& type, const QVariant& value) {
     // updateDataService
 }
 
+void ControlContent::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        default: {
+            break;
+        }
+    }
+}
+
 void ControlContent::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         default: {

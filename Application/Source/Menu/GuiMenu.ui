@@ -304,7 +304,7 @@
   </action>
   <action name="actionGenSSFS">
    <property name="text">
-    <string>Gen ssfs</string>
+    <string>Gen SSFS</string>
    </property>
    <property name="shortcut">
     <string>Shift+S</string>

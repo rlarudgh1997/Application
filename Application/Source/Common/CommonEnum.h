@@ -121,6 +121,7 @@ public:
         PropertyTypeShortcutType,
         PropertyTypeTestReport,
         PropertyTypeKey,
+        PropertyTypeArrowKey,
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
         PropertyTypeRunScriptLogCurrent,
@@ -266,6 +267,14 @@ public:
         EventValueInt,
         EventValueString,
         EventValueList,
+    };
+};
+
+class ControlUpdateTypeEnum {
+public:
+    enum ControlUpdateType {
+        ControlUpdateTypeInvalid = 0,
+        ControlUpdateTypeScriptRunnigCompleted,
     };
 };
 

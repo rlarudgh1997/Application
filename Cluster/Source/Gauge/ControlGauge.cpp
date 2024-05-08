@@ -220,6 +220,14 @@ void ControlGauge::updateGaugeInfo(const int& dataType, const QVariant& dataValu
     }
 }
 
+void ControlGauge::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        default: {
+            break;
+        }
+    }
+}
+
 void ControlGauge::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         default: {

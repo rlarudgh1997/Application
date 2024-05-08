@@ -175,6 +175,14 @@ void ControlTelltale::updateDataService(const int& type, const QVariant& value) 
     // updateDataService
 }
 
+void ControlTelltale::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        default: {
+            break;
+        }
+    }
+}
+
 void ControlTelltale::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         default: {

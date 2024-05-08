@@ -423,11 +423,11 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo, QVariant(testResultInfo), true);
 
     if (complete) {
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, false);
-        QVariant popupData = QVariant();
-        ivis::common::Popup::drawPopup(ivis::common::PopupType::ScriptRunnigCompleted, isHandler(), popupData,
-                                       QVariantList({STRING_SCRIPT_RUNNIG_COMPLETED, STRING_SCRIPT_RUNNIG_COMPLETED_TIP}));
+        // Calling the main thread function from watcher thread : Error to set parent
+        QMetaObject::invokeMethod(this, "slotControlUpdate",
+                                  Q_ARG(int, ivis::common::ControlUpdateTypeEnum::ControlUpdateTypeScriptRunnigCompleted));
     }
+
     return complete;
 }
 
@@ -649,7 +649,6 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         process.start(QString("rm -rf %1/ssfs/src/generated").arg(sfcModelPath), log);
         totalCount = 10;
         cmd = QString("./gen_ssfs.sh %1").arg(pvCvName);
-        // updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 1, QStringList());
     } else {
         if (infoList.size() != 2) {
             qDebug() << "Fail to select info list size :" << infoList.size();
@@ -825,6 +824,21 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
         count++;
     }
     return count;
+}
+
+void ControlMenu::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        case ivis::common::ControlUpdateTypeEnum::ControlUpdateTypeScriptRunnigCompleted: {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, false);
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::ScriptRunnigCompleted, isHandler(), popupData,
+                                           QVariantList({STRING_SCRIPT_RUNNIG_COMPLETED, STRING_SCRIPT_RUNNIG_COMPLETED_TIP}));
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {

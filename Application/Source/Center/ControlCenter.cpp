@@ -322,6 +322,14 @@ void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVari
     }
 }
 
+void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        default: {
+            break;
+        }
+    }
+}
+
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
 

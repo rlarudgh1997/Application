@@ -1,4 +1,13 @@
 # [Release Note]
+[2024-05-]
+	PR 정보
+		-
+
+	기타 이슈 수정
+		-
+
+
+==================================================================================================================
 [2024-04-29]
 	PR 정보
 		- https://jira.ccos.dev/browse/EXNCP-42092
@@ -7,8 +16,10 @@
 		- App Mode 설정 기능 추가 : PV, CV
 		- Module 정보 구성 방식 변경 : platform.json, CV.json 파일에서 참조 하도록
 		- Default Path, VSM Path 설정 기능 통합 : SFC Model Path 설정 방식으로 변경 ex) {$SFC_ROOT_PATH}/model
-		- Gen SSFS 기능 추가 : sfc/vsm signal 참조 파일 생성용 (NodeAddressSFC.info, NodeAddressVSM.info)
+		- Menu - Gen SSFS 기능 추가 : sfc/vsm signal 참조 파일 생성용 (NodeAddressSFC.info, NodeAddressVSM.info)
 		- Menu 단축키 추가
+		- Cell 정보 표시, 편집 창 추가
+		- GUI 화면 튜닝
 
 
 ==================================================================================================================

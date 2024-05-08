@@ -141,6 +141,8 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
                 qDebug() << "ControlExcel : Ctrl + C";
             }
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKey, inputValue, true);
+        } else if ((inputValue >= Qt::Key::Key_Left) && (inputValue <= Qt::Key::Key_Down)) {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, inputValue, true);
         } else {
             // qDebug() << "Excel Key Value :" << inputValue << std::hex << inputValue;
         }
@@ -909,6 +911,14 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
     if (inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].size() > 0) {  // ValueEunm data is not null
         QVariantList info = QVariantList({sfcSignal, outputState});
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible, info, true);
+    }
+}
+
+void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {
+    switch (type) {
+        default: {
+            break;
+        }
     }
 }
 

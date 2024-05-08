@@ -1,74 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>GuiExcel</class>
- <widget class="QTabWidget" name="GuiExcel">
+ <widget class="QWidget" name="GuiExcel">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>1400</width>
-    <height>900</height>
+    <height>1000</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="currentIndex">
-   <number>0</number>
-  </property>
-  <widget class="QTableWidget" name="Description">
-   <attribute name="title">
-    <string>Description</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Praivates">
-   <attribute name="title">
-    <string>Praivates</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Telltales">
-   <attribute name="title">
-    <string>Telltales</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Constants">
-   <attribute name="title">
-    <string>Constants</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Events">
-   <attribute name="title">
-    <string>Events</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Sounds">
-   <attribute name="title">
-    <string>Sounds</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Inters">
-   <attribute name="title">
-    <string>Inters</string>
-   </attribute>
-  </widget>
-  <widget class="QTableWidget" name="Outputs">
-   <attribute name="title">
-    <string>Outputs</string>
-   </attribute>
-  </widget>
-  <widget class="QWidget" name="Menu">
-   <property name="title">
+  <widget class="QWidget" name="Menu" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>100</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="title" stdset="0">
     <string/>
    </property>
-   <attribute name="title">
-    <string>Menu</string>
-   </attribute>
    <addaction name="actionCut"/>
    <addaction name="actionCopy"/>
    <addaction name="actionPaste"/>
    <addaction name="actionInsert"/>
    <addaction name="actionDelete"/>
    <addaction name="actionMergeSplit"/>
+  </widget>
+  <widget class="QTabWidget" name="TabWidgetTC">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>1400</width>
+     <height>900</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QTableWidget" name="Description">
+    <attribute name="title">
+     <string>Description</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Privates">
+    <attribute name="title">
+     <string>Privates</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Telltales">
+    <attribute name="title">
+     <string>Telltales</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Constants">
+    <attribute name="title">
+     <string>Constants</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Events">
+    <attribute name="title">
+     <string>Events</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Sounds">
+    <attribute name="title">
+     <string>Sounds</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Inters">
+    <attribute name="title">
+     <string>Inters</string>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="Outputs">
+    <attribute name="title">
+     <string>Outputs</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="CellInfo" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <widget class="QLineEdit" name="CellInfoContent">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>0</y>
+      <width>1100</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="CellInfoTitle">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>100</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cell Info</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QTabWidget" name="TabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>1400</width>
+     <height>900</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>-1</number>
+   </property>
   </widget>
   <action name="actionCut">
    <property name="text">
@@ -100,6 +170,10 @@
     <string>Merge/Split</string>
    </property>
   </action>
+  <zorder>Menu</zorder>
+  <zorder>CellInfo</zorder>
+  <zorder>TabWidgetTC</zorder>
+  <zorder>TabWidget</zorder>
  </widget>
  <resources/>
  <connections/>

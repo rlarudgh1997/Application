@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-// #include "ui_GuiExcel.h"
+#include "ui_GuiExcel.h"
 
 class SelectModuleDialog;
 
@@ -287,9 +287,11 @@ private:
     void updateDisplayMergeCell(const int& sheetIndex);
     void updateDisplaySheetHeaderAdjust(const int& sheetIndex);
     void updateDisplaySheetText(const int& sheetIndex);
+    void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column);
     void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column);
     void updateInitialExcelSheet();
     void updateDisplayKey(const int& keyValue);
+    void updateDisplayArrowKey(const int& keyValue);
     void updateDisplayExcelSheet();
     void updateDisplayAutoComplete(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
@@ -306,11 +308,12 @@ public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
 
 private:
-    // Ui::GuiExcel* mGui = nullptr;
-    QTabWidget* mMainView = nullptr;
+    Ui::GuiExcel* mGui = nullptr;
+    QWidget* mMainView = nullptr;
 
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, ExcelSheet> mMergeInfo = QMap<int, ExcelSheet>();
+    QMap<int, QPair<int, int>> mModelIndex = QMap<int, QPair<int, int>>();
     ExcelSheet mCopyMergeInfo = ExcelSheet();
     ExcelSheet mClearMergeInfo = ExcelSheet();
     QList<int> mClearCellInfo = QList<int>();

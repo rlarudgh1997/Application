@@ -37,6 +37,7 @@ protected:
     virtual void updateDataService(const int& type, const QVariant& value);
 
 public slots:
+    virtual void slotControlUpdate(const int& type, const QVariant& value = QVariant());
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);

@@ -23,15 +23,15 @@
 
 [Menu]
     - File : New, Open, Save, Save As, Exit
-    - Edit : Copy, Cut, Paste
+    - Edit : Copy, Cut, Paste, Insert, Delete, Merge/Split
     - View : Config, Node View
-    - Setting : Default Path, VSM Path
-    - Run : Generate TC, Run TC, TC Report, Gcov Report, Enter Script Text, View Run Script Log
+    - Setting : App Mode, SFC Model Path
+    - Run : Gen  TC, Run TC, TC Report, GOV Report, Enter Script Text, Gen SSFS, View Run Script Log
     - Help : About, About QT
 
 
 [Etc]
-    - DefaultModule.info : VSM Module 리스트 정보
+    - DefaultModule.info : VSM Module 리스트 정보 (사용하지 않음)
     - NodeAddressSFC.info : SFC 리스트 정보
     - NodeAddressVSM.info : VSM 리스트 정보
     - Application.ini : Config 설정 파일 (앱 실행시 자동 생성)

@@ -3,13 +3,13 @@ import csv
 import os
 import pickle
 import sys
+import time
 
 import pandas as pd
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import coordinate_to_tuple, range_to_tuple
 # from openpyxl.utils import get_column_letter
 from pandas import DataFrame
-import time
 
 # # 하위 경로 import 방법 3가지
 # import source.def_functon as func
@@ -117,7 +117,12 @@ def readFromExcel(file_path, sheet_name):
             for row in currentSheet.iter_rows(min_row=1, max_row=currentSheet.max_row, min_col=1, max_col=currentSheet.max_column):
                 data = list()
                 for currentCell in row:
-                    readCellText = currentCell.value
+                    if (type(currentCell.value) == str) and ("\n" in currentCell.value):
+                        readCellText = currentCell.value.replace("\n", "")
+                        print("\t Cell with line break at -", sheet, "[", rowIndex, ",", columnIndex, "] :", readCellText)
+                    else:
+                        readCellText = currentCell.value
+
                     rowIndex, columnIndex = coordinate_to_tuple(currentCell.coordinate)
 
                     checkMerged = False
