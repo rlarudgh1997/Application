@@ -29,6 +29,7 @@
 
 #include "ui_GuiMenu.h"
 
+#if defined(USE_DIALOG_OLD)
 class SelectModuleDialog;
 
 class SelectReportDialog : public QDialog {
@@ -232,6 +233,59 @@ private:
     QPushButton* mOK = nullptr;
     QPushButton* mCancel = nullptr;
     // QLabel* mCommand = nullptr;
+};
+
+class TextEnterDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit TextEnterDialog(QWidget* parent, const QString& text = QString()) : QDialog(parent) {
+        setWindowTitle("Enter Script Text");
+        setWindowFlag(Qt::WindowContextHelpButtonHint, true);
+        setWindowFlag(Qt::WindowCloseButtonHint, true);
+        setParent(parent);
+        setModal(true);
+
+        QRect rootWidgetRect = static_cast<QWidget*>(parent->parent())->geometry();
+        QRect setRect = QRect();
+        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
+        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
+        setFixedSize(QSize(mWidth, mHeight));
+        setGeometry(setRect);
+        setFocus();
+
+        mLayout = new QVBoxLayout(this);
+
+        mInputText = ivis::common::createWidget<QLineEdit>(this, true);
+        mInputText->setText(text);
+
+        mButtonLayout = new QHBoxLayout(mLayout->widget());
+        mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mOK->setText("OK");
+        mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
+        mCancel->setText("Cancel");
+        mButtonLayout->addWidget(mOK);
+        mButtonLayout->addWidget(mCancel);
+
+        mLayout->addWidget(mInputText);
+        mLayout->addLayout(mButtonLayout);
+        setLayout(mLayout);
+
+        connect(mOK, &QPushButton::clicked, [=]() { emit signalEnterTextCompletd(mInputText->text()); });
+        connect(mCancel, &QPushButton::clicked, [=]() { finished(true); });
+    }
+
+signals:
+    void signalEnterTextCompletd(const QString& text);
+
+private:
+    const int mWidth = 500;
+    const int mHeight = 100;
+    QVBoxLayout* mLayout = nullptr;
+    QLineEdit* mInputText = nullptr;
+    QHBoxLayout* mButtonLayout = nullptr;
+    QPushButton* mOK = nullptr;
+    QPushButton* mCancel = nullptr;
 };
 
 class LogDisplayDialog : public QDialog {
@@ -459,75 +513,15 @@ private:
     bool mPressCtrl = false;
     bool mFindInputTextVisible = false;
 };
-
-class TextEnterDialog : public QDialog {
-    Q_OBJECT
-
-public:
-    explicit TextEnterDialog(QWidget* parent, const QString& text = QString()) : QDialog(parent) {
-        setWindowTitle("Enter Script Text");
-        setWindowFlag(Qt::WindowContextHelpButtonHint, true);
-        setWindowFlag(Qt::WindowCloseButtonHint, true);
-        setParent(parent);
-        setModal(true);
-
-        QRect rootWidgetRect = static_cast<QWidget*>(parent->parent())->geometry();
-        QRect setRect = QRect();
-        setRect.setX(static_cast<int>(rootWidgetRect.x() + (rootWidgetRect.width() - mWidth) * 0.5));
-        setRect.setY(static_cast<int>(rootWidgetRect.y() + (rootWidgetRect.height() - mHeight) * 0.5));
-        setFixedSize(QSize(mWidth, mHeight));
-        setGeometry(setRect);
-        setFocus();
-
-        mLayout = new QVBoxLayout(this);
-
-        mInputText = ivis::common::createWidget<QLineEdit>(this, true);
-        mInputText->setText(text);
-
-        mButtonLayout = new QHBoxLayout(mLayout->widget());
-        mOK = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
-        mOK->setText("OK");
-        mCancel = ivis::common::createWidget<QPushButton>(mButtonLayout->widget(), true);
-        mCancel->setText("Cancel");
-        mButtonLayout->addWidget(mOK);
-        mButtonLayout->addWidget(mCancel);
-
-        mLayout->addWidget(mInputText);
-        mLayout->addLayout(mButtonLayout);
-        setLayout(mLayout);
-
-        connect(mOK, &QPushButton::clicked, [=]() { emit signalEnterTextCompletd(mInputText->text()); });
-        connect(mCancel, &QPushButton::clicked, [=]() { finished(true); });
-    }
-
-signals:
-    void signalEnterTextCompletd(const QString& text);
-
-private:
-    const int mWidth = 500;
-    const int mHeight = 100;
-    QVBoxLayout* mLayout = nullptr;
-    QLineEdit* mInputText = nullptr;
-    QHBoxLayout* mButtonLayout = nullptr;
-    QPushButton* mOK = nullptr;
-    QPushButton* mCancel = nullptr;
-};
+#endif
 
 class GuiMenu : public AbstractGui {
     Q_OBJECT
 
-private:
-    enum class MainType {
-        File = 0,
-        Edit,
-        View,
-        Setting,
-        Report,
-        Run,
-        Docker,
-        Help,
-        Max,
-    };
+    REGISTER_WRITABLE_PROPERTY(int, DialogType, 0, false)
+    REGISTER_WRITABLE_PROPERTY(QVariantList, SelectModuleList, QVariantList(), false)
+    REGISTER_WRITABLE_PROPERTY(bool, TestResultComplted, false, false)
+    REGISTER_WRITABLE_PROPERTY(QVariantList, ProgressInfo, QVariantList({0, 0}), false)
 
 public:
     static QSharedPointer<GuiMenu>& instance(AbstractHandler* handler = nullptr);
@@ -548,14 +542,17 @@ private:
     void drawMenuRun();
     void drawMenuDocker();
     void drawMenuHelp();
-    void drawMenuEtc(const bool& update = false);
-    void updateDisplaySelectModule(const int& runType);
-    void updateDisplaySelectOption(const int& runType, const QVariantList& moduleList);
+    void drawMenuEtc();
+    void updateDrawDialog(const int& dialogType, const QVariantList& info);
+    void updateDisplaySelectModule();
+    void updateDisplaySelectOption();
+    void updateDisplayPath();
+    void updateDisplayProgressBar(const bool& show, const QVariantList& progressInfo);
     void updateDisplayTestResultInfo();
-    void updateDisplayDetailLog(const bool& visible);
     void updateDisplayEnterScriptText();
     void updateDisplayTestReport();
     void updateDisplayViewRunScriptList();
+    void updateDisplayDetailLog(const bool& detailShow);
     void updateDisplayViewRunScriptDetail();
     void updateDisplayAppMode();
 
@@ -565,17 +562,19 @@ public slots:
 private:
     Ui::GuiMenu* mGui = nullptr;
     QMainWindow* mMainView = nullptr;
-
+#if defined(USE_DIALOG_OLD)
     QProgressBar* mProgressBar = nullptr;
     QPushButton* mTestResultInfo = nullptr;
     SelectModuleDialog* mSelectModule = nullptr;
+    SelectModuleDialog* mViewRunScript = nullptr;
     CheckBoxGroupDialog* mCheckBoxGroup = nullptr;
-    LogDisplayDialog* mLogDisplay = nullptr;
     TextEnterDialog* mTextEnter = nullptr;
     SelectReportDialog* mTestReport = nullptr;
+    LogDisplayDialog* mLogDisplay = nullptr;
     DetailLog* mDetailLog = nullptr;
-    SelectModuleDialog* mViewRunScript = nullptr;
+#else
     Dialog* mDialog = nullptr;
+#endif
 };
 
 #endif  // GUI_MENU_H

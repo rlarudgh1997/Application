@@ -6,22 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>800</height>
+    <width>1200</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QStackedWidget" name="Widget">
+  <widget class="QStackedWidget" name="StackedWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>800</height>
+     <width>1200</width>
+     <height>1000</height>
     </rect>
    </property>
+   <widget class="QWidget" name="Invalid"/>
    <widget class="QWidget" name="AppMode">
     <widget class="QWidget" name="AppModeWidget" native="true">
      <property name="geometry">
@@ -32,7 +33,7 @@
        <height>300</height>
       </rect>
      </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
+     <widget class="QWidget" name="AppModeVLayout" native="true">
       <property name="geometry">
        <rect>
         <x>-1</x>
@@ -41,7 +42,7 @@
         <height>301</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="AppModeVLayout">
+      <layout class="QVBoxLayout" name="AppModeVLayout_">
        <property name="leftMargin">
         <number>10</number>
        </property>
@@ -390,105 +391,497 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="ModuleInfo">
-    <widget class="QWidget" name="a1" native="true">
+   <widget class="QWidget" name="SelectList">
+    <widget class="QWidget" name="SelectListWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>600</width>
+       <height>800</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="SelectListWidget_">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="SelectListButton" native="true">
+        <layout class="QHBoxLayout" name="SelectListButton_">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="SelectListAll">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="SelectListOK">
+           <property name="text">
+            <string>OK</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="SelectListItemWidget" native="true">
+        <layout class="QVBoxLayout" name="SelectListItemWidget_">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QTableView" name="SelectListItemTableView"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="SelectOption">
+    <widget class="QWidget" name="SelectOptionWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>400</width>
+       <height>150</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="SelectOptionWidget_">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="SelectOption1" native="true">
+        <layout class="QHBoxLayout" name="SelectOption1_">
+         <item>
+          <widget class="QCheckBox" name="SelectOption1Check">
+           <property name="text">
+            <string>Docker</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="SelectOption2" native="true">
+        <layout class="QHBoxLayout" name="SelectOption2_">
+         <item>
+          <widget class="QCheckBox" name="SelectOption2Check1">
+           <property name="text">
+            <string>ICV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="SelectOption2Check2">
+           <property name="text">
+            <string>EV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="SelectOption2Check3">
+           <property name="text">
+            <string>FCEV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="SelectOption2Check4">
+           <property name="text">
+            <string>PHEV</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="SelectOption2Check5">
+           <property name="text">
+            <string>HEV</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="SelectOptionButton" native="true">
+        <layout class="QHBoxLayout" name="SelectOptionButton_">
+         <item>
+          <widget class="QPushButton" name="SelectOptionOK">
+           <property name="text">
+            <string>OK</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="SelectOptionCancel">
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="EnterText">
+    <widget class="QWidget" name="EnterTextWidget" native="true">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
        <width>500</width>
-       <height>230</height>
+       <height>100</height>
       </rect>
      </property>
-     <widget class="QPushButton" name="a2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>480</width>
-        <height>25</height>
-       </rect>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>5</number>
       </property>
-      <property name="text">
-       <string>OK</string>
+      <property name="leftMargin">
+       <number>10</number>
       </property>
-     </widget>
-     <widget class="QLabel" name="a3">
-      <property name="enabled">
-       <bool>true</bool>
+      <property name="topMargin">
+       <number>10</number>
       </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>480</width>
-        <height>30</height>
-       </rect>
+      <property name="rightMargin">
+       <number>10</number>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
+      <property name="bottomMargin">
+       <number>10</number>
       </property>
-      <property name="text">
-       <string>Vehicle</string>
+      <item>
+       <widget class="QLineEdit" name="EnterTextLineEdit"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="EnterTextOK">
+        <property name="text">
+         <string>OK</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="TestReport">
+    <widget class="QWidget" name="TestReportWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>400</width>
+       <height>150</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="TestReportWidget_">
+      <property name="spacing">
+       <number>5</number>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+      <property name="leftMargin">
+       <number>10</number>
       </property>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>481</width>
-        <height>150</height>
-       </rect>
+      <property name="topMargin">
+       <number>10</number>
       </property>
-      <layout class="QVBoxLayout" name="AppModeRadioVLayout">
-       <property name="leftMargin">
-        <number>10</number>
-       </property>
-       <property name="topMargin">
-        <number>10</number>
-       </property>
-       <property name="rightMargin">
-        <number>10</number>
-       </property>
-       <property name="bottomMargin">
-        <number>10</number>
-       </property>
-       <item>
-        <widget class="QRadioButton" name="Button2">
-         <property name="text">
-          <string>RadioButton</string>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="TestReportOption1" native="true">
+        <layout class="QHBoxLayout" name="TestReportOption1_">
+         <item>
+          <widget class="QRadioButton" name="TestReportOption1Radio1">
+           <property name="text">
+            <string>Radio1</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="TestReportOption1Radio2">
+           <property name="text">
+            <string>Radio2</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="TestReportOption2" native="true">
+        <layout class="QHBoxLayout" name="TestReportOption2_">
+         <item>
+          <widget class="QCheckBox" name="TestReportOption2Check1">
+           <property name="text">
+            <string>Check1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="TestReportOption2Check2">
+           <property name="text">
+            <string>Check2</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="TestReportOption2Check3">
+           <property name="text">
+            <string>Check3</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="TestReportOption2Check4">
+           <property name="text">
+            <string>Check4</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="TestReportOption2Check5">
+           <property name="text">
+            <string>Check5</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="TestReportButton" native="true">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <layout class="QHBoxLayout" name="TestReportButton_">
+         <item>
+          <widget class="QPushButton" name="TestReportOK">
+           <property name="text">
+            <string>OK</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="TestReportCancel">
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="LogDisplay">
+    <widget class="QWidget" name="LogDisplayWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>800</width>
+       <height>600</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="LogDisplayWidget_">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QTextEdit" name="LogDisplayTitle">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>80</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="LogDisplayContent">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>460</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="LogDisplayButton" native="true">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>5</number>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="Button3">
-         <property name="text">
-          <string>RadioButton</string>
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="Button4">
-         <property name="text">
-          <string>RadioButton</string>
+         <property name="topMargin">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="Button1">
-         <property name="text">
-          <string>RadioButton</string>
+         <property name="rightMargin">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="LogDisplayClose">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Close</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="LogDisplayCancel">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="LogDisplayDetail">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Detail</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="DetialLog">
+    <widget class="QWidget" name="DetialLogWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>1200</width>
+       <height>600</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="DetialLogWidget_">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+     </layout>
     </widget>
    </widget>
   </widget>

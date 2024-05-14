@@ -513,6 +513,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
 #else
         int rowMax = mExcelSheet[sheetIndex]->rowCount();
         ivis::common::LIMIT_P(row, 1, 0, rowMax);
+        mModelIndex[sheetIndex] = QPair<int, int>(row, column);
         mExcelSheet[sheetIndex]->setCurrentCell(row, column);
 #endif
     }

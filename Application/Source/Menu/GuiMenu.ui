@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>700</height>
+    <width>1462</width>
+    <height>887</height>
    </rect>
   </property>
   <property name="font">
@@ -18,13 +18,52 @@
   <property name="windowTitle">
    <string>SubWindow</string>
   </property>
-  <widget class="QWidget" name="Widget"/>
+  <widget class="QWidget" name="Widget">
+   <widget class="QWidget" name="TestResult" native="true">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>23</y>
+      <width>150</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <widget class="QPushButton" name="TestResultView">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Test Result Info</string>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="TestResultProgressBar">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+    </widget>
+    <zorder>TestResultProgressBar</zorder>
+    <zorder>TestResultView</zorder>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>1462</width>
      <height>20</height>
     </rect>
    </property>

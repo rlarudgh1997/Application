@@ -10,6 +10,7 @@
 
 #include "GuiCenter.h"
 #include "ConfigSetting.h"
+#include "Dialog.h"
 
 QSharedPointer<GuiMenu>& GuiMenu::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiMenu> gGui;
@@ -34,7 +35,7 @@ void GuiMenu::drawDisplayDepth0() {
     drawMenuRun();
     drawMenuDocker();
     drawMenuHelp();
-    drawMenuEtc(false);
+    drawMenuEtc();
 }
 
 void GuiMenu::drawDisplayDepth1() {
@@ -137,20 +138,109 @@ void GuiMenu::drawMenuHelp() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeHelpAboutQt, QVariant()); });
 }
 
-void GuiMenu::drawMenuEtc(const bool& update) {
-    QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath);
-    mGui->actionPath->setText(QString("Path : %1").arg(path.toString()));
-    mGui->actionPath->setIconText(QString("Path : %1").arg(path.toString()));
-
-    if (update) {
-        return;
-    }
+void GuiMenu::drawMenuEtc() {
+    // Model Path
+    updateDisplayPath();
     connect(mGui->actionPath, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant()); });
+
+    // Test Result Info
+    mGui->TestResult->setGeometry(QRect(1000, 23, 150, 30));
+    mGui->TestResult->setParent(mMainView);
+    updateDisplayProgressBar(false, QVariantList());
+    connect(mGui->TestResultView, &QPushButton::clicked, [=]() {
+        updateDisplayProgressBar(true, getProgressInfo());
+    });
 }
 
-void GuiMenu::updateDisplaySelectModule(const int& runType) {
-    // qDebug() << "updateDisplaySelectModule :" << runType;
+void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) {
+    if (mDialog == nullptr) {
+        QRect rect = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+        mDialog = new Dialog(rect, isHandler()->getScreen());
+
+        connect(mDialog, &QDialog::finished, [=]() {
+            disconnect(mDialog, nullptr, nullptr, nullptr);
+            delete mDialog;
+            mDialog = nullptr;
+        });
+        connect(mDialog, &Dialog::signalSelectAppMode,
+                [=](const int& appMode) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode); });
+        connect(mDialog, &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
+            int dialogType = getDialogType();
+            if (dialogType == Dialog::DialogTypeMoudleInfo) {
+                QVariantList selectModule = QVariantList();
+                for (const auto& select : selectItem) {
+                    selectModule.append(QVariant(select.second));
+                }
+                if (selectModule.size() == 0) {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleError, QVariant());
+                } else {
+                    setSelectModuleList(selectModule);
+                    updateDisplaySelectOption();
+                }
+            } else if (dialogType == Dialog::DialogTypeViewLogFile) {
+                if (selectItem.size() == 1) {
+                    // mDialog->accept();
+                    createSignal(ivis::common::EventTypeEnum::EventTypeViewRunScriptDetail, QVariant(selectItem.at(0).first));
+                }
+            } else {
+            }
+        });
+        connect(mDialog, &Dialog::signalSelectOption, [=](const bool& option1, const QList<QPair<QString, bool>>& option2) {
+            int dialogType = getDialogType();
+            if ((dialogType == Dialog::DialogTypeTestReportTC) || (dialogType == Dialog::DialogTypeTestReportGCOV)) {
+                QVariantList reportInfo = QVariantList();
+                if (dialogType == Dialog::DialogTypeTestReportTC) {
+                    reportInfo.append(ivis::common::TestReportTypeEnum::TestReportTypeTC);
+                } else {
+                    reportInfo.append(ivis::common::TestReportTypeEnum::TestReportTypeGCOV);
+                }
+                reportInfo.append(option1);
+                for (const auto& option : option2) {
+                    reportInfo.append(option.second);
+                }
+                createSignal(ivis::common::EventTypeEnum::EventTypeRunTestReport, reportInfo);
+            } else {
+                int runType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun).toInt();
+                QVariantList selectModule = getSelectModuleList();
+                QVariantList checkList = QVariantList();
+                for (const auto& check : option2) {
+                    if (check.second) {
+                        checkList.append(QVariant(check.first));
+                    }
+                }
+                QVariantList info({runType, option1, selectModule, checkList});
+                createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun, info);
+            }
+        });
+        connect(mDialog, &Dialog::signalEnterTextChanged, [=](const QString& text) {
+            // mDialog->accept();
+            createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted, text);
+        });
+        connect(mDialog, &Dialog::signalLogDisplayClicked, [=](const bool& hide, const bool& detail) {
+            // bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
+            if ((hide == true) && (detail == false)) {    // Close
+                updateDisplayProgressBar(true, QVariantList());
+            } else if ((hide == false) && (detail == false)) {    // Cancel
+                createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCancel, getTestResultComplted());
+            } else if ((hide == true) && (detail == true)) {    // Detail
+                updateDisplayDetailLog(true);
+            } else {
+            }
+        });
+    }
+    // qDebug() << "updateDrawDialog :" << dialogType << info.size();
+    setDialogType(dialogType);
+    mDialog->drawDialog(dialogType, info);
+}
+
+void GuiMenu::updateDisplaySelectModule() {
+    int runType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun).toInt();
+    if (runType == ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
+        return;
+    }
+
+#if defined(USE_DIALOG_OLD)
     if (mSelectModule == nullptr) {
         QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
         QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);
@@ -166,7 +256,8 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
             if (moduleSelect.size() == 0) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleError, QVariant());
             } else {
-                updateDisplaySelectOption(runType, moduleSelect);
+                setSelectModuleList(moduleSelect);
+                updateDisplaySelectOption();
             }
         });
         connect(mSelectModule, &QDialog::finished, [=]() {
@@ -176,10 +267,21 @@ void GuiMenu::updateDisplaySelectModule(const int& runType) {
         });
     }
     mSelectModule->show();
+#else
+    QVariantList info = QVariantList({
+        QString("Select Module"),
+        QStringList({"Module"}),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList(),
+        false,
+    });
+    updateDrawDialog(Dialog::DialogTypeMoudleInfo, info);
+#endif
 }
 
-void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& moduleList) {
+void GuiMenu::updateDisplaySelectOption() {
+#if defined(USE_DIALOG_OLD)
     if (mCheckBoxGroup == nullptr) {
+        int runType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun).toInt();
         QString title = QString("Select Negative");
         QString item = QString("Negative");
         QStringList itemList = QStringList();
@@ -198,14 +300,19 @@ void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& 
                             checkList.append(QVariant(check.first));
                         }
                     }
+#if defined(USE_DIALOG_OLD)
                     if (mSelectModule) {
                         mSelectModule->finished(true);
                     }
+#else
+                    if (mDialog) {
+                        mDialog->finished(true);
+                    }
+#endif
                     mCheckBoxGroup->hide();
                     mCheckBoxGroup->finished(true);
-
                     createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun,
-                                 QVariant({runType, option1, moduleList, checkList}));
+                                 QVariant({runType, option1, getSelectModuleList(), checkList}));
                 });
         connect(mCheckBoxGroup, &QDialog::finished, [=]() {
             disconnect(mCheckBoxGroup);
@@ -214,6 +321,70 @@ void GuiMenu::updateDisplaySelectOption(const int& runType, const QVariantList& 
         });
     }
     mCheckBoxGroup->show();
+#else
+    int runType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun).toInt();
+    int dialogType = Dialog::DialogTypeSelectNegative;
+    QString title = QString("Select Negative");
+    QString option1 = QString("Negative");
+    QStringList option2 = QStringList();
+    if (runType == ivis::common::RunTypeEnum::RunTypeRunTC) {
+        int appMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt();
+        dialogType = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? (Dialog::DialogTypeSelectVehiclePV) :
+                                                                             (Dialog::DialogTypeSelectVehicleCV);
+        title = QString("Select PT");
+        option1 = QString("Docker");
+        option2 = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList();
+    }
+    QVariantList info = QVariantList({
+        title,
+        option1,
+        option2,
+    });
+    updateDrawDialog(dialogType, info);
+#endif
+}
+
+void GuiMenu::updateDisplayPath() {
+    QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath);
+    mGui->actionPath->setText(QString("Path : %1").arg(path.toString()));
+    mGui->actionPath->setIconText(QString("Path : %1").arg(path.toString()));
+}
+
+void GuiMenu::updateDisplayProgressBar(const bool& show, const QVariantList& progressInfo) {
+#if defined(USE_DIALOG_OLD)
+    // Test Result Info : Visible
+    if (mTestResultInfo == nullptr) {
+        mTestResultInfo = ivis::common::createWidget<QPushButton>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
+        mTestResultInfo->setText("Test Result Info");
+        connect(mTestResultInfo, &QPushButton::clicked, [=]() {
+            mTestResultInfo->hide();
+            if (mLogDisplay) {
+                mLogDisplay->show();
+            }
+            if (mProgressBar) {
+                mProgressBar->show();
+            }
+        });
+    }
+    mTestResultInfo->hide();
+
+    if (mProgressBar == nullptr) {
+        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
+    }
+    mProgressBar->setRange(0, total);
+    mProgressBar->setValue(current);
+#else
+    if (progressInfo.size() == 2) {
+        int current = progressInfo.at(0).toInt();
+        int total = progressInfo.at(1).toInt();
+        mGui->TestResultProgressBar->setRange(0, total);
+        mGui->TestResultProgressBar->setValue(current);
+        mGui->TestResultProgressBar->raise();
+    } else {
+        mGui->TestResultView->raise();
+    }
+    mGui->TestResult->setVisible(show);
+#endif
 }
 
 void GuiMenu::updateDisplayTestResultInfo() {
@@ -231,10 +402,9 @@ void GuiMenu::updateDisplayTestResultInfo() {
         return;
     }
     // Test Result Info : Parsing Value Info
-    static bool complete = false;
     int current = countInfo.at(0).toInt();
     int total = countInfo.at(1).toInt();
-    complete = countInfo.at(2).toBool();
+    setTestResultComplted(countInfo.at(2).toBool());
 
     QString titleInfo = QString();
     for (const auto& info : testResultInfo.at(1).toList()) {
@@ -253,12 +423,13 @@ void GuiMenu::updateDisplayTestResultInfo() {
     // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
     // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
 
+#if defined(USE_DIALOG_OLD)
     // Test Result Info
     if (mLogDisplay == nullptr) {
         mLogDisplay = new LogDisplayDialog(isHandler()->getScreen(), QString("Test Result Info"));
         connect(mLogDisplay, &LogDisplayDialog::signalTestResultClick, [=](const bool& cancel) {
             if (cancel) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCancel, complete);
+                createSignal(ivis::common::EventTypeEnum::EventTypeGenRunTCCancel, getTestResultComplted());
             } else {
                 bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
                 mLogDisplay->hide();
@@ -300,53 +471,23 @@ void GuiMenu::updateDisplayTestResultInfo() {
     }
     mLogDisplay->updateLogDisplay(titleInfo, errorInfo, moduleStateInfo);
     mLogDisplay->show();
+#else
+    QVariantList info = QVariantList({
+        QString("Test Result Info"),
+        titleInfo,
+        errorInfo,
+        moduleStateInfo
+    });
+    updateDrawDialog(Dialog::DialogTypeLogDisplay, info);
+#endif
 
     // Test Result Info : ProgressBar
-    if (mProgressBar == nullptr) {
-        mProgressBar = ivis::common::createWidget<QProgressBar>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
-    }
-    mProgressBar->setRange(0, total);
-    mProgressBar->setValue(current);
-
-    // Test Result Info : Visible
-    if (mTestResultInfo == nullptr) {
-        mTestResultInfo = ivis::common::createWidget<QPushButton>(isHandler()->getScreen(), true, QRect(1100, 25, 100, 30));
-        mTestResultInfo->setText("Test Result Info");
-        connect(mTestResultInfo, &QPushButton::clicked, [=]() {
-            mTestResultInfo->hide();
-            if (mLogDisplay) {
-                mLogDisplay->show();
-            }
-            if (mProgressBar) {
-                mProgressBar->show();
-            }
-        });
-    }
-    mTestResultInfo->hide();
-}
-
-void GuiMenu::updateDisplayDetailLog(const bool& visible) {
-    if (mDetailLog == nullptr) {
-        mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"));
-        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) { mDetailLog->hide(); });
-        mDetailLog->hide();
-    }
-
-    QStringList detailLog =
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent).toStringList();
-
-    if (detailLog.size() == 0) {
-        mDetailLog->contentClear();
-    } else {
-        mDetailLog->updateLogDisplay(detailLog);
-    }
-
-    if (visible) {
-        mDetailLog->show();
-    }
+    setProgressInfo(QVariantList({current, total}));
+    updateDisplayProgressBar(true, getProgressInfo());
 }
 
 void GuiMenu::updateDisplayEnterScriptText() {
+#if defined(USE_DIALOG_OLD)
     if (mTextEnter == nullptr) {
         mTextEnter = new TextEnterDialog(isHandler()->getScreen());
 
@@ -362,9 +503,16 @@ void GuiMenu::updateDisplayEnterScriptText() {
         });
     }
     mTextEnter->show();
+#else
+    QVariantList info = QVariantList({
+        QString("Enter Script Text"),
+    });
+    updateDrawDialog(Dialog::DialogTypeEnterText, info);
+#endif
 }
 
 void GuiMenu::updateDisplayTestReport() {
+#if defined(USE_DIALOG_OLD)
     if (mTestReport == nullptr) {
         QVariantList reportInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport).toList();
         if (reportInfo.size() != 5) {
@@ -379,7 +527,7 @@ void GuiMenu::updateDisplayTestReport() {
 
         QString title = QString();
         QList<QPair<bool, QString>> options = QList<QPair<bool, QString>>();
-        if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeResult)) {
+        if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeTC)) {
             title = QString("TC Report");
             options.append(QPair<bool, QString>(option1, QString("Split")));
             options.append(QPair<bool, QString>(option2, QString("Config")));
@@ -410,9 +558,49 @@ void GuiMenu::updateDisplayTestReport() {
         });
     }
     mTestReport->show();
+#else
+    QVariantList reportInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport).toList();
+    if (reportInfo.size() != 5) {
+        qDebug() << "Fail to report info size :" << reportInfo.size();
+        return;
+    }
+
+    int testReportType = reportInfo.at(0).toInt();
+    int dialogType = 0;
+    QString title = QString();
+    bool option1 = reportInfo.at(1).toBool();
+    QStringList option2Str = QStringList();
+    QVariantList option2Value = QVariantList({
+        reportInfo.at(2).toBool(),
+        reportInfo.at(3).toBool(),
+        reportInfo.at(4).toBool(),
+    });
+    if (testReportType == ivis::common::TestReportTypeEnum::TestReportTypeTC) {
+        dialogType = Dialog::DialogTypeTestReportTC;
+        title = QString("TC Report");
+        option2Str.append(QString("Split"));
+        option2Str.append(QString("Config"));
+        option2Str.append(QString("Excel"));
+    } else {
+        dialogType = Dialog::DialogTypeTestReportGCOV;
+        title = QString("GCOV Report");
+        option2Str.append(QString("Function"));
+        option2Str.append(QString("Branch"));
+        option2Str.append(QString("Line"));
+    }
+
+    QVariantList info = QVariantList({
+        title,
+        option1,
+        option2Str,
+        option2Value,
+    });
+    updateDrawDialog(dialogType, info);
+#endif
 }
 
 void GuiMenu::updateDisplayViewRunScriptList() {
+#if defined(USE_DIALOG_OLD)
     if (mViewRunScript == nullptr) {
         QVariant fileList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList);
         mViewRunScript = new SelectModuleDialog(isHandler()->getScreen(), fileList.toStringList(), true);
@@ -431,12 +619,47 @@ void GuiMenu::updateDisplayViewRunScriptList() {
         });
     }
     mViewRunScript->show();
+#else
+    QVariantList info = QVariantList({
+        QString("Select Log File"),
+        QStringList({"Log File"}),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList).toStringList(),
+        false,
+    });
+    updateDrawDialog(Dialog::DialogTypeViewLogFile, info);
+#endif
+}
+
+void GuiMenu::updateDisplayDetailLog(const bool& detailShow) {
+    QVariant detailInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail);
+#if defined(USE_DIALOG_OLD)
+    if (mDetailLog == nullptr) {
+        mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"));
+        connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) { mDetailLog->hide(); });
+        mDetailLog->hide();
+    }
+
+    if (detailInfo.toStringList().size() == 0) {
+        mDetailLog->contentClear();
+    } else {
+        mDetailLog->updateLogDisplay(detailInfo.toStringList());
+    }
+
+    if (detailShow) {
+        mDetailLog->show();
+    }
+#else
+    QVariantList info = QVariantList({
+        QString("Detail Log"),
+        detailInfo.toStringList(),
+    });
+    updateDrawDialog(Dialog::DialogTypeDetialLog, info);
+#endif
 }
 
 void GuiMenu::updateDisplayViewRunScriptDetail() {
     QVariant detailInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail);
-    qDebug() << "detailInfo :" << detailInfo.toStringList().size();
-
+#if defined(USE_DIALOG_OLD)
     if (mDetailLog == nullptr) {
         mDetailLog = new DetailLog(isHandler()->getScreen(), QString("Detail Log"), false);
         connect(mDetailLog, &DetailLog::signalCloseClicked, [=](const bool& clicked) { mDetailLog->hide(); });
@@ -446,24 +669,18 @@ void GuiMenu::updateDisplayViewRunScriptDetail() {
     QVariant detailLog = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail);
     mDetailLog->contentClear();
     mDetailLog->updateLogDisplay(detailLog.toStringList());
+#else
+
+#endif
 }
 
 void GuiMenu::updateDisplayAppMode() {
-    int appMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt();
-    QStringList appModeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList).toStringList();
-    QRect screenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-
-    if (mDialog == nullptr) {
-        mDialog = new Dialog(screenInfo, this);
-        connect(mDialog, &Dialog::signalSelectAppMode,
-                [=](const int& appMode) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode); });
-        connect(mDialog, &QDialog::finished, [=]() {
-            disconnect(mDialog);
-            delete mDialog;
-            mDialog = nullptr;
-        });
-    }
-    mDialog->updateAppModeRadio(appMode, appModeList);
+    QVariantList info = QVariantList({
+        QString("Select App Mode"),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList).toStringList(),
+    });
+    updateDrawDialog(Dialog::DialogTypeAppModeRadio, info);
 }
 
 void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -481,14 +698,11 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath: {
-            drawMenuEtc(true);
+            updateDisplayPath();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun: {
-            int runType = value.toInt();
-            if (runType != ivis::common::RunTypeEnum::RunTypeEnterScriptText) {
-                updateDisplaySelectModule(runType);
-            }
+            updateDisplaySelectModule();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo: {
@@ -505,15 +719,17 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayTestReport();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
-            updateDisplayDetailLog(false);
-            break;
-        }
         case ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList: {
             updateDisplayViewRunScriptList();
             break;
         }
+        case ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent: {
+            qDebug() << "PropertyTypeRunScriptLogCurrent";
+            updateDisplayDetailLog(false);
+            break;
+        }
         case ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail: {
+            qDebug() << "PropertyTypeViewRunScriptDetail";
             updateDisplayViewRunScriptDetail();
             break;
         }

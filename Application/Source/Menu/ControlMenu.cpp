@@ -297,17 +297,17 @@ void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList
 void ControlMenu::updateTestReportInfo(const int& eventType) {
     QVariantList reportInfo = QVariantList();
     if (eventType == ivis::common::EventTypeEnum::EventTypeTestReportResult) {
-        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeResult));
+        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeTC));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResult));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultSplit));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultConfig));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportResultExcel));
     } else {
-        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeCoverage));
+        reportInfo.append(static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeGCOV));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverage));
-        reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageFunction));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageBranch));
+        reportInfo.append(true);    // ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine)
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, reportInfo, true);
 }
@@ -816,7 +816,7 @@ void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
 
 int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& value) {
     int count = 0;
-    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeResult)
+    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeTC)
                          ? (ConfigInfo::ConfigTypeReportResult)
                          : (ConfigInfo::ConfigTypeReportCoverage);
     for (const auto& configValue : value) {
@@ -973,7 +973,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             int testReportType = reportInfo.at(0).toInt();
             int runType = ivis::common::RunTypeEnum::RunTypeTCReport;
-            if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeCoverage)) {
+            if (testReportType == static_cast<int>(ivis::common::TestReportTypeEnum::TestReportTypeGCOV)) {
                 runType = ivis::common::RunTypeEnum::RunTypeGcovReport;
             }
             bool state = reportInfo.at(1).toBool();

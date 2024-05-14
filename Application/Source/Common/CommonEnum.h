@@ -413,8 +413,8 @@ public:
 class TestReportTypeEnum {
 public:
     enum TestReportType {
-        TestReportTypeResult = 0,
-        TestReportTypeCoverage,
+        TestReportTypeTC = 0,
+        TestReportTypeGCOV,
     };
 };
 
