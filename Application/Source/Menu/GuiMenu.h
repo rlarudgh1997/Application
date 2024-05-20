@@ -518,7 +518,6 @@ private:
 class GuiMenu : public AbstractGui {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(int, DialogType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QVariantList, SelectModuleList, QVariantList(), false)
     REGISTER_WRITABLE_PROPERTY(bool, TestResultComplted, false, false)
     REGISTER_WRITABLE_PROPERTY(QVariantList, ProgressInfo, QVariantList({0, 0}), false)
@@ -551,9 +550,9 @@ private:
     void updateDisplayTestResultInfo();
     void updateDisplayEnterScriptText();
     void updateDisplayTestReport();
-    void updateDisplayViewRunScriptList();
-    void updateDisplayDetailLog(const bool& detailShow);
-    void updateDisplayViewRunScriptDetail();
+    void updateDisplayViewLogFileList();
+    void updateDisplayViewLogInfo(const bool& show);
+    void updateDisplayViewLogFileInfo();
     void updateDisplayAppMode();
 
 public slots:

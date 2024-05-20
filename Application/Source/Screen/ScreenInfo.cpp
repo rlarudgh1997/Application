@@ -49,7 +49,7 @@ QWidget* ScreenInfo::drawScreen(const int& displayType, const QString& objectNam
                                                           mRootScreen->geometry().height());
                 }
                 mSubScreens[displayType]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
+                // mSubScreens[displayType]->setStyleSheet("color: rgb(50, 50, 255)");
                 mSubScreens[displayType]->setObjectName(objectName);
                 mSubScreens[displayType]->show();
             } catch (...) {

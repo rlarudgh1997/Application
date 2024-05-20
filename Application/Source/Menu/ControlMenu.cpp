@@ -431,38 +431,56 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     return complete;
 }
 
-void ControlMenu::updateViewRunScript(const int& viewType) {
-    QString defaultFileName = QString("%1_RunScript.log");
-    if (viewType == ivis::common::RunTypeEnum::RunTypeViewRunScriptLog) {
-        QFileInfoList fileList = QFileInfoList();
-        QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(ivis::common::APP_PWD(), QString(".log"), fileList);
-        QStringList fileName = QStringList();
-        for (const auto& file : fileInfo) {
-            QString name = QString();
-            if (file.compare(defaultFileName.arg(0)) == false) {
-                name = QString("Generate TC");
-            } else if (file.compare(defaultFileName.arg(1)) == false) {
-                name = QString("Run TC");
-            } else if (file.compare(defaultFileName.arg(2)) == false) {
-                name = QString("TC Report");
-            } else if (file.compare(defaultFileName.arg(3)) == false) {
-                name = QString("Gcov Report");
-            } else if (file.compare(defaultFileName.arg(4)) == false) {
-                name = QString("Enter Script Text");
-            } else if (file.compare(defaultFileName.arg(5)) == false) {
-                name = QString("Gen SSFS");
-            } else {
-                continue;
-            }
-            fileName.append(name);
-            // qDebug() << "File Name :" << file << "->" << name;
+void ControlMenu::updateViewLogFile() {
+    QFileInfoList fileList = QFileInfoList();
+    QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(ivis::common::APP_PWD(), QString(".log"), fileList);
+    QString baseName = QString("%1_RunScript.log");
+    QVariantList logFileInfo = QVariantList();
+    QStringList logFileName = QStringList();
+    for (const auto& file : fileInfo) {
+        QPair<int, QString> title = QPair<int, QString>();
+        if (file.compare(baseName.arg(0)) == false) {
+            title = QPair<int, QString>(0, QString("Generate TC"));
+        } else if (file.compare(baseName.arg(1)) == false) {
+            title = QPair<int, QString>(1, QString("Run TC"));
+        } else if (file.compare(baseName.arg(2)) == false) {
+            title = QPair<int, QString>(2, QString("TC Report"));
+        } else if (file.compare(baseName.arg(3)) == false) {
+            title = QPair<int, QString>(3, QString("GCOV Report"));
+        } else if (file.compare(baseName.arg(4)) == false) {
+            title = QPair<int, QString>(4, QString("Enter Script Text"));
+        } else if (file.compare(baseName.arg(5)) == false) {
+            title = QPair<int, QString>(5, QString("Gen SSFS"));
+        } else {
+            continue;
         }
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptList, fileName, true);
-    } else if (viewType < ivis::common::RunTypeEnum::RunTypeViewRunScriptLog) {
-        QString readFilePath = QString("%1/%2").arg(ivis::common::APP_PWD()).arg(defaultFileName.arg(viewType));
-        QStringList fileInfo = ivis::common::FileInfo::readFile(readFilePath);
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewRunScriptDetail, QVariant(fileInfo), true);
-    } else {
+        logFileInfo.append(QVariant(QVariantList({title.first, title.second})));
+        logFileName.append(title.second);
+        // qDebug() << "File :" << file << "->" << title.first << title.second;
+    }
+    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileListInfo, logFileInfo);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList, logFileName, true);
+}
+
+void ControlMenu::updateViewLogDisplay(const QString& titleName) {
+    QString fileName = QString();
+    for (const auto& logFileInfo : getData(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileListInfo).toList()) {
+        QVariantList title = logFileInfo.toList();
+        if (title.size() != 2) {
+            continue;
+        }
+        // qDebug() << "updateViewLogDisplay :" << titleName << title.at(0).toInt() << title.at(1).toString();
+        if (titleName.compare(title.at(1).toString()) == false) {
+            fileName = QString("%1_RunScript.log").arg(title.at(0).toInt());
+            break;
+        }
+    }
+    if (fileName.size() > 0) {
+        QString readFilePath = QString("%1/%2").arg(ivis::common::APP_PWD()).arg(fileName);
+        QStringList detailLog = ivis::common::FileInfo::readFile(readFilePath);
+        QVariantList logInfo = QVariantList({titleName, detailLog});
+        // qDebug() << "\t View Log Info :" << fileName << titleName << detailLog.size();
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileInfo, QVariant(logInfo), true);
     }
 }
 
@@ -480,12 +498,12 @@ void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, 
         connect(mWatcherRunScript.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileDataChanged,
                 [=](const bool& init, const QStringList& data) {
                     QStringList previousData =
-                        getData(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious).toStringList();
+                        getData(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfoPrevious).toStringList();
                     if ((data.size() - previousData.size()) > 0) {
                         QStringList selectedData = data.mid(previousData.size(), data.size());
-                        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, selectedData);
+                        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo, selectedData);
                     }
-                    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, data);
+                    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfoPrevious, data);
                 });
         connect(mWatcherRunScript.data(), &ivis::common::FileSystemWatcherThread::signalWatcherFileReadError,
                 [=](const QString& errorFile) { qDebug() << "\t WatcherRunScript File Error :" << errorFile; });
@@ -764,8 +782,8 @@ void ControlMenu::stopWatcherFile(const int& type) {
             qDebug() << "WatcherRunScript is running -> stop";
             disconnect(mWatcherRunScript.data());
             mWatcherRunScript.reset();
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogPrevious, QVariant());
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptLogCurrent, QVariant());
+            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfoPrevious, QVariant());
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo, QVariant());
         }
     } else if (type == ivis::common::WatcherTypeEnum::WatcherTypeTestResult) {
         if (mWatcherTestResult.isNull() == false) {
@@ -995,9 +1013,12 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, runScriptState);
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeViewRunScript:
-        case ivis::common::EventTypeEnum::EventTypeViewRunScriptDetail: {
-            updateViewRunScript(value.toInt());
+        case ivis::common::EventTypeEnum::EventTypeViewLogFile: {
+            updateViewLogFile();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeViewLogDisplay: {
+            updateViewLogDisplay(value.toString());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenSSFS: {

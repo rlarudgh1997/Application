@@ -19,13 +19,25 @@ Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new U
 Dialog::~Dialog() {
     controlConnet(DisplayTypeMax);
     delete mGui;
-    // qDebug() << "~Dialog";
+    qDebug() << "Destructor : Dialog";
 }
 
 void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
-    qDebug() << "drawDialog :" << dialogType << value.size();
+    if (getKeepDialog()) {
+        qDebug() << "[Dialog] Current dialog screen maintenance status";
+        return;
+    }
+
     bool draw = false;
+
+    // Previous Info
+    setPrevDialogInfo(getDialogInfo());
+    setPrevDialogType(getDialogType());
+
+    // Current Info
+    setDialogInfo(value);
     setDialogType(dialogType);
+
     switch (dialogType) {
         case DialogTypeAppModeCheck: {
             draw = (value.size() == 3);
@@ -47,15 +59,15 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
             }
             break;
         }
-        case DialogTypeMoudleInfo:
-        case DialogTypeViewLogFile: {
+        case DialogTypeSelectMoudleInfo:
+        case DialogTypSelectLogFile: {
             draw = (value.size() == 4);
             if (draw) {
                 QString title = value.at(0).toString();
                 QStringList column = value.at(1).toStringList();
                 QStringList list = value.at(2).toStringList();
                 bool all = value.at(3).toBool();
-                updateSelectList(dialogType, title, column, list, all);
+                updateSelectList(title, column, list, all);
             }
             break;
         }
@@ -67,7 +79,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
                 QString title = value.at(0).toString();
                 QString option1 = value.at(1).toString();
                 QStringList option2 = value.at(2).toStringList();
-                updateSelectOption(dialogType, title, option1, option2);
+                updateSelectOption(title, option1, option2);
             }
             break;
         }
@@ -87,7 +99,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
                 bool option1 = value.at(1).toBool();
                 QStringList option2Str = value.at(2).toStringList();
                 QVariantList option2Value = value.at(3).toList();
-                updateTestReport(dialogType, title, option1, option2Str, option2Value);
+                updateTestReport(title, option1, option2Str, option2Value);
             }
             break;
         }
@@ -102,12 +114,14 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
             }
             break;
         }
-        case DialogTypeDetialLog: {
+        case DialogTypeViewLogInfo:
+        case DialogTypeViewLogFileInfo: {
             draw = (value.size() == 2);
             if (draw) {
+                setKeepDialog(dialogType == DialogTypeViewLogInfo);
                 QString title = value.at(0).toString();
-                QStringList detailLog = value.at(3).toStringList();
-                updateDetailLog(title, detailLog);
+                QStringList detailLog = value.at(1).toStringList();
+                updateViewLog(title, detailLog);
             }
             break;
         }
@@ -116,20 +130,65 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& value) {
             break;
         }
     }
-    qDebug() << "\t Draw :" << ((draw) ? ("Sucess") : ("Fail"));
+    qDebug() << "drawDialog :" << dialogType << value.size() << ((draw) ? ("-> Sucess") : ("-> Fail"));
 }
 
-void Dialog::controlConnet(const int& dialogType) {
-    if (dialogType == DisplayTypeAppMode) {
-        connect(&mModel, &QStandardItemModel::dataChanged,
-                [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
-                    int appMode = topLeft.row();
-                    if (getAppMode() != appMode) {
-                        mModel.item(getAppMode(), 0)->setCheckState(Qt::Unchecked);
-                        mModel.item(appMode, 0)->setCheckState(Qt::Checked);
-                        setAppMode(appMode);
-                    }
-                });
+void Dialog::controlConnet(const int& displayType) {
+    if (getPrevDisplayType() == displayType) {
+        qDebug() << "[Dialog] Skip to request for same screen as previous screen :" << displayType;
+        return;
+    }
+
+    switch (displayType) {
+        case DisplayTypeAppMode: {
+            connectAppMode(true);
+            break;
+        }
+        case DisplayTypeAppModeRadio: {
+            connectAppModeRadio(true);
+            break;
+        }
+        case DisplayTypeSelectList: {
+            connectSelectList(true);
+            break;
+        }
+        case DisplayTypeSelectOption: {
+            connectSelectOption(true);
+            break;
+        }
+        case DisplayTypeEnterText: {
+            connectEnterText(true);
+            break;
+        }
+        case DisplayTypeTestReport: {
+            connectTestReport(true);
+            break;
+        }
+        case DisplayTypeLogDisplay: {
+            connectLogDisplay(true);
+            break;
+        }
+        case DisplayTypeViewLog: {
+            connectViewLog(true);
+            break;
+        }
+        default: {
+            connectAppMode(false);
+            connectAppModeRadio(false);
+            connectSelectList(false);
+            connectSelectOption(false);
+            connectEnterText(false);
+            connectTestReport(false);
+            connectLogDisplay(false);
+            connectViewLog(false);
+            qDebug() << "[Dialog] disconnect : complted";
+            break;
+        }
+    }
+}
+
+void Dialog::connectAppMode(const bool& state) {
+    if (state) {
         connect(mGui->AppModeOK, &QPushButton::clicked, [=]() {
             for (int rowIndex = 0; rowIndex < mModel.rowCount(); rowIndex++) {
                 if (mModel.item(rowIndex, 0) == nullptr) {
@@ -143,7 +202,23 @@ void Dialog::controlConnet(const int& dialogType) {
             emit signalSelectAppMode(getAppMode());
             QDialog::accept();
         });
-    } else if (dialogType == DisplayTypeAppModeRadio) {
+        connect(&mModel, &QStandardItemModel::dataChanged,
+                [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
+                    int appMode = topLeft.row();
+                    if (getAppMode() != appMode) {
+                        mModel.item(getAppMode(), 0)->setCheckState(Qt::Unchecked);
+                        mModel.item(appMode, 0)->setCheckState(Qt::Checked);
+                        setAppMode(appMode);
+                    }
+                });
+    } else {
+        disconnect(&mModel, nullptr, nullptr, nullptr);
+        disconnect(mGui->AppModeOK, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectAppModeRadio(const bool& state) {
+    if (state) {
         for (const auto& widget : isRadioWidget()) {
             connect(widget.second, &QPushButton::clicked, [=]() {
                 for (const auto& widgetItem : isRadioWidget()) {
@@ -164,7 +239,16 @@ void Dialog::controlConnet(const int& dialogType) {
             emit signalSelectAppMode(getAppMode());
             QDialog::accept();
         });
-    } else if (dialogType == DisplayTypeSelectList) {
+    } else {
+        for (const auto& widget : isRadioWidget()) {
+            disconnect(widget.second, nullptr, nullptr, nullptr);
+        }
+        disconnect(mGui->AppModeRadioOK, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectSelectList(const bool& state) {
+    if (state) {
         connect(mGui->SelectListAll, &QPushButton::clicked, [=]() {
             setSelectAll(getSelectAll() == false);
             updateSelectListCheckState(getSelectAll());
@@ -182,7 +266,26 @@ void Dialog::controlConnet(const int& dialogType) {
             emit signalSelectListItem(selectItem);
             // QDialog::accept();
         });
-    } else if (dialogType == DisplayTypeSelectOption) {
+        connect(&mModel, &QStandardItemModel::dataChanged,
+                [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
+                    if (getDialogType() == DialogTypSelectLogFile) {
+                        int checkModelIndex = topLeft.row();  // bottomRight.row()
+                        int preCheckModelIndex = getCheckModelIndex();
+                        if ((preCheckModelIndex != checkModelIndex) && (preCheckModelIndex >= 0)) {
+                            mModel.item(preCheckModelIndex, 0)->setCheckState(Qt::Unchecked);
+                        }
+                        setCheckModelIndex(checkModelIndex);
+                    }
+                });
+    } else {
+        disconnect(mGui->SelectListAll, nullptr, nullptr, nullptr);
+        disconnect(mGui->SelectListOK, nullptr, nullptr, nullptr);
+        disconnect(&mModel, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectSelectOption(const bool& state) {
+    if (state) {
         connect(mGui->SelectOptionOK, &QPushButton::clicked, [=]() {
             bool option1 = (mGui->SelectOption1Check->checkState() == Qt::CheckState::Checked);
             QList<QPair<QString, bool>> option2 = QList<QPair<QString, bool>>();
@@ -197,12 +300,25 @@ void Dialog::controlConnet(const int& dialogType) {
         connect(mGui->SelectOptionCancel, &QPushButton::clicked, [=]() {
             QDialog::accept();
         });
-    } else if (dialogType == DisplayTypeEnterText) {
+    } else {
+        disconnect(mGui->SelectOptionOK, nullptr, nullptr, nullptr);
+        disconnect(mGui->SelectOptionCancel, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectEnterText(const bool& state) {
+    if (state) {
         connect(mGui->EnterTextOK, &QPushButton::clicked, [=]() {
             QString inputText = mGui->EnterTextLineEdit->text();
             emit signalEnterTextChanged(inputText);
         });
-    } else if (dialogType == DisplayTypeTestReport) {
+    } else {
+        disconnect(mGui->EnterTextOK, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectTestReport(const bool& state) {
+    if (state) {
         connect(mGui->TestReportOption1Radio1, &QRadioButton::clicked, [=]() {
             for (const auto& check : isCheckWidget(false)) {
                 check->setEnabled(true);
@@ -227,7 +343,16 @@ void Dialog::controlConnet(const int& dialogType) {
         connect(mGui->TestReportCancel, &QPushButton::clicked, [=]() {
             QDialog::accept();
         });
-    } else if (dialogType == DisplayTypeLogDisplay) {
+    } else {
+        disconnect(mGui->TestReportOption1Radio1, nullptr, nullptr, nullptr);
+        disconnect(mGui->TestReportOption1Radio2, nullptr, nullptr, nullptr);
+        disconnect(mGui->TestReportOK, nullptr, nullptr, nullptr);
+        disconnect(mGui->TestReportCancel, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectLogDisplay(const bool& state) {
+    if (state) {
         connect(mGui->LogDisplayClose, &QPushButton::clicked, [=]() {
             emit signalLogDisplayClicked(true, false);
             QDialog::accept();
@@ -236,27 +361,48 @@ void Dialog::controlConnet(const int& dialogType) {
             emit signalLogDisplayClicked(false, false);
         });
         connect(mGui->LogDisplayDetail, &QPushButton::clicked, [=]() {
+            qDebug() << "signalLogDisplayClicked : detail";
             emit signalLogDisplayClicked(true, true);
         });
-    } else if (dialogType == DisplayTypeDetialLog) {
     } else {
-        disconnect(&mModel);
-        disconnect(mGui->AppModeOK, nullptr, nullptr, nullptr);
-        disconnect(mGui->AppModeRadioOK, nullptr, nullptr, nullptr);
-        for (const auto& widget : isRadioWidget()) {
-            disconnect(widget.second, nullptr, nullptr, nullptr);
-        }
-        disconnect(mGui->SelectListAll, nullptr, nullptr, nullptr);
-        disconnect(mGui->SelectListOK, nullptr, nullptr, nullptr);
-        disconnect(mGui->SelectOptionOK, nullptr, nullptr, nullptr);
-        disconnect(mGui->SelectOptionCancel, nullptr, nullptr, nullptr);
-        disconnect(mGui->TestReportOption1Radio1, nullptr, nullptr, nullptr);
-        disconnect(mGui->TestReportOption1Radio2, nullptr, nullptr, nullptr);
-        disconnect(mGui->TestReportOK, nullptr, nullptr, nullptr);
-        disconnect(mGui->TestReportCancel, nullptr, nullptr, nullptr);
         disconnect(mGui->LogDisplayClose, nullptr, nullptr, nullptr);
         disconnect(mGui->LogDisplayCancel, nullptr, nullptr, nullptr);
         disconnect(mGui->LogDisplayDetail, nullptr, nullptr, nullptr);
+    }
+}
+
+void Dialog::connectViewLog(const bool& state) {
+    if (state) {
+        connect(mGui->actionFindText, &QAction::triggered, [=]() {
+            refreshViewLog(RefreshTypeFindShow);
+        });
+        connect(mGui->ViewLogFindInput, &QTextEdit::textChanged, [=]() {
+            refreshViewLog(RefreshTypeSearch);
+        });
+        connect(mGui->ViewLogFindPrevious, &QPushButton::clicked, [=]() {
+            refreshViewLog(RefreshTypeSearchPrevious);
+        });
+        connect(mGui->ViewLogFindNext, &QPushButton::clicked, [=]() {
+            refreshViewLog(RefreshTypeSearchNext);
+        });
+        connect(mGui->ViewLogClear, &QPushButton::clicked, [=]() {
+            refreshViewLog(RefreshTypeClear);
+        });
+        connect(mGui->ViewLogStop, &QPushButton::clicked, [=]() {
+            refreshViewLog(RefreshTypeStop);
+        });
+        connect(mGui->ViewLogClose, &QPushButton::clicked, [=]() {
+            setKeepDialog(false);
+            QDialog::accept();
+        });
+    } else {
+        disconnect(mGui->actionFindText, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogFindInput, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogFindPrevious, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogFindNext, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogClear, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogStop, nullptr, nullptr, nullptr);
+        disconnect(mGui->ViewLogClose, nullptr, nullptr, nullptr);
     }
 }
 
@@ -271,12 +417,12 @@ QRect Dialog::updateMainRect() {
             rect = mGui->AppModeRadioWidget->geometry();
             break;
         }
-        case DialogTypeMoudleInfo: {
+        case DialogTypeSelectMoudleInfo: {
             mGui->SelectListWidget->setGeometry(QRect(0, 0, 600, 800));
             rect = mGui->SelectListWidget->geometry();
             break;
         }
-        case DialogTypeViewLogFile: {
+        case DialogTypSelectLogFile: {
             mGui->SelectListWidget->setGeometry(QRect(0, 0, 500, 300));
             rect = mGui->SelectListWidget->geometry();
             break;
@@ -305,8 +451,9 @@ QRect Dialog::updateMainRect() {
             rect = mGui->LogDisplayWidget->geometry();
             break;
         }
-        case DialogTypeDetialLog: {
-            rect = mGui->DetialLogWidget->geometry();
+        case DialogTypeViewLogInfo:
+        case DialogTypeViewLogFileInfo: {
+            rect = mGui->ViewLogWidget->geometry();
             break;
         }
         default: {
@@ -318,6 +465,8 @@ QRect Dialog::updateMainRect() {
 
 void Dialog::updateDisplay(const int& displayType, const QString& title) {
     QRect mainRect = updateMainRect();
+    setPrevDisplayType(getDisplayType());
+    setDisplayType(displayType);
     controlConnet(displayType);
     mGui->StackedWidget->setCurrentIndex(displayType);
 
@@ -423,14 +572,13 @@ void Dialog::updateSelectListCheckState(const bool& all) {
     setSelectAll(all);
 }
 
-void Dialog::updateSelectList(const int& dialogType, const QString& title, const QStringList& column, const QStringList& list,
-                              const bool& all) {
+void Dialog::updateSelectList(const QString& title, const QStringList& column, const QStringList& list, const bool& all) {
     updateDisplay(DisplayTypeSelectList, title);
 
     bool headerFixed = true;
     int rowIndex = 0;
 
-    if (dialogType == DialogTypeMoudleInfo) {
+    if (getDialogType() == DialogTypeSelectMoudleInfo) {
         updateSelectListCheckState(all);
     } else {
         updateSelectListCheckState(false);
@@ -448,24 +596,24 @@ void Dialog::updateSelectList(const int& dialogType, const QString& title, const
         rowIndex++;
     }
     if (headerFixed) {
-        mGui->SelectListItemTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
+        mGui->SelectListItemList->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
     } else {
-        mGui->SelectListItemTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
+        mGui->SelectListItemList->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
     }
-    mGui->SelectListItemTableView->setModel(&mModel);
-    mGui->SelectListItemTableView->verticalHeader()->setHidden(true);
+    mGui->SelectListItemList->setModel(&mModel);
+    mGui->SelectListItemList->verticalHeader()->setHidden(true);
     for (rowIndex = 0; rowIndex < mModel.rowCount(); ++rowIndex) {
-        mGui->SelectListItemTableView->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
-        mGui->SelectListItemTableView->verticalHeader()->resizeSection(rowIndex, 20);
+        mGui->SelectListItemList->verticalHeader()->setSectionResizeMode(rowIndex, QHeaderView::Fixed);
+        mGui->SelectListItemList->verticalHeader()->resizeSection(rowIndex, 20);
     }
 }
 
-void Dialog::updateSelectOption(const int& dialogType, const QString& title, const QString& option1, const QStringList& option2) {
+void Dialog::updateSelectOption(const QString& title, const QString& option1, const QStringList& option2) {
     updateDisplay(DisplayTypeSelectOption, title);
 
     mGui->SelectOption1->setVisible(true);
     mGui->SelectOption1Check->setText(option1);
-    mGui->SelectOption1Check->setChecked((dialogType != DialogTypeSelectNegative) );
+    mGui->SelectOption1Check->setChecked((getDialogType() != DialogTypeSelectNegative) );
 
     int index = 0;
     mGui->SelectOption2->setVisible(option2.size() > 0);
@@ -482,7 +630,7 @@ void Dialog::updateInputText(const QString& title) {
     updateDisplay(DisplayTypeEnterText, title);
 }
 
-void Dialog::updateTestReport(const int& dialogType, const QString& title, const bool& option1, const QStringList& option2Str,
+void Dialog::updateTestReport(const QString& title, const bool& option1, const QStringList& option2Str,
                               const QVariantList& option2Value) {
     updateDisplay(DisplayTypeTestReport, title);
 
@@ -529,7 +677,81 @@ void Dialog::updateLogDisplay(const QString& title, const QString& titleInfo, co
     mGui->LogDisplayContent->verticalScrollBar()->setValue(mGui->LogDisplayContent->verticalScrollBar()->maximum());
 }
 
-void Dialog::updateDetailLog(const QString& title, const QStringList& detailLog) {
-    updateDisplay(DisplayTypeDetialLog, title);
+void Dialog::refreshViewLog(const int& refreshType) {
+    switch (refreshType) {
+        case RefreshTypeFindHide: {
+            if (mGui->ViewLogFind->isVisible()) {
+                mGui->ViewLogWidget->addAction(mGui->actionFindText);
+                mGui->ViewLogFind->setVisible(false);
+                mGui->ViewLogContent->setMaximumSize(QSize(16777215, 16777215));
+                mGui->ViewLogClear->setVisible(getDialogType() == DialogTypeViewLogInfo);
+                mGui->ViewLogStop->setVisible(getDialogType() == DialogTypeViewLogInfo);
+            }
+            break;
+        }
+        case RefreshTypeFindShow: {
+            if (mGui->ViewLogFind->isVisible() == false) {
+                mGui->ViewLogFind->setVisible(true);
+                mGui->ViewLogContent->setMaximumSize(QSize(16777215, 520));
+                mGui->ViewLogContent->verticalScrollBar()->setValue(mGui->ViewLogContent->verticalScrollBar()->maximum());
+                mGui->ViewLogFindInput->setAlignment(Qt::AlignCenter);
+                mGui->ViewLogFindInput->setFocus();
+            }
+            break;
+        }
+        case RefreshTypeStop: {
+            setViewLogStop(getViewLogStop() == false);
+            break;
+        }
+        case RefreshTypeClear: {
+            mGui->ViewLogContent->clear();
+            break;
+        }
+        case RefreshTypeSearch:
+        case RefreshTypeSearchPrevious:
+        case RefreshTypeSearchNext: {
+            QString searchText = mGui->ViewLogFindInput->toPlainText();
+            QTextCursor cursor = mGui->ViewLogContent->textCursor();
+            if (refreshType == RefreshTypeSearch) {
+                if (searchText.contains("\n")) {
+                    searchText.remove("\n");
+                    mGui->ViewLogFindInput->setText(searchText);
+                    QTextCursor inputCursor = mGui->ViewLogFindInput->textCursor();
+                    inputCursor.movePosition(QTextCursor::End);
+                    mGui->ViewLogFindInput->setTextCursor(inputCursor);
+                    mGui->ViewLogFindInput->setAlignment(Qt::AlignCenter);
+                    cursor = mGui->ViewLogContent->document()->find(searchText, cursor, QTextDocument::FindBackward);
+                }
+            } else if (refreshType == RefreshTypeSearchNext) {
+                cursor = mGui->ViewLogContent->document()->find(searchText, cursor, QTextDocument::FindFlags());
+            } else {
+                cursor = mGui->ViewLogContent->document()->find(searchText, cursor, QTextDocument::FindBackward);
+            }
+            if (cursor.isNull() == false) {
+                mGui->ViewLogContent->setTextCursor(cursor);
+                mGui->ViewLogContent->ensureCursorVisible();
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
 
+void Dialog::updateViewLog(const QString& title, const QStringList& detailLog) {
+    if (getViewLogStop()) {
+        return;
+    }
+
+    updateDisplay(DisplayTypeViewLog, title);
+
+    QString content = QString();
+    for (const auto& log : detailLog) {
+        content.append(QString("%1\n").arg(log));
+    }
+
+    refreshViewLog(RefreshTypeFindHide);
+    mGui->ViewLogContent->insertPlainText(content);
+    mGui->ViewLogContent->verticalScrollBar()->setValue(mGui->ViewLogContent->verticalScrollBar()->maximum());
 }
