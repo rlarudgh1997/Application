@@ -229,40 +229,6 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
         nodeAddressName.append(text[0]);
     }
 
-#if defined(USE_DIALOG_OLD)
-    if (mAutoComplete == nullptr) {
-        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("Search"), nodeAddressName);
-        connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& selectNodeName) {
-            int rowIndex = 0;
-            for (const auto& nodeName : nodeAddressName) {
-                if (selectNodeName == nodeName) {
-                    break;
-                }
-                rowIndex++;
-            }
-            mGui->NodeView->clearSelection();
-            QTableWidgetItem* scrollItem = mGui->NodeView->item(rowIndex, 0);
-            if (scrollItem) {
-                mGui->NodeView->scrollToItem(scrollItem, QAbstractItemView::PositionAtTop);
-                scrollItem->setSelected(true);
-            }
-
-            mAutoComplete->hide();
-            // mAutoComplete->finished(true);
-        });
-        connect(mAutoComplete, &QDialog::finished, [=]() {
-            disconnect(mAutoComplete);
-            delete mAutoComplete;
-            mAutoComplete = nullptr;
-        });
-    }
-
-    if (show) {
-        mAutoComplete->show();
-    } else {
-        mAutoComplete->hide();
-    }
-#else
     setNodeAddress(nodeAddressName);
     QVariantList info = QVariantList({
         QString("Auto Complete"),
@@ -270,7 +236,6 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
         nodeAddressName,
     });
     updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
-#endif
 }
 
 void GuiCenter::updateDisplaySelectModule(const bool& show) {
@@ -278,31 +243,6 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
         return;
     }
 
-#if defined(USE_DIALOG_OLD)
-    if (mSelectModule == nullptr) {
-        QVariant moduleList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList);
-        QVariant selectModule = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule);
-        bool allState = (moduleList.toStringList().size() == selectModule.toStringList().size());
-        mSelectModule = new SelectModuleDialog(isHandler()->getScreen(), moduleList.toStringList(), allState, true);
-        mSelectModule->updateSelectModule(selectModule.toStringList());
-
-        connect(mSelectModule, &SelectModuleDialog::signalModuleSelected, [=](const QList<QPair<int, QString>>& selectModule) {
-            mSelectModule->hide();
-            QVariantList moduleSelect = QVariantList();
-            for (const auto& select : selectModule) {
-                moduleSelect.append(QVariant(select.second));
-            }
-            createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, QVariant(moduleSelect));
-            // mSelectModule->finished(true);
-        });
-        connect(mSelectModule, &QDialog::finished, [=]() {
-            disconnect(mSelectModule);
-            delete mSelectModule;
-            mSelectModule = nullptr;
-        });
-    }
-    mSelectModule->show();
-#else
     QVariantList info = QVariantList({
         QString("Select Module"),
         QStringList({"Module"}),
@@ -312,7 +252,6 @@ void GuiCenter::updateDisplaySelectModule(const bool& show) {
         getScrolBarValue(),
     });
     updateDrawDialog(Dialog::DialogTypeSelectMoudleInfo, info);
-#endif
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {

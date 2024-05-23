@@ -873,70 +873,21 @@ void GuiExcel::updateDisplayAutoComplete(const bool& show, const int& columnInde
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter).toStringList());
 
-#if defined(USE_DIALOG_OLD)
-    if (mAutoComplete == nullptr) {
-        mAutoComplete = new AutoCompleteDialog(isHandler()->getScreen(), QString("AutoComplete"), list);
-        connect(mAutoComplete, &AutoCompleteDialog::signalAutoCompleteSelectedText, [=](const QString& text) {
-            if (mSelectItem) {
-                mSelectItem->setText(text);
-            }
-            mAutoComplete->hide();
-            // mAutoComplete->finished(true);
-        });
-        connect(mAutoComplete, &QDialog::finished, [=]() {
-            disconnect(mAutoComplete);
-            delete mAutoComplete;
-            mAutoComplete = nullptr;
-        });
-    }
-
-    if (show) {
-        mAutoComplete->setAutoCompleteStringList(list);
-        mAutoComplete->show();
-        if (mSelectItem) {
-            mAutoComplete->setInputText(mSelectItem->text());
-        }
-    } else {
-        mAutoComplete->hide();
-    }
-#else
     QVariantList info = QVariantList({
         QString("Auto Complete"),
         mSelectItem->text(),
         list,
     });
     updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
-#endif
 }
 
 void GuiExcel::updateDisplayAutoCompleteVehicle() {
-#if defined(USE_DIALOG_OLD)
-    if (mAutoCompleteVehicle == nullptr) {
-        QStringList itemList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList();
-        mAutoCompleteVehicle = new AutoCompleteVehicleDialog(isHandler()->getScreen(), QString("Select Vehicle"), itemList);
-
-        connect(mAutoCompleteVehicle, &AutoCompleteVehicleDialog::signalSelecteCheck, [=](const QString& vehicleTypeText) {
-            if (mSelectItem) {
-                mSelectItem->setText(vehicleTypeText);
-            }
-            mAutoCompleteVehicle->hide();
-            mAutoCompleteVehicle->finished(true);
-        });
-        connect(mAutoCompleteVehicle, &QDialog::finished, [=]() {
-            disconnect(mAutoCompleteVehicle);
-            delete mAutoCompleteVehicle;
-            mAutoCompleteVehicle = nullptr;
-        });
-    }
-    mAutoCompleteVehicle->show();
-#else
     QVariantList info = QVariantList({
         QString("Select Vehicle"),
         QString(),
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeSelectVehicleType, info);
-#endif
 }
 
 void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
@@ -946,82 +897,6 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
     }
     bool sfcSignal = data.at(0).toBool();
     bool outputState = data.at(1).toBool();
-
-#if defined(USE_DIALOG_OLD)
-    if (mAutoCompleteInputData == nullptr) {
-        QStringList subTitle = QStringList({"Value Enum"});
-        QStringList valueEnum =
-            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
-        QSize widgetSize = QSize(500, 300);
-        QList<QStringList> matchingTable = QList<QStringList>();
-
-        if ((sfcSignal == false) && (outputState == false)) {
-            QVariant data = QVariant();
-            QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
-
-            for (const auto& vehicle : vehicleTypeList.toStringList()) {
-                int propertyType = 0;
-                if (vehicle.compare(VEHICLE_TYPE_ICV) == false) {
-                    propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV;
-                } else if (vehicle.compare(VEHICLE_TYPE_EV) == false) {
-                    propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == false) {
-                    propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == false) {
-                    propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_HEV) == false) {
-                    propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV;
-                } else {
-                    continue;
-                }
-
-                subTitle.append(vehicle);
-                data = isHandler()->getProperty(propertyType);
-                matchingTable.append(data.toStringList());
-            }
-            subTitle.append("System");
-            data = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem);
-            matchingTable.append(data.toStringList());
-
-            widgetSize = (vehicleTypeList.toStringList().size() > 3) ? (QSize(864, 300)) : (QSize(664, 300));
-        }
-        mAutoCompleteInputData = new SelectModuleDialog(isHandler()->getScreen(), valueEnum, outputState);
-        mAutoCompleteInputData->updateSelectListInfo(valueEnum, matchingTable);
-        mAutoCompleteInputData->updateSelectWidgetInfo(QString("Select Data"), subTitle, widgetSize);
-        connect(mAutoCompleteInputData, &SelectModuleDialog::signalModuleSelected,
-                [=](const QList<QPair<int, QString>>& selectModule) {
-                    if (mSelectItem) {
-                        QString selectValueEnum = QString();
-                        for (const auto& select : selectModule) {
-                            QStringList lineStr = select.second.split(":");
-                            if (lineStr.size() != 2) {
-                                continue;
-                            }
-
-                            QString temp = ((sfcSignal) ? (lineStr.at(0)) : (lineStr.at(1)));
-                            if (outputState) {
-                                temp = ((sfcSignal) ? (lineStr.at(1)) : (lineStr.at(0)));
-                            }
-                            temp.remove("\"");
-
-                            if (selectValueEnum.size() > 0) {
-                                selectValueEnum.append(", ");
-                            }
-                            selectValueEnum.append(temp);
-                        }
-                        mSelectItem->setText(selectValueEnum);
-                    }
-                    mAutoCompleteInputData->hide();
-                    mAutoCompleteInputData->finished(true);
-                });
-        connect(mAutoCompleteInputData, &QDialog::finished, [=]() {
-            disconnect(mAutoCompleteInputData);
-            delete mAutoCompleteInputData;
-            mAutoCompleteInputData = nullptr;
-        });
-    }
-    mAutoCompleteInputData->show();
-#else
     int dialogType = Dialog::DialogTypeSelectValueEnumInput;
     QStringList subTitle = QStringList({"Value Enum"});
     QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
@@ -1072,7 +947,6 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
         0,
     });
     updateDrawDialog(dialogType, info);
-#endif
 }
 
 void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {

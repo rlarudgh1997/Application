@@ -714,8 +714,7 @@ bool Dialog::updateSelectOption(const QVariantList& info) {
     QString option1 = info.at(1).toString();
     QStringList option2 = info.at(2).toStringList();
 
-    mGui->SelectOption1->setVisible((getDialogType() == DialogTypeSelectVehiclePV) ||
-                                    (getDialogType() == DialogTypeSelectVehicleCV));
+    mGui->SelectOption1->setVisible(getDialogType() != DialogTypeSelectVehicleType);
     mGui->SelectOption1Check->setText(option1);
     mGui->SelectOption1Check->setChecked((getDialogType() != DialogTypeSelectNegative));
 
