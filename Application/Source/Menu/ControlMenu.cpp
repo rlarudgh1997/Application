@@ -48,6 +48,8 @@ void ControlMenu::initCommonData(const int& currentMode, const int& displayType)
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
 }
 
 void ControlMenu::initNormalData() {
@@ -132,6 +134,8 @@ void ControlMenu::resizeEvent(const int& width, const int& height) {
     Q_UNUSED(height)
 #else
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, QSize(width, height));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
 #endif
 }
 
@@ -307,7 +311,7 @@ void ControlMenu::updateTestReportInfo(const int& eventType) {
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverage));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageFunction));
         reportInfo.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageBranch));
-        reportInfo.append(true);    // ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine)
+        reportInfo.append(true);  // ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeReportCoverageLine)
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, reportInfo, true);
 }
@@ -834,9 +838,8 @@ void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
 
 int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& value) {
     int count = 0;
-    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeTC)
-                         ? (ConfigInfo::ConfigTypeReportResult)
-                         : (ConfigInfo::ConfigTypeReportCoverage);
+    int configType = (reportType == ivis::common::TestReportTypeEnum::TestReportTypeTC) ? (ConfigInfo::ConfigTypeReportResult)
+                                                                                        : (ConfigInfo::ConfigTypeReportCoverage);
     for (const auto& configValue : value) {
         ConfigSetting::instance().data()->writeConfig((configType + count), configValue);
         count++;
@@ -863,6 +866,11 @@ void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ConfigInfo::ConfigTypeSfcModelPath: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, value);
+            break;
+        }
+        case ConfigInfo::ConfigTypeScreenInfo: {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                              ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
             break;
         }
         default: {

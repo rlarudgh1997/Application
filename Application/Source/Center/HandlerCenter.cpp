@@ -26,6 +26,7 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode, QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible, QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth, QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo, QVariant(QRect()));
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType, QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious, QVariant(""));

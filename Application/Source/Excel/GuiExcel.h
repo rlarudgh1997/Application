@@ -21,8 +21,10 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include "Dialog.h"
 #include "ui_GuiExcel.h"
 
+#if defined(USE_DIALOG_OLD)
 class SelectModuleDialog;
 
 class AutoCompleteDialog : public QDialog {
@@ -186,6 +188,7 @@ private:
     QPushButton* mOK = nullptr;
     QPushButton* mCancel = nullptr;
 };
+#endif
 
 class ExcelSheet {
 public:
@@ -256,6 +259,9 @@ private:
 class GuiExcel : public AbstractGui {
     Q_OBJECT
 
+    REGISTER_WRITABLE_PROPERTY(bool, SfcSignal, false, false)
+    REGISTER_WRITABLE_PROPERTY(bool, OutputState, false, false)
+
 private:
     enum CellMergeType {
         ClearMerge,
@@ -274,6 +280,7 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
+    void updateDrawDialog(const int& dialogType, const QVariantList& info);
     bool chcekExcleSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
     void readAllExcelSheet();
@@ -295,7 +302,7 @@ private:
     void updateDisplayExcelSheet();
     void updateDisplayAutoComplete(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
-    void updateDisplayAutoCompleteInputData(const bool& sfcSignal, const bool& outputState);
+    void updateDisplayValueEnum(const QVariantList& data);
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);
@@ -310,6 +317,12 @@ public slots:
 private:
     Ui::GuiExcel* mGui = nullptr;
     QWidget* mMainView = nullptr;
+    QSharedPointer<Dialog> mDialog = nullptr;
+#if defined(USE_DIALOG_OLD)
+    SelectModuleDialog* mAutoCompleteInputData = nullptr;
+    AutoCompleteVehicleDialog* mAutoCompleteVehicle = nullptr;
+    AutoCompleteDialog* mAutoComplete = nullptr;
+#endif
 
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
     QMap<int, ExcelSheet> mMergeInfo = QMap<int, ExcelSheet>();
@@ -319,9 +332,6 @@ private:
     QList<int> mClearCellInfo = QList<int>();
     QMenu* mMenuRight = nullptr;
     QMap<int, QAction*> mMenuActionItem = QMap<int, QAction*>();
-    AutoCompleteDialog* mAutoComplete = nullptr;
-    AutoCompleteVehicleDialog* mAutoCompleteVehicle = nullptr;
-    SelectModuleDialog* mAutoCompleteInputData = nullptr;
     QTableWidgetItem* mSelectItem = nullptr;
     int mCurrentSheetIndex = 0;
 };

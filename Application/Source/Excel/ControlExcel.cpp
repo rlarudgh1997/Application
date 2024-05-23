@@ -45,6 +45,8 @@ void ControlExcel::initCommonData(const int& currentMode, const int& displayType
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
 }
 
 void ControlExcel::initNormalData() {
@@ -71,7 +73,9 @@ void ControlExcel::initNormalData() {
         vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toStringList();
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, vehicleTypeList);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, appMode);
     updateNodeAddress(true, QStringList(), QStringList());
+
 #if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)  // Firt Booting : new excel sheet
     updateExcelSheet(false, QVariant());
 #endif
@@ -155,6 +159,8 @@ void ControlExcel::resizeEvent(const int& width, const int& height) {
     Q_UNUSED(height)
 #else
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, QSize(width, height));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
 #endif
 }
 
@@ -910,7 +916,7 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
 
     if (inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].size() > 0) {  // ValueEunm data is not null
         QVariantList info = QVariantList({sfcSignal, outputState});
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible, info, true);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, info, true);
     }
 }
 
@@ -928,6 +934,11 @@ void ControlExcel::slotConfigChanged(const int& type, const QVariant& value) {
         case ConfigInfo::ConfigTypeExcelMergeTextEnd:
         case ConfigInfo::ConfigTypeExcelMergeText: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText, value);
+            break;
+        }
+        case ConfigInfo::ConfigTypeScreenInfo: {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                              ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
             break;
         }
         default: {

@@ -74,6 +74,7 @@ public:
         PropertyTypeMode,
         PropertyTypeVisible,
         PropertyTypeDepth,
+        PropertyTypeScreenInfo,
 
         PropertyTypeNormal = PROPETRY_START_NORMAL,
         PropertyTypeViewType,
@@ -90,7 +91,7 @@ public:
         PropertyTypeAppMode,
         PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
-        PropertyTypeInputDataVisible,
+        PropertyTypeValueEnum,
         PropertyTypeInputDataValuEnum,
         PropertyTypeInputDataMatchingTableICV,
         PropertyTypeInputDataMatchingTableEV,

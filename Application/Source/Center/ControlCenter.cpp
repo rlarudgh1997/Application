@@ -39,6 +39,8 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMode, currentMode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDepth, ivis::common::ScreenEnum::DisplayDepthDepth0);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
 }
 
 void ControlCenter::initNormalData() {
@@ -332,15 +334,24 @@ void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
 
 void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-
-    switch (viewType) {
-        case ivis::common::ViewTypeEnum::ViewTypeConfig: {
-            if ((type == ConfigInfo::ConfigTypeInit) || (type == ConfigInfo::ConfigTypeSfcModelPath)) {
+    switch (type) {
+        case ConfigInfo::ConfigTypeInit:
+        case ConfigInfo::ConfigTypeSfcModelPath: {
+            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
                 updateConfigInfo();
             }
             break;
         }
+        case ConfigInfo::ConfigTypeScreenInfo: {
+            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+                updateConfigInfo();
+            }
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                              ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
+            break;
+        }
         default: {
+            break;
         }
     }
 }
@@ -375,6 +386,13 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModule: {
             updateSelectModueNodeAddress(true, value.toList());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSelectModuleError: {
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(
+                ivis::common::PopupType::ModuleSelectError, isHandler(), popupData,
+                QVariantList({STRING_POPUP_MODULE_SELECT_ERROR, STRING_POPUP_MODULE_SELECT_ERROR_TIP}));
             break;
         }
         default: {

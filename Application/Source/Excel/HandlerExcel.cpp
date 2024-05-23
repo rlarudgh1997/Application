@@ -26,14 +26,16 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMode, QVariant(-1));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVisible, QVariant(true));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDepth, QVariant(-1));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo, QVariant(QRect()));
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataVisible, QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV, QVariant(""));

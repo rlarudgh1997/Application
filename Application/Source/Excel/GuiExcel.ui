@@ -110,9 +110,9 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="CellInfoTitle">
+   <widget class="QLineEdit" name="CellInfoTitle">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -124,6 +124,15 @@
     </property>
     <property name="text">
      <string>Cell Info</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

@@ -77,10 +77,10 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
         emit signalConfigChanged(configType, configValue);
     }
 
-    if (configType == ConfigInfo::ConfigTypeInit) {
-        emit signalUpdateWindowTitle(QString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
-        emit signalConfigReset(true);
-    }
+    // if (configType == ConfigInfo::ConfigTypeInit) {
+    //     emit signalUpdateWindowTitle(QString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
+    //     emit signalConfigReset(true);
+    // }
 }
 
 QVariant ConfigSetting::isConfigName(const int& configType) {

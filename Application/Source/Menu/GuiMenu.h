@@ -561,6 +561,7 @@ public slots:
 private:
     Ui::GuiMenu* mGui = nullptr;
     QMainWindow* mMainView = nullptr;
+
 #if defined(USE_DIALOG_OLD)
     QProgressBar* mProgressBar = nullptr;
     QPushButton* mTestResultInfo = nullptr;
@@ -572,7 +573,7 @@ private:
     LogDisplayDialog* mLogDisplay = nullptr;
     DetailLog* mDetailLog = nullptr;
 #else
-    Dialog* mDialog = nullptr;
+    QSharedPointer<Dialog> mDialog = nullptr;
 #endif
 };
 
