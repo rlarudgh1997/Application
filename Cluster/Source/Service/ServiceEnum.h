@@ -9,6 +9,30 @@ enum class DataType : u_int32_t {
     Etc,
 };
 
+enum class ValueType : u_int32_t {
+    Invalid = 0,
+    ID,
+    Stat,
+    Value,
+    StatAfterBlink,
+    BlinkDuration,
+    BlinkValueA,
+    BlinkValueB,
+    StatOptional,
+    BlinkValueAOptional,
+    BlinkValueBOptional,
+    LinkedSoundID,
+    LinkedSoundType,
+    LinkedSoundRepeatCount,
+    LinkedSoundRepeatMin,
+    LinkedSoundRepeatMax,
+    LinkedSoundDuration,
+    LinkedSoundBlinkOnDuration,
+    LinkedSoundBlinkOffDuration,
+    LinkedVoiceID,
+    Etc,
+};
+
 enum class Constant : u_int32_t {
     // SpeedGauge
     SpeedGaugeStart = 0,
@@ -124,6 +148,11 @@ enum class Telltale : u_int32_t {
     HandsOnOffStatOptional,
     DAWStat,
     ADASDrivingNewEnd,
+
+    // ADASDrivingNew
+    HighPerformanceStart,
+    Gauge,
+    HighPerformanceEnd,
 };
 
 enum class Event : u_int32_t {
@@ -246,8 +275,7 @@ enum class Event : u_int32_t {
     ADASDrivingNewStart,
     DrivingAssistSummaryID,
     DrivingAssistSummaryStat,
-    Group1FullPopup1_1ID,
-    Group1FullPopup1_1Stat,
+    Group1FullPopup1,
     Group1FullPopup1_2ID,
     Group1FullPopup1_2Stat,
     Group1FullPopup1_2LinkedSoundID,

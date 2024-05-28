@@ -182,7 +182,8 @@ public:
 
     enum EventType {
         EventInvalid = PROPETRY_START_EVENT,
-        EventID,
+        EventType,
+        PopupInfo,
     };
     Q_ENUMS(GaugeType)
 
@@ -411,6 +412,21 @@ public:
         GaugeTypeRpm,
     };
 };
+
+class HandlerEventEnum : public QObject {
+    Q_OBJECT
+
+public:
+    enum EventType {
+        Invalid = 0,
+        Popup1,
+        Popup2,
+        Popup3,
+    };
+    Q_ENUMS(EventType)
+};
+
+
 
 }  // end of namespace common
 }  // end of namespace ivis

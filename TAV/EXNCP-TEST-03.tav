@@ -1,0 +1,28 @@
+[Description]
+    Ticket No : EXNCP-TEST-03
+    Issue Type : SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat
+    Module : invalid
+    HMC : https://jira.ccos.dev/browse/EXNCP-40685
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1150
+    Info : TEST - 이경원
+    #Date :2024.05.24
+    #Onwer : 이경원
+    #Status : Open
+
+[PowerTrain]
+    ICV
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    SFC.Private.IGNElapsed.ElapsedOn0ms 1
+    VCU_NCstmLaunchCtrlSta 0
+
+[Step]
+    VCU_NCstmLaunchCtrlSta 1
+
+[Expected Result]
+    SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat 200
+    SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional 2
+    SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional 1
+    SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA 200
+    SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB 1

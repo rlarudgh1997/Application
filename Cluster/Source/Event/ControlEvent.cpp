@@ -43,7 +43,8 @@ void ControlEvent::initCommonData(const int& currentMode, const int& displayType
 }
 
 void ControlEvent::initNormalData() {
-    updateDataHandler(ivis::common::PropertyEnum::EventID, 0);
+    updateDataHandler(ivis::common::PropertyEnum::EventType, 0);
+    updateDataHandler(ivis::common::PropertyEnum::PopupInfo, QVariant());
 }
 
 void ControlEvent::initControlData() {
@@ -72,6 +73,10 @@ void ControlEvent::controlConnect(const bool& state) {
         connect(Service::instance().data(), &Service::signalServiceDataChanged,
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
+                });
+        connect(Service::instance().data(), &Service::signalServiceDatasChanged,
+                [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                    slotServiceDatasChanged(dataType, signalType, signalValues);
                 });
     } else {
         disconnect(isHandler());
@@ -153,7 +158,40 @@ void ControlEvent::slotEventInfoChanged(const int& displayType, const int& event
 }
 
 void ControlEvent::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    if (dataType == static_cast<int>(DataType::Constant)) {
-        // Constant
+    int propertyType = 0;
+
+    switch (static_cast<DataType>(dataType)) {
+        case DataType::Event: {
+            Event eventType = static_cast<Event>(signalType);
+            if (eventType == Event::Group1FullPopup1) {
+                propertyType = ivis::common::PropertyEnum::EventType::PopupInfo;
+            } else {
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    if (propertyType > 0) {
+        updateDataHandler(propertyType, signalValue);
+    }
+}
+
+void ControlEvent::slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                           const QHash<QString, QVariant>& signalValues) {
+    if (signalValues.size() == 1) {
+        // auto it = signalValues.constBegin();
+        // slotServiceDataChanged(dataType, signalType, it.value());
+        slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
+    } else {
+        QString text = QString();
+        QHashIterator<QString, QVariant> iter(signalValues);
+        while (iter.hasNext()) {
+            iter.next();
+            text.append(QString("%1 : %2\n").arg(iter.key()).arg(iter.value().toString()));
+        }
+        slotServiceDataChanged(dataType, signalType, text);
     }
 }

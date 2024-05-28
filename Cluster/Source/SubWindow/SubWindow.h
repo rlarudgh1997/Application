@@ -38,6 +38,7 @@ class SubWindow : public QMainWindow {
     REGISTER_WRITABLE_PROPERTY(QStringList, AltonListenData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, AltonServiceData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QString, AllDetailInfo, false)
+    REGISTER_WRITABLE_PROPERTY(QString, CheckSfcSignal, QString(), false)
 
 private:
     // TO_ENUM(DisplayType, ListMain, ListSub, ListAltonService, ListHmi, ETC)

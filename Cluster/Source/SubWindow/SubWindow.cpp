@@ -45,12 +45,16 @@ SubWindow::SubWindow(QWidget* parent) : QMainWindow(parent), mGui(new Ui::SubWin
 }
 
 SubWindow::~SubWindow() {
+    excuteScript(false, QString(), QStringList());
+    qDebug() << "~SubWindow";
     delete mGui;
 }
 
 void SubWindow::init() {
+    // excuteScript(false, QString(), QStringList());
 #if defined(__SUB_WINDOW_ONLY__)
     qDebug() << "Service :" << Service::instance().data();
+    Service::instance().data()->init();
 #endif
 
     ConfigSetting::instance();
@@ -191,6 +195,26 @@ void SubWindow::controlConnect(const bool& state) {
     connect(mGui->actionVSM_Path, &QAction::triggered, [=]() { settingPath(PathTypeVSM); });
     connect(mGui->actionTAV_Path, &QAction::triggered, [=]() { settingPath(PathTypeTAV); });
     connect(mGui->actionAltonClient_Path, &QAction::triggered, [=]() { settingPath(PathTypeAltonClient); });
+
+    // Service
+    connect(Service::instance().data(), &Service::signalServiceDataChanged,
+            [=](const int& dataType, const int& signalType, const QVariant& signalValue) {});
+    connect(Service::instance().data(), &Service::signalServiceDatasChanged,
+            [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                QString text = QString();
+                QHashIterator<QString, QVariant> iter(signalValues);
+                while (iter.hasNext()) {
+                    iter.next();
+                    if (getCheckSfcSignal().contains(iter.key())) {
+                        text.append(QString("  Received : %1 = %2\n").arg(iter.key()).arg(iter.value().toString()));
+                    }
+                }
+                if (text.size() > 0) {
+                    text.prepend(QString("Singal Received - %1\n").arg((signalValues.size() > 1) ? ("Group") : ("Single")));
+                    text.append("\n");
+                    updateHmiLog(text);
+                }
+            });
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {
@@ -246,7 +270,6 @@ void SubWindow::drawDisplay(const int& type, const QString& text) {
 #else
     mGui->companyInfo->setVisible(false);
 #endif
-
     setDisplayType(type);
 }
 
@@ -393,8 +416,12 @@ void SubWindow::updateAltonServiceLog(const QString& log) {
 
 void SubWindow::updateHmiLog(const QString& log) {
     if (mGui->hmiContent) {
-        mGui->hmiContent->insertPlainText(log);
-        mGui->hmiContent->verticalScrollBar()->setValue(mGui->hmiContent->verticalScrollBar()->maximum());
+        if (log.size() == 0) {
+            mGui->hmiContent->clear();
+        } else {
+            mGui->hmiContent->insertPlainText(log);
+            mGui->hmiContent->verticalScrollBar()->setValue(mGui->hmiContent->verticalScrollBar()->maximum());
+        }
     }
 }
 
@@ -591,9 +618,14 @@ QString SubWindow::isToScriptInfo(const int& type, QStringList& infoList, const 
 
     infoList.clear();
     if ((type == DetailInfoDescription) || (type == DetailInfoExpectedResult)) {
+        QString sfcSignal = QString();
         scriptInfo.append(QString("#%1\n").arg(detailInfo.first));
         for (const auto& detail : detailInfo.second) {
             scriptInfo.append(QString("#%1\n").arg(detail));
+            sfcSignal.append(detail + "\n");
+        }
+        if (type == DetailInfoExpectedResult) {
+            setCheckSfcSignal(sfcSignal);
         }
     } else if (type == DetailInfoPowerTrain) {
         QString currPowerTrain = QString("ALL");

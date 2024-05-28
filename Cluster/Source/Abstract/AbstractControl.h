@@ -54,6 +54,8 @@ private slots:
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) = 0;
     virtual void slotHandlerEvent(const int& type, const QVariant& value) = 0;
     virtual void slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) = 0;
+    virtual void slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                         const QHash<QString, QVariant>& signalValues) = 0;
 
 private:
     QMap<int, int> mTimer = QMap<int, int>();

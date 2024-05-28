@@ -269,9 +269,8 @@ void Dialog::connectSelectOption(const bool& state) {
 
 void Dialog::connectEnterText(const bool& state) {
     if (state) {
-        connect(mGui->EnterTextOK, &QPushButton::clicked, [=]() {
-            emit signalEnterTextChanged(mGui->EnterTextLineEdit->text());
-        });
+        connect(mGui->EnterTextOK, &QPushButton::clicked,
+                [=]() { emit signalEnterTextChanged(mGui->EnterTextLineEdit->text()); });
     } else {
         disconnect(mGui->EnterTextOK, nullptr, nullptr, nullptr);
     }

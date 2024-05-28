@@ -1,0 +1,27 @@
+[Description]
+    Ticket No : EXNCP-TEST-02
+    Issue Type : IMG_LFATelltale_Stat
+    Module : invalid
+    HMC : https://jira.ccos.dev/browse/EXNCP-40685
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1150
+    Info : TEST - 이경원
+    #Date :2024.05.24
+    #Onwer : 이경원
+    #Status : Open
+
+[PowerTrain]
+    ICV
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    SMV_LFA_SymbSta 0
+
+[Step]
+    SMV_LFA_SymbSta 1
+    delay 1500
+    SMV_LFA_SymbSta 2
+
+[Expected Result]
+    SFC.ADAS_Driving_New.Telltale.LFA.Stat 198
+
+

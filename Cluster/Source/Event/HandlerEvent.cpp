@@ -2,7 +2,7 @@
 #include "CommonEnum.h"
 
 #define QML QString("qrc:/Event/Event.qml")
-#define QML_OBJECT QString("dataModelEvent")  // DataModelEvent.qml : ojbectName
+#define QML_OBJECT QString("dataModelEvent")  // DataModelHome.qml : ojbectName
 
 QSharedPointer<HandlerEvent>& HandlerEvent::instance() {
     static QSharedPointer<HandlerEvent> gHandler;
@@ -20,8 +20,9 @@ void HandlerEvent::initPropertyInfo() {
     registerProperty(ivis::common::PropertyEnum::CommonDisplay, QString("display"), QVariant(0));
     registerProperty(ivis::common::PropertyEnum::CommonVisible, QString("visible"), QVariant(true));
 
-    // Content
-    registerProperty(ivis::common::PropertyEnum::EventID, QString("eventID"), QVariant(0));
+    // Event
+    registerProperty(ivis::common::PropertyEnum::EventType, QString("eventType"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::PopupInfo, QString("popupInfo"), QVariant());
 }
 
 void HandlerEvent::controlConnect(const bool& state) {

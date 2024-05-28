@@ -3,8 +3,6 @@
 #include <regex>
 #include <QDebug>
 
-#define USE_SERVICE_CODE
-
 QSharedPointer<Service>& Service::instance() {
     static QSharedPointer<Service> gService;
     if (gService.isNull()) {
@@ -82,13 +80,32 @@ void Service::addSubscriptionGroup(const std::vector<std::string>& nodePaths, co
 //     }
 // }
 
+QVariant Service::processVehicleSignal(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                       const std::map<std::string, NodePathToValueFunc>& nodePathToValueFuncs,
+                                       QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
+    std::string nodePath = vehicleSignal.getNodePath();
+
+    auto it = nodePathToValueFuncs.find(nodePath);
+    if (it != nodePathToValueFuncs.end()) {
+        value = it->second(vehicleSignal);
+    }
+
+    if (!nodePath.empty()) {
+        values[nodePath.c_str()] = value;
+    }
+
+    return value;
+}
+
 // ==================================================================================================================
 // ==================================================================================================================
 //    Constant
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                       QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {
@@ -118,14 +135,17 @@ QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal&
     } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                       QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Tachometer.Constant.Rpm.Value) {
@@ -139,14 +159,17 @@ QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal&
     } else if (nodePath == SFC.Tachometer.Constant.RpmDamp.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RpmDamp.Stat.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                       QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Intro_Outro.Constant.ResvCharge.Stat) {
@@ -162,14 +185,16 @@ QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal&
     } else if (nodePath == SFC.Intro_Outro.Constant.CO2Reduction.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.CO2Reduction.Value.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     // if (nodePath == SFC.OAT.Constant.OutTempDisplay.Stat) {
@@ -180,79 +205,99 @@ QVariant Service::isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicl
     //     value = QVariant();
     // }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                                  QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                           QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                                     QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isConstantADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isConstantADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                           QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
 void Service::onConstantChanged(const Constant& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    qDebug() << "onConstantChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant signalValue = QVariant();
+    // qDebug() << "onConstantChanged :" << static_cast<int>(signalType) << signalList.size();
+    QVariant isValue = QVariant();
+    QHash<QString, QVariant> values = QHash<QString, QVariant>();
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Constant::SpeedGaugeStart) && (signalType < Constant::SpeedGaugeEnd)) {
-            signalValue = isConstantSpeedGauge(vehicleSignal);
+            isValue = isConstantSpeedGauge(vehicleSignal, values);
         } else if ((signalType > Constant::TachometerStart) && (signalType < Constant::TachometerEnd)) {
-            signalValue = isConstantTachometer(vehicleSignal);
+            isValue = isConstantTachometer(vehicleSignal, values);
         } else if ((signalType > Constant::IntroOutroStart) && (signalType < Constant::IntroOutroEnd)) {
-            signalValue = isConstantIntroOutro(vehicleSignal);
+            isValue = isConstantIntroOutro(vehicleSignal, values);
         } else if ((signalType > Constant::OATStart) && (signalType < Constant::OATEnd)) {
-            signalValue = isConstantOAT(vehicleSignal);
+            isValue = isConstantOAT(vehicleSignal, values);
         } else if ((signalType > Constant::TransmissionIndicatorStart) && (signalType < Constant::TransmissionIndicatorEnd)) {
-            signalValue = isConstantTransmissionIndicator(vehicleSignal);
+            isValue = isConstantTransmissionIndicator(vehicleSignal, values);
         } else if ((signalType > Constant::DriveModeStart) && (signalType < Constant::DriveModeEnd)) {
-            signalValue = isConstantDriveMode(vehicleSignal);
+            isValue = isConstantDriveMode(vehicleSignal, values);
         } else if ((signalType > Constant::ADASParkingNewStart) && (signalType < Constant::ADASParkingNewEnd)) {
-            signalValue = isConstantADASParkingNew(vehicleSignal);
+            isValue = isConstantADASParkingNew(vehicleSignal, values);
         } else if ((signalType > Constant::HighPerformanceForNBrandStart) &&
                    (signalType < Constant::HighPerformanceForNBrandEnd)) {
-            signalValue = isConstantHighPerformanceForNBrand(vehicleSignal);
+            isValue = isConstantHighPerformanceForNBrand(vehicleSignal, values);
         } else if ((signalType > Constant::ADASDrivingNewStart) && (signalType < Constant::ADASDrivingNewEnd)) {
-            signalValue = isConstantADASDrivingNew(vehicleSignal);
+            isValue = isConstantADASDrivingNew(vehicleSignal, values);
         } else {
-            signalValue = QVariant();
-        }
-
-        if (signalValue.isValid()) {
-            break;
         }
     }
 
-    if (signalValue.isValid()) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Constant), static_cast<int>(signalType), signalValue);
+    if (values.size() == 0) {
+        emit signalServiceDataChanged(static_cast<int>(DataType::Constant), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(DataType::Constant), static_cast<int>(signalType), values);
     }
 }
 
@@ -346,11 +391,6 @@ void Service::subscribeConstant() {
     subscribeConstantTachometer();
     subscribeConstantIntroOutro();
     subscribeConstantOAT();
-    // subscribeConstant();
-    // subscribeConstant();
-    // subscribeConstant();
-    // subscribeConstant();
-    // subscribeConstant();
 }
 
 // ==================================================================================================================
@@ -358,8 +398,9 @@ void Service::subscribeConstant() {
 //    Telltale
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                          QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Lamp_Indicator.Telltale.FrontFog.Stat) {
@@ -377,14 +418,16 @@ QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSign
     } else if (nodePath == SFC.Lamp_Indicator.Telltale.LowBeam.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.LowBeam.Stat.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.OAT.Telltale.IceWarn.Stat) {
@@ -392,74 +435,108 @@ QVariant Service::isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicl
     } else if (nodePath == SFC.OAT.Telltale.IceWarn.StatOptional) {
         value = static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.StatOptional.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isTelltaleDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isTelltaleDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isTelltaleHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isTelltaleHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                                     QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                           QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat.value(vehicleSignal));
     } else if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional) {
         value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Telltale.LFA.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.LFA.Stat.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
+    return value;
+}
+
+QVariant Service::isTelltaleHighPerformance(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                            QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
+    std::string nodePath = vehicleSignal.getNodePath();
+
+    if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional) {
+        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional.value(vehicleSignal));
+    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional) {
+        value = static_cast<ccos::HUInt64>(
+            SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional.value(vehicleSignal));
+    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA) {
+        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA.value(vehicleSignal));
+    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB) {
+        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB.value(vehicleSignal));
+    } else {
+    }
+
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
 void Service::onTelltaleChanged(const Telltale& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    qDebug() << "onTelltaleChanged :" << static_cast<int>(signalType) << signalList.size();
-    QMap<int, QVariant> signalValues = QMap<int, QVariant>();
-    int type = static_cast<int>(signalType);
+    // qDebug() << "onTelltaleChanged :" << static_cast<int>(signalType) << signalList.size();
+    QVariant isValue = QVariant();
+    QHash<QString, QVariant> values = QHash<QString, QVariant>();
 
     for (const auto& vehicleSignal : signalList) {
-        QVariant isValue = QVariant();
         if ((signalType > Telltale::LampIndicatorStart) && (signalType < Telltale::LampIndicatorEnd)) {
-            isValue = isTelltaleLampIndicator(vehicleSignal);
+            isValue = isTelltaleLampIndicator(vehicleSignal, values);
         } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {  // Group
-            isValue = isTelltaleOAT(vehicleSignal);
+            isValue = isTelltaleOAT(vehicleSignal, values);
         } else if ((signalType > Telltale::DriveModeStart) && (signalType < Telltale::DriveModeEnd)) {
-            isValue = isTelltaleDriveMode(vehicleSignal);
+            isValue = isTelltaleDriveMode(vehicleSignal, values);
         } else if ((signalType > Telltale::HighPerformanceForNBrandStart) &&
                    (signalType < Telltale::HighPerformanceForNBrandEnd)) {
-            isValue = isTelltaleHighPerformanceForNBrand(vehicleSignal);
+            isValue = isTelltaleHighPerformanceForNBrand(vehicleSignal, values);
         } else if ((signalType > Telltale::ADASDrivingNewStart) && (signalType < Telltale::ADASDrivingNewEnd)) {
-            isValue = isTelltaleADASDrivingNew(vehicleSignal);
+            isValue = isTelltaleADASDrivingNew(vehicleSignal, values);
+        } else if ((signalType > Telltale::HighPerformanceStart) && (signalType < Telltale::HighPerformanceEnd)) {
+            isValue = isTelltaleHighPerformance(vehicleSignal, values);
         } else {
         }
-
-        signalValues[type] = isValue;
-        type++;
     }
 
-    QMapIterator<int, QVariant> iter(signalValues);
-    while (iter.hasNext()) {
-        iter.next();
-        emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), iter.key(), iter.value());
+    if (values.size() == 0) {
+        emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), values);
     }
-    // if (signalValue.isValid()) {
-    //     emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), signalValue);
-    // }
 }
 
 void Service::subscribeTelltaleLampIndicator() {
@@ -550,6 +627,15 @@ void Service::subscribeTelltaleADASDrivingNew() {
                     std::bind(&Service::onTelltaleChanged, this, Telltale::DAWStat, std::placeholders::_1));
 }
 
+void Service::subscribeTelltaleHighPerformance() {
+    addSubscriptionGroup(std::vector<std::string>({SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat,
+                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional,
+                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional,
+                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA,
+                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB}),
+                         std::bind(&Service::onTelltaleChanged, this, Telltale::Gauge, std::placeholders::_1));
+}
+
 void Service::subscribeTelltale() {
     qDebug() << "Service - subscribeTelltale";
 
@@ -558,6 +644,7 @@ void Service::subscribeTelltale() {
     subscribeTelltaleDriveMode();
     subscribeTelltaleHighPerformanceForNBrand();
     subscribeTelltaleADASDrivingNew();
+    subscribeTelltaleHighPerformance();
 }
 
 // ==================================================================================================================
@@ -565,85 +652,123 @@ void Service::subscribeTelltale() {
 //    Event
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isEventIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                               QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                        QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                                  QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEventADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEventADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                        QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID) {
+        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID.value(vehicleSignal).c_str();
+    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID) {
+        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID.value(vehicleSignal).c_str();
+    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID) {
+        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID.value(vehicleSignal).c_str();
+    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type.value(vehicleSignal));
+    } else {
+    }
+
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
 void Service::onEventChanged(const Event& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    qDebug() << "onEventChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant signalValue = QVariant();
+    // qDebug() << "onEventChanged :" << static_cast<int>(signalType) << signalList.size();
+    QVariant isValue = QVariant();
+    QHash<QString, QVariant> values = QHash<QString, QVariant>();
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Event::IntroOutroStart) && (signalType < Event::IntroOutroEnd)) {
-            signalValue = isEventIntroOutro(vehicleSignal);
+            isValue = isEventIntroOutro(vehicleSignal, values);
         } else if ((signalType > Event::OATStart) && (signalType < Event::OATEnd)) {
-            signalValue = isEventOAT(vehicleSignal);
+            isValue = isEventOAT(vehicleSignal, values);
         } else if ((signalType > Event::TransmissionIndicatorStart) && (signalType < Event::TransmissionIndicatorEnd)) {
-            signalValue = isEventTransmissionIndicator(vehicleSignal);
+            isValue = isEventTransmissionIndicator(vehicleSignal, values);
         } else if ((signalType > Event::DriveModeStart) && (signalType < Event::DriveModeEnd)) {
-            signalValue = isEventDriveMode(vehicleSignal);
+            isValue = isEventDriveMode(vehicleSignal, values);
         } else if ((signalType > Event::ADASParkingNewStart) && (signalType < Event::ADASParkingNewEnd)) {
-            signalValue = isEventADASParkingNew(vehicleSignal);
+            isValue = isEventADASParkingNew(vehicleSignal, values);
         } else if ((signalType > Event::HighPerformanceForNBrandStart) && (signalType < Event::HighPerformanceForNBrandEnd)) {
-            signalValue = isEventHighPerformanceForNBrand(vehicleSignal);
+            isValue = isEventHighPerformanceForNBrand(vehicleSignal, values);
         } else if ((signalType > Event::ADASDrivingNewStart) && (signalType < Event::ADASDrivingNewEnd)) {
-            signalValue = isEventADASDrivingNew(vehicleSignal);
+            isValue = isEventADASDrivingNew(vehicleSignal, values);
         } else {
-            signalValue = QVariant();
-        }
-
-        if (signalValue.isValid()) {
-            break;
         }
     }
 
-    if (signalValue.isValid()) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Event), static_cast<int>(signalType), signalValue);
+    if (values.size() == 0) {
+        emit signalServiceDataChanged(static_cast<int>(DataType::Event), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(DataType::Event), static_cast<int>(signalType), values);
     }
 }
 
@@ -864,10 +989,9 @@ void Service::subscribeEventADASDrivingNew() {
                     std::bind(&Service::onEventChanged, this, Event::DrivingAssistSummaryID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.DrivingAssistSummary.Stat,
                     std::bind(&Service::onEventChanged, this, Event::DrivingAssistSummaryStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_1ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_1Stat, std::placeholders::_1));
+    addSubscriptionGroup(std::vector<std::string>({SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID,
+                                                   SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat}),
+                         std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID,
                     std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2ID, std::placeholders::_1));
     addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat,
@@ -1037,13 +1161,17 @@ void Service::subscribeEventADASDrivingNew() {
 void Service::subscribeEvent() {
     qDebug() << "Service - subscribeEvent";
 
-    void subscribeEventIntroOutro();
-    void subscribeEventOAT();
-    void subscribeEventTransmissionIndicator();
-    void subscribeEventDriveMode();
-    void subscribeEventADASParking_New();
-    void subscribeEventHighPerformanceForNBrand();
-    void subscribeEventADASDrivingNew();
+#if defined(USE_TEST_CODE)
+    subscribeEventADASDrivingNew();
+#else
+    subscribeEventIntroOutro();
+    subscribeEventOAT();
+    subscribeEventTransmissionIndicator();
+    subscribeEventDriveMode();
+    subscribeEventADASParking_New();
+    subscribeEventHighPerformanceForNBrand();
+    subscribeEventADASDrivingNew();
+#endif
 }
 
 // ==================================================================================================================
@@ -1051,76 +1179,97 @@ void Service::subscribeEvent() {
 //    Sound
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isSoundLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                       QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isSoundIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isSoundTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                               QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isSoundADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                        QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isSoundHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                                  QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isSoundADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isSoundADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                        QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
 void Service::onSoundChanged(const Sound& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    qDebug() << "onSoundChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant signalValue = QVariant();
+    // qDebug() << "onSoundChanged :" << static_cast<int>(signalType) << signalList.size();
+    QVariant isValue = QVariant();
+    QHash<QString, QVariant> values = QHash<QString, QVariant>();
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Sound::LampIndicatorStart) && (signalType < Sound::LampIndicatorEnd)) {
-            signalValue = isSoundLampIndicator(vehicleSignal);
+            isValue = isSoundLampIndicator(vehicleSignal, values);
         } else if ((signalType > Sound::IntroOutroStart) && (signalType < Sound::IntroOutroEnd)) {
-            signalValue = isSoundIntroOutro(vehicleSignal);
+            isValue = isSoundIntroOutro(vehicleSignal, values);
         } else if ((signalType > Sound::TransmissionIndicatorStart) && (signalType < Sound::TransmissionIndicatorEnd)) {
-            signalValue = isSoundTransmissionIndicator(vehicleSignal);
+            isValue = isSoundTransmissionIndicator(vehicleSignal, values);
         } else if ((signalType > Sound::SADASParkingNewtart) && (signalType < Sound::ADASParkingNewEnd)) {
-            signalValue = isSoundADASParkingNew(vehicleSignal);
+            isValue = isSoundADASParkingNew(vehicleSignal, values);
         } else if ((signalType > Sound::HighPerformanceForNBrandStart) && (signalType < Sound::HighPerformanceForNBrandEnd)) {
-            signalValue = isSoundHighPerformanceForNBrand(vehicleSignal);
+            isValue = isSoundHighPerformanceForNBrand(vehicleSignal, values);
         } else if ((signalType > Sound::ADASDrivingNewStart) && (signalType < Sound::ADASDrivingNewEnd)) {
-            signalValue = isSoundADASDrivingNew(vehicleSignal);
+            isValue = isSoundADASDrivingNew(vehicleSignal, values);
         } else {
-            signalValue = QVariant();
-        }
-
-        if (signalValue.isValid()) {
-            break;
         }
     }
 
-    if (signalValue.isValid()) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Sound), static_cast<int>(signalType), signalValue);
+    if (values.size() == 0) {
+        emit signalServiceDataChanged(static_cast<int>(DataType::Sound), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(DataType::Sound), static_cast<int>(signalType), values);
     }
 }
 
@@ -1170,8 +1319,8 @@ void Service::subscribeSound() {
 //    Etc
 // ==================================================================================================================
 // ==================================================================================================================
-QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedUnit) {
@@ -1181,48 +1330,54 @@ QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehi
     } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH) {
         value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
     } else {
-        value = QVariant();
     }
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEtcDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEtcDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
-QVariant Service::isEtcADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal) {
-    QVariant value = QVariant();
+QVariant Service::isEtcADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+    QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
     return value;
 }
 
 void Service::onEtcChanged(const Etc& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    qDebug() << "onEtcChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant signalValue = QVariant();
+    // qDebug() << "onEtcChanged :" << static_cast<int>(signalType) << signalList.size();
+    QVariant isValue = QVariant();
+    QHash<QString, QVariant> values = QHash<QString, QVariant>();
 
     for (const auto& vehicleSignal : signalList) {
         if ((signalType > Etc::SpeedGaugeStart) && (signalType < Etc::SpeedGaugeEnd)) {
-            signalValue = isEtcSpeedGauge(vehicleSignal);
+            isValue = isEtcSpeedGauge(vehicleSignal, values);
         } else if ((signalType > Etc::DriveModeStart) && (signalType < Etc::DriveModeEnd)) {
-            signalValue = isEtcDriveMode(vehicleSignal);
+            isValue = isEtcDriveMode(vehicleSignal, values);
         } else if ((signalType > Etc::ADASDrivingNewStart) && (signalType < Etc::ADASDrivingNewEnd)) {
-            signalValue = isEtcADASDrivingNew(vehicleSignal);
+            isValue = isEtcADASDrivingNew(vehicleSignal, values);
         } else {
-            signalValue = QVariant();
-        }
-
-        if (signalValue.isValid()) {
-            break;
         }
     }
 
-    if (signalValue.isValid()) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Etc), static_cast<int>(signalType), signalValue);
+    if (values.size() == 0) {
+        emit signalServiceDataChanged(static_cast<int>(DataType::Etc), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(DataType::Etc), static_cast<int>(signalType), values);
     }
 }
 
@@ -1262,7 +1417,7 @@ void Service::subscribeEtcADASDrivingNew() {
 void Service::subscribeEtc() {
     qDebug() << "Service - subscribeEtc";
 
-    // subscribeEtcSpeedGauge();
-    // subscribeEtcDriveMode();
-    // subscribeEtcADASDrivingNew();
+    subscribeEtcSpeedGauge();
+    subscribeEtcDriveMode();
+    subscribeEtcADASDrivingNew();
 }

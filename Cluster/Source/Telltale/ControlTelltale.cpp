@@ -138,6 +138,10 @@ void ControlTelltale::controlConnect(const bool& state) {
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
                 });
+        connect(Service::instance().data(), &Service::signalServiceDatasChanged,
+                [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                    slotServiceDatasChanged(dataType, signalType, signalValues);
+                });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -218,7 +222,7 @@ void ControlTelltale::slotEventInfoChanged(const int& displayType, const int& ev
 }
 
 void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleInvalid;
+    int propertyType = 0;
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
@@ -245,9 +249,8 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
                 // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
             } else if ((telltaleType == Telltale::HandsOnOffStat) || (telltaleType == Telltale::HandsOnOffStatOptional)) {
                 // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-                qDebug() << "==============================================================";
-                qDebug() << "\t HandsOnOffStatOptional :" << static_cast<int>(telltaleType) << signalValue;
-                qDebug() << "==============================================================";
+            } else if (telltaleType == Telltale::LFAStat) {
+                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleADASDrivingNewLFAStat;
             } else {
             }
             break;
@@ -257,7 +260,16 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
         }
     }
 
-    if (propertyType != ivis::common::PropertyEnum::TelltaleType::TelltaleInvalid) {
+    if (propertyType > 0) {
         updateDataHandler(propertyType, signalValue);
+    }
+}
+
+void ControlTelltale::slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                              const QHash<QString, QVariant>& signalValues) {
+    if (signalValues.size() == 1) {
+        // auto it = signalValues.constBegin();
+        // slotServiceDataChanged(dataType, signalType, it.value());
+        slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     }
 }

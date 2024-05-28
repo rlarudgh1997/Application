@@ -7,5 +7,6 @@ DataModel {
     onModeChanged: print("Event      : onModeChanged =", show, mode, display, z)
     Component.onCompleted: print("Event      : onCompleted   =", show, mode, display, z)
 
-    property int eventID: 0
+    property int eventType: 0
+    property var popupInfo: ""
 }

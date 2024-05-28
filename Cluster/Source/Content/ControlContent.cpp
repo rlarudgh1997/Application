@@ -73,6 +73,10 @@ void ControlContent::controlConnect(const bool& state) {
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
                 });
+        connect(Service::instance().data(), &Service::signalServiceDatasChanged,
+                [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                    slotServiceDatasChanged(dataType, signalType, signalValues);
+                });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -153,7 +157,31 @@ void ControlContent::slotEventInfoChanged(const int& displayType, const int& eve
 }
 
 void ControlContent::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    if (dataType == static_cast<int>(DataType::Constant)) {
-        // Constant
+    int propertyType = 0;
+
+    switch (static_cast<DataType>(dataType)) {
+        case DataType::Constant: {
+            Constant constantType = static_cast<Constant>(signalType);
+            if (constantType == Constant::SpeedAnalogStat) {
+                // propertyType = ivis::common::PropertyEnum::CostantType::PopupInfo;
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    if (propertyType > 0) {
+        updateDataHandler(propertyType, signalValue);
+    }
+}
+
+void ControlContent::slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                             const QHash<QString, QVariant>& signalValues) {
+    if (signalValues.size() == 1) {
+        // auto it = signalValues.constBegin();
+        // slotServiceDataChanged(dataType, signalType, it.value());
+        slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     }
 }

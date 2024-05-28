@@ -96,6 +96,10 @@ void ControlGauge::controlConnect(const bool& state) {
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
                 });
+        connect(Service::instance().data(), &Service::signalServiceDatasChanged,
+                [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                    slotServiceDatasChanged(dataType, signalType, signalValues);
+                });
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
@@ -263,19 +267,38 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 }
 
 void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    if (dataType == static_cast<int>(DataType::Constant)) {
-        switch (static_cast<Constant>(signalType)) {
-            case Constant::SpeedAnalogStat: {
-                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
-                break;
+    int propertyType = 0;
+
+    switch (static_cast<DataType>(dataType)) {
+        case DataType::Constant: {
+            Constant constantType = static_cast<Constant>(signalType);
+            if (constantType == Constant::SpeedAnalogStat) {
+                propertyType = ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed;
+            } else if (constantType == Constant::SpeedDigitalStat) {
+                propertyType = ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm;
+            } else {
             }
-            case Constant::SpeedDigitalStat: {
-                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
-                break;
-            }
-            default: {
-                break;
-            }
+            break;
         }
+        case DataType::Event: {
+            Event eventType = static_cast<Event>(signalType);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    if (propertyType > 0) {
+        updateDataHandler(propertyType, signalValue);
+    }
+}
+
+void ControlGauge::slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                           const QHash<QString, QVariant>& signalValues) {
+    if (signalValues.size() == 1) {
+        // auto it = signalValues.constBegin();
+        // slotServiceDataChanged(dataType, signalType, it.value());
+        slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     }
 }

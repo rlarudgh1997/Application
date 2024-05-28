@@ -50,14 +50,21 @@ MainWindow::MainWindow(QQuickView* parent) : QQuickView(parent) {
 }
 
 MainWindow::~MainWindow() {
+#if defined(__MODULE_SUB_WINDOW__)
     delete mSubWindow;
+#endif
     qInfo() << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
 void MainWindow::controlConnect() {
+#if defined(USE_APP_EXIT_NEW)
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this, &MainWindow::close,
+            Qt::UniqueConnection);
+#else
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
             &QGuiApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
+#endif
 }
 
 void MainWindow::setContextProperty() {
@@ -87,6 +94,9 @@ void MainWindow::setQmlRegisterType() {
                                                                           "TelltaleECASAxleMotionStatOptional");
     qmlRegisterType<ivis::common::TelltaleOATIceWarnStatOptionalType>("TelltaleEnum", 1, 0, "TelltaleOATIceWarnStatOptional");
     qmlRegisterType<ivis::common::TelltaleLowFuelWarnStatOptionalType>("TelltaleEnum", 1, 0, "TelltaleLowFuelWarnStatOptional");
+
+    // Evnet
+    qmlRegisterType<ivis::common::HandlerEventEnum>("EventEnum", 1, 0, "Event");
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
@@ -116,4 +126,14 @@ void MainWindow::resizeEvent(QResizeEvent* resizeEvent) {
 
     mScreenInfo = QRect(mScreenInfo.x(), mScreenInfo.y(), resizeEvent->size().width(), resizeEvent->size().height());
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeScreenInfo, mScreenInfo);
+}
+
+void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+#if defined(USE_APP_EXIT_NEW)
+    // mSubWindow->close();
+    // QQuickView::closeEvent(closeEvent);
+    QGuiApplication::quit();    // qApp->quit();
+#else
+    emit ControlManager::instance().data()->signalExitProgram();
+#endif
 }

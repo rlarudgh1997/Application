@@ -42,6 +42,8 @@ public slots:
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);
     virtual void slotHandlerEvent(const int& type, const QVariant& value);
     virtual void slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
+    virtual void slotServiceDatasChanged(const int& dataType, const int& signalType,
+                                         const QHash<QString, QVariant>& signalValues);
 
 private:
     AbstractHandler* mHandler = nullptr;
