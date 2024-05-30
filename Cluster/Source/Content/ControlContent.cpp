@@ -185,13 +185,13 @@ void ControlContent::slotServiceDataChanged(const int& dataType, const int& sign
 void ControlContent::slotServiceDatasChanged(const int& dataType, const int& signalType,
                                              const QHash<QString, QVariant>& signalValues) {
     if (signalValues.size() == 1) {
-        // auto it = signalValues.constBegin();
-        // slotServiceDataChanged(dataType, signalType, it.value());
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     } else {
         QString multiValueInfo = QString();
         for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
-            multiValueInfo.append(QString("%1 : %2\n").arg(iter.key()).arg(iter.value().toString()));
+            QString sfcName = iter.key();
+            QVariant sfcValue = iter.value();
+            multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
             slotServiceDataChanged(dataType, signalType, multiValueInfo);
         }
     }

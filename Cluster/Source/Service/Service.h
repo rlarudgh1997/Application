@@ -51,29 +51,15 @@ private:
     template <typename TYPE>
     void subscribeSignals(const DataType& datatType,
                           const std::vector<std::pair<TYPE, std::vector<std::string>>>& signalsToSubscribe);
-    template <typename TYPE>
-    QVariant isSignalValue(const DataType& dataType, const TYPE& signalType,
-                           const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal
-                           QHash<int, QPair<QString, QVariant>>& values);
+    QVariant isSignalValue(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                           QHash<QString, QVariant>& values);
     template <typename TYPE>
     void onSignalChanged(const DataType& dataType, const TYPE& signalType,
                          const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-#if 0
-    QVariant isConstantSignal(const Constant& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                              QHash<QString, QVariant>& values);
-    QVariant isTelltaleSignal(const Telltale& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                              QHash<QString, QVariant>& values);
-    QVariant isEventSignal(const Event& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                           QHash<QString, QVariant>& values);
-    QVariant isSoundSignal(const Sound& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                           QHash<QString, QVariant>& values);
-    QVariant isEtcSignal(const Etc& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                         QHash<QString, QVariant>& values);
-#endif
 
 signals:
     void signalServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
     void signalServiceDatasChanged(const int& dataType, const int& signalType,
-                                   const QHash<int, QPair<QString, QVariant>>& signalValues);
+                                   const QHash<QString, QVariant>& signalValues);
 };
 #endif  // SERIVCE_H

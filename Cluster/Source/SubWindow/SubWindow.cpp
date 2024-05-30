@@ -201,16 +201,19 @@ void SubWindow::controlConnect(const bool& state) {
             [=](const int& dataType, const int& signalType, const QVariant& signalValue) {});
     connect(Service::instance().data(), &Service::signalServiceDatasChanged,
             [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
-                QString text = QString();
+                QString multiValueInfo = QString();
                 for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
-                    if (getCheckSfcSignal().contains(iter.key())) {
-                        text.append(QString("  Received : %1 = %2\n").arg(iter.key()).arg(iter.value().toString()));
+                    QString sfcName = iter.key();
+                    QVariant sfcValue = iter.value();
+                    if (getCheckSfcSignal().contains(sfcName)) {
+                        multiValueInfo.append(QString("  Received : %1 = %2\n").arg(sfcName).arg(sfcValue.toString()));
                     }
                 }
-                if (text.size() > 0) {
-                    text.prepend(QString("Singal Received - %1\n").arg((signalValues.size() > 1) ? ("Group") : ("Single")));
-                    text.append("\n");
-                    updateHmiLog(text);
+                if (multiValueInfo.size() > 0) {
+                    multiValueInfo.prepend(
+                            QString("Singal Received - %1\n").arg((signalValues.size() > 1) ? ("Group") : ("Single")));
+                    multiValueInfo.append("\n");
+                    updateHmiLog(multiValueInfo);
                 }
             });
 }

@@ -95,9 +95,9 @@ void Service::subscribeConstantSignals() {
               SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat,
               SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value,
               SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value,
               SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value,
-              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat,
-              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value}},
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat}},
         });
 }
 
@@ -395,293 +395,64 @@ void Service::subscribeSignals(const DataType& dataType,
     }
 }
 
-template <typename TYPE>
-QVariant Service::isSignalValue(const DataType& dataType, const TYPE& signalType,
-                                const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                QHash<int, QPair<QString, QVariant>>& values) {
-#if 1
+QVariant Service::isSignalValue(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                QHash<QString, QVariant>& values) {
     QVariant isValue = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-    switch (vehicleSignal.getValueType()) {
-        case ccos::vehicle::vsm::HVehicleSignalValueType::INT64:
-            isValue = vehicleSignal.getValue<ccos::HInt64>();
-            break;
-        case ccos::vehicle::vsm::HVehicleSignalValueType::UINT64:
-            isValue = vehicleSignal.getValue<ccos::HUInt64>();
-            break;
-        case ccos::vehicle::vsm::HVehicleSignalValueType::DOUBLE:
-            isValue = vehicleSignal.getValue<ccos::HDouble>();
-            break;
-        case ccos::vehicle::vsm::HVehicleSignalValueType::BOOL:
-            isValue = vehicleSignal.getValue<ccos::HBool>();
-            break;
-        case ccos::vehicle::vsm::HVehicleSignalValueType::STRING:
-            isValue = vehicleSignal.getValue<std::string>().c_str();
-            break;
-        default:
-            break;
+    QString nodePath = vehicleSignal.getNodePath().c_str();
+    if (nodePath.isEmpty() == false) {
+        switch (vehicleSignal.getValueType()) {
+            case ccos::vehicle::vsm::HVehicleSignalValueType::INT64:
+                isValue = vehicleSignal.getValue<ccos::HInt64>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::UINT64:
+                isValue = vehicleSignal.getValue<ccos::HUInt64>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::DOUBLE:
+                isValue = vehicleSignal.getValue<ccos::HDouble>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::BOOL:
+                isValue = vehicleSignal.getValue<ccos::HBool>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::TRISTATE:
+                isValue = vehicleSignal.getValue<ccos::HUInt64>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::SWITCHSTATE:
+                isValue = vehicleSignal.getValue<ccos::HUInt64>();
+                break;
+            case ccos::vehicle::vsm::HVehicleSignalValueType::STRING:
+                isValue = vehicleSignal.getValue<std::string>().c_str();
+                break;
+            default:
+                isValue = vehicleSignal.getValue<std::string>().c_str();
+                break;
+        }
+        values[nodePath] = isValue;
     }
-    if (nodePath.empty() == false) {
-        values[signalType] = QPair<nodePath.c_str(), isValue>;
-        // values[nodePath.c_str()] = isValue;
-    }
-#else
-    QVariant isValue = QVariant();
-    switch (dataType) {
-        case DataType::Constant:
-            isValue = isConstantSignal(static_cast<Constant>(signalType), vehicleSignal, values);
-            break;
-        case DataType::Telltale:
-            isValue = isTelltaleSignal(static_cast<Telltale>(signalType), vehicleSignal, values);
-            break;
-        case DataType::Event:
-            isValue = isEventSignal(static_cast<Event>(signalType), vehicleSignal, values);
-            break;
-        case DataType::Sound:
-            isValue = isSoundSignal(static_cast<Sound>(signalType), vehicleSignal, values);
-            break;
-        case DataType::Etc:
-            isValue = isEtcSignal(static_cast<Etc>(signalType), vehicleSignal, values);
-            break;
-        default:
-            break;
-    }
-#endif
-
     return isValue;
 }
 
 template <typename TYPE>
 void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
                               const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    QHash<int, QPair<QString, QVariant>> values;
+    QHash<QString, QVariant> values;
     QVariant isValue;
     for (const auto& vehicleSignal : signalList) {
-        isValue = isSignalValue(dataType, signalType, vehicleSignal, values);
+        isValue = isSignalValue(vehicleSignal, values);
     }
 
-    if (values.isEmpty()) {
-        emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
-    } else {
+    if (values.size() > 1) {
 #if 0
         QString multiValueInfo = QString();
-        for (auto iter = values.cbegin(); iter != values.cend(); ++iter) {
-            QPair<QString, QVariant> valueInfo = iter.value().toString();
-            multiValueInfo.append(QString("%1 : %2\n").arg(valueInfo.first.toString()).arg(valueInfo.second.toString()));
+        for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+            QString sfcName = iter.key();
+            QVariant sfcValue = iter.value();
+            multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
         }
         emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), multiValueInfo);
 #else
         emit signalServiceDatasChanged(static_cast<int>(dataType), static_cast<int>(signalType), values);
 #endif
+    } else {
+        emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
     }
 }
-
-#if 0
-QVariant Service::isConstantSignal(const Constant& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                   QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {    // Speed_Gauge
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedDigital.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedDigital.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedDigital.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedDigital.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDigital.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDigital.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Tachometer.Constant.Rpm.Value) {    // Tachometer
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.Rpm.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Tachometer.Constant.RedZoneNbrand.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RedZoneNbrand.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Tachometer.Constant.MaxRpm.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.MaxRpm.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Tachometer.Constant.RpmDamp.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RpmDamp.Stat.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath == SFC.Intro_Outro.Constant.ResvCharge.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.ResvCharge.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Intro_Outro.Constant.ResvClimate.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.ResvClimate.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Intro_Outro.Constant.PurificationAir.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.PurificationAir.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Intro_Outro.Constant.PurificationAir.Value) {
-        value = static_cast<ccos::HDouble>(SFC.Intro_Outro.Constant.PurificationAir.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.Intro_Outro.Constant.CO2Reduction.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.CO2Reduction.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Intro_Outro.Constant.CO2Reduction.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.CO2Reduction.Value.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value) {
-        value =
-            static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-
-    // if (value.isValid()) {
-    //     qDebug() << "isConstantSignal :" << nodePath.c_str() << value;
-    // }
-    return value;
-}
-
-QVariant Service::isTelltaleSignal(const Telltale& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                   QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath == SFC.Lamp_Indicator.Telltale.FrontFog.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.FrontFog.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.HighBeam.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.HighBeam.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.RearFog.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.RearFog.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.TailLamp.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.TailLamp.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.Lamp_Indicator.Telltale.LowBeam.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.Lamp_Indicator.Telltale.LowBeam.Stat.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath == SFC.OAT.Telltale.IceWarn.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.OAT.Telltale.IceWarn.StatOptional) {
-        value = static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.StatOptional.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Telltale.LFA.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.LFA.Stat.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional) {
-        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional.value(vehicleSignal));
-    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional) {
-        value = static_cast<ccos::HUInt64>(
-            SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional.value(vehicleSignal));
-    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA) {
-        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA.value(vehicleSignal));
-    } else if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB) {
-        value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-
-    return value;
-}
-
-QVariant Service::isEventSignal(const Event& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID) {
-        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID.value(vehicleSignal).c_str();
-    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID) {
-        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID.value(vehicleSignal).c_str();
-    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat.value(vehicleSignal));
-    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID) {
-        value = SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID.value(vehicleSignal).c_str();
-    } else if (nodePath == SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type) {
-        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-
-    return value;
-}
-
-QVariant Service::isSoundSignal(const Sound& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-
-    return value;
-}
-
-QVariant Service::isEtcSignal(const Etc& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                              QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedUnit) {
-        value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Inter_DisplaySpeedUnit.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH) {
-        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH.value(vehicleSignal));
-    } else if (nodePath == SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH) {
-        value = static_cast<ccos::HDouble>(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-
-    return value;
-}
-#endif

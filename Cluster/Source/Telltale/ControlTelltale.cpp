@@ -246,6 +246,7 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
             } else if (telltaleType == Telltale::LowBeamStat) {
                 propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorLowBeamStat] = signalValue;
             } else if (telltaleType == Telltale::LFAStat) {
+                qDebug() << "TelltaleADASDrivingNewLFAStat :" << signalValue;
                 propertyData[ivis::common::PropertyEnum::TelltaleADASDrivingNewLFAStat] = signalValue;
             } else if ((telltaleType == Telltale::IceWarnStat) || (telltaleType == Telltale::IceWarnStatOptional)) {
             } else if ((telltaleType == Telltale::HandsOnOffStat) || (telltaleType == Telltale::HandsOnOffStatOptional)) {
@@ -266,8 +267,14 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
 void ControlTelltale::slotServiceDatasChanged(const int& dataType, const int& signalType,
                                               const QHash<QString, QVariant>& signalValues) {
     if (signalValues.size() == 1) {
-        // auto it = signalValues.constBegin();
-        // slotServiceDataChanged(dataType, signalType, it.value());
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
+    } else {
+        QString multiValueInfo = QString();
+        for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+            QString sfcName = iter.key();
+            QVariant sfcValue = iter.value();
+            multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
+            slotServiceDataChanged(dataType, signalType, multiValueInfo);
+        }
     }
 }
