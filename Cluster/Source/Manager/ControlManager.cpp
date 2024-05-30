@@ -10,7 +10,9 @@
 #include "ControlContent.h"
 #include "ControlEvent.h"
 
+#if !defined(__MODULE_SUB_WINDOW__)
 #include "Service.h"
+#endif
 
 QSharedPointer<ControlManager>& ControlManager::instance() {
     static QSharedPointer<ControlManager> gControl;
@@ -24,7 +26,10 @@ ControlManager::ControlManager() {
 }
 
 void ControlManager::init() {
+#if !defined(__MODULE_SUB_WINDOW__)
     Service::instance().data();
+#endif
+
     setCurrentMode(ivis::common::DisplayEnum::DisplayTypeHome);
 
     createControl(ivis::common::DisplayEnum::DisplayTypeHome);
@@ -33,7 +38,9 @@ void ControlManager::init() {
     createControl(ivis::common::DisplayEnum::DisplayTypeContent);
     createControl(ivis::common::DisplayEnum::DisplayTypeEvent);
 
+#if !defined(__MODULE_SUB_WINDOW__)
     Service::instance().data()->init();
+#endif
 }
 
 void ControlManager::sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue) {

@@ -21,7 +21,8 @@ void HandlerContent::initPropertyInfo() {
     registerProperty(ivis::common::PropertyEnum::CommonVisible, QString("visible"), QVariant(true));
 
     // Content
-    registerProperty(ivis::common::PropertyEnum::ContentID, QString("contentID"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::ContentType, QString("contentType"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::ContentInfo, QString("contentInfo"), QVariant());
 }
 
 void HandlerContent::controlConnect(const bool& state) {

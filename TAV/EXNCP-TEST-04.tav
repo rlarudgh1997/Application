@@ -1,0 +1,40 @@
+[Description]
+    Ticket No : EXNCP-TEST-04
+    Issue Type : Spec
+    Module : High Performance Gauge [PT280]
+    HMC : https://jira.ccos.dev/browse/EXNCP-40685
+    #IVIS : https://ivis.atlassian.net/browse/SFC-1150
+    Info : TEST - 최석흠
+    #Date :2024.02.13
+    #Onwer : 김상엽
+    #Status : Open
+
+[PowerTrain]
+    ICV
+
+[Precondition]
+    SFC.Extension.AEM.Inter_AEMInitializeComplete true
+    HardWire_HardWireIgnition1 1
+    [Group]
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_MvFrontLeftObjectLateralPositionValue 0
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_MvFrontLeftObjectLongitudinalPositionValue 0
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_MvFrontRightObjectLateralPositionValue 0
+        Vehicle.AD.ADAS_DRIVING_NEW.Input_MvFrontRightObjectLongitudinalPositionValue 0
+
+[Step]
+    #delay 1000
+    [Group]
+        MV_FrLtObjLongPosVal 200
+        MV_FrLtObjLatPosVal 23
+        MV_FrRtObjLongPosVal 999
+        MV_FrRtObjLatPosVal 40
+
+[Expected Result]
+	SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat 2
+	SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value 200
+	SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat 2
+	SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value 23
+	SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat 2
+	SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value 40
+	SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat 2
+	SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value 999

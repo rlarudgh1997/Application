@@ -472,7 +472,7 @@ QString ControlExcel::sytemCall(const bool& readFile, const QVariant& filePath) 
 
     qDebug() << "*************************************************************************************************";
     qDebug() << "PWD      :" << ivis::common::APP_PWD();
-    qDebug() << "System   :" << ((result) ? ("<sucess>") : ("<fail>")) << cmd;
+    qDebug() << "System   :" << ((result) ? ("<Success>") : ("<fail>")) << cmd;
     qDebug() << "FilePath :" << filePath;
     qDebug() << "DirPath  :" << dirPath;
     for (const auto& d : log) {

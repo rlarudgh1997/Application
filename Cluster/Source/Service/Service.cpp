@@ -15,6 +15,18 @@ Service::Service() {
     qDebug() << "Service - Start";
 }
 
+void Service::init() {
+    qDebug() << "Service - Init";
+
+    getVehicleSignalModel();
+
+    subscribeConstantSignals();
+    subscribeTelltaleSignals();
+    subscribeEventSignals();
+    subscribeSoundSignals();
+    subscribeEtcSignals();
+}
+
 ccos::vehicle::vsm::HVehicleSignalModel& Service::getVehicleSignalModel() {
     static ccos::vehicle::vsm::HVehicleSignalModel* gVehicleSignalModel = nullptr;
     if (gVehicleSignalModel == nullptr) {
@@ -23,26 +35,12 @@ ccos::vehicle::vsm::HVehicleSignalModel& Service::getVehicleSignalModel() {
     return *gVehicleSignalModel;
 }
 
-void Service::init() {
-    qDebug() << "Service - Init";
-
-    getVehicleSignalModel();
-
-    subscribeConstant();
-    subscribeTelltale();
-    subscribeEvent();
-    subscribeSound();
-    subscribeEtc();
-}
-
 void Service::addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc) {
-    std::vector<std::string> nodePaths{nodeAddress};
-    auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
-        nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
+    auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(std::vector<std::string>{nodeAddress},
+                                                                            ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED,
+                                                                            std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
-    // qDebug() << "\t addSubscription :" << ((result == ccos::HResult::OK) ? ("Sucess ->") : ("Fail   ->"))
-    //          << nodeAddress.c_str();
     if (result != ccos::HResult::OK) {
         qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
     }
@@ -53,7 +51,7 @@ void Service::addSubscriptionGroup(const std::vector<std::string>& nodePaths, co
         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
     auto result = getVehicleSignalModel().subscribe(subscription);
 
-    // qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
+    // qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Success") : ("Fail"));
     if (result != ccos::HResult::OK) {
         for (const std::string& nodeAddress : nodePaths) {
             qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
@@ -61,54 +59,430 @@ void Service::addSubscriptionGroup(const std::vector<std::string>& nodePaths, co
     }
 }
 
-// void Service::addSubscriptionEventPopup() {
-//     std::vector<std::string> nodePaths = sfc::searchAddress("SFC.*.Event.*");
-//     auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
-//         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
-
-//     auto result = getVehicleSignalModel().subscribe(subscription);
-
-//     getVehicleSignalModel().subscribe(std::make_shared<HSubscription>(
-//         addressList, HSubscriptionType::VALUE_CHANGED,
-//         std::make_shared<sfc::SubscriptionListener>(std::bind(&AppService::onEventFunc, this, std::placeholders::_1))));
-
-//     qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Sucess") : ("Fail"));
-//     if (result != ccos::HResult::OK) {
-//         for (const std::string& nodeAddress : nodePaths) {
-//             qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
-//         }
-//     }
-// }
-
-QVariant Service::processVehicleSignal(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                       const std::map<std::string, NodePathToValueFunc>& nodePathToValueFuncs,
-                                       QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    auto it = nodePathToValueFuncs.find(nodePath);
-    if (it != nodePathToValueFuncs.end()) {
-        value = it->second(vehicleSignal);
-    }
-
-    if (!nodePath.empty()) {
-        values[nodePath.c_str()] = value;
-    }
-
-    return value;
+void Service::subscribeConstantSignals() {
+    subscribeSignals<Constant>(
+        DataType::Constant,
+        {
+            {Constant::SpeedAnalogStat, {SFC.Speed_Gauge.Constant.SpeedAnalog.Stat}},
+            {Constant::SpeedAnalogValue, {SFC.Speed_Gauge.Constant.SpeedAnalog.Value}},
+            {Constant::SpeedDigitalStat, {SFC.Speed_Gauge.Constant.SpeedDigital.Stat}},
+            {Constant::SpeedDigitalValue, {SFC.Speed_Gauge.Constant.SpeedDigital.Value}},
+            {Constant::SpeedSubDigitalStat, {SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat}},
+            {Constant::SpeedSubDigitalValue, {SFC.Speed_Gauge.Constant.SpeedSubDigital.Value}},
+            {Constant::SpeedMainDisplayUnitStat, {SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat}},
+            {Constant::SpeedAuxDisplayUnitStat, {SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat}},
+            {Constant::SpeedSubDisplayStat, {SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat}},
+            {Constant::SpeedScaleMaximumStat, {SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat}},
+            {Constant::NaviSpeedLimitStat, {SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat}},
+            {Constant::NaviSpeedLimitOver1ColorValue, {SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value}},
+            {Constant::NaviSpeedLimitOver2ColorValue, {SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value}},
+            {Constant::RpmValue, {SFC.Tachometer.Constant.Rpm.Value}},
+            {Constant::RedZoneExceptNbrandStat, {SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat}},
+            {Constant::RedZoneNbrandStat, {SFC.Tachometer.Constant.RedZoneNbrand.Stat}},
+            {Constant::MaxRpmStat, {SFC.Tachometer.Constant.MaxRpm.Stat}},
+            {Constant::RpmDampStat, {SFC.Tachometer.Constant.RpmDamp.Stat}},
+            {Constant::ResvChargeStat, {SFC.Intro_Outro.Constant.ResvCharge.Stat}},
+            {Constant::ResvClimateStat, {SFC.Intro_Outro.Constant.ResvClimate.Stat}},
+            {Constant::PurificationAirStat, {SFC.Intro_Outro.Constant.PurificationAir.Stat}},
+            {Constant::PurificationAirValue, {SFC.Intro_Outro.Constant.PurificationAir.Value}},
+            {Constant::CO2ReductionStat, {SFC.Intro_Outro.Constant.CO2Reduction.Stat}},
+            {Constant::CO2ReductionValue, {SFC.Intro_Outro.Constant.CO2Reduction.Value}},
+            {Constant::OutTempDisplayStat, {SFC.OAT.Constant.OutTempDisplay.Stat}},
+            {Constant::OutTempDisplayUnitStat, {SFC.OAT.Constant.OutTempDisplayUnit.Stat}},
+            {Constant::ViewFrontVehicle,
+             {SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value,
+              SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value}},
+        });
 }
 
-// ==================================================================================================================
-// ==================================================================================================================
-//    Constant
-// ==================================================================================================================
-// ==================================================================================================================
-QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                       QHash<QString, QVariant>& values) {
+void Service::subscribeTelltaleSignals() {
+    subscribeSignals<Telltale>(
+        DataType::Telltale,
+        {
+            {Telltale::FrontFogStat, {SFC.Lamp_Indicator.Telltale.FrontFog.Stat}},
+            {Telltale::HighBeamStat, {SFC.Lamp_Indicator.Telltale.HighBeam.Stat}},
+            {Telltale::RearFogStat, {SFC.Lamp_Indicator.Telltale.RearFog.Stat}},
+            {Telltale::TailLampStat, {SFC.Lamp_Indicator.Telltale.TailLamp.Stat}},
+            {Telltale::TurnSignalLeftStat, {SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat}},
+            {Telltale::TurnSignalRightStat, {SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat}},
+            {Telltale::LowBeamStat, {SFC.Lamp_Indicator.Telltale.LowBeam.Stat}},
+            {Telltale::IceWarnStat, {SFC.OAT.Telltale.IceWarn.Stat, SFC.OAT.Telltale.IceWarn.StatOptional}},
+            {Telltale::DMSStat, {SFC.Drive_Mode.Telltale.Drive_Mode.DMS.Stat}},
+            {Telltale::DMSStatOptional, {SFC.Drive_Mode.Telltale.Drive_Mode.DMS.StatOptional}},
+            {Telltale::DimmedStat, {SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.Stat}},
+            {Telltale::DimmedStatOptional, {SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.StatOptional}},
+            {Telltale::CreepOffStat, {SFC.High_Performance_For_N_Brand.Telltale.CreepOff.Stat}},
+            {Telltale::ShiftLightStat, {SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.Stat}},
+            {Telltale::ShiftLightBlinkValueA, {SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueA}},
+            {Telltale::ShiftLightBlinkValueB, {SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueB}},
+            {Telltale::ShiftLightBlinkValueBOptional, {SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueBOptional}},
+            {Telltale::ShiftLightStatOptional, {SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.StatOptional}},
+            {Telltale::EnduranceRaceStat, {SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.Stat}},
+            {Telltale::EnduranceRaceStatOptional, {SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.StatOptional}},
+            {Telltale::FCAStat, {SFC.ADAS_Driving_New.Telltale.FCA.Stat}},
+            {Telltale::ELKStat, {SFC.ADAS_Driving_New.Telltale.ELK.Stat}},
+            {Telltale::LKAStat, {SFC.ADAS_Driving_New.Telltale.LKA.Stat}},
+            {Telltale::HBAStat, {SFC.ADAS_Driving_New.Telltale.HBA.Stat}},
+            {Telltale::LFAStat, {SFC.ADAS_Driving_New.Telltale.LFA.Stat}},
+            {Telltale::LCALeftStat, {SFC.ADAS_Driving_New.Telltale.LCALeft.Stat}},
+            {Telltale::LCARightStat, {SFC.ADAS_Driving_New.Telltale.LCARight.Stat}},
+            {Telltale::HandsOnOffStat,
+             {SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat, SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional}},
+            {Telltale::DAWStat, {SFC.ADAS_Driving_New.Telltale.DAW.Stat}},
+            {Telltale::Gauge,
+             {SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat,
+              SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional,
+              SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional,
+              SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA,
+              SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB}},
+        });
+}
+
+void Service::subscribeEventSignals() {
+    subscribeSignals<Event>(
+        DataType::Event,
+        {
+            {Event::WelcomeID, {SFC.Intro_Outro.Event.Welcome.ID}},
+            {Event::WelcomeStat, {SFC.Intro_Outro.Event.Welcome.Stat}},
+            {Event::WelcomeLinkedSoundID, {SFC.Intro_Outro.Event.Welcome.LinkedSound.ID}},
+            {Event::WelcomeLinkedSoundType, {SFC.Intro_Outro.Event.Welcome.LinkedSound.Type}},
+            {Event::WelcomeLinkedSoundRepeatCount, {SFC.Intro_Outro.Event.Welcome.LinkedSound.RepeatCount}},
+            {Event::SystemCheckID, {SFC.Intro_Outro.Event.SystemCheck.ID}},
+            {Event::SystemCheckStat, {SFC.Intro_Outro.Event.SystemCheck.Stat}},
+            {Event::GoodbyeID, {SFC.Intro_Outro.Event.Goodbye.ID}},
+            {Event::GoodbyeStat, {SFC.Intro_Outro.Event.Goodbye.Stat}},
+            {Event::GoodbyeLinkedSoundID, {SFC.Intro_Outro.Event.Goodbye.LinkedSound.ID}},
+            {Event::GoodbyeLinkedSoundType, {SFC.Intro_Outro.Event.Goodbye.LinkedSound.Type}},
+            {Event::GoodbyeLinkedSoundRepeatCount, {SFC.Intro_Outro.Event.Goodbye.LinkedSound.RepeatCount}},
+            {Event::IceWarnID, {SFC.OAT.Event.IceWarn.ID}},
+            {Event::IceWarnStat_, {SFC.OAT.Event.IceWarn.Stat}},
+            {Event::IceWarnLinkedSoundID, {SFC.OAT.Event.IceWarn.LinkedSound.ID}},
+            {Event::IceWarnLinkedSoundType, {SFC.OAT.Event.IceWarn.LinkedSound.Type}},
+            {Event::IceWarnLinkedSoundRepeatCount, {SFC.OAT.Event.IceWarn.LinkedSound.RepeatCount}},
+            {Event::TransmissionIndicatorID, {SFC.Transmission_Indicator.Event.Transmission_Indicator.ID}},
+            {Event::TransmissionIndicatorStat, {SFC.Transmission_Indicator.Event.Transmission_Indicator.Stat}},
+            {Event::TransmissionPaddleShiftID, {SFC.Transmission_Indicator.Event.Transmission_PaddleShift.ID}},
+            {Event::TransmissionPaddleShiftStat, {SFC.Transmission_Indicator.Event.Transmission_PaddleShift.Stat}},
+            {Event::TransmissionSBWID, {SFC.Transmission_Indicator.Event.Transmission_SBW.ID}},
+            {Event::TransmissionSBWStat, {SFC.Transmission_Indicator.Event.Transmission_SBW.Stat}},
+            {Event::DrivingModeChangeID, {SFC.Drive_Mode.Event.DrivingModeChange.ID}},
+            {Event::DrivingModeChangeStat, {SFC.Drive_Mode.Event.DrivingModeChange.Stat}},
+            {Event::TerrainModeExitNotificationID, {SFC.Drive_Mode.Event.TerrainModeExitNotification.ID}},
+            {Event::TerrainModeExitNotificationStat, {SFC.Drive_Mode.Event.TerrainModeExitNotification.Stat}},
+            {Event::TerrainModeExitNotificationLinkedSoundID, {SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.ID}},
+            {Event::TerrainModeExitNotificationLinkedSoundType,
+             {SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.Type}},
+            {Event::TerrainModeExitNotificationLinkedSoundRepeatCount,
+             {SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.RepeatCount}},
+            {Event::ReconfirmNCustomModeID, {SFC.Drive_Mode.Event.ReconfirmNCustomMode.ID}},
+            {Event::ReconfirmNCustomModeStat, {SFC.Drive_Mode.Event.ReconfirmNCustomMode.Stat}},
+            {Event::ReconfirmNCustomModeLinkedSoundID, {SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.ID}},
+            {Event::ReconfirmNCustomModeLinkedSoundType, {SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.Type}},
+            {Event::ReconfirmNCustomModeLinkedSoundRepeatCount,
+             {SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.RepeatCount}},
+            {Event::ModeSwitchingImpossibleID, {SFC.Drive_Mode.Event.ModeSwitchingImpossible.ID}},
+            {Event::ModeSwitchingImpossibleStat, {SFC.Drive_Mode.Event.ModeSwitchingImpossible.Stat}},
+            {Event::ModeSwitchingImpossibleLinkedSoundID, {SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.ID}},
+            {Event::ModeSwitchingImpossibleLinkedSoundType, {SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.Type}},
+            {Event::ModeSwitchingImpossibleLinkedSoundRepeatCount,
+             {SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.RepeatCount}},
+            {Event::ReconfirmGTMYModeID, {SFC.Drive_Mode.Event.ReconfirmGT_MYMode.ID}},
+            {Event::ReconfirmGTMYModeStat, {SFC.Drive_Mode.Event.ReconfirmGT_MYMode.Stat}},
+            {Event::ReconfirmGTMYModeLinkedSoundID, {SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.ID}},
+            {Event::ReconfirmGTMYModeLinkedSoundType, {SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.Type}},
+            {Event::ReconfirmGTMYModeLinkedSoundRepeatCount, {SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.RepeatCount}},
+            {Event::Event4GroupID, {SFC.ADAS_PARKING_NEW.Event.Event4Group.ID}},
+            {Event::Event4GroupStat, {SFC.ADAS_PARKING_NEW.Event.Event4Group.Stat}},
+            {Event::Event7GroupFailure10ID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.ID}},
+            {Event::Event7GroupFailure10Stat, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.Stat}},
+            {Event::Event7GroupFailure10LinkedSoundID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.ID}},
+            {Event::Event7GroupFailure10LinkedSoundType, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.Type}},
+            {Event::Event7GroupFailure10LinkedSoundRepeatCount,
+             {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.RepeatCount}},
+            {Event::Event7GroupFailure11ID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.ID}},
+            {Event::Event7GroupFailure11Stat, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.Stat}},
+            {Event::Event7GroupFailure11LinkedSoundID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.ID}},
+            {Event::Event7GroupFailure11LinkedSoundType, {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.Type}},
+            {Event::Event7GroupFailure11LinkedSoundRepeatCount,
+             {SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.RepeatCount}},
+            {Event::Event7GroupCCWFailureID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.ID}},
+            {Event::Event7GroupCCWFailureStat, {SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.Stat}},
+            {Event::Event7GroupCCWFailureLinkedSoundID, {SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.ID}},
+            {Event::Event7GroupCCWFailureLinkedSoundType, {SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.Type}},
+            {Event::Event7GroupCCWFailureLinkedSoundRepeatCount,
+             {SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.RepeatCount}},
+            {Event::Event2GroupID, {SFC.ADAS_PARKING_NEW.Event.Event2Group.ID}},
+            {Event::Event2GroupStat, {SFC.ADAS_PARKING_NEW.Event.Event2Group.Stat}},
+            {Event::BrakeOverrideID, {SFC.High_Performance_For_N_Brand.Event.BrakeOverride.ID}},
+            {Event::BrakeOverrideStat, {SFC.High_Performance_For_N_Brand.Event.BrakeOverride.Stat}},
+            {Event::BrakeOverrideLinkedSoundID, {SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.ID}},
+            {Event::BrakeOverrideLinkedSoundType, {SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.Type}},
+            {Event::BrakeOverrideLinkedSoundRepeatCount,
+             {SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.RepeatCount}},
+            {Event::Ngs1ID, {SFC.High_Performance_For_N_Brand.Event.Ngs1.ID}},
+            {Event::Ngs1Stat, {SFC.High_Performance_For_N_Brand.Event.Ngs1.Stat}},
+            {Event::Ngs2ID, {SFC.High_Performance_For_N_Brand.Event.Ngs2.ID}},
+            {Event::Ngs2Stat, {SFC.High_Performance_For_N_Brand.Event.Ngs2.Stat}},
+            {Event::Ngs2LinkedSoundID, {SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.ID}},
+            {Event::Ngs2LinkedSoundType, {SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.Type}},
+            {Event::Ngs2LinkedSoundRepeatCount, {SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.RepeatCount}},
+            {Event::NRoadSenseID, {SFC.High_Performance_For_N_Brand.Event.NRoadSense.ID}},
+            {Event::NRoadSenseStat, {SFC.High_Performance_For_N_Brand.Event.NRoadSense.Stat}},
+            {Event::NRoadSenseLinkedSoundID, {SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.ID}},
+            {Event::NRoadSenseLinkedSoundType, {SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.Type}},
+            {Event::NRoadSenseLinkedSoundRepeatCount,
+             {SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.RepeatCount}},
+            {Event::BrakepadCheckID, {SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.ID}},
+            {Event::BrakepadCheckStat, {SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.Stat}},
+            {Event::BrakepadCheckLinkedSoundID, {SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.ID}},
+            {Event::BrakepadCheckLinkedSoundType, {SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.Type}},
+            {Event::BrakepadCheckLinkedSoundRepeatCount,
+             {SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.RepeatCount}},
+            {Event::ElectricKickDriftID, {SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.ID}},
+            {Event::ElectricKickDriftStat, {SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.Stat}},
+            {Event::ElectricKickDriftLinkedSoundID, {SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.ID}},
+            {Event::ElectricKickDriftLinkedSoundType,
+             {SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.Type}},
+            {Event::ElectricKickDriftLinkedSoundRepeatCount,
+             {SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.RepeatCount}},
+            {Event::DrivingAssistSummaryID, {SFC.ADAS_Driving_New.Event.DrivingAssistSummary.ID}},
+            {Event::DrivingAssistSummaryStat, {SFC.ADAS_Driving_New.Event.DrivingAssistSummary.Stat}},
+            {Event::Group1FullPopup1,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID, SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat}},
+            {Event::Group1FullPopup1_2ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID}},
+            {Event::Group1FullPopup1_2Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat}},
+            {Event::Group1FullPopup1_2LinkedSoundID, {SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID}},
+            {Event::Group1FullPopup1_2LinkedSoundType, {SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type}},
+            {Event::Group1FullPopup1_2LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.RepeatCount}},
+            {Event::Group1FullPopup2_1ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.ID}},
+            {Event::Group1FullPopup2_1Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.Stat}},
+            {Event::Group1FullPopup2_1LinkedSoundID, {SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.ID}},
+            {Event::Group1FullPopup2_1LinkedSoundType, {SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.Type}},
+            {Event::Group1FullPopup2_1LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.RepeatCount}},
+            {Event::Group1FullPopup3_1_E52099ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.ID}},
+            {Event::Group1FullPopup3_1_E52099Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.Stat}},
+            {Event::Group1FullPopup3_1_E52099LinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.ID}},
+            {Event::Group1FullPopup3_1_E52099LinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.Type}},
+            {Event::Group1FullPopup3_1_E52100ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.ID}},
+            {Event::Group1FullPopup3_1_E52100Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.Stat}},
+            {Event::Group1FullPopup3_1_E52101ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.ID}},
+            {Event::Group1FullPopup3_1_E52101Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.Stat}},
+            {Event::Group1FullPopup3_1_E52101LinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.ID}},
+            {Event::Group1FullPopup3_1_E52101LinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.Type}},
+            {Event::Group1FullPopup3_1_E52101LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.RepeatCount}},
+            {Event::Group1FullPopup3_1_E52105ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.ID}},
+            {Event::Group1FullPopup3_1_E52105Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.Stat}},
+            {Event::Group1FullPopup3_1_E52105LinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.ID}},
+            {Event::Group1FullPopup3_1_E52105LinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.Type}},
+            {Event::Group1FullPopup3_1_E52106ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.ID}},
+            {Event::Group1FullPopup3_1_E52106Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.Stat}},
+            {Event::Group1FullPopup3_1_E52107ID, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.ID}},
+            {Event::Group1FullPopup3_1_E52107Stat, {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.Stat}},
+            {Event::Group1FullPopup3_1_E52107LinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.ID}},
+            {Event::Group1FullPopup3_1_E52107LinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.Type}},
+            {Event::Group1FullPopup3_1_E52107LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.RepeatCount}},
+            {Event::Group4FullPopup1_1ID, {SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.ID}},
+            {Event::Group4FullPopup1_1Stat, {SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.Stat}},
+            {Event::Group4FullPopup1_1LinkedSoundID, {SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.ID}},
+            {Event::Group4FullPopup1_1LinkedSoundType, {SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.Type}},
+            {Event::Group4FullPopup1_1LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.RepeatCount}},
+            {Event::Group7FullPopupBlindSpotSafetyFailureID,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.ID}},
+            {Event::Group7FullPopupBlindSpotSafetyFailureStat,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.Stat}},
+            {Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.ID}},
+            {Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.Type}},
+            {Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.RepeatCount}},
+            {Event::Group7FullPopupOutsideMirrorSymbolFailureID,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.ID}},
+            {Event::Group7FullPopupOutsideMirrorSymbolFailureStat,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.Stat}},
+            {Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.ID}},
+            {Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.Type}},
+            {Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.RepeatCount}},
+            {Event::Group7FullPopupHdpFailureID, {SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.ID}},
+            {Event::Group7FullPopupHdpFailureStat, {SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.Stat}},
+            {Event::Group7FullPopupHdpFailureLinkedSoundID,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.ID}},
+            {Event::Group7FullPopupHdpFailureLinkedSoundType,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.Type}},
+            {Event::Group7FullPopupHdpFailureLinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.RepeatCount}},
+            {Event::Group2MiniPopup1_1ID, {SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.ID}},
+            {Event::Group2MiniPopup1_1Stat, {SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.Stat}},
+            {Event::PuMGroup2AdasWarning1_2StatusID, {SFC.ADAS_Driving_New.Event.PuMGroup2AdasWarning1_2Status.ID}},
+            {Event::PuMGroup2AdasWarning1_2StatusStat, {SFC.ADAS_Driving_New.Event.PuMGroup2AdasWarning1_2Status.Stat}},
+            {Event::DriverAssistFailure1ID, {SFC.ADAS_Driving_New.Event.DriverAssistFailure1.ID}},
+            {Event::DriverAssistFailure1Stat, {SFC.ADAS_Driving_New.Event.DriverAssistFailure1.Stat}},
+            {Event::DriverAssistFailure1LinkedSoundID, {SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.ID}},
+            {Event::DriverAssistFailure1LinkedSoundType, {SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.Type}},
+            {Event::DriverAssistFailure1LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.RepeatCount}},
+            {Event::DriverAssistFailure2ID, {SFC.ADAS_Driving_New.Event.DriverAssistFailure2.ID}},
+            {Event::DriverAssistFailure2Stat, {SFC.ADAS_Driving_New.Event.DriverAssistFailure2.Stat}},
+            {Event::DriverAssistFailure2LinkedSoundID, {SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.ID}},
+            {Event::DriverAssistFailure2LinkedSoundType, {SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.Type}},
+            {Event::DriverAssistFailure2LinkedSoundRepeatCount,
+             {SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.RepeatCount}},
+            {Event::HDPOperProhibitID, {SFC.ADAS_Driving_New.Event.HDPOperProhibit.ID}},
+            {Event::HDPOperProhibitStat, {SFC.ADAS_Driving_New.Event.HDPOperProhibit.Stat}},
+        });
+}
+
+void Service::subscribeSoundSignals() {
+    subscribeSignals<Sound>(
+        DataType::Sound,
+        {
+            // {Sound::AAAAAAAAAAAA, {SFC.AAAAAAAAAAAA}},
+        });
+}
+
+void Service::subscribeEtcSignals() {
+    subscribeSignals<Etc>(
+        DataType::Etc,
+        {
+            {Etc::InterDisplaySpeedUnit, {SFC.Speed_Gauge.Inter_DisplaySpeedUnit}},
+            {Etc::InterDisplaySpeedValueKPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH}},
+            {Etc::InterDisplaySpeedValueMPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH}},
+            {Etc::InterDriveModeSelectStatus, {SFC.Drive_Mode.Inter_DriveModeSelectStatus}},
+            {Etc::InterTerrainModeSelectStatus, {SFC.Drive_Mode.Inter_TerrainModeSelectStatus}},
+            {Etc::InterNModeSelectStatus, {SFC.Drive_Mode.Inter_NModeSelectStatus}},
+            {Etc::InterGtModeSelectStatus, {SFC.Drive_Mode.Inter_GtModeSelectStatus}},
+            {Etc::InterAdasViewFixStatus, {SFC.ADAS_Driving_New.Inter_AdasViewFixStatus}},
+            {Etc::InterHDPMasterWarningStatus, {SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus}},
+            {Etc::TimerOneShotTimerPriorityISLAStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityISLA.Stat}},
+            {Etc::TimerOneShotTimerPriorityDISStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityDIS.Stat}},
+            {Etc::InterAdasOnStatus, {SFC.ADAS_Driving_New.Inter_AdasOnStatus}},
+        });
+}
+
+template <typename TYPE>
+void Service::subscribeSignals(const DataType& dataType,
+                               const std::vector<std::pair<TYPE, std::vector<std::string>>>& signalsToSubscribe) {
+    for (const auto& signalPair : signalsToSubscribe) {
+        const TYPE& signalType = signalPair.first;
+        const std::vector<std::string>& nodePaths = signalPair.second;
+        SignalHandlingFunc handlingFunc = [this, dataType,
+                                           signalType](const std::vector<ccos::vehicle::vsm::HVehicleSignal>& vehicleSignals) {
+            onSignalChanged(dataType, signalType, vehicleSignals);
+        };
+        addSubscriptionGroup(nodePaths, handlingFunc);
+    }
+}
+
+template <typename TYPE>
+QVariant Service::isSignalValue(const DataType& dataType, const TYPE& signalType,
+                                const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                QHash<int, QPair<QString, QVariant>>& values) {
+#if 1
+    QVariant isValue = QVariant("value not found");
+    std::string nodePath = vehicleSignal.getNodePath();
+    switch (vehicleSignal.getValueType()) {
+        case ccos::vehicle::vsm::HVehicleSignalValueType::INT64:
+            isValue = vehicleSignal.getValue<ccos::HInt64>();
+            break;
+        case ccos::vehicle::vsm::HVehicleSignalValueType::UINT64:
+            isValue = vehicleSignal.getValue<ccos::HUInt64>();
+            break;
+        case ccos::vehicle::vsm::HVehicleSignalValueType::DOUBLE:
+            isValue = vehicleSignal.getValue<ccos::HDouble>();
+            break;
+        case ccos::vehicle::vsm::HVehicleSignalValueType::BOOL:
+            isValue = vehicleSignal.getValue<ccos::HBool>();
+            break;
+        case ccos::vehicle::vsm::HVehicleSignalValueType::STRING:
+            isValue = vehicleSignal.getValue<std::string>().c_str();
+            break;
+        default:
+            break;
+    }
+    if (nodePath.empty() == false) {
+        values[signalType] = QPair<nodePath.c_str(), isValue>;
+        // values[nodePath.c_str()] = isValue;
+    }
+#else
+    QVariant isValue = QVariant();
+    switch (dataType) {
+        case DataType::Constant:
+            isValue = isConstantSignal(static_cast<Constant>(signalType), vehicleSignal, values);
+            break;
+        case DataType::Telltale:
+            isValue = isTelltaleSignal(static_cast<Telltale>(signalType), vehicleSignal, values);
+            break;
+        case DataType::Event:
+            isValue = isEventSignal(static_cast<Event>(signalType), vehicleSignal, values);
+            break;
+        case DataType::Sound:
+            isValue = isSoundSignal(static_cast<Sound>(signalType), vehicleSignal, values);
+            break;
+        case DataType::Etc:
+            isValue = isEtcSignal(static_cast<Etc>(signalType), vehicleSignal, values);
+            break;
+        default:
+            break;
+    }
+#endif
+
+    return isValue;
+}
+
+template <typename TYPE>
+void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
+                              const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
+    QHash<int, QPair<QString, QVariant>> values;
+    QVariant isValue;
+    for (const auto& vehicleSignal : signalList) {
+        isValue = isSignalValue(dataType, signalType, vehicleSignal, values);
+    }
+
+    if (values.isEmpty()) {
+        emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
+    } else {
+#if 0
+        QString multiValueInfo = QString();
+        for (auto iter = values.cbegin(); iter != values.cend(); ++iter) {
+            QPair<QString, QVariant> valueInfo = iter.value().toString();
+            multiValueInfo.append(QString("%1 : %2\n").arg(valueInfo.first.toString()).arg(valueInfo.second.toString()));
+        }
+        emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), multiValueInfo);
+#else
+        emit signalServiceDatasChanged(static_cast<int>(dataType), static_cast<int>(signalType), values);
+#endif
+    }
+}
+
+#if 0
+QVariant Service::isConstantSignal(const Constant& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                   QHash<QString, QVariant>& values) {
     QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
-    if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {
+    if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Stat) {    // Speed_Gauge
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Stat.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Constant.SpeedAnalog.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.SpeedAnalog.Value.value(vehicleSignal));
@@ -134,21 +508,7 @@ QVariant Service::isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal&
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value.value(vehicleSignal));
     } else if (nodePath == SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value) {
         value = static_cast<ccos::HUInt64>(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value.value(vehicleSignal));
-    } else {
-    }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                       QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath == SFC.Tachometer.Constant.Rpm.Value) {
+    } else if (nodePath == SFC.Tachometer.Constant.Rpm.Value) {    // Tachometer
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.Rpm.Value.value(vehicleSignal));
     } else if (nodePath == SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat.value(vehicleSignal));
@@ -160,17 +520,6 @@ QVariant Service::isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal&
         value = static_cast<ccos::HUInt64>(SFC.Tachometer.Constant.RpmDamp.Stat.value(vehicleSignal));
     } else {
     }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                       QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.Intro_Outro.Constant.ResvCharge.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.Intro_Outro.Constant.ResvCharge.Stat.value(vehicleSignal));
@@ -187,219 +536,38 @@ QVariant Service::isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal&
     } else {
     }
 
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    // if (nodePath == SFC.OAT.Constant.OutTempDisplay.Stat) {
-    //     value = static_cast<ccos::HUInt64>(SFC.OAT.Constant.OutTempDisplay.Stat.value(vehicleSignal));
-    // } else if (nodePath == SFC.OAT.Constant.OutTempDisplayUnit.Stat) {
-    //     value = static_cast<ccos::HUInt64>(SFC.OAT.Constant.OutTempDisplayUnit.Stat.value(vehicleSignal));
-    // } else {
-    //     value = QVariant();
-    // }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                  QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                           QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                     QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isConstantADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                           QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-void Service::onConstantChanged(const Constant& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    // qDebug() << "onConstantChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant isValue = QVariant();
-    QHash<QString, QVariant> values = QHash<QString, QVariant>();
-
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Constant::SpeedGaugeStart) && (signalType < Constant::SpeedGaugeEnd)) {
-            isValue = isConstantSpeedGauge(vehicleSignal, values);
-        } else if ((signalType > Constant::TachometerStart) && (signalType < Constant::TachometerEnd)) {
-            isValue = isConstantTachometer(vehicleSignal, values);
-        } else if ((signalType > Constant::IntroOutroStart) && (signalType < Constant::IntroOutroEnd)) {
-            isValue = isConstantIntroOutro(vehicleSignal, values);
-        } else if ((signalType > Constant::OATStart) && (signalType < Constant::OATEnd)) {
-            isValue = isConstantOAT(vehicleSignal, values);
-        } else if ((signalType > Constant::TransmissionIndicatorStart) && (signalType < Constant::TransmissionIndicatorEnd)) {
-            isValue = isConstantTransmissionIndicator(vehicleSignal, values);
-        } else if ((signalType > Constant::DriveModeStart) && (signalType < Constant::DriveModeEnd)) {
-            isValue = isConstantDriveMode(vehicleSignal, values);
-        } else if ((signalType > Constant::ADASParkingNewStart) && (signalType < Constant::ADASParkingNewEnd)) {
-            isValue = isConstantADASParkingNew(vehicleSignal, values);
-        } else if ((signalType > Constant::HighPerformanceForNBrandStart) &&
-                   (signalType < Constant::HighPerformanceForNBrandEnd)) {
-            isValue = isConstantHighPerformanceForNBrand(vehicleSignal, values);
-        } else if ((signalType > Constant::ADASDrivingNewStart) && (signalType < Constant::ADASDrivingNewEnd)) {
-            isValue = isConstantADASDrivingNew(vehicleSignal, values);
-        } else {
-        }
-    }
-
-    if (values.size() == 0) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Constant), static_cast<int>(signalType), isValue);
+    if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat) {
+        value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat.value(vehicleSignal));
+    } else if (nodePath == SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value) {
+        value =
+            static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value.value(vehicleSignal));
     } else {
-        emit signalServiceDatasChanged(static_cast<int>(DataType::Constant), static_cast<int>(signalType), values);
     }
+
+    if (nodePath.empty() == false) {
+        values[nodePath.c_str()] = value;
+    }
+
+    // if (value.isValid()) {
+    //     qDebug() << "isConstantSignal :" << nodePath.c_str() << value;
+    // }
+    return value;
 }
 
-void Service::subscribeConstantSpeedGauge() {
-    // SpeedAnalog
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedAnalog.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedAnalogStat, std::placeholders::_1));
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedAnalog.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedAnalogValue, std::placeholders::_1));
-
-    // SpeedDigital
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedDigital.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedDigitalStat, std::placeholders::_1));
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedDigital.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedDigitalValue, std::placeholders::_1));
-
-    // SpeedSubDigital
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedSubDigitalStat, std::placeholders::_1));
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedSubDigital.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedSubDigitalValue, std::placeholders::_1));
-
-    // SpeedMainDisplayUnit
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedMainDisplayUnitStat, std::placeholders::_1));
-
-    // SpeedAuxDisplayUnit
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedAuxDisplayUnitStat, std::placeholders::_1));
-
-    // SpeedSubDisplay
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedSubDisplayStat, std::placeholders::_1));
-
-    // SpeedScaleMaximum
-    addSubscription(SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::SpeedScaleMaximumStat, std::placeholders::_1));
-
-    // NaviSpeedLimit
-    addSubscription(SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::NaviSpeedLimitStat, std::placeholders::_1));
-
-    // NaviSpeedLimitOver1Color
-    addSubscription(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::NaviSpeedLimitOver1ColorValue, std::placeholders::_1));
-
-    // NaviSpeedLimitOver2Color
-    addSubscription(SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::NaviSpeedLimitOver2ColorValue, std::placeholders::_1));
-}
-
-void Service::subscribeConstantTachometer() {
-    addSubscription(SFC.Tachometer.Constant.Rpm.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::RpmValue, std::placeholders::_1));
-    addSubscription(SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::RedZoneExceptNbrandStat, std::placeholders::_1));
-    addSubscription(SFC.Tachometer.Constant.RedZoneNbrand.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::RedZoneNbrandStat, std::placeholders::_1));
-    addSubscription(SFC.Tachometer.Constant.MaxRpm.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::MaxRpmStat, std::placeholders::_1));
-    addSubscription(SFC.Tachometer.Constant.RpmDamp.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::RpmDampStat, std::placeholders::_1));
-}
-
-void Service::subscribeConstantIntroOutro() {
-    addSubscription(SFC.Intro_Outro.Constant.ResvCharge.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::ResvChargeStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Constant.ResvClimate.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::ResvClimateStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Constant.PurificationAir.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::PurificationAirStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Constant.PurificationAir.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::PurificationAirValue, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Constant.CO2Reduction.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::CO2ReductionStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Constant.CO2Reduction.Value,
-                    std::bind(&Service::onConstantChanged, this, Constant::CO2ReductionValue, std::placeholders::_1));
-}
-
-void Service::subscribeConstantOAT() {
-    addSubscription(SFC.OAT.Constant.OutTempDisplay.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::OutTempDisplayStat, std::placeholders::_1));
-    addSubscription(SFC.OAT.Constant.OutTempDisplayUnit.Stat,
-                    std::bind(&Service::onConstantChanged, this, Constant::OutTempDisplayUnitStat, std::placeholders::_1));
-}
-
-void Service::subscribeConstant() {
-    qDebug() << "Service - subscribeConstant";
-
-    subscribeConstantSpeedGauge();
-    subscribeConstantTachometer();
-    subscribeConstantIntroOutro();
-    subscribeConstantOAT();
-}
-
-// ==================================================================================================================
-// ==================================================================================================================
-//    Telltale
-// ==================================================================================================================
-// ==================================================================================================================
-QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                          QHash<QString, QVariant>& values) {
+QVariant Service::isTelltaleSignal(const Telltale& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                   QHash<QString, QVariant>& values) {
     QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
@@ -420,54 +588,12 @@ QVariant Service::isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSign
     } else {
     }
 
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
     if (nodePath == SFC.OAT.Telltale.IceWarn.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.Stat.value(vehicleSignal));
     } else if (nodePath == SFC.OAT.Telltale.IceWarn.StatOptional) {
         value = static_cast<ccos::HUInt64>(SFC.OAT.Telltale.IceWarn.StatOptional.value(vehicleSignal));
     } else {
     }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isTelltaleDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isTelltaleHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                     QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                           QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat.value(vehicleSignal));
@@ -477,17 +603,6 @@ QVariant Service::isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSig
         value = static_cast<ccos::HUInt64>(SFC.ADAS_Driving_New.Telltale.LFA.Stat.value(vehicleSignal));
     } else {
     }
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isTelltaleHighPerformance(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                            QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath == SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat) {
         value = static_cast<ccos::HUInt64>(SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat.value(vehicleSignal));
@@ -506,217 +621,12 @@ QVariant Service::isTelltaleHighPerformance(const ccos::vehicle::vsm::HVehicleSi
     if (nodePath.empty() == false) {
         values[nodePath.c_str()] = value;
     }
+
     return value;
 }
 
-void Service::onTelltaleChanged(const Telltale& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    // qDebug() << "onTelltaleChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant isValue = QVariant();
-    QHash<QString, QVariant> values = QHash<QString, QVariant>();
-
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Telltale::LampIndicatorStart) && (signalType < Telltale::LampIndicatorEnd)) {
-            isValue = isTelltaleLampIndicator(vehicleSignal, values);
-        } else if ((signalType > Telltale::OATStart) && (signalType < Telltale::OATEnd)) {  // Group
-            isValue = isTelltaleOAT(vehicleSignal, values);
-        } else if ((signalType > Telltale::DriveModeStart) && (signalType < Telltale::DriveModeEnd)) {
-            isValue = isTelltaleDriveMode(vehicleSignal, values);
-        } else if ((signalType > Telltale::HighPerformanceForNBrandStart) &&
-                   (signalType < Telltale::HighPerformanceForNBrandEnd)) {
-            isValue = isTelltaleHighPerformanceForNBrand(vehicleSignal, values);
-        } else if ((signalType > Telltale::ADASDrivingNewStart) && (signalType < Telltale::ADASDrivingNewEnd)) {
-            isValue = isTelltaleADASDrivingNew(vehicleSignal, values);
-        } else if ((signalType > Telltale::HighPerformanceStart) && (signalType < Telltale::HighPerformanceEnd)) {
-            isValue = isTelltaleHighPerformance(vehicleSignal, values);
-        } else {
-        }
-    }
-
-    if (values.size() == 0) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), isValue);
-    } else {
-        emit signalServiceDatasChanged(static_cast<int>(DataType::Telltale), static_cast<int>(signalType), values);
-    }
-}
-
-void Service::subscribeTelltaleLampIndicator() {
-    addSubscription(SFC.Lamp_Indicator.Telltale.FrontFog.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::FrontFogStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.HighBeam.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::HighBeamStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.RearFog.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::RearFogStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.TailLamp.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::TailLampStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.TurnSignalLeft.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::TurnSignalLeftStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.TurnSignalRight.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::TurnSignalRightStat, std::placeholders::_1));
-    addSubscription(SFC.Lamp_Indicator.Telltale.LowBeam.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::LowBeamStat, std::placeholders::_1));
-}
-
-void Service::subscribeTelltaleOAT() {
-#if 0
-    addSubscription(SFC.OAT.Telltale.IceWarn.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
-    addSubscription(SFC.OAT.Telltale.IceWarn.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStatOptional, std::placeholders::_1));
-#else
-    addSubscriptionGroup(std::vector<std::string>({SFC.OAT.Telltale.IceWarn.Stat, SFC.OAT.Telltale.IceWarn.StatOptional}),
-                         std::bind(&Service::onTelltaleChanged, this, Telltale::IceWarnStat, std::placeholders::_1));
-#endif
-}
-
-void Service::subscribeTelltaleDriveMode() {
-    addSubscription(SFC.Drive_Mode.Telltale.Drive_Mode.DMS.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::DMSStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Telltale.Drive_Mode.DMS.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::DMSStatOptional, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::DimmedStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::DimmedStatOptional, std::placeholders::_1));
-}
-
-void Service::subscribeTelltaleHighPerformanceForNBrand() {
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.CreepOff.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::CreepOffStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ShiftLightStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueA,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ShiftLightBlinkValueA, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueB,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ShiftLightBlinkValueB, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueBOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ShiftLightBlinkValueBOptional, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ShiftLightStatOptional, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::EnduranceRaceStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::EnduranceRaceStatOptional, std::placeholders::_1));
-}
-
-void Service::subscribeTelltaleADASDrivingNew() {
-    addSubscription(SFC.ADAS_Driving_New.Telltale.FCA.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::FCAStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.ELK.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::ELKStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.LKA.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::LKAStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.HBA.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::HBAStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.LFA.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::LFAStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.LCALeft.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::LCALeftStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.LCARight.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::LCARightStat, std::placeholders::_1));
-#if 0
-    addSubscription(SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStatOptional, std::placeholders::_1));
-#else
-    addSubscriptionGroup(std::vector<std::string>({SFC.ADAS_Driving_New.Telltale.HandsOnOff.Stat,
-                                                   SFC.ADAS_Driving_New.Telltale.HandsOnOff.StatOptional}),
-                         std::bind(&Service::onTelltaleChanged, this, Telltale::HandsOnOffStat, std::placeholders::_1));
-#endif
-    addSubscription(SFC.ADAS_Driving_New.Telltale.DAW.Stat,
-                    std::bind(&Service::onTelltaleChanged, this, Telltale::DAWStat, std::placeholders::_1));
-}
-
-void Service::subscribeTelltaleHighPerformance() {
-    addSubscriptionGroup(std::vector<std::string>({SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat,
-                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional,
-                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional,
-                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA,
-                                                   SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB}),
-                         std::bind(&Service::onTelltaleChanged, this, Telltale::Gauge, std::placeholders::_1));
-}
-
-void Service::subscribeTelltale() {
-    qDebug() << "Service - subscribeTelltale";
-
-    subscribeTelltaleLampIndicator();
-    subscribeTelltaleOAT();
-    subscribeTelltaleDriveMode();
-    subscribeTelltaleHighPerformanceForNBrand();
-    subscribeTelltaleADASDrivingNew();
-    subscribeTelltaleHighPerformance();
-}
-
-// ==================================================================================================================
-// ==================================================================================================================
-//    Event
-// ==================================================================================================================
-// ==================================================================================================================
-QVariant Service::isEventIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                               QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                        QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                  QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEventADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                        QHash<QString, QVariant>& values) {
+QVariant Service::isEventSignal(const Event& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                QHash<QString, QVariant>& values) {
     QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
@@ -738,588 +648,24 @@ QVariant Service::isEventADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal
     if (nodePath.empty() == false) {
         values[nodePath.c_str()] = value;
     }
+
     return value;
 }
 
-void Service::onEventChanged(const Event& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    // qDebug() << "onEventChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant isValue = QVariant();
-    QHash<QString, QVariant> values = QHash<QString, QVariant>();
-
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Event::IntroOutroStart) && (signalType < Event::IntroOutroEnd)) {
-            isValue = isEventIntroOutro(vehicleSignal, values);
-        } else if ((signalType > Event::OATStart) && (signalType < Event::OATEnd)) {
-            isValue = isEventOAT(vehicleSignal, values);
-        } else if ((signalType > Event::TransmissionIndicatorStart) && (signalType < Event::TransmissionIndicatorEnd)) {
-            isValue = isEventTransmissionIndicator(vehicleSignal, values);
-        } else if ((signalType > Event::DriveModeStart) && (signalType < Event::DriveModeEnd)) {
-            isValue = isEventDriveMode(vehicleSignal, values);
-        } else if ((signalType > Event::ADASParkingNewStart) && (signalType < Event::ADASParkingNewEnd)) {
-            isValue = isEventADASParkingNew(vehicleSignal, values);
-        } else if ((signalType > Event::HighPerformanceForNBrandStart) && (signalType < Event::HighPerformanceForNBrandEnd)) {
-            isValue = isEventHighPerformanceForNBrand(vehicleSignal, values);
-        } else if ((signalType > Event::ADASDrivingNewStart) && (signalType < Event::ADASDrivingNewEnd)) {
-            isValue = isEventADASDrivingNew(vehicleSignal, values);
-        } else {
-        }
-    }
-
-    if (values.size() == 0) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Event), static_cast<int>(signalType), isValue);
-    } else {
-        emit signalServiceDatasChanged(static_cast<int>(DataType::Event), static_cast<int>(signalType), values);
-    }
-}
-
-void Service::subscribeEventIntroOutro() {
-    addSubscription(SFC.Intro_Outro.Event.Welcome.ID,
-                    std::bind(&Service::onEventChanged, this, Event::WelcomeID, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Welcome.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::WelcomeStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Welcome.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::WelcomeLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Welcome.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::WelcomeLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Welcome.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::WelcomeLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.SystemCheck.ID,
-                    std::bind(&Service::onEventChanged, this, Event::SystemCheckID, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.SystemCheck.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::SystemCheckStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Goodbye.ID,
-                    std::bind(&Service::onEventChanged, this, Event::GoodbyeID, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Goodbye.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::GoodbyeStat, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Goodbye.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::GoodbyeLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Goodbye.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::GoodbyeLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.Intro_Outro.Event.Goodbye.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::GoodbyeLinkedSoundRepeatCount, std::placeholders::_1));
-}
-
-void Service::subscribeEventOAT() {
-    addSubscription(SFC.OAT.Event.IceWarn.ID, std::bind(&Service::onEventChanged, this, Event::IceWarnID, std::placeholders::_1));
-    addSubscription(SFC.OAT.Event.IceWarn.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::IceWarnStat_, std::placeholders::_1));
-    addSubscription(SFC.OAT.Event.IceWarn.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::IceWarnLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.OAT.Event.IceWarn.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::IceWarnLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.OAT.Event.IceWarn.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::IceWarnLinkedSoundRepeatCount, std::placeholders::_1));
-}
-
-void Service::subscribeEventTransmissionIndicator() {
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_Indicator.ID,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionIndicatorID, std::placeholders::_1));
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_Indicator.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionIndicatorStat, std::placeholders::_1));
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_PaddleShift.ID,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionPaddleShiftID, std::placeholders::_1));
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_PaddleShift.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionPaddleShiftStat, std::placeholders::_1));
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_SBW.ID,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionSBWID, std::placeholders::_1));
-    addSubscription(SFC.Transmission_Indicator.Event.Transmission_SBW.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::TransmissionSBWStat, std::placeholders::_1));
-}
-
-void Service::subscribeEventDriveMode() {
-    addSubscription(SFC.Drive_Mode.Event.DrivingModeChange.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DrivingModeChangeID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.DrivingModeChange.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::DrivingModeChangeStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.ID,
-                    std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationStat, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::TerrainModeExitNotificationLinkedSoundRepeatCount,
-                              std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::ReconfirmNCustomModeLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ModeSwitchingImpossible.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleStat, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::ModeSwitchingImpossibleLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeStat, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::ReconfirmGTMYModeLinkedSoundRepeatCount, std::placeholders::_1));
-}
-
-void Service::subscribeEventADASParking_New() {
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event4Group.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event4GroupID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event4Group.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Event4GroupStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure10.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure10LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_PARKING_NEW.Event.Event7GroupFailure11.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Event7GroupFailure11LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_PARKING_NEW.Event.Event7GroupCCWFailure.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Event7GroupCCWFailureLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event2Group.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Event2GroupID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_PARKING_NEW.Event.Event2Group.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Event2GroupStat, std::placeholders::_1));
-}
-
-void Service::subscribeEventHighPerformanceForNBrand() {
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakeOverride.ID,
-                    std::bind(&Service::onEventChanged, this, Event::BrakeOverrideID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakeOverride.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::BrakeOverrideStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::BrakeOverrideLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::BrakeOverrideLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::BrakeOverrideLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs1ID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs1Stat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs2.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs2ID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs2.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs2Stat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs2LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs2LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Ngs2LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.NRoadSense.ID,
-                    std::bind(&Service::onEventChanged, this, Event::NRoadSenseID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.NRoadSense.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::NRoadSenseStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::NRoadSenseLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::NRoadSenseLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::NRoadSenseLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.ID,
-                    std::bind(&Service::onEventChanged, this, Event::BrakepadCheckID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::BrakepadCheckStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::BrakepadCheckLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::BrakepadCheckLinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::BrakepadCheckLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftStat, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::ElectricKickDriftLinkedSoundRepeatCount, std::placeholders::_1));
-}
-
-void Service::subscribeEventADASDrivingNew() {
-    addSubscription(SFC.ADAS_Driving_New.Event.DrivingAssistSummary.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DrivingAssistSummaryID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DrivingAssistSummary.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::DrivingAssistSummaryStat, std::placeholders::_1));
-    addSubscriptionGroup(std::vector<std::string>({SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.ID,
-                                                   SFC.ADAS_Driving_New.Event.Group1FullPopup1_1.Stat}),
-                         std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup1_2.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup1_2LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup2_1.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup2_1LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099Stat, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52099.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52099LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52100ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52100.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52100Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101Stat, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52101.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52101LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105Stat, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52105.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52105LinkedSoundType, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52106ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52106.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52106Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107Stat, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group1FullPopup3_1_E52107.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group1FullPopup3_1_E52107LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group4FullPopup1_1.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group4FullPopup1_1LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.Stat,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundType,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupBlindSpotSafetyFailureLinkedSoundRepeatCount,
-                              std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.Stat,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundID,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundType,
-                              std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.RepeatCount,
-                    std::bind(&Service::onEventChanged, this,
-                              Event::Group7FullPopupOutsideMirrorSymbolFailureLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureStat, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.ID,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundID, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.Type,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.Group7FullPopupHdpFailure.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::Group7FullPopupHdpFailureLinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::Group2MiniPopup1_1ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.Group2MiniPopup1_1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::Group2MiniPopup1_1Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.PuMGroup2AdasWarning1_2Status.ID,
-                    std::bind(&Service::onEventChanged, this, Event::PuMGroup2AdasWarning1_2StatusID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.PuMGroup2AdasWarning1_2Status.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::PuMGroup2AdasWarning1_2StatusStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.DriverAssistFailure1.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure1LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2ID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2Stat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.ID,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.Type,
-                    std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundType, std::placeholders::_1));
-    addSubscription(
-        SFC.ADAS_Driving_New.Event.DriverAssistFailure2.LinkedSound.RepeatCount,
-        std::bind(&Service::onEventChanged, this, Event::DriverAssistFailure2LinkedSoundRepeatCount, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.HDPOperProhibit.ID,
-                    std::bind(&Service::onEventChanged, this, Event::HDPOperProhibitID, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Event.HDPOperProhibit.Stat,
-                    std::bind(&Service::onEventChanged, this, Event::HDPOperProhibitStat, std::placeholders::_1));
-}
-
-void Service::subscribeEvent() {
-    qDebug() << "Service - subscribeEvent";
-
-#if defined(USE_TEST_CODE)
-    subscribeEventADASDrivingNew();
-#else
-    subscribeEventIntroOutro();
-    subscribeEventOAT();
-    subscribeEventTransmissionIndicator();
-    subscribeEventDriveMode();
-    subscribeEventADASParking_New();
-    subscribeEventHighPerformanceForNBrand();
-    subscribeEventADASDrivingNew();
-#endif
-}
-
-// ==================================================================================================================
-// ==================================================================================================================
-//    Sound
-// ==================================================================================================================
-// ==================================================================================================================
-QVariant Service::isSoundLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                       QHash<QString, QVariant>& values) {
+QVariant Service::isSoundSignal(const Sound& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                                QHash<QString, QVariant>& values) {
     QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
     if (nodePath.empty() == false) {
         values[nodePath.c_str()] = value;
     }
+
     return value;
 }
 
-QVariant Service::isSoundIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isSoundTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                               QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isSoundADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                        QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isSoundHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                  QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isSoundADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                        QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-void Service::onSoundChanged(const Sound& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    // qDebug() << "onSoundChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant isValue = QVariant();
-    QHash<QString, QVariant> values = QHash<QString, QVariant>();
-
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Sound::LampIndicatorStart) && (signalType < Sound::LampIndicatorEnd)) {
-            isValue = isSoundLampIndicator(vehicleSignal, values);
-        } else if ((signalType > Sound::IntroOutroStart) && (signalType < Sound::IntroOutroEnd)) {
-            isValue = isSoundIntroOutro(vehicleSignal, values);
-        } else if ((signalType > Sound::TransmissionIndicatorStart) && (signalType < Sound::TransmissionIndicatorEnd)) {
-            isValue = isSoundTransmissionIndicator(vehicleSignal, values);
-        } else if ((signalType > Sound::SADASParkingNewtart) && (signalType < Sound::ADASParkingNewEnd)) {
-            isValue = isSoundADASParkingNew(vehicleSignal, values);
-        } else if ((signalType > Sound::HighPerformanceForNBrandStart) && (signalType < Sound::HighPerformanceForNBrandEnd)) {
-            isValue = isSoundHighPerformanceForNBrand(vehicleSignal, values);
-        } else if ((signalType > Sound::ADASDrivingNewStart) && (signalType < Sound::ADASDrivingNewEnd)) {
-            isValue = isSoundADASDrivingNew(vehicleSignal, values);
-        } else {
-        }
-    }
-
-    if (values.size() == 0) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Sound), static_cast<int>(signalType), isValue);
-    } else {
-        emit signalServiceDatasChanged(static_cast<int>(DataType::Sound), static_cast<int>(signalType), values);
-    }
-}
-
-void Service::subscribeSoundLampIndicator() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSoundIntroOutro() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSoundTransmissionIndicator() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSoundADASParkingNew() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSoundHighPerformanceForNBrand() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSoundADASDrivingNew() {
-    // addSubscription(AAAAAAAAA,
-    //                 std::bind(&Service::onSoundChanged, this, Sound::AAAAAAAAA, std::placeholders::_1));
-}
-
-void Service::subscribeSound() {
-    qDebug() << "Service - subscribeSound";
-
-    subscribeSoundLampIndicator();
-    subscribeSoundIntroOutro();
-    subscribeSoundTransmissionIndicator();
-    subscribeSoundADASParkingNew();
-    subscribeSoundHighPerformanceForNBrand();
-    subscribeSoundADASDrivingNew();
-}
-
-// ==================================================================================================================
-// ==================================================================================================================
-//    Etc
-// ==================================================================================================================
-// ==================================================================================================================
-QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
+QVariant Service::isEtcSignal(const Etc& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                              QHash<QString, QVariant>& values) {
     QVariant value = QVariant("value not found");
     std::string nodePath = vehicleSignal.getNodePath();
 
@@ -1335,89 +681,7 @@ QVariant Service::isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehi
     if (nodePath.empty() == false) {
         values[nodePath.c_str()] = value;
     }
+
     return value;
 }
-
-QVariant Service::isEtcDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-QVariant Service::isEtcADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values) {
-    QVariant value = QVariant("value not found");
-    std::string nodePath = vehicleSignal.getNodePath();
-
-    if (nodePath.empty() == false) {
-        values[nodePath.c_str()] = value;
-    }
-    return value;
-}
-
-void Service::onEtcChanged(const Etc& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList) {
-    // qDebug() << "onEtcChanged :" << static_cast<int>(signalType) << signalList.size();
-    QVariant isValue = QVariant();
-    QHash<QString, QVariant> values = QHash<QString, QVariant>();
-
-    for (const auto& vehicleSignal : signalList) {
-        if ((signalType > Etc::SpeedGaugeStart) && (signalType < Etc::SpeedGaugeEnd)) {
-            isValue = isEtcSpeedGauge(vehicleSignal, values);
-        } else if ((signalType > Etc::DriveModeStart) && (signalType < Etc::DriveModeEnd)) {
-            isValue = isEtcDriveMode(vehicleSignal, values);
-        } else if ((signalType > Etc::ADASDrivingNewStart) && (signalType < Etc::ADASDrivingNewEnd)) {
-            isValue = isEtcADASDrivingNew(vehicleSignal, values);
-        } else {
-        }
-    }
-
-    if (values.size() == 0) {
-        emit signalServiceDataChanged(static_cast<int>(DataType::Etc), static_cast<int>(signalType), isValue);
-    } else {
-        emit signalServiceDatasChanged(static_cast<int>(DataType::Etc), static_cast<int>(signalType), values);
-    }
-}
-
-void Service::subscribeEtcSpeedGauge() {
-    addSubscription(SFC.Speed_Gauge.Inter_DisplaySpeedUnit,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterDisplaySpeedUnit, std::placeholders::_1));
-    addSubscription(SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterDisplaySpeedValueKPH, std::placeholders::_1));
-    addSubscription(SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterDisplaySpeedValueMPH, std::placeholders::_1));
-}
-
-void Service::subscribeEtcDriveMode() {
-    addSubscription(SFC.Drive_Mode.Inter_DriveModeSelectStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterDriveModeSelectStatus, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Inter_TerrainModeSelectStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterTerrainModeSelectStatus, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Inter_NModeSelectStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterNModeSelectStatus, std::placeholders::_1));
-    addSubscription(SFC.Drive_Mode.Inter_GtModeSelectStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterGtModeSelectStatus, std::placeholders::_1));
-}
-
-void Service::subscribeEtcADASDrivingNew() {
-    addSubscription(SFC.ADAS_Driving_New.Inter_AdasViewFixStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterAdasViewFixStatus, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterHDPMasterWarningStatus, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityISLA.Stat,
-                    std::bind(&Service::onEtcChanged, this, Etc::TimerOneShotTimerPriorityISLAStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityDIS.Stat,
-                    std::bind(&Service::onEtcChanged, this, Etc::TimerOneShotTimerPriorityDISStat, std::placeholders::_1));
-    addSubscription(SFC.ADAS_Driving_New.Inter_AdasOnStatus,
-                    std::bind(&Service::onEtcChanged, this, Etc::InterAdasOnStatus, std::placeholders::_1));
-}
-
-void Service::subscribeEtc() {
-    qDebug() << "Service - subscribeEtc";
-
-    subscribeEtcSpeedGauge();
-    subscribeEtcDriveMode();
-    subscribeEtcADASDrivingNew();
-}
+#endif

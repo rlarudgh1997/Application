@@ -52,8 +52,8 @@ SubWindow::~SubWindow() {
 
 void SubWindow::init() {
     // excuteScript(false, QString(), QStringList());
-#if defined(__SUB_WINDOW_ONLY__)
-    qDebug() << "Service :" << Service::instance().data();
+#if 1    // defined(__SUB_WINDOW_ONLY__)
+    Service::instance().data();
     Service::instance().data()->init();
 #endif
 
@@ -202,9 +202,7 @@ void SubWindow::controlConnect(const bool& state) {
     connect(Service::instance().data(), &Service::signalServiceDatasChanged,
             [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
                 QString text = QString();
-                QHashIterator<QString, QVariant> iter(signalValues);
-                while (iter.hasNext()) {
-                    iter.next();
+                for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
                     if (getCheckSfcSignal().contains(iter.key())) {
                         text.append(QString("  Received : %1 = %2\n").arg(iter.key()).arg(iter.value().toString()));
                     }
@@ -871,7 +869,7 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
         QString delFile = QString("rm -f %1").arg(filePath);
         delFile.replace(".info", ".*.info");
         result = process.start(delFile, log);
-        qDebug() << "\t\t Delete :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << delFile;
+        qDebug() << "\t\t Delete :" << ((result) ? ("[Success]") : ("[Fail]  ")) << delFile;
 
         // 2-2. Watcher Log file : ../TAV/[FILE].AltonListen.info
         QString altonLogFile = filePath;
@@ -886,7 +884,7 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
         QString altonPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonPath).toString();
         QString altonServiceCmd = QString("%1/%2 > %3 &").arg(altonPath).arg(altonService).arg(altonLogFile);
         result = process.start(altonServiceCmd, log);
-        qDebug() << "\t Start - AltonService :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonServiceCmd;
+        qDebug() << "\t Start - AltonService :" << ((result) ? ("[Success]") : ("[Fail]  ")) << altonServiceCmd;
 
         // 4. chmod -R 777 ../TAV/[FILE].sh
         QString command = QString();
@@ -896,7 +894,7 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
             }
             QString permissionCmd = QString("chmod -R 777 %1").arg(script);
             result = process.start(permissionCmd, log);
-            qDebug() << "\t\t Permisstion :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << permissionCmd;
+            qDebug() << "\t\t Permisstion :" << ((result) ? ("[Success]") : ("[Fail]  ")) << permissionCmd;
         }
 
         // 5. ../TAV/[FILE].sh >> ../TAV/[FILE].Script.info
@@ -907,10 +905,10 @@ void SubWindow::excuteScript(const bool& start, const QString& file, const QStri
     } else {
         QString altonClient = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAltonClient).toString();
         result = process.start(QString("killall %1").arg(altonClient), log);
-        qDebug() << "\t Kill  - AltonClient  :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonClient;
+        qDebug() << "\t Kill  - AltonClient  :" << ((result) ? ("[Success]") : ("[Fail]  ")) << altonClient;
 
         result = process.start(QString("killall %1").arg(altonService), log);
-        qDebug() << "\t Kill  - AltonService :" << ((result) ? ("[Sucess]") : ("[Fail]  ")) << altonService;
+        qDebug() << "\t Kill  - AltonService :" << ((result) ? ("[Success]") : ("[Fail]  ")) << altonService;
 
         setAltonServiceData(QStringList());
     }
@@ -934,7 +932,7 @@ void SubWindow::startProcess(const QString& command, const QString& log) {
             if (start == false) {
                 qDebug() << "*************************************************************************************************";
                 qDebug() << "Commnad :" << command;
-                qDebug() << "Result  :" << ((result) ? ("sucess") : ("fail"));
+                qDebug() << "Result  :" << ((result) ? ("Success") : ("fail"));
                 qDebug() << "*************************************************************************************************\n";
             }
         });
@@ -1282,7 +1280,7 @@ bool SubWindow::deleteFile(const int& deleteType) {
                 ivis::common::PopupButton::OK) {
                 for (const auto& file : getDeleteFileList()) {
                     result = ivis::common::FileInfo::deleteFile(tavPath, file);
-                    qDebug() << "DeleteTypeSelectTAV :" << ((result) ? ("Sucess") : ("Fail")) << file;
+                    qDebug() << "DeleteTypeSelectTAV :" << ((result) ? ("Success") : ("Fail")) << file;
                 }
             }
             break;
@@ -1299,7 +1297,7 @@ bool SubWindow::deleteFile(const int& deleteType) {
                 ivis::common::PopupButton::OK) {
                 QString extensions = QString("*.sh");
                 result = ivis::common::FileInfo::deleteFile(tavPath, extensions);
-                qDebug() << "DeleteTypeScript :" << ((result) ? ("Sucess") : ("Fail")) << extensions;
+                qDebug() << "DeleteTypeScript :" << ((result) ? ("Success") : ("Fail")) << extensions;
             }
             break;
         }
@@ -1311,7 +1309,7 @@ bool SubWindow::deleteFile(const int& deleteType) {
                 ivis::common::PopupButton::OK) {
                 QString extensions = QString("*.info");
                 result = ivis::common::FileInfo::deleteFile(tavPath, extensions);
-                qDebug() << "DeleteTypeInfo :" << ((result) ? ("Sucess") : ("Fail")) << extensions;
+                qDebug() << "DeleteTypeInfo :" << ((result) ? ("Success") : ("Fail")) << extensions;
             }
             break;
         }

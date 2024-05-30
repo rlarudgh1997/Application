@@ -156,7 +156,7 @@ bool ScreenInfo::updateLanguage(const int& changeLanguage, QString languageFileN
     }
 
     qDebug() << "ScreenInfo::updateMultiLanguage(" << changeLanguage << "," << languageFileName
-             << ")->LanguageChange :" << ((result) ? ("Sucess") : ("Fail")) << "!!!!!!!\n\n\n\n";
+             << ")->LanguageChange :" << ((result) ? ("Success") : ("Fail")) << "!!!!!!!\n\n\n\n";
     return result;
 }
 

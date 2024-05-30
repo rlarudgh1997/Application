@@ -491,7 +491,7 @@ void ControlMenu::updateViewLogDisplay(const QString& titleName) {
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
     if (QFile::exists(watcherFile)) {
         bool deleteResult = QFile::remove(watcherFile);
-        qDebug() << ((deleteResult) ? ("Sucess") : ("Fail")) << "delete file :" << watcherFile;
+        qDebug() << ((deleteResult) ? ("Success") : ("Fail")) << "delete file :" << watcherFile;
     }
 
     stopWatcherFile(type);
@@ -598,7 +598,7 @@ void ControlMenu::startProcess(const QString& command, const QString& arg, const
             if (start == false) {
                 qDebug() << "*************************************************************************************************";
                 qDebug() << "Commnad :" << command;
-                qDebug() << "Result  :" << ((result) ? ("sucess") : ("fail")) << ", RequestCancel :" << requestCancel;
+                qDebug() << "Result  :" << ((result) ? ("Success") : ("fail")) << ", RequestCancel :" << requestCancel;
                 qDebug() << "*************************************************************************************************\n";
             }
         });
@@ -825,7 +825,7 @@ void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
             QStringList log;
             ivis::common::ExcuteProgram process(false);
             bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
-            qDebug() << "Terminate Process :" << info << ", Result :" << ((result) ? ("sucess") : ("fail"));
+            qDebug() << "Terminate Process :" << info << ", Result :" << ((result) ? ("Success") : ("fail"));
         }
     }
 

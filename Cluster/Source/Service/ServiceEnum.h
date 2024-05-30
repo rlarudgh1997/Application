@@ -34,8 +34,9 @@ enum class ValueType : u_int32_t {
 };
 
 enum class Constant : u_int32_t {
+    Invalid = 0,
     // SpeedGauge
-    SpeedGaugeStart = 0,
+    SpeedGaugeStart,
     SpeedAnalogStat,
     SpeedAnalogValue,
     SpeedDigitalStat,
@@ -94,12 +95,14 @@ enum class Constant : u_int32_t {
 
     // ADASDrivingNew
     ADASDrivingNewStart,
+    ViewFrontVehicle,
     ADASDrivingNewEnd,
 };
 
 enum class Telltale : u_int32_t {
+    Invalid = 0,
     // LampIndicator
-    LampIndicatorStart = 0,
+    LampIndicatorStart,
     FrontFogStat,
     HighBeamStat,
     RearFogStat,
@@ -156,8 +159,9 @@ enum class Telltale : u_int32_t {
 };
 
 enum class Event : u_int32_t {
+    Invalid = 0,
     // IntroOutro
-    IntroOutroStart = 0,
+    IntroOutroStart,
     WelcomeID,
     WelcomeStat,
     WelcomeLinkedSoundID,
@@ -348,8 +352,9 @@ enum class Event : u_int32_t {
 };
 
 enum class Sound : u_int32_t {
+    Invalid = 0,
     // LampIndicator
-    LampIndicatorStart = 0,
+    LampIndicatorStart,
     LampIndicatorEnd,
 
     // IntroOutro
@@ -361,7 +366,7 @@ enum class Sound : u_int32_t {
     TransmissionIndicatorEnd,
 
     // ADASParkingNew
-    SADASParkingNewtart,
+    ADASParkingNewStart,
     ADASParkingNewEnd,
 
     // HighPerformanceForNBrand
@@ -374,8 +379,9 @@ enum class Sound : u_int32_t {
 };
 
 enum class Etc : u_int32_t {
+    Invalid = 0,
     // SpeedGauge
-    SpeedGaugeStart = 0,
+    SpeedGaugeStart,
     InterDisplaySpeedUnit,
     InterDisplaySpeedValueKPH,
     InterDisplaySpeedValueMPH,

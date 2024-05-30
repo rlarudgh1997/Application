@@ -7,5 +7,6 @@ DataModel {
     onModeChanged: print("Content    : onModeChanged =", show, mode, display, z)
     Component.onCompleted: print("Content    : onCompleted   =", show, mode, display, z)
 
-    property int contentID: 0
+    property int contentType: 0
+    property var contentInfo: ""
 }

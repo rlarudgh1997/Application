@@ -267,15 +267,15 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 }
 
 void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = 0;
+    QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
             Constant constantType = static_cast<Constant>(signalType);
             if (constantType == Constant::SpeedAnalogStat) {
-                propertyType = ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed;
+                propertyData[ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed] = signalType;
             } else if (constantType == Constant::SpeedDigitalStat) {
-                propertyType = ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm;
+                propertyData[ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm] = signalType;
             } else {
             }
             break;
@@ -289,8 +289,8 @@ void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signal
         }
     }
 
-    if (propertyType > 0) {
-        updateDataHandler(propertyType, signalValue);
+    for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
+        updateDataHandler(iter.key(), iter.value());
     }
 }
 

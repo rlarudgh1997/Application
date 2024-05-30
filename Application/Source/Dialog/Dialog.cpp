@@ -86,7 +86,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
     }
-    qDebug() << "drawDialog :" << dialogType << info.size() << ((draw) ? ("-> Sucess") : ("-> Fail"));
+    qDebug() << "drawDialog :" << dialogType << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
 }
 
 void Dialog::controlConnet(const int& displayType) {

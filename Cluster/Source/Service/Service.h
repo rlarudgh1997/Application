@@ -41,97 +41,39 @@ private:
     ccos::vehicle::vsm::HVehicleSignalModel& getVehicleSignalModel();
     void addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc);
     void addSubscriptionGroup(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
-    QVariant processVehicleSignal(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                  const std::map<std::string, NodePathToValueFunc>& nodePathToValueFuncs,
-                                  QHash<QString, QVariant>& values);
 
-    // Constant
-    QVariant isConstantSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantTachometer(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                             QHash<QString, QVariant>& values);
-    QVariant isConstantDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isConstantHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                QHash<QString, QVariant>& values);
-    QVariant isConstantADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    void onConstantChanged(const Constant& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-    void subscribeConstantSpeedGauge();
-    void subscribeConstantTachometer();
-    void subscribeConstantIntroOutro();
-    void subscribeConstantOAT();
-    void subscribeConstant();
+    void subscribeConstantSignals();
+    void subscribeTelltaleSignals();
+    void subscribeEventSignals();
+    void subscribeSoundSignals();
+    void subscribeEtcSignals();
 
-    // Telltale
-    QVariant isTelltaleLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isTelltaleOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isTelltaleDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isTelltaleHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                                QHash<QString, QVariant>& values);
-    QVariant isTelltaleADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isTelltaleHighPerformance(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    void onTelltaleChanged(const Telltale& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-    void subscribeTelltaleLampIndicator();
-    void subscribeTelltaleOAT();
-    void subscribeTelltaleDriveMode();
-    void subscribeTelltaleHighPerformanceForNBrand();
-    void subscribeTelltaleADASDrivingNew();
-    void subscribeTelltaleHighPerformance();
-    void subscribeTelltale();
-
-    // Event
-    QVariant isEventIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEventOAT(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEventTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                          QHash<QString, QVariant>& values);
-    QVariant isEventDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEventADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEventHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                             QHash<QString, QVariant>& values);
-    QVariant isEventADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    void onEventChanged(const Event& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-    void subscribeEventIntroOutro();
-    void subscribeEventOAT();
-    void subscribeEventTransmissionIndicator();
-    void subscribeEventDriveMode();
-    void subscribeEventADASParking_New();
-    void subscribeEventHighPerformanceForNBrand();
-    void subscribeEventADASDrivingNew();
-    void subscribeEvent();
-
-    // Sount
-    QVariant isSoundLampIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isSoundIntroOutro(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isSoundTransmissionIndicator(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                          QHash<QString, QVariant>& values);
-    QVariant isSoundADASParkingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isSoundHighPerformanceForNBrand(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                                             QHash<QString, QVariant>& values);
-    QVariant isSoundADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    void onSoundChanged(const Sound& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-    void subscribeSoundLampIndicator();
-    void subscribeSoundIntroOutro();
-    void subscribeSoundTransmissionIndicator();
-    void subscribeSoundADASParkingNew();
-    void subscribeSoundHighPerformanceForNBrand();
-    void subscribeSoundADASDrivingNew();
-    void subscribeSound();
-
-    // Etc
-    QVariant isEtcSpeedGauge(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEtcDriveMode(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    QVariant isEtcADASDrivingNew(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
-    void onEtcChanged(const Etc& signalType, const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
-    void subscribeEtcSpeedGauge();
-    void subscribeEtcDriveMode();
-    void subscribeEtcADASDrivingNew();
-    void subscribeEtc();
+    template <typename TYPE>
+    void subscribeSignals(const DataType& datatType,
+                          const std::vector<std::pair<TYPE, std::vector<std::string>>>& signalsToSubscribe);
+    template <typename TYPE>
+    QVariant isSignalValue(const DataType& dataType, const TYPE& signalType,
+                           const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal
+                           QHash<int, QPair<QString, QVariant>>& values);
+    template <typename TYPE>
+    void onSignalChanged(const DataType& dataType, const TYPE& signalType,
+                         const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
+#if 0
+    QVariant isConstantSignal(const Constant& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                              QHash<QString, QVariant>& values);
+    QVariant isTelltaleSignal(const Telltale& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                              QHash<QString, QVariant>& values);
+    QVariant isEventSignal(const Event& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                           QHash<QString, QVariant>& values);
+    QVariant isSoundSignal(const Sound& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                           QHash<QString, QVariant>& values);
+    QVariant isEtcSignal(const Etc& signalType, const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
+                         QHash<QString, QVariant>& values);
+#endif
 
 signals:
     void signalServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
-    void signalServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues);
+    void signalServiceDatasChanged(const int& dataType, const int& signalType,
+                                   const QHash<int, QPair<QString, QVariant>>& signalValues);
 };
-
 #endif  // SERIVCE_H

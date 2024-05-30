@@ -222,7 +222,7 @@ void ControlTelltale::slotEventInfoChanged(const int& displayType, const int& ev
 }
 
 void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = 0;
+    QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
@@ -232,25 +232,23 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
         case DataType::Telltale: {
             Telltale telltaleType = static_cast<Telltale>(signalType);
             if (telltaleType == Telltale::FrontFogStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorFrontFogStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorFrontFogStat] = signalValue;
             } else if (telltaleType == Telltale::HighBeamStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorHighBeamStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorHighBeamStat] = signalValue;
             } else if (telltaleType == Telltale::RearFogStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorRearFogStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorRearFogStat] = signalValue;
             } else if (telltaleType == Telltale::TailLampStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTailLampStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorTailLampStat] = signalValue;
             } else if (telltaleType == Telltale::TurnSignalLeftStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTurnSignalLeftStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorTurnSignalLeftStat] = signalValue;
             } else if (telltaleType == Telltale::TurnSignalRightStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorTurnSignalRightStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorTurnSignalRightStat] = signalValue;
             } else if (telltaleType == Telltale::LowBeamStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-            } else if ((telltaleType == Telltale::IceWarnStat) || (telltaleType == Telltale::IceWarnStatOptional)) {
-                // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
-            } else if ((telltaleType == Telltale::HandsOnOffStat) || (telltaleType == Telltale::HandsOnOffStatOptional)) {
-                // propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleLampIndicatorLowBeamStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleLampIndicatorLowBeamStat] = signalValue;
             } else if (telltaleType == Telltale::LFAStat) {
-                propertyType = ivis::common::PropertyEnum::TelltaleType::TelltaleADASDrivingNewLFAStat;
+                propertyData[ivis::common::PropertyEnum::TelltaleADASDrivingNewLFAStat] = signalValue;
+            } else if ((telltaleType == Telltale::IceWarnStat) || (telltaleType == Telltale::IceWarnStatOptional)) {
+            } else if ((telltaleType == Telltale::HandsOnOffStat) || (telltaleType == Telltale::HandsOnOffStatOptional)) {
             } else {
             }
             break;
@@ -260,8 +258,8 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
         }
     }
 
-    if (propertyType > 0) {
-        updateDataHandler(propertyType, signalValue);
+    for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
+        updateDataHandler(iter.key(), iter.value());
     }
 }
 

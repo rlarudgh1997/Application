@@ -22,6 +22,8 @@ void HandlerEvent::initPropertyInfo() {
 
     // Event
     registerProperty(ivis::common::PropertyEnum::EventType, QString("eventType"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::PopupColorType, QString("popupColorType"), QVariant(0));
+    registerProperty(ivis::common::PropertyEnum::PopupColorStatus, QString("popupColorStatus"), QVariant(false));
     registerProperty(ivis::common::PropertyEnum::PopupInfo, QString("popupInfo"), QVariant());
 }
 

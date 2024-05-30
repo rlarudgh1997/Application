@@ -45,6 +45,9 @@ void ControlEvent::initCommonData(const int& currentMode, const int& displayType
 void ControlEvent::initNormalData() {
     updateDataHandler(ivis::common::PropertyEnum::EventType, 0);
     updateDataHandler(ivis::common::PropertyEnum::PopupInfo, QVariant());
+    updateDataHandler(ivis::common::PropertyEnum::PopupColorType,
+                      static_cast<int>(ivis::common::PopupColorType::PopupColor::None));
+    updateDataHandler(ivis::common::PropertyEnum::PopupColorStatus, false);
 }
 
 void ControlEvent::initControlData() {
@@ -88,6 +91,12 @@ void ControlEvent::controlConnect(const bool& state) {
 
 void ControlEvent::timerFunc(const int& timerId) {
     Q_UNUSED(timerId)
+    if (getTimerId(AbstractControl::AbstractTimerStart) == timerId) {
+        qDebug() << "\n\n\n\n\n\t asdlfaowiefjlaskdfjoawijfoaljfldkjasl;dfkja;lsdkfj";
+
+        controlTimer(AbstractControl::AbstractTimerStart);
+        updateDataHandler(ivis::common::PropertyEnum::EventType, 0);
+    }
 }
 
 void ControlEvent::keyEvent(const int& inputType, const int& inputValue) {
@@ -158,14 +167,17 @@ void ControlEvent::slotEventInfoChanged(const int& displayType, const int& event
 }
 
 void ControlEvent::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = 0;
+    QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Event: {
             Event eventType = static_cast<Event>(signalType);
             if (eventType == Event::Group1FullPopup1) {
-                propertyType = ivis::common::PropertyEnum::EventType::PopupInfo;
-            } else {
+                propertyData[ivis::common::PropertyEnum::EventType] = static_cast<int>(Event::Group1FullPopup1);
+                propertyData[ivis::common::PropertyEnum::PopupColorType] =
+                    static_cast<int>(ivis::common::PopupColorType::PopupColor::WHITE);
+                propertyData[ivis::common::PropertyEnum::PopupInfo] = signalValue;
+                controlTimer(AbstractControl::AbstractTimerStart, true, 3000);
             }
             break;
         }
@@ -174,8 +186,8 @@ void ControlEvent::slotServiceDataChanged(const int& dataType, const int& signal
         }
     }
 
-    if (propertyType > 0) {
-        updateDataHandler(propertyType, signalValue);
+    for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
+        updateDataHandler(iter.key(), iter.value());
     }
 }
 
@@ -186,12 +198,10 @@ void ControlEvent::slotServiceDatasChanged(const int& dataType, const int& signa
         // slotServiceDataChanged(dataType, signalType, it.value());
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     } else {
-        QString text = QString();
-        QHashIterator<QString, QVariant> iter(signalValues);
-        while (iter.hasNext()) {
-            iter.next();
-            text.append(QString("%1 : %2\n").arg(iter.key()).arg(iter.value().toString()));
+        QString multiValueInfo = QString();
+        for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+            multiValueInfo.append(QString("%1 : %2\n").arg(iter.key()).arg(iter.value().toString()));
+            slotServiceDataChanged(dataType, signalType, multiValueInfo);
         }
-        slotServiceDataChanged(dataType, signalType, text);
     }
 }

@@ -352,13 +352,13 @@ private:
             for (const auto& fileName : isFileListInfo(path, fileExtenstion, fileList)) {
                 file.setFileName(QString("%1/%2").arg(path).arg(fileName));
                 bool result = file.remove();
-                // qDebug() << ((result) ? ("Delete Sucess :") : ("1 Delete Fail :")) << file.fileName();
+                // qDebug() << ((result) ? ("Delete Success :") : ("1 Delete Fail :")) << file.fileName();
             }
             return true;
         } else {
             file.setFileName(QString("%1/%2").arg(path).arg(deleteInfo));
             bool result = file.remove();
-            // qDebug() << ((result) ? ("Delete Sucess :") : ("2 Delete Fail :")) << file.fileName();
+            // qDebug() << ((result) ? ("Delete Success :") : ("2 Delete Fail :")) << file.fileName();
             return result;
         }
     }
@@ -410,7 +410,7 @@ public:
         } else {
             result = system(cmd.toLatin1());
         }
-        // qDebug() << "ExcuteProgram::start() ->" << ((result == 0) ? ("Sucess :") : ("Fail :")) << result;
+        // qDebug() << "ExcuteProgram::start() ->" << ((result == 0) ? ("Success :") : ("Fail :")) << result;
         return (result == 0);
     }
 
@@ -644,7 +644,7 @@ private:
             }
 
             if (mWatcher.addPath(mWatcherFile)) {
-                qDebug() << "\t [Sucess] Watcher file :" << mCount << mWatcherFile;
+                qDebug() << "\t [Success] Watcher file :" << mCount << mWatcherFile;
                 mCount = 0;
                 readFile(true, mWatcherFile, true);
                 break;

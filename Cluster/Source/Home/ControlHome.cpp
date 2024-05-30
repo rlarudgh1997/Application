@@ -157,7 +157,7 @@ void ControlHome::slotEventInfoChanged(const int& displayType, const int& eventT
 }
 
 void ControlHome::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = 0;
+    QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
@@ -173,8 +173,8 @@ void ControlHome::slotServiceDataChanged(const int& dataType, const int& signalT
         }
     }
 
-    if (propertyType > 0) {
-        updateDataHandler(propertyType, signalValue);
+    for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
+        updateDataHandler(iter.key(), iter.value());
     }
 }
 

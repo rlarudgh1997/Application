@@ -43,7 +43,8 @@ void ControlContent::initCommonData(const int& currentMode, const int& displayTy
 }
 
 void ControlContent::initNormalData() {
-    updateDataHandler(ivis::common::PropertyEnum::ContentID, 0);
+    updateDataHandler(ivis::common::PropertyEnum::ContentType, 0);
+    updateDataHandler(ivis::common::PropertyEnum::ContentInfo, QVariant());
 }
 
 void ControlContent::initControlData() {
@@ -157,14 +158,18 @@ void ControlContent::slotEventInfoChanged(const int& displayType, const int& eve
 }
 
 void ControlContent::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
-    int propertyType = 0;
+    QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
             Constant constantType = static_cast<Constant>(signalType);
-            if (constantType == Constant::SpeedAnalogStat) {
-                // propertyType = ivis::common::PropertyEnum::CostantType::PopupInfo;
+            if (constantType == Constant::ViewFrontVehicle) {
+                propertyData[ivis::common::PropertyEnum::ContentInfo] = signalValue;
             }
+            break;
+        }
+        case DataType::Event: {
+            Event eventType = static_cast<Event>(signalType);
             break;
         }
         default: {
@@ -172,8 +177,8 @@ void ControlContent::slotServiceDataChanged(const int& dataType, const int& sign
         }
     }
 
-    if (propertyType > 0) {
-        updateDataHandler(propertyType, signalValue);
+    for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
+        updateDataHandler(iter.key(), iter.value());
     }
 }
 
@@ -183,5 +188,11 @@ void ControlContent::slotServiceDatasChanged(const int& dataType, const int& sig
         // auto it = signalValues.constBegin();
         // slotServiceDataChanged(dataType, signalType, it.value());
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
+    } else {
+        QString multiValueInfo = QString();
+        for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+            multiValueInfo.append(QString("%1 : %2\n").arg(iter.key()).arg(iter.value().toString()));
+            slotServiceDataChanged(dataType, signalType, multiValueInfo);
+        }
     }
 }

@@ -176,13 +176,16 @@ public:
 
     enum ContentType {
         ContentInvalid = PROPETRY_START_CONTENT,
-        ContentID,
+        ContentType,
+        ContentInfo,
     };
     Q_ENUMS(GaugeType)
 
     enum EventType {
         EventInvalid = PROPETRY_START_EVENT,
         EventType,
+        PopupColorType,
+        PopupColorStatus,
         PopupInfo,
     };
     Q_ENUMS(GaugeType)
@@ -426,7 +429,18 @@ public:
     Q_ENUMS(EventType)
 };
 
-
+class PopupColorType : public QObject {
+    Q_OBJECT
+public:
+    enum class PopupColor : uint64_t {
+        None = 0x0,
+        WHITE,
+        YELLOW,
+        RED,
+        NOT_DISPLAY
+    };
+    Q_ENUM(PopupColor)
+};
 
 }  // end of namespace common
 }  // end of namespace ivis

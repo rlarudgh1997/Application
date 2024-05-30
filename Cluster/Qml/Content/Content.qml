@@ -10,14 +10,20 @@ import "../DataModel"
 DataModelContent {
     id: dataModelContent
 
-    Text {
-        anchors.fill: parent
-        visible: false
-        text: "Content - 구현중"
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        color: "#ffffff"
-        font.pointSize: 30
+    onContentInfoChanged: {
+        // print("onContentInfoChanged :", contentInfo)
+        var text = ""
+        for (var index = 0; index < contentInfo.length; index++) {
+            text += contentInfo[index]
+        }
+        contentText.text = text
     }
 
+    Text {
+        id: contentText
+        anchors.fill: parent
+        verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 20;  color: "red"
+        text: ""
+    }
 }

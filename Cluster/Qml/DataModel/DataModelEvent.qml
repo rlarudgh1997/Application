@@ -8,5 +8,7 @@ DataModel {
     Component.onCompleted: print("Event      : onCompleted   =", show, mode, display, z)
 
     property int eventType: 0
+    property int popupColorType: 0
+    property bool popupColorStatus: false
     property var popupInfo: ""
 }

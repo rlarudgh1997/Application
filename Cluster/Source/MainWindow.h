@@ -28,7 +28,7 @@ protected:
     void keyReleaseEvent(QKeyEvent* keyEvent) override;
     void moveEvent(QMoveEvent* moveEvent) override;
     void resizeEvent(QResizeEvent* resizeEvent) override;
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     QRect mScreenInfo = QRect();

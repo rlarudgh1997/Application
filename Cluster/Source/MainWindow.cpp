@@ -97,6 +97,7 @@ void MainWindow::setQmlRegisterType() {
 
     // Evnet
     qmlRegisterType<ivis::common::HandlerEventEnum>("EventEnum", 1, 0, "Event");
+    qmlRegisterType<ivis::common::PopupColorType>("EventEnum", 1, 0, "PopupColor");
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
@@ -128,11 +129,11 @@ void MainWindow::resizeEvent(QResizeEvent* resizeEvent) {
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeScreenInfo, mScreenInfo);
 }
 
-void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+void MainWindow::closeEvent(QCloseEvent* closeEvent) {
 #if defined(USE_APP_EXIT_NEW)
     // mSubWindow->close();
     // QQuickView::closeEvent(closeEvent);
-    QGuiApplication::quit();    // qApp->quit();
+    QGuiApplication::quit();  // qApp->quit();
 #else
     emit ControlManager::instance().data()->signalExitProgram();
 #endif
