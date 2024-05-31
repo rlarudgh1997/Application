@@ -187,12 +187,48 @@ void ControlContent::slotServiceDatasChanged(const int& dataType, const int& sig
     if (signalValues.size() == 1) {
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     } else {
+        if ((static_cast<DataType>(dataType) == DataType::Constant) &&
+            (static_cast<Constant>(signalType) == Constant::ViewFrontVehicle)) {
+            QStringList keyList = {"SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Value",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat",
+                                   "SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value"};
+            QHash<int, QString> info;
+            int count = 0;
+            for (QString key : keyList) {
+                int index;
+                QString title;
+                int value = signalValues[key].toInt();
+                if (count < 4) {
+                    index = 0;
+                    title = key.remove("SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.");
+                } else {
+                    index = 1;
+                    title = key.remove("SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.");
+                }
+                count++;
+
+                // if ((title.contains("Value")) && (value == 0)) {
+                //     continue;
+                // }
+                if (title.isEmpty() == false) {
+                    info[index].append(QString("%1 : %2\n").arg(title).arg(value));
+                }
+            }
+            updateDataHandler(ivis::common::PropertyEnum::ViewFrontLeftVehicle, info[0]);
+            updateDataHandler(ivis::common::PropertyEnum::ViewFrontRightVehicle, info[1]);
+            return;
+        }
         QString multiValueInfo = QString();
         for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
             QString sfcName = iter.key();
             QVariant sfcValue = iter.value();
             multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
-            slotServiceDataChanged(dataType, signalType, multiValueInfo);
         }
+        slotServiceDataChanged(dataType, signalType, multiValueInfo);
     }
 }

@@ -427,5 +427,7 @@
         <file>Image/Popup/ParkingSafety_12H/sea_r_card_01_seq_13.png</file>
         <file>Image/Popup/ParkingSafety_12H/sea_r_card_01_seq_14.png</file>
         <file>Image/Popup/ParkingSafety_12H/sea_r_card_01_seq_15.png</file>
+        <file>Image/MainView/ADASMain_12H/adasmain_card_04_image_01.png</file>
+        <file>Image/MainView/ADASMain_12H/adasmain_hda2_lane_g_l_card_00.png</file>
     </qresource>
 </RCC>

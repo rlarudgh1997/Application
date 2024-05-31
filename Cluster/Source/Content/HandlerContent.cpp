@@ -23,6 +23,8 @@ void HandlerContent::initPropertyInfo() {
     // Content
     registerProperty(ivis::common::PropertyEnum::ContentType, QString("contentType"), QVariant(0));
     registerProperty(ivis::common::PropertyEnum::ContentInfo, QString("contentInfo"), QVariant());
+    registerProperty(ivis::common::PropertyEnum::ViewFrontLeftVehicle, QString("viewFrontLeftVehicle"), QVariant());
+    registerProperty(ivis::common::PropertyEnum::ViewFrontRightVehicle, QString("viewFrontRightVehicle"), QVariant());
 }
 
 void HandlerContent::controlConnect(const bool& state) {

@@ -9,4 +9,6 @@ DataModel {
 
     property int contentType: 0
     property var contentInfo: ""
+    property var viewFrontLeftVehicle: ""
+    property var viewFrontRightVehicle: ""
 }

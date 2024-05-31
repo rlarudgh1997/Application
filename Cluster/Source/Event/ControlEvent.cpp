@@ -94,6 +94,9 @@ void ControlEvent::timerFunc(const int& timerId) {
     if (getTimerId(AbstractControl::AbstractTimerStart) == timerId) {
         controlTimer(AbstractControl::AbstractTimerStart);
         updateDataHandler(ivis::common::PropertyEnum::EventType, 0);
+        updateDataHandler(ivis::common::PropertyEnum::PopupColorType, 0);
+        updateDataHandler(ivis::common::PropertyEnum::PopupColorStatus, false);
+        updateDataHandler(ivis::common::PropertyEnum::PopupInfo, QVariant());
     }
 }
 
@@ -171,7 +174,8 @@ void ControlEvent::slotServiceDataChanged(const int& dataType, const int& signal
         case DataType::Event: {
             Event eventType = static_cast<Event>(signalType);
             if (eventType == Event::Group1FullPopup1) {
-                propertyData[ivis::common::PropertyEnum::EventType] = static_cast<int>(Event::Group1FullPopup1);
+                propertyData[ivis::common::PropertyEnum::EventType] = static_cast<int>(eventType);
+                propertyData[ivis::common::PropertyEnum::PopupColorStatus] = true;
                 propertyData[ivis::common::PropertyEnum::PopupColorType] =
                     static_cast<int>(ivis::common::PopupColorType::PopupColor::WHITE);
                 propertyData[ivis::common::PropertyEnum::PopupInfo] = signalValue;
@@ -198,8 +202,15 @@ void ControlEvent::slotServiceDatasChanged(const int& dataType, const int& signa
         for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
             QString sfcName = iter.key();
             QVariant sfcValue = iter.value();
-            multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
-            slotServiceDataChanged(dataType, signalType, multiValueInfo);
+            bool event = (static_cast<DataType>(dataType) == DataType::Event);
+            if ((event) && (static_cast<Event>(signalType) == Event::Group1FullPopup1)) {
+                if (sfcName.contains("ID")) {
+                    multiValueInfo.append(sfcValue.toString() + "\nGroup1FullPopup1_1");
+                }
+            } else {
+                multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
+            }
         }
+        slotServiceDataChanged(dataType, signalType, multiValueInfo);
     }
 }

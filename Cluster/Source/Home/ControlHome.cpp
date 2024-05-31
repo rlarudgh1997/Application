@@ -188,7 +188,7 @@ void ControlHome::slotServiceDatasChanged(const int& dataType, const int& signal
             QString sfcName = iter.key();
             QVariant sfcValue = iter.value();
             multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
-            slotServiceDataChanged(dataType, signalType, multiValueInfo);
         }
+        slotServiceDataChanged(dataType, signalType, multiValueInfo);
     }
 }

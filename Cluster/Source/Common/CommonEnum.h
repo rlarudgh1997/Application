@@ -178,6 +178,8 @@ public:
         ContentInvalid = PROPETRY_START_CONTENT,
         ContentType,
         ContentInfo,
+        ViewFrontLeftVehicle,
+        ViewFrontRightVehicle,
     };
     Q_ENUMS(GaugeType)
 

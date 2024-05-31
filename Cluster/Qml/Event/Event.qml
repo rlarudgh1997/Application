@@ -44,17 +44,10 @@ DataModelEvent {
         }
         Text {
             id: popupText
-            anchors.fill: parent
+            x: 100; y: 100; width: 480; height: 236
             verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 20;  color: "red"
+            font.pixelSize: 35; color: "white"
             text: ""
         }
-        // Text {
-        //     id: popupText
-        //     x: 100; y: 100; width: 480; height: 236
-        //     verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter
-        //     font.pixelSize: 35; color: "white"
-        //     text: dataModelEvent.popupInfo
-        // }
     }
 }

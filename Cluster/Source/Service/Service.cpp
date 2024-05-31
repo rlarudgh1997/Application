@@ -96,8 +96,8 @@ void Service::subscribeConstantSignals() {
               SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Value,
               SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat,
               SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Value,
-              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value,
-              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat}},
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat,
+              SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Value}},
         });
 }
 
