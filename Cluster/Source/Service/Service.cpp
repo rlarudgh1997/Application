@@ -423,7 +423,7 @@ QVariant Service::isSignalValue(const ccos::vehicle::vsm::HVehicleSignal& vehicl
                 isValue = vehicleSignal.getValue<std::string>().c_str();
                 break;
             default:
-                isValue = vehicleSignal.getValue<std::string>().c_str();
+                qDebug() << "Fail to vehicle value type :" << isValue;
                 break;
         }
         values[nodePath] = isValue;
@@ -440,7 +440,7 @@ void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
         isValue = isSignalValue(vehicleSignal, values);
     }
 
-    if (values.size() > 1) {
+    if (values.size() >= 1) {
 #if 0
         QString multiValueInfo = QString();
         for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {

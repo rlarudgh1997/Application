@@ -179,7 +179,7 @@ void ControlEvent::slotServiceDataChanged(const int& dataType, const int& signal
                 propertyData[ivis::common::PropertyEnum::PopupColorType] =
                     static_cast<int>(ivis::common::PopupColorType::PopupColor::WHITE);
                 propertyData[ivis::common::PropertyEnum::PopupInfo] = signalValue;
-                controlTimer(AbstractControl::AbstractTimerStart, true, 3000);
+                // controlTimer(AbstractControl::AbstractTimerStart, true, 3000);
             }
             break;
         }

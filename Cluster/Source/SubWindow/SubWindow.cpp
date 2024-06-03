@@ -198,7 +198,14 @@ void SubWindow::controlConnect(const bool& state) {
 
     // Service
     connect(Service::instance().data(), &Service::signalServiceDataChanged,
-            [=](const int& dataType, const int& signalType, const QVariant& signalValue) {});
+            [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
+                // if (getCheckSfcSignal().contains(signalValue.toString())) {
+                //     QString signalName = getCheckSfcSignal().split(" ").at(0);
+                //     QString singleValueInfo("Singal Received - Single\n");
+                //     singleValueInfo.append(QString("  Received : %1 = %2\n").arg(signalName).arg(sfcValue.toString()));
+                //     updateHmiLog(singleValueInfo);
+                // }
+            });
     connect(Service::instance().data(), &Service::signalServiceDatasChanged,
             [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
                 QString multiValueInfo = QString();
