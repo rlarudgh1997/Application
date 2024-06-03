@@ -161,7 +161,7 @@ class ExcelParser:
 
 def main(argv):
     if len(argv) != 4:
-        print("Usage: script.py <directory> <file_name> <read/write>")
+        print("Usage : python3 Excelparser.py <directory> <file_name> <read/write>")
         sys.exit(1)
 
     start_time = time.time()
