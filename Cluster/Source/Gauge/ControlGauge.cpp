@@ -48,15 +48,23 @@ void ControlGauge::initNormalData() {
     // Handler Data
     updateDataHandler(ivis::common::PropertyEnum::GaugeDefaultAngle, mDefaultAngle);
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, 260);
-    updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, 2000);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, 260);
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperature, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, mDefaultAngle);
-    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle, mDefaultAngle);
     updateDataHandler(ivis::common::PropertyEnum::GaugeFuelAngle, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeTemperatureAngle, 0);
     updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedUnit,
                       static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::KM_PER_HOUR));
+
+    // Tachometer Contant
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmState, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle, mDefaultAngle);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRedZoneExceptNbrandStat, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRedZoneNbrandStat, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeMaxRpmStat, 0);
+    updateDataHandler(ivis::common::PropertyEnum::GaugeRpmDampStat, 0);
 }
 
 void ControlGauge::initControlData() {
@@ -183,6 +191,7 @@ qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValu
             break;
         }
         default: {
+            qDebug() << "default";
             break;
         }
     }
@@ -192,29 +201,94 @@ qreal ControlGauge::isGaugeAngle(const int& gaugeType, const QVariant& gaugeValu
 
 void ControlGauge::updateGaugeInfo(const int& dataType, const QVariant& dataValue) {
     switch (dataType) {
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed: {
-            int speedUnit = getData(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedUnit).toInt();
+        // Speed_Gauge
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeAnalogSpeedState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngleState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeAnalogSpeed: {
+            int speedUnit = getData(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedMainDisplayUnitState).toInt();
             int gaugeType = ((speedUnit == static_cast<int>(ivis::common::SpeedUnitType::SpeedUnit::MILE_PER_HOUR))
                                  ? (ivis::common::GaugeTypeEnum::GaugeTypeSpeedMile)
                                  : (ivis::common::GaugeTypeEnum::GaugeTypeSpeed));
-            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, dataValue);
             updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAngle, isGaugeAngle(gaugeType, dataValue));
             break;
         }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeed, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDigitalState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedSubDigitalState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDigital: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedSubDigital, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedMainDisplayUnitState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedUnit, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedAuxDisplayUnitState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedAuxDisplayUnit, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDisplayState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedSubDisplayState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedScaleMaximumState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedScaleMaxState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitState: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedNaviSpeedLimitState, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitOver1ColorValue: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedNaviSpeedLimitOver1ColorValue, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitOver2ColorValue: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeSpeedNaviSpeedLimitOver2ColorValue, dataValue);
+            break;
+        }
+        // Tachometer(Rpm Gauge)
         case ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeRpm, dataValue);
             updateDataHandler(ivis::common::PropertyEnum::GaugeRpmAngle,
                               isGaugeAngle(ivis::common::GaugeTypeEnum::GaugeTypeRpm, dataValue));
             break;
         }
-        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel: {
-            updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, dataValue);
-            // updateDataHandler(ivis::common::PropertyEnum::GaugeFuelAngle, dataValue);
+        case ivis::common::ServiceDataTypeEnum::ServiceDataRedZoneExceptNbrandStat: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeRedZoneExceptNbrandStat, dataValue);
             break;
         }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataRedZoneNbrandStat: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeRedZoneNbrandStat, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataMaxRpmStat: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeMaxRpmStat, dataValue);
+            break;
+        }
+        case ivis::common::ServiceDataTypeEnum::ServiceDataRpmDampStat: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeRpmDampStat, dataValue);
+            break;
+        }
+        // Fuel
+        case ivis::common::ServiceDataTypeEnum::ServiceDataTypeFuel: {
+            updateDataHandler(ivis::common::PropertyEnum::GaugeFuel, dataValue);
+            break;
+        }
+        // Temperature
         case ivis::common::ServiceDataTypeEnum::ServiceDataTypeTemperature: {
             updateDataHandler(ivis::common::PropertyEnum::GaugeTemperature, dataValue);
-            // updateDataHandler(ivis::common::PropertyEnum::GaugeTemperatureAngle, dataValue);
             break;
         }
         default: {
@@ -273,9 +347,41 @@ void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signal
         case DataType::Constant: {
             Constant constantType = static_cast<Constant>(signalType);
             if (constantType == Constant::SpeedAnalogStat) {
-                propertyData[ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed] = signalType;
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeAnalogSpeedState, signalValue);
+            } else if (constantType == Constant::SpeedAnalogValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeAnalogSpeed, signalValue);
             } else if (constantType == Constant::SpeedDigitalStat) {
-                propertyData[ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm] = signalType;
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedState, signalValue);
+            } else if (constantType == Constant::SpeedDigitalValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeed, signalValue);
+            } else if (constantType == Constant::SpeedSubDigitalStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDigitalState, signalValue);
+            } else if (constantType == Constant::SpeedSubDigitalValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDigital, signalValue);
+            } else if (constantType == Constant::SpeedMainDisplayUnitStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedMainDisplayUnitState, signalValue);
+            } else if (constantType == Constant::SpeedAuxDisplayUnitStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedAuxDisplayUnitState, signalValue);
+            } else if (constantType == Constant::SpeedSubDisplayStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedSubDisplayState, signalValue);
+            } else if (constantType == Constant::SpeedScaleMaximumStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeSpeedScaleMaximumState, signalValue);
+            } else if (constantType == Constant::NaviSpeedLimitStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitState, signalValue);
+            } else if (constantType == Constant::NaviSpeedLimitOver1ColorValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitOver1ColorValue, signalValue);
+            } else if (constantType == Constant::NaviSpeedLimitOver2ColorValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeNaviSpeedLimitOver2ColorValue, signalValue);
+            } else if (constantType == Constant::RpmValue) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataTypeRpm, signalValue);
+            } else if (constantType == Constant::RedZoneExceptNbrandStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataRedZoneExceptNbrandStat, signalValue);
+            } else if (constantType == Constant::RedZoneNbrandStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataRedZoneNbrandStat, signalValue);
+            } else if (constantType == Constant::MaxRpmStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataMaxRpmStat, signalValue);
+            } else if (constantType == Constant::RpmDampStat) {
+                updateGaugeInfo(ivis::common::ServiceDataTypeEnum::ServiceDataRpmDampStat, signalValue);
             } else {
             }
             break;

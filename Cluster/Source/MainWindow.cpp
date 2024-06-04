@@ -37,14 +37,6 @@ MainWindow::MainWindow(QQuickView* parent) : QQuickView(parent) {
 
 #if defined(__MODULE_SUB_WINDOW__)
     mSubWindow = new SubWindow();
-
-#if 0
-    QWidget* centralWidget = static_cast<QWidget*>(mSubWindow);
-    QWidget* container = QWidget::createWindowContainer(this);
-    container->setMinimumSize(this->size());
-    container->setFocusPolicy(Qt::TabFocus);
-    container->setCentralWidget(centralWidget);
-#endif
     checkTimer.check("SubWindow");
 #endif
 }

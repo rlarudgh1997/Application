@@ -121,18 +121,38 @@ public:
     enum GaugeType {
         GaugeInvalid = PROPETRY_START_GAUGE,
         GaugeDefaultAngle,
+
+        // Speed_Gauge
         GaugeSpeed,
-        GaugeRpm,
-        GaugeFuel,
-        GaugeTemperature,
         GaugeSpeedAngle,
-        GaugeRpmAngle,
-        GaugeFuelAngle,
-        GaugeTemperatureAngle,
+        GaugeSpeedAngleState,
         GaugeSpeedUnit,
+        GaugeSpeedAuxDisplayUnit,
         GaugeSpeedState,
+        GaugeSpeedSubDigital,
         GaugeSpeedSubDigitalState,
+        GaugeSpeedSubDisplayState,
+        GaugeSpeedScaleMaxState,
+        GaugeSpeedNaviSpeedLimitState,
+        GaugeSpeedNaviSpeedLimitOver1ColorValue,
+        GaugeSpeedNaviSpeedLimitOver2ColorValue,
+
+        // Tachometer(Rpm Gauge)
         GaugeRpmState,
+        GaugeRpm,
+        GaugeRpmAngle,
+        GaugeRedZoneExceptNbrandStat,
+        GaugeRedZoneNbrandStat,
+        GaugeMaxRpmStat,
+        GaugeRpmDampStat,
+
+        // Fuel
+        GaugeFuel,
+        GaugeFuelAngle,
+
+        // Temperature
+        GaugeTemperature,
+        GaugeTemperatureAngle,
     };
     Q_ENUMS(GaugeType)
 
@@ -393,14 +413,39 @@ public:
     enum ServiceDataType {
         ServiceDataTypeInvalid = 0,
 
+        // Speed Gauge
+        //// Analog speed
+        ServiceDataTypeAnalogSpeedState,
+        ServiceDataTypeAnalogSpeed,
+        //// Digital speed
+        ServiceDataTypeSpeedState,
         ServiceDataTypeSpeed,
+        //// Sub digital
+        ServiceDataTypeSpeedSubDigitalState,
+        ServiceDataTypeSpeedSubDigital,
+        //// Display unit
+        ServiceDataTypeSpeedMainDisplayUnitState,
+        ServiceDataTypeSpeedAuxDisplayUnitState,
+        //// Sub display stat
+        ServiceDataTypeSpeedSubDisplayState,
+        //// Speed scale max
+        ServiceDataTypeSpeedScaleMaximumState,
+        //// navi
+        ServiceDataTypeNaviSpeedLimitState,
+        ServiceDataTypeNaviSpeedLimitOver1ColorValue,
+        ServiceDataTypeNaviSpeedLimitOver2ColorValue,
+
+        // Tachometer(Rpm Gauge)
+        ServiceDataTypeRpmState,
         ServiceDataTypeRpm,
+        ServiceDataRedZoneExceptNbrandStat,
+        ServiceDataRedZoneNbrandStat,
+        ServiceDataMaxRpmStat,
+        ServiceDataRpmDampStat,
+
+        // etc
         ServiceDataTypeFuel,
         ServiceDataTypeTemperature,
-        ServiceDataTypeSpeedUnit,
-        ServiceDataTypeSpeedState,
-        ServiceDataTypeSpeedSubDigitalState,
-        ServiceDataTypeRpmState,
 
         ServiceDataTypeMax,
     };

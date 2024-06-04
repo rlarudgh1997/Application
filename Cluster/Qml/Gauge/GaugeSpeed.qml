@@ -37,7 +37,7 @@ Item {
     // Component.onCompleted: {
     //     speedNiddleRotation.angle = speedAngle
     // }
-    
+
     onSpeedAngleChanged: {
         if (speedGaugeAnimation.running) {
             speedGaugeAnimation.stop()
@@ -57,7 +57,15 @@ Item {
     // Speed Gauge : BG, Unit, Text
     Item {
         id: speedBg
-        visible: ((dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) || (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR))
+        visible: {
+            if ((dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) || (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR)) {
+                true
+            } else {
+                console.warn("Unavailable SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat....")
+                console.warn("Your SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat is ", dataModelGauge.gaugeSpeedUnit)
+                false
+            }
+        }
         Image {
             id: speedMainBg; x: 54; y: 54;
             source: "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_image_05.png"
@@ -74,32 +82,18 @@ Item {
                 }
             }
         }
-        Image {
-            id: speedUnit; x: 314; y: 404;
-            source: {
-                if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
-                    "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_mainspd_unit_card_01.png"
-                } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
-                    "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_mainspd_unit_card_02.png"
-                } else {
-                    ""
-                }
-            }
-        }
-        Text {
-            id: subSpeedDisital
-            x: 53; y: 587; width: 160; height: 50; font.pixelSize: 20; color: "white"
-            horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
-            text: {
-                if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
-                    dataModelGauge.gaugeSpeed + " km/h"
-                } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
-                    dataModelGauge.gaugeSpeed + " MPH"
-                } else {
-                    ""
-                }
-            }
-        }
+        // Image {
+        //     id: speedUnit; x: 314; y: 404;
+        //     source: {
+        //         if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
+        //             "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_mainspd_unit_card_01.png"
+        //         } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
+        //             "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_mainspd_unit_card_02.png"
+        //         } else {
+        //             ""
+        //         }
+        //     }
+        // }
     }
 
 
@@ -232,7 +226,7 @@ Item {
     // Speed Gauge : Digit Number - MPH
     Item {
         id: speedNumMPH
-        visible: (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.SpeedUnitType)
+        visible: (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR)
         Image {
             id: speednum0MPH; x: 108; y: 435
             source: {
@@ -324,9 +318,7 @@ Item {
                 }
             }
         }
-
     }
-
 
 
     Image {
@@ -339,5 +331,150 @@ Item {
             id: speedNiddleRotation; origin.x: 6; origin.y: 180; angle: -123
         }
         source: "qrc:/Image/Gauge/Speed/T1_THEME_A_thm1_COMFORT/t1_thm1_speedo_image_01.png"
+    }
+
+    Text {
+        // visible: (dataModelGauge.gaugeSpeedState === 2)
+        font.strikeout: {
+            if (dataModelGauge.gaugeSpeedState !== 2) {
+                true
+            } else {
+                false
+            }
+        }
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 100
+        }
+        width: 200; height: 100; font.pixelSize: 50; color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        text: {
+            if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
+                gaugeSpeed + " km/h"
+            } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
+                gaugeSpeed + " MPH"
+            } else {
+                console.warn("Warn : Not a supported unit type...")
+                "Unavailable Unit (u): 0x" + dataModelGauge.gaugeSpeedUnit.toString(16)
+            }
+        }
+    }
+
+    Text {
+        // visible: (dataModelGauge.gaugeSpeedSubDigitalState === 2)
+        font.strikeout: {
+            if (dataModelGauge.gaugeSpeedSubDigitalState !== 2) {
+                true
+            } else {
+                false
+            }
+        }
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 160
+        }
+        width: 200; height: 100; font.pixelSize: 30; color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        text: {
+            if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.KM_PER_HOUR) {
+                dataModelGauge.gaugeSpeedSubDigital + " MPH"
+            } else if (dataModelGauge.gaugeSpeedUnit === SpeedUnitType.MILE_PER_HOUR) {
+                dataModelGauge.gaugeSpeedSubDigital + " km/h"
+            } else {
+                console.warn("Warn : Not a supported unit type...")
+                "Unavailable Unit (u): 0x" + dataModelGauge.gaugeSpeedUnit.toString(16)
+            }
+        }
+    }
+
+    Text {
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 190
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 15; color: "grey"
+        text: {
+            "Speed_Gauge.Constant.NaviSpeedLimit.Stat: 0x" + dataModelGauge.gaugeSpeedNaviSpeedLimitState.toString(16)
+        }
+    }
+
+    Text {
+        visible: (dataModelGauge.gaugeSpeedNaviSpeedLimitState === 1 || dataModelGauge.gaugeSpeedNaviSpeedLimitState === 2 || dataModelGauge.gaugeSpeedNaviSpeedLimitState === 3)
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 210
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 15; color: "grey"
+        text: {
+            if (dataModelGauge.gaugeSpeedNaviSpeedLimitState === 1) {
+                "Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value : 0x" + dataModelGauge.gaugeSpeedNaviSpeedLimitOver1ColorValue.toString(16)
+            } else if (dataModelGauge.gaugeSpeedNaviSpeedLimitState === 2) {
+                "Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value : 0x" + dataModelGauge.gaugeSpeedNaviSpeedLimitOver2ColorValue.toString(16)
+            } else {
+                console.warn("Warn : Not a supported NaviSpeedLimitStat...")
+                ""
+            }
+        }
+    }
+
+    Text {
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 230
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 15; color: "grey"
+        text: {
+            "Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat: 0x" + dataModelGauge.gaugeSpeedAuxDisplayUnit.toString(16)
+        }
+    }
+
+    Text {
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 250
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 15; color: "grey"
+        text: {
+            "Speed_Gauge.Constant.SpeedSubDisplay.Stat: 0x" + dataModelGauge.gaugeSpeedSubDisplayState.toString(16)
+        }
+    }
+
+    Text {
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: 270
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 15; color: "grey"
+        text: {
+            if (gaugeSpeedScaleMaxState === 1) {
+                "Speed_Gauge.Constant.SpeedScaleMaximum.Stat: 0x1"
+            } else if (gaugeSpeedScaleMaxState === 2) {
+                "Speed_Gauge.Constant.SpeedScaleMaximum.Stat: 0x2"
+            } else if (gaugeSpeedScaleMaxState === 3) {
+                "Speed_Gauge.Constant.SpeedScaleMaximum.Stat: 0x3"
+            } else if (gaugeSpeedScaleMaxState === 4) {
+                "Speed_Gauge.Constant.SpeedScaleMaximum.Stat: 0x4"
+            } else {
+                "Speed_Gauge.Constant.SpeedScaleMaximum.Stat: undefined"
+            }
+        }
+    }
+
+    Text {
+        visible: (dataModelGauge.gaugeSpeedAngleState !== 2)
+        anchors{
+            centerIn: speedNiddlePointer
+            verticalCenterOffset: -100
+        }
+        horizontalAlignment: Text.AlignHCenter
+        width: 50; height: 100; font.pixelSize: 50; color: "white"
+        text: {
+            "Analog Speed stat error\n(stat value: 0x" + dataModelGauge.gaugeSpeedAngleState.toString(16) + ")"
+        }
     }
 }

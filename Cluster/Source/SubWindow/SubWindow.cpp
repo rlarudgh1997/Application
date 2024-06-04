@@ -52,7 +52,7 @@ SubWindow::~SubWindow() {
 
 void SubWindow::init() {
     // excuteScript(false, QString(), QStringList());
-#if 1    // defined(__SUB_WINDOW_ONLY__)
+#if 1  // defined(__SUB_WINDOW_ONLY__)
     Service::instance().data();
     Service::instance().data()->init();
 #endif
@@ -206,23 +206,23 @@ void SubWindow::controlConnect(const bool& state) {
                 //     updateHmiLog(singleValueInfo);
                 // }
             });
-    connect(Service::instance().data(), &Service::signalServiceDatasChanged,
-            [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
-                QString multiValueInfo = QString();
-                for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
-                    QString sfcName = iter.key();
-                    QVariant sfcValue = iter.value();
-                    if (getCheckSfcSignal().contains(sfcName)) {
-                        multiValueInfo.append(QString("  Received : %1 = %2\n").arg(sfcName).arg(sfcValue.toString()));
-                    }
+    connect(
+        Service::instance().data(), &Service::signalServiceDatasChanged,
+        [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+            QString multiValueInfo = QString();
+            for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+                QString sfcName = iter.key();
+                QVariant sfcValue = iter.value();
+                if (getCheckSfcSignal().contains(sfcName)) {
+                    multiValueInfo.append(QString("  Received : %1 = %2\n").arg(sfcName).arg(sfcValue.toString()));
                 }
-                if (multiValueInfo.size() > 0) {
-                    multiValueInfo.prepend(
-                            QString("Singal Received - %1\n").arg((signalValues.size() > 1) ? ("Group") : ("Single")));
-                    multiValueInfo.append("\n");
-                    updateHmiLog(multiValueInfo);
-                }
-            });
+            }
+            if (multiValueInfo.size() > 0) {
+                multiValueInfo.prepend(QString("Singal Received - %1\n").arg((signalValues.size() > 1) ? ("Group") : ("Single")));
+                multiValueInfo.append("\n");
+                updateHmiLog(multiValueInfo);
+            }
+        });
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {

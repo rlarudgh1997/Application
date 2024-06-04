@@ -533,7 +533,7 @@ public:
         // join();
     }
     void setLibInfo(const QStringList& libInfo) {
-        for (const auto info : libInfo) {
+        for (const auto& info : libInfo) {
             mCheckInfo[mCheckInfo.size()] = QPair<QString, bool>(info, false);
         }
     }

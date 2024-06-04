@@ -51,15 +51,13 @@ private:
     template <typename TYPE>
     void subscribeSignals(const DataType& datatType,
                           const std::vector<std::pair<TYPE, std::vector<std::string>>>& signalsToSubscribe);
-    QVariant isSignalValue(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal,
-                           QHash<QString, QVariant>& values);
+    QVariant isSignalValue(const ccos::vehicle::vsm::HVehicleSignal& vehicleSignal, QHash<QString, QVariant>& values);
     template <typename TYPE>
     void onSignalChanged(const DataType& dataType, const TYPE& signalType,
                          const std::vector<ccos::vehicle::vsm::HVehicleSignal>& signalList);
 
 signals:
     void signalServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
-    void signalServiceDatasChanged(const int& dataType, const int& signalType,
-                                   const QHash<QString, QVariant>& signalValues);
+    void signalServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues);
 };
 #endif  // SERIVCE_H

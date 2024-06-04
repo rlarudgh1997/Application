@@ -2,7 +2,7 @@
 #include "CommonEnum.h"
 
 #define QML QString("qrc:/Event/Event.qml")
-#define QML_OBJECT QString("dataModelEvent")  // DataModelHome.qml : ojbectName
+#define QML_OBJECT QString("dataModelEvent")  // DataModelEvent.qml : ojbectName
 
 QSharedPointer<HandlerEvent>& HandlerEvent::instance() {
     static QSharedPointer<HandlerEvent> gHandler;

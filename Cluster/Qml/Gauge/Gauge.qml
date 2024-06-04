@@ -41,15 +41,4 @@ DataModelGauge {
 
     GaugeSpeed { id: gaugeSpeedItem; x:8; y:2 }
     GaugeRpm { id: gaugeRpmItem; x: 1212; y:2 }
-
-
-    // Text {
-    //     x: 700; y: 400; width: 200; height: 100; font.pixelSize: 50; color: "red"
-    //     text: gaugeSpeed
-    // }
-    // Text {
-    //     x: 1100; y: 400; width: 200; height: 100; font.pixelSize: 50; color: "red"
-    //     text: gaugeRpm
-    // }
-
 }

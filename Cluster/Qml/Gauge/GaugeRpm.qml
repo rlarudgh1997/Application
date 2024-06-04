@@ -140,4 +140,27 @@ Item {
         }
         source: "qrc:/Image/Gauge/RPM/T1_THEME_A_thm1_COMFORT/t1_thm1_tacho_image_01.png"
     }
+
+    Text {
+        anchors {
+            centerIn: rpmNiddlePointer
+            verticalCenterOffset: 100
+        }
+        width: 50; height: 100; font.pixelSize: 50; color: "white"
+        horizontalAlignment: Text.AlignHCenter
+        text: gaugeRpm + " RPM"
+    }
+
+    Text {
+        anchors {
+            centerIn: rpmNiddlePointer
+            verticalCenterOffset: 190
+        }
+        width: 50; height: 100; font.pixelSize: 20; color: "gray"
+        horizontalAlignment: Text.AlignHCenter
+        text: "Tachometer.Constant.RedZoneExceptNbrand.Stat:" + gaugeRedZoneExceptNbrandStat +
+              "\nTachometer.Constant.RedZoneNbrand.Stat:" + gaugeRedZoneNbrandStat +
+              "\nTachometer.Constant.MaxRpm.Stat:" + gaugeMaxRpmStat +
+              "\nTachometer.Constant.RpmDamp.Stat:" + gaugeRpmDampStat
+    }
 }
