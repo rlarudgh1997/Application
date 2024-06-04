@@ -22,6 +22,16 @@ RESOURCES += \
     $$PWD/Qml/Qml.qrc\
     $$PWD/Resource/Image.qrc\
 
+# Delete : File
+QMAKE_CLEAN += \
+    $$PWD/../TAV/*.info \
+    $$PWD/../TAV/*.sh \
+QMAKE_DISTCLEAN = $${QMAKE_CLEAN}
+
+# Delete : Folder
+# QMAKE_CLEAN_DIRS += \
+#     $$PWD/../deploy_* \
+# QMAKE_DISTCLEAN_DIRS += $${QMAKE_CLEAN_DIRS}
 
 
 contains(DEFINES, TARGET_BUILD) {

@@ -80,6 +80,9 @@ function platformClean(){
 	for COMPILE_PATH in "${COMPILE_PATH_ARR[@]}"; do
 		find -name $COMPILE_PATH -type d -exec rm -rfv {} \;
 	done
+
+#	rm -rf $PROJECT_DIR/TAV/*.info
+#	rm -rf $PROJECT_DIR/TAV/*.sh
 }
 
 function cleanAll(){
