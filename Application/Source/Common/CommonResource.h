@@ -111,6 +111,8 @@
 #define STRING_POPUP_INSTALL_COMPLETE_TIP QString("Python-related libraries have been installed.")
 #define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect. Please select again.")
 
+#define STRING_POPUP_CONFIG_RESET QString("Reset config value")
+#define STRING_POPUP_CONFIG_RESET_TIP QString("Do you want to reset the config value?")
 #define STRING_POPUP_FILE_NOT_EXIST QString("File doesn't exist")
 #define STRING_POPUP_FILE_NOT_EXIST_TIP QString("VSM file not found.\nDo you want to set SFC model path?")
 #define STRING_POPUP_DEFAULT_PATH_ERROR QString("Default path error")

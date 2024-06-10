@@ -14,7 +14,25 @@
    <string>Form</string>
   </property>
   <widget class="QWidget" name="Invalid"/>
-  <widget class="QWidget" name="ConfigView">
+  <widget class="QTableWidget" name="ConfigView">
+   <widget class="QPushButton" name="ConfigViewReset">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>60</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
    <widget class="QPushButton" name="ConfigViewClose">
     <property name="geometry">
      <rect>
@@ -33,24 +51,6 @@
     </property>
     <property name="text">
      <string>X</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="ConfigViewReset">
-    <property name="geometry">
-     <rect>
-      <x>1200</x>
-      <y>60</y>
-      <width>100</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>13</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Reset</string>
     </property>
    </widget>
   </widget>
@@ -110,6 +110,46 @@
     <property name="text">
      <string>Select
 Module</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="ConfigViewItem">
+   <widget class="QPushButton" name="ConfigViewItemClose">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>5</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ConfigViewItemReset">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>60</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Reset</string>
     </property>
    </widget>
   </widget>

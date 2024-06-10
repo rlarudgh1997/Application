@@ -336,18 +336,15 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
     switch (type) {
         case ConfigInfo::ConfigTypeInit:
-        case ConfigInfo::ConfigTypeSfcModelPath: {
-            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
-                updateConfigInfo();
-            }
-            break;
-        }
+        case ConfigInfo::ConfigTypeSfcModelPath:
         case ConfigInfo::ConfigTypeScreenInfo: {
             if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
                 updateConfigInfo();
             }
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
-                              ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
+            if (type == ConfigInfo::ConfigTypeScreenInfo) {
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeScreenInfo,
+                                  ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
+            }
             break;
         }
         default: {
@@ -376,7 +373,14 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeConfigReset: {
             int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
             if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
-                ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
+                ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+                QVariantList text = QVariantList(
+                    {STRING_POPUP_CONFIG_RESET, STRING_POPUP_CONFIG_RESET_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
+                QVariant popupData = QVariant();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::RestConfigValue, isHandler(), popupData,
+                                                QVariant(text)) == ivis::common::PopupButton::Confirm) {
+                    ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
+                }
             }
             break;
         }

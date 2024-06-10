@@ -25,6 +25,11 @@ void GuiCenter::drawDisplayDepth0() {
     updateDisplayVisible();
 
     // Config View
+    connect(mGui->ConfigView, &QTableWidget::itemChanged, [=](QTableWidgetItem* item) {
+        if ((getConfigUpdating() == false) && (item != nullptr)) {
+            createSignal(ivis::common::EventTypeEnum::EventTypeUpdateConfig, QVariantList{item->row() + 1, item->text()});
+        }
+    });
     connect(mGui->ConfigViewClose, &QPushButton::clicked, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeConfig));
     });
@@ -38,6 +43,15 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
+
+#if defined(USE_CONFIG_VIEW_ITEM)
+    // Config View - Item
+    connect(mGui->ConfigViewItemClose, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeConfig));
+    });
+    connect(mGui->ConfigViewItemReset, &QPushButton::clicked,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
+#endif
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -111,12 +125,13 @@ void GuiCenter::updateDrawDialog(const int& dialogType, const QVariantList& info
     mDialog.data()->drawDialog(dialogType, info);
 }
 
+#if defined(USE_CONFIG_VIEW_ITEM)
 void GuiCenter::updateDisplayConfigInfo() {
     QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
     QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
     // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
 
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeConfig);
+    mMainView->setCurrentIndex(3);
 
     if (prevConfig == currConfig) {
         for (const auto& item : mConfigListItem) {
@@ -182,6 +197,82 @@ void GuiCenter::updateDisplayConfigInfo() {
         index++;
     }
 }
+#else
+void GuiCenter::updateDisplayConfigInfo() {
+    QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
+    QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
+    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
+
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeConfig);
+    setConfigUpdating(true);
+
+    QStringList title = QStringList({"Config Name", "Config Value"});
+    mGui->ConfigView->setRowCount(currConfig.size());
+    mGui->ConfigView->setColumnCount(title.size());
+    mGui->ConfigView->setGeometry(mGui->ConfigView->geometry());
+    mGui->ConfigView->setHorizontalHeaderLabels(title);
+
+    QList<QPair<QString, QString>> configInfo;
+    for (const auto& info : currConfig) {
+        QVariantList config = info.toList();
+        if (config.size() != 3) {
+            continue;
+        }
+        int type = config.at(0).toInt();
+        QString name = config.at(1).toString();
+        QVariant value = config.at(2);
+        QString realValue = QString();
+        switch (value.type()) {
+            case QVariant::Type::List: {
+                for (const auto& v : value.toList()) {
+                    realValue.append(QString("%1, ").arg(v.toString()));
+                }
+                realValue.resize(realValue.size() - 2);
+                break;
+            }
+            case QVariant::Type::StringList: {
+                for (const auto& v : value.toStringList()) {
+                    realValue.append(QString("%1, ").arg(v));
+                }
+                realValue.resize(realValue.size() - 2);
+                break;
+            }
+            case QVariant::Type::Rect: {
+                QRect rect = value.toRect();
+                realValue.append(QString("%1, %2, %3, %4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
+                break;
+            }
+            default: {
+                realValue = value.toString();
+                break;
+            }
+        }
+        configInfo.append(qMakePair(name, realValue));
+    }
+
+    int rowIndex = 0;
+    for (const auto& config : configInfo) {
+        for (int columnIndex = 0; columnIndex < title.size(); ++columnIndex) {
+            QTableWidgetItem* item = new QTableWidgetItem((columnIndex == 0) ? (config.first) : (config.second));
+            mGui->ConfigView->setItem(rowIndex, columnIndex, item);
+
+            QHeaderView::ResizeMode resizeMode = (columnIndex == 0) ? QHeaderView::Fixed : QHeaderView::ResizeToContents;
+            mGui->ConfigView->horizontalHeader()->setSectionResizeMode(columnIndex, resizeMode);
+
+            Qt::ItemFlags flags = mGui->ConfigView->item(rowIndex, columnIndex)->flags();
+            flags = (columnIndex == 0) ? (flags & ~Qt::ItemIsEditable) : (flags | Qt::ItemIsEditable);
+            mGui->ConfigView->item(rowIndex, columnIndex)->setFlags(flags);
+        }
+        mGui->ConfigView->verticalHeader()->resizeSection(rowIndex, 30);
+        rowIndex++;
+    }
+    // mGui->ConfigView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mGui->ConfigView->resizeColumnsToContents();
+    // mGui->ConfigView->resizeRowsToContents();
+
+    setConfigUpdating(false);
+}
+#endif
 
 void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();

@@ -24,6 +24,7 @@
 #include "Dialog.h"
 #include "ui_GuiCenter.h"
 
+#if defined(USE_CONFIG_VIEW_ITEM)
 class ListItem : public QObject {
     Q_OBJECT
 
@@ -109,12 +110,14 @@ private:
     QLabel* mDispaly = nullptr;
     QLineEdit* mEdit = nullptr;
 };
+#endif
 
 class GuiCenter : public AbstractGui {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(int, ScrolBarValue, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, NodeAddress, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(bool, ConfigUpdating, false, false)
 
 public:
     static QSharedPointer<GuiCenter>& instance(AbstractHandler* handler = nullptr);
@@ -141,7 +144,9 @@ private:
     Ui::GuiCenter* mGui = nullptr;
     QStackedWidget* mMainView = nullptr;
     QSharedPointer<Dialog> mDialog = nullptr;
+#if defined(USE_CONFIG_VIEW_ITEM)
     QMap<int, ListItem*> mConfigListItem = QMap<int, ListItem*>();
+#endif
 };
 
 #endif  // GUI_CENTER_H

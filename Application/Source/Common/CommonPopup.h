@@ -35,6 +35,7 @@ enum class PopupType {
     New,
     NoInstallLib,
     FileNotExist,
+    RestConfigValue,
 
     AboutQt,
     Open,
@@ -92,7 +93,8 @@ public:
             case PopupType::Exit:
             case PopupType::New:
             case PopupType::NoInstallLib:
-            case PopupType::FileNotExist: {
+            case PopupType::FileNotExist:
+            case PopupType::RestConfigValue: {
                 button = drawPopupSelect(popupType, handler, value);
                 break;
             }
@@ -176,7 +178,8 @@ private:
             button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
             connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
             connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-        } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist)) && (list.size() == 4)) {
+        } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist) ||
+                     (popupType == PopupType::RestConfigValue)) && (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
             button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
@@ -193,6 +196,11 @@ private:
         } else {
         }
 
+        connect(&selectBox, &QMessageBox::finished, [&](int result) {
+            if (result == QMessageBox::Rejected) {
+                buttonType = PopupButton::Cancel; // X 버튼 또는 Esc 키 눌렀을 때 처리
+            }
+        });
         if (button.size() == 0) {
             return PopupButton::Invalid;
         }

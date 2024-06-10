@@ -103,6 +103,10 @@ QVariant ConfigSetting::isConfigName(const int& configType) {
 }
 
 void ConfigSetting::editConfig(const int& configType, const QVariant& configValue) {
+    if (readConfig(configType) == configValue) {
+        qDebug() << "Skip - Config value is the same value. :" << configValue;
+        return;
+    }
     QVariant editValue = QVariant();
     switch (configType) {
         case ConfigInfo::ConfigTypeNewSheetRowCount: {
