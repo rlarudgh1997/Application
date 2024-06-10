@@ -43,15 +43,6 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
-
-#if defined(USE_CONFIG_VIEW_ITEM)
-    // Config View - Item
-    connect(mGui->ConfigViewItemClose, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeConfig));
-    });
-    connect(mGui->ConfigViewItemReset, &QPushButton::clicked,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
-#endif
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -125,79 +116,6 @@ void GuiCenter::updateDrawDialog(const int& dialogType, const QVariantList& info
     mDialog.data()->drawDialog(dialogType, info);
 }
 
-#if defined(USE_CONFIG_VIEW_ITEM)
-void GuiCenter::updateDisplayConfigInfo() {
-    QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
-    QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
-
-    mMainView->setCurrentIndex(3);
-
-    if (prevConfig == currConfig) {
-        for (const auto& item : mConfigListItem) {
-            item->initStyle();
-        }
-        return;
-    }
-
-    bool newItem = (prevConfig.size() != currConfig.size());
-    if (newItem) {
-        for (const auto& item : mConfigListItem) {
-            item->clear();
-        }
-        mConfigListItem.clear();
-    }
-
-    int index = 0;
-    for (const auto& info : currConfig) {
-        QVariantList config = info.toList();
-        if (config.size() != 3) {
-            continue;
-        }
-        int type = config.at(0).toInt();
-        QString name = config.at(1).toString();
-        QVariant value = config.at(2);
-        QString realValue = QString();
-        switch (value.type()) {
-            case QVariant::Type::List: {
-                for (const auto& v : value.toList()) {
-                    realValue.append(QString("%1, ").arg(v.toString()));
-                }
-                realValue.resize(realValue.size() - 2);
-                break;
-            }
-            case QVariant::Type::StringList: {
-                for (const auto& v : value.toStringList()) {
-                    realValue.append(QString("%1, ").arg(v));
-                }
-                realValue.resize(realValue.size() - 2);
-                break;
-            }
-            case QVariant::Type::Rect: {
-                QRect rect = value.toRect();
-                realValue.append(QString("%1, %2, %3, %4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
-                break;
-            }
-            default: {
-                realValue = value.toString();
-                break;
-            }
-        }
-
-        if (newItem) {
-            mConfigListItem[index] = new ListItem(index, type, name, realValue, mMainView->currentWidget());
-            connect(mConfigListItem[index], &ListItem::signalValueChanged, [=](const int& type, const QVariant& value) {
-                createSignal(ivis::common::EventTypeEnum::EventTypeUpdateConfig, QVariant(QVariantList{type, value}));
-            });
-        } else {
-            if (mConfigListItem[index]) {
-                mConfigListItem[index]->setData(name, realValue);
-            }
-        }
-        index++;
-    }
-}
-#else
 void GuiCenter::updateDisplayConfigInfo() {
     QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
     QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
@@ -272,7 +190,6 @@ void GuiCenter::updateDisplayConfigInfo() {
 
     setConfigUpdating(false);
 }
-#endif
 
 void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
