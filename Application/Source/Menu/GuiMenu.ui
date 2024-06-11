@@ -298,7 +298,7 @@
     <string>Gen TC</string>
    </property>
    <property name="shortcut">
-    <string>Shift+G</string>
+    <string>Alt+G</string>
    </property>
   </action>
   <action name="actionRunTC">
@@ -306,7 +306,7 @@
     <string>Run TC</string>
    </property>
    <property name="shortcut">
-    <string>Shift+R</string>
+    <string>Alt+R</string>
    </property>
   </action>
   <action name="actionTCReport">
@@ -314,7 +314,7 @@
     <string>TC Report</string>
    </property>
    <property name="shortcut">
-    <string>Shift+T</string>
+    <string>Alt+T</string>
    </property>
   </action>
   <action name="actionGCOVReport">
@@ -322,7 +322,7 @@
     <string>GCOV Report</string>
    </property>
    <property name="shortcut">
-    <string>Shift+C</string>
+    <string>Alt+O</string>
    </property>
   </action>
   <action name="actionEnterScriptText">
@@ -330,7 +330,7 @@
     <string>Enter Script Text</string>
    </property>
    <property name="shortcut">
-    <string>Shift+E</string>
+    <string>Alt+E</string>
    </property>
   </action>
   <action name="actionViewScriptLog">
@@ -338,7 +338,7 @@
     <string>View Script Log</string>
    </property>
    <property name="shortcut">
-    <string>Shift+L</string>
+    <string>Alt+L</string>
    </property>
   </action>
   <action name="actionGenSSFS">
@@ -346,7 +346,7 @@
     <string>Gen SSFS</string>
    </property>
    <property name="shortcut">
-    <string>Shift+S</string>
+    <string>Alt+S</string>
    </property>
   </action>
   <action name="actionAbout">

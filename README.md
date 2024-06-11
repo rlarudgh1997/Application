@@ -1,4 +1,9 @@
 =====================================================================
+# [Docker 앱 실행]
+	./run.sh xs 10.45.143.61
+
+
+=====================================================================
 # [Repo 정보]
 	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
@@ -137,6 +142,10 @@
 	cd ${HOME}/900_Code/620_SFC
 	mkdir build
 	cd build
+
+	# 기존 CV, PV 산출물 관련 파일 삭제
+	rm -rf $HOME/900_Code/620_SFC/model/ssfs/include/generated/
+	rm -rf $HOME/900_Code/620_SFC/model/ssfs/src/generated/
 
 	# PV
 		unset LD_LIBRARY_PATH
