@@ -151,7 +151,7 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
     mDialog.data()->drawDialog(dialogType, info);
 }
 
-bool GuiExcel::chcekExcleSheet(const int& sheetIndex) {
+bool GuiExcel::chcekExcelSheet(const int& sheetIndex) {
     if (mExcelSheet.size() == 0) {
         qDebug() << "Fail to - excel sheet was not created";
         return true;
@@ -170,7 +170,7 @@ bool GuiExcel::chcekExcleSheet(const int& sheetIndex) {
 }
 
 QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         qDebug() << "Fail to excel sheet nullptr : " << sheetIndex << ", size :" << mExcelSheet.size();
         return QVariantList();
     }
@@ -254,7 +254,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
 }
 
 void GuiExcel::readAllExcelSheet() {
-    if (chcekExcleSheet(0)) {
+    if (chcekExcelSheet(0)) {
         return;
     }
 
@@ -274,7 +274,7 @@ void GuiExcel::readAllExcelSheet() {
 }
 
 int GuiExcel::isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return 0;
     }
     return mMergeInfo[sheetIndex].isMergeCellCount(columnIndex, rowStart);
@@ -282,7 +282,7 @@ int GuiExcel::isMergeCell(const int& sheetIndex, const int& columnIndex, const i
 
 bool GuiExcel::updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                                const int& rowEnd) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return false;
     }
 
@@ -368,7 +368,7 @@ void GuiExcel::constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData,
 }
 
 void GuiExcel::updateDisplaySplitCell(const int& sheetIndex) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -376,7 +376,7 @@ void GuiExcel::updateDisplaySplitCell(const int& sheetIndex) {
 }
 
 void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -408,7 +408,7 @@ void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
 }
 
 void GuiExcel::updateDisplaySheetHeaderAdjust(const int& sheetIndex) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -419,7 +419,7 @@ void GuiExcel::updateDisplaySheetHeaderAdjust(const int& sheetIndex) {
 }
 
 void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -461,6 +461,38 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
     updateDisplayMergeCell(sheetIndex);  // Draw - Merge Cell
 }
 
+void GuiExcel::updateCellInfoContent(const int& sheetIndex, const int& row, const int& column) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    QString text = QString();
+    if ((mExcelSheet[sheetIndex]->item(row, column)) && (mExcelSheet[sheetIndex]->rowCount() > 0)) {
+        text = mExcelSheet[sheetIndex]->item(row, column)->text();
+    }
+
+    if (mCurrentSheetIndex == sheetIndex) {
+        // qDebug() << "Info :" <<  mCurrentSheetIndex << sheetIndex << text << row << column;
+        mGui->CellInfoContent->setText(text);
+    }
+}
+
+void GuiExcel::updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    if (mExcelSheet[sheetIndex]->item(row, column) == nullptr) {
+        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
+    }
+
+    if (mExcelSheet[sheetIndex]->item(row, column)) {
+        mExcelSheet[sheetIndex]->item(row, column)->setSelected(true);
+        // mExcelSheet[sheetIndex]->setCurrentItem(mExcelSheet[sheetIndex]->item(row, column));
+        mExcelSheet[sheetIndex]->setFocus();
+    }
+}
+
 void GuiExcel::updateInitialExcelSheet() {
     mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
     mMergeInfo.clear();
@@ -497,41 +529,9 @@ void GuiExcel::updateInitialExcelSheet() {
     // qDebug() << "\t ExcelSheet : Init";
 }
 
-void GuiExcel::updateCellInfoContent(const int& sheetIndex, const int& row, const int& column) {
-    if (chcekExcleSheet(sheetIndex)) {
-        return;
-    }
-
-    QString text = QString();
-    if ((mExcelSheet[sheetIndex]->item(row, column)) && (mExcelSheet[sheetIndex]->rowCount() > 0)) {
-        text = mExcelSheet[sheetIndex]->item(row, column)->text();
-    }
-
-    if (mCurrentSheetIndex == sheetIndex) {
-        // qDebug() << "Info :" <<  mCurrentSheetIndex << sheetIndex << text << row << column;
-        mGui->CellInfoContent->setText(text);
-    }
-}
-
-void GuiExcel::updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column) {
-    if (chcekExcleSheet(sheetIndex)) {
-        return;
-    }
-
-    if (mExcelSheet[sheetIndex]->item(row, column) == nullptr) {
-        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
-    }
-
-    if (mExcelSheet[sheetIndex]->item(row, column)) {
-        mExcelSheet[sheetIndex]->item(row, column)->setSelected(true);
-        // mExcelSheet[sheetIndex]->setCurrentItem(mExcelSheet[sheetIndex]->item(row, column));
-        mExcelSheet[sheetIndex]->setFocus();
-    }
-}
-
 void GuiExcel::updateDisplayKey(const int& keyValue) {
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -578,7 +578,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
 void GuiExcel::updateDisplayArrowKey(const int& keyValue) {
 #if defined(USE_EXCEL_ARROW_KEY)
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -978,7 +978,7 @@ void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {
 
 void GuiExcel::copyClipboardInfo(const bool& cutState) {
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -1080,7 +1080,7 @@ int GuiExcel::clearClipboardInfo(const bool& escapeKeyClear) {
 
 void GuiExcel::pasteClipboardInfo() {
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -1170,7 +1170,7 @@ void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
 
 void GuiExcel::updateDisplayReceiveKeyFocus() {
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
@@ -1179,7 +1179,7 @@ void GuiExcel::updateDisplayReceiveKeyFocus() {
 
 void GuiExcel::updateDisplayEditCell(const int& editType) {
     int sheetIndex = mCurrentSheetIndex;
-    if (chcekExcleSheet(sheetIndex)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 

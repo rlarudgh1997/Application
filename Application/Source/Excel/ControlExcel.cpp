@@ -428,10 +428,10 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
         }
 
         if (writeData.size() > 0) {
-            QString saveFilePaht = QString("%1/%2").arg(savePath).arg(file);
-            writeSize = ivis::common::FileInfo::writeFile(saveFilePaht, writeData, false);
+            QString saveFilePath = QString("%1/%2").arg(savePath).arg(file);
+            writeSize = ivis::common::FileInfo::writeFile(saveFilePath, writeData, false);
             if (writeSize == 0) {
-                qDebug() << "Fail to write size : 0, filePath :" << saveFilePaht;
+                qDebug() << "Fail to write size : 0, filePath :" << saveFilePath;
             }
         }
     }

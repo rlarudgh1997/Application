@@ -115,7 +115,7 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
-    bool chcekExcleSheet(const int& sheetIndex);
+    bool chcekExcelSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
     void readAllExcelSheet();
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);

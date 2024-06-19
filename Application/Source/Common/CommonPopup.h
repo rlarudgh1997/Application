@@ -198,7 +198,7 @@ private:
 
         connect(&selectBox, &QMessageBox::finished, [&](int result) {
             if (result == QMessageBox::Rejected) {
-                buttonType = PopupButton::Cancel; // X 버튼 또는 Esc 키 눌렀을 때 처리
+                buttonType = PopupButton::Cancel;   // X 버튼 또는 Esc 키 눌렀을 때 처리
             }
         });
         if (button.size() == 0) {
