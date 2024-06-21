@@ -1,0 +1,74 @@
+@startuml
+
+
+class MenuControl {
+    +void keyEvent(const int& inputType, const int& inputValue)
+    -bool initControl()
+    -void controlConnect(const bool& state)
+    -void initCommonData(const int& currentMode, const int& displayType)
+    -void initNormalData()
+    -void initControlData()
+}
+
+class CenterControl {
+    +void keyEvent(const int& inputType, const int& inputValue)
+    -bool initControl()
+    -void controlConnect(const bool& state)
+    -void initCommonData(const int& currentMode, const int& displayType)
+    -void initNormalData()
+    -void initControlData()
+}
+
+class ExcelControl {
+    +void keyEvent(const int& inputType, const int& inputValue)
+    -bool initControl()
+    -void controlConnect(const bool& state)
+    -void initCommonData(const int& currentMode, const int& displayType)
+    -void initNormalData()
+    -void initControlData()
+}
+
+' ControlManager 클래스 정의
+class ControlManager {
+    +void init()
+    +void sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue)
+    +void raise(const int& displayType)
+    +void keyEvent(const int& inputType, QKeyEvent* keyEvent)
+    +void mouseEvent(const int& inputType, const int& inputValue)
+    +void resizeEvent(QResizeEvent& resizeEvent)
+    +void exitProgram(const bool& check)
+    -void createControl(const int& displayType)
+    -QSize getScreenSize()
+    -int getPreviousMode()
+    -int getCurrentMode()
+    -void setScreenSize()
+    -void setPreviousMode()
+    -void setCurrentMode()
+    -void signalExitProgram() <<signal>>
+    -void signalEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) <<signal>>
+
+    -QMap<int, AbstractControl*> mControlInfo
+    -QSize ScreenSize
+    -int PreviousMode
+    -int CurrentMode
+}
+
+package User {
+}
+
+' 클래스 간의 관계 정의
+User -> ControlManager : Boot/Init
+ControlManager -> ConfigSetting : Read config
+MenuControl <-- ControlManager : Create/Init
+CenterControl <-- ControlManager : Create/Init
+ExcelControl <-- ControlManager : Create/Init
+
+MenuControl <.. ControlManager : emit Event
+CenterControl <.. ControlManager : emit Event
+ExcelControl <.. ControlManager : emit Event
+
+MenuControl --> ControlManager : Send Event
+CenterControl --> ControlManager : Send Event
+ExcelControl --> ControlManager : Send Event
+
+@enduml

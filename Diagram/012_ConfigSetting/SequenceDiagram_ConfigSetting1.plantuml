@@ -1,0 +1,26 @@
+@startuml
+
+actor User order 1
+
+participant ControlManager order 10
+participant MenuControl order 20
+participant ConfigSetting order 60
+
+== Config Setting 초기화 ==
+
+' autoactivate on
+User -> ControlManager : init()
+ControlManager -> ConfigSetting : Create instance()
+activate ConfigSetting
+ConfigSetting -> ConfigSetting : ConfigFileOpen()
+ConfigSetting -> ConfigSetting : init()
+activate ConfigSetting
+alt Config file does not exist
+    ConfigSetting -> ConfigSetting : resetConfig()
+end
+ConfigSetting -> ConfigSetting : readConfig()
+ConfigSetting -> ConfigSetting : save class member variables
+ConfigSetting -> ConfigSetting : thread start
+deactivate ConfigSetting
+
+@enduml

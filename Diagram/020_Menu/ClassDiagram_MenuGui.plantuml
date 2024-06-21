@@ -1,0 +1,71 @@
+@startuml
+
+' AbstractGui 클래스 정의
+class AbstractGui {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    +AbstractHandler* isHandler()
+    +bool createSignal(const int& type, const QVariant& value)
+    +void drawDisplay(const QVariant& depth)
+
+    -AbstractHandler* mHandler;
+}
+
+' GuiMenu 클래스 정의
+class GuiMenu {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    -void drawMenuFile()
+    -void drawMenuEdit()
+    -void drawMenuView()
+    -void drawMenuSetting()
+    -void drawMenuRun()
+    -void drawMenuDocker()
+    -void drawMenuHelp()
+    -void drawMenuEtc()
+    -void updateDrawDialog(const int& dialogType, const QVariantList& info)
+    -void updateDisplaySelectModule()
+    -void updateDisplaySelectOption()
+    -void updateDisplayPath()
+    -void updateDisplayProgressBar(const bool& show, const QVariantList& progressInfo)
+    -void updateDisplayTestResultInfo()
+    -void updateDisplayEnterScriptText()
+    -void updateDisplayTestReport()
+    -void updateDisplayViewLogFileList()
+    -void updateDisplayViewLogInfo(const bool& show)
+    -void updateDisplayViewLogFileInfo()
+    -void updateDisplayAppMode()
+
+    -void setSelectModuleList(const QVariantList& list)
+    -QVariantList getSelectModuleList()
+    -void setTestResultComplted(const bool& testResultComplted)
+    -bool getTestResultComplted()
+    -void setProgressInfo(const QVariantList& list)
+    -QVariantList getProgressInfo()
+
+    -Ui::GuiMenu* mGui
+    -QMainWindow* mMainView
+    -QSharedPointer<Dialog> mDialog
+
+    -QVariantList mSelectModuleList
+    -bool mTestResultComplted
+    -QVariantList mProgressInfo
+}
+
+
+' 클래스 간의 관계 정의
+AbstractGui <|- GuiMenu : inheritance
+GuiMenu <-- HandlerMenu : update property : signal/slot
+GuiMenu ..> HandlerMenu : send event singal
+
+@enduml

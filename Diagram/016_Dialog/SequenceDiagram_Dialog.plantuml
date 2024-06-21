@@ -1,0 +1,51 @@
+@startuml
+
+== Draw Dialog ==
+
+actor User order 1
+
+
+participant MenuGui order 10
+participant Dialog order 50
+
+User -> MenuGui: Menu : app mode
+
+
+activate MenuGui
+    MenuGui -> MenuGui : updateDisplayAppMode()
+    activate MenuGui
+        MenuGui -> MenuGui : updateDrawDialog()
+        activate MenuGui
+
+        MenuGui -> Dialog : drawDialog()
+        activate Dialog
+            Dialog -> Dialog : updateAppModeRadio()
+            activate Dialog
+                Dialog -> Dialog : updateDisplay()
+                activate Dialog
+                    Dialog -> Dialog : updateMainRect()
+                    Dialog -> Dialog : controlConnet()
+                    Dialog -> Dialog : setGeometry()
+                deactivate Dialog
+        MenuGui -> MenuGui : connect()
+        deactivate MenuGui
+'     deactivate MenuGui
+
+deactivate Dialog
+deactivate MenuGui
+
+
+...
+User -> Dialog : Dialog : select CV/PV -> OK
+
+
+
+MenuGui <-- Dialog : emit signalSelectAppMode()
+activate MenuGui
+
+deactivate Dialog
+
+
+
+
+@enduml

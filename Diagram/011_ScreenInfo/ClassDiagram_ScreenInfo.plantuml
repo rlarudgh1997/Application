@@ -1,0 +1,35 @@
+@startuml
+
+' ScreenInfo 클래스 정의
+class ScreenInfo {
+    +void updateRootItem(QWidget* rootItem)
+    +QWidget* drawScreen(const int& displayType, const QString& objectName)
+    +void controlScreen(const int& displayType, const bool& show)
+    +void captureScreen(const QRect& rect)
+    +bool updateLanguage(const int& changeLanguage, QString languageFileName)
+    +void loadComplete(const int& displayType)
+    +void resizeScreenInfo(QResizeEvent& resizeEvent)
+    -void signalLoadComplete(const int& displayType) <<signal>>
+
+    -QWidget* mRootScreen
+    -QWidget* mAlwaysTopScreen
+    -QMap<int, QWidget*> mSubScreens
+    -QTranslator* mTranslator
+}
+
+' class QWidget {
+'     +void setGeometry()
+'     +void setSizePolicy()
+'     +void setObjectName()
+'     +void show()
+' }
+
+' 클래스 간의 관계 정의
+ScreenInfo <-- ControlManager : Control screen
+ScreenInfo <-- MenuHandler : Create display
+ScreenInfo <-- CenterHandler : Create display
+ScreenInfo <-- ExcelHandler : Create display
+
+QWidget <-- ScreenInfo : create widget
+
+@enduml

@@ -1,0 +1,110 @@
+@startuml
+
+actor User order 10
+
+participant MenuGui order 10
+' participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ExcelGui order 40
+participant ExcelHandler order 50
+participant ExcelControl order 60
+
+participant ControlManager order 80
+participant ConfigSetting order 90
+participant Popup order 100
+participant Python order 110
+
+
+== Excel File - Open ==
+
+
+User -> MenuGui: select menu : open
+
+activate MenuGui
+MenuGui -> MenuGui : createSignal()
+MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+MenuControl -> MenuControl : slotHandlerEvent()
+MenuControl -> ControlManager : sendEventInfo() : excel open
+deactivate MenuControl
+
+activate ControlManager
+ControlManager -> ExcelControl : slotEventInfoChanged()
+deactivate ControlManager
+
+activate ExcelControl
+ExcelControl -> ExcelControl : loadExcelFile()
+activate ExcelControl
+ExcelControl -> Popup : drawPopup() : Open
+activate Popup
+Popup -> Popup : drawPopupOpen()
+deactivate ExcelControl
+deactivate ExcelControl
+
+...
+
+User -> Popup : select path
+Popup -> Popup : setPopupData()
+ExcelControl <-- Popup : return button type & popup data
+
+alt ButtonType == OK
+    deactivate Popup
+    activate ExcelControl
+
+    ExcelControl -> ExcelControl : openExcelFile()
+    activate ExcelControl
+    ExcelControl -> ExcelControl : sytemCall()
+    activate ExcelControl
+    ExcelControl --> Python : sytem call : file path, open
+    activate Python
+    Python -> Python : _read_config_setting()
+    Python -> Python : read_from_excel()
+    activate Python
+    Python -> Python : load_workbook()
+    deactivate Python
+    Python -> Python : write_to_text()
+    activate Python
+    Python -> Python : to_csv()
+    deactivate Python
+    Python --> ExcelControl : Done
+    deactivate Python
+    deactivate ExcelControl
+
+    alt File Delete State
+        ExcelControl -> ExcelControl : TC file delete
+    end
+
+
+    ExcelControl -> ExcelControl : updateExcelSheet()
+    ExcelControl -> ExcelControl : updateNodeAddress()
+    ExcelControl -> ExcelControl : updateDataHandler()
+    ExcelControl -> ExcelHandler : emit creatSignal()
+    deactivate ExcelControl
+    activate ExcelHandler
+    ExcelHandler -> ExcelGui : slotPropertyChanged()
+    deactivate ExcelHandler
+    activate ExcelGui
+    ExcelGui -> ExcelGui : updateDisplayExcelSheet()
+    activate ExcelGui
+    ExcelGui -> ExcelGui : updateInitialExcelSheet()
+
+    loop SheetIndex < SheetCount
+        ExcelGui -> ExcelGui : updateInitialExcelSheet()
+
+        alt Open
+            ExcelGui -> ExcelGui : updateDisplaySheetText()
+        end
+
+        ExcelGui -> ExcelGui : updateDefaultSheetFocus()
+        ExcelGui -> ExcelGui : updateCellInfoContent()
+        ExcelGui -> ExcelGui : connect()
+    end
+    deactivate ExcelGui
+
+    ExcelGui -> ExcelGui : updateDisplaySheetHeaderAdjust()
+end
+
+@enduml

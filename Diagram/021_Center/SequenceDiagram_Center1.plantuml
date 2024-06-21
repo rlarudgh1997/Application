@@ -1,0 +1,80 @@
+@startuml
+
+== Config View ==
+
+actor User order 10
+
+participant MenuGui order 10
+participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ConfigSetting order 40
+' participant Popup order 50
+participant ControlManager order 60
+
+participant CenterGui order 70
+participant CenterHandler order 80
+participant CenterControl order 90
+
+
+
+User -> MenuGui: Menu : select SFC Model Path
+
+activate MenuGui
+    MenuGui -> MenuGui : createSignal()
+    MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+    MenuControl -> MenuControl : slotHandlerEvent()
+    MenuControl -> MenuControl : sendEventInfo()
+    activate MenuControl
+        MenuControl -> ControlManager : sendEventInfo()
+    deactivate MenuControl
+deactivate MenuControl
+
+
+
+activate ControlManager
+    ControlManager --> CenterControl : emit signalEventInfoChanged()
+deactivate ControlManager
+
+activate CenterControl
+    CenterControl -> CenterControl : slotEventInfoChanged()
+    activate CenterControl
+        CenterControl -> CenterControl : updateConfigInfo()
+
+loop configIndex < allConfigSize
+    CenterControl -> ConfigSetting : isConfigName()
+    activate ConfigSetting
+        CenterControl <-- ConfigSetting : return : config name
+        CenterControl -> ConfigSetting : readConfig()
+        CenterControl <-- ConfigSetting : return : config value
+    deactivate ConfigSetting
+end
+
+
+
+
+        CenterControl -> CenterControl : updateDataHandler()
+        CenterControl -> CenterControl : setData()
+        alt Data changed
+            CenterControl -> CenterControl : createSignal()
+            CenterControl --> CenterHandler : emit signalUpdateDataModel()
+            activate CenterHandler
+
+        end
+    deactivate CenterControl
+deactivate CenterControl
+
+        CenterHandler --> CenterGui : slotPropertyChanged()
+        deactivate CenterHandler
+
+activate CenterGui
+    CenterGui -> CenterGui : updateDisplayConfigInfo
+    activate CenterGui
+        CenterGui -> CenterGui : draw config value()
+' deactivate CenterGui
+
+
+@enduml

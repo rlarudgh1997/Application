@@ -1,0 +1,86 @@
+@startuml
+
+' AbstractGui 클래스 정의
+class AbstractGui {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    +AbstractHandler* isHandler()
+    +bool createSignal(const int& type, const QVariant& value)
+    +void drawDisplay(const QVariant& depth)
+
+    -AbstractHandler* mHandler;
+}
+
+' GuiExcel 클래스 정의
+class GuiExcel {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    -void updateDrawDialog(const int& dialogType, const QVariantList& info)
+    -bool chcekExcelSheet(const int& sheetIndex)
+    -QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString)
+    -void readAllExcelSheet()
+    -int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart)
+    -bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart, const int& rowEnd)
+    -QMap<int, QList<QPair<int, int>>> findMergeInfo(const QMap<int, QVariantList>& sheetData)
+    -void constructMergeInfo(const int& sheetIndex, const QMap<int, QVariantList>& sheetData)
+    -void constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart)
+    -void updateDisplaySplitCell(const int& sheetIndex)
+    -void updateDisplayMergeCell(const int& sheetIndex)
+    -void updateDisplaySheetHeaderAdjust(const int& sheetIndex)
+    -void updateDisplaySheetText(const int& sheetIndex)
+    -void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column)
+    -void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column)
+    -void updateInitialExcelSheet()
+    -void updateDisplayKey(const int& keyValue)
+    -void updateDisplayArrowKey(const int& keyValue)
+    -void updateDisplayExcelSheet()
+    -void updateDisplayAutoComplete(const bool& show, const int& columnIndex)
+    -void updateDisplayAutoCompleteVehicle()
+    -void updateDisplayValueEnum(const QVariantList& data)
+    -void printMergeInfo(const QString& title, const bool& mergeSplit)
+    -void copyClipboardInfo(const bool& cutState)
+    -int clearClipboardInfo(const bool& escapeKeyClear)
+    -void pasteClipboardInfo()
+    -void updateDisplayClipboardInfo(const int& clipboardType)
+    -void updateDisplayReceiveKeyFocus()
+    -void updateDisplayEditCell(const int& editType)
+
+    -void setSfcSignal(const bool& sfcSignal)
+    -bool getSfcSignal()
+    -void setOutputState(const bool& outputState)
+    -bool getOutputState()
+
+    -Ui::GuiExcel* mGui
+    -QWidget* mMainView
+    -QSharedPointer<Dialog> mDialog
+    -QMap<int, QTableWidget*> mExcelSheet
+    -QMap<int, ExcelSheet> mMergeInfo
+    -QMap<int, QPair<int, int>> mModelIndex
+    -ExcelSheet mCopyMergeInfo
+    -ExcelSheet mClearMergeInfo
+    -QList<int> mClearCellInfo
+    -QMenu* mMenuRight
+    -QMap<int, QAction*> mMenuActionItem
+    -QTableWidgetItem* mSelectItem
+
+    -int mCurrentSheetIndex
+    -bool mSfcSignal
+    -bool mOutputState
+}
+
+' 클래스 간의 관계 정의
+AbstractGui <|- GuiExcel : inheritance
+GuiExcel <-- HandlerExcel : update property : signal/slot
+GuiExcel ..> HandlerExcel : send event singal
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+
+' Popup 클래스 정의
+class Popup {
+    +static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, QVariant& popupData, const QVariant& value)
+    -static PopupType isPopupType()
+    -static QVariant isPopupData()
+    -static void setPopupType(const PopupType& type)
+    -static void setPopupData(const QVariant& data)
+    -static PopupButton drawPopupNoraml(AbstractHandler* handler, const bool& warning, const QString& title, const QString& tip)
+    -static PopupButton drawPopupSelect(const PopupType& popupType, AbstractHandler* handler, const QVariant& textList)
+    -static PopupButton drawPopupAboutQt(AbstractHandler* handler)
+    -static PopupButton drawPopupOpen(AbstractHandler* handler, const QString& title, const QString& path)
+    -static PopupButton drawPopupSave(AbstractHandler* handler)
+    -static PopupButton drawPopupSettingPath(AbstractHandler* handler, const QString& title, const QString& path)
+	-static PopupType gPopupType
+	-static QVariant gPopupData
+}
+
+
+' 클래스 간의 관계 정의
+Popup <-- MenuControl : draw popup
+Popup <-- CenterControl : draw popup
+Popup <-- ExcelControl : draw popup
+
+@enduml

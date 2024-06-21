@@ -1,0 +1,174 @@
+@startuml
+
+== Menu - App Mode ==
+
+actor User order 1
+
+
+participant MenuGui order 10
+participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ConfigSetting order 40
+participant Dialog order 50
+participant ControlManager order 60
+
+participant MainWindow order 70
+
+
+
+User -> MenuGui: Menu : select SFC Model Path
+
+activate MenuGui
+    MenuGui -> MenuGui : createSignal()
+    MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+    MenuControl -> MenuControl : slotHandlerEvent()
+    MenuControl -> MenuControl : updateSelectAppMode()
+
+    MenuControl -> ConfigSetting : readConfig()
+    activate ConfigSetting
+        MenuControl <-- ConfigSetting : return : appMode
+    deactivate ConfigSetting
+
+    activate MenuControl
+        MenuControl -> MenuControl : updateDataHandler()
+        MenuControl -> MenuControl : setData()
+        alt Data changed
+            MenuControl -> MenuControl : createSignal()
+            MenuControl --> MenuHandler : emit signalUpdateDataModel()
+            activate MenuHandler
+        end
+
+        MenuHandler --> MenuGui : slotPropertyChanged()
+        deactivate MenuHandler
+    deactivate MenuControl
+deactivate MenuControl
+
+activate MenuGui
+    MenuGui -> MenuGui : updateDisplayAppMode()
+    activate MenuGui
+        MenuGui -> MenuGui : updateDrawDialog()
+        activate MenuGui
+
+        MenuGui -> Dialog : drawDialog()
+        activate Dialog
+        Dialog -> Dialog : updateAppModeRadio()
+
+        MenuGui -> MenuGui : connect()
+        deactivate MenuGui
+    deactivate MenuGui
+deactivate MenuGui
+
+
+
+...
+User -> Dialog : Dialog : select CV/PV -> OK
+
+
+
+MenuGui <-- Dialog : emit signalSelectAppMode()
+deactivate Dialog
+
+activate MenuGui
+    MenuGui -> MenuGui : createSignal()
+    MenuGui --> MenuControl : emit signalUpdateDataModel()
+deactivate MenuGui
+
+
+activate MenuControl
+    MenuControl -> MenuControl : slotEventInfoChanged()
+    activate MenuControl
+        MenuControl -> ConfigSetting : readData()
+        activate ConfigSetting
+            MenuControl <-- ConfigSetting : return : appMode
+        deactivate ConfigSetting
+
+        alt setAppMode != appMode
+            MenuControl -> ConfigSetting : writeData() : setAppMode
+            activate ConfigSetting
+            MenuControl -> ConfigSetting : writeData() : init
+            deactivate MenuControl
+
+
+            MainWindow <-- ConfigSetting : emit signalUpdateWindowTitle()
+            activate MainWindow
+                MainWindow -> MainWindow : setWindowTitle()\n : TC_Creator[CV/PV]
+                activate MainWindow
+                deactivate MainWindow
+            deactivate MainWindow
+
+            MenuControl <-- ConfigSetting : emit signalConfigChanged()
+            deactivate ConfigSetting
+
+            MenuControl -> MenuControl : resetControl()
+
+
+            activate MenuControl
+
+            MenuControl -> MenuControl : initCommonData()
+            activate MenuControl
+                MenuControl -> MenuControl : updateDataHandler()
+                MenuControl -> MenuControl : setData()
+                alt Data changed
+                    MenuControl -> MenuControl : createSignal()
+                    MenuControl --> MenuHandler : emit signalUpdateDataModel()
+                    activate MenuHandler
+                end
+
+                MenuHandler --> MenuGui : slotPropertyChanged()
+                deactivate MenuHandler
+            deactivate MenuControl
+
+            activate MenuGui
+                MenuGui -> MenuGui : update
+                activate MenuGui
+                deactivate MenuGui
+            deactivate MenuGui
+
+
+
+
+
+
+
+
+            MenuControl -> MenuControl : initNormalData()
+
+            activate MenuControl
+                MenuControl -> MenuControl : updateDataHandler()
+                MenuControl -> MenuControl : setData()
+                alt Data changed
+                    MenuControl -> MenuControl : createSignal()
+                    MenuControl --> MenuHandler : emit signalUpdateDataModel()
+                    activate MenuHandler
+                end
+
+                MenuHandler --> MenuGui : slotPropertyChanged()
+                deactivate MenuHandler
+            deactivate MenuControl
+
+            activate MenuGui
+                MenuGui -> MenuGui : update
+                activate MenuGui
+                deactivate MenuGui
+            deactivate MenuGui
+
+
+
+            MenuControl -> MenuControl : initControlData()
+
+            activate MenuControl
+                MenuControl -> MenuControl : updateDataControl()
+                MenuControl -> MenuControl : setData()
+
+        end
+
+deactivate MenuControl
+deactivate MenuControl
+
+
+
+@enduml

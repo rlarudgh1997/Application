@@ -1,0 +1,65 @@
+@startuml
+
+actor User order 1
+
+participant MenuGui order 10
+' participant MenuHandler order 20
+participant MenuControl order 30
+
+participant CenterControl order 40
+participant ControlManager order 50
+
+participant Popup order 60
+participant ConfigSetting order 70
+
+
+
+== SFC Model Path 변경 ==
+User -> MenuGui : select menu
+
+activate MenuGui
+MenuGui -> MenuGui : createSignal()
+MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+MenuControl -> MenuControl : slotHandlerEvent()
+MenuControl -> ConfigSetting : readConfig()
+
+activate ConfigSetting
+MenuControl <-- ConfigSetting : return path
+deactivate ConfigSetting
+
+MenuControl -> Popup : drawPopup()
+activate Popup
+Popup -> Popup : drawPopupSettingPath()
+deactivate MenuControl
+
+...
+
+User -> Popup : select path
+Popup -> Popup : setPopupData()
+MenuControl <-- Popup : return button type & popup data
+deactivate Popup
+
+activate MenuControl
+
+alt ButtonType == OK
+MenuControl -> ConfigSetting : writeConfig() : path
+activate ConfigSetting
+ConfigSetting -> ConfigSetting : save config file
+end
+deactivate ConfigSetting
+
+MenuControl -> ControlManager : sendEventInfo() : init module path
+deactivate MenuControl
+activate ControlManager
+ControlManager -> CenterControl : slotEventInfoChanged()
+deactivate ControlManager
+activate CenterControl
+CenterControl -> CenterControl : updateAllModuleList()
+
+...
+
+
+@enduml

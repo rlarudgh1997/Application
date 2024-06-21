@@ -1,0 +1,35 @@
+@startuml
+
+actor User order 10
+
+participant ExcelControl order 60
+
+participant Python order 110
+
+
+== Excel Parser - Read ==
+
+
+User -> ExcelControl: popup : select open button
+
+activate ExcelControl
+ExcelControl -> ExcelControl : openExcelFile()
+activate ExcelControl
+ExcelControl -> ExcelControl : sytemCall()
+activate ExcelControl
+ExcelControl --> Python : sytem call : file path, open
+activate Python
+Python -> Python : _read_config_setting()
+Python -> Python : read_from_excel()
+activate Python
+Python -> Python : load_workbook()
+deactivate Python
+Python -> Python : write_to_text()
+activate Python
+Python -> Python : to_csv()
+deactivate Python
+Python --> ExcelControl : Done
+deactivate Python
+deactivate ExcelControl
+
+@enduml

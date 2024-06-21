@@ -1,0 +1,32 @@
+@startuml
+
+' AbstractGui 클래스 정의
+class AbstractGui {
+    +AbstractHandler* isHandler()
+    +bool createSignal(const int& type, const QVariant& value)
+    +void drawDisplay(const QVariant& depth)
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+    -AbstractHandler* mHandler = nullptr;
+}
+
+' Gui 클래스 정의
+class Gui {
+    -void drawDisplayDepth0()
+    -void drawDisplayDepth1()
+    -void drawDisplayDepth2()
+    -void updateDisplaySize()
+    -void updateDisplayVisible()
+    -void slotPropertyChanged(const int& type, const QVariant& value)
+    -Ui::GuiCenter* mGui
+}
+
+' 클래스 간의 관계 정의
+AbstractGui <|- Gui : Inheritance
+Gui <-- Handler : Create
+
+@enduml

@@ -1,0 +1,126 @@
+@startuml
+
+== Menu - SFC Model Path ==
+
+actor User order 10
+
+participant MenuGui order 10
+participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ConfigSetting order 40
+participant Popup order 50
+participant ControlManager order 60
+
+participant CenterGui order 70
+participant CenterHandler order 80
+participant CenterControl order 90
+
+
+
+User -> MenuGui: Menu : select SFC Model Path
+
+activate MenuGui
+    MenuGui -> MenuGui : createSignal()
+    MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+    MenuControl -> MenuControl : slotHandlerEvent()
+
+    MenuControl -> ConfigSetting : readConfig()
+    activate ConfigSetting
+        MenuControl <-- ConfigSetting : return : path
+    deactivate ConfigSetting
+
+    MenuControl -> Popup : drawPopup() : SettingPath
+
+    activate Popup
+        Popup -> Popup : drawPopupSettingPath()
+
+        activate Popup
+            alt Path does not exist
+                Popup -> Popup : QApplication::applicationDirPath()
+            else
+                Popup -> Popup : QFileDialog::getExistingDirectory()
+            end
+
+...
+User -> Popup : Popup : select other path
+
+            Popup -> Popup : setPopupData()
+        deactivate Popup
+
+        MenuControl <-- Popup : return : button type & popup data
+    deactivate Popup
+
+    MenuControl -> ConfigSetting : writeConfig()
+    activate ConfigSetting
+    MenuControl <-- ConfigSetting : emit signalConfigChanged()
+    deactivate ConfigSetting
+
+    activate MenuControl
+        MenuControl -> MenuControl : slotConfigChanged()
+        MenuControl -> MenuControl : updateDataHandler()
+        MenuControl -> MenuControl : setData()
+        alt Data changed
+            MenuControl -> MenuControl : createSignal()
+            MenuControl --> MenuHandler : emit signalUpdateDataModel()
+            activate MenuHandler
+        end
+
+        MenuHandler --> MenuGui : slotPropertyChanged()
+        deactivate MenuHandler
+    deactivate MenuControl
+
+    activate MenuGui
+        MenuGui -> MenuGui : updateDisplayPath()
+        activate MenuGui
+        deactivate MenuGui
+    deactivate MenuGui
+
+
+
+
+    MenuControl -> MenuControl : sendEventInfo()
+    activate MenuControl
+        MenuControl -> ControlManager : sendEventInfo()
+    deactivate MenuControl
+deactivate MenuControl
+
+activate ControlManager
+    ControlManager --> CenterControl : emit signalEventInfoChanged()
+deactivate ControlManager
+
+activate CenterControl
+    CenterControl -> CenterControl : slotEventInfoChanged()
+    activate CenterControl
+        CenterControl -> CenterControl : updateAllModuleList()
+    ' deactivate CenterControl
+
+
+
+
+
+
+
+        CenterControl -> CenterControl : updateDataHandler()
+        CenterControl -> CenterControl : setData()
+        alt Data changed
+            CenterControl -> CenterControl : createSignal()
+            CenterControl --> CenterHandler : emit signalUpdateDataModel()
+            activate CenterHandler
+
+        end
+    deactivate CenterControl
+deactivate CenterControl
+
+        CenterHandler --> CenterGui : slotPropertyChanged()
+        deactivate CenterHandler
+
+activate CenterGui
+    CenterGui -> CenterGui : update value
+' deactivate CenterGui
+
+
+@enduml

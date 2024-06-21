@@ -1,0 +1,32 @@
+@startuml
+
+actor User order 10
+
+participant ControlManager order 10
+
+participant Control order 20
+participant Handler order 30
+participant Gui order 40
+
+participant ScreenInfo order 50
+
+== Create Display ==
+
+
+User -> ControlManager: Create Display
+
+ControlManager -> Control: init()
+Control -> Control: initControl()
+Control -> Handler: Create insatnce()
+Control -> Handler: init()
+Handler -> ScreenInfo: Create insatnce()
+Handler <-- ScreenInfo: return screenInfo
+Handler -> Gui: Create insatnce()
+Control -> Control: updateDataHandler()
+Control --> Handler: emit creatSignal()
+Handler -> Gui: slotPorpertyChanged()
+Gui -> Gui: drawDisplay()
+Gui -> Gui: drawDisplayDepth0()
+
+
+@enduml

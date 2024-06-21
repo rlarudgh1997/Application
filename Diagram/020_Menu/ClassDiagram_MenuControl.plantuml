@@ -1,0 +1,87 @@
+@startuml
+
+' AbstractControl 클래스 정의
+class AbstractControl {
+    +virtual void keyEvent(const int& inputType, const int& inputValue)
+    +virtual void resizeEvent(const int& width, const int& height)
+    -virtual AbstractHandler* isHandler()
+    -virtual bool initControl()
+    -virtual void controlConnect(const bool& state)
+    -virtual void initCommonData(const int& currentMode, const int& displayType)
+    -virtual void initNormalData()
+    -virtual void initControlData()
+    -virtual void resetControl(const bool& reset)
+    -virtual void timerFunc(const int& timerId)
+    -virtual void updateDataControl(const int& type, const QVariant& value)
+    -virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    -virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue)
+    -virtual void slotControlUpdate(const int& type, const QVariant& value)
+    -virtual void slotConfigChanged(const int& type, const QVariant& value)
+    -virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue)
+    -virtual void slotHandlerEvent(const int& type, const QVariant& value)
+
+    +bool init(const int& currentMode, const int& displayType)
+    +bool isInitComplete()
+    +int controlTimer(const int& timerType, const bool& start, const int& interval)
+    +int getTimerId(const int& timerType)
+    +const QVariant getData(const int& type)
+    +bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    +bool createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    +void timerEvent(QTimerEvent* event)
+
+    -QMap<int, int> mTimer
+    -QMap<int, QVariant> mData
+    -bool mInit
+}
+
+' ControlMenu 클래스 정의
+class ControlMenu {
+    +virtual void keyEvent(const int& inputType, const int& inputValue)
+    +virtual void resizeEvent(const int& width, const int& height)
+    -virtual AbstractHandler* isHandler()
+    -virtual bool initControl()
+    -virtual void controlConnect(const bool& state)
+    -virtual void initCommonData(const int& currentMode, const int& displayType)
+    -virtual void initNormalData()
+    -virtual void initControlData()
+    -virtual void resetControl(const bool& reset)
+    -virtual void timerFunc(const int& timerId)
+    -virtual void updateDataControl(const int& type, const QVariant& value)
+    -virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    -virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue)
+    -virtual void slotControlUpdate(const int& type, const QVariant& value)
+    -virtual void slotConfigChanged(const int& type, const QVariant& value)
+    -virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue)
+    -virtual void slotHandlerEvent(const int& type, const QVariant& value)
+
+    -void updateSelectAppMode()
+    -QStringList isModuleListFromJson()
+    -void updateAllModuleList(const QString& filter)
+    -void updateSelectModueList(const int& eventType, const QVariantList& selectModule)
+    -void updateTestReportInfo(const int& eventType)
+    -bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData)
+    -void updateViewLogFile()
+    -void updateViewLogDisplay(const QString& titleName)
+    -void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount)
+    -void startProcess(const QString& command, const QString& arg, const int& totalCount)
+    -bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList)
+    -void stopWatcherFile(const int& type)
+    -void stopProcess()
+    -void cancelScript(const bool& script, const bool& watcher)
+    -int saveTestReportInfo(const int& reportType, const QList<bool>& value)
+
+    -AbstractHandler* mHandler
+    -QSharedPointer<ivis::common::ExcuteProgramThread> mProcess
+    -QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcherRunScript
+    -QSharedPointer<ivis::common::FileSystemWatcherThread> mWatcherTestResult
+}
+
+
+' 클래스 간의 관계 정의
+AbstractControl <|- ControlMenu : inheritance
+HandlerMenu <-- ControlMenu : create, init, connect
+ControlMenu <--> ConfigSetting : read, write
+ControlMenu <.. ControlManager : create, init
+ControlMenu <--> Popup : draw popup
+
+@enduml

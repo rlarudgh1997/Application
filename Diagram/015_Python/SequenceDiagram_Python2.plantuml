@@ -1,0 +1,34 @@
+@startuml
+
+actor User order 10
+
+participant ExcelControl order 60
+
+participant Python order 110
+
+
+== Excel Parser - Write ==
+
+
+User -> ExcelControl: popup : select save button
+
+activate ExcelControl
+ExcelControl -> ExcelControl : writeExcelFile()
+activate ExcelControl
+ExcelControl -> ExcelControl : writeExcelSheet()
+ExcelControl --> Python : sytem call : file path, open
+activate Python
+Python -> Python : read_from_text()
+activate Python
+Python -> Python : read_csv()
+Python -> Python : _write_to_excel()
+Python -> Python : _write_to_merge_cell()
+deactivate Python
+Python --> ExcelControl : Done
+
+
+deactivate Python
+deactivate ExcelControl
+
+
+@enduml

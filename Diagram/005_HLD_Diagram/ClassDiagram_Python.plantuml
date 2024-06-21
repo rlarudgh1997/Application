@@ -1,0 +1,17 @@
+@startuml
+
+' ExcelParser 클래스 정의
+class ExcelParser {
+    -__init__(self):
+    -_read_config_setting(self, config_path):
+    -read_from_excel(self, file_path):
+    -write_to_text(self, path):
+    -read_from_text(self, path, save_file_path):
+    -_write_to_excel(self, data, file_path):
+    -_write_to_merge_cell(self, merge_info_list, file_path):
+}
+
+' 클래스 간의 관계 정의
+ExcelParser <.. ExcelControl : Excel Open / Save
+
+@enduml

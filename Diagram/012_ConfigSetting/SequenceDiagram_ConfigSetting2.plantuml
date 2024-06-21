@@ -1,0 +1,62 @@
+@startuml
+
+actor User order 1
+
+participant MenuGui order 10
+' participant MenuHandler order 20
+participant MenuControl order 30
+participant ConfigSetting order 60
+
+== Read Config ==
+User -> MenuGui : select menu 1
+
+activate MenuGui
+MenuGui -> MenuGui : createSignal()
+MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+MenuControl -> MenuControl : slotHandlerEvent()
+MenuControl -> ConfigSetting : readConfig()
+
+activate ConfigSetting
+ConfigSetting -> ConfigSetting : read class member variables
+MenuControl <-- ConfigSetting : return config
+
+deactivate ConfigSetting
+MenuControl -> MenuControl : updateDataHandler()
+' MenuControl --> MenuGui : done
+deactivate MenuControl
+
+...
+
+== Write Config ==
+User -> MenuGui : select menu 2
+
+activate MenuGui
+MenuGui -> MenuGui : createSignal()
+MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+MenuControl -> MenuControl : slotHandlerEvent()
+MenuControl -> ConfigSetting : writeConfig()
+deactivate MenuControl
+
+activate ConfigSetting
+ConfigSetting -> ConfigSetting : write class member variables
+ConfigSetting -> ConfigSetting : set thread start flag
+ConfigSetting --> : emit signalConfigChanged()
+
+activate ConfigSetting
+ConfigSetting -> ConfigSetting : writeConfig()
+activate ConfigSetting
+
+alt check for changed config values
+    ConfigSetting -> ConfigSetting : write config value to file
+end
+deactivate ConfigSetting
+
+ConfigSetting -> ConfigSetting : set thread stop flag
+
+@enduml

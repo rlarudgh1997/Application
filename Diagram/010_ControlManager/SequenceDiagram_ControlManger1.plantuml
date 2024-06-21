@@ -1,0 +1,54 @@
+@startuml
+
+== Application Booting ==
+
+actor User order 10
+participant MainWidonw order 20
+participant ControlManager order 30
+participant MenuControl order 40
+participant MenuHandler order 50
+participant MenuGui order 60
+participant ScreenInfo order 70
+participant ConfigSetting order 80
+
+User -> MainWidonw: boot
+MainWidonw -> ConfigSetting: create istance()
+MainWidonw -> ScreenInfo: create istance()
+MainWidonw -> ScreenInfo: updateRootItem()
+MainWidonw -> ControlManager: create istance()
+MainWidonw -> ControlManager: init()
+ControlManager -> ControlManager: setCurrentMode()
+ControlManager -> ControlManager: createControl()
+ControlManager -> MenuControl: create istance()
+MenuControl -> MenuHandler: isHandler()
+MenuHandler -> ScreenInfo: create istance()
+MenuHandler -> ScreenInfo: drawScreen()
+ScreenInfo --> MenuHandler: return screen
+MenuHandler -> MenuGui: create istance()
+MenuGui -> MenuGui: setParent()
+MenuGui -> MenuGui: setupUi()
+MenuGui -> MenuGui: updateDisplaySize()
+ControlManager -> MenuControl: init()
+MenuControl -> MenuControl: initControl()
+MenuControl -> MenuHandler: init()
+MenuHandler -> MenuHandler: initPropertyInfo()
+MenuHandler -> MenuHandler: controlConnect()
+MenuControl -> MenuControl: controlConnect()
+MenuControl -> MenuControl: initCommonData()
+MenuControl -> MenuControl: updateDataHandler()
+MenuControl --> MenuHandler: emit createSignal()
+MenuHandler -> MenuGui: slotPropertyChanged()
+MenuGui -> MenuGui: drawDisplay()
+MenuHandler -> MenuGui: slotPropertyChanged()
+MenuGui -> MenuGui: updateProperty()
+MenuControl -> MenuControl: initNormalData()
+MenuControl -> ConfigSetting: readConfig()
+ConfigSetting --> MenuControl: return config
+MenuControl --> MenuHandler: emit createSignal()
+MenuHandler -> MenuGui: slotPropertyChanged()
+MenuGui -> MenuGui: updateProperty()
+MenuControl -> MenuControl: initControlData()
+MenuControl -> MenuControl: updateDataControl()
+MainWidonw -> MainWidonw: controlConnect()
+
+@enduml

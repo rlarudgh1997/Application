@@ -1,0 +1,31 @@
+@startuml
+
+participant ControlManager order 10
+participant Control order 20
+participant Handler order 30
+participant Gui order 40
+participant ScreenInfo order 50
+participant ConfigSetting order 60
+
+ControlManager->Control: createControl()
+Control->Control: initControl()
+Control->Handler: create()
+Control->Handler: init()
+Handler->ScreenInfo: create()
+Handler<--ScreenInfo: return screen
+Handler->Gui: create()
+Control->Control: controlConnect()
+Control->Control: initCommonData()
+Control->Handler: updateProperty()
+Handler->Gui: updateProperty()
+Gui->Gui: drawDisplay()
+Control->Control: initNormalData()
+Control->ConfigSetting: readConfig()
+Control<--ConfigSetting: return value
+Control->Handler: updateProperty()
+Handler->Gui: updateProperty()
+Gui->Gui: drawProperty()
+Control->Control: initControlData()
+Control->Control: updateProperty()
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+
+' Control 클래스 정의
+class Control {
+    +initControl()
+}
+
+' ConfigSetting 클래스 정의
+class ConfigSetting {
+    +readConfig()
+}
+
+' ControlManager 클래스 정의
+class ControlManager {
+    +void init()
+    +void sendEventInfo(const int& source, const int& destination, const int& eventType, const QVariant& eventValue)
+    +void raise(const int& displayType)
+    +void keyEvent(const int& inputType, QKeyEvent* keyEvent)
+    +void mouseEvent(const int& inputType, const int& inputValue)
+    +void resizeEvent(QResizeEvent& resizeEvent)
+    +void exitProgram(const bool& check)
+    -void createControl(const int& displayType)
+    -QSize getScreenSize()
+    -int getPreviousMode()
+    -int getCurrentMode()
+    -void setScreenSize()
+    -void setPreviousMode()
+    -void setCurrentMode()
+    -void signalExitProgram() <<signal>>
+    -void signalEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) <<signal>>
+
+    -QMap<int, AbstractControl*> mControlInfo
+    -QSize ScreenSize
+    -int PreviousMode
+    -int CurrentMode
+}
+
+' 클래스 간의 관계 정의
+Control <-- ControlManager : Create/Init
+' note on link #red : Control - create / init
+ControlManager <.> ConfigSetting : Read config
+Control <.> ConfigSetting : Read/Wriet config
+
+@enduml

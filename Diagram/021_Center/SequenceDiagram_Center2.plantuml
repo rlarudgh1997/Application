@@ -1,0 +1,99 @@
+@startuml
+
+== Node View ==
+
+actor User order 10
+
+participant MenuGui order 10
+participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ConfigSetting order 40
+' participant Popup order 50
+participant ControlManager order 60
+
+participant CenterGui order 70
+participant CenterHandler order 80
+participant CenterControl order 90
+
+
+
+User -> MenuGui: Menu : select SFC Model Path
+
+activate MenuGui
+    MenuGui -> MenuGui : createSignal()
+    MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+    MenuControl -> MenuControl : slotHandlerEvent()
+    MenuControl -> MenuControl : sendEventInfo()
+    activate MenuControl
+        MenuControl -> ControlManager : sendEventInfo()
+    deactivate MenuControl
+deactivate MenuControl
+
+
+
+activate ControlManager
+    ControlManager --> CenterControl : emit signalEventInfoChanged()
+deactivate ControlManager
+
+activate CenterControl
+    CenterControl -> CenterControl : slotEventInfoChanged()
+    activate CenterControl
+        CenterControl -> CenterControl : updateNodeAddress()
+        activate CenterControl
+
+    CenterControl -> ConfigSetting : readConfig()
+    activate ConfigSetting
+        CenterControl <-- ConfigSetting : return : sfc model path
+        CenterControl -> ConfigSetting : readConfig()
+        CenterControl <-- ConfigSetting : return : app mode
+        CenterControl -> ConfigSetting : readConfig()
+        CenterControl <-- ConfigSetting : return : vsm file base name
+        CenterControl -> ConfigSetting : readConfig()
+        CenterControl <-- ConfigSetting : return : vehicle type
+        CenterControl -> ConfigSetting : readConfig()
+        CenterControl <-- ConfigSetting : return : vsm spec type
+    deactivate ConfigSetting
+
+    CenterControl -> CenterControl : checkNodeAddress()
+    CenterControl -> CenterControl : isNodeAddressAll()
+    CenterControl -> CenterControl : isNodeAddressMatchingModule()
+    activate CenterControl
+        CenterControl -> ConfigSetting : readConfig()
+            activate ConfigSetting
+                CenterControl <-- ConfigSetting : return : select module list
+            deactivate ConfigSetting
+    deactivate CenterControl
+
+
+
+
+
+
+        CenterControl -> CenterControl : updateDataHandler()
+        CenterControl -> CenterControl : setData()
+        alt Data changed
+            CenterControl -> CenterControl : createSignal()
+            CenterControl --> CenterHandler : emit signalUpdateDataModel()
+            activate CenterHandler
+
+        end
+
+        CenterHandler --> CenterGui : slotPropertyChanged()
+        deactivate CenterHandler
+
+activate CenterGui
+    CenterGui -> CenterGui : updateDisplayNodeAddress()
+    activate CenterGui
+        CenterGui -> CenterGui : draw node address
+
+
+
+    CenterControl -> CenterControl : updateSelectModueList()
+    ' deactivate CenterControl
+' deactivate CenterControl
+
+@enduml

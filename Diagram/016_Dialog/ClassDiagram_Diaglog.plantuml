@@ -1,0 +1,100 @@
+@startuml
+
+' Dialog 클래스 정의
+class Dialog {
+    +void drawDialog(const int& type, const QVariantList& info)
+    -void controlConnet(const int& displayType)
+    -void connectAppMode(const bool& state)
+    -void connectAppModeRadio(const bool& state)
+    -void connectSelectList(const bool& state)
+    -void connectSelectOption(const bool& state)
+    -void connectEnterText(const bool& state)
+    -void connectTestReport(const bool& state)
+    -void connectLogDisplay(const bool& state)
+    -void connectViewLog(const bool& state)
+    -void connectAutoComplete(const bool& state)
+    -QRect updateMainRect()
+    -void updateDisplay(const int& displayType, const QString& title)
+    -QList<QPair<QFrame*, QRadioButton*>> isRadioWidget() const
+    -QList<QCheckBox*> isCheckWidget(const bool& option1) const
+    -void updateSelectListCheckState(const bool& allCheck, const QStringList& selectList)
+    -void refreshViewLog(const int& refreshType)
+    -void updateAutoCompleteSuggestionsList(const QString& text)
+    -bool updateAppMode(const QVariantList& info)
+    -bool updateAppModeRadio(const QVariantList& info)
+    -bool updateSelectList(const QVariantList& info)
+    -bool updateSelectOption(const QVariantList& info)
+    -bool updateInputText(const QVariantList& info)
+    -bool updateTestReport(const QVariantList& info)
+    -bool updateLogDisplay(const QVariantList& info)
+    -bool updateViewLog(const QVariantList& info)
+    -bool updateAutoComplete(const QVariantList& info)
+
+    ' -int getDialogType()
+    ' -void setDialogType(const int& dialogType)
+    ' -int getPrevDialogType()
+    ' -void setPrevDialogType(const int& prevDialogType)
+    ' -QVariantList getDialogInfo()
+    ' -void setDialogInfo(const QVariantList& dialogInfo)
+    ' -QVariantList getPrevDialogInfo()
+    ' -void setPrevDialogInfo(const QVariantList& prevDialogInfo)
+    ' -bool getKeepDialog()
+    ' -void setKeepDialog(const bool& keepDialog)
+    ' -int getDisplayType()
+    ' -void setDisplayType(const int& displayType)
+    ' -int getPrevDisplayType()
+    ' -void setPrevDisplayType(const int& prevDisplayType)
+    ' -int getAppMode()
+    ' -void setAppMode(const int& appMode)
+    ' -QRect getScreenRect()
+    ' -void setScreenRect(const QRect& screenRect)
+    ' -bool getSelectAll()
+    ' -void setSelectAll(const bool& selectAll)
+    ' -bool getMultiCheck()
+    ' -void setMultiCheck(const bool& multiCheck)
+    ' -int getCheckModelIndex()
+    ' -void setCheckModelIndex(const int& checkModelIndex)
+    ' -bool getFindLog()
+    ' -void setFindLog(const bool& findLog)
+    ' -bool getViewLogStop()
+    ' -void setViewLogStop(const bool& viewLogStop)
+    ' -QStringList getAutoCompleteList()
+    ' -void setAutoCompleteList(const QStringList& autoCompleteList)
+
+    -void signalSelectAppMode(const int& appMode) <<signal>>
+    -void signalSelectListItem(const QList<QPair<int, QString>>& selectItem) <<signal>>
+    -void signalSelectOption(const bool& option1, const QList<QPair<QString, bool>>& option2) <<signal>>
+    -void signalScrollBarValueChanged(const int& value) <<signal>>
+    -void signalEnterTextChanged(const QString& text) <<signal>>
+    -void signalLogDisplayClicked(const bool& hide, const bool& detail) <<signal>>
+    -void signalViewLogClicked(const bool& close) <<signal>>
+    -void signalAutoCompleteSelected(const QString& text) <<signal>>
+
+    -Ui::Dialog* mGui
+    -QStandardItemModel mModel
+	' -int mDialogType
+    ' -int mPrevDialogType
+    ' -QVariantList mDialogInfo
+    ' -QVariantList mPrevDialogInfo
+    ' -bool mKeepDialog
+    ' -int mDisplayType
+    ' -int mPrevDisplayType
+    ' -int mAppMode
+    ' -QRect mScreenRect
+    ' -bool mSelectAll
+    ' -bool mMultiCheck
+    ' -int mCheckModelIndex
+    ' -bool mFindLog
+    ' -bool mViewLogStop
+    ' -QStringList mAutoCompleteList
+}
+
+
+' 클래스 간의 관계 정의
+QDialog <-- Dialog : create
+
+Dialog <-- Control : drawDialog
+Dialog ..> Control : emit signal
+
+
+@enduml

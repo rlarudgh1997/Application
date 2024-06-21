@@ -1,0 +1,56 @@
+@startuml
+
+' AbstractGui 클래스 정의
+class AbstractGui {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    +AbstractHandler* isHandler()
+    +bool createSignal(const int& type, const QVariant& value)
+    +void drawDisplay(const QVariant& depth)
+
+    -AbstractHandler* mHandler;
+}
+
+' GuiCenter 클래스 정의
+class GuiCenter {
+    -virtual void drawDisplayDepth0()
+    -virtual void drawDisplayDepth1()
+    -virtual void drawDisplayDepth2()
+    -virtual void updateDisplaySize()
+    -virtual void updateDisplayVisible()
+    -virtual void slotPropertyChanged(const int& type, const QVariant& value)
+
+    -void updateDrawDialog(const int& dialogType, const QVariantList& info)
+    -void updateDisplayConfigInfo()
+    -void updateDisplayNodeAddress(const int& updateType)
+    -void updateDisplayAutoComplete(const bool& show)
+    -void updateDisplaySelectModule(const bool& show)
+
+    -int getScrolBarValue()
+    -void setScrolBarValue(const int& scrolBarValue)
+    -QStringList getNodeAddress()
+    -void setNodeAddress(const QStringList& nodeAddress)
+    -bool getConfigUpdating()
+    -void setConfigUpdating(const bool& configUpdating)
+
+    -Ui::GuiCenter* mGui
+    -QMainWindow* mMainView
+    -QSharedPointer<Dialog> mDialog
+
+    -int mScrolBarValue
+    -QStringList mNodeAddress
+    -bool mConfigUpdating
+}
+
+
+' 클래스 간의 관계 정의
+AbstractGui <|- GuiCenter : inheritance
+GuiCenter <-- HandlerCenter : update property : signal/slot
+GuiCenter ..> HandlerCenter : send event singal
+
+@enduml

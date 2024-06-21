@@ -1,0 +1,40 @@
+@startuml
+
+' AbstractHandler 클래스 정의
+class AbstractHandler{
+    -virtual void controlConnect(const bool& state)
+    -virtual void timerFunc(const int& timerId)
+    -virtual void initPropertyInfo()
+
+    +bool init()
+    +QWidget* getScreen()
+    +int controlTimer(const int& timerType, const bool& start, const int& interval)
+    +int getTimerId(const int& timerType)
+    +void registerProperty(const int& type, const QVariant& value)
+    +QVariant getProperty(const int& type)
+    -void setProperty(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    -void timerEvent(QTimerEvent* event)
+    -void signalPropertyChanged(const int& type, const QVariant& value) <<signal>>
+    -void signalHandlerEvent(const int& type, const QVariant& value) <<signal>>
+
+    -QWidget* mScreen
+    -QMap<int, QVariant> mProperty
+    -QMap<int, int> mTimer
+    -bool mUpdateState
+}
+
+' Handler 클래스 정의
+class HandlerCenter {
+    -virtual void controlConnect(const bool& state)
+    -virtual void initPropertyInfo()
+    -virtual void timerFunc(const int& timerId)
+}
+
+' 클래스 간의 관계 정의
+GuiCenter <-- HandlerCenter : create, init
+AbstractHandler <|- HandlerCenter : class inheritance
+HandlerCenter <-> ScreenInfo : create, init
+HandlerCenter <-- ControlCneter : create, init, connect
+
+
+@enduml

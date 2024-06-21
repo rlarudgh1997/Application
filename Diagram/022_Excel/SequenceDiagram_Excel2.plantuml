@@ -1,0 +1,115 @@
+@startuml
+
+actor User order 10
+
+participant MenuGui order 10
+' participant MenuHandler order 20
+participant MenuControl order 30
+
+participant ExcelGui order 40
+participant ExcelHandler order 50
+participant ExcelControl order 60
+
+participant ControlManager order 80
+' participant ConfigSetting order 90
+participant Popup order 100
+participant Python order 110
+
+
+== Excel File - Save ==
+
+
+User -> MenuGui: select menu : save
+
+activate MenuGui
+MenuGui -> MenuGui : createSignal()
+MenuGui --> MenuControl : emit signalHandlerEvent()
+deactivate MenuGui
+
+activate MenuControl
+MenuControl -> MenuControl : slotHandlerEvent()
+MenuControl -> ControlManager : sendEventInfo() : excel save
+deactivate MenuControl
+
+activate ControlManager
+ControlManager -> ExcelControl : slotEventInfoChanged()
+deactivate ControlManager
+
+activate ExcelControl
+ExcelControl -> ExcelControl : saveExcelFile()
+activate ExcelControl
+ExcelControl -> Popup : drawPopup() : save
+activate Popup
+Popup -> Popup : drawPopupSave()
+deactivate ExcelControl
+deactivate ExcelControl
+
+...
+
+User -> Popup : select path
+Popup -> Popup : setPopupData()
+ExcelControl <-- Popup : return button type & popup data
+
+alt ButtonType == OK
+    deactivate Popup
+    activate ExcelControl
+
+    ExcelControl -> ExcelControl : saveExcelFile()
+    activate ExcelControl
+    ExcelControl -> ExcelControl : updateDataHandler() : read file info
+
+
+    ExcelControl -> ExcelControl : updateDataHandler()
+    deactivate ExcelControl
+    ExcelControl -> ExcelHandler : emit creatSignal()
+    deactivate ExcelControl
+
+    activate ExcelHandler
+    ExcelHandler -> ExcelGui : slotPropertyChanged()
+    deactivate ExcelHandler
+    activate ExcelGui
+    ExcelGui -> ExcelGui : updateDisplayExcelSheet()
+    activate ExcelGui
+    ExcelGui -> ExcelGui : read file info
+
+
+    ExcelGui -> ExcelGui : createSignal()
+    ExcelGui --> ExcelControl : emit signalHandlerEvent()
+    deactivate ExcelGui
+
+    activate ExcelControl
+    ExcelControl -> ExcelControl : slotHandlerEvent()
+    activate ExcelControl
+    ExcelControl -> ExcelControl : writeExcelFile()
+    activate ExcelControl
+    ExcelControl -> ExcelControl : writeExcelSheet()
+    ExcelControl --> Python : sytem call : file path, open
+    ' deactivate ExcelControl
+    activate Python
+
+    Python -> Python : read_from_text()
+    activate Python
+    Python -> Python : read_csv()
+    Python -> Python : _write_to_excel()
+    Python -> Python : _write_to_merge_cell()
+    deactivate Python
+    Python --> ExcelControl : Done
+    deactivate Python
+    deactivate ExcelControl
+
+
+
+    alt File Delete State
+        ExcelControl -> ExcelControl : TC file delete
+    end
+
+
+
+
+
+
+
+    deactivate ExcelControl
+end
+
+@enduml

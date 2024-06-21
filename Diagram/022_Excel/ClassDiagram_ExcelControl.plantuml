@@ -1,0 +1,86 @@
+@startuml
+
+' AbstractControl 클래스 정의
+class AbstractControl {
+    +virtual void keyEvent(const int& inputType, const int& inputValue)
+    +virtual void resizeEvent(const int& width, const int& height)
+    -virtual AbstractHandler* isHandler()
+    -virtual bool initControl()
+    -virtual void controlConnect(const bool& state)
+    -virtual void initCommonData(const int& currentMode, const int& displayType)
+    -virtual void initNormalData()
+    -virtual void initControlData()
+    -virtual void resetControl(const bool& reset)
+    -virtual void timerFunc(const int& timerId)
+    -virtual void updateDataControl(const int& type, const QVariant& value)
+    -virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    -virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue)
+    -virtual void slotControlUpdate(const int& type, const QVariant& value)
+    -virtual void slotConfigChanged(const int& type, const QVariant& value)
+    -virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue)
+    -virtual void slotHandlerEvent(const int& type, const QVariant& value)
+
+    +bool init(const int& currentMode, const int& displayType)
+    +bool isInitComplete()
+    +int controlTimer(const int& timerType, const bool& start, const int& interval)
+    +int getTimerId(const int& timerType)
+    +const QVariant getData(const int& type)
+    +bool setData(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    +bool createSignal(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    +void timerEvent(QTimerEvent* event)
+
+    -QMap<int, int> mTimer
+    -QMap<int, QVariant> mData
+    -bool mInit
+}
+
+' ControlExcel 클래스 정의
+class ControlExcel {
+    +virtual void keyEvent(const int& inputType, const int& inputValue)
+    +virtual void resizeEvent(const int& width, const int& height)
+    -virtual AbstractHandler* isHandler()
+    -virtual bool initControl()
+    -virtual void controlConnect(const bool& state)
+    -virtual void initCommonData(const int& currentMode, const int& displayType)
+    -virtual void initNormalData()
+    -virtual void initControlData()
+    -virtual void resetControl(const bool& reset)
+    -virtual void timerFunc(const int& timerId)
+    -virtual void updateDataControl(const int& type, const QVariant& value)
+    -virtual void updateDataHandler(const int& type, const QVariant& value, const bool& alwaysUpdate)
+    -virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue)
+    -virtual void slotControlUpdate(const int& type, const QVariant& value)
+    -virtual void slotConfigChanged(const int& type, const QVariant& value)
+    -virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue)
+    -virtual void slotHandlerEvent(const int& type, const QVariant& value)
+
+    -void updateNodeAddress(const bool& all, const QStringList& privateList, const QStringList& interList)
+    -void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath)
+    -bool writeExcelSheet(const QVariant& filePath)
+    -bool writeExcelFile(const QVariant& filePath)
+    -bool writeSheetInfo(const QVariant& filePath)
+    -QString sytemCall(const bool& readFile, const QVariant& filePath)
+    -bool checkPythonLibrary()
+    -bool openExcelFile(const QVariant& filePath)
+    -void loadExcelFile(const int& eventType)
+    -void saveExcelFile(const bool& saveAs)
+    -void updateClipboardInfo(const int& eventType)
+    -void updateShortcutInfo(const int& eventType)
+    -QString isSfcFileInfo(const QString& signalName)
+    -QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType)
+    -QMap<int, QStringList> isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName, const QMap<int, QStringList>& vsmFileList)
+    -void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType, QString& signalName)
+
+    -AbstractHandler* mHandler
+    -QSharedPointer<ivis::common::ExcuteProgramThread> mProcess
+}
+
+
+' 클래스 간의 관계 정의
+AbstractControl <|- ControlExcel : inheritance
+HandlerExcel <-- ControlExcel : create, init, connect
+ControlExcel <--> ConfigSetting : read, write
+ControlExcel <.. ControlManager : create, init
+ControlExcel <--> Popup : draw popup
+
+@enduml

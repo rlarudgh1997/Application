@@ -1,0 +1,34 @@
+@startuml
+
+' ConfigSetting 클래스 정의
+class ConfigSetting {
+    +QVariant readConfig(const int& configType)
+    +void writeConfig(const int& configType, const QVariant& configValue)
+    +QVariant isConfigName(const int& configType)
+    +void editConfig(const int& configType, const QVariant& configValue)
+    +void resetConfig(const int& resetType = ConfigResetTypeAll)
+    -void init()
+    -void readConfig()
+    -void writeConfig()
+    -void threadFunc()
+    -void signalConfigReset(const bool& resetAll) <<signal>>
+    -void signalConfigChanged(const int& type, const QVariant& value) <<signal>>
+    -void signalUpdateWindowTitle(const QString& title, const int& appMode) <<signal>>
+
+    -QSettings* mSetting
+    -ConfigInfo mConfigInfo
+    -QThread* mThread
+    -QMutex mMutex
+    -QMap<int, QVariant> mConfigData
+    -QMap<int, QVariant> mConfigBackup
+    -bool mThreadRun
+    -bool mThreadDataSave
+}
+
+' 클래스 간의 관계 정의
+ConfigSetting <-- ControlManager : read
+ConfigSetting <-- MenuControl : read, write, reset
+ConfigSetting <-- CenterControl : read, write, edit
+ConfigSetting <-- ExcelControl : read, write
+
+@enduml

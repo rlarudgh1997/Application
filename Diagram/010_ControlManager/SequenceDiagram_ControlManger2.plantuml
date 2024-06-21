@@ -1,0 +1,36 @@
+@startuml
+
+== Event Handling (Config View)==
+
+actor User order 10
+
+' participant MenuHandler order 30
+participant MenuControl order 20
+participant MenuGui order 40
+
+participant ControlManager order 50
+
+participant CenterHandler order 60
+participant CenterControl order 50
+participant CenterGui order 70
+
+
+
+
+User -> MenuGui: file open
+
+MenuGui -> MenuControl: emit createSignal()
+MenuControl -> MenuControl: slotHandlerEvent()
+MenuControl -> MenuControl: sendEventInfo()
+MenuControl -> ControlManager: sendEventInfo()
+ControlManager --> CenterControl: emit signalEventInfoChanged()
+CenterControl -> CenterControl: slotEventInfoChanged()
+CenterControl -> CenterControl: updateConfigInfo()
+CenterControl -> CenterControl: updateDataHandler()
+CenterControl --> CenterHandler: emit createSignal()
+CenterHandler -> CenterGui: slotPropertyChanged()
+CenterGui -> CenterGui: updateDisplayConfigInfo()
+
+
+
+@enduml
