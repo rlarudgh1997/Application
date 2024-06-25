@@ -1,0 +1,76 @@
+@startuml
+
+' Package Definitions
+package "User Interface" {
+    class User
+}
+
+package "Control Layer" {
+    class ControlManager {
+        +init(): void
+        +CreateInstance(): ConfigSetting
+        +readConfig(): void
+    }
+
+    class MenuControl {
+        +readConfig(): void
+    }
+}
+
+package "Handler Layer" {
+    class MenuHandler {
+        +init(): void
+    }
+}
+
+package "Gui Layer" {
+    class MenuGui {
+        +init(): void
+    }
+    class Menu {
+        +setupUi(): void
+    }
+}
+
+package "Screen Layer" {
+    class ScreenInfo {
+        +init(): void
+        +drawScrrenInfo(): void
+    }
+}
+
+package "Config Layer" {
+    class ConfigSetting {
+        +init(): void
+        +readConfig(): void
+        +writeConfig(): void
+        +resetConfig(): void
+    }
+}
+
+' Relationships
+User -> ControlManager : init()
+User -> Menu : select item
+
+ControlManager -> ConfigSetting : Create Instance()
+ControlManager --> MenuControl : Create Instance()
+
+MenuControl -> ConfigSetting : readConfig()
+MenuControl --> MenuHandler : init()
+MenuControl <.. MenuHandler : emit signal()
+
+MenuHandler --> MenuGui : init()
+MenuHandler <.. MenuGui : emit signal()
+MenuHandler -> ScreenInfo : init()
+
+Menu <- MenuGui : Create Instance()
+Menu ..> MenuGui : TouchEvent()
+
+' ConfigSetting Methods
+' ConfigSetting : +init(): void
+' ConfigSetting : +configFileOpen(): void
+' ConfigSetting : +resetConfig(): void
+' ConfigSetting : +readConfig(): void
+' ConfigSetting : +threadStart(): void
+
+@enduml
