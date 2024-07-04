@@ -86,7 +86,14 @@
         "qtablewidget": "cpp",
         "qtabwidget": "cpp",
         "qvboxlayout": "cpp",
-        "qhboxlayout": "cpp"
+        "qhboxlayout": "cpp",
+        "qstandarditemmodel": "cpp",
+        "qinputdialog": "cpp",
+        "qshortcut": "cpp",
+        "qstringlistmodel": "cpp",
+        "qsharedpointer": "cpp",
+        "qguiapplication": "cpp",
+        "qapplication": "cpp"
     },
     // "C_Cpp.clang_format_path": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
     // // "C_Cpp.clang_format_path": "/usr/bin/clang-format-13",

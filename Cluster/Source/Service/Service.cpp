@@ -451,17 +451,7 @@ void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
     }
 
     if (values.size() >= 1) {
-#if 0
-        QString multiValueInfo = QString();
-        for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
-            QString sfcName = iter.key();
-            QVariant sfcValue = iter.value();
-            multiValueInfo.append(QString("%1 : %2\n").arg(sfcName).arg(sfcValue.toString()));
-        }
-        emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), multiValueInfo);
-#else
         emit signalServiceDatasChanged(static_cast<int>(dataType), static_cast<int>(signalType), values);
-#endif
     } else {
         emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
     }
@@ -474,5 +464,11 @@ void Service::slotServiceDataChanged(const int& dataType, const int& signalType,
 
 void Service::slotServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
     qDebug() << "Service::slotServiceDatasChanged :" << dataType << signalType << signalValues.size();
+
+    for (auto iter = signalValues.cbegin(); iter != signalValues.cend(); ++iter) {
+        QString sfcName = iter.key();
+        QVariant sfcValue = iter.value();
+        qDebug() << "\t" << sfcName << ":" << sfcValue.toString();
+    }
 }
 #endif
