@@ -18,6 +18,17 @@ Service::Service() {
 void Service::init() {
     qDebug() << "Service - Init";
 
+#if defined(USE_SERVCIE_DATA_TEST)
+    connect(this, &Service::signalServiceDataChanged,
+            [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
+                slotServiceDataChanged(dataType, signalType, signalValue);
+            });
+    connect(this, &Service::signalServiceDatasChanged,
+            [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+                slotServiceDatasChanged(dataType, signalType, signalValues);
+            });
+#endif
+
     // getVehicleSignalModel().data();
 
     subscribeConstantSignals();
@@ -455,3 +466,13 @@ void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
         emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
     }
 }
+
+#if defined(USE_SERVCIE_DATA_TEST)
+void Service::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
+    qDebug() << "Service::slotServiceDataChanged :" << dataType << signalType << signalValue;
+}
+
+void Service::slotServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
+    qDebug() << "Service::slotServiceDatasChanged :" << dataType << signalType << signalValues.size();
+}
+#endif

@@ -10,6 +10,8 @@
 #include "SFCHelper.h"
 #include "ServiceEnum.h"
 
+// #define USE_SERVCIE_DATA_TEST
+
 using SignalHandlingFunc = std::function<void(const std::vector<ccos::vehicle::vsm::HVehicleSignal>&)>;
 using NodePathToValueFunc = std::function<QVariant(const ccos::vehicle::vsm::HVehicleSignal&)>;
 
@@ -61,5 +63,11 @@ private:
 signals:
     void signalServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
     void signalServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues);
+
+#if defined(USE_SERVCIE_DATA_TEST)
+private slots:
+    void slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue);
+    void slotServiceDatasChanged(const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues);
+#endif
 };
 #endif  // SERIVCE_H
