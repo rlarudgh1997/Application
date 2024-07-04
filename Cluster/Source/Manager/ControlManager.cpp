@@ -4,13 +4,24 @@
 #include "ScreenInfo.h"
 #include "ConfigSetting.h"
 
-#include "ControlHome.h"
-#include "ControlGauge.h"
-#include "ControlTelltale.h"
-#include "ControlContent.h"
-#include "ControlEvent.h"
 
-#if !defined(__MODULE_SUB_WINDOW__)
+#if defined(__MODULE_HOME__)
+#include "ControlHome.h"
+#endif
+#if defined(__MODULE_GAUGE__)
+#include "ControlGauge.h"
+#endif
+#if defined(__MODULE_TELLTALE__)
+#include "ControlTelltale.h"
+#endif
+#if defined(__MODULE_CONTENT__)
+#include "ControlContent.h"
+#endif
+#if defined(__MODULE_EVENT__)
+#include "ControlEvent.h"
+#endif
+
+#if !defined(__MODULE_SUB_WINDOW__) && defined(__MODULE_SERVICE__)
 #include "Service.h"
 #endif
 
@@ -120,26 +131,36 @@ void ControlManager::resizeEvent(QResizeEvent& resizeEvent) {
 void ControlManager::createControl(const int& displayType) {
     if (mControlInfo[displayType] == nullptr) {
         switch (displayType) {
+#if defined(__MODULE_HOME__)
             case ivis::common::DisplayEnum::DisplayTypeHome: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlHome::instance().data());
                 break;
             }
+#endif
+#if defined(__MODULE_GAUGE__)
             case ivis::common::DisplayEnum::DisplayTypeGauge: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlGauge::instance().data());
                 break;
             }
+#endif
+#if defined(__MODULE_TELLTALE__)
             case ivis::common::DisplayEnum::DisplayTypeTelltale: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlTelltale::instance().data());
                 break;
             }
+#endif
+#if defined(__MODULE_CONTENT__)
             case ivis::common::DisplayEnum::DisplayTypeContent: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlContent::instance().data());
                 break;
             }
+#endif
+#if defined(__MODULE_EVENT__)
             case ivis::common::DisplayEnum::DisplayTypeEvent: {
                 mControlInfo[displayType] = static_cast<AbstractControl*>(ControlEvent::instance().data());
                 break;
             }
+#endif
             default: {
                 qDebug() << "Fail to create control instnace - displayType :" << displayType;
                 break;

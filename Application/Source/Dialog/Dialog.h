@@ -8,6 +8,8 @@
 
 #include "CommonUtil.h"
 
+// #define USE_DIALOG_PROPERTY
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Dialog;
@@ -17,6 +19,7 @@ QT_END_NAMESPACE
 class Dialog : public QDialog {
     Q_OBJECT
 
+#if defined(USE_DIALOG_PROPERTY)
     REGISTER_WRITABLE_PROPERTY(int, DialogType, 0, false)
     REGISTER_WRITABLE_PROPERTY(int, PrevDialogType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QVariantList, DialogInfo, QVariantList(), false)
@@ -29,9 +32,30 @@ class Dialog : public QDialog {
     REGISTER_WRITABLE_PROPERTY(bool, SelectAll, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, MultiCheck, true, false)
     REGISTER_WRITABLE_PROPERTY(int, CheckModelIndex, (-1), false)
-    REGISTER_WRITABLE_PROPERTY(bool, FindLog, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, ViewLogStop, false, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, AutoCompleteList, QStringList(), false)
+#else
+    REGISTER_WRITABLE_PROPERTY_CONTAINER2(QHash, int, QVariant, Property, false)
+
+public:
+    enum {
+        DataTypeInvalid = 0,
+        DataTypeDialogType,
+        DataTypePrevDialogType,
+        DataTypeDialogInfo,
+        DataTypePrevDialogInfo,
+        DataTypeKeepDialog,
+        DataTypeDisplayType,
+        DataTypePrevDisplayType,
+        DataTypeAppMode,
+        DataTypeScreenRect,
+        DataTypeSelectAll,
+        DataTypeMultiCheck,
+        DataTypeCheckModelIndex,
+        DataTypeViewLogStop,
+        DataTypeAutoCompleteList,
+    };
+#endif
 
 public:
     enum {
@@ -104,6 +128,9 @@ private:
     void connectViewLog(const bool& state);
     void connectAutoComplete(const bool& state);
 
+    QVariant getData(const int& type);
+    void setData(const int& type, const QVariant& value);
+
     QRect updateMainRect();
     void updateDisplay(const int& displayType, const QString& title);
 
@@ -135,6 +162,7 @@ signals:
 
 private:
     Ui::Dialog* mGui;
+	QMap<int, QVariant> mData = QMap<int, QVariant>();
     QStandardItemModel mModel = QStandardItemModel();
 };
 

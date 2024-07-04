@@ -4,9 +4,14 @@
 #include "CommonPopup.h"
 #include "CommonResource.h"
 #include "ConfigSetting.h"
-#include "Service.h"
 
+#if defined(__MODULE_SERVICE__)
+#include "Service.h"
+#endif
+
+#if defined(USE_FILE_WATCHER_QT)
 #include "LogWatcher.h"
+#endif
 
 #include <QDebug>
 #include <QMapIterator>
@@ -52,7 +57,7 @@ SubWindow::~SubWindow() {
 
 void SubWindow::init() {
     // excuteScript(false, QString(), QStringList());
-#if 1  // defined(__SUB_WINDOW_ONLY__)
+#if defined(__MODULE_SERVICE__)
     Service::instance().data();
     Service::instance().data()->init();
 #endif
@@ -197,6 +202,7 @@ void SubWindow::controlConnect(const bool& state) {
     connect(mGui->actionAltonClient_Path, &QAction::triggered, [=]() { settingPath(PathTypeAltonClient); });
 
     // Service
+#if defined(__MODULE_SERVICE__)
     connect(Service::instance().data(), &Service::signalServiceDataChanged,
             [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                 // if (getCheckSfcSignal().contains(signalValue.toString())) {
@@ -223,6 +229,7 @@ void SubWindow::controlConnect(const bool& state) {
                 updateHmiLog(multiValueInfo);
             }
         });
+#endif
 }
 
 void SubWindow::drawDisplay(const int& type, const QString& text) {

@@ -18,7 +18,7 @@ Service::Service() {
 void Service::init() {
     qDebug() << "Service - Init";
 
-    getVehicleSignalModel();
+    // getVehicleSignalModel().data();
 
     subscribeConstantSignals();
     subscribeTelltaleSignals();
@@ -27,29 +27,32 @@ void Service::init() {
     subscribeEtcSignals();
 }
 
-ccos::vehicle::vsm::HVehicleSignalModel& Service::getVehicleSignalModel() {
-    static ccos::vehicle::vsm::HVehicleSignalModel* gVehicleSignalModel = nullptr;
-    if (gVehicleSignalModel == nullptr) {
-        gVehicleSignalModel = new ccos::vehicle::vsm::HVehicleSignalModel;
+QSharedPointer<ccos::vehicle::vsm::HVehicleSignalModel>& Service::getVehicleSignalModel() {
+    static QSharedPointer<ccos::vehicle::vsm::HVehicleSignalModel> gVehicleSignalModel;
+    if (gVehicleSignalModel.isNull()) {
+        gVehicleSignalModel =
+            QSharedPointer<ccos::vehicle::vsm::HVehicleSignalModel>(new ccos::vehicle::vsm::HVehicleSignalModel());
     }
-    return *gVehicleSignalModel;
+    return gVehicleSignalModel;
 }
 
+#if 0
 void Service::addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc) {
     auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(std::vector<std::string>{nodeAddress},
                                                                             ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED,
                                                                             std::make_shared<VehicleListener>(handlingFunc));
-    auto result = getVehicleSignalModel().subscribe(subscription);
+    auto result = getVehicleSignalModel().data()->subscribe(subscription);
 
     if (result != ccos::HResult::OK) {
         qDebug() << "Fail to subscribe :" << static_cast<int>(result) << nodeAddress.c_str();
     }
 }
+#endif
 
 void Service::addSubscriptionGroup(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc) {
     auto subscription = std::make_shared<ccos::vehicle::vsm::HSubscription>(
         nodePaths, ccos::vehicle::vsm::HSubscriptionType::VALUE_CHANGED, std::make_shared<VehicleListener>(handlingFunc));
-    auto result = getVehicleSignalModel().subscribe(subscription);
+    auto result = getVehicleSignalModel().data()->subscribe(subscription);
 
     // qDebug() << "\t addSubscriptionGroup :" << ((result == ccos::HResult::OK) ? ("Success") : ("Fail"));
     if (result != ccos::HResult::OK) {

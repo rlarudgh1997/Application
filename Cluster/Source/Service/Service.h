@@ -38,8 +38,10 @@ public:
 private:
     explicit Service();
 
-    ccos::vehicle::vsm::HVehicleSignalModel& getVehicleSignalModel();
+    static QSharedPointer<ccos::vehicle::vsm::HVehicleSignalModel>& getVehicleSignalModel();
+#if 0
     void addSubscription(const std::string& nodeAddress, const SignalHandlingFunc& handlingFunc);
+#endif
     void addSubscriptionGroup(const std::vector<std::string>& nodePaths, const SignalHandlingFunc& handlingFunc);
 
     void subscribeConstantSignals();

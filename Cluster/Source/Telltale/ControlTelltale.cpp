@@ -7,7 +7,9 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
+#if defined(__MODULE_SERVICE__)
 #include "Service.h"
+#endif
 
 QSharedPointer<ControlTelltale>& ControlTelltale::instance() {
     static QSharedPointer<ControlTelltale> gControl;
@@ -134,6 +136,7 @@ void ControlTelltale::controlConnect(const bool& state) {
                 [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
                     slotEventInfoChanged(displayType, eventType, eventValue);
                 });
+#if defined(__MODULE_SERVICE__)
         connect(Service::instance().data(), &Service::signalServiceDataChanged,
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
@@ -142,11 +145,14 @@ void ControlTelltale::controlConnect(const bool& state) {
                 [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
                     slotServiceDatasChanged(dataType, signalType, signalValues);
                 });
+#endif
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
+#if defined(__MODULE_SERVICE__)
         disconnect(Service::instance().data());
+#endif
     }
 }
 
@@ -224,6 +230,7 @@ void ControlTelltale::slotEventInfoChanged(const int& displayType, const int& ev
 void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
     QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
+#if defined(__MODULE_SERVICE__)
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
             Constant constantType = static_cast<Constant>(signalType);
@@ -257,6 +264,7 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
             break;
         }
     }
+#endif
 
     for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
         updateDataHandler(iter.key(), iter.value());
@@ -265,6 +273,7 @@ void ControlTelltale::slotServiceDataChanged(const int& dataType, const int& sig
 
 void ControlTelltale::slotServiceDatasChanged(const int& dataType, const int& signalType,
                                               const QHash<QString, QVariant>& signalValues) {
+#if defined(__MODULE_SERVICE__)
     if (signalValues.size() == 1) {
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     } else {
@@ -276,4 +285,5 @@ void ControlTelltale::slotServiceDatasChanged(const int& dataType, const int& si
         }
         slotServiceDataChanged(dataType, signalType, multiValueInfo);
     }
+#endif
 }

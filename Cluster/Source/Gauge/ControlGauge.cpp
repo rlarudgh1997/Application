@@ -7,7 +7,9 @@
 #include "CommonUtil.h"
 #include "CommonResource.h"
 
+#if defined(__MODULE_SERVICE__)
 #include "Service.h"
+#endif
 
 // #define USE_GAUGE_TEMP_VALUE
 
@@ -100,6 +102,7 @@ void ControlGauge::controlConnect(const bool& state) {
                 [=](const int& displayType, const int& eventType, const QVariant& eventValue) {
                     slotEventInfoChanged(displayType, eventType, eventValue);
                 });
+#if defined(__MODULE_SERVICE__)
         connect(Service::instance().data(), &Service::signalServiceDataChanged,
                 [=](const int& dataType, const int& signalType, const QVariant& signalValue) {
                     slotServiceDataChanged(dataType, signalType, signalValue);
@@ -108,11 +111,14 @@ void ControlGauge::controlConnect(const bool& state) {
                 [=](const int& dataType, const int& signalType, const QHash<QString, QVariant>& signalValues) {
                     slotServiceDatasChanged(dataType, signalType, signalValues);
                 });
+#endif
     } else {
         disconnect(isHandler());
         disconnect(ControlManager::instance().data());
         disconnect(ConfigSetting::instance().data());
+#if defined(__MODULE_SERVICE__)
         disconnect(Service::instance().data());
+#endif
     }
 }
 
@@ -343,6 +349,7 @@ void ControlGauge::slotEventInfoChanged(const int& displayType, const int& event
 void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signalType, const QVariant& signalValue) {
     QHash<int, QVariant> propertyData = QHash<int, QVariant>();
 
+#if defined(__MODULE_SERVICE__)
     switch (static_cast<DataType>(dataType)) {
         case DataType::Constant: {
             Constant constantType = static_cast<Constant>(signalType);
@@ -394,6 +401,7 @@ void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signal
             break;
         }
     }
+#endif
 
     for (auto iter = propertyData.cbegin(); iter != propertyData.cend(); ++iter) {
         updateDataHandler(iter.key(), iter.value());
@@ -402,6 +410,7 @@ void ControlGauge::slotServiceDataChanged(const int& dataType, const int& signal
 
 void ControlGauge::slotServiceDatasChanged(const int& dataType, const int& signalType,
                                            const QHash<QString, QVariant>& signalValues) {
+#if defined(__MODULE_SERVICE__)
     if (signalValues.size() == 1) {
         slotServiceDataChanged(dataType, signalType, signalValues.value(signalValues.keys().first()));
     } else {
@@ -413,4 +422,5 @@ void ControlGauge::slotServiceDatasChanged(const int& dataType, const int& signa
         }
         slotServiceDataChanged(dataType, signalType, multiValueInfo);
     }
+#endif
 }

@@ -43,49 +43,95 @@ public Q_SLOTS:                                                                 
     }                                                                                 \
 Q_SIGNALS:                                                                            \
     void signal##name##Changed(const type& name);                                     \
-                                                                                      \
 private:                                                                              \
     QMutex mMutex##name;                                                              \
     type m##name = value;
 
 // continer : QMap, QPair ....
-#define REGISTER_WRITABLE_PROPERTY_CONTAINER(container, key, value, name, notify)                      \
-    Q_PROPERTY(container<key, value> name READ get##name WRITE set##name NOTIFY signal##name##Changed) \
+#define REGISTER_WRITABLE_PROPERTY_CONTAINER(CONTAINER, KEY, VALUE, NAME, NOTI)                        \
+    Q_PROPERTY(CONTAINER<KEY, VALUE> NAME READ get##NAME WRITE set##NAME NOTIFY signal##NAME##Changed) \
 public:                                                                                                \
-    container<key, value> get##name() const {                                                          \
-        return m##name;                                                                                \
+    CONTAINER<KEY, VALUE> get##NAME() const {                                                          \
+        return m##NAME;                                                                                \
     }                                                                                                  \
 public Q_SLOTS:                                                                                        \
-    void set##name(const container<key, value>& name) {                                                \
-        QMutexLocker lock(&mMutex##name);                                                              \
-        if (m##name != name) {                                                                         \
-            m##name = name;                                                                            \
-            if (notify) {                                                                              \
-                emit signal##name##Changed(m##name);                                                   \
+    void set##NAME(const CONTAINER<KEY, VALUE>& info) {                                                \
+        QMutexLocker lock(&mMutex##NAME);                                                              \
+        if (m##NAME != info) {                                                                         \
+            m##NAME = info;                                                                            \
+            if (NOTI) {                                                                                \
+                emit signal##NAME##Changed(m##NAME);                                                   \
             }                                                                                          \
         }                                                                                              \
     }                                                                                                  \
 Q_SIGNALS:                                                                                             \
-    void signal##name##Changed(const container<key, value>& name);                                     \
-                                                                                                       \
+    void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                     \
 private:                                                                                               \
-    QMutex mMutex##name;                                                                               \
-    container<key, value> m##name = container<key, value>();
+    QMutex mMutex##NAMEe;                                                                              \
+    CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
+
+// continer : QMap, QPair ....
+#define REGISTER_WRITABLE_PROPERTY_CONTAINER2(CONTAINER, KEY, VALUE, NAME, NOTI)                          \
+    Q_PROPERTY(CONTAINER<KEY, VALUE> NAME READ read##NAME WRITE write##NAME NOTIFY signal##NAME##Changed) \
+public:                                                                                                   \
+    VALUE get##NAME(const KEY& key) const {                                                               \
+        return m##NAME[key];                                                                              \
+    }                                                                                                     \
+    CONTAINER<KEY, VALUE> read##NAME() const {                                                            \
+        return m##NAME;                                                                                   \
+    }                                                                                                     \
+public Q_SLOTS:                                                                                           \
+    void set##NAME(const KEY& key, const VALUE& value) {                                                  \
+        QMutexLocker lock(&mMutex##NAME);                                                                 \
+        if (m##NAME[key] != value) {                                                                      \
+            m##NAME[key] = value;                                                                         \
+            if (NOTI) {                                                                                   \
+                emit signal##NAME##ValueChanged(key, value);                                              \
+                emit signal##NAME##Changed(m##NAME);                                                      \
+            }                                                                                             \
+        }                                                                                                 \
+    }                                                                                                     \
+    void write##NAME(const CONTAINER<KEY, VALUE>& info) {                                                 \
+        QMutexLocker lock(&mMutex##NAME);                                                                 \
+        if (m##NAME != info) {                                                                            \
+            m##NAME = info;                                                                               \
+            if (NOTI) {                                                                                   \
+                emit signal##NAME##Changed(m##NAME);                                                      \
+            }                                                                                             \
+        }                                                                                                 \
+    }                                                                                                     \
+Q_SIGNALS:                                                                                                \
+    void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                        \
+    void signal##NAME##ValueChanged(const KEY& key, const VALUE& value);                                  \
+private:                                                                                                  \
+    QMutex mMutex##NAME;                                                                                  \
+    CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
 
 // enum
-#define TO_ENUM(name, ...) \
-    enum name {            \
-        name##Invalid = 0, \
-        name##__VA_ARGS__, \
+// TO_ENUM(private, PrivateEnum, Enum1, Enum2, Enum3)
+// TO_ENUM(public, PublicEnum, Enum1, Enum2, Enum3)
+#define TO_ENUM(ACCESS, NAME, ...) \
+ACCESS:                            \
+    enum {                         \
+        NAME##Invalid = 0,         \
+        NAME##__VA_ARGS__,         \
     };
 
-// enum clss
-#define TO_ENUM_CLASS(name, ...)   \
-    class name : public QObject {  \
-        Q_GADGET                   \
-    public:                        \
-        enum Type { __VA_ARGS__ }; \
-        Q_ENUMS(Type)              \
+// enum type
+#define TO_ENUM_TYPE(ACCESS, NAME, ...) \
+ACCESS:                                 \
+    enum NAME {                         \
+        NAME##Invalid = 0,              \
+        NAME##__VA_ARGS__,              \
+    };
+
+// enum class
+#define TO_ENUM_CLASS(NAME, TYPE, ...) \
+    class NAME : public QObject {      \
+        Q_GADGET                       \
+    public:                            \
+        enum TYPE { __VA_ARGS__ };     \
+        Q_ENUMS(TYPE)                  \
     };
 
 // button -> connect() : signal - slot

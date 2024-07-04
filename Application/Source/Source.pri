@@ -7,7 +7,7 @@ include($$PWD/Menu/Menu.pri)
 include($$PWD/Excel/Excel.pri)
 include($$PWD/Center/Center.pri)
 include($$PWD/Dialog/Dialog.pri)
-
+include($$PWD/TestCase/TestCase.pri)
 
 INCLUDEPATH+=\
     $$PWD\

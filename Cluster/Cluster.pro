@@ -34,13 +34,6 @@ QMAKE_DISTCLEAN = $${QMAKE_CLEAN}
 # QMAKE_DISTCLEAN_DIRS += $${QMAKE_CLEAN_DIRS}
 
 
-contains(DEFINES, TARGET_BUILD) {
-    PKGCONFIG += hmiappcommon ssfs hvehicle
-} else {
-    PKGCONFIG += ssfs hvehicle
-#    PKGCONFIG += hmiappcommon
-}
-
 message("==================================")
 message("==== Top-level qmake settings ====")
 message("==================================")
