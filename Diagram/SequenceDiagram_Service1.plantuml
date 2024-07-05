@@ -1,0 +1,75 @@
+@startuml
+
+== Service 초기화 ==
+
+participant OtherClass order 10
+
+participant Service order 20
+
+participant VehicleListener order 30
+participant HVehicleSignalModel order 40
+participant HSubscription order 50
+
+participant AltonService order 60
+
+OtherClass -> Service: init()
+activate OtherClass
+deactivate OtherClass
+
+
+activate Service
+Service -> Service: getVehicleSignalModel()
+activate Service
+deactivate Service
+
+Service -> Service: subscribeConstantSignals()
+activate Service
+
+Service -> Service: subscribeSignals<Constant>()
+activate Service
+
+Service -> Service: addSubscriptionGroup()
+activate Service
+
+Service -> VehicleListener: make_shared VehicleListener
+activate VehicleListener
+deactivate VehicleListener
+
+Service -> HSubscription: make_shared HSubscription
+activate HSubscription
+deactivate HSubscription
+
+Service -> Service: new HVehicleSignalModel
+Service -> HVehicleSignalModel: subscribe(onSignalChanged()) -> register callback
+activate HVehicleSignalModel
+deactivate HVehicleSignalModel
+
+deactivate Service
+deactivate Service
+deactivate Service
+deactivate Service
+
+
+== SFC 데이터 변경 ==
+
+
+Service <-- AltonService : sfc value changed
+activate AltonService
+deactivate AltonService
+
+activate Service
+Service -> Service : onSignalChanged()
+
+
+OtherClass <-- Service: emit signalServiceDatasChanged()
+activate OtherClass
+deactivate OtherClass
+
+
+' Service -> Service: subscribeTelltaleSignals()
+' Service -> Service: subscribeEventSignals()
+' Service -> Service: subscribeSoundSignals()
+' Service -> Service: subscribeEtcSignals()
+
+
+@enduml

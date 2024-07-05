@@ -450,10 +450,10 @@ void Service::onSignalChanged(const DataType& dataType, const TYPE& signalType,
         isValue = isSignalValue(vehicleSignal, values);
     }
 
-    if (values.size() >= 1) {
-        emit signalServiceDatasChanged(static_cast<int>(dataType), static_cast<int>(signalType), values);
-    } else {
+    if (values.size() == 0) {
         emit signalServiceDataChanged(static_cast<int>(dataType), static_cast<int>(signalType), isValue);
+    } else {
+        emit signalServiceDatasChanged(static_cast<int>(dataType), static_cast<int>(signalType), values);
     }
 }
 
