@@ -13,7 +13,7 @@
 // #define USE_SERVCIE_DATA_TEST
 
 using SignalHandlingFunc = std::function<void(const std::vector<ccos::vehicle::vsm::HVehicleSignal>&)>;
-using NodePathToValueFunc = std::function<QVariant(const ccos::vehicle::vsm::HVehicleSignal&)>;
+// using NodePathToValueFunc = std::function<QVariant(const ccos::vehicle::vsm::HVehicleSignal&)>;
 
 class VehicleListener : public ccos::vehicle::vsm::IHSubscriptionListener {
 public:

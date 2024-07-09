@@ -1,3 +1,6 @@
+CONFIG += link_pkgconfig
+
+
 INCLUDEPATH += \
     $$PWD\
 
@@ -19,3 +22,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/Service.cpp\
+
+
+message("PKGCONFIG=$$PKGCONFIG")
