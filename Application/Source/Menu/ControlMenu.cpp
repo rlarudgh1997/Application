@@ -986,6 +986,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateSelectModueList(type, QVariantList());
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
+            qDebug() << "EventTypeRunMultiDocker";
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeTestReportResult:
         case ivis::common::EventTypeEnum::EventTypeTestReportCoverage: {
             updateTestReportInfo(type);

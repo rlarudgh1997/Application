@@ -708,8 +708,9 @@ void GuiExcel::updateDisplayExcelSheet() {
             // QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
             // qDebug() << sheetIndex << ". cellChanged :" << column << "," << row << ", Text" << text;
             QVariantList editSheetInfo = QVariantList();
-            if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates) ||
-                (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters)) {
+            if (true) {
+            // if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates) ||
+            //     (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters)) {
                 QString allString = QString();
                 QVariantList nodeAddress = QVariantList();
                 for (const auto& data : readExcelSheet(sheetIndex, QVariantList(), allString)) {
@@ -725,6 +726,20 @@ void GuiExcel::updateDisplayExcelSheet() {
             }
             createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant(editSheetInfo));
             updateDisplaySheetHeaderAdjust(sheetIndex);
+
+            if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) && (column == 0)) {
+                QString moduleName = mExcelSheet[sheetIndex]->item(row, 0)->text();
+                QString version = (mExcelSheet[sheetIndex]->item(row, 1) == nullptr) ?
+                                  ("") : (mExcelSheet[sheetIndex]->item(row, 1)->text());
+                QString description = (mExcelSheet[sheetIndex]->item(row, 2) == nullptr) ?
+                                      ("") : (mExcelSheet[sheetIndex]->item(row, 2)->text());
+                if ((moduleName.size() == 0) || (version.size() > 0) || (description.size() > 0)) {
+                    qDebug() << "Fail to text :" << (moduleName.size() == 0) << (version.size() > 0) << (description.size() > 0);
+                    return;
+                }
+                QVariantList autoInputInfo = QVariantList({sheetIndex, row, moduleName});
+                createSignal(ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo, autoInputInfo);
+            }
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
             QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
@@ -808,6 +823,9 @@ void GuiExcel::updateDisplayExcelSheet() {
                 } else if (signalName.indexOf("Vehicle.") == 0) {
                     inputDataInfo = QVariantList({false, outputState, vehicleType, signalName});
                     createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData, inputDataInfo);
+                } else if (signalName.indexOf("[Sheet]") == 0) {
+                    qDebug() << "[Sheet] Private : TCName :" << signalName;
+
                 } else {
                 }
             } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)) {
@@ -947,6 +965,22 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
         0,
     });
     updateDrawDialog(dialogType, info);
+}
+
+void GuiExcel::updateDisplayAutoInputDescrtion() {
+    int sheetIndex = mCurrentSheetIndex;
+    QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
+    if (modelIndexs.size() == 0) {
+        qDebug() << "Select cell count : 0";
+        return;
+    }
+    QVariant descrtionInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo);
+    int row = modelIndexs.at(0).row();
+    int column = modelIndexs.at(0).column() + 1;
+    int index = 0;
+    for (const auto& info : descrtionInfo.toList()) {
+        mExcelSheet[sheetIndex]->setItem(row, column + index++, new QTableWidgetItem(info.toString()));
+    }
 }
 
 void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {
@@ -1284,6 +1318,10 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeValueEnum: {
             updateDisplayValueEnum(value.toList());
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo: {
+            updateDisplayAutoInputDescrtion();
             break;
         }
         default: {

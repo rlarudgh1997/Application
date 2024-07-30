@@ -117,6 +117,7 @@
     </property>
     <addaction name="actionGenTC"/>
     <addaction name="actionRunTC"/>
+    <addaction name="actionRunTCMulti"/>
     <addaction name="actionTCReport"/>
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
@@ -427,6 +428,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionRunTCMulti">
+   <property name="text">
+    <string>RunMultiDocker</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+M</string>
    </property>
   </action>
  </widget>

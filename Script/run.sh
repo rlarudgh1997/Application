@@ -46,7 +46,7 @@ function setEnvironments(){
 			APP_PATH=$CCOS_LIB_DIR/bin
 			# APP_PATH=$../Alton
 		elif [ "$BIN_NAME" = Cluster ]; then
-			source $SDK_HOST
+			source $SDK_HOST PV
 			unset $ALTON_HAL_SCRIPT_PATH
 			APP_PATH=$APP_PATH/deploy_x86
 		else
@@ -58,6 +58,7 @@ function setEnvironments(){
 	fi
 
 
+	echo "SDK_HOST=$SDK_HOST"
 	echo "APP_PATH=$APP_PATH"
 	echo "=========================================================================================================="
 	echo

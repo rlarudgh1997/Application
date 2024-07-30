@@ -9,7 +9,7 @@
 		PubkeyAcceptedKeyTypes +ssh-rsa
 		HostKeyAlgorithms +ssh-rsa
 
-		
+
 [ssh key 등록 확인]
 	ssh dcp.ivis.tech
 	- 하기 메세지 출력시 정상동작
@@ -22,11 +22,11 @@
 
 		  git clone ssh://kkh1997@dcp.ivis.tech:29418/REPOSITORY_NAME.git
 
-		  
-[repo init]		  
+
+[repo init]
 	repo init -u ssh://dcp.ivis.tech/repo-cluster
 	repo sync
-	
+
 
 [lib 설치]
 	sudo apt-get update
@@ -56,18 +56,18 @@
 		USER_SFC_REPO=yes
 		if [ "$USER_SFC_REPO" = yes ]; then
 			SFC_TYPE=PV
-			
+
 			INSTALL_PATH=/opt/sfc
 			#INSTALL_PATH=$HOME/usr
 
-			if [ "$SFC_TYPE" = CV ]; then	
+			if [ "$SFC_TYPE" = CV ]; then
 				ALTON_INSTALL_PATH=$INSTALL_PATH/CV
 				export ALTON_SFC_CONFIGURATION_FILENAME=CV
 			else
 				ALTON_INSTALL_PATH=$INSTALL_PATH/PV
 				export ALTON_SFC_CONFIGURATION_FILENAME=platform
 			fi
-			
+
 			SFC_SOURCE_PATH=$HOME/900_Code/700_Cluster
 			export ALTON_SFC_CONFIGURATION=$SFC_SOURCE_PATH/srcs/SFC/model/SFC/config
 			export ALTON_VSM_CONFIGURATION=$ALTON_INSTALL_PATH/bin/config/vsm/
@@ -88,16 +88,16 @@
 		#cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=$HOME/usr -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
 		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DCMAKE_INSTALL_PREFIX=/opt/sfc/CV -DSFC=SFC -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE=coverage
 
-		
-		
-[build 방법]
+
+
+[SFC Repo : build 방법]
 	cd $HOME/900_Code/700_Cluster/
 	sudo rm -rf srcs
 	repo sync
 		에러 발생시 repo sync 다시 한번더 수행
 
 	cd $HOME/900_Code/700_Cluster/srcs
-	
+
 	- PV
 		mkdir build_PV
 		cd build_PV
@@ -109,7 +109,7 @@
 
 	sudo make -j8
 
-	
+
 [라이브러리 정보 파일 생성 방법]
 	echo "[SDK 생성시 라이브러리 버전]"     > LibraryVersion.info
 	date +"%Y-%m-%d %H:%M:%S"        >> LibraryVersion.info
@@ -126,22 +126,22 @@
 	protoc --version                 >> LibraryVersion.info
 	echo ""                          >> LibraryVersion.info
 	clang-format-13 --version        >> LibraryVersion.info
-	
+
 	sudo mv LibraryVersion.info /opt/sfc/PV
 	cat /opt/sfc/PV/LibraryVersion.info
 
 
 [hmiappcommon 별도 컴파일 방법]
 	cd $HOME/900_Code/700_Cluster/srcs/apptemplate/
-	
+
 	- cmake 파일 수정
 		chmod +w CMakeLists.txt
 		vi CMakeLists.txt
-		
+
 		- 주석 해제 : hmiappcommon 관련 주석
 	        set(DependencyList "${DependencyList};hmiappcommon")
 			BuildQtProject(windowguicomponents "${DependencyList}")
-	
+
 	mkdir build
 	cd build
 
@@ -152,7 +152,7 @@
 
 	sudo make -j8
 
-	
+
 [alton 실행 방법]
 	cd $HOME/900_Code/700_Cluster/srcs/build/alton/AltonService
 	./altonservice &
@@ -178,11 +178,11 @@
 	sudo apt install gcc-9 g++-9
 	sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 40
 	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 40
-	
+
 [cmake 설치]
 	- 3.15 이상
 	cmake --version
-	
+
 	sudo apt-get install cmake
 
 	wget https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz
@@ -257,20 +257,20 @@
 	pip install openpyxl
 	pip install numpy
 
-	
+
 [clang-format-13 설치]
 	cd ~/buildenv/
 	wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 	sudo apt-get update
 	sudo apt-get install clang-format-13
 	clang-format-13 --version
-	
+
 	sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 100
 
-	
-	
-	
-	
+
+
+
+
 ====================================================================================================
 설치된 라이브러리 버전 확인
 ====================================================================================================
@@ -305,7 +305,7 @@
 
 [WSL(22.04) lib Version]
 	Python 3.8.18
-	
+
 	gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
 	Copyright (C) 2019 Free Software Foundation, Inc.
 	This is free software; see the source for copying conditions.  There is NO
@@ -318,13 +318,13 @@
 
 	cmake version 3.22.1
 	CMake suite maintained and supported by Kitware (kitware.com/cmake).
-	
+
 	libprotoc 3.11.4
-	
+
 	Ubuntu clang-format version 13.0.1-2ubuntu2.2
 
-	
-	
+
+
 
 ====================================================================================================
 설치 불필요 : 기존 설치 내용
@@ -360,18 +360,3 @@
 	cmake ..
 	make -j$(nproc)
 	sudo make install
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,7 +5,13 @@ PROJECT_DIR="$BASE_DIR/.."
 
 SDK_ENVIROMENT_PATH=""
 SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-poky-linux-gnueabi
-#SDK_HOST=/opt/sfc/PV/environment-setup-sfc
+
+# CCOS_LIB_DIR : SFC SDK 설치 path 를 사용해야함
+# ~/.bashrc 마지막 줄에 정의 된 CCOS_LIB_DIR 을 사용하거나 아래에 정의도니 CCOS_LIB_DIR 사용 가능
+# 현재 아래 CCOS_LIB_DIR 사용함
+CCOS_LIB_DIR="/opt/sfc/PV"
+# CCOS_LIB_DIR="/opt/sfc/CV"
+# CCOS_LIB_DIR="/opt/sfc/CONN"
 SDK_HOST=$CCOS_LIB_DIR/environment-setup-sfc
 
 SET_PLATFORM=target

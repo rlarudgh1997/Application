@@ -34,6 +34,7 @@ private:
                                                     const QMap<int, QStringList>& vsmFileList);
     void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                      QString& signalName);
+    void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
 
 protected:
     virtual AbstractHandler* isHandler();

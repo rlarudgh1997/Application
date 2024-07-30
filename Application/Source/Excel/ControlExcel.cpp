@@ -212,7 +212,11 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& private
         iter.next();
         int propertyType = iter.key();
         QStringList dataList = QStringList();
-        for (const auto& infoData : iter.value()) {
+        for (QString infoData : iter.value()) {
+            infoData.remove(prefixText);
+            if (infoData.size() == 0) {
+                continue;
+            }
             QStringList startText = infoData.split(excelMergeTextStart.toString());
             if (startText.size() == 2) {
                 dataList.append(QString("%1%2").arg(prefixText).arg(startText.at(1)));
@@ -662,16 +666,18 @@ void ControlExcel::updateShortcutInfo(const int& eventType) {
 }
 
 QString ControlExcel::isSfcFileInfo(const QString& signalName) {
-    QString ymlFile = QString();
     QString moduleName = QString();
     QStringList signalSplit = signalName.split(".");
     if (signalSplit.size() >= 2) {
-        // Input Signal : SFC.{MODULE_NAME}.*
+        // signalName : SFC.{MODULE_NAME}.*
         moduleName = signalSplit.at(1);
         if ((moduleName.compare("Extension") == false) || (moduleName.compare("Private") == false)) {
-            // Input Signal : SFC.Extension.{MODULE_NAME}.*  or  SFC.Private.{MODULE_NAME}.*
+            // signalName : SFC.Extension.{MODULE_NAME}.*  or  SFC.Private.{MODULE_NAME}.*
             moduleName = signalSplit.at(2);
         }
+    } else {
+        // signalName : {MODULE_NAME}
+        moduleName = signalName;
     }
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QStringList sfcTypeList = QStringList();
@@ -687,6 +693,8 @@ QString ControlExcel::isSfcFileInfo(const QString& signalName) {
         // moduleName.remove("_New");
         moduleName.replace("_New", "_CV");
     }
+
+    QString ymlFile = QString();
     for (const auto& sfc : sfcTypeList) {
         QString file = QString("%1/SFC/%2/%3/%4.yml").arg(sfcModelPath).arg(sfc).arg(moduleName).arg(moduleName);
         bool fileExists = QFile::exists(file);
@@ -920,6 +928,45 @@ void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int&
     }
 }
 
+void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo) {
+    if (autoInputInfo.size() != 3) {
+        qDebug() << "Fail to auto input info size :" << autoInputInfo.size();
+        return;
+    }
+
+    // int sheetIndex = autoInputInfo.at(0).toInt();
+    // int row = autoInputInfo.at(1).toInt();
+    QString moduleName = autoInputInfo.at(2).toString();
+    QString fileName = isSfcFileInfo(moduleName);
+
+    if (fileName.size() == 0) {
+        return;
+    }
+
+    QStringList readData = ivis::common::FileInfo::readFile(fileName);
+    QStringList foundStr = QStringList({"  sfcVersion: ", "  description: "});
+    QVariantList descInfo = QVariantList();
+    for (const auto& data : readData) {
+        for (const auto& str : foundStr) {
+            if (data.contains(str)) {
+                QString temp = data;
+                temp.remove(str);
+                temp.remove("\"");
+                descInfo.append(temp);
+            }
+        }
+        if (descInfo.size() == foundStr.size()) {
+            break;
+        }
+    }
+
+    if (descInfo.size() > 0) {
+        // descInfo.prepend(sheetIndex);
+        // descInfo.prepend(row);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo, descInfo, true);
+    }
+}
+
 void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {
     switch (type) {
         default: {
@@ -969,6 +1016,10 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
                 updateNodeAddress(false, privateList, interList);
             }
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {
+            updateAutoInputDescriptionInfo(value.toList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet: {

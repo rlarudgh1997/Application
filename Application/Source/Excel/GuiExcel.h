@@ -137,6 +137,7 @@ private:
     void updateDisplayAutoComplete(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
     void updateDisplayValueEnum(const QVariantList& data);
+    void updateDisplayAutoInputDescrtion();
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);

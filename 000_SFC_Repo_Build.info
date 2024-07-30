@@ -1,0 +1,74 @@
+[가이드 문서]
+	https://ivis.atlassian.net/wiki/spaces/SFC/pages/1981120559/Repo+Build#1)-SFC-Full-Build-Script
+
+
+[Repo 권한 등록]
+	- 접근 권한 확인
+
+	- repo 동작 확인
+		repo init -u git@bitbucket.org:ivc-suite/alton.manifests.git
+
+	- App 비밀 번호 등록
+		https://bitbucket.org/account/settings/app-passwords/
+			-> 참고 : https://ivis.atlassian.net/wiki/spaces/SFC/pages/1980399648/Bitbucket+repo#4)-.gitconfig%EC%97%90-ssh%EB%A5%BC-https%EB%A1%9C-%EB%8C%80%EC%B2%B4%ED%95%98%EB%8F%84%EB%A1%9D-%EB%B3%80%EA%B2%BD
+	- SSH 보안키 등록
+		https://bitbucket.org/account/settings/ssh-keys/
+			-> 참고 : https://ivis.atlassian.net/wiki/spaces/PDD/pages/1940160692/git+ssh+Credenrials
+			-> 사용중인 보안키 정보
+				등록 ~/.ssh/id_rsa.pub
+				사용 ~/.ssh/id_rsa
+
+=================================================================================================================================
+=================================================================================================================================
+[Repo Init]
+	repo init -u git@bitbucket.org:ivc-suite/alton.manifests.git
+	repo sync
+
+	repo info
+	# repo forall -p -c git checkout <branch>
+	# repo forall -p -c git status
+
+	# git clone https://kkh1997@bitbucket.org/ivc-suite/alton.manifests.git
+
+
+[Script 복사]
+	https://ivis.atlassian.net/wiki/spaces/SFC/pages/1981120559/Repo+Build#1)-SFC-Full-Build-Script
+
+
+
+=================================================================================================================================
+=================================================================================================================================
+[Build]
+	./sfc_local_build.sh -c PV -SFC SFC -p ~/opt/sfc/PV_TEST
+	sudo ./sfc_local_build.sh -c PV -SFC SFC -p /opt/sfc/CONN
+	#sudo ./sfc_local_build.sh -c CONN -o POIP -p /opt/sfc/CONN
+
+	- 참조
+		./sfc_local_build.sh -h
+			This script build alton package for SFC in local enviroment
+			  <USAGE> $ ./sfc_local_build.sh -c [vehicle_type]
+			  (Option ex1) $ ./sfc_local_build.sh -c PV -g OFF
+			  (Option ex2) $ ./sfc_local_build.sh -c CV -t SFCFUEL -p {TARGET_DIR_FROM_HOME} -g ON
+
+			Options:
+			  -c    [PV|CV|CONN]                vehicle category (essential option)
+			  -SFC  [SFC|SFCFUEL|NONE]          SFC type (default[-DSFC=]: SFC and SFCFUEL)
+			  -r    [YOUR_OWN_REMOTE_REPO|local] remote repository name (default: hmc_private)
+					  # If you wanna use a local branch, just write 'local'
+			  -b    [branch name]               SFC branch name (default: current)
+			  -PR   [PR Number]                 SFC pull-request number (default: NONE)
+			  -o    [CCOS|POIP]                 target OS type (default: CCOS)
+			  -p    [YOUR_OWN_DIR_FROM_HOME]    target directory from home (same as CMAKE_INSTALL_PREFIX, default: usr)
+					  # If you want to custom sdk install path set ENV(VEHICLE_TYPE_PREFIX) or ENV(VEHICLE_TYPE_POSTFIX)
+					  # e.g 1) export VEHICLE_TYPE_PREFIX="pv_"
+					  # -----> sdk install path will be set /home/ivis/pv_usr
+					  # - e.g 2) export VEHICLE_TYPE_POSTFIX="_pv"
+					  # -----> sdk install path will be set /home/ivis/usr_pv
+			  -g    [ON|OFF]                    gcov build (default: ON)
+			  -v    [ON|OFF]                 validator build option(default: ON)
+
+
+=================================================================================================================================
+=================================================================================================================================
+[SDK 생성 방법]
+	참고 : SDK 파일 생성 방법_V2.txt

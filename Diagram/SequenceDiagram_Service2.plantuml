@@ -1,0 +1,58 @@
+@startuml
+participant Client
+participant Service
+' participant ccos::vehicle::vsm::HVehicleSignalModel as Model
+' participant ccos::vehicle::vsm::HSubscription as Subscription
+' participant ccos::vehicle::vsm::HVehicleSignal as Signal
+participant Model
+participant Subscription
+participant Signal
+
+Client -> Service: instance()
+activate Service
+Service -> Service: static QSharedPointer<Service> gService
+Service -> Service: if (gService.isNull())
+Service -> Service: gService = QSharedPointer<Service>(new Service())
+Service --> Client: return gService
+deactivate Service
+
+Client -> Service: gService->init()
+activate Service
+Service -> Service: getVehicleSignalModel()
+activate Model
+Model -> Model: static ccos::vehicle::vsm::HVehicleSignalModel* gVehicleSignalModel
+Model -> Model: if (gVehicleSignalModel == nullptr)
+Model -> Model: gVehicleSignalModel = new ccos::vehicle::vsm::HVehicleSignalModel
+Model -> Model: return *gVehicleSignalModel
+deactivate Model
+Service -> Service: subscribeConstantSignals()
+
+Service -> Service: subscribeSignals(Constant, ...)
+
+Service -> Service: addSubscriptionGroup(nodePaths, handlingFunc)
+activate Subscription
+Subscription -> Model: subscribe(subscription)
+Model -> Model: return result
+alt result != ccos::HResult::OK
+    Service -> Service: qDebug() << "Fail to subscribe :" << result << nodeAddress
+end
+deactivate Subscription
+
+Service -> Service: subscribeSignals(Constant, ...)
+' activate Service
+
+AltonService --> Service: SFC Data Changed
+Service -> Service: onSignalChanged(DataType, signalType, signalList)
+activate Service
+Service -> Service: isSignalValue(vehicleSignal, values)
+alt vehicleSignal.getNodePath().isEmpty() == false
+    Service -> Signal: vehicleSignal.getValue<type>()
+    Service -> Service: values[nodePath] = isValue
+end
+alt values.size() >= 1
+    Service -> Client: emit signalServiceDatasChanged(dataType, signalType, values)
+else
+    Service -> Client: emit signalServiceDataChanged(dataType, signalType, isValue)
+end
+deactivate Service
+@enduml

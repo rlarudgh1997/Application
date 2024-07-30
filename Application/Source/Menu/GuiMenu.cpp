@@ -115,6 +115,8 @@ void GuiMenu::drawMenuRun() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTC, QVariant()); });
     connect(mGui->actionRunTC, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunTC, QVariant()); });
+    connect(mGui->actionRunTCMulti, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunMultiDocker, QVariant()); });
     connect(mGui->actionTCReport, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTestReportResult, QVariant()); });
     connect(mGui->actionGCOVReport, &QAction::triggered,
