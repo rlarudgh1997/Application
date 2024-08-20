@@ -15,7 +15,7 @@
 #define CONFIG_FILE (QString("%1/%2").arg(CONFIG_PATH).arg(CONFIG_NAME))
 
 #define GROUP_NAME_COMMON "Common"
-#define GROUP_NAME_GENERAL "Gernal"
+#define GROUP_NAME_GENERAL "General"
 #define GROUP_NAME_REPORT "Report"
 #define GROUP_NAME_FILE "File"
 #define GROUP_NAME_VEHICLE "Vehicle"

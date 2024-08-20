@@ -30,11 +30,16 @@ private:
     void updateShortcutInfo(const int& eventType);
     QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
-    QMap<int, QStringList> isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName,
-                                                    const QMap<int, QStringList>& vsmFileList);
+    QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName,
+                                            const QMap<int, QStringList>& fileList);
+    int isDataType(const QString& inputDataType);
+    QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                      QString& signalName);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
+    void updateGenDataInfo();
+    bool replaceGenDataInfo();
+    void constructGenDataInfo();
 
 protected:
     virtual AbstractHandler* isHandler();

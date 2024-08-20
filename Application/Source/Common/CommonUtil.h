@@ -43,6 +43,7 @@ public Q_SLOTS:                                                                 
     }                                                                                 \
 Q_SIGNALS:                                                                            \
     void signal##name##Changed(const type& name);                                     \
+                                                                                      \
 private:                                                                              \
     QMutex mMutex##name;                                                              \
     type m##name = value;
@@ -66,6 +67,7 @@ public Q_SLOTS:                                                                 
     }                                                                                                  \
 Q_SIGNALS:                                                                                             \
     void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                     \
+                                                                                                       \
 private:                                                                                               \
     QMutex mMutex##NAMEe;                                                                              \
     CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
@@ -103,6 +105,7 @@ public Q_SLOTS:                                                                 
 Q_SIGNALS:                                                                                                \
     void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                        \
     void signal##NAME##ValueChanged(const KEY& key, const VALUE& value);                                  \
+                                                                                                          \
 private:                                                                                                  \
     QMutex mMutex##NAME;                                                                                  \
     CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
@@ -111,7 +114,7 @@ private:                                                                        
 // TO_ENUM(private, PrivateEnum, Enum1, Enum2, Enum3)
 // TO_ENUM(public, PublicEnum, Enum1, Enum2, Enum3)
 #define TO_ENUM(ACCESS, NAME, ...) \
-ACCESS:                            \
+    ACCESS:                        \
     enum {                         \
         NAME##Invalid = 0,         \
         NAME##__VA_ARGS__,         \
@@ -119,7 +122,7 @@ ACCESS:                            \
 
 // enum type
 #define TO_ENUM_TYPE(ACCESS, NAME, ...) \
-ACCESS:                                 \
+    ACCESS:                             \
     enum NAME {                         \
         NAME##Invalid = 0,              \
         NAME##__VA_ARGS__,              \
@@ -273,9 +276,9 @@ public:
     }
     void check(const QString& info = QString()) {
         if (info.size()) {
-            qDebug() << "CheckTime[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "[CheckTime]" << info.toLatin1().data() << ":" << mElapsedTimer.elapsed() << "ms\n";
         } else {
-            qDebug() << "CheckTime :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "[CheckTime] :" << mElapsedTimer.elapsed() << "ms\n";
         }
     }
 

@@ -988,6 +988,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
             qDebug() << "EventTypeRunMultiDocker";
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTestReportResult:

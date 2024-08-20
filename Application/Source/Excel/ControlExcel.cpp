@@ -7,6 +7,8 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
+#include "TestCase.h"
+
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
 const QString VEHICLE_TYPE_FCEV = QString("FCEV");
@@ -624,7 +626,9 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
         (saveAs) ? (QVariant()) : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
     if (savefilePath.toString().size() == 0) {
         QVariant filePath = QVariant();
-        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath);
+        savefilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
+        button =
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::Save, isHandler(), filePath, QVariantList({savefilePath}));
         if (button == ivis::common::PopupButton::OK) {
             savefilePath = filePath;
         }
@@ -701,9 +705,8 @@ QString ControlExcel::isSfcFileInfo(const QString& signalName) {
         if (fileExists) {
             ymlFile = file;
         }
-        qDebug() << ((appModePV) ? ("\t PV yml :") : ("\t CV yml :")) << fileExists << file;
+        // qDebug() << ((appModePV) ? ("\t PV yml :") : ("\t CV yml :")) << fileExists << file;
 
-        // if ((ymlFile.size() == 0) && (appModePV == false)) {
         if (appModePV == false) {
             file = QString("%1/SFC/%2/%3_CV/%4_CV.yml").arg(sfcModelPath).arg(sfc).arg(moduleName).arg(moduleName);
             if (QFile::exists(file)) {
@@ -712,7 +715,7 @@ QString ControlExcel::isSfcFileInfo(const QString& signalName) {
             }
         }
     }
-    qDebug() << "Found yml :" << (ymlFile.size() > 0) << ymlFile;
+    // qDebug() << "Found yml :" << (ymlFile.size() > 0) << ymlFile;
     return ymlFile;
 }
 
@@ -736,8 +739,8 @@ QStringList ControlExcel::isVsmFileInfo(const QString& vehicleName, const QStrin
     return fileName;
 }
 
-QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName,
-                                                              const QMap<int, QStringList>& vsmFileList) {
+QMap<int, QStringList> ControlExcel::isSignalDataInfo(const bool& isDataType, const QString& signalName,
+                                                      const QMap<int, QStringList>& fileList) {
     const QString PREFIX_TYPE = QString("type:");
     const QString PREFIX_SIGNAL_NAME = QString("signalName:");
     const QString PREFIX_DATA_TYPE = QString("dataType:");
@@ -754,9 +757,17 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
     // const QString PREFIX_CCAN = QString("_CCAN");
 
     QMap<int, QStringList> inputDataInfo = QMap<int, QStringList>();
+    bool sfcSignal = signalName.trimmed().startsWith("SFC.");
+    bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
+
+    if ((sfcSignal == false) && (vehicleSignal == false)) {
+        qDebug() << "Error with input signal name :" << signalName;
+        return inputDataInfo;
+    }
+
     QString signal = QString();
-    bool vehiclSystem = signalName.contains("Vehicle.System.");
-    int startAppendIndex = ((vehiclSystem) ? (3) : (2));
+    bool vehicleSystem = signalName.contains("Vehicle.System.");
+    int startAppendIndex = ((vehicleSystem) ? (3) : (2));
     int index = 0;
     for (const auto& splitText : signalName.split(PREFIX_DOT)) {
         if (index >= startAppendIndex) {
@@ -770,19 +781,22 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
         return inputDataInfo;
     }
 
-    qDebug() << "Input  Signal      :" << signalName;
-    qDebug() << "Parser Signal      :" << signal;
-    QMapIterator<int, QStringList> iter(vsmFileList);
+    // qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    // qDebug() << "Input  Signal      :" << signalName;
+    // qDebug() << "Parser Signal      :" << signal;
+
+    QMapIterator<int, QStringList> iter(fileList);
     while (iter.hasNext()) {
         iter.next();
         int inputDataType = iter.key();
         QStringList fileName = iter.value();
         // qDebug() << inputDataType << ". Size :" << fileName.size() << ", File :" << fileName;
+        QString dataType = QString();
         QStringList valueEunm = QStringList();
         QStringList matchingTable = QStringList();
         for (const auto& file : fileName) {
             if (QFile::exists(file) == false) {
-                qDebug() << "\t\t Fail to file not exists :" << file;
+                // qDebug() << "\t\t Fail to file not exists :" << file;
                 continue;
             }
             QStringList readData = ivis::common::FileInfo::readFile(file);
@@ -792,12 +806,13 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
                 if (foundSignal) {
                     if ((lineStr.trimmed().startsWith(PREFIX_HYPHEN)) && (lineStr.trimmed().endsWith(PREFIX_COLON))) {
                         // if ((lineStr.contains(PREFIX_HYPHEN)) && (lineStr.contains(PREFIX_COLON))) {
-                        qDebug() << "\t Next  Signal[" << inputDataType << "] :" << lineStr;
+                        // qDebug() << "\t Next  Signal[" << inputDataType << "] :" << lineStr;
                         break;
-                    } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) || (lineStr.contains(PREFIX_DATA_TYPE)) ||
+                    } else if ((lineStr.size() == 0) || (lineStr.contains(PREFIX_TYPE)) ||
+                               // (lineStr.contains(PREFIX_DATA_TYPE)) ||   // Skip : dataType
                                (lineStr.contains(PREFIX_SIGNAL_NAME)) || (lineStr.contains(PREFIX_ABSTRACTION_NAME)) ||
                                (lineStr.contains(PREFIX_DESCRIPTION)) || (lineStr.contains(PREFIX_CODE_COMMENTING))) {
-                        // Skip : type, signalName, dataType, description, abstractionName, #(주석)
+                        // Skip : type, signalName, description, abstractionName, #(주석)
                         continue;
                     } else {
                         // Append : ValueEnum, MatchingTable
@@ -812,15 +827,22 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
                         lineStr.remove(PREFIX_COLON);
                         lineStr.remove(PREFIX_SPACE);
                         foundSignal = ((sfcSignal) ? (true) : (lineStr.compare(signal) == false));
-                        qDebug() << ((foundSignal) ? ("\t Found") : ("\t Skip ")) << "Signal[" << inputDataType
-                                 << "] :" << lineStr;
+                        // qDebug() << ((foundSignal) ? ("\t Found") : ("\t Skip ")) << "Signal[" << inputDataType
+                        //          << "] :" << lineStr;
                     }
                 }
             }
 
             bool foundValueEnum = false;
             bool foundMatchingTable = false;
+            bool foundDataType = false;
             for (const auto& info : vsmInfo) {
+                if (info.contains(PREFIX_DATA_TYPE)) {
+                    dataType = info;
+                    dataType.remove(PREFIX_DATA_TYPE);
+                    continue;
+                }
+
                 if (foundMatchingTable) {
                     foundValueEnum = false;
                     matchingTable.append(info);
@@ -829,7 +851,7 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
                     foundMatchingTable = (info.contains(PREFIX_MATCHING_TABLE));
                 }
 
-                if ((vehiclSystem) || (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum)) {
+                if ((vehicleSystem) || (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum)) {
                     if (foundValueEnum) {
                         if (info.contains(PREFIX_MATCHING_TABLE)) {
                             continue;
@@ -843,86 +865,95 @@ QMap<int, QStringList> ControlExcel::isVsmSignalInputDataInfo(const bool& sfcSig
             }
         }
 
+        if (isDataType) {   // DataType prepend
+            valueEunm.prepend(dataType);
+            matchingTable.prepend(dataType);
+        }
+
         if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            // qDebug() << "\t Value    Size :" << valueEunm.size();
             inputDataInfo[inputDataType] = valueEunm;
+            // qDebug() << "\t Value    Size :" << valueEunm.size();
         } else {
-            // qDebug() << "\t Matching Size :" << matchingTable.size();
             inputDataInfo[inputDataType] = matchingTable;
-            if ((valueEunm.size() > 0) && (vehiclSystem)) {
-                // qDebug() << "\t Value    Size :" << valueEunm.size();
+            // qDebug() << "\t Matching Size :" << matchingTable.size();
+            if ((valueEunm.size() > 0) && (vehicleSystem)) {
                 inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
+                // qDebug() << "\t Value    Size :" << valueEunm.size();
             }
         }
     }
+    // qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
 
     return inputDataInfo;
+}
+
+int ControlExcel::isDataType(const QString& inputDataType) {
+    ivis::common::DataTypeEnum::DataType dataType = ivis::common::DataTypeEnum::DataType::Max;
+    if (inputDataType.compare("HUInt64") == false) {
+        dataType = ivis::common::DataTypeEnum::DataType::HUInt64;
+    } else if (inputDataType.compare("HInt64") == false) {
+        dataType = ivis::common::DataTypeEnum::DataType::HInt64;
+    } else if (inputDataType.compare("HString") == false) {
+        dataType = ivis::common::DataTypeEnum::DataType::HString;
+    } else {
+    }
+    return static_cast<int>(dataType);
+}
+
+QMap<int, QStringList> ControlExcel::isSignalFileList(const QString& signalName, const QString& vehicleType) {
+    QMap<int, QStringList> fileList = QMap<int, QStringList>();
+
+    if (signalName.trimmed().startsWith("SFC.")) {
+        fileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
+    } else if (signalName.trimmed().startsWith("Vehicle.")) {
+        QStringList specType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
+        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+        if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+            specType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
+        }
+
+        // ValueEnum
+        fileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = isVsmFileInfo(QString("SKEL"), specType);
+
+        // MatchinigTable : CV(ICV, EV, FCEV)        PV(ICV, EV, FCEV, PHEV, HEV)
+        for (const auto& vehicle : vehicleType.split(", ")) {
+            int inputDataType = 0;
+            if (vehicle.compare(VEHICLE_TYPE_ICV) == false) {
+                inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV;
+            } else if (vehicle.compare(VEHICLE_TYPE_EV) == false) {
+                inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == false) {
+                inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == false) {
+                inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == false) {
+                inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV;
+            } else {
+                continue;
+            }
+            fileList[inputDataType] = isVsmFileInfo(vehicle, specType);
+        }
+
+        // MatchinigTable : System
+        specType = QStringList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"});
+        fileList[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = isVsmFileInfo(QString("System"), specType);
+    } else {
+    }
+
+    return fileList;
 }
 
 void ControlExcel::updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                                QString& signalName) {
     qDebug() << "updateAutoCompleteInputData :" << sfcSignal << outputState << vehicleType << signalName;
 
-    QMap<int, QStringList> inputDataInfo = QMap<int, QStringList>();
-    QMap<int, QStringList> vsmFileList = QMap<int, QStringList>();
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-
-    if (sfcSignal) {
-        vsmFileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
-        inputDataInfo = isVsmSignalInputDataInfo(sfcSignal, signalName, vsmFileList);
-    } else {
-        QStringList specType = QStringList();
-        if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-            specType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
-        } else {
-            specType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
-        }
-
-        // ValueEnum
-        vsmFileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = isVsmFileInfo(QString("SKEL"), specType);
-
-        if (outputState == false) {
-            // MatchinigTable : ICV, EV, FCEV, PHEV, HEV
-            for (const auto& vehicle : vehicleType.split(", ")) {
-                int inputDataType = 0;
-                if (vehicle.compare(VEHICLE_TYPE_ICV) == false) {
-                    inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV;
-                } else if (vehicle.compare(VEHICLE_TYPE_EV) == false) {
-                    inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == false) {
-                    inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == false) {
-                    inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV;
-                } else if (vehicle.compare(VEHICLE_TYPE_HEV) == false) {
-                    inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV;
-                } else {
-                    continue;
-                }
-                vsmFileList[inputDataType] = isVsmFileInfo(vehicle, specType);
-            }
-
-            // MatchinigTable : System
-            specType = QStringList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"});
-            vsmFileList[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] =
-                isVsmFileInfo(QString("System"), specType);
-        }
-        inputDataInfo = isVsmSignalInputDataInfo(sfcSignal, signalName, vsmFileList);
-    }
-
-    // qDebug() << "=============================================================================================";
-    // QMapIterator<int, QStringList> iter(inputDataInfo);
-    // while (iter.hasNext()) {
-    //     iter.next();
-    //     qDebug() << "\t InputDataSize :" << iter.key() << iter.value().size();
-    // }
-    // qDebug() << "=============================================================================================\n\n\n\n";
-
+    QMap<int, QStringList> dataInfo = isSignalDataInfo(false, signalName, isSignalFileList(signalName, vehicleType));
     for (int index = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
          index < ivis::common::InputDataTypeEnum::InputDataTypeMax; index++) {
-        updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum + index), inputDataInfo[index]);
+        updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum + index), dataInfo[index]);
     }
 
-    if (inputDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].size() > 0) {  // ValueEunm data is not null
+    if (dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].size() > 0) {  // ValueEunm data is not null
         QVariantList info = QVariantList({sfcSignal, outputState});
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, info, true);
     }
@@ -964,6 +995,81 @@ void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& autoInputI
         // descInfo.prepend(sheetIndex);
         // descInfo.prepend(row);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo, descInfo, true);
+    }
+}
+
+void ControlExcel::updateGenDataInfo() {
+    ivis::common::CheckTimer checkTimer;
+
+    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool()) {
+        if (replaceGenDataInfo()) {
+            constructGenDataInfo();
+        }
+    } else {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateGenDataInfo, QVariant(), true);
+    }
+
+    checkTimer.check("updateGenDataInfo");
+}
+
+bool ControlExcel::replaceGenDataInfo() {
+    qDebug() << "replaceGenDataInfo()";
+    bool result = true;
+    return result;
+}
+
+void ControlExcel::constructGenDataInfo() {
+    qDebug() << "constructGenDataInfo()";
+
+    QStringList signalNameList = QStringList();
+    bool titleSkip = true;
+
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoMax;
+    for (int index = startIndex; index < endIndex; ++index) {
+        for (const auto& sheetDataList : getData(index).toList()) {
+            if (titleSkip) {
+                titleSkip = false;  // title -> RowIndex 0
+                continue;
+            }
+            if (sheetDataList.toList().size() != (static_cast<int>(ivis::common::ExcelSheetTitle::Other::NegativeTest) + 1)) {
+                qDebug() << "Fail to sheet data list size :" << sheetDataList.toList().size();
+                continue;
+            }
+
+            QVariantList rowDataList = sheetDataList.toList();
+            QVariant inputSignal = rowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+            QVariant outputSignal = rowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
+            signalNameList.append(inputSignal.toString());
+            signalNameList.append(outputSignal.toString());
+        }
+    }
+    signalNameList.removeAll("");
+    signalNameList.removeDuplicates();
+
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QVariant vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV);
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV);
+    }
+
+    QString vehicleType = QString();
+    for (const auto& vehicle : vehicleTypeList.toStringList()) {
+        if (vehicleType.size() > 0) {
+            vehicleType.append(", ");
+        }
+        vehicleType.append(vehicle);
+    }
+
+    TestCase::instance().data()->clearSignalDataInfo();
+    for (const auto& signalName : signalNameList) {
+        QMap<int, QStringList> dataInfo = isSignalDataInfo(true, signalName, isSignalFileList(signalName, vehicleType));
+        if (dataInfo.size() > 0) {
+            TestCase::instance().data()->setSignalDataInfo(signalName, dataInfo);
+        }
+
+        // QString dataType;
+        // QMap<int, QStringList> dataInfo = TestCase::instance().data()->getSignalDataInfo(signalName, dataType);
     }
 }
 
@@ -1048,6 +1154,10 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeUpdateGenDataInfo: {
+            constructGenDataInfo();
+            break;
+        }
         default: {
             if ((type > ivis::common::EventTypeEnum::EventTypeList) && (type < ivis::common::EventTypeEnum::EventTypeListMax)) {
                 QVariantList sheetData = value.toList();
@@ -1099,6 +1209,10 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
         case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
             updateShortcutInfo(eventType);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
+            updateGenDataInfo();
             break;
         }
         default: {

@@ -127,6 +127,7 @@ public:
         PropertyTypeViewLogInfo,
         PropertyTypeViewLogFileList,
         PropertyTypeViewLogFileInfo,
+        PropertyTypeUpdateGenDataInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -137,16 +138,7 @@ public:
         PropertyTypeDetailInfoSounds,
         PropertyTypeDetailInfoInters,
         PropertyTypeDetailInfoOutputs,
-        PropertyTypeDetailInfoReserved0,
-        PropertyTypeDetailInfoReserved1,
-        PropertyTypeDetailInfoReserved2,
-        PropertyTypeDetailInfoReserved3,
-        PropertyTypeDetailInfoReserved4,
-        PropertyTypeDetailInfoReserved5,
-        PropertyTypeDetailInfoReserved6,
-        PropertyTypeDetailInfoReserved7,
-        PropertyTypeDetailInfoReserved8,
-        PropertyTypeDetailInfoReserved9,
+        PropertyTypeDetailInfoMax,
         PropertyTypeListMax,
 
         PropertyTypeOnlyControl = PROPETRY_START_CONTROL,
@@ -209,6 +201,7 @@ public:
         EventTypeEditExcelSheet,
         EventTypeAutoInputDescriptionInfo,
         EventTypeSaveFromReadExcelSheet,
+        EventTypeUpdateGenDataInfo,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,
         EventTypeUpdateSheetInfo,
@@ -445,6 +438,19 @@ public:
     enum AppModeType {
         AppModeTypeCV = 0,
         AppModeTypePV,
+    };
+};
+
+class DataTypeEnum {
+public:
+    enum class DataType {
+        Invalid = 0,
+        HUInt64,
+        HInt64,
+        HDouble,
+        HBool,
+        HString,
+        Max,
     };
 };
 

@@ -52,13 +52,12 @@ void MainWindow::controlConnect() {
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
             &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
-    connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
-            [=](const int& type, const QVariant& value) {
-                if (type == ConfigInfo::ConfigTypeInit) {
-                    mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-                    this->setGeometry(mScreenInfo);
-                }
-            });
+    connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, [=](const int& type, const QVariant& value) {
+        if (type == ConfigInfo::ConfigTypeInit) {
+            mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+            this->setGeometry(mScreenInfo);
+        }
+    });
     connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle,
             [=](const QString& title, const int& appMode) {
                 QString text = QString("TC Creator");

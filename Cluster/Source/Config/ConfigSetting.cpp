@@ -17,7 +17,7 @@
 
 #define GROUP_NAME_COMMON "Common"
 #if defined(USE_MULTI_GROUP_NAME)
-#define GROUP_NAME_GENERAL "Gernal"
+#define GROUP_NAME_GENERAL "General"
 #define GROUP_NAME_VEHICLE "Etc"
 #endif
 

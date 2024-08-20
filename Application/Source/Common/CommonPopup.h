@@ -110,7 +110,10 @@ public:
                 break;
             }
             case PopupType::Save: {
-                button = drawPopupSave(handler);
+                QVariantList infoData = value.toList();
+                if (infoData.size() == 1) {
+                    button = drawPopupSave(handler, infoData.at(0).toString());
+                }
                 break;
             }
             case PopupType::SettingPath: {
@@ -179,7 +182,8 @@ private:
             connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
             connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
         } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist) ||
-                     (popupType == PopupType::RestConfigValue)) && (list.size() == 4)) {
+                    (popupType == PopupType::RestConfigValue)) &&
+                   (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());
             button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
@@ -198,7 +202,7 @@ private:
 
         connect(&selectBox, &QMessageBox::finished, [&](int result) {
             if (result == QMessageBox::Rejected) {
-                buttonType = PopupButton::Cancel;   // X 버튼 또는 Esc 키 눌렀을 때 처리
+                buttonType = PopupButton::Cancel;  // X 버튼 또는 Esc 키 눌렀을 때 처리
             }
         });
         if (button.size() == 0) {
@@ -229,12 +233,13 @@ private:
         }
         return button;
     }
-    static PopupButton drawPopupSave(AbstractHandler* handler) {
+    static PopupButton drawPopupSave(AbstractHandler* handler, const QString& path) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             QFileDialog dialog(handler->getScreen());
             dialog.setWindowModality(Qt::WindowModal);
             dialog.setAcceptMode(QFileDialog::AcceptSave);
+            dialog.setDirectory(path);
             if (dialog.exec() == QDialog::Accepted) {
                 setPopupData(dialog.selectedFiles().first());
                 button = PopupButton::OK;

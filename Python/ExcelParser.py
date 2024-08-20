@@ -33,8 +33,14 @@ class ExcelParser:
         excel_merge_text_end = self.config_info["ConfigTypeExcelMergeTextEnd"]
         excel_merge_text = self.config_info["ConfigTypeExcelMergeText"]
 
+        # start_time = time.time()
         wb = load_workbook(file_path, data_only=True)
+        # check_time = time.time() - start_time
+        # print(f"\t [CheckTime] load_workbook : {check_time:.5f} seconds")
+
         for sheet in self.sheet_names:
+            start_time = time.time()
+
             current_sheet = wb[sheet]
             merged_cells = current_sheet.merged_cells.ranges
             sheet_data = []
@@ -42,8 +48,13 @@ class ExcelParser:
             for row in current_sheet.iter_rows(min_row=1, max_row=current_sheet.max_row, min_col=1, max_col=current_sheet.max_column):
                 data = []
                 for current_cell in row:
+                    # start_time_sheet_sub = time.time()
+
                     read_cell_text = current_cell.value
                     check_merged = any(current_cell.coordinate in merged_cell for merged_cell in merged_cells)
+
+                    # check_time_any = time.time() - start_time_sheet_sub
+                    # start_time_sheet_sub = time.time()
 
                     if check_merged:
                         merged_cell = next(merged_cell for merged_cell in merged_cells if current_cell.coordinate in merged_cell)
@@ -61,15 +72,26 @@ class ExcelParser:
                         merge_cell_text += str(current_merge_cell.value or "")
                         read_cell_text = merge_cell_text
 
+                    # check_time_merge_info = time.time() - start_time_sheet_sub
+                    # print("\t\t [CheckTime]", sheet, f" {check_time_any:.5f}, {check_time_merge_info:.5f} seconds")
+
                     data.append(read_cell_text)
                 sheet_data.append(data)
             self.sheet_info.append(sheet_data)
 
+            check_time = time.time() - start_time
+            print("\t [CheckTime]", sheet, f": {check_time:.5f} seconds")
+
     def write_to_text(self, path):
+        start_time = time.time()
+
         for sheet_index, sheet in enumerate(self.sheet_info):
             save_sheet = pd.DataFrame(sheet)
             sheet_file_name = os.path.join(path, f"{sheet_index}_{self.sheet_names[sheet_index]}.fromExcel")
             save_sheet.to_csv(sheet_file_name, sep="\t", index=False)
+
+        check_time = time.time() - start_time
+        print("\t [CheckTime] WriteToExcel :", f" {check_time:.5f} seconds")
 
     def read_from_text(self, path, save_file_path):
         excel_merge_text_start = self.config_info["ConfigTypeExcelMergeTextStart"]
@@ -183,7 +205,7 @@ def main(argv):
         parser.read_from_text(path_dir, path_file)
 
     execution_time = time.time() - start_time
-    print(f"Execution time: {execution_time:.2f} seconds")
+    print(f"[CheckTime] Total : {execution_time:.5f} seconds")
 
 
 if __name__ == "__main__":

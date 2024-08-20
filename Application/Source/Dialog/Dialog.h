@@ -162,7 +162,7 @@ signals:
 
 private:
     Ui::Dialog* mGui;
-	QMap<int, QVariant> mData = QMap<int, QVariant>();
+    QMap<int, QVariant> mData = QMap<int, QVariant>();
     QStandardItemModel mModel = QStandardItemModel();
 };
 

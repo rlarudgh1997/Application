@@ -113,11 +113,10 @@ private:
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
         mConfigInfoData[ConfigTypeExcelMergeTextStart] =
-            QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart", QVariant("ExcelMergeTextStart"));
-        mConfigInfoData[ConfigTypeExcelMergeText] =
-            QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("ExcelMergeText"));
+            QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart", QVariant("[MergeStart]"));
+        mConfigInfoData[ConfigTypeExcelMergeText] = QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("[Merge]"));
         mConfigInfoData[ConfigTypeExcelMergeTextEnd] =
-            QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd", QVariant("ExcelMergeTextEnd"));
+            QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd", QVariant("[MergeEnd]"));
 
         // Vehicle
         mConfigInfoData[ConfigTypeVsmFileNameBaseCV] =

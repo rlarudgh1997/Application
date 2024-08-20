@@ -378,7 +378,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                     {STRING_POPUP_CONFIG_RESET, STRING_POPUP_CONFIG_RESET_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
                 QVariant popupData = QVariant();
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::RestConfigValue, isHandler(), popupData,
-                                                QVariant(text)) == ivis::common::PopupButton::Confirm) {
+                                                   QVariant(text)) == ivis::common::PopupButton::Confirm) {
                     ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
                 }
             }

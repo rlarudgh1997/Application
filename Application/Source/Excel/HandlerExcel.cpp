@@ -57,6 +57,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateGenDataInfo, false);
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates, QVariant(""));
@@ -66,13 +67,6 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoSounds, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoOutputs, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved1, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved2, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved3, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved4, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved5, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved6, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoReserved7, QVariant(""));
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, QVariant(false));
 }

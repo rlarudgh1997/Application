@@ -68,7 +68,7 @@ class ControlExcel {
     -void updateShortcutInfo(const int& eventType)
     -QString isSfcFileInfo(const QString& signalName)
     -QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType)
-    -QMap<int, QStringList> isVsmSignalInputDataInfo(const bool& sfcSignal, const QString& signalName, const QMap<int, QStringList>& vsmFileList)
+    -QMap<int, QStringList> isSignalDataInfo(const bool& sfcSignal, const QString& signalName, const QMap<int, QStringList>& vsmFileList)
     -void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType, QString& signalName)
 
     -AbstractHandler* mHandler

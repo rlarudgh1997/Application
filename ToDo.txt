@@ -7,9 +7,12 @@
 	: 해당 기능인 경우 inputData 에 Private - TCName Result 값으로 자동 완성 동작 하도록 기능 구현
 
 - config reset 동작
-	- 화면 사이즈 변경 내역 업데이트 안됨
+	: 화면 사이즈 변경 내역 업데이트 안됨
 
-
+- SFC.Private.IGNElapsed.* 로 시작하는 시그널 파싱
+	: 시그널 파싱 위치 및 파일명 변경 - model/SFC/ETC/IGNElapsed/IGNElapsed.yml
+	: 기존 코드에서 변경 필요
+	: SFC.Private.IGNElapsed.ElapsedOff1000ms
 
 
 

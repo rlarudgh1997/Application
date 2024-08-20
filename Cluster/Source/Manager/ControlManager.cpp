@@ -4,7 +4,6 @@
 #include "ScreenInfo.h"
 #include "ConfigSetting.h"
 
-
 #if defined(__MODULE_HOME__)
 #include "ControlHome.h"
 #endif
