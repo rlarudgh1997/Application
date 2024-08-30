@@ -21,6 +21,8 @@
 #include <QPair>
 #include <QDateTime>
 
+#include <type_traits>    // std::is_same 사용을 위해 필요
+
 namespace ivis {
 namespace common {
 
@@ -160,50 +162,55 @@ inline int ARRAY_SIZE(T array) {
 }
 
 template <typename T1, typename T2>
-inline void SWAP(T1 a, T2 b) {
+inline void SWAP(T1& a, T2& b) {
     (a) ^= (b) ^= (a) ^= (b);
 }
 
-inline void BOOL_REVERSE(bool value) {
+inline void BOOL_REVERSE(bool& value) {
     (value = (value) ? (false) : (true));
 }
 
 template <typename T>
-inline void LIMIT(T& value, T min, T max) {
-    value = (value < min) ? (min) : ((value >= max) ? (max - 1) : (value));
+inline void LIMIT(T& value, const T& min, const T& max) {
+    if constexpr (std::is_same_v<T, QString>) {
+        value = (value < min) ? (min) : ((value >= max) ? (max) : (value));
+    } else if constexpr (std::is_same_v<T, int>) {
+        value = (value < min) ? (min) : ((value >= max) ? (max - 1) : (value));
+    } else {
+    }
 }
 
 template <typename T>
-inline void LIMIT_P(T& value, T gap, T min, T max) {
+inline void LIMIT_P(T& value, const T& gap, const T& min, const T& max) {
     value += gap;
     LIMIT(value, min, max);
 }
 
 template <typename T>
-inline void LIMIT_M(T& value, T gap, T min, T max) {
+inline void LIMIT_M(T& value, const T& gap, const T& min, const T& max) {
     value -= gap;
     LIMIT(value, min, max);
 }
 
 template <typename T>
-inline void REVOLVE(T& value, T min, T max) {
+inline void REVOLVE(T& value, const T& min, const T& max) {
     value = (value < min) ? (max - 1) : ((value >= max) ? (min) : (value));
 }
 
 template <typename T>
-inline void REVOLVE_P(T& value, T gap, T min, T max) {
+inline void REVOLVE_P(T& value, const T& gap, const T& min, const T& max) {
     value += gap;
     REVOLVE(value, min, max);
 }
 
 template <typename T>
-inline void REVOLVE_M(T& value, T gap, T min, T max) {
+inline void REVOLVE_M(T& value, const T& gap, const T& min, const T& max) {
     value -= gap;
     REVOLVE(value, min, max);
 }
 
 template <typename T1, typename T2, typename T3>
-inline void SET_PROPERTY(T1 widget, T2 name, T3 value) {
+inline void SET_PROPERTY(const T1& widget, const T2& name, const T3& value) {
     if (widget) {
         widget->setProperty(name, value);
     } else {

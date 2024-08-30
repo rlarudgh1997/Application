@@ -36,14 +36,33 @@ public:
     explicit SignalDataInfo(const QMap<int, QStringList>& dataInfo, const QString& dataType) {
         updateSignalDataInfo(dataInfo, dataType);
     }
+    int isDataType() {
+        int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
+        QString isDataType = getDataType();
+
+        if (isDataType.compare("HUInt64") == false) {
+            dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
+        } else if (isDataType.compare("HInt64") == false) {
+            dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
+        } else if (isDataType.compare("HString") == false) {
+            dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HString);
+        } else {
+        }
+
+        return dataType;
+    }
 
 private:
     void updateSignalDataInfo(const QMap<int, QStringList>& dataInfo, const QString& dataType) {
         QMap<int, QStringList> info = dataInfo;
+
         if (info.size() > 0) {
             // DataType Update : dataType or ValueEnum[0]
             if (dataType.size() == 0) {
-                setDataType(info[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].at(0));
+                auto valueEnum = info[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
+                if (valueEnum.size() > 0) {
+                    setDataType(valueEnum.at(0));
+                }
             } else {
                 setDataType(dataType);
             }

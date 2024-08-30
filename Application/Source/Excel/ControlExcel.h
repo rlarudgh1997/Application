@@ -5,6 +5,35 @@
 #include "CommonUtil.h"
 #include "CommonDefine.h"
 
+class KeywordInfo {
+public:
+    KeywordInfo() {}
+    KeywordInfo(int row, int column, QString text, int keyword) {
+        mRow = row;
+        mColumn = column;
+        mText = text;
+        mKeyword = keyword;
+    }
+    int isRow() {
+        return mRow;
+    }
+    int isColumn() {
+        return mColumn;
+    }
+    QString isText() {
+        return mText;
+    }
+    int isKeyword() {
+        return mKeyword;
+    }
+
+private:
+    int mRow = 0;
+    int mColumn = 0;
+    QString mText = QString();
+    int mKeyword = 0;
+};
+
 class ControlExcel : public AbstractControl {
     Q_OBJECT
 
@@ -32,12 +61,13 @@ private:
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
     QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName,
                                             const QMap<int, QStringList>& fileList);
-    int isDataType(const QString& inputDataType);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                      QString& signalName);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
-    void updateGenDataInfo();
+    void updateInputDataValidation(const QString& signal, const QString& inputData);
+    void updateGenDataInfo(const bool& readData);
+    QMap<int, QList<KeywordInfo>> isKeywordInfo();
     bool replaceGenDataInfo();
     void constructGenDataInfo();
 

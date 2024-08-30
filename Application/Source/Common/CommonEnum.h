@@ -127,7 +127,7 @@ public:
         PropertyTypeViewLogInfo,
         PropertyTypeViewLogFileList,
         PropertyTypeViewLogFileInfo,
-        PropertyTypeUpdateGenDataInfo,
+        PropertyTypeReadExcelSheetBeforeGenDataInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeDetailInfoDescription,
@@ -199,6 +199,7 @@ public:
         EventTypeSaveExcel,
         EventTypeUpdateExcelSheet,
         EventTypeEditExcelSheet,
+        EventTypeUpdateCellDataInfo,
         EventTypeAutoInputDescriptionInfo,
         EventTypeSaveFromReadExcelSheet,
         EventTypeUpdateGenDataInfo,
@@ -310,6 +311,7 @@ public:
         Description,
         ConfigSignal,
         Data,
+        Max,
     };
     enum class Other {
         TCName = 0,
@@ -324,6 +326,7 @@ public:
         ConfigSignal,
         Data,
         NegativeTest,
+        Max,
     };
 };
 
@@ -450,6 +453,18 @@ public:
         HDouble,
         HBool,
         HString,
+        Max,
+    };
+};
+
+class KeywordTypeEnum {
+public:
+    enum class KeywordType {
+        Invalid = 0x0000,
+        Sheet = 0x0001,
+        Cal = 0x0002,
+        Range = 0x0004,
+        Collect = 0x0008,
         Max,
     };
 };

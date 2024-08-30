@@ -31,6 +31,19 @@ void TestCase::excuteTestCase(const int& type) {
     setExcuteType(type);
 }
 
+int TestCase::isDataType(QMap<int, QStringList>& dataInfo) {
+    SignalDataInfo info = SignalDataInfo(dataInfo, QString());
+    int dataType = info.isDataType();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = info.getValueEnum();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV] = info.getMatchingTableICV();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV] = info.getMatchingTableEV();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV] = info.getMatchingTableFCEV();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV] = info.getMatchingTablePHEV();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV] = info.getMatchingTableHEV();
+    dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = info.getMatchingTableSystem();
+    return dataType;
+}
+
 void TestCase::clearSignalDataInfo(const QString& signalName) {
     qDebug() << "clearSignalDataInfo :" << mSignalDataInfo.size() << signalName;
 
@@ -42,32 +55,34 @@ void TestCase::clearSignalDataInfo(const QString& signalName) {
 }
 
 void TestCase::setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo, const QString& dataType) {
-    if (dataInfo.size() > 0) {
-        mSignalDataInfo[signalName] = QSharedPointer<SignalDataInfo>::create(dataInfo, dataType);
-#if 0
-        qDebug() << "=============================================================================================";
-        for (auto iter = mSignalDataInfo.cbegin(); iter != mSignalDataInfo.cend(); ++iter) {
-            QString signal = iter.key();
-            if (signal.compare(signalName) != false) {
-                continue;
-            }
-
-            QSharedPointer<SignalDataInfo> signalInfo = iter.value();
-            if (signalInfo) {
-                qDebug() << "\n    [Write] :" << signalName.toLatin1().data()
-                        << "\n\t     DataType            :" << signalInfo->getDataType()
-                        << "\n\t     ValueEnum           :" << signalInfo->getValueEnum()
-                        << "\n\t     MatchingTableICV    :" << signalInfo->getMatchingTableICV()
-                        << "\n\t     MatchingTableEV     :" << signalInfo->getMatchingTableEV()
-                        << "\n\t     MatchingTableFCEV   :" << signalInfo->getMatchingTableFCEV()
-                        << "\n\t     MatchingTablePHEV   :" << signalInfo->getMatchingTablePHEV()
-                        << "\n\t     MatchingTableHEV    :" << signalInfo->getMatchingTableHEV()
-                        << "\n\t     MatchingTableSystem :" << signalInfo->getMatchingTableSystem();
-            }
-        }
-        qDebug() << "=============================================================================================\n\n";
-#endif
+    if (dataInfo.size() == 0) {
+        return;
     }
+
+    mSignalDataInfo[signalName] = QSharedPointer<SignalDataInfo>::create(dataInfo, dataType);
+#if 0
+    qDebug() << "=============================================================================================";
+    for (auto iter = mSignalDataInfo.cbegin(); iter != mSignalDataInfo.cend(); ++iter) {
+        QString signal = iter.key();
+        if (signal.compare(signalName) != false) {
+            continue;
+        }
+
+        QSharedPointer<SignalDataInfo> signalInfo = iter.value();
+        if (signalInfo) {
+            qDebug() << "\n    [Write] :" << signalName.toLatin1().data()
+                    << "\n\t     DataType            :" << signalInfo->getDataType()
+                    << "\n\t     ValueEnum           :" << signalInfo->getValueEnum()
+                    << "\n\t     MatchingTableICV    :" << signalInfo->getMatchingTableICV()
+                    << "\n\t     MatchingTableEV     :" << signalInfo->getMatchingTableEV()
+                    << "\n\t     MatchingTableFCEV   :" << signalInfo->getMatchingTableFCEV()
+                    << "\n\t     MatchingTablePHEV   :" << signalInfo->getMatchingTablePHEV()
+                    << "\n\t     MatchingTableHEV    :" << signalInfo->getMatchingTableHEV()
+                    << "\n\t     MatchingTableSystem :" << signalInfo->getMatchingTableSystem();
+        }
+    }
+    qDebug() << "=============================================================================================\n\n";
+#endif
 }
 
 QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QString& dataType) {
@@ -87,7 +102,6 @@ QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QS
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV] = dataInfo->getMatchingTablePHEV();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV] = dataInfo->getMatchingTableHEV();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo->getMatchingTableSystem();
-
 #if 1
     qDebug() << "=============================================================================================";
     qDebug() << "\n    [Read] :" << signalName.toLatin1().data()

@@ -21,6 +21,7 @@ public:
     static QSharedPointer<TestCase>& instance();
 
     void excuteTestCase(const int& type = ExcuteTypeGenTC);
+    int isDataType(QMap<int, QStringList>& dataInfo);
     void clearSignalDataInfo(const QString& signalName = QString());
     void setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo,
                            const QString& dataType = QString());

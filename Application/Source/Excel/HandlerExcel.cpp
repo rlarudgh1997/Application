@@ -57,7 +57,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateGenDataInfo, false);
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeGenDataInfo, false);
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates, QVariant(""));

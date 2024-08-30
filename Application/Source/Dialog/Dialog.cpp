@@ -22,7 +22,7 @@ Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new U
 Dialog::~Dialog() {
     controlConnet(DisplayTypeMax);
     delete mGui;
-    qDebug() << "[Dialog] Destructor : disconnect";
+    qDebug() << "[Dialog] destructor";
 }
 
 void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
@@ -99,7 +99,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
     }
-    qDebug() << "drawDialog :" << dialogType << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
+    qDebug() << "[Dialog] drawDialog :" << dialogType << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
 }
 
 void Dialog::controlConnet(const int& displayType) {

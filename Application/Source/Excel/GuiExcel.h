@@ -134,6 +134,7 @@ private:
     void updateDisplayKey(const int& keyValue);
     void updateDisplayArrowKey(const int& keyValue);
     void updateDisplayExcelSheet();
+    void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);
     void updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column);
     void updateDisplayAutoCompleteSignal(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
