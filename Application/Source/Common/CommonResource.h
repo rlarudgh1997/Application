@@ -132,6 +132,9 @@
 #define STRING_POPUP_BINARY_NOT_EXISTS QString("Binary not exists")
 #define STRING_POPUP_BINARY_NOT_EXISTS_TIP QString("Can't find binary(altonservice) file.")
 
+#define STRING_POPUP_DATA_VALIDATION QString("Data Validation")
+#define STRING_POPUP_DATA_VALIDATION_TIP QString("The input data contains %1.\nPlease enter the enumeration string.")
+
 // =============================================================================================================
 // Image Define
 // =============================================================================================================

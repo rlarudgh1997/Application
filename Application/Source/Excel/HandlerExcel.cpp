@@ -52,12 +52,12 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeGenDataInfo, false);
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadForDataGeneration, false);
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates, QVariant(""));

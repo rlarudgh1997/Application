@@ -7,7 +7,8 @@
 
 class KeywordInfo {
 public:
-    KeywordInfo() {}
+    KeywordInfo() {
+    }
     KeywordInfo(int row, int column, QString text, int keyword) {
         mRow = row;
         mColumn = column;
@@ -65,8 +66,10 @@ private:
     void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
                                      QString& signalName);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
-    void updateInputDataValidation(const QString& signal, const QString& inputData);
+    void updateInputDataValidation(const QString& signal, const QString& inputData, const int& sheet, const int& row,
+                                   const int& column);
     void updateGenDataInfo(const bool& readData);
+    QMap<QString, int> isKeywordPatternInfo(const int& columnIndex);
     QMap<int, QList<KeywordInfo>> isKeywordInfo();
     bool replaceGenDataInfo();
     void constructGenDataInfo();

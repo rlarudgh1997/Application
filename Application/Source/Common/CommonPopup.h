@@ -20,6 +20,7 @@ enum class PopupType {
 
     About,
     OpenFail,
+    DataValidation,
     NowInstalling,
     InstallComplete,
     DefaultPathError,
@@ -73,6 +74,7 @@ public:
         switch (popupType) {
             case PopupType::About:
             case PopupType::OpenFail:
+            case PopupType::DataValidation:
             case PopupType::NowInstalling:
             case PopupType::InstallComplete:
             case PopupType::DefaultPathError:

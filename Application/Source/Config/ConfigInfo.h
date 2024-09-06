@@ -44,6 +44,7 @@ public:
         ConfigTypeVehicleTypePV,
         ConfigTypeSfcSpecTypePV,
         ConfigTypeVsmSpecTypePV,
+        ConfigTypeSystemTypePV,
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -134,6 +135,9 @@ private:
             "ConfigTypeSfcSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC"})));
         mConfigInfoData[ConfigTypeVsmSpecTypePV] = QPair<QString, QVariant>(
             "ConfigTypeVsmSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "CS"})));
+        mConfigInfoData[ConfigTypeSystemTypePV] = QPair<QString, QVariant>(
+            "ConfigTypeSystemTypePV",
+            QVariant(QVariantList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"})));
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.

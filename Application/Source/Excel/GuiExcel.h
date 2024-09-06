@@ -117,7 +117,7 @@ private:
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     bool chcekExcelSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
-    void readAllExcelSheet(const bool& saveFile);
+    void readAllExcelSheet(const int& sheetIndex, const bool& dataStorage);
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
     bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                          const int& rowEnd);

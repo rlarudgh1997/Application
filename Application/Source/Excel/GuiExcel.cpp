@@ -253,28 +253,41 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     return sheetData;
 }
 
-void GuiExcel::readAllExcelSheet(const bool& saveFile) {
+void GuiExcel::readAllExcelSheet(const int& sheetIndex, const bool& dataStorage) {
     if (chcekExcelSheet(0)) {
         return;
     }
 
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
-    for (const auto& sheet : mExcelSheet) {
-        QString allString = QString();
-        QVariantList sheetData = readExcelSheet(sheetIndex, QVariantList(), allString);
-        if (sheetData.size() > 0) {
-            int eventType = (sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) +
-                            ivis::common::EventTypeEnum::EventTypeListDescription;
-            createSignal(eventType, sheetData);
-            sheetIndex++;
+    int eventType = ivis::common::EventTypeEnum::EventTypeInvalid;
+    QList<int> sheetIndexList = QList<int>();
+
+    if ((sheetIndex >= ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) &&
+        (sheetIndex < ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoMax)) {
+        sheetIndexList.append(sheetIndex);
+    } else {
+        for (auto iter = mExcelSheet.cbegin(); iter != mExcelSheet.cend(); ++iter) {
+            sheetIndexList.append(iter.key());
+        }
+
+        if (dataStorage) {
+            eventType = ivis::common::EventTypeEnum::EventTypeDataStorage;
+        } else {
+            eventType = ivis::common::EventTypeEnum::EventTypeDataGeneration;
         }
     }
 
-    if (saveFile) {
-        QVariant saveFielPath = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave);
-        createSignal(ivis::common::EventTypeEnum::EventTypeSaveFromReadExcelSheet, saveFielPath);
-    } else {
-        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateGenDataInfo);
+    for (auto readSheetIndex : sheetIndexList) {
+        QString allString = QString();
+        QVariantList sheetData = readExcelSheet(readSheetIndex, QVariantList(), allString);
+        if (sheetData.size() > 0) {
+            int currentSheetIndex = (readSheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription);
+            createSignal(ivis::common::EventTypeEnum::EventTypeListDescription + currentSheetIndex, sheetData);
+            readSheetIndex++;
+        }
+    }
+
+    if (eventType != ivis::common::EventTypeEnum::EventTypeInvalid) {
+        createSignal(eventType);
     }
 }
 
@@ -811,9 +824,13 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     if (columnIndex > (-1)) {
         QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr) ? (QString()) :
                             (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());
-        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateCellDataInfo, QVariantList({signal, text}));
+        QVariantList cellDataInfo = QVariantList({signal, text, sheetIndex, row, column});
+        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateCellDataInfo, cellDataInfo);
     }
+
     updateDisplaySheetHeaderAdjust(sheetIndex);
+    readAllExcelSheet(sheetIndex, false);
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet);
 }
 
 void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column) {
@@ -1356,9 +1373,9 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayExcelSheet();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeGenDataInfo:
-        case ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave: {
-            readAllExcelSheet(type == ivis::common::PropertyTypeEnum::PropertyTypeReadExcelSheetBeforeSave);
+        case ivis::common::PropertyTypeEnum::PropertyTypeReadForDataGeneration:
+        case ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage: {
+            readAllExcelSheet(0, (type == ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage));
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeClipboardType: {
