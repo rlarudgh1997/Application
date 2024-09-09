@@ -254,7 +254,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
 }
 
 void GuiExcel::readAllExcelSheet(const int& sheetIndex, const bool& dataStorage) {
-    if (chcekExcelSheet(0)) {
+    if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
