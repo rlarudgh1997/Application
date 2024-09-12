@@ -376,21 +376,20 @@ void Service::subscribeSoundSignals() {
 
 void Service::subscribeEtcSignals() {
     subscribeSignals<Etc>(
-        DataType::Etc,
-        {
-            {Etc::InterDisplaySpeedUnit, {SFC.Speed_Gauge.Inter_DisplaySpeedUnit}},
-            {Etc::InterDisplaySpeedValueKPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH}},
-            {Etc::InterDisplaySpeedValueMPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH}},
-            {Etc::InterDriveModeSelectStatus, {SFC.Drive_Mode.Inter_DriveModeSelectStatus}},
-            {Etc::InterTerrainModeSelectStatus, {SFC.Drive_Mode.Inter_TerrainModeSelectStatus}},
-            {Etc::InterNModeSelectStatus, {SFC.Drive_Mode.Inter_NModeSelectStatus}},
-            {Etc::InterGtModeSelectStatus, {SFC.Drive_Mode.Inter_GtModeSelectStatus}},
-            {Etc::InterAdasViewFixStatus, {SFC.ADAS_Driving_New.Inter_AdasViewFixStatus}},
-            {Etc::InterHDPMasterWarningStatus, {SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus}},
-            {Etc::TimerOneShotTimerPriorityISLAStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityISLA.Stat}},
-            {Etc::TimerOneShotTimerPriorityDISStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityDIS.Stat}},
-            {Etc::InterAdasOnStatus, {SFC.ADAS_Driving_New.Inter_AdasOnStatus}},
-        });
+        DataType::Etc, {
+                           {Etc::InterDisplaySpeedUnit, {SFC.Speed_Gauge.Inter_DisplaySpeedUnit}},
+                           {Etc::InterDisplaySpeedValueKPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH}},
+                           {Etc::InterDisplaySpeedValueMPH, {SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH}},
+                           {Etc::InterDriveModeSelectStatus, {SFC.Drive_Mode.Inter_DriveModeSelectStatus}},
+                           {Etc::InterTerrainModeSelectStatus, {SFC.Drive_Mode.Inter_TerrainModeSelectStatus}},
+                           {Etc::InterNModeSelectStatus, {SFC.Drive_Mode.Inter_NModeSelectStatus}},
+                           {Etc::InterGtModeSelectStatus, {SFC.Drive_Mode.Inter_GtModeSelectStatus}},
+                           {Etc::InterAdasViewFixStatus, {SFC.ADAS_Driving_New.Inter_AdasViewFixStatus}},
+                           {Etc::InterHDPMasterWarningStatus, {SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus}},
+                           {Etc::TimerOneShotTimerPriorityISLAStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityISLA.Stat}},
+                           {Etc::TimerOneShotTimerPriorityDISStat, {SFC.ADAS_Driving_New.Timer.OneShotTimerPriorityDIS.Stat}},
+                           {Etc::InterAdasOnStatus, {SFC.ADAS_Driving_New.Inter_AdasOnStatus}},
+                       });
 }
 
 template <typename TYPE>

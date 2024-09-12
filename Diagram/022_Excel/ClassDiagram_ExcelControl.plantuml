@@ -69,7 +69,7 @@ class ControlExcel {
     -QString isSfcFileInfo(const QString& signalName)
     -QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType)
     -QMap<int, QStringList> isSignalDataInfo(const bool& sfcSignal, const QString& signalName, const QMap<int, QStringList>& vsmFileList)
-    -void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType, QString& signalName)
+    -void updateAutoCompleteSignal(const bool& sfcSignal, const int& outputState, const QString& vehicleType, QString& signalName)
 
     -AbstractHandler* mHandler
     -QSharedPointer<ivis::common::ExcuteProgramThread> mProcess

@@ -178,24 +178,15 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     QVariantList sheetData = QVariantList();
     int rowStart = 0;
     int columnStart = 0;
-    int rowMax = 0;
-    int columnMax = 0;
+    int rowMax = mExcelSheet[sheetIndex]->rowCount();
+    int columnMax = mExcelSheet[sheetIndex]->columnCount();
+    bool readShortcut = (readIndexInfo.size() > 0);
 
-    if (readIndexInfo.size() == 0) {
-        rowMax = mExcelSheet[sheetIndex]->rowCount();
-        columnMax = mExcelSheet[sheetIndex]->columnCount();
-        // Read Title
-        QStringList title = QStringList();
-        for (int columnIndex = 0; columnIndex < columnMax; columnIndex++) {
-            title.append(mExcelSheet[sheetIndex]->horizontalHeaderItem(columnIndex)->text());
-        }
-        sheetData.append(title);
-    } else {
+    if (readShortcut) {
         if (readIndexInfo.size() != 4) {
             qDebug() << "Fail to read index info size :" << readIndexInfo.size();
             return QVariantList();
         }
-
         rowStart = readIndexInfo.at(0).toInt();
         columnStart = readIndexInfo.at(1).toInt();
         rowMax = readIndexInfo.at(2).toInt();
@@ -237,10 +228,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
                 }
             }
             rowData.append(text);
-
-            // if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
-            //     qDebug() << "ReadText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << "] :" << text;
-            // }
+            // qDebug() << "ReadText[" << sheetIndex << "][" << columnIndex << "," << rowIndex << "] :" << text;
         }
         sheetData.append(rowData);
         allString.append("\n");
@@ -253,7 +241,7 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     return sheetData;
 }
 
-void GuiExcel::readAllExcelSheet(const int& sheetIndex, const bool& dataStorage) {
+void GuiExcel::syncSheetData(const int& sheetIndex, const bool& dataStorage) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
@@ -289,6 +277,28 @@ void GuiExcel::readAllExcelSheet(const int& sheetIndex, const bool& dataStorage)
     if (eventType != ivis::common::EventTypeEnum::EventTypeInvalid) {
         createSignal(eventType);
     }
+}
+
+bool GuiExcel::isSheetChanged(const int& sheetIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return false;
+    }
+
+    QVariantList readSheetData = isHandler()->getProperty(sheetIndex).toList();
+    if (readSheetData.size() > 0) {
+        readSheetData.remove(0);  // Delete : Title
+    }
+    QVariantList currentSheetData = QVariantList();
+    QAbstractItemModel* model = mExcelSheet[sheetIndex]->model();
+    for (int rowIndex = 0; rowIndex < model->rowCount(); ++rowIndex) {
+        QStringList rowData = QStringList();
+        for (int columnIndex = 0; columnIndex < model->columnCount(); ++columnIndex) {
+            QModelIndex index = model->index(rowIndex, columnIndex);
+            rowData.append(model->data(index).toString());
+        }
+        currentSheetData.append(rowData);
+    }
+    return (readSheetData != currentSheetData);
 }
 
 int GuiExcel::isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart) {
@@ -746,11 +756,11 @@ void GuiExcel::updateDisplayExcelSheet() {
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
                 updateDisplayClipboardInfo(ivis::common::ShortcutTypeEnum::ShortcutTypePaste);
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
+                updateDisplayEditCellShortcut(ivis::common::ShortcutTypeEnum::ShortcutTypeInsert);
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeDelete);
+                updateDisplayEditCellShortcut(ivis::common::ShortcutTypeEnum::ShortcutTypeDelete);
             } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
-                updateDisplayEditCell(ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit);
+                updateDisplayEditCellShortcut(ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit);
             } else {
                 qDebug() << "Fail to menu right selection action item";
             }
@@ -772,12 +782,14 @@ void GuiExcel::updateDisplayExcelSheet() {
             qDebug() << "8 cellActivated[" << sheetIndex << "] :" << row << column;
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+            qDebug() << "9 itemSelectionChanged[" << sheetIndex << "]";
             QString text = QString();
             if (mExcelSheet[sheetIndex]->currentItem()) {
                 text = mExcelSheet[sheetIndex]->currentItem()->text();
             }
             mGui->CellInfoContent->setText(text);
         });
+#if 0
         connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
                                                                 [=](int logicalIndex, int oldSize, int newSize) {
             qDebug() << sheetIndex << ". H_sectionResized :" << logicalIndex << oldSize << newSize;
@@ -786,6 +798,7 @@ void GuiExcel::updateDisplayExcelSheet() {
                                                                 [=](int logicalIndex, int oldSize, int newSize) {
             qDebug() << sheetIndex << ". V_sectionResized :" << logicalIndex << oldSize << newSize;
         });
+#endif
 #endif
 
         // Resize - Cell Width/Height
@@ -798,8 +811,18 @@ void GuiExcel::updateDisplayExcelSheet() {
 }
 
 void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    if (isSheetChanged(sheetIndex) == false) {
+        qDebug() << "The excel sheet has not been modified.";
+        return;
+    }
+
     QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
     int columnIndex = (-1);
+    bool tcNameEdit = false;
 
     if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
@@ -809,28 +832,29 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         } else {
         }
     } else {
-        if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
-            updateTCNameInfo(sheetIndex);
-        } else  if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
+        if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
+        } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
+            tcNameEdit = true;
         } else {
         }
     }
 
     if (columnIndex > (-1)) {
-        QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr) ? (QString()) :
-                            (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());
+        QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr)
+                             ? (QString())
+                             : (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());
         QVariantList cellDataInfo = QVariantList({signal, text, sheetIndex, row, column});
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateCellDataInfo, cellDataInfo);
     }
 
     updateDisplaySheetHeaderAdjust(sheetIndex);
-    readAllExcelSheet(sheetIndex, false);
-    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet);
+    syncSheetData(sheetIndex, false);
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
 }
 
 void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column) {
@@ -876,7 +900,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
                 columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
             } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
                 columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
-            } else {   // (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data))
+            } else {  // (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data))
                 columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
             }
         }
@@ -897,22 +921,22 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             }
         }
 
-        QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr) ? (QString()) :
-                            (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());
+        QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr)
+                             ? (QString())
+                             : (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());
         if (signal.size() == 0) {
             return;
         }
 
         bool outputState = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
         if (signal.indexOf("SFC.") == 0) {
-            createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData,
+            createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteSignal,
                          QVariantList({true, outputState, vehicleType, signal}));
         } else if (signal.indexOf("Vehicle.") == 0) {
-            createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteInputData,
+            createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteSignal,
                          QVariantList({false, outputState, vehicleType, signal}));
-        } else if (signal.indexOf("[Sheet]") == 0) {
-            qDebug() << "\t [Sheet]" << signal << "-> Keyword : Data Replace !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         } else {
+            createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteEtc, QVariantList({vehicleType, signal}));
         }
     } else if (supportVehicleType) {
         updateDisplayAutoCompleteVehicle();
@@ -927,9 +951,9 @@ void GuiExcel::updateDisplayAutoCompleteSignal(const bool& show, const int& colu
     qDebug() << "updateDisplayAutoCompleteSignal :" << show << columnIndex;
 
     QStringList list = QStringList();
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList());
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate).toStringList());
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
+    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList());
 
     QVariantList info = QVariantList({
         QString("Auto Complete"),
@@ -1195,6 +1219,7 @@ void GuiExcel::pasteClipboardInfo() {
         }
     }
 
+    QVariantList updateSheetList = QVariantList({sheetIndex});
     int clearSheetIndex = clearClipboardInfo(false);
     if (clearSheetIndex >= 0) {
         QMapIterator<int, QList<QPair<int, int>>> iterClear(mClearMergeInfo.isMergeInfo());
@@ -1207,6 +1232,7 @@ void GuiExcel::pasteClipboardInfo() {
         mClearMergeInfo.clear();
 
         if (sheetIndex != clearSheetIndex) {
+            updateSheetList.append(clearSheetIndex);
             updateDisplaySplitCell(clearSheetIndex);
             updateDisplayMergeCell(clearSheetIndex);
         }
@@ -1228,7 +1254,15 @@ void GuiExcel::pasteClipboardInfo() {
     updateDisplaySplitCell(sheetIndex);
     updateDisplayMergeCell(sheetIndex);
 
-    updateTCNameInfo(sheetIndex);
+    // chaged data sync : gui -> control
+    bool tcNameEdit = false;
+    for (const auto& updateIndex : updateSheetList) {
+        if (tcNameEdit == false) {
+            tcNameEdit = (updateIndex.toInt() == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+        }
+        syncSheetData(updateIndex.toInt(), false);
+    }
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
 }
 
 void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
@@ -1254,7 +1288,7 @@ void GuiExcel::updateDisplayReceiveKeyFocus() {
     mExcelSheet[sheetIndex]->setFocus();  // Sheet 활성화 상태에서 화면 전화시 focus 설정 되도록
 }
 
-void GuiExcel::updateDisplayEditCell(const int& editType) {
+void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
     int sheetIndex = mCurrentSheetIndex;
     if (chcekExcelSheet(sheetIndex)) {
         return;
@@ -1308,9 +1342,10 @@ void GuiExcel::updateDisplayEditCell(const int& editType) {
         qDebug() << "Fail to edit type :" << editType;
         return;
     }
-
-    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant());
     updateDisplaySheetHeaderAdjust(sheetIndex);
+
+    bool tcNameEdit = (columnStart == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
 }
 
 void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {
@@ -1328,31 +1363,6 @@ void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {
     }
     QVariantList autoInputInfo = QVariantList({sheetIndex, row, moduleName});
     createSignal(ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo, autoInputInfo);
-}
-
-void GuiExcel::updateTCNameInfo(const int& sheetIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
-    }
-
-    QVariantList editSheetInfo = QVariantList();
-    if (true) {
-        // if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoPrivates) ||
-        //     (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoInters)) {
-        QString allString = QString();
-        QVariantList nodeAddress = QVariantList();
-        for (const auto& data : readExcelSheet(sheetIndex, QVariantList(), allString)) {
-            QVariantList rowLineData = data.toList();
-            if (rowLineData.size() > 0) {
-                nodeAddress.append(rowLineData.at(0));
-            }
-        }
-        if (nodeAddress.size() > 0) {
-            nodeAddress.removeAt(0);  // nodeAddress[0] = "TCName" -> 필요없음
-        }
-        editSheetInfo = QVariantList({sheetIndex, QVariant(nodeAddress)});
-    }
-    createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, QVariant(editSheetInfo));
 }
 
 void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -1375,7 +1385,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeReadForDataGeneration:
         case ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage: {
-            readAllExcelSheet(0, (type == ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage));
+            syncSheetData(0, (type == ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage));
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeClipboardType: {
@@ -1385,7 +1395,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeShortcutType: {
             int shortcutType = value.toInt();
-            updateDisplayEditCell(shortcutType);
+            updateDisplayEditCellShortcut(shortcutType);
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeKey: {

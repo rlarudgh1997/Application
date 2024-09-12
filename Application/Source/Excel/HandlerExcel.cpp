@@ -30,11 +30,9 @@ void HandlerExcel::initPropertyInfo() {
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressPrivate, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressInter, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));

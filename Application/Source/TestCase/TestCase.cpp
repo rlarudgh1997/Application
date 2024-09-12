@@ -104,8 +104,7 @@ QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QS
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo->getMatchingTableSystem();
 #if 1
     qDebug() << "=============================================================================================";
-    qDebug() << "\n    [Read] :" << signalName.toLatin1().data()
-             << "\n\t     DataType            :" << dataType
+    qDebug() << "\n    [Read] :" << signalName.toLatin1().data() << "\n\t     DataType            :" << dataType
              << "\n\t     ValueEnum           :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum]
              << "\n\t     MatchingTableICV    :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV]
              << "\n\t     MatchingTableEV     :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV]

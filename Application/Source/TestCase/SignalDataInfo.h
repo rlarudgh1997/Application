@@ -19,7 +19,8 @@ class SignalDataInfo : public QObject {
     REGISTER_WRITABLE_PROPERTY(QStringList, MatchingTableSystem, QStringList(), false)
 
 public:
-    SignalDataInfo() {}
+    SignalDataInfo() {
+    }
     explicit SignalDataInfo(const QVariantList& dataInfo, const QString& dataType) {
         if (dataInfo.size() == (ivis::common::InputDataTypeEnum::InputDataTypeMax - 1)) {
             QMap<int, QStringList> info;

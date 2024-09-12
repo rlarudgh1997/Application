@@ -21,7 +21,7 @@
 #include <QPair>
 #include <QDateTime>
 
-#include <type_traits>    // std::is_same 사용을 위해 필요
+#include <type_traits>  // std::is_same 사용을 위해 필요
 
 namespace ivis {
 namespace common {

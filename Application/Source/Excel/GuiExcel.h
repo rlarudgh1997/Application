@@ -117,7 +117,8 @@ private:
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     bool chcekExcelSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
-    void readAllExcelSheet(const int& sheetIndex, const bool& dataStorage);
+    void syncSheetData(const int& sheetIndex, const bool& dataStorage);
+    bool isSheetChanged(const int& sheetIndex);
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
     bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                          const int& rowEnd);
@@ -146,9 +147,8 @@ private:
     void pasteClipboardInfo();
     void updateDisplayClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
-    void updateDisplayEditCell(const int& editType);
+    void updateDisplayEditCellShortcut(const int& editType);
     void updateDescriptionInfo(const int& sheetIndex, const int& row);
-    void updateTCNameInfo(const int& sheetIndex);
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

@@ -9,23 +9,23 @@ class KeywordInfo {
 public:
     KeywordInfo() {
     }
-    KeywordInfo(int row, int column, QString text, int keyword) {
-        mRow = row;
-        mColumn = column;
-        mText = text;
-        mKeyword = keyword;
+    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QVariant& data)
+        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data) {
     }
-    int isRow() {
+    int isRow() const {
         return mRow;
     }
-    int isColumn() {
+    int isColumn() const {
         return mColumn;
     }
-    QString isText() {
+    QString isText() const {
         return mText;
     }
-    int isKeyword() {
+    int isKeyword() const {
         return mKeyword;
+    }
+    QVariant isData() const {
+        return mData;
     }
 
 private:
@@ -33,6 +33,7 @@ private:
     int mColumn = 0;
     QString mText = QString();
     int mKeyword = 0;
+    QVariant mData = QVariant();
 };
 
 class ControlExcel : public AbstractControl {
@@ -46,7 +47,8 @@ public:
 private:
     explicit ControlExcel();
 
-    void updateNodeAddress(const bool& all, const QStringList& privateList, const QStringList& interList);
+    void updateNodeAddress(const bool& all, const QStringList& list);
+    void updateSheetData(const int& propertyType, const QVariantList& sheetData);
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath);
     bool writeExcelFile(const QVariant& filePath);
@@ -63,14 +65,15 @@ private:
     QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName,
                                             const QMap<int, QStringList>& fileList);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
-    void updateAutoCompleteInputData(const bool& sfcSignal, const int& outputState, const QString& vehicleType,
-                                     QString& signalName);
+    void updateAutoCompleteSignal(const QVariantList& inputData);
+    void updateAutoCompleteEtc(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
-    void updateInputDataValidation(const QString& signal, const QString& inputData, const int& sheet, const int& row,
-                                   const int& column);
+    void updateExcelSheetEditInfo(const bool& tcNameEdit);
+    void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const bool& readData);
     QMap<QString, int> isKeywordPatternInfo(const int& columnIndex);
-    QMap<int, QList<KeywordInfo>> isKeywordInfo();
+    int isKeywordType(const int& columnIndex, QString& signalName);
+    QMap<int, QList<KeywordInfo>> isKeywordTypeInfo();
     bool replaceGenDataInfo();
     void constructGenDataInfo();
 

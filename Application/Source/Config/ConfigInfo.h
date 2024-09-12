@@ -31,6 +31,7 @@ public:
         // File
         ConfigTypeLastSavedFilePath,
         ConfigTypeDeleteFileTC,
+        ConfigTypeSaveConvertExcel,
         ConfigTypeExcelMergeTextStart,
         ConfigTypeExcelMergeText,
         ConfigTypeExcelMergeTextEnd,
@@ -113,6 +114,8 @@ private:
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
+        mConfigInfoData[ConfigTypeSaveConvertExcel] = QPair<QString, QVariant>("ConfigTypeSaveConvertExcel", QVariant(false));
+
         mConfigInfoData[ConfigTypeExcelMergeTextStart] =
             QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart", QVariant("[MergeStart]"));
         mConfigInfoData[ConfigTypeExcelMergeText] = QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("[Merge]"));
