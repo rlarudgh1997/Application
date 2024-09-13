@@ -127,6 +127,8 @@
 #define STRING_POPUP_GCOV_REPORT_TIP QString("Gcov report view value is not set.")
 #define STRING_POPUP_EXCEL_EDIT QString("Editing Excel file")
 #define STRING_POPUP_EXCEL_EDIT_TIP QString("Would you like to create a new Excel sheet?")
+#define STRING_POPUP_ANOTHER_FILE_OPEN_TIP \
+    QString("Would you like  to open another file without saving the Excel sheet you're editing?")
 #define STRING_POPUP_MODULE_SELECT_ERROR QString("Module select error")
 #define STRING_POPUP_MODULE_SELECT_ERROR_TIP QString("Please select one or more modules.")
 #define STRING_POPUP_BINARY_NOT_EXISTS QString("Binary not exists")

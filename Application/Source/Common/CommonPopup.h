@@ -34,6 +34,7 @@ enum class PopupType {
 
     Exit,
     New,
+    AnotherFileOpen,
     NoInstallLib,
     FileNotExist,
     RestConfigValue,
@@ -94,6 +95,7 @@ public:
             }
             case PopupType::Exit:
             case PopupType::New:
+            case PopupType::AnotherFileOpen:
             case PopupType::NoInstallLib:
             case PopupType::FileNotExist:
             case PopupType::RestConfigValue: {
@@ -184,7 +186,7 @@ private:
             connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
             connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
         } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist) ||
-                    (popupType == PopupType::RestConfigValue)) &&
+                    (popupType == PopupType::RestConfigValue) || (popupType == PopupType::AnotherFileOpen)) &&
                    (list.size() == 4)) {
             selectBox.setWindowTitle(list[0].toString());
             selectBox.setText(list[1].toString());

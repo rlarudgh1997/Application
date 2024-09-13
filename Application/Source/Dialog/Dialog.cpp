@@ -60,6 +60,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
         case DialogTypeSelectLogFile:
         case DialogTypeSelectValueEnumOutput:
         case DialogTypeSelectValueEnumInput:
+        case DialogTypeSelectValueResult:
         case DialogTypeSelectMatchingTableCV:
         case DialogTypeSelectMatchingTablePV: {
             draw = updateSelectList(info);
@@ -464,6 +465,7 @@ QRect Dialog::updateMainRect() {
         }
         case DialogTypeSelectLogFile:
         case DialogTypeSelectValueEnumInput:
+        case DialogTypeSelectValueResult:
         case DialogTypeSelectValueEnumOutput: {
             mGui->SelectListWidget->setGeometry(QRect(0, 0, 500, 300));
             rect = mGui->SelectListWidget->geometry();

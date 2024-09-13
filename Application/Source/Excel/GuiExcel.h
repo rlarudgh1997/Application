@@ -117,7 +117,7 @@ private:
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     bool chcekExcelSheet(const int& sheetIndex);
     QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
-    void syncSheetData(const int& sheetIndex, const bool& dataStorage);
+    void syncSheetData(const int& sheetIndex);
     bool isSheetChanged(const int& sheetIndex);
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
     bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
@@ -140,6 +140,7 @@ private:
     void updateDisplayAutoCompleteSignal(const bool& show, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
     void updateDisplayValueEnum(const QVariantList& data);
+    void updateDisplayTCNameResult(const QStringList& data);
     void updateDisplayAutoInputDescrtion();
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);

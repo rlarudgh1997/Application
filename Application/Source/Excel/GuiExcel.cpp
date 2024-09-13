@@ -54,7 +54,7 @@ void GuiExcel::drawDisplayDepth0() {
     });
     connect(mGui->TabWidget, &QTabWidget::tabBarClicked, [=](int index) {
         // connect(mGui->TabWidget, &QTabWidget::currentChanged, [=](int index) {
-        int currentIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription + index;
+        int currentIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription + index;
         if (mCurrentSheetIndex != currentIndex) {
             mCurrentSheetIndex = currentIndex;
             updateCellInfoContent(currentIndex, mModelIndex[currentIndex].first, mModelIndex[currentIndex].second);
@@ -241,26 +241,19 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     return sheetData;
 }
 
-void GuiExcel::syncSheetData(const int& sheetIndex, const bool& dataStorage) {
+void GuiExcel::syncSheetData(const int& sheetIndex) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
-    int eventType = ivis::common::EventTypeEnum::EventTypeInvalid;
     QList<int> sheetIndexList = QList<int>();
 
-    if ((sheetIndex >= ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) &&
-        (sheetIndex < ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoMax)) {
+    if ((sheetIndex >= ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
+        (sheetIndex < ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax)) {
         sheetIndexList.append(sheetIndex);
     } else {
         for (auto iter = mExcelSheet.cbegin(); iter != mExcelSheet.cend(); ++iter) {
             sheetIndexList.append(iter.key());
-        }
-
-        if (dataStorage) {
-            eventType = ivis::common::EventTypeEnum::EventTypeDataStorage;
-        } else {
-            eventType = ivis::common::EventTypeEnum::EventTypeDataGeneration;
         }
     }
 
@@ -268,14 +261,10 @@ void GuiExcel::syncSheetData(const int& sheetIndex, const bool& dataStorage) {
         QString allString = QString();
         QVariantList sheetData = readExcelSheet(readSheetIndex, QVariantList(), allString);
         if (sheetData.size() > 0) {
-            int currentSheetIndex = (readSheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription);
+            int currentSheetIndex = (readSheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
             createSignal(ivis::common::EventTypeEnum::EventTypeListDescription + currentSheetIndex, sheetData);
             readSheetIndex++;
         }
-    }
-
-    if (eventType != ivis::common::EventTypeEnum::EventTypeInvalid) {
-        createSignal(eventType);
     }
 }
 
@@ -525,7 +514,7 @@ void GuiExcel::updateDefaultSheetFocus(const int& sheetIndex, const int& row, co
 }
 
 void GuiExcel::updateInitialExcelSheet() {
-    mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    mCurrentSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     mMergeInfo.clear();
     mModelIndex.clear();
     mCopyMergeInfo.clear();
@@ -710,13 +699,13 @@ void GuiExcel::updateDisplayExcelSheet() {
     QStringList descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
     QStringList otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
     QVariantList listRowCount = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount).toList();
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription;
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     // qDebug() << "\t Excel : read data";
 
     for (const auto& sheet : sheetName) {
         QStringList contentTitle =
-            (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) ? (descTitle) : (otherTitle);
-        int rowMax = listRowCount.at(sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription).toInt();
+            (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ? (descTitle) : (otherTitle);
+        int rowMax = listRowCount.at(sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription).toInt();
         int columnMax = contentTitle.size();
 
         // Draw Sheet
@@ -824,7 +813,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     int columnIndex = (-1);
     bool tcNameEdit = false;
 
-    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
+    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
             updateDescriptionInfo(sheetIndex, row);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data)) {
@@ -853,7 +842,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     }
 
     updateDisplaySheetHeaderAdjust(sheetIndex);
-    syncSheetData(sheetIndex, false);
+    syncSheetData(sheetIndex);
     createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
 }
 
@@ -865,7 +854,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
     bool notSupport = false;
     bool supportDataInfo = false;
     bool supportVehicleType = false;
-    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
+    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
         notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Version)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Description)));
@@ -895,7 +884,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
 
     if (supportDataInfo) {
         int columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal);
-        if (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeDetailInfoDescription) {
+        if (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
             if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
                 columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
             } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
@@ -1030,6 +1019,18 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
         0,
     });
     updateDrawDialog(dialogType, info);
+}
+
+void GuiExcel::updateDisplayTCNameResult(const QStringList& data) {
+    QVariantList info = QVariantList({
+        QString("Select Data"),
+        QStringList({"Result"}),
+        data,
+        QStringList(),
+        QStringList(),
+        0,
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectValueResult, info);
 }
 
 void GuiExcel::updateDisplayAutoInputDescrtion() {
@@ -1260,7 +1261,7 @@ void GuiExcel::pasteClipboardInfo() {
         if (tcNameEdit == false) {
             tcNameEdit = (updateIndex.toInt() == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
         }
-        syncSheetData(updateIndex.toInt(), false);
+        syncSheetData(updateIndex.toInt());
     }
     createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
 }
@@ -1383,11 +1384,6 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayExcelSheet();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeReadForDataGeneration:
-        case ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage: {
-            syncSheetData(0, (type == ivis::common::PropertyTypeEnum::PropertyTypeReadForStorage));
-            break;
-        }
         case ivis::common::PropertyTypeEnum::PropertyTypeClipboardType: {
             int clipboardType = value.toInt();
             updateDisplayClipboardInfo(clipboardType);
@@ -1414,6 +1410,10 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeValueEnum: {
             updateDisplayValueEnum(value.toList());
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult: {
+            updateDisplayTCNameResult(value.toStringList());
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo: {

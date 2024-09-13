@@ -6,6 +6,9 @@
 =====================================================================
 # [Repo 정보]
 	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
+	git clone ssh://sfc@10.45.143.171/home/sfc/100_Repo/TC_Creator.git
+		ID : sfc
+		PW : ivis!
 
 # [SFC 정보]
 	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive

@@ -68,6 +68,7 @@ public:
         DialogTypeSelectValueEnumOutput,
         DialogTypeSelectMatchingTableCV,
         DialogTypeSelectMatchingTablePV,
+        DialogTypeSelectValueResult,
         DialogTypeSelectNegative,
         DialogTypeSelectVehiclePV,
         DialogTypeSelectVehicleCV,  // 10

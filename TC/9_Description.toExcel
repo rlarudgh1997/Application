@@ -1,0 +1,10 @@
+TCName	VehicleType	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
+[MergeStart]Priavate_1	[MergeStart]	[MergeStart]On	[MergeStart]Example 1								
+[Merge]Priavate_1	[Merge]	[MergeEnd]On	[MergeEnd]Example 1	SFC.ADAS_Driving_New.Constant.FrontVehicle.Level.Value							
+[Merge]Priavate_1	[Merge]	[MergeStart]Off	[MergeStart]Example 2	SFC.ADAS_Driving_New.Constant.LaneCentralLine.Stat							
+[Merge]Priavate_1	[Merge]	[MergeEnd]Off	[MergeEnd]Example 2	SFC.ADAS_Driving_New.Constant.HeadwayDistance.Color.Stat							
+[MergeEnd]Priavate_1	[MergeEnd]			Vehicle.CV.Transmission_Warning_CV.Input_TMFailureModeStopStatus							
+Priavate_2				SFC.Extension.Event_Control_Logic.Inter_NCustom1AdminStatus							
+Priavate_3				aaaaa							
+Priavate_4											
+Priavate_5											
