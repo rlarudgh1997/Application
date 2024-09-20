@@ -10,7 +10,7 @@ public:
     KeywordInfo() {
     }
     KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data,
-                const QMap<int, QStringList>& convertData = QMap<int, QStringList>())
+                const QList<QStringList>& convertData = QList<QStringList>())
         : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data), mConvertData(convertData) {
     }
     int isRow() const {
@@ -28,11 +28,10 @@ public:
     QString isData() const {
         return mData;
     }
-    QMap<int, QStringList> isConvertData() const {
+    QList<QStringList> isConvertData() const {
         return mConvertData;
     }
-    void updateConvertData(const QMap<int, QStringList>& convertData) {
-        // qDebug() << "\t updateConvertData :" << convertData;
+    void updateConvertData(const QList<QStringList>& convertData) {
         mConvertData = convertData;
     }
 
@@ -42,7 +41,7 @@ private:
     QString mText = QString();
     int mKeyword = 0;
     QString mData = QString();
-    QMap<int, QStringList> mConvertData = QMap<int, QStringList>();
+    QList<QStringList> mConvertData = QList<QStringList>();
 };
 
 class ControlExcel : public AbstractControl {
@@ -75,7 +74,7 @@ private:
                                             const QMap<int, QStringList>& fileList);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
-                                            const bool& convert, const bool& mergeInfoErase);
+                                            const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
     void updateAutoCompleteSignal(const QVariantList& inputData);
     void updateAutoCompleteEtc(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
