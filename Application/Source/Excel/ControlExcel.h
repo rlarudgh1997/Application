@@ -9,9 +9,8 @@ class KeywordInfo {
 public:
     KeywordInfo() {
     }
-    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data,
-                const QList<QStringList>& convertData = QList<QStringList>())
-        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data), mConvertData(convertData) {
+    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
+        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data) {
     }
     int isRow() const {
         return mRow;
@@ -28,6 +27,12 @@ public:
     QString isData() const {
         return mData;
     }
+    QList<QStringList> isRowData() const {
+        return mRowData;
+    }
+    void updateRowData(const QList<QStringList>& rowData) {
+        mRowData = rowData;
+    }
     QList<QStringList> isConvertData() const {
         return mConvertData;
     }
@@ -42,6 +47,7 @@ private:
     int mKeyword = 0;
     QString mData = QString();
     QList<QStringList> mConvertData = QList<QStringList>();
+    QList<QStringList> mRowData = QList<QStringList>();
 };
 
 class ControlExcel : public AbstractControl {
@@ -70,7 +76,7 @@ private:
     void updateShortcutInfo(const int& eventType);
     QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
-    QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName,
+    QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName, const QStringList& signalData,
                                             const QMap<int, QStringList>& fileList);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
@@ -83,7 +89,7 @@ private:
     void updateGenDataInfo(const int& eventType);
     QMap<QString, int> isKeywordPatternInfo(const int& columnIndex);
     int isKeywordType(const int& columnIndex, QString& signalName);
-    QMap<int, QList<KeywordInfo>> isKeywordTypeInfo();
+    QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex);
     bool replaceGenDataInfo();
     void constructGenDataInfo();
 

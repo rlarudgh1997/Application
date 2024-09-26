@@ -10,6 +10,7 @@ class SignalDataInfo : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(QString, DataType, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, InputData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ValueEnum, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, MatchingTableICV, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, MatchingTableEV, QStringList(), false)
@@ -31,6 +32,7 @@ public:
             info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV] = dataInfo.at(4).toStringList();
             info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV] = dataInfo.at(5).toStringList();
             info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo.at(6).toStringList();
+            info[ivis::common::InputDataTypeEnum::InputDataTypeInputData] = dataInfo.at(7).toStringList();
             updateSignalDataInfo(info, dataType);
         }
     }
@@ -71,7 +73,7 @@ private:
             // DataType Remove : MatchingTable*[0] -> Not Used
             for (int index = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
                  index < ivis::common::InputDataTypeEnum::InputDataTypeMax; ++index) {
-                if (info[index].size() > 0) {
+                if ((info[index].size() > 0) && (index != ivis::common::InputDataTypeEnum::InputDataTypeInputData)) {
                     info[index].removeAt(0);
                 }
             }
@@ -83,6 +85,7 @@ private:
         setMatchingTablePHEV(info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV]);
         setMatchingTableHEV(info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV]);
         setMatchingTableSystem(info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem]);
+        setInputData(info[ivis::common::InputDataTypeEnum::InputDataTypeInputData]);
     }
 };
 

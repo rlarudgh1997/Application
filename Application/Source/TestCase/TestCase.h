@@ -26,6 +26,7 @@ public:
     void setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo,
                            const QString& dataType = QString());
     QMap<int, QStringList> getSignalDataInfo(const QString& signalName, QString& dataType);
+    QString getSignalInfoString();
 
 private:
     explicit TestCase();

@@ -35,13 +35,14 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputData, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());

@@ -777,7 +777,8 @@ bool Dialog::updateSelectList(const QVariantList& info) {
     bool headerFixed = true;
     int rowIndex = 0;
     int columnIndex = 0;
-    bool multiCheck = ((dialogType != DialogTypeSelectLogFile) && (dialogType != DialogTypeSelectValueEnumOutput));
+    bool multiCheck = ((dialogType != DialogTypeSelectLogFile) && (dialogType != DialogTypeSelectValueEnumOutput) &&
+                       (dialogType != DialogTypeSelectValueResult));
 
 #if defined(USE_DIALOG_PROPERTY)
     setMultiCheck(multiCheck);

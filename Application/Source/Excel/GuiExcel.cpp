@@ -105,7 +105,11 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
             mDialog.reset();
         });
         connect(mDialog.data(), &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
+            int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
             QString selectValueEnum = QString();
+
+            qDebug() << "Dialog::signalSelectListItem :" << dialogType << selectItem;
+
             for (const auto& select : selectItem) {
                 QStringList lineStr = select.second.split(":");
                 if (lineStr.size() != 2) {
@@ -124,6 +128,7 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
             }
             if ((selectValueEnum.size() > 0) && (mSelectItem)) {
                 mSelectItem->setText(selectValueEnum);
+                qDebug() << "\t selectValueEnum :" << selectValueEnum;
             }
             mDialog.data()->accept();
         });
@@ -823,8 +828,8 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     } else {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
-        } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
-            columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
+            // } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
+            //     columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
@@ -943,10 +948,11 @@ void GuiExcel::updateDisplayAutoCompleteSignal(const bool& show, const int& colu
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
     list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList());
+    QString text = (mSelectItem) ? (mSelectItem->text()) : (QString());
 
     QVariantList info = QVariantList({
         QString("Auto Complete"),
-        mSelectItem->text(),
+        text,
         list,
     });
     updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
@@ -972,7 +978,7 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
     QStringList subTitle = QStringList({"Value Enum"});
     QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
     QStringList valueEnum =
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum).toStringList();
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum).toStringList();
     QVariantList matchingTableList = QVariantList();
     if ((sfcSignal == false) && (outputState == false)) {
         matchingTableList.append(valueEnum);  // ValueEnum -> Dialog : Not Used

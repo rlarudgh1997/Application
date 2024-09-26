@@ -91,13 +91,14 @@ public:
         PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
         PropertyTypeValueEnum,
-        PropertyTypeInputDataValuEnum,
+        PropertyTypeInputDataValueEnum,
         PropertyTypeInputDataMatchingTableICV,
         PropertyTypeInputDataMatchingTableEV,
         PropertyTypeInputDataMatchingTableFCEV,
         PropertyTypeInputDataMatchingTablePHEV,
         PropertyTypeInputDataMatchingTableHEV,
         PropertyTypeInputDataMatchingTableSystem,
+        PropertyTypeInputData,
         PropertyTypeTCNameResult,
         PropertyTypeAutoInputDescriptionInfo,
         PropertyTypeUpdateSelectModule,
@@ -377,6 +378,7 @@ public:
         InputDataTypeMatchingTablePHEV,
         InputDataTypeMatchingTableHEV,
         InputDataTypeMatchingTableSystem,
+        InputDataTypeInputData,
         InputDataTypeMax,
     };
 };
