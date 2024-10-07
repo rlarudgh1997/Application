@@ -200,9 +200,9 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
     }
 
     // Read Row Data
-    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
-    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
-    QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    QVariant excelMergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart);
+    QVariant excelMergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd);
+    QVariant excelMerge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge);
     QMap<int, QList<QPair<int, int>>> mergeInfo = mMergeInfo[sheetIndex].isMergeInfo();
     for (int rowIndex = rowStart; rowIndex < rowMax; rowIndex++) {
         QStringList rowData = QStringList();
@@ -222,11 +222,11 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
                 int rowEnd = (info.first + info.second);
                 if ((rowIndex >= rowStart) && (rowIndex < rowEnd)) {
                     if (rowIndex == rowStart) {
-                        text = excelMergeTextStart.toString();
+                        text = excelMergeStart.toString();
                     } else if (rowIndex == (rowEnd - 1)) {
-                        text = excelMergeTextEnd.toString();
+                        text = excelMergeEnd.toString();
                     } else {
-                        text = excelMergeText.toString();
+                        text = excelMerge.toString();
                     }
                     text = text + readText;
                     // qDebug() << "MergeText[" << sheetIndex << "][" << rowIndex << "," << columnIndex << "] :" << text;
@@ -319,9 +319,9 @@ bool GuiExcel::updateMergeInfo(const bool& erase, const int& sheetIndex, const i
 }
 
 QMap<int, QList<QPair<int, int>>> GuiExcel::findMergeInfo(const QMap<int, QVariantList>& sheetData) {
-    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
-    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
-    // QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    QVariant excelMergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart);
+    QVariant excelMergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd);
+    // QVariant excelMerge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge);
 
     QMap<int, QList<QPair<int, int>>> mergeInfo = QMap<int, QList<QPair<int, int>>>();
     QMapIterator<int, QVariantList> iter(sheetData);
@@ -334,9 +334,9 @@ QMap<int, QList<QPair<int, int>>> GuiExcel::findMergeInfo(const QMap<int, QVaria
 
         for (const auto& v : iter.value()) {
             QString readText = v.toString();
-            QStringList startText = readText.split(excelMergeTextStart.toString());
-            QStringList endText = readText.split(excelMergeTextEnd.toString());
-            // QStringList mergeText = readText.split(excelMergeText.toString());
+            QStringList startText = readText.split(excelMergeStart.toString());
+            QStringList endText = readText.split(excelMergeEnd.toString());
+            // QStringList mergeText = readText.split(excelMerge.toString());
 
             if (startText.size() == 2) {
                 mergeRowStart = rowIndex;
@@ -446,9 +446,9 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
     }
 
     QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
-    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
-    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
-    QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    QVariant excelMergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart);
+    QVariant excelMergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd);
+    QVariant excelMerge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge);
     QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
     // qDebug() << "====================================================================================================";
     // qDebug() << "Length :" << sheetData.size() << rowMax << columnMax;
@@ -458,9 +458,9 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
         QStringList rowDataList = sheetData[rowIndex].toStringList();
         for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
             QString readText = rowDataList[columnIndex];
-            QStringList startText = readText.split(excelMergeTextStart.toString());
-            QStringList endText = readText.split(excelMergeTextEnd.toString());
-            QStringList mergeText = readText.split(excelMergeText.toString());
+            QStringList startText = readText.split(excelMergeStart.toString());
+            QStringList endText = readText.split(excelMergeEnd.toString());
+            QStringList mergeText = readText.split(excelMerge.toString());
             QString setText = QString();
 
             newSheetData[columnIndex].append(readText);
@@ -1094,9 +1094,9 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
         return;
     }
 
-    QVariant excelMergeTextStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart);
-    QVariant excelMergeTextEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd);
-    QVariant excelMergeText = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText);
+    QVariant excelMergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart);
+    QVariant excelMergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd);
+    QVariant excelMerge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge);
 
     int rowStart = modelIndexs.at(0).row();
     int rowEnd = modelIndexs.last().row() - rowStart + 1;

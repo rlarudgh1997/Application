@@ -9,6 +9,7 @@
 
 class TestCase : public QObject {
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER2(QMap, int, QVariant, SheetData, false)
 
 public:
     enum {
@@ -21,11 +22,12 @@ public:
     static QSharedPointer<TestCase>& instance();
 
     void excuteTestCase(const int& type = ExcuteTypeGenTC);
-    int isDataType(QMap<int, QStringList>& dataInfo);
+    int isKeywordType(const QString& signalName);
+    int isDataType(QMap<int, QStringList>& dataInfo, const int& keywordType);
     void clearSignalDataInfo(const QString& signalName = QString());
-    void setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo,
+    void setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo, const int& keywordType,
                            const QString& dataType = QString());
-    QMap<int, QStringList> getSignalDataInfo(const QString& signalName, QString& dataType);
+    QMap<int, QStringList> getSignalDataInfo(const QString& signalName, int& keywordType, QString& dataType);
     QString getSignalInfoString();
 
 private:

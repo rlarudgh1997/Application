@@ -20,7 +20,7 @@ void TestCase::excuteTestCase(const int& type) {
     switch (type) {
         case ExcuteTypeGenTC: {
             QString str = getSignalInfoString();
-            QString cmd = QString("python3 %1/../Python/ItertoolTest.py \"%2\"").arg(ivis::common::APP_PWD()).arg(str);
+            QString cmd = QString("python3 %1/../Python/ItertoolsTest.py \"%2\"").arg(ivis::common::APP_PWD()).arg(str);
             ivis::common::ExcuteProgram process(false);
             QStringList log;
             bool result = process.start(cmd, log);
@@ -29,6 +29,13 @@ void TestCase::excuteTestCase(const int& type) {
                 qDebug() << "success!: " << log;
             } else {
                 qDebug() << "fail!: " << log;
+            }
+
+            QStringList readData =
+                ivis::common::FileInfo::readFile(QString("%1/../Python/ItertoolsTest.txt").arg(ivis::common::APP_PWD()));
+
+            for (int rowIndex = 0; rowIndex < readData.size(); rowIndex++) {
+                // qDebug() << "rowIndex" << rowIndex << ": " << readData[rowIndex];
             }
 
             break;
@@ -43,8 +50,13 @@ void TestCase::excuteTestCase(const int& type) {
     setExcuteType(type);
 }
 
-int TestCase::isDataType(QMap<int, QStringList>& dataInfo) {
-    SignalDataInfo info = SignalDataInfo(dataInfo, QString());
+int TestCase::isKeywordType(const QString& signalName) {
+    QSharedPointer<SignalDataInfo> dataInfo = mSignalDataInfo[signalName];
+    return dataInfo->getKeywordType();
+}
+
+int TestCase::isDataType(QMap<int, QStringList>& dataInfo, const int& keywordType) {
+    SignalDataInfo info = SignalDataInfo(dataInfo, keywordType, QString());
     int dataType = info.isDataType();
     dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = info.getValueEnum();
     dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV] = info.getMatchingTableICV();
@@ -67,12 +79,13 @@ void TestCase::clearSignalDataInfo(const QString& signalName) {
     }
 }
 
-void TestCase::setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo, const QString& dataType) {
+void TestCase::setSignalDataInfo(const QString& signalName, const QMap<int, QStringList>& dataInfo, const int& keywordType,
+                                 const QString& dataType) {
     if (dataInfo.size() == 0) {
         return;
     }
 
-    mSignalDataInfo[signalName] = QSharedPointer<SignalDataInfo>::create(dataInfo, dataType);
+    mSignalDataInfo[signalName] = QSharedPointer<SignalDataInfo>::create(dataInfo, keywordType, dataType);
 #if 0
     qDebug() << "=============================================================================================";
     for (auto iter = mSignalDataInfo.cbegin(); iter != mSignalDataInfo.cend(); ++iter) {
@@ -84,6 +97,7 @@ void TestCase::setSignalDataInfo(const QString& signalName, const QMap<int, QStr
         QSharedPointer<SignalDataInfo> signalInfo = iter.value();
         if (signalInfo) {
             qDebug() << "\n\t [Write] :" << signalName.toLatin1().data()
+                     << "\n\t\t KeywordType         :" << signalInfo->getKeywordType()
                      << "\n\t\t DataType            :" << signalInfo->getDataType()
                      << "\n\t\t InputData           :" << signalInfo->getInputData()
                      << "\n\t\t ValueEnum           :" << signalInfo->getValueEnum()
@@ -99,7 +113,7 @@ void TestCase::setSignalDataInfo(const QString& signalName, const QMap<int, QStr
 #endif
 }
 
-QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QString& dataType) {
+QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, int& keywordType, QString& dataType) {
     QMap<int, QStringList> signalInfo = QMap<int, QStringList>();
     QSharedPointer<SignalDataInfo> dataInfo = mSignalDataInfo[signalName];
 
@@ -109,6 +123,7 @@ QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QS
     }
 
     dataType = dataInfo->getDataType();
+    keywordType = dataInfo->getKeywordType();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData] = dataInfo->getInputData();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = dataInfo->getValueEnum();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV] = dataInfo->getMatchingTableICV();
@@ -119,7 +134,8 @@ QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, QS
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo->getMatchingTableSystem();
 #if 0
     qDebug() << "=============================================================================================";
-    qDebug() << "\n\t [Read] :" << signalName.toLatin1().data() << "\n\t\t DataType            :" << dataType
+    qDebug() << "\n\t [Read] :" << signalName.toLatin1().data() << "\n\t\t KeywordType          :" << keywordType
+             << "\n\t\t DataType            :" << dataType
              << "\n\t\t InputData           :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData]
              << "\n\t\t ValueEnum           :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum]
              << "\n\t\t MatchingTableICV    :" << signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV]
@@ -157,6 +173,8 @@ QString TestCase::getSignalInfoString() {
         ret += "InputValueEnum    : " + iter.value().data()->getValueEnum().join(", ").replace("\\", "").replace("\"", "") + "\n";
         // qDebug() << "iter.value().data()->getValueEnum(): " << iter.value().data()->getValueEnum();
     }
+#if 0
     qDebug() << "getSignalInfoString ret: " << ret;
+#endif
     return ret;
 }

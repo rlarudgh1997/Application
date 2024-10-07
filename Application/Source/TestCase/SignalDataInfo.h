@@ -9,6 +9,7 @@
 class SignalDataInfo : public QObject {
     Q_OBJECT
 
+    REGISTER_WRITABLE_PROPERTY(int, KeywordType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QString, DataType, QString(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, InputData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ValueEnum, QStringList(), false)
@@ -22,7 +23,7 @@ class SignalDataInfo : public QObject {
 public:
     SignalDataInfo() {
     }
-    explicit SignalDataInfo(const QVariantList& dataInfo, const QString& dataType) {
+    explicit SignalDataInfo(const QVariantList& dataInfo, const int& keywordType, const QString& dataType) {
         if (dataInfo.size() == (ivis::common::InputDataTypeEnum::InputDataTypeMax - 1)) {
             QMap<int, QStringList> info;
             info[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = dataInfo.at(0).toStringList();
@@ -33,11 +34,11 @@ public:
             info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV] = dataInfo.at(5).toStringList();
             info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo.at(6).toStringList();
             info[ivis::common::InputDataTypeEnum::InputDataTypeInputData] = dataInfo.at(7).toStringList();
-            updateSignalDataInfo(info, dataType);
+            updateSignalDataInfo(info, keywordType, dataType);
         }
     }
-    explicit SignalDataInfo(const QMap<int, QStringList>& dataInfo, const QString& dataType) {
-        updateSignalDataInfo(dataInfo, dataType);
+    explicit SignalDataInfo(const QMap<int, QStringList>& dataInfo, const int& keywordType, const QString& dataType) {
+        updateSignalDataInfo(dataInfo, keywordType, dataType);
     }
     int isDataType() {
         int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
@@ -56,7 +57,7 @@ public:
     }
 
 private:
-    void updateSignalDataInfo(const QMap<int, QStringList>& dataInfo, const QString& dataType) {
+    void updateSignalDataInfo(const QMap<int, QStringList>& dataInfo, const int& keywordType, const QString& dataType) {
         QMap<int, QStringList> info = dataInfo;
 
         if (info.size() > 0) {
@@ -78,6 +79,7 @@ private:
                 }
             }
         }
+        setKeywordType(keywordType);
         setValueEnum(info[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum]);
         setMatchingTableICV(info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV]);
         setMatchingTableEV(info[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV]);

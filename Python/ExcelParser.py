@@ -29,9 +29,9 @@ class ExcelParser:
         self.sheet_names = self.config_info["ConfigTypeSheetName"].split(", ")
 
     def read_from_excel(self, file_path):
-        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeTextStart"]
-        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeTextEnd"]
-        excel_merge_text = self.config_info["ConfigTypeExcelMergeText"]
+        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeStart"]
+        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeEnd"]
+        excel_merge_text = self.config_info["ConfigTypeExcelMerge"]
 
         # start_time = time.time()
         wb = load_workbook(file_path, data_only=True)
@@ -94,9 +94,9 @@ class ExcelParser:
         print("\t [CheckTime] WriteToExcel :", f" {check_time:.5f} seconds")
 
     def read_from_text(self, path, save_file_path):
-        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeTextStart"]
-        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeTextEnd"]
-        excel_merge_text = self.config_info["ConfigTypeExcelMergeText"]
+        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeStart"]
+        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeEnd"]
+        excel_merge_text = self.config_info["ConfigTypeExcelMerge"]
 
         read_data = []
         merge_info_list = {}

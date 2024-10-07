@@ -60,9 +60,9 @@ def readConfigSetting() :
 
 
 def readFromExcel(file_path, sheet_name):
-    excelMergeTextStart = configInfo["ConfigTypeExcelMergeTextStart"]
-    excelMergeTextEnd = configInfo["ConfigTypeExcelMergeTextEnd"]
-    excelMergeText = configInfo["ConfigTypeExcelMergeText"]
+    excelMergeStart = configInfo["ConfigTypeExcelMergeStart"]
+    excelMergeEnd = configInfo["ConfigTypeExcelMergeEnd"]
+    excelMerge = configInfo["ConfigTypeExcelMerge"]
 
 
     wb = load_workbook(file_path, data_only=True)
@@ -89,19 +89,19 @@ def readFromExcel(file_path, sheet_name):
 
                         if True:    # new code : True, False
                             if currentCell.row == rowStart:
-                                mergeCellText = excelMergeTextStart
+                                mergeCellText = excelMergeStart
                             elif currentCell.row == rowEnd:
-                                mergeCellText = excelMergeTextEnd
+                                mergeCellText = excelMergeEnd
                             else:
-                                mergeCellText = excelMergeText
+                                mergeCellText = excelMerge
 
                             if readCellText:
                                 mergeCellText = mergeCellText + currentMergeCell.value
                         else:
                             if readCellText is None:
-                                mergeCellText = excelMergeText
+                                mergeCellText = excelMerge
                             else:
-                                mergeCellText = excelMergeText + currentMergeCell.value
+                                mergeCellText = excelMerge + currentMergeCell.value
 
                         readCellText = mergeCellText
                         # print("1 Merge[", currentCell.row, ",", currentCell.column, "] :", readCellText)
@@ -137,11 +137,11 @@ def readFromExcel(file_path, sheet_name):
 
                     if checkMerged:
                         if rowIndex == rowStart:
-                            mergeCellText = excelMergeTextStart
+                            mergeCellText = excelMergeStart
                         elif rowIndex == rowEnd:
-                            mergeCellText = excelMergeTextEnd
+                            mergeCellText = excelMergeEnd
                         else:
-                            mergeCellText = excelMergeText
+                            mergeCellText = excelMerge
 
                         if readCellText:
                             mergeCellText = mergeCellText + str(readCellText)
@@ -175,9 +175,9 @@ def readFromText(path, saveFilePath) :
     # print("\n=================================================================================================")
     # print("readFromText : ", path)
 
-    excelMergeTextStart = configInfo["ConfigTypeExcelMergeTextStart"]
-    excelMergeTextEnd = configInfo["ConfigTypeExcelMergeTextEnd"]
-    excelMergeText = configInfo["ConfigTypeExcelMergeText"]
+    excelMergeStart = configInfo["ConfigTypeExcelMergeStart"]
+    excelMergeEnd = configInfo["ConfigTypeExcelMergeEnd"]
+    excelMerge = configInfo["ConfigTypeExcelMerge"]
 
     readData = list()
     mergeInfoList = dict()
@@ -204,9 +204,9 @@ def readFromText(path, saveFilePath) :
                     readText = read.iloc[rowIndex, columnIndex]
 
                     if type(readText) == str:
-                        startText = readText.split(excelMergeTextStart)
-                        endText = readText.split(excelMergeTextEnd)
-                        mergeText = readText.split(excelMergeText)
+                        startText = readText.split(excelMergeStart)
+                        endText = readText.split(excelMergeEnd)
+                        mergeText = readText.split(excelMerge)
                         if len(startText) == 2 :
                             rowStart = rowIndex
                             rowEnd = (-1)
@@ -234,9 +234,9 @@ def readFromText(path, saveFilePath) :
                     # readText = read.at[rowIndex][columnIndex]
                     text = ""
                     if type(readText) == str:
-                        startText = readText.split(excelMergeTextStart)
-                        endText = readText.split(excelMergeTextEnd)
-                        mergeText = readText.split(excelMergeText)
+                        startText = readText.split(excelMergeStart)
+                        endText = readText.split(excelMergeEnd)
+                        mergeText = readText.split(excelMerge)
                         typeText = ""
                         if len(startText) == 2 :
                             typeText = "Start "
