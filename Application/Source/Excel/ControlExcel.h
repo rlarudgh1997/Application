@@ -81,11 +81,13 @@ private:
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
                                             const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
-    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& tcName, const QString& result);
+    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                      const QString& caseInfo);
     QList<QStringList> isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo, const QPair<int, int>& columnInfo);
-    QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+    QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result, const QString& caseInfo,
                                        const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
-    QList<QStringList> isInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
+    QList<QStringList> isInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                       const QString& caseInfo);
     QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
     QList<QStringList> isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
     void updateAutoCompleteSignal(const QVariantList& inputData);
