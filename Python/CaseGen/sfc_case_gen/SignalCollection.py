@@ -1,0 +1,89 @@
+"""
+SignalCollection.py
+
+This module provides Signal list
+"""
+import itertools
+import copy
+from .SignalData import SignalData
+
+class SignalCollection:
+    def __init__(self, signal_objects = []):
+        self.signals = signal_objects
+        self.all_value_enum_combinations = []
+        self.all_data_combinations = []
+        self.other_combinations = []
+
+    def parse_input_string(self, input_str):
+        signal_objects = []
+        lines = input_str.strip().splitlines()
+        i = 0
+        while i < len(lines):
+            if "InputSignalName" in lines[i]:
+                name = lines[i].split(":")[1].strip()
+                data_type = lines[i + 1].split(":")[1].strip()
+                # Split data and value_enum into lists
+                tmp_data = ':'.join(lines[i + 2].split(":")[1:]).strip()
+                data = [item.strip() for item in tmp_data.split(",")]
+                tmp_value_enum = ':'.join(lines[i + 3].split(":")[1:]).strip()
+                value_enum = [item.strip() for item in tmp_value_enum.split(",")]
+                signal_objects.append(SignalData(name, data_type, data, value_enum))
+                i += 4
+            else:
+                i += 1
+        self.signals = signal_objects
+
+    def display_signals(self):
+        # Print InputValueEnumHex and InputDataHex for each signal object
+        idx = 0
+        for signal in self.signals:
+            print("--------------------------------------------------------------------------")
+            print(f"Signal{idx}: {signal.InputSignalName}")
+            # print(f"  InputValueEnum: {signal.InputValueEnum}")  # Display the original InputValueEnum
+            # print(f"  InputValueEnumHex: {signal.InputValueEnumHex}")
+            print(f"  InputData: {signal.InputData}")  # Display the original InputData
+            print(f"  InputDataHex: {signal.InputDataHex}")
+            print("--------------------------------------------------------------------------\n")
+            idx += 1
+
+    def generate_combinations(self):
+        # Generate combinations from InputValueEnumHex and InputDataHex across all signals
+        value_enum_hex_lists = [signal.InputValueEnumHex for signal in self.signals if signal.InputValueEnumHex]
+        data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
+        # Create all combinations
+        if value_enum_hex_lists and data_hex_lists:
+            self.all_value_enum_combinations = list(itertools.product(*value_enum_hex_lists))
+            self.all_data_combinations = list(itertools.product(*data_hex_lists))
+            self.other_combinations = copy.deepcopy(self.all_value_enum_combinations)
+            for combo in self.all_data_combinations:
+                if combo in self.other_combinations:
+                    self.other_combinations.remove(combo)
+                else:
+                    print("[Error] There is no enum matching with : ", combo)
+            print(f"전체 조합수: {len(self.all_value_enum_combinations)}")
+            print(f"조건 만족 조합수: {len(self.all_data_combinations)}")
+            print(f"조건 이외 조합수: {len(self.other_combinations)}")
+            # # print results
+#             print("Combinations of InputValueEnumHex:")
+#             for combo in self.all_value_enum_combinations:
+#                 print("   ", combo)
+#             print("Combinations of InputDataHex:")
+#             for combo in self.all_data_combinations:
+#                 print("   ", combo)
+#             print("Combinations of Other:")
+#             for combo in self.other_combinations:
+#                 print("   ", combo)
+        else:
+            print("[Error] Not a available input data set: ")
+
+    def get_signals(self):
+        return self.signals
+
+    def get_all_value_enum_combinations(self):
+        return self.all_value_enum_combinations
+
+    def get_all_data_combinations(self):
+        return self.all_data_combinations
+
+    def get_other_combinations(self):
+        return self.other_combinations
