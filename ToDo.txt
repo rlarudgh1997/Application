@@ -1,5 +1,27 @@
 ======================================================================================================================================================
 # [ToDo]
+- 자동 완성 기능 보완
+	: 자동 완성 추천 리스트 선택 기능
+		- SFC, Vehicle, TCName 선택 하여 해당 항목만 표시 되도록 하는 기능
+	: 자동 완성 추천 리스트 화면에서 키워드 선택 기능
+		- 자동 완성 리스트내 키워드 선택 화면을 추가 하여 키워드 항목 선택 기능
+			Sheet 등 필요한 키워드 추가
+		- 선택 가능한 키워드 정보를 구분하여 제공
+			InputSignal, OutputSingl 열 : Sheet, 등
+			InputValue, OuputData 열 : range, cal 등
+
+
+- 시그널 파싱 기능 보완
+	: 특정 시그널(SFC.Private.IGNElapsed.* 로 시작) 파싱시 기존 파싱 로직과 분리하여 별도 동작하는 기능
+	: 특정 시그널 입력시 파일 경로 및 파일명 확인 필요
+		- /model/SFC/ETC/IGNElapsed/IGNElapsed.yml
+			SFC.Private.IGNElapsed.ElapsedOff500ms
+			SFC.Private.IGNElapsed.ElapsedOff1000ms
+
+
+
+
+
 - InputDataValidation 동작 수정
 	: sfc, vehilce 타입에 따라서 valueEunm 체크 인덱스가 달라져야함
 	: output_value 를 처리 하지 않음

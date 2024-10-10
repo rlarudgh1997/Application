@@ -955,62 +955,9 @@ QMap<int, QStringList> ControlExcel::isTCNameDataInfo(const QString& tcName, con
     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
     int foundSheetIndex = 0;
 
-#if 0
-    QPair<int, int> tcNameRowInfo((-1), (-1));
-    QPair<int, int> resultRowInfo((-1), (-1));
-
-
-    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        int rowIndex = 0;
-        for (const auto& rowDataList : getData(sheetIndex).toList()) {
-            QStringList rowData = rowDataList.toStringList();
-            if (rowData.size() < (static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max))) {
-                qDebug() << "Fail to sheet data list size :" << rowData.size();
-                continue;
-            }
-            QString text = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
-            if (text.contains(tcName)) {
-                if (text.contains(excelMergeEnd.toString())) {
-                    tcNameRowInfo = QPair<int, int>(tcNameRowInfo.first, rowIndex);
-                } else  {
-                    if (text.contains(excelMerge.toString()) == false) {
-                        tcNameRowInfo = QPair<int, int>(rowIndex, rowIndex);
-                    }
-                }
-
-                if (result.size() > 0) {
-                    text = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
-                    if (text.contains(result)) {
-                        if (text.contains(excelMergeEnd.toString())) {
-                            resultRowInfo = QPair<int, int>(resultRowInfo.first, rowIndex);
-                        } else  {
-                            if (text.contains(excelMerge.toString()) == false) {
-                                resultRowInfo = QPair<int, int>(rowIndex, rowIndex);
-                            }
-                        }
-                    }
-                }
-            }
-            rowIndex++;
-        }
-
-        if ((tcNameRowInfo.first >= 0) && (tcNameRowInfo.second >= 0)) {
-            foundSheetIndex = sheetIndex;
-            break;
-        }
-    }
-
-    if (foundSheetIndex == 0) {
-        qDebug() << "Fail to found tcName :" << tcName;
-        return QMap<int, QStringList>();
-    }
-
-    QPair<int, int> rowInfo = (result.size() == 0) ? (tcNameRowInfo) : (resultRowInfo);
-    qDebug() << "RowInfo :" << tcNameRowInfo << resultRowInfo;
-#else
     QPair<int, int> rowInfo((-1), (-1));
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        QPair<int, int> rowInfo = isContainsRowInfo(sheetIndex, tcName, result, QString());
+        rowInfo = isContainsRowInfo(sheetIndex, tcName, result, QString());
         if ((rowInfo.first >= 0) && (rowInfo.second >= 0)) {
             foundSheetIndex = sheetIndex;
             break;
@@ -1021,13 +968,11 @@ QMap<int, QStringList> ControlExcel::isTCNameDataInfo(const QString& tcName, con
         qDebug() << "Fail to found tcName :" << tcName << " or result :" << result;
         return QMap<int, QStringList>();
     }
-#endif
-
 
     QMap<int, QStringList> tcNameDataInfo = QMap<int, QStringList>();
     QMap<int, QMap<int, QString>> tempTcNameDataInfo;
     int searchRowIndex = 0;
-    qDebug() << "Found TCName :" << tcName << result << rowInfo;
+    qDebug() << "Found TCName :" << foundSheetIndex << tcName << result << rowInfo;
 
     const auto sheetData = getData(foundSheetIndex).toList();
     for (const auto& rowDataList : sheetData) {
@@ -1497,6 +1442,9 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
     int sheetIndex = cellDataInfo.at(2).toInt();
     int rowIndex = cellDataInfo.at(3).toInt();
     int columnIndex = cellDataInfo.at(4).toInt();
+    // bool sfcSignal = signalName.trimmed().startsWith("SFC.");
+    bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
+    int validDataIndex = (vehicleSignal) ? (1) : (0);
 
     qDebug() << "updateInputDataValidation :" << signalName << inputData;
 
@@ -1543,12 +1491,13 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
             break;
         }
 
-        for (const auto& originData : valueEnum) {
+        for (auto& originData : valueEnum) {
+            originData.remove("\"");
             QStringList splitData = originData.split(":");
             if (splitData.size() < 2) {
                 continue;
             }
-            if (splitData.at(0).toUpper().compare(data.toUpper()) == false) {
+            if (splitData.at(validDataIndex).toUpper().compare(data.toUpper()) == false) {
                 qDebug() << "\t Matching[" << validCount << "] :" << data << originData;
                 validCount++;
                 break;
@@ -1571,7 +1520,7 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
 void ControlExcel::updateGenDataInfo(const int& eventType) {
     ivis::common::CheckTimer checkTimer;
 
-#if 1
+#if 0
     const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 
@@ -1614,7 +1563,6 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
         }
     }
 
-
     // for (auto iter = sheetDataInfo.cbegin(); iter != sheetDataInfo.cend(); ++iter) {
     //     int count = 0;
     //     for (const auto& info : iter.value()) {
@@ -1623,21 +1571,15 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     //     qDebug() << "\n\n";
     // }
 
-
-
-
     isOutputDataInfo(3004, "Constant_TCName", "Constant1");
     isOutputDataInfo(3004, "Constant_TCName", "Constant2");
     isOutputDataInfo(3004, "Constant_TCName", "Constant3");
 
-
     isConfigDataInfo(3004, "Constant_TCName", "");
-
 
     isInputDataInfo(3004, "Constant_TCName", "Constant2", "Constant_Case_2");
     isInputDataInfo(3004, "Constant_TCName", "Result2", "Case3");
     isInputDataInfo(3004, "Constant_TCName", "Result2", "");
-
 #else
     if (getData(ivis::common::PropertyTypeEnum::PropertyTypeCreateExcelSheeet).toBool() == false) {
         qDebug() << "No exist excel sheet !!!!!!";
@@ -1646,7 +1588,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
     if (replaceGenDataInfo()) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QVariant filePath = ivis::common::APP_PWD() + "/test.excel";
+            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel";
             if (writeExcelSheet(filePath, true)) {
                 QString dirPath = sytemCall(false, filePath);
                 if (dirPath.size() > 0) {
