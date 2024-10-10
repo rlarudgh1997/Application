@@ -1635,6 +1635,8 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
 
     isInputDataInfo(3004, "Constant_TCName", "Constant2", "Constant_Case_2");
+    isInputDataInfo(3004, "Constant_TCName", "Result2", "Case3");
+    isInputDataInfo(3004, "Constant_TCName", "Result2", "");
 
 #else
     if (getData(ivis::common::PropertyTypeEnum::PropertyTypeCreateExcelSheeet).toBool() == false) {
