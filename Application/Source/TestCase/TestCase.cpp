@@ -132,7 +132,7 @@ QMap<int, QStringList> TestCase::getSignalDataInfo(const QString& signalName, in
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV] = dataInfo->getMatchingTablePHEV();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV] = dataInfo->getMatchingTableHEV();
     signalInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem] = dataInfo->getMatchingTableSystem();
-#if 1
+#if 0
     qDebug() << "=============================================================================================";
     qDebug() << "\n\t [Read] :" << signalName.toLatin1().data() << "\n\t\t KeywordType          :" << keywordType
              << "\n\t\t DataType            :" << dataType

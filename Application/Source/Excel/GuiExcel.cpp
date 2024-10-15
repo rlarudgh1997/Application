@@ -957,18 +957,12 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
 void GuiExcel::updateDisplayAutoCompleteSignal(const bool& show, const int& columnIndex) {
     qDebug() << "updateDisplayAutoCompleteSignal :" << show << columnIndex;
 
-    // QStringList list = QStringList();
-    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
-    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
-    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList());
     QString text = (mSelectItem) ? (mSelectItem->text()) : (QString());
-
     text.remove(KEYWORD_SHEET);
 
     QVariantList info = QVariantList({
         QString("Auto Complete"),
         text,
-        // list,
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
