@@ -388,6 +388,9 @@ void Dialog::connectAutoComplete(const bool& state) {
     } else {
         disconnect(mGui->AutoCompleteInput, nullptr, nullptr, nullptr);
         disconnect(mGui->AutoCompleteList, nullptr, nullptr, nullptr);
+        disconnect(mGui->ListCheck1, nullptr, nullptr, nullptr);
+        disconnect(mGui->ListCheck2, nullptr, nullptr, nullptr);
+        disconnect(mGui->ListCheck3, nullptr, nullptr, nullptr);
     }
 }
 
