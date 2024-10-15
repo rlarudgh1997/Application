@@ -470,23 +470,24 @@ class KeywordTypeEnum {
 public:
     enum class KeywordType {
         Invalid = 0x00000000,
-        Sheet = 0x00000001,
-        Cal = 0x00000002,
-        Range = 0x00000004,
-        Collect = 0x00000008,
-        Over = 0x00000010,
-        Under = 0x00000020,
-        Equal = 0x00000040,
-        Other = 0x00000080,
-        Or = 0x00000100,
+        Sheet = 0x00000001,    // InputSignal : [Sheet]
+        Cal = 0x00000002,    // OutputValue : [Cal]
+        Range = 0x00000004,    // InputData : ~
+        Collect = 0x00000008,    // OutputSignal : collect
+        Over = 0x00000010,    // InputData : >
+        Under = 0x00000020,    // InputData : <
+        Equal = 0x00000040,    // InputData : =
+        Other = 0x00000080,    // Case : others, other
+        Or = 0x00000100,    // ConfigData : |
         // NotTrigger = 0x00000200,
         // Preset = 0x00000400,
-        ValueChanged = 0x00000800,
-        Flow = 0x00001000,
-        Not = 0x00002000,
-        DontCare = 0x00004000,
-        Timeout = 0x00008000,
-        Crc = 0x00010000,
+        ValueChanged = 0x00000800,    // InputData : Value Chagned, ValueChagned
+        Flow = 0x00001000,    // InputData : =>
+        Not = 0x00002000,    // InputData : !
+        DontCare = 0x00004000,    // InputData : D`, D'
+        Timeout = 0x00008000,    // InputData : timeout, MESSAGE_TIMEOUT
+        Crc = 0x00010000,    // InputData : crc, CRC_ERROR
+        TwoWay = 0x00020000,    // InputData : <=>
 
 #if 0  // 아래는 Keyword enum의 전체 List임, 값이 쓰였다면 주석처리 하였음
        // Invalid = 0x00000000,

@@ -8,8 +8,6 @@
 
 #include "CommonUtil.h"
 
-// #define USE_DIALOG_PROPERTY
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Dialog;
@@ -19,22 +17,6 @@ QT_END_NAMESPACE
 class Dialog : public QDialog {
     Q_OBJECT
 
-#if defined(USE_DIALOG_PROPERTY)
-    REGISTER_WRITABLE_PROPERTY(int, DialogType, 0, false)
-    REGISTER_WRITABLE_PROPERTY(int, PrevDialogType, 0, false)
-    REGISTER_WRITABLE_PROPERTY(QVariantList, DialogInfo, QVariantList(), false)
-    REGISTER_WRITABLE_PROPERTY(QVariantList, PrevDialogInfo, QVariantList(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, KeepDialog, false, false)
-    REGISTER_WRITABLE_PROPERTY(int, DisplayType, 0, false)
-    REGISTER_WRITABLE_PROPERTY(int, PrevDisplayType, 0, false)
-    REGISTER_WRITABLE_PROPERTY(int, AppMode, 0, false)
-    REGISTER_WRITABLE_PROPERTY(QRect, ScreenRect, QRect(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, SelectAll, false, false)
-    REGISTER_WRITABLE_PROPERTY(bool, MultiCheck, true, false)
-    REGISTER_WRITABLE_PROPERTY(int, CheckModelIndex, (-1), false)
-    REGISTER_WRITABLE_PROPERTY(bool, ViewLogStop, false, false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, AutoCompleteList, QStringList(), false)
-#else
     REGISTER_WRITABLE_PROPERTY_CONTAINER2(QHash, int, QVariant, Property, false)
 
 public:
@@ -53,11 +35,11 @@ public:
         DataTypeMultiCheck,
         DataTypeCheckModelIndex,
         DataTypeViewLogStop,
-        DataTypeAutoCompleteList,
+        DataTypeAutoCompleteListInput,
+        DataTypeAutoCompleteListSfc,
+        DataTypeAutoCompleteListVehicle,
+        DataTypeAutoCompleteListTCName,
     };
-#endif
-
-public:
     enum {
         DialogTypeInvalid = 0,
         DialogTypeAppModeCheck,
@@ -71,7 +53,7 @@ public:
         DialogTypeSelectValueResult,
         DialogTypeSelectNegative,
         DialogTypeSelectVehiclePV,
-        DialogTypeSelectVehicleCV,  // 10
+        DialogTypeSelectVehicleCV,
         DialogTypeSelectVehicleType,
         DialogTypeEnterText,
         DialogTypeTestReportTC,
@@ -113,10 +95,6 @@ public:
 
     void drawDialog(const int& type, const QVariantList& info);
 
-    // protected:
-    //     void showEvent(QShowEvent* event) override {
-    //     }
-
 private:
     void controlConnet(const int& displayType);
     void connectAppMode(const bool& state);
@@ -139,7 +117,7 @@ private:
     QList<QCheckBox*> isCheckWidget(const bool& option1) const;
     void updateSelectListCheckState(const bool& allCheck, const QStringList& selectList);
     void refreshViewLog(const int& refreshType);
-    void updateAutoCompleteSuggestionsList(const QString& text);
+    void updateAutoCompleteSuggestionsList(const bool& sfc, const bool& vehicle, const bool& tcName);
 
     bool updateAppMode(const QVariantList& info);
     bool updateAppModeRadio(const QVariantList& info);

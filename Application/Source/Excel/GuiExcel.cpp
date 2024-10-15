@@ -18,6 +18,7 @@ const QString VEHICLE_TYPE_EV = QString("EV");
 const QString VEHICLE_TYPE_FCEV = QString("FCEV");
 const QString VEHICLE_TYPE_PHEV = QString("PHEV");
 const QString VEHICLE_TYPE_HEV = QString("HEV");
+const QString KEYWORD_SHEET = QString("[Sheet]");
 
 QSharedPointer<GuiExcel>& GuiExcel::instance(AbstractHandler* handler) {
     static QSharedPointer<GuiExcel> gGui;
@@ -108,27 +109,31 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
             QString selectValueEnum = QString();
 
-            qDebug() << "Dialog::signalSelectListItem :" << dialogType << selectItem;
-
             for (const auto& select : selectItem) {
-                QStringList lineStr = select.second.split(":");
-                if (lineStr.size() != 2) {
-                    continue;
-                }
-                QString temp = (getSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
-                if (getOutputState()) {
-                    temp = (getSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
-                }
-                temp.remove("\"");
+                if (dialogType == Dialog::DialogTypeSelectValueResult) {
+                    if (selectValueEnum.size() > 0) {
+                        selectValueEnum.append(", ");
+                    }
+                    selectValueEnum.append(select.second);
+                } else {
+                    QStringList lineStr = select.second.split(":");
+                    if (lineStr.size() != 2) {
+                        continue;
+                    }
+                    QString temp = (getSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
+                    if (getOutputState()) {
+                        temp = (getSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
+                    }
+                    temp.remove("\"");
 
-                if (selectValueEnum.size() > 0) {
-                    selectValueEnum.append(", ");
+                    if (selectValueEnum.size() > 0) {
+                        selectValueEnum.append(", ");
+                    }
+                    selectValueEnum.append(temp);
                 }
-                selectValueEnum.append(temp);
             }
             if ((selectValueEnum.size() > 0) && (mSelectItem)) {
                 mSelectItem->setText(selectValueEnum);
-                qDebug() << "\t selectValueEnum :" << selectValueEnum;
             }
             mDialog.data()->accept();
         });
@@ -149,7 +154,15 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
                 });
         connect(mDialog.data(), &Dialog::signalAutoCompleteSelected, [=](const QString& text) {
             if (mSelectItem) {
-                mSelectItem->setText(text);
+                QString singal = text;
+                QStringList tcNamelist =
+                    isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList();
+
+                if (tcNamelist.contains(text)) {
+                    singal.prepend(KEYWORD_SHEET);
+                }
+
+                mSelectItem->setText(singal);
             }
         });
     }
@@ -944,16 +957,21 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
 void GuiExcel::updateDisplayAutoCompleteSignal(const bool& show, const int& columnIndex) {
     qDebug() << "updateDisplayAutoCompleteSignal :" << show << columnIndex;
 
-    QStringList list = QStringList();
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
-    list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList());
+    // QStringList list = QStringList();
+    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList());
+    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList());
+    // list.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList());
     QString text = (mSelectItem) ? (mSelectItem->text()) : (QString());
+
+    text.remove(KEYWORD_SHEET);
 
     QVariantList info = QVariantList({
         QString("Auto Complete"),
         text,
-        list,
+        // list,
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
 }

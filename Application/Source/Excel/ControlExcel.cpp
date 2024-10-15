@@ -217,7 +217,7 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& list) {
     tcNameList.sort();
     tcNameList.removeDuplicates();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, tcNameList, true);
-    // qDebug() << "\t TCNameList :" << tcNameList;
+    qDebug() << "\t updateNodeAddress :" << all << list << tcNameList;
 }
 
 void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& sheetData) {
@@ -232,7 +232,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
 }
 
 void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPath) {
-    qDebug() << "ControlExcel::updateExcelSheet() ->" << excelOpen << "," << dirPath;
+    qDebug() << "updateExcelSheet() ->" << excelOpen << "," << dirPath;
 
     QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
@@ -950,12 +950,17 @@ QMap<int, QStringList> ControlExcel::isTCNameDataInfo(const QString& tcName, con
     const QVariant excelMergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart);
     const QVariant excelMergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd);
     const QVariant excelMerge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge);
-    const int startIndex = (convert) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
-                                     : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates);
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+    int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
+    int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+    QPair<int, int> rowInfo((-1), (-1));
     int foundSheetIndex = 0;
 
-    QPair<int, int> rowInfo((-1), (-1));
+    if (convert) {
+        startIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
+        endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
+    }
+
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
         rowInfo = isContainsRowInfo(sheetIndex, tcName, result, QString());
         if ((rowInfo.first >= 0) && (rowInfo.second >= 0)) {
@@ -972,6 +977,7 @@ QMap<int, QStringList> ControlExcel::isTCNameDataInfo(const QString& tcName, con
     QMap<int, QStringList> tcNameDataInfo = QMap<int, QStringList>();
     QMap<int, QMap<int, QString>> tempTcNameDataInfo;
     int searchRowIndex = 0;
+
     qDebug() << "Found TCName :" << foundSheetIndex << tcName << result << rowInfo;
 
     const auto sheetData = getData(foundSheetIndex).toList();
@@ -1407,19 +1413,13 @@ void ControlExcel::updateExcelSheetEditInfo(const bool& tcNameEdit) {
     if (tcNameEdit == false) {
         return;
     }
-    ivis::common::CheckTimer checkTimer;
 
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 
     QStringList tcNameList = QStringList();
     for (int updateSheetIndex = startIndex; updateSheetIndex < endIndex; ++updateSheetIndex) {
-        bool titleSkip = true;
         for (const auto& sheetDataList : getData(updateSheetIndex).toList()) {
-            if (titleSkip) {
-                titleSkip = false;
-                continue;
-            }
             QVariantList sheetData = sheetDataList.toList();
             QString tcName = sheetData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)).toString();
             if (tcName.size() > 0) {
@@ -1428,13 +1428,11 @@ void ControlExcel::updateExcelSheetEditInfo(const bool& tcNameEdit) {
         }
     }
     updateNodeAddress(false, tcNameList);
-
-    checkTimer.check("updateExcelSheetEditInfo");
 }
 
 void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
     if (cellDataInfo.size() != 5) {
-        qDebug() << "Fail to cell data infoetc input data size :" << cellDataInfo.size();
+        qDebug() << "Fail to cell data info size :" << cellDataInfo.size();
     }
 
     QString signalName = cellDataInfo.at(0).toString();
@@ -1762,16 +1760,15 @@ QList<KeywordInfo> ControlExcel::isKeywordTypeInfo(const int& sheetIndex) {
         QList<QStringList> rowData;
         int getRowIndex = 0;
         const auto sheetData = getData(sheetIndex).toList();
+        // Keyword 에 해당하는 Row 데이터 전체 구성
         for (const auto& rowDataList : sheetData) {
             if ((getRowIndex >= rowInfo.first) && (getRowIndex <= rowInfo.second)) {
-                QStringList rowInfo = rowDataList.toStringList();
-                QString inputSignalInfo = rowInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+                QStringList rowDataInfo = rowDataList.toStringList();
+                QString inputSignalInfo = rowDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
                 if (inputSignalInfo.contains(keyword.isText()) == false) {
                     QStringList dataInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
-                    QPair<int, int> indexInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName),
-                                              static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
-                    for (int index = indexInfo.first; index < indexInfo.second; ++index) {
-                        dataInfo[index] = rowInfo.at(index);
+                    for (int index = 0; index < static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max); ++index) {
+                        dataInfo[index] = rowDataInfo.at(index);
                     }
                     rowData.append(dataInfo);
                 }

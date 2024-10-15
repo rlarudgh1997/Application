@@ -19,7 +19,17 @@
 			SFC.Private.IGNElapsed.ElapsedOff1000ms
 
 
-
+- 유효성 검사
+	: 전체 시트의 tcname, result, case 명은 하나만 존재해야함
+		- 병합 정보 : [MergeStart]TEXT1
+		- 일반 정보 : TEXT2
+			QStringList list;
+			if ((str.contains("[Merge]")) || (str.contains("[MergeEnd]"))) {
+				// SKIP
+			} else {
+				str.remvoe("[MergeStart]");
+				list.append(str);
+			}
 
 
 - InputDataValidation 동작 수정

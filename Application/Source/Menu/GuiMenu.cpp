@@ -158,15 +158,10 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
         mDialog = QSharedPointer<Dialog>(new Dialog(rect, isHandler()->getScreen()));
 
         connect(mDialog.data(), &QDialog::finished, [=]() {
-#if defined(USE_DIALOG_PROPERTY)
-            int dialogType = mDialog.data()->getDialogType();
-            int prevDialogType = mDialog.data()->getPrevDialogType();
-            QVariantList prevDialogInfo = mDialog.data()->getPrevDialogInfo();
-#else
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
             int prevDialogType = mDialog.data()->getProperty(Dialog::DataTypePrevDialogType).toInt();
             QVariantList prevDialogInfo = mDialog.data()->getProperty(Dialog::DataTypePrevDialogInfo).toList();
-#endif
+
             qDebug() << "\t Info :" << dialogType << prevDialogType << prevDialogInfo.size();
 
             disconnect(mDialog.data(), nullptr, nullptr, nullptr);
@@ -197,11 +192,8 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
         connect(mDialog.data(), &Dialog::signalSelectAppMode,
                 [=](const int& appMode) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode); });
         connect(mDialog.data(), &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
-#if defined(USE_DIALOG_PROPERTY)
-            int dialogType = mDialog.data()->getDialogType();
-#else
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
-#endif
+
             if (dialogType == Dialog::DialogTypeSelectMoudleInfo) {
                 QVariantList selectModule = QVariantList();
                 for (const auto& select : selectItem) {
@@ -224,11 +216,8 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
         });
         connect(
             mDialog.data(), &Dialog::signalSelectOption, [=](const bool& option1, const QList<QPair<QString, bool>>& option2) {
-#if defined(USE_DIALOG_PROPERTY)
-                int dialogType = mDialog.data()->getDialogType();
-#else
                 int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
-#endif
+
                 if ((dialogType == Dialog::DialogTypeTestReportTC) || (dialogType == Dialog::DialogTypeTestReportGCOV)) {
                     QVariantList reportInfo = QVariantList();
                     if (dialogType == Dialog::DialogTypeTestReportTC) {
