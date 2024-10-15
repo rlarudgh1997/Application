@@ -922,14 +922,17 @@ bool Dialog::updateAutoComplete(const QVariantList& info) {
     bool sfc = (sfcList.size() > 0);
     mGui->ListCheck1->setCheckState((sfc) ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked));
     mGui->ListCheck1->setEnabled(sfc);
+    mGui->ListCheck1->setText("SFC");
 
     bool vehicle = (vehicleList.size() > 0);
     mGui->ListCheck2->setCheckState((vehicle) ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked));
     mGui->ListCheck2->setEnabled(vehicle);
+    mGui->ListCheck2->setText("Vehicle");
 
     bool tcName = (tcNameList.size() > 0);
     mGui->ListCheck3->setCheckState((tcName) ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked));
     mGui->ListCheck3->setEnabled(tcName);
+    mGui->ListCheck3->setText("TCName");
 
     updateAutoCompleteSuggestionsList(sfc, vehicle, tcName);
 
