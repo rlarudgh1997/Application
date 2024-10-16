@@ -2,7 +2,7 @@
 #define COMMON_RESOURCE_H
 
 #include "CommonDefine.h"
-#include <QObject>
+// #include <QObject>
 
 // =============================================================================================================
 // String Define

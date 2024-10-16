@@ -85,7 +85,7 @@ private:
                                       const QString& caseInfo);
     QList<QStringList> isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo, const QPair<int, int>& columnInfo);
     QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result, const QString& caseInfo,
-                                       const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
+                                  const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
     QList<QStringList> isInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
                                        const QString& caseInfo);
     QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
@@ -99,8 +99,11 @@ private:
     QMap<QString, int> isKeywordPatternInfo(const int& columnIndex);
     int isKeywordType(const int& columnIndex, QString& signalName);
     QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex);
+    bool isExcelDataValidation();
     bool replaceGenDataInfo();
     void constructGenDataInfo();
+    void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    void constructAllCasesSignalSet();
 
 protected:
     virtual AbstractHandler* isHandler();
