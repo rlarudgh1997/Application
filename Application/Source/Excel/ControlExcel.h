@@ -90,6 +90,8 @@ private:
                                        const QString& caseInfo);
     QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
     QList<QStringList> isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
+    QList<QStringList> isSignalDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                        const QString& caseInfo);
     void updateAutoCompleteSignal(const QVariantList& inputData);
     void updateAutoCompleteEtc(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);

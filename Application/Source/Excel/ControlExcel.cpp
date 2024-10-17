@@ -1192,7 +1192,7 @@ QList<QStringList> ControlExcel::isRowDataInfo(const int& sheetIndex, const QPai
         columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Description::Max);
     }
 
-    qDebug() << "isRowDataInfo :" << sheetIndex << rowInfo << columnInfo;
+    // qDebug() << "isRowDataInfo :" << sheetIndex << rowInfo << columnInfo;
 
     int rowIndex = 0;
     for (const auto& rowDataList : getData(sheetIndex).toList()) {
@@ -1254,10 +1254,10 @@ QList<QStringList> ControlExcel::isInputDataInfo(const int& sheetIndex, const QS
                                      static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
     QList<QStringList> dataInfo = isDataInfo(sheetIndex, tcName, result, caseInfo, columnInfo, 0);
 
-    if (dataInfo.size() > 0) {
-        qDebug() << "\t isInputDataInfo :" << dataInfo;
-        qDebug() << "\n";
-    }
+    // if (dataInfo.size() > 0) {
+    //     qDebug() << "\t isInputDataInfo :" << dataInfo;
+    //     qDebug() << "\n";
+    // }
 
     return dataInfo;
 }
@@ -1267,10 +1267,10 @@ QList<QStringList> ControlExcel::isOutputDataInfo(const int& sheetIndex, const Q
                                      static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
     QList<QStringList> dataInfo = isDataInfo(sheetIndex, tcName, result, QString(), columnInfo, columnInfo.first);
 
-    if (dataInfo.size() > 0) {
-        qDebug() << "\t isOutputDataInfo :" << dataInfo;
-        qDebug() << "\n";
-    }
+    // if (dataInfo.size() > 0) {
+    //     qDebug() << "\t isOutputDataInfo :" << dataInfo;
+    //     qDebug() << "\n";
+    // }
 
     return dataInfo;
 }
@@ -1302,8 +1302,20 @@ QList<QStringList> ControlExcel::isConfigDataInfo(const int& sheetIndex, const Q
         }
     }
 
+    // if (dataInfo.size() > 0) {
+    //     qDebug() << "\t isConfigDataInfo :" << dataInfo;
+    //     qDebug() << "\n";
+    // }
+
+    return dataInfo;
+}
+
+QList<QStringList> ControlExcel::isSignalDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                                  const QString& caseInfo) {
+    QList<QStringList> dataInfo = isInputDataInfo(sheetIndex, tcName, result, caseInfo);
+
     if (dataInfo.size() > 0) {
-        qDebug() << "\t isConfigDataInfo :" << dataInfo;
+        qDebug() << "\t isSignalDataInfo :" << dataInfo;
         qDebug() << "\n";
     }
 
@@ -1592,7 +1604,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
     if (replaceGenDataInfo()) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel";
+            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
             if (writeExcelSheet(filePath, true)) {
                 QString dirPath = sytemCall(false, filePath);
                 if (dirPath.size() > 0) {
@@ -2321,11 +2333,12 @@ void ControlExcel::constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& 
         if ((convertIndex != 0) && (convertRowData.size() > 0)) {
             updateDataControl(convertIndex, convertRowData);
             TestCase::instance().data()->setSheetData(convertIndex, convertRowData);
-            qDebug() << "[Convert Keyword] Origin[" << originIndex << "] -> Convert[" << convertIndex
-                     << "] :" << convertRowData.size();
-            for (const auto& rowData : convertRowData) {
-                qDebug() << "\t" << rowData;
-            }
+
+            // qDebug() << "[Convert Keyword] Origin[" << originIndex << "] -> Convert[" << convertIndex
+            //          << "] :" << convertRowData.size();
+            // for (const auto& rowData : convertRowData) {
+            //     qDebug() << "\t" << rowData;
+            // }
         }
     }
 
@@ -2401,7 +2414,9 @@ void ControlExcel::constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& 
                     isOutputDataInfo(convertIndexToOriginIndex, currentTCNameStr, currentResultStr);
                 QList<QStringList> tmpConfigRowData =
                     isConfigDataInfo(convertIndexToOriginIndex, currentTCNameStr, currentResultStr);
+#if defined(ENABLE_DEBUG_LOG_OUTPUT)
                 qDebug() << convertRowDataList.toList();
+#endif
                 tmpOutputConvertData = convertRowDataList.toStringList();
                 if (outputDataListIndex < tmpOutputRowData.length()) {
 #if defined(ENABLE_DEBUG_LOG_OUTPUT)
@@ -2445,11 +2460,12 @@ void ControlExcel::constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& 
         if ((convertSheetIndex != 0) && (convertRowData.size() > 0)) {
             updateDataControl(convertSheetIndex, convertRowData);
             TestCase::instance().data()->setSheetData(convertSheetIndex, convertRowData);
-            qDebug() << "[Convert Output/Config] Before Convert[" << convertSheetIndex << "] -> After Convert["
-                     << convertSheetIndex << "] :" << convertRowData.size();
-            for (const auto& rowData : convertRowData) {
-                qDebug() << "\t" << rowData;
-            }
+
+            // qDebug() << "[Convert Output/Config] Before Convert[" << convertSheetIndex << "] -> After Convert["
+            //          << convertSheetIndex << "] :" << convertRowData.size();
+            // for (const auto& rowData : convertRowData) {
+            //     qDebug() << "\t" << rowData;
+            // }
         }
     }
 }
