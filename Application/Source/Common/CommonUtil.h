@@ -271,6 +271,13 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
 //     }
 // }
 
+template <typename T1>
+inline T1 getRemoved(T1& origin, const T1& toRemove) {
+    T1 ret = origin;
+    ret.remove(toRemove);
+    return ret;
+}
+
 class CheckTimer {
 public:
     CheckTimer() {

@@ -90,8 +90,8 @@ private:
                                        const QString& caseInfo);
     QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
     QList<QStringList> isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
-    QList<QStringList> isSignalDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
-                                        const QString& caseInfo);
+    QMap<QString, QStringList> isInputSignalDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                                     const QString& caseInfo);
     void updateAutoCompleteSignal(const QVariantList& inputData);
     void updateAutoCompleteEtc(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
@@ -103,9 +103,18 @@ private:
     QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex);
     bool isExcelDataValidation();
     bool replaceGenDataInfo();
+    bool appendConvertDataInfo();
+
     void constructGenDataInfo();
+    QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex);
+    bool isDataAlreadyExistInKeywordInfoList(const QStringList& rowDataList, const KeywordInfo& keywordInfo,
+                                             const int& originSheetIndex, const bool& isEqualData);
     void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    void constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    // TODO(csh) : 구현 예정
     void constructAllCasesSignalSet();
+
+    inline QString createMergeInfoString(const QString& mergeKeyword, const QString& data) const;
 
 protected:
     virtual AbstractHandler* isHandler();

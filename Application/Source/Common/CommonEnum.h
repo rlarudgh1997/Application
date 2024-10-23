@@ -470,24 +470,25 @@ class KeywordTypeEnum {
 public:
     enum class KeywordType {
         Invalid = 0x00000000,
-        Sheet = 0x00000001,    // InputSignal : [Sheet]
-        Cal = 0x00000002,    // OutputValue : [Cal]
-        Range = 0x00000004,    // InputData : ~
-        Collect = 0x00000008,    // OutputSignal : collect
-        Over = 0x00000010,    // InputData : >
-        Under = 0x00000020,    // InputData : <
-        Equal = 0x00000040,    // InputData : =
-        Other = 0x00000080,    // Case : others, other
-        Or = 0x00000100,    // ConfigData : |
-        // NotTrigger = 0x00000200,
-        // Preset = 0x00000400,
-        ValueChanged = 0x00000800,    // InputData : Value Chagned, ValueChagned
-        Flow = 0x00001000,    // InputData : =>
-        Not = 0x00002000,    // InputData : !
-        DontCare = 0x00004000,    // InputData : D`, D'
-        Timeout = 0x00008000,    // InputData : timeout, MESSAGE_TIMEOUT
-        Crc = 0x00010000,    // InputData : crc, CRC_ERROR
-        TwoWay = 0x00020000,    // InputData : <=>
+        Sheet = 0x00000001,         // InputSignal : [Sheet]
+        Cal = 0x00000002,           // OutputValue : [Cal]
+        Range = 0x00000004,         // InputData : ~
+        Collect = 0x00000008,       // OutputSignal : collect
+        Over = 0x00000010,          // InputData : >
+        Under = 0x00000020,         // InputData : <
+        Equal = 0x00000040,         // InputData : =
+        Other = 0x00000080,         // Case : others, other
+        Or = 0x00000100,            // ConfigData : |
+        NotTrigger = 0x00000200,    // InputSignal, InputData: [Not_Trigger]
+        Preset = 0x00000400,        // InputSignal : [Preset]
+        ValueChanged = 0x00000800,  // InputData : Value Changed, ValueChanged
+        Flow = 0x00001000,          // InputData : =>
+        Not = 0x00002000,           // InputData : !
+        DontCare = 0x00004000,      // InputData : D`, D'
+        Timeout = 0x00008000,       // InputData : timeout, MESSAGE_TIMEOUT
+        Crc = 0x00010000,           // InputData : crc, CRC_ERROR
+        TwoWay = 0x00020000,        // InputData : <=>
+        DependentOn = 0x00040000,   // InputSignal : [Dependent_On]
 
 #if 0  // 아래는 Keyword enum의 전체 List임, 값이 쓰였다면 주석처리 하였음
        // Invalid = 0x00000000,
@@ -524,6 +525,18 @@ public:
         ReservedEnum8 = 0x40000000,
         ReservedEnum9 = 0x80000000,
 #endif
+        Max,
+    };
+};
+
+class ValidationTypeEnum {
+public:
+    enum class ValidationType {
+        Invalid = 0,
+        ExcelData,               // TCName <- Result <- Case 이름 유효성 확인 : 중복 사용 불가(상관 관계 참고하여)
+        CheckKeywordWithinData,  // 시트 키워드로 참조 하는 데이터에서 키워드 사용 확인 : 사용 불가
+        DataNull,                // Signal.size > 0 && (inputData, outputValue, configData).size == 0 입력값 유무 확인
+        SignalNull,              // Signal.size == 0 && (inputData, outputValue, configData).size > 0 입력값 유무 확인
         Max,
     };
 };

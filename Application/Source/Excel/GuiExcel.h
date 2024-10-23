@@ -95,6 +95,7 @@ class GuiExcel : public AbstractGui {
 
     REGISTER_WRITABLE_PROPERTY(bool, SfcSignal, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, OutputState, false, false)
+    REGISTER_WRITABLE_PROPERTY(bool, CellEditSkip, false, false)
 
 private:
     enum CellMergeType {

@@ -252,9 +252,15 @@ QVariantList GuiExcel::readExcelSheet(const int& sheetIndex, const QVariantList&
         allString.append("\n");
     }
 
-    // qDebug() << "readExcelSheet() ->"<< "Length :" << rowMax << columnMax << sheetData.size();
-    // qDebug() << mExcelSheet[sheetIndex] << ":" << sheetData;
-    // qDebug() << "==================================================================================================\n";
+#if 0
+    qDebug() << "==================================================================================================";
+    int rowIndex = 0;
+    qDebug() << "readExcelSheet() ->"<< "Length :" << rowMax << columnMax << sheetData.size();
+    for (const auto& sheetDataList : sheetData.toList()) {
+        qDebug() << "\t GuiData[" << rowIndex++ << "] :" << sheetDataList.toStringList();
+    }
+    qDebug() << "==================================================================================================\n";
+#endif
 
     return sheetData;
 }
@@ -275,13 +281,15 @@ void GuiExcel::syncSheetData(const int& sheetIndex) {
         }
     }
 
-    for (auto readSheetIndex : sheetIndexList) {
+    // qDebug() << "syncSheetData :" << sheetIndex << "->" << sheetIndexList;
+
+    for (const auto& readSheetIndex : sheetIndexList) {
         QString allString = QString();
         QVariantList sheetData = readExcelSheet(readSheetIndex, QVariantList(), allString);
         if (sheetData.size() > 0) {
-            int currentSheetIndex = (readSheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-            createSignal(ivis::common::EventTypeEnum::EventTypeListDescription + currentSheetIndex, sheetData);
-            readSheetIndex++;
+            int eventType = ivis::common::EventTypeEnum::EventTypeListDescription +
+                (readSheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+            createSignal(eventType, sheetData);
         }
     }
 }
@@ -415,6 +423,8 @@ void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
         return;
     }
 
+    // qDebug() << "updateDisplayMergeCell :" << sheetIndex;
+
     QMap<int, QList<QPair<int, int>>> mergeInfo = mMergeInfo[sheetIndex].isMergeInfo();
     QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
     int columnMax = mExcelSheet[sheetIndex]->columnCount();
@@ -466,6 +476,8 @@ void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
     // qDebug() << "====================================================================================================";
     // qDebug() << "Length :" << sheetData.size() << rowMax << columnMax;
     // qDebug() << sheet << ":" << sheetData;
+
+    // qDebug() << "updateDisplaySheetText :" << sheetIndex;
 
     for (int rowIndex = 0; rowIndex < sheetData.size(); rowIndex++) {
         QStringList rowDataList = sheetData[rowIndex].toStringList();
@@ -827,9 +839,16 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         return;
     }
 
+    if (getCellEditSkip()) {
+        // qDebug() << "Skip cell editing event handling.";
+        return;
+    }
+
     QString text = mExcelSheet[sheetIndex]->item(row, column)->text();
     int columnIndex = (-1);
     bool tcNameEdit = false;
+
+    // qDebug() << "updateDisplayCellDataInfo :" << sheetIndex << row << column << text;
 
     if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
@@ -1106,10 +1125,6 @@ void GuiExcel::copyClipboardInfo(const bool& cutState) {
         return;
     }
 
-    QVariant excelMergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart);
-    QVariant excelMergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd);
-    QVariant excelMerge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge);
-
     int rowStart = modelIndexs.at(0).row();
     int rowEnd = modelIndexs.last().row() - rowStart + 1;
     int rowMax = (rowStart + rowEnd);
@@ -1214,6 +1229,8 @@ void GuiExcel::pasteClipboardInfo() {
         return;
     }
 
+    setCellEditSkip(true);
+
     QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
     int rowStart = (selectCellCount == 1) ? (modelIndexs.at(0).row()) : (0);
     int columnStart = (selectCellCount == 1) ? (modelIndexs.at(0).column()) : (0);
@@ -1273,6 +1290,7 @@ void GuiExcel::pasteClipboardInfo() {
     updateDisplaySplitCell(sheetIndex);
     updateDisplayMergeCell(sheetIndex);
 
+    updateDisplaySheetHeaderAdjust(sheetIndex);
     // chaged data sync : gui -> control
     bool tcNameEdit = false;
     for (const auto& updateIndex : updateSheetList) {
@@ -1282,6 +1300,8 @@ void GuiExcel::pasteClipboardInfo() {
         syncSheetData(updateIndex.toInt());
     }
     createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
+
+    setCellEditSkip(false);
 }
 
 void GuiExcel::updateDisplayClipboardInfo(const int& clipboardType) {
@@ -1313,6 +1333,8 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
         return;
     }
 
+    setCellEditSkip(true);
+
     QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
     int selectCellCount = modelIndexs.size();
     int rowStart = (selectCellCount == 0) ? (mExcelSheet[sheetIndex]->currentRow()) : (modelIndexs.at(0).row());
@@ -1331,7 +1353,8 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
             rowEnd = (*std::max_element(rowList.constBegin(), rowList.constEnd())) - rowStart + 1;
         }
     }
-    qDebug() << "EditCell[" << sheetIndex << "] - Index :" << selectCellCount << rowStart << rowEnd << columnStart << columnEnd;
+    // qDebug() << "updateDisplayEditCellShortcut :" << editType;
+    // qDebug() << "EditCell[" << sheetIndex << "] :" << selectCellCount << rowStart << rowEnd << columnStart << columnEnd;
 
     ivis::common::LIMIT(rowStart, 0, mExcelSheet[sheetIndex]->rowCount());
     ivis::common::LIMIT(columnStart, 0, mExcelSheet[sheetIndex]->columnCount());
@@ -1362,9 +1385,12 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
         return;
     }
     updateDisplaySheetHeaderAdjust(sheetIndex);
+    syncSheetData(sheetIndex);
 
     bool tcNameEdit = (columnStart == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
     createSignal(ivis::common::EventTypeEnum::EventTypeEditExcelSheet, tcNameEdit);
+
+    setCellEditSkip(false);
 }
 
 void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {

@@ -1,0 +1,50 @@
+@startuml
+
+== Test Case Generation ==
+
+actor User order 10
+participant ControlExcel order 20
+participant TestCase order 30
+participant Python_ExcelParser order 40
+participant Python_run_sfc_case.py order 45
+participant Python_SignalCollection order 50
+participant Python_TextWriter order 60
+
+box "Python" #F0F8FF
+    participant Python_ExcelParser
+    participant Python_run_sfc_case.py order 45
+    participant Python_SignalCollection
+    participant Python_TextWriter
+end box
+
+box "C++" #E0FFFF
+    participant ControlExcel
+    participant TestCase
+end box
+
+User --> ControlExcel: GenTC(alt+M)
+ControlExcel -> ControlExcel: isExcelDataValidation()
+ControlExcel -> ControlExcel: replaceGenDataInfo()
+ControlExcel -> ControlExcel: constructConvertDataInfo()
+ControlExcel -> Python_ExcelParser: writeExcelSheet()
+Python_ExcelParser -> Python_ExcelParser: _write_to_excel()
+User <-- Python_ExcelParser: Converted Excel Provision
+
+ControlExcel -> ControlExcel: constructGenDataInfo()
+ControlExcel -> TestCase: setSignalDataInfo()
+ControlExcel -> TestCase: excuteTestCase()
+TestCase -> TestCase: genCase()
+TestCase -> TestCase: callPython()
+TestCase -> Python_run_sfc_case.py: case_gen()
+Python_run_sfc_case.py -> Python_SignalCollection: parse_input_string()
+Python_run_sfc_case.py -> Python_SignalCollection: generate_combinations()
+Python_SignalCollection -> Python_TextWriter: write_json()
+TestCase <-- Python_TextWriter: Case JSON File send
+TestCase -> TestCase: readJson()
+TestCase -> TestCase: appendCaseJson()
+TestCase -> TestCase: saveJsonToFile()
+User <-- TestCase: Case JSON File Provision for Debug
+
+
+
+@enduml

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from tests.test_sfc_case_gen import test_run
+from tests.run_sfc_case_gen import case_gen
 
 if __name__ == "__main__":
     # Check if an input string is provided as an argument
@@ -9,4 +9,4 @@ if __name__ == "__main__":
     else:
         print("Please provide the input string as an argument.")
         input_str = ""
-    test_run(input_str)
+    case_gen(input_str)
