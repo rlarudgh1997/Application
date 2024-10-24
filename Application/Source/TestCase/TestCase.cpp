@@ -17,6 +17,7 @@ void TestCase::excuteTestCase(const int& type) {
         return;
     }
 
+    setExcuteType(type);
     switch (type) {
         case ExcuteTypeGenTC: {
             qDebug() << "excuteTestCase()";
@@ -31,7 +32,7 @@ void TestCase::excuteTestCase(const int& type) {
             break;
         }
     }
-    setExcuteType(type);
+    setExcuteType(ExcuteTypeInvalid);
 }
 
 int TestCase::isKeywordType(const QString& signalName) {

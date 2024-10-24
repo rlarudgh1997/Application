@@ -1402,12 +1402,36 @@ QList<QStringList> ControlExcel::isConfigDataInfo(const int& sheetIndex, const Q
     return dataInfo;
 }
 
-QMap<QString, QStringList> ControlExcel::isInputSignalDataInfo(const int& sheetIndex, const QString& tcName,
-                                                               const QString& result, const QString& caseInfo) {
+QStringList ControlExcel::isSignalDataEnum(const QString& signalName, const QStringList& valueEnum) {
+    QStringList data;
+    bool sfcSignal = signalName.trimmed().startsWith("SFC.");
+    // bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
+
+    // [sfc]
+    // on : 0x01, off : 0x02
+
+    // [vehicle]
+    // 0x01 : on
+    // 0x02 : off
+
+    return data;
+}
+
+QStringList ControlExcel::isSignalDataValue(const QString& signalName, const QStringList& valueEnum) {
+    QStringList data;
+    bool sfcSignal = signalName.trimmed().startsWith("SFC.");
+    // bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
+    return data;
+}
+
+QMap<QString, InputSignalDataInfo> ControlExcel::isInputSignalDataInfo(const bool& usedTC, const int& sheetIndex,
+                                                                       const QString& tcName, const QString& result,
+                                                                       const QString& caseInfo) {
     QList<QStringList> tcNameDataInfo = isInputDataInfo(sheetIndex, tcName, QString(), QString());
     QList<QStringList> caseDataInfo = isInputDataInfo(sheetIndex, tcName, result, caseInfo);
 
-    qDebug() << "isInputSignalDataInfo :" << tcNameDataInfo.size() << caseDataInfo.size();
+    qDebug() << "isInputSignalDataInfo :"  << usedTC << sheetIndex << tcName << result << caseInfo
+             << ", Size :" << tcNameDataInfo.size() << caseDataInfo.size();
 
     QMap<QString, QStringList> inputDataInfo;
     for (const auto& tcNameData : tcNameDataInfo) {
@@ -1417,22 +1441,23 @@ QMap<QString, QStringList> ControlExcel::isInputSignalDataInfo(const int& sheetI
         }
         QString resultInfo = tcNameData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
         QString caseInfo = tcNameData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
-        QStringList dataInfo = tcNameData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)).split(",");
-        dataInfo.removeAll(" ");
+        QString inputData = tcNameData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
+        QStringList dataInfo = inputData.remove(" ").split(",");
         inputDataInfo[singalInfo].append(dataInfo);
-        qDebug() << "[" << singalInfo << "] :" << resultInfo << caseInfo << dataInfo;
+        qDebug() << "[" << singalInfo << "] :" << dataInfo;
     }
 
     qDebug() << "=================================================================================================\n\n";
-    QMap<QString, QStringList> singalDataInfo;
+    QMap<QString, QStringList> allSignal;
     for (auto iter = inputDataInfo.cbegin(); iter != inputDataInfo.cend(); ++iter) {
         QString singalInfo = iter.key();
         QStringList dataInfo = iter.value();
+        dataInfo.removeAll("");
         dataInfo.removeDuplicates();
 
-        qDebug() << "[" << singalInfo << "]";
-        qDebug() << "\t OriginData  :" << iter.value();
-        qDebug() << "\t ConvertData :" << dataInfo;
+        // qDebug() << "[" << singalInfo << "]";
+        // qDebug() << "\t OriginData  :" << iter.value();
+        // qDebug() << "\t ConvertData :" << dataInfo;
 
         if (caseInfo.size() > 0) {
             for (const auto& caseData : caseDataInfo) {
@@ -1444,18 +1469,54 @@ QMap<QString, QStringList> ControlExcel::isInputSignalDataInfo(const int& sheetI
             }
         }
         if (singalInfo.size() > 0) {
-            singalDataInfo[singalInfo] = dataInfo;
+            allSignal[singalInfo] = dataInfo;
         }
     }
 
-    qDebug() << "=================================================================================================\n\n";
-    for (auto iter = singalDataInfo.cbegin(); iter != singalDataInfo.cend(); ++iter) {
-        qDebug() << "[" << iter.key() << "]";
-        qDebug() << "\t CurrentData :" << iter.value();
-    }
-    qDebug() << "=================================================================================================\n\n";
+    // SignalData 구성
+    QMap<QString, InputSignalDataInfo> signalDataInfo;
 
-    return singalDataInfo;
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QVariant vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV);
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV);
+    }
+    QString vehicleType = QString();
+    for (const auto& vehicle : vehicleTypeList.toStringList()) {
+        if (vehicleType.size() > 0) {
+            vehicleType.append(", ");
+        }
+        vehicleType.append(vehicle);
+    }
+
+    for (auto iter = allSignal.cbegin(); iter != allSignal.cend(); ++iter) {
+        QString signalName = iter.key();
+        QStringList signalData = iter.value();
+        QMap<int, QStringList> dataInfo =
+            isSignalDataInfo(false, signalName, signalData, isSignalFileList(signalName, vehicleType));
+
+        if (dataInfo.size() > 0) {
+            QStringList valueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
+            QStringList inputData = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
+            QString checkText = (signalData.size() == 0) ? (QString()) : (signalData.at(0));   // 0 : 키워드 포함 데이터
+            int keywordType = isKeywordType(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData), checkText);
+            signalDataInfo[signalName] = InputSignalDataInfo(dataInfo, keywordType, QString());
+
+
+        }
+    }
+
+
+
+
+    // qDebug() << "=================================================================================================\n\n";
+    // for (auto iter = signalDataInfo.cbegin(); iter != signalDataInfo.cend(); ++iter) {
+    //     qDebug() << "[" << iter.key() << "]";
+    //     qDebug() << "\t CurrentData :" << iter.value();
+    // }
+    // qDebug() << "=================================================================================================\n\n";
+
+    return signalDataInfo;
 }
 
 void ControlExcel::updateAutoCompleteSignal(const QVariantList& inputData) {
@@ -1686,10 +1747,12 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
                 }
             }
         }
-        // constructGenDataInfo();
     }
+
     // TODO(csh): IterTools 수행 전, 최종 signal 조합 set 구성 후 두번째 Convert Excel파일 생성 예정
     if (appendConvertDataInfo() == true) {
+        constructGenDataInfo();
+
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
             if (writeExcelSheet(filePath, true)) {
@@ -1699,7 +1762,10 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
                 }
             }
         }
-        constructGenDataInfo();
+
+#if 0    // itertool test
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+#endif
     }
 
     checkTimer.check("updateGenDataInfo");
@@ -2023,6 +2089,14 @@ bool ControlExcel::replaceGenDataInfo() {
 void ControlExcel::constructGenDataInfo() {
     ivis::common::CheckTimer checkTimer;
 
+#if 1
+    // isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants,
+    //                       QString("Constant_TCName"), QString("Result1"), QString("Case1_INVALID1"));
+
+    isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants,
+                          QString("Constant_TCName"), QString(""), QString(""));
+
+#else
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetPrivates;
     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
 
@@ -2087,10 +2161,6 @@ void ControlExcel::constructGenDataInfo() {
         QMap<int, QStringList> signalDataInfo = TestCase::instance().data()->getSignalDataInfo(signalName, keywordType, dataType);
 #endif
     }
-
-#if 1
-    // itertool test
-    TestCase::instance().data()->excuteTestCase(1);
 #endif
 
     checkTimer.check("constructGenDataInfo");
@@ -2101,17 +2171,17 @@ bool ControlExcel::appendConvertDataInfo() {
 #if defined(ENABLE_DEBUG_LOG_KEYWORD)
     qDebug() << "@@@@ appendConvertDataInfo";
     qDebug() << "@@@@ 1 "
-             << isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
+             << isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
                                       "Result1", "Case1_INVALID1");
     qDebug() << "@@@@ 2 "
-             << isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
+             << isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
                                       "Result1", "Case1_INVALID2");
     qDebug() << "@@@@ 3 "
-             << isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
+             << isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
                                       "Result1", "Case1_INVALID3");
     qDebug() << "@@@@ 4 "
-             << isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName", "",
-                                      "");
+             << isInputSignalDataInfo(false, ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConstants, "Constant_TCName",
+                                       "", "");
 #endif
     return result;
 }
@@ -2337,7 +2407,7 @@ void ControlExcel::constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& 
                 if (originIndex != static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) {
                     for (auto rowData : curKeywordInfo.isRowData()) {
                         qDebug() << "########################################### [11111] #########################################################";
-                        qDebug() << "> TC Name     : " << rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+                        qDebug() << "> TC Name     : "<< rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
                         qDebug() << "> VehicleType : " << rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType));
                         qDebug() << "> Result      : " << rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
                         qDebug() << "> Case        : " << rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));

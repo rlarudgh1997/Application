@@ -1,0 +1,1348 @@
+{
+    "Constant_TCName": {
+        "Case0": {
+            "Case": "Case1_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case1": {
+            "Case": "Case1_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case2": {
+            "Case": "Case1_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case3": {
+            "Case": "Case2_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case4": {
+            "Case": "Case2_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case5": {
+            "Case": "Case2_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case6": {
+            "Case": "Case3_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result3",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case7": {
+            "Case": "Case3_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result3",
+            "TCName": "Constant_TCName",
+            "VehicleType": ""
+        },
+        "Case8": {
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ]
+        }
+    },
+    "Constant_TCName1": {
+        "Case0": {
+            "Case": "Case1_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case1": {
+            "Case": "Case1_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case2": {
+            "Case": "Case1_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result1",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case3": {
+            "Case": "Case2_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case4": {
+            "Case": "Case2_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case5": {
+            "Case": "Case2_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case6": {
+            "Case": "Case3_VALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case7": {
+            "Case": "Case4_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case8": {
+            "Case": "Case4_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        },
+        "Case9": {
+            "Case": "Case4_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result2",
+            "TCName": "Constant_TCName1",
+            "VehicleType": ""
+        }
+    },
+    "Constant_TCName2": {
+        "Case10": {
+            "Case": "Case5_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result3",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case11": {
+            "Case": "Case5_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result3",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case12": {
+            "Case": "Case5_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result3",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case13": {
+            "Case": "Case6_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case14": {
+            "Case": "Case6_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case15": {
+            "Case": "Case6_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case16": {
+            "Case": "Case7_VALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case17": {
+            "Case": "Case8_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x0",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x2",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x3",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x4",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x5",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x6",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x7",
+                    "Unknown"
+                ],
+                [
+                    "0x1",
+                    "Unknown",
+                    "0x17",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case18": {
+            "Case": "Case8_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case19": {
+            "Case": "Case8_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "Unknown",
+                    "Unknown"
+                ]
+            ],
+            "Input_Signal_List": [
+                "SFC.Private.IGNElapsed.ElapsedOn0ms",
+                "Vehicle.CV.ECAS.Input_AxleWeight",
+                "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue"
+            ],
+            "Result": "Result4",
+            "TCName": "Constant_TCName2",
+            "VehicleType": ""
+        },
+        "Case20": {
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ]
+        }
+    },
+    "Event_TCName": {
+        "Case0": {
+            "Case": "Case1_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case1": {
+            "Case": "Case1_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case2": {
+            "Case": "Case1_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case3": {
+            "Case": "Case2_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case4": {
+            "Case": "Case2_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case5": {
+            "Case": "Case2_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case6": {
+            "Case": "Case3_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result3",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case7": {
+            "Case": "Case3_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result3",
+            "TCName": "Event_TCName",
+            "VehicleType": ""
+        },
+        "Case8": {
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ]
+        }
+    },
+    "Telltale_TCName": {
+        "Case0": {
+            "Case": "Case1_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case1": {
+            "Case": "Case1_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case2": {
+            "Case": "Case1_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result1",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case3": {
+            "Case": "Case2_INVALID1",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case4": {
+            "Case": "Case2_INVALID2",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case5": {
+            "Case": "Case2_INVALID3",
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ],
+            "Result": "Result2",
+            "TCName": "Telltale_TCName",
+            "VehicleType": ""
+        },
+        "Case6": {
+            "Cases": [
+                [
+                    "0x1",
+                    "0x0",
+                    "0x0"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x1"
+                ],
+                [
+                    "0x1",
+                    "0x0",
+                    "0x2"
+                ]
+            ],
+            "Input_Signal_List": [
+                "Signal_A",
+                "Signal_B",
+                "Signal_C"
+            ]
+        }
+    }
+}

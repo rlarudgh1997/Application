@@ -4,6 +4,9 @@
 #include "AbstractControl.h"
 #include "CommonUtil.h"
 #include "CommonDefine.h"
+// #include "SignalDataInfo.h"
+
+class SignalDataInfo;
 
 class KeywordInfo {
 public:
@@ -50,6 +53,34 @@ private:
     QList<QStringList> mRowData = QList<QStringList>();
 };
 
+class InputSignalDataInfo {
+public:
+    InputSignalDataInfo() {
+    }
+    InputSignalDataInfo(const int& keywordType, const QStringList& iputData, const QStringList& valueEnum)
+        : mKeywordType(keywordType), mIputData(iputData), mValueEnum(valueEnum) {
+            qDebug() << "[" << signalName << "]";
+            qDebug() << "\t KeywordType :" << keywordType;
+            qDebug() << "\t InputData   :" << inputData;
+            qDebug() << "\t ValueEnum   :" << valueEnum;
+
+    }
+    int isKeywordType() const {
+        return mKeywordType;
+    }
+    QStringList isIputData() const {
+        return mIputData;
+    }
+    QStringList isValueEnum() const {
+        return mValueEnum;
+    }
+
+private:
+    int mKeywordType = 0;
+    QStringList mIputData = QStringList();
+    QStringList mValueEnum = QStringList();
+};
+
 class ControlExcel : public AbstractControl {
     Q_OBJECT
 
@@ -90,8 +121,10 @@ private:
                                        const QString& caseInfo);
     QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
     QList<QStringList> isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
-    QMap<QString, QStringList> isInputSignalDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
-                                                     const QString& caseInfo);
+    QStringList isSignalDataEnum(const QString& signalName, const QStringList& valueEnum);
+    QStringList isSignalDataValue(const QString& signalName, const QStringList& valueEnum);
+    QMap<QString, InputSignalDataInfo> isInputSignalDataInfo(const bool& usedTC, const int& sheetIndex, const QString& tcName,
+                                                             const QString& result, const QString& caseInfo);
     void updateAutoCompleteSignal(const QVariantList& inputData);
     void updateAutoCompleteEtc(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
