@@ -1,0 +1,147 @@
+{
+    "Cases": [
+        [
+            "D?",
+            "Unknown",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x8",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x9",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xA",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xB",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xC",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xD",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xE",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0xF",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x10",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x11",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x12",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x13",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x14",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x15",
+            "MESSAGE_TIMEOUT"
+        ],
+        [
+            "D?",
+            "0x16",
+            "MESSAGE_TIMEOUT"
+        ]
+    ],
+    "InputSignalList": {
+        "SFC.Private.IGNElapsed.ElapsedOn0ms": {
+            "DataType": 0,
+            "KeywordType": 0,
+            "Precondition": [
+                ""
+            ],
+            "Enum": [
+                ""
+            ]
+        },
+        "Vehicle.CV.ECAS.Input_ECASTelltaleStatus1": {
+            "DataType": 1,
+            "KeywordType": 512,
+            "Precondition": [
+                "0x0",
+                "0x1",
+                "0x2",
+                "0x3",
+                "0x4",
+                "0x5",
+                "0x6",
+                "0x7",
+                "0x17"
+            ],
+            "Enum": [
+                "0x0:OFF",
+                "0x1:NORMAL",
+                "0x2:FR_UP_ON",
+                "0x3:FR_LOW_ON",
+                "0x4:RR_UP_ON",
+                "0x5:RR_LOW_ON",
+                "0x6:ALL_UP_ON",
+                "0x7:ALL_LOW_ON",
+                "0x8:FR_UP_RR_LOW_ON",
+                "0x9:FR_LOW_RR_UP_ON",
+                "0xA:TO_NORMAL_ON",
+                "0xB:FR_UP_BLINK",
+                "0xC:FR_LOW_BLINK",
+                "0xD:RR_UP_BLINK",
+                "0xE:RR_LOW_BLINK",
+                "0xF:ALL_UP_BLINK",
+                "0x10:ALL_LOW_BLINK",
+                "0x11:TO_NORMAL_BLINK",
+                "0x12:ABOVE_SPEED_LIMIT",
+                "0x13:AXLE_LOAD_LIMIT",
+                "0x14:EXCEED_TAG_AXLE_LOAD",
+                "0x15:CHECK_ON",
+                "0x16:NOT_AVAILABLE",
+                "0x17:MESSAGE_TIMEOUT"
+            ]
+        },
+        "Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue": {
+            "DataType": 1,
+            "KeywordType": 0,
+            "Precondition": [
+                ""
+            ],
+            "Enum": [
+                ""
+            ]
+        }
+    }
+}

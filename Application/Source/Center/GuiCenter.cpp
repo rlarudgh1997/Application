@@ -239,11 +239,14 @@ void GuiCenter::updateDisplayAutoComplete(const bool& show) {
 
     setNodeAddress(nodeAddressName);
     QVariantList info = QVariantList({
-        QString("Auto Complete"),
+        QString("Node View"),
         QString(),
         nodeAddressName,
+        QStringList(),
+        QStringList(),
+        QStringList(),
     });
-    updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
+    updateDrawDialog(Dialog::DialogTypeNodeView, info);
 }
 
 void GuiCenter::updateDisplaySelectModule(const bool& show) {

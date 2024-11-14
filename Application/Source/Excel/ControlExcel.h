@@ -9,9 +9,8 @@ class KeywordInfo {
 public:
     KeywordInfo() {
     }
-    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data,
-                const QMap<int, QStringList>& convertData = QMap<int, QStringList>())
-        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data), mConvertData(convertData) {
+    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
+        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data) {
     }
     int isRow() const {
         return mRow;
@@ -28,11 +27,16 @@ public:
     QString isData() const {
         return mData;
     }
-    QMap<int, QStringList> isConvertData() const {
+    QList<QStringList> isRowData() const {
+        return mRowData;
+    }
+    void updateRowData(const QList<QStringList>& rowData) {
+        mRowData = rowData;
+    }
+    QList<QStringList> isConvertData() const {
         return mConvertData;
     }
-    void updateConvertData(const QMap<int, QStringList>& convertData) {
-        // qDebug() << "\t updateConvertData :" << convertData;
+    void updateConvertData(const QList<QStringList>& convertData) {
         mConvertData = convertData;
     }
 
@@ -42,7 +46,121 @@ private:
     QString mText = QString();
     int mKeyword = 0;
     QString mData = QString();
-    QMap<int, QStringList> mConvertData = QMap<int, QStringList>();
+    QList<QStringList> mConvertData = QList<QStringList>();
+    QList<QStringList> mRowData = QList<QStringList>();
+};
+
+class SignalDataInfo {
+public:
+    SignalDataInfo() {
+    }
+    SignalDataInfo(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
+                   const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
+                   const QStringList& notUsedEnum, const QStringList& precondition)
+        : mDataType(dataType),
+          mInitialize(initialize),
+          mKeywordType(keywordType),
+          mOriginData(originData),
+          mConvertData(convertData),
+          mValueEnum(valueEnum),
+          mNotUsedEnum(notUsedEnum),
+          mPrecondition(precondition) {
+    }
+    int isDataType() const {
+        return mDataType;
+    }
+    bool isInitialize() const {
+        return mInitialize;
+    }
+    int isKeywordType() const {
+        return mKeywordType;
+    }
+    QStringList isOriginData() const {
+        return mOriginData;
+    }
+    QStringList isConvertData() const {
+        return mConvertData;
+    }
+    QStringList isValueEnum() const {
+        return mValueEnum;
+    }
+    QStringList isNotUsedEnum() const {
+        return mNotUsedEnum;
+    }
+    QStringList isPrecondition() const {
+        return mPrecondition;
+    }
+
+private:
+    int mDataType = 0;
+    bool mInitialize = false;
+    int mKeywordType = 0;
+    QStringList mOriginData = QStringList();
+    QStringList mConvertData = QStringList();
+    QStringList mValueEnum = QStringList();
+    QStringList mNotUsedEnum = QStringList();
+    QStringList mPrecondition = QStringList();
+};
+
+class SheetConfigurationInfo {
+public:
+    SheetConfigurationInfo(const QString& tcName, const QString& result, const QStringList& cases) {
+        updateSheetConfigurationInfo(tcName, result, cases);
+    }
+    SheetConfigurationInfo() = default;
+    SheetConfigurationInfo(const SheetConfigurationInfo& other) = default;
+    SheetConfigurationInfo& operator=(const SheetConfigurationInfo& other) = default;
+
+    bool isSheetContainsCases(const QStringList& contatinsList) {
+        QStringList caseList;
+        for (const auto& sheetData : mSheetData) {
+            // QString tcName = sheetData.first;
+            // QString result = sheetData.second.first;
+            caseList.append(sheetData.second.second);
+        }
+        for (const auto& str : caseList) {
+            for (const auto& compareStr : contatinsList) {
+                if (str.compare(compareStr, Qt::CaseInsensitive) == false) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    QList<QPair<QString, QPair<QString, QStringList>>> isSheetDataInfo() {
+        printData();
+        return mSheetData;
+    }
+    void updateSheetConfigurationInfo(const QString& tcName, const QString& result, const QStringList& cases) {
+        for (const auto& singleCase : cases) {
+            updateSheetConfigurationInfo(tcName, result, singleCase);
+        }
+    }
+
+private:
+    void updateSheetConfigurationInfo(const QString& tcName, const QString& result, const QString& singleCase) {
+        for (auto& pairInfo : mSheetData) {
+            if ((pairInfo.first == tcName) && (pairInfo.second.first == result)) {
+                if (pairInfo.second.second.contains(singleCase) == false) {
+                    pairInfo.second.second.append(singleCase);
+                }
+                return;
+            }
+        }
+        mSheetData.append({tcName, {result, {singleCase}}});
+    }
+    void printData() const {
+        qDebug() << "\n ----------------------------------------------------------------------------------------------------";
+        for (const auto& sheetData : mSheetData) {
+            QString tcName = sheetData.first;
+            QString result = sheetData.second.first;
+            QStringList caseList = sheetData.second.second;
+            qDebug() << "SheetData :" << tcName << result << caseList;
+        }
+    }
+
+private:
+    QList<QPair<QString, QPair<QString, QStringList>>> mSheetData;
 };
 
 class ControlExcel : public AbstractControl {
@@ -53,10 +171,17 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
+    QMap<QString, SignalDataInfo> isInputSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo,
+                                                        const bool& caseRemove);
+    QMap<QString, SignalDataInfo> isOutputSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo);
+    QMap<QString, SignalDataInfo> isConfigSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo);
+    SheetConfigurationInfo isSheetConfigurationInfo(const int& sheetIndex);
+    QString isIGNElapsedName(const int& ignType);
+
 private:
     explicit ControlExcel();
 
-    void updateNodeAddress(const bool& all, const QStringList& list);
+    void updateNodeAddress(const bool& all, const QStringList& tcNameList, const QStringList& cofigNameList);
     void updateSheetData(const int& propertyType, const QVariantList& sheetData);
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath, const bool& backup);
@@ -70,23 +195,59 @@ private:
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
     QString isSfcFileInfo(const QString& signalName);
+    int isDataType(const QString& dataTypeStr);
+    QPair<int, int> isIGNElapsedType(const QString& singalName);
+    QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
-    QMap<int, QStringList> isSignalDataInfo(const bool& isDataType, const QString& signalName,
-                                            const QMap<int, QStringList>& fileList);
+    QMap<int, QStringList> isSignalDataInfo(const QString& signalName, const QStringList& signalData,
+                                            const QMap<int, QStringList>& fileList, int& dataType);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
-                                            const bool& convert, const bool& mergeInfoErase);
-    void updateAutoCompleteSignal(const QVariantList& inputData);
-    void updateAutoCompleteEtc(const QVariantList& inputData);
+                                            const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
+    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                      const QString& caseInfo);
+    QList<QStringList> isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo, const QPair<int, int>& columnInfo);
+    QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result, const QString& caseInfo,
+                                  const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
+    QList<QStringList> isInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result,
+                                       const QString& caseInfo);
+    QList<QStringList> isOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
+    QList<QStringList> isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result);
+    QStringList isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum);
+    QStringList isDescriptionDataInfo();
+    bool isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
+                                const QStringList& inputData, const QStringList& valueEnum);
+    int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
+    QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
+                                                           const QStringList& columnDataInfo);
+    void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
+    void updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType);
+    void updateAutoCompleteSuggestions(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
-    void updateExcelSheetEditInfo(const bool& tcNameEdit);
+    void updateExcelSheetEditInfo(const bool& tcNameEdit, const bool& configNameEdit);
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
-    QMap<QString, int> isKeywordPatternInfo(const int& columnIndex);
-    int isKeywordType(const int& columnIndex, QString& signalName);
-    QMap<int, QList<KeywordInfo>> isKeywordTypeInfo();
+    QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
+    QString isKeywordString(const int keywordType);
+    int isKeywordType(const int& columnIndex, QString& inputData);
+    QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex, const QList<int>& inputColumnList);
+    bool isExcelDataValidation();
     bool replaceGenDataInfo();
-    void constructGenDataInfo();
+
+    QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
+                                                               const QList<int>& columnList);
+    bool isDataAlreadyExistInKeywordInfoList(const QStringList& rowDataList, const KeywordInfo& keywordInfo,
+                                             const int& originSheetIndex, const bool& isEqualData);
+    void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    void constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    void constructOutputConfigColumnDataInfo(const QList<int>& convertSheetIndexList);
+    bool appendConvertAllTCSignalSet();
+
+    QStringList deleteColumnRowData(const QStringList& rowData, const QList<int>& deleteColumnIndex);
+    int getMergeKeywordType(const QString& data);
+    QString constructKeywordCaseName(const QString& originCaseName, const QString& convertCaseName);
+
+    inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
 
 protected:
     virtual AbstractHandler* isHandler();

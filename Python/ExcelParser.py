@@ -10,6 +10,9 @@ from openpyxl.utils import coordinate_to_tuple
 class ExcelParser:
     def __init__(self, config_path="Application.ini"):
         self.sheet_names = []
+        self.title_desc = []
+        self.title_config = []
+        self.title_other = []
         self.sheet_info = []
         self.config_info = {}
         self.config_path = config_path
@@ -27,11 +30,14 @@ class ExcelParser:
                     self.config_info[key] = value
 
         self.sheet_names = self.config_info["ConfigTypeSheetName"].split(", ")
+        self.title_desc = self.config_info["ConfigTypeDescTitle"].split(", ")
+        self.title_config = self.config_info["ConfigTypeConfigTitle"].split(", ")
+        self.title_other = self.config_info["ConfigTypeOtherTitle"].split(", ")
 
     def read_from_excel(self, file_path):
-        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeTextStart"]
-        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeTextEnd"]
-        excel_merge_text = self.config_info["ConfigTypeExcelMergeText"]
+        excel_merge_start = self.config_info["ConfigTypeExcelMergeStart"]
+        excel_merge_end = self.config_info["ConfigTypeExcelMergeEnd"]
+        excel_merge = self.config_info["ConfigTypeExcelMerge"]
 
         # start_time = time.time()
         wb = load_workbook(file_path, data_only=True)
@@ -40,10 +46,18 @@ class ExcelParser:
 
         for sheet in self.sheet_names:
             start_time = time.time()
+            sheet_data = []
+
+#if 1    // KKH_EDIT_ADD_CONFIGS
+            if (sheet not in wb.sheetnames) and (sheet == "Configs"):
+                print("Sheet Config - Append Data")
+                sheet_data.append(self.title_config)
+                self.sheet_info.append(sheet_data)
+                continue
+#endif
 
             current_sheet = wb[sheet]
             merged_cells = current_sheet.merged_cells.ranges
-            sheet_data = []
 
             for row in current_sheet.iter_rows(min_row=1, max_row=current_sheet.max_row, min_col=1, max_col=current_sheet.max_column):
                 data = []
@@ -63,11 +77,11 @@ class ExcelParser:
                         current_merge_cell = current_sheet.cell(row=row_start, column=column_start)
 
                         if current_cell.row == row_start:
-                            merge_cell_text = excel_merge_text_start
+                            merge_cell_text = excel_merge_start
                         elif current_cell.row == row_end:
-                            merge_cell_text = excel_merge_text_end
+                            merge_cell_text = excel_merge_end
                         else:
-                            merge_cell_text = excel_merge_text
+                            merge_cell_text = excel_merge
 
                         merge_cell_text += str(current_merge_cell.value or "")
                         read_cell_text = merge_cell_text
@@ -94,9 +108,9 @@ class ExcelParser:
         print("\t [CheckTime] WriteToExcel :", f" {check_time:.5f} seconds")
 
     def read_from_text(self, path, save_file_path):
-        excel_merge_text_start = self.config_info["ConfigTypeExcelMergeTextStart"]
-        excel_merge_text_end = self.config_info["ConfigTypeExcelMergeTextEnd"]
-        excel_merge_text = self.config_info["ConfigTypeExcelMergeText"]
+        excel_merge_start = self.config_info["ConfigTypeExcelMergeStart"]
+        excel_merge_end = self.config_info["ConfigTypeExcelMergeEnd"]
+        excel_merge = self.config_info["ConfigTypeExcelMerge"]
 
         read_data = []
         merge_info_list = {}
@@ -115,9 +129,9 @@ class ExcelParser:
                     read_text = read.iloc[row_index, column_index]
 
                     if isinstance(read_text, str):
-                        start_text = read_text.split(excel_merge_text_start)
-                        end_text = read_text.split(excel_merge_text_end)
-                        merge_text = read_text.split(excel_merge_text)
+                        start_text = read_text.split(excel_merge_start)
+                        end_text = read_text.split(excel_merge_end)
+                        merge_text = read_text.split(excel_merge)
 
                         if len(start_text) == 2:
                             row_start = row_index
@@ -137,9 +151,9 @@ class ExcelParser:
                     text = ""
 
                     if isinstance(read_text, str):
-                        start_text = read_text.split(excel_merge_text_start)
-                        end_text = read_text.split(excel_merge_text_end)
-                        merge_text = read_text.split(excel_merge_text)
+                        start_text = read_text.split(excel_merge_start)
+                        end_text = read_text.split(excel_merge_end)
+                        merge_text = read_text.split(excel_merge)
 
                         if len(start_text) == 2:
                             text = start_text[1]

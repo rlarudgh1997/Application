@@ -95,6 +95,7 @@ class GuiExcel : public AbstractGui {
 
     REGISTER_WRITABLE_PROPERTY(bool, SfcSignal, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, OutputState, false, false)
+    REGISTER_WRITABLE_PROPERTY(bool, CellEditSkip, false, false)
 
 private:
     enum CellMergeType {
@@ -137,8 +138,9 @@ private:
     void updateDisplayExcelSheet();
     void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);
     void updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column);
-    void updateDisplayAutoCompleteSignal(const bool& show, const int& columnIndex);
+    void updateDisplayAutoCompleteSignal(const bool& description, const int& columnIndex);
     void updateDisplayAutoCompleteVehicle();
+    void updateDisplayAutoCompleteConfigName();
     void updateDisplayValueEnum(const QVariantList& data);
     void updateDisplayTCNameResult(const QStringList& data);
     void updateDisplayAutoInputDescrtion();

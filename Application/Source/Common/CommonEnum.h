@@ -86,18 +86,20 @@ public:
         PropertyTypeNodeAddressSFC,
         PropertyTypeNodeAddressVSM,
         PropertyTypeNodeAddressTCName,
+        PropertyTypeNodeAddressConfigName,
         PropertyTypeNodeAddressModule,
         PropertyTypeAppMode,
         PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
         PropertyTypeValueEnum,
-        PropertyTypeInputDataValuEnum,
+        PropertyTypeInputDataValueEnum,
         PropertyTypeInputDataMatchingTableICV,
         PropertyTypeInputDataMatchingTableEV,
         PropertyTypeInputDataMatchingTableFCEV,
         PropertyTypeInputDataMatchingTablePHEV,
         PropertyTypeInputDataMatchingTableHEV,
         PropertyTypeInputDataMatchingTableSystem,
+        PropertyTypeInputData,
         PropertyTypeTCNameResult,
         PropertyTypeAutoInputDescriptionInfo,
         PropertyTypeUpdateSelectModule,
@@ -110,12 +112,13 @@ public:
         PropertyTypeSignalListToMicom,
         PropertyTypeExcelSheetName,
         PropertyTypeExcelDescTitle,
+        PropertyTypeExcelConfigTitle,
         PropertyTypeExcelOtherTitle,
         PropertyTypeExcelSheetCount,
         PropertyTypeExcelOpen,
-        PropertyTypeExcelMergeTextStart,
-        PropertyTypeExcelMergeText,
-        PropertyTypeExcelMergeTextEnd,
+        PropertyTypeExcelMergeStart,
+        PropertyTypeExcelMerge,
+        PropertyTypeExcelMergeEnd,
         PropertyTypeClipboardType,
         PropertyTypeShortcutType,
         PropertyTypeTestReport,
@@ -126,16 +129,18 @@ public:
         PropertyTypeViewLogInfo,
         PropertyTypeViewLogFileList,
         PropertyTypeViewLogFileInfo,
+        PropertyTypeKeywordTypeInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeOriginSheetDescription,
         PropertyTypeOriginSheetPrivates,
-        PropertyTypeOriginSheetTelltale,
+        PropertyTypeOriginSheetTelltales,
         PropertyTypeOriginSheetConstants,
         PropertyTypeOriginSheetEvents,
         PropertyTypeOriginSheetSounds,
         PropertyTypeOriginSheetInters,
         PropertyTypeOriginSheetOutputs,
+        PropertyTypeOriginSheetConfigs,
         PropertyTypeOriginSheetMax,
         PropertyTypeConvertSheetDescription,
         PropertyTypeConvertSheetPrivates,
@@ -145,6 +150,7 @@ public:
         PropertyTypeConvertSheetSounds,
         PropertyTypeConvertSheetInters,
         PropertyTypeConvertSheetOutputs,
+        PropertyTypeConvertSheetConfigs,
         PropertyTypeConvertSheetMax,
         PropertyTypeListMax,
 
@@ -214,8 +220,7 @@ public:
         EventTypeUpdateSheetInfo,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
-        EventTypeAutoCompleteSignal,
-        EventTypeAutoCompleteEtc,
+        EventTypeAutoCompleteSuggestions,
         EventTypeCellMergeSplit,
         EventTypeCellMergeSplitWarning,
         EventTypeViewInfoClose,
@@ -241,6 +246,8 @@ public:
         EventTypeRunTestReport,
         EventTypeSelectModuleError,
         EventTypeSelectAppMode,
+        EventTypeShortcutInsert,
+        EventTypeShortcutDelete,
 
         EventTypeTest = 3000,
         EventTypeLastFile,
@@ -254,6 +261,7 @@ public:
         EventTypeListSounds,
         EventTypeListInters,
         EventTypeListOutputs,
+        EventTypeListConfig,
         EventTypeListReserved0,
         EventTypeListReserved1,
         EventTypeListReserved2,
@@ -320,9 +328,19 @@ public:
         Data,
         Max,
     };
+    enum class Config {
+        ConfigName = 0,
+        InputSignal,
+        InputData,
+        Operation,
+        OperationSignal,
+        Etc,
+        Max,
+    };
     enum class Other {
         TCName = 0,
         VehicleType,
+        Config,
         Result,
         Case,
         InputSignal,
@@ -377,6 +395,7 @@ public:
         InputDataTypeMatchingTablePHEV,
         InputDataTypeMatchingTableHEV,
         InputDataTypeMatchingTableSystem,
+        InputDataTypeInputData,
         InputDataTypeMax,
     };
 };
@@ -466,40 +485,164 @@ public:
 
 class KeywordTypeEnum {
 public:
-    enum class KeywordType {
-        Invalid = 0x00000000,
-        Sheet = 0x00000001,
-        Cal = 0x00000002,
-        Range = 0x00000004,
-        Collect = 0x00000008,
-        Over = 0x00000010,
-        Under = 0x00000020,
-        Equal = 0x00000040,
-        Other = 0x00000080,
-        Or = 0x00000100,
+    enum class KeywordType : uint64_t {
+        Invalid = 0,
+        Sheet,
+        Cal,
+        Range,
+        Collect,
+        Over,  // 5
+        Under,
+        // Equal,
+        Other,
+        Or,
+        NotTrigger,
+        Preset,  // 10
+        ValueChanged,
+        Flow,  // 12
+        Not,
+        DontCare,  //  14
+        Timeout,
+        Crc,
+        TwoWay,  // 17
+        DependentOn,
+        MoreThanEqual,  // 19
+        LessThanEqual,  // 20
 
-#if 0
+        CustomNotTrigger,
+        CustomOver,
+        CustomUnder,
+        CustomRange,
+        CustomTwoWay,
+        CustomFlow,
+        CustomIgn,
+        CustomMoreThanEqual,
+        CustomLessThanEqual,
+        CustomNotDefined,
+
+        // Invalid = 0x00000000,
+        // Sheet = 0x00000001,          // InputSignal : [Sheet]
+        // Cal = 0x00000002,            // OutputValue : [Cal]
+        // Range = 0x00000004,          // InputData : ~
+        // Collect = 0x00000008,        // OutputSignal : collect
+        // Over = 0x00000010,           // InputData : >
+        // Under = 0x00000020,          // InputData : <
+        // // Equal = 0x00000040,          // InputData : =
+        // Other = 0x00000080,          // Case : others, other
+        // Or = 0x00000100,             // ConfigData : |
+        // NotTrigger = 0x00000200,     // InputSignal, InputData: [Not_Trigger]
+        // Preset = 0x00000400,         // InputSignal : [Preset]
+        // ValueChanged = 0x00000800,   // InputData : Value Changed, ValueChanged
+        // Flow = 0x00001000,           // InputData : =>
+        // Not = 0x00002000,            // InputData : !
+        // DontCare = 0x00004000,       // InputData : D`, D'
+        // Timeout = 0x00008000,        // InputData : timeout, MESSAGE_TIMEOUT
+        // Crc = 0x00010000,            // InputData : crc, CRC_ERROR
+        // TwoWay = 0x00020000,         // InputData : <=>
+        // DependentOn = 0x00040000,    // InputSignal : [Dependent_On]
+        // MoreThanEqual = 0x00080000,  // InputData : >=
+        // LessThanEqual = 0x00100000,  // InputData : <=
+
+        // CustomNotTrigger = 0x01000000,
+        // CustomOver = 0x02000000,
+        // CustomUnder = 0x04000000,
+        // CustomRange = 0x08000000,
+        // CustomTwoWay = 0x10000000,
+        // CustomFlow = 0x20000000,
+        // CustomIgn = 0x80000000,
+        // CustomMoreThanEqual = 0x100000000,
+        // CustomLessThanEqual = 0x200000000,
+
+#if 0  // 아래는 Keyword enum의 전체 List임, 값이 쓰였다면 주석처리 하였음
+       // Invalid = 0x00000000,
+       // Sheet = 0x00000001,
+       // Cal = 0x00000002,
+       // Range = 0x00000004,
+        Collect = 0x00000008,
+        // GreaterThan = 0x00000010,
+        // LessThan = 0x00000020,
+        // Equal = 0x00000040,
+        // Other = 0x00000080,
+        // Or = 0x00000100,
         // NotTrigger = 0x00000200,
         // Preset = 0x00000400,
         DependentOn = 0x00000800,
-        ValueChanged = 0x00001000,
-        // Comma = 0x00002000,
-        // Range = 0x00004000,
-        GreaterThan = 0x00008000,
-        LessThan = 0x00010000,
+        // ValueChanged = 0x00001000,
+        Comma = 0x00002000,
+        // VehicleSignal = 0x00004000,
+        // SFCSignal = 0x00008000,
+        ReservedEnum1 = 0x00010000,
         GreaterThanOrEqual = 0x00020000,
         LessThanOrEqual = 0x00040000,
-        Flow = 0x00080000,
-        Not = 0x00100000,
-        DontCare = 0x00200000,
-        Timeout = 0x00400000,
-        Crc = 0x00800000,
-        // Cal = 0x01000000,
-        SheetOutputValue = 0x02000000,
-        InputDelay = 0x04000000,
-        OutputDelay = 0x08000000,
-        OutputCollect = 0x10000000,
+        // Flow = 0x00080000,
+        // Not = 0x00100000,
+        // DontCare = 0x00200000,
+        // Timeout = 0x00400000,
+        // Crc = 0x00800000,
+        ReservedEnum2 = 0x01000000,
+        ReservedEnum3 = 0x02000000,
+        ReservedEnum4 = 0x04000000,
+        ReservedEnum5 = 0x08000000,
+        ReservedEnum6 = 0x10000000,
+        ReservedEnum7 = 0x20000000,
+        ReservedEnum8 = 0x40000000,
+        ReservedEnum9 = 0x80000000,
 #endif
+        Max,
+    };
+};
+
+class DataInfoTypeEnum {
+public:
+    enum class DataInfoType {
+        Invalid = 0,
+        InputTCName,
+        InputCase,
+        InputCaseRemove,  // Case Data Remove
+        Ouput,
+        Config,
+        Max,
+    };
+};
+
+class ValidationTypeEnum {
+public:
+    enum class ValidationType {
+        Invalid = 0,
+        ExcelData,  // TCName <- Result <- Case 이름 유효성 확인 : 중복 사용 불가(상관 관계 참고하여)
+        CheckKeywordWithinData,  // 시트 키워드로 참조 하는 데이터에서 키워드 사용 확인 : 사용 불가
+        DataNull,                // Signal.size > 0 && (inputData, outputValue, configData).size == 0 입력값 유무 확인
+        SignalNull,              // Signal.size == 0 && (inputData, outputValue, configData).size > 0 입력값 유무 확인
+        Max,
+    };
+};
+
+class MergeKeywordEnum {
+public:
+    enum class MergeKeywordType {
+        NoMergeType = 0,
+        MergeStart,
+        Merge,
+        MergeEnd,
+        Max,
+    };
+};
+
+class IGNElapsedTypeEnum {
+public:
+    enum class IGNElapsedType {
+        ElapsedOn0ms = 0,
+        ElapsedOn500ms,
+        ElapsedOn3000ms,
+        ElapsedOn3500ms,
+        ElapsedOn4000ms,
+        ElapsedOn10s,
+
+        ElapsedOff0ms = 10,
+        ElapsedOff500ms,
+        ElapsedOff700ms,
+        ElapsedOff1000ms,
+        ElapsedOff1500ms,
         Max,
     };
 };

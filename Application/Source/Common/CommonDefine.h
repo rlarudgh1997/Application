@@ -1,7 +1,7 @@
 #ifndef COMMON_DEFINE_H
 #define COMMON_DEFINE_H
 
-#include <QDebug>
+// #include <QDebug>
 
 #if defined(__BUILD_TYPE_TARGET__)
 #define PLATFORM_TARGET

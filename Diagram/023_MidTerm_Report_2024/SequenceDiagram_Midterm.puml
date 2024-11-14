@@ -1,0 +1,115 @@
+@startuml
+
+== Test Case Generation ==
+
+actor User order 10
+participant ControlExcel order 20
+participant TestCase order 30
+participant ExcelParser order 40
+participant RunSfcCaseGen order 45
+participant SignalCollection order 50
+participant TextWriter order 60
+
+box "Python" #F0F8FF
+    participant ExcelParser
+    participant RunSfcCaseGen
+    participant SignalCollection
+    participant TextWriter
+end box
+
+box "C++" #E0FFFF
+    participant ControlExcel
+    participant TestCase
+end box
+
+User --> ControlExcel: Select Excel
+activate ControlExcel
+
+ControlExcel -> ControlExcel: loadExcelFile()
+ControlExcel -> ControlExcel: openExcelFile()
+ControlExcel -> ControlExcel: updateExcelSheet()
+ControlExcel -> ControlExcel: updateDataControl()
+deactivate ControlExcel
+note right of ControlExcel
+  Excel data
+  successfully loaded
+end note
+
+User --> ControlExcel: GenTC
+activate ControlExcel
+ControlExcel -> ControlExcel: updateGenDataInfo()
+ControlExcel -> ControlExcel: isExcelDataValidation()
+activate ControlExcel
+ControlExcel -> ControlExcel: replaceGenDataInfo()
+ControlExcel -> ControlExcel: constructConvertDataInfo()
+ControlExcel -> ExcelParser: writeExcelSheet()
+deactivate ControlExcel
+
+activate ExcelParser
+ExcelParser -> ExcelParser: _write_to_excel()
+note right of ExcelParser
+  Convert Excel#1 saved
+  name: Convert.excel_001.xlsx
+end note
+deactivate ExcelParser
+
+activate ControlExcel
+ControlExcel -> ControlExcel: appendConvertDataInfo()
+alt Incomplete item
+ControlExcel -> ControlExcel: isInputSignalDataInfo()
+end
+ControlExcel -> ExcelParser: writeExcelSheet()
+activate ExcelParser
+ExcelParser -> ExcelParser: _write_to_excel()
+note right of ExcelParser
+  Convert Excel#2 saved
+  name: Convert.excel_002.xlsx
+end note
+deactivate ExcelParser
+ControlExcel -> ControlExcel: constructGenDataInfo()
+ControlExcel -> TestCase: setSignalDataInfo()
+ControlExcel -> TestCase: excuteTestCase()
+deactivate ControlExcel
+deactivate ControlExcel
+
+activate TestCase
+TestCase -> TestCase: genCase()
+TestCase -> RunSfcCaseGen: callPython()
+
+activate RunSfcCaseGen
+RunSfcCaseGen -> RunSfcCaseGen: case_gen()
+activate SignalCollection
+RunSfcCaseGen -> SignalCollection: parse_input_string()
+RunSfcCaseGen -> SignalCollection: generate_combinations()
+SignalCollection -> SignalCollection: Itertools.product()
+deactivate SignalCollection
+activate TextWriter
+RunSfcCaseGen -> TextWriter: make_Json_buffer()
+RunSfcCaseGen -> TextWriter: write_json()
+note over of TextWriter
+  Case saved in JSON format
+  name: CaseResultFromPython.json
+end note
+TestCase <-- TextWriter: Read JSON File
+deactivate TextWriter
+deactivate RunSfcCaseGen
+
+TestCase -> TestCase: readJson()
+TestCase -> TestCase: appendCaseJson()
+activate TestCase
+TestCase -> TestCase: appendTCNameJson()
+TestCase -> TestCase: saveJsonToFile()
+note right of TestCase
+  History saved in JSON format
+  name: TcGenHistory.json
+end note
+deactivate TestCase
+alt Incomplete item
+TestCase -> TestCase: WriteTcFile()
+note right of TestCase
+  TC file created
+end note
+end
+deactivate TestCase
+
+@enduml

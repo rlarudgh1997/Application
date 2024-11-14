@@ -26,15 +26,17 @@ public:
         ConfigTypeNewSheetRowCount,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
+        ConfigTypeConfigTitle,
         ConfigTypeOtherTitle,
 
         // File
         ConfigTypeLastSavedFilePath,
         ConfigTypeDeleteFileTC,
         ConfigTypeSaveConvertExcel,
-        ConfigTypeExcelMergeTextStart,
-        ConfigTypeExcelMergeText,
-        ConfigTypeExcelMergeTextEnd,
+        ConfigTypeExcelMergeStart,
+        ConfigTypeExcelMerge,
+        ConfigTypeExcelMergeEnd,
+        ConfigTypeTCFileSplitSize,
 
         // Vehicle
         ConfigTypeVsmFileNameBaseCV,
@@ -102,40 +104,46 @@ private:
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
-            "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
-                                                          "Inters", "Outputs"})));
+            "ConfigTypeSheetName",
+            QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds", "Inters", "Outputs",
+                                   "Configs"})));
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
+
+        mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
+            "ConfigTypeConfigTitle",
+            QVariant(QVariantList({"ConfigName", "InputSignal", "InputData", "Operation", "OperationSignal", "Etc"})));
+
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
-            QVariant(QVariantList({"TCName", "VehicleType", "Result", "Case", "Input_Signal", "Input_Data", "Output_Signal",
-                                   "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative Test"})));
+            QVariant(QVariantList({"TCName", "VehicleType", "Config", "Result", "Case", "Input_Signal", "Input_Data",
+                                   "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative Test"})));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
         mConfigInfoData[ConfigTypeSaveConvertExcel] = QPair<QString, QVariant>("ConfigTypeSaveConvertExcel", QVariant(false));
 
-        mConfigInfoData[ConfigTypeExcelMergeTextStart] =
-            QPair<QString, QVariant>("ConfigTypeExcelMergeTextStart", QVariant("[MergeStart]"));
-        mConfigInfoData[ConfigTypeExcelMergeText] = QPair<QString, QVariant>("ConfigTypeExcelMergeText", QVariant("[Merge]"));
-        mConfigInfoData[ConfigTypeExcelMergeTextEnd] =
-            QPair<QString, QVariant>("ConfigTypeExcelMergeTextEnd", QVariant("[MergeEnd]"));
+        mConfigInfoData[ConfigTypeExcelMergeStart] =
+            QPair<QString, QVariant>("ConfigTypeExcelMergeStart", QVariant("[MergeStart]"));
+        mConfigInfoData[ConfigTypeExcelMerge] = QPair<QString, QVariant>("ConfigTypeExcelMerge", QVariant("[Merge]"));
+        mConfigInfoData[ConfigTypeExcelMergeEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeEnd", QVariant("[MergeEnd]"));
+        mConfigInfoData[ConfigTypeTCFileSplitSize] = QPair<QString, QVariant>("ConfigTypeTCFileSplitSize", QVariant(100));
 
         // Vehicle
         mConfigInfoData[ConfigTypeVsmFileNameBaseCV] =
             QPair<QString, QVariant>("ConfigTypeVsmFileNameBaseCV", QVariant("CLU_VSM_CV_%1.Vehicle.%2.vsm"));
         mConfigInfoData[ConfigTypeVehicleTypeCV] =
             QPair<QString, QVariant>("ConfigTypeVehicleTypeCV", QVariant(QVariantList({"ICV", "EV", "FCEV"})));
-        mConfigInfoData[ConfigTypeSfcSpecTypeCV] =
-            QPair<QString, QVariant>("ConfigTypeSfcSpecTypeCV", QVariant(QVariantList({"AV", "CD", "CV", "EC", "PT"})));
+        mConfigInfoData[ConfigTypeSfcSpecTypeCV] = QPair<QString, QVariant>(
+            "ConfigTypeSfcSpecTypeCV", QVariant(QVariantList({"AV", "CD", "CV", "EC", "PT", "ETC", "extension"})));
         mConfigInfoData[ConfigTypeVsmSpecTypeCV] = QPair<QString, QVariant>("ConfigTypeVsmSpecTypeCV", QVariant("CV"));
         mConfigInfoData[ConfigTypeVsmFileNameBasePV] =
             QPair<QString, QVariant>("ConfigTypeVsmFileNameBasePV", QVariant("CLU_VSM_%1.Vehicle.%2.vsm"));
         mConfigInfoData[ConfigTypeVehicleTypePV] =
             QPair<QString, QVariant>("ConfigTypeVehicleTypePV", QVariant(QVariantList({"ICV", "EV", "FCEV", "PHEV", "HEV"})));
         mConfigInfoData[ConfigTypeSfcSpecTypePV] = QPair<QString, QVariant>(
-            "ConfigTypeSfcSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC"})));
+            "ConfigTypeSfcSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC", "extension"})));
         mConfigInfoData[ConfigTypeVsmSpecTypePV] = QPair<QString, QVariant>(
             "ConfigTypeVsmSpecTypePV", QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "CS"})));
         mConfigInfoData[ConfigTypeSystemTypePV] = QPair<QString, QVariant>(

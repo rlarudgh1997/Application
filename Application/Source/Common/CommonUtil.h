@@ -271,6 +271,40 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
 //     }
 // }
 
+template <typename T1>
+inline T1 getRemoved(T1& origin, const QList<T1>& toRemove) {
+    T1 ret = origin;
+    for (const auto& removeObj : toRemove) {
+        ret.remove(removeObj);
+    }
+    origin = ret;
+    return ret;
+}
+
+template <typename T1, typename T2>
+inline bool isContainsString(const T1& orgin, const T2& contains) {
+    QString orginStr;
+    if constexpr (std::is_same_v<T1, QString>) {
+        orginStr = orgin;
+    } else if constexpr (std::is_same_v<T1, QVariant>) {
+        orginStr = orgin.toString();
+    } else {
+        return false;
+    }
+
+    QString containsStr;
+    if constexpr (std::is_same_v<T2, QString>) {
+        containsStr = contains;
+    } else if constexpr (std::is_same_v<T2, QVariant>) {
+        containsStr = contains.toString();
+    } else {
+        return false;
+    }
+
+    return orginStr.trimmed().startsWith(containsStr);
+}
+
+
 class CheckTimer {
 public:
     CheckTimer() {

@@ -8,10 +8,12 @@
 	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	git clone ssh://sfc@10.45.143.171/home/sfc/100_Repo/TC_Creator.git
 		ID : sfc
-		PW : ivis!
+		PW : 1234
 
 # [SFC 정보]
-	git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
+	# git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
+	# git clone ssh://gitlab.hmc.co.kr/kkh1997/ccos-core-sfc-kkh.git --recursive
+	git clone https://gitlab.hmc.co.kr/kkh1997/ccos-core-sfc-kkh.git --recursive
 
 # [Docker 정보]
 	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git
@@ -23,6 +25,9 @@
 	git fetch origin refs/pull-requests/3376/from:ivis.kkh
 	git fetch origin refs/pull-requests/39907/from:ccos.core.sfc.work
 	git checkout ivis.kkh
+
+	git fetch hmc_private merge-requests/4231/head:PR-4231
+	// git fetch {원격지} merge-requests/{PR번호}/head:{생성할 로컬 브랜치 이름}
 
 # [VSM 모듈 pull 안될경우]
 	cd ccos.core.sfc/model

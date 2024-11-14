@@ -2,7 +2,7 @@
 #define COMMON_RESOURCE_H
 
 #include "CommonDefine.h"
-#include <QObject>
+// #include <QObject>
 
 // =============================================================================================================
 // String Define
@@ -93,6 +93,7 @@
 #define STRING_FILE_OPEN QString("File Open")
 #define STRING_FILE_OPEN_FAIL QString("Fail to file open")
 #define STRING_BINARY_NOT_EXISTS_ERROR QString("Can't find binary file : ")
+#define STRING_SELECT_KEYWORD QString("Select Keyword")
 
 // Popup
 #define STRING_POPUP_SAVE QString("Save")

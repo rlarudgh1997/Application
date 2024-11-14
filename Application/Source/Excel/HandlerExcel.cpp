@@ -33,37 +33,42 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValuEnum, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputData, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, QVariant(false));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextStart, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeText, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeTextEnd, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, QVariant());
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltale, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetEvents, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetSounds, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetInters, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs, QVariant(""));
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, QVariant(false));
 }
