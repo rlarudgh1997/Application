@@ -90,6 +90,82 @@ private:
     QMap<int, QList<QPair<int, int>>> mInfo = QMap<int, QList<QPair<int, int>>>();
 };
 
+class SelectedCellInfo {
+public:
+    explicit SelectedCellInfo(QTableWidget* tableWidget) {
+        clear();
+        updateSelectedCellInfo(tableWidget);
+    }
+    SelectedCellInfo() = default;
+    SelectedCellInfo(const SelectedCellInfo& other) = default;
+    SelectedCellInfo& operator=(const SelectedCellInfo& other) = default;
+
+    QPair<int, int> isRowInfo() const {
+        return QPair<int, int>(mRowStart, mRowCount);
+    }
+    QPair<int, int> isColumnInfo() const {
+        return QPair<int, int>(mColumnStart, mColumnCount);
+    }
+    QPair<int, int> isEndInfo() const {
+        return QPair<int, int>((mRowStart + mRowCount), (mColumnStart + mColumnCount));
+    }
+    QPair<int, int> isMaxInfo() const {
+        return QPair<int, int>(mRowMax, mColumnMax);
+    }
+    QModelIndexList isModelIndexsInfo() const {
+        return mModelIndexs;
+    }
+
+private:
+    void updateSelectedCellInfo(QTableWidget* tableWidget) {
+        if (tableWidget == nullptr) {
+            return;
+        }
+        const QModelIndexList modelIndexs = tableWidget->selectionModel()->selectedIndexes();
+        const bool selected = (modelIndexs.size() > 0);
+
+        mRowStart = (selected) ? (modelIndexs.at(0).row()) : (tableWidget->currentRow());
+        mRowCount = (selected) ? (modelIndexs.last().row() - mRowStart + 1) : (1);
+        mRowMax = tableWidget->rowCount();
+
+        mColumnStart = (selected) ? (modelIndexs.at(0).column()) : (tableWidget->currentColumn());
+        mColumnCount = (selected) ? (modelIndexs.last().column() - mColumnStart + 1) : (1);
+        mColumnMax = tableWidget->columnCount();
+
+        if (mRowCount <= 0) {
+            QList<int> rowList = QList<int>();
+            for (const auto& index : modelIndexs) {
+                rowList.append(index.row());
+            }
+            if (rowList.size() > 0) {
+                mRowStart = (*std::min_element(rowList.constBegin(), rowList.constEnd()));
+                mRowCount = (*std::max_element(rowList.constBegin(), rowList.constEnd())) - mRowStart + 1;
+            }
+        }
+        ivis::common::LIMIT(mRowStart, 0, mRowMax);
+        ivis::common::LIMIT(mColumnStart, 0, mColumnMax);
+    }
+    void clear() {
+        mRowStart = Default;
+        mRowCount = Default;
+        mRowMax = Default;
+        mColumnStart = Default;
+        mColumnCount = Default;
+        mColumnMax = Default;
+        mModelIndexs.clear();
+    }
+
+private:
+    const int Default = (-1);
+    int mRowStart = Default;
+    int mRowCount = Default;
+    int mColumnStart = Default;
+    int mColumnCount = Default;
+    int mRowMax = Default;
+    int mColumnMax = Default;
+    QModelIndexList mModelIndexs = QModelIndexList();
+};
+
 class GuiExcel : public AbstractGui {
     Q_OBJECT
 
@@ -128,7 +204,14 @@ private:
     void constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart);
     void updateDisplaySplitCell(const int& sheetIndex);
     void updateDisplayMergeCell(const int& sheetIndex);
-    void updateDisplaySheetHeaderAdjust(const int& sheetIndex);
+    QMap<int, QSet<QPair<int, int>>> isSheetMergeInfo(const int& sheetIndex);
+    void updateSheetMergeInfo(const int& editType, const int& sheetIndex, const int& rowStart, const int& rowCount,
+                              const int& columnStart, const int& columnCount);
+    void updateDisplayInsertDelete(const int& editType, const int& sheetIndex, const int& columnIndex, const int& rowStart,
+                                   const int& rowCount);
+    void updateDisplayMergeSplit(const int& editType, const int& sheetIndex, const int& columnStart, const int& columnCount,
+                                 const int& rowStart, const int& rowCount);
+    void updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
     void updateDisplaySheetText(const int& sheetIndex);
     void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column);
     void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column);
@@ -148,7 +231,10 @@ private:
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);
     void pasteClipboardInfo();
-    void updateDisplayClipboardInfo(const int& clipboardType);
+    QList<QStringList> isSheetData(const int& sheetIndex, const bool& removeMerge, const QPair<int, int>& maxInfo);
+    QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    QString isSeletedSheetData(const int& sheetIndex);
+    void updateConstructClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
     void updateDisplayEditCellShortcut(const int& editType);
     void updateDescriptionInfo(const int& sheetIndex, const int& row);

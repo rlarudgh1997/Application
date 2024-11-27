@@ -112,7 +112,7 @@ private:
 
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle",
-            QVariant(QVariantList({"ConfigName", "InputSignal", "InputData", "Operation", "OperationSignal", "Etc"})));
+            QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
 
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",

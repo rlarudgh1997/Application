@@ -29,15 +29,20 @@ public:
 
     void excuteTestCase(const int& type = ExcuteTypeGenTC);
     QString genCase();
+    void saveHistory();
     void printCase(const QMap<QString, QMap<QString, QString>>& tmpSignalMap);
     void eraseMergeTag(QString& str);
-    QString getSignalInfoString(const int& sheetNum, const QString& tcName, const QString& resultName, const QString& caseName);
+    QString getSignalInfoString(const QString& genType, const int& sheetNum, const QString& tcName, const QString& resultName,
+                                const QString& caseName);
     void callPython(const QString& str);
-    QJsonObject readJson(const QString& filePath);
+    QJsonObject readJson(const QString& filePath = "");
     void printJson(const QJsonObject& jsonObj);
     void appendCaseJson(QJsonObject& fileJson, QJsonObject& caseJson, const QString& caseName, const int& caseNumber,
                         const QString& resultName, const int& resultNumber, const QString& vehicleType, const QString& tcName,
                         const int& tcNameNumber, const int& sheetNumber);
+    void appendCase(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
+                    const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
+                    const int& sheetNumber);
     QString getGenType();
     QJsonObject getConfigSig(const int& sheetIdx, const QStringList& strList);
     QJsonObject getOutputSig(const int& sheetIdx, const QStringList& strList);
@@ -46,6 +51,7 @@ public:
                              const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
                              const int& sheetNumber);
     void removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& validArray);
+    void genTestCaseFile(const QJsonObject& json);
 
 private:
     template <typename T>
@@ -54,7 +60,10 @@ private:
 
 private:
     QMap<QString, QSharedPointer<SignalDataInfo>> mSignalDataInfo = QMap<QString, QSharedPointer<SignalDataInfo>>();
-    QJsonObject mFileJson;
+    QJsonObject mDefaultFileJson;
+    QJsonObject mNegativeFileJson;
+    QJsonObject mPositiveFileJson;
+    QJsonObject mAllFileJson;
 };
 
 #endif  // TEST_CASE_H

@@ -212,7 +212,7 @@ public:
         EventTypeOpenExcel = 1700,
         EventTypeSaveExcel,
         EventTypeUpdateExcelSheet,
-        EventTypeEditExcelSheet,
+        EventTypeUpdateAutoCompleteData,
         EventTypeUpdateCellDataInfo,
         EventTypeAutoInputDescriptionInfo,
         EventTypeUpdateSheetTextInfo,
@@ -222,7 +222,7 @@ public:
         EventTypeSheetRowDelete,
         EventTypeAutoCompleteSuggestions,
         EventTypeCellMergeSplit,
-        EventTypeCellMergeSplitWarning,
+        EventTypeWarningMergeSplit,
         EventTypeViewInfoClose,
         EventTypeUpdateConfig,
         EventTypeConfigReset,
@@ -330,11 +330,9 @@ public:
     };
     enum class Config {
         ConfigName = 0,
+        AndGroup,
         InputSignal,
         InputData,
-        Operation,
-        OperationSignal,
-        Etc,
         Max,
     };
     enum class Other {
@@ -509,6 +507,7 @@ public:
         MoreThanEqual,  // 19
         LessThanEqual,  // 20
 
+        CustomNotUsed,
         CustomNotTrigger,
         CustomOver,
         CustomUnder,
@@ -597,8 +596,9 @@ public:
     enum class DataInfoType {
         Invalid = 0,
         InputTCName,
+        // InputTCNameRemove,  // TCName 기준 시그널 에서 중복 시그널을 삭제 하고 중복 제거
         InputCase,
-        InputCaseRemove,  // Case Data Remove
+        InputCaseRemove,  // TCName 기준 시그널 에서 Case 기준 시그널을 삭제 하고 중복 제거
         Ouput,
         Config,
         Max,
@@ -646,6 +646,21 @@ public:
         Max,
     };
 };
+
+class SignalTypeEnum {
+public:
+    enum class SignalType {
+        Invalid = 0,
+        Sfc,
+        SfcExternal,
+        SfcEvent,
+        SfcCommon,
+        SfcException,
+        Vehicle,
+        VehicleSystem,
+    };
+};
+
 
 }  // end of namespace common
 }  // end of namespace ivis

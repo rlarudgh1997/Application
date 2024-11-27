@@ -5,6 +5,7 @@
 #include <QStandardItemModel>
 #include <QFrame>
 #include <QRadioButton>
+#include <QListWidget>
 
 #include "CommonUtil.h"
 
@@ -37,6 +38,7 @@ public:
         DataTypeViewLogStop,
         DataTypeAutoCompleteListInput,
         DataTypeAutoCompleteListKeyword,
+        DataTypeAutoCompleteListNormal,
         DataTypeAutoCompleteListSfc,
         DataTypeAutoCompleteListVehicle,
         DataTypeAutoCompleteListTCName,
@@ -109,8 +111,8 @@ private:
     void connectTestReport(const bool& state);
     void connectLogDisplay(const bool& state);
     void connectViewLog(const bool& state);
-    void connectAutoCompleteNormal(const bool& state);
     void connectAutoComplete(const bool& state);
+    void connectAutoCompleteNormal(const bool& state);
 
     QVariant getData(const int& type);
     void setData(const int& type, const QVariant& value);
@@ -122,7 +124,7 @@ private:
     QList<QCheckBox*> isCheckWidget(const bool& option1) const;
     void updateSelectListCheckState(const bool& allCheck, const QStringList& selectList);
     void refreshViewLog(const int& refreshType);
-    void updateAutoCompleteSuggestionsList(const bool& sfc, const bool& vehicle, const bool& tcName);
+    void updateAutoCompleteSuggestionsList(const bool& normal, const bool& sfc, const bool& vehicle, const bool& tcName);
 
     bool updateAppMode(const QVariantList& info);
     bool updateAppModeRadio(const QVariantList& info);
@@ -149,6 +151,7 @@ private:
     Ui::Dialog* mGui;
     QMap<int, QVariant> mData = QMap<int, QVariant>();
     QStandardItemModel mModel = QStandardItemModel();
+    QListWidget* mAutoCompleteListWidget = nullptr;
 };
 
 #endif  // DIALOG_H

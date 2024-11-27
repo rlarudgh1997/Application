@@ -36,7 +36,7 @@ class GuiExcel {
     -void constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart)
     -void updateDisplaySplitCell(const int& sheetIndex)
     -void updateDisplayMergeCell(const int& sheetIndex)
-    -void updateDisplaySheetHeaderAdjust(const int& sheetIndex)
+    -void updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn)
     -void updateDisplaySheetText(const int& sheetIndex)
     -void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column)
     -void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column)

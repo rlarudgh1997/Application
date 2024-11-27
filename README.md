@@ -4,6 +4,32 @@
 
 
 =====================================================================
+# [계정 정보]
+	vi .git-credentials
+		https://kkh1997%40ivis.ai:4ZGuRCtdS7NreAyzab8i@gitlab.hmc.co.kr
+
+		ID : kkh1997@ivis.ai
+		PW :4ZGuRCtdS7NreAyzab8i
+
+# [Repo 정보]
+	git clone --recursive https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git
+
+# [hosts 추가]
+	sudo vi /etc/hosts
+		10.5.216.21     gitlab.hmc.co.kr
+
+
+# [GitLab 계정 정보]
+	https://gitlab.hmc.co.kr/-/user_settings/personal_access_tokens
+
+	- Personal access tokens 생성시 아래 정보로 생성
+		Token name : kkh1997
+		Scopes : read_repository, write_repository
+
+	- 생성시 tocken 정보 복사 해야함
+		계정 PW 로 사용함
+
+=====================================================================
 # [Repo 정보]
 	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 	git clone ssh://sfc@10.45.143.171/home/sfc/100_Repo/TC_Creator.git

@@ -271,39 +271,77 @@ inline T1* createWidget(T2* parent, const bool& show = false, const QRect& geome
 //     }
 // }
 
-template <typename T1>
-inline T1 getRemoved(T1& origin, const QList<T1>& toRemove) {
+template <typename T1, typename T2>
+inline T1 getRemoved(T1& origin, const T2& toRemove) {
     T1 ret = origin;
-    for (const auto& removeObj : toRemove) {
-        ret.remove(removeObj);
+    if constexpr (std::is_same_v<T2, QString>) {
+        ret.remove(toRemove);
+    } else if constexpr (std::is_same_v<T2, QStringList>) {
+        for (const auto& removeObj : toRemove) {
+            ret.remove(removeObj);
+        }
+    } else {
     }
     origin = ret;
     return ret;
 }
 
 template <typename T1, typename T2>
-inline bool isContainsString(const T1& orgin, const T2& contains) {
-    QString orginStr;
-    if constexpr (std::is_same_v<T1, QString>) {
-        orginStr = orgin;
-    } else if constexpr (std::is_same_v<T1, QVariant>) {
-        orginStr = orgin.toString();
+inline T1 isConvertData(const T2& str) {
+    if constexpr (std::is_same_v<T1, T2>) {
+        return str;
+    } else if constexpr ((std::is_same_v<T1, QString>) && (std::is_same_v<T2, QVariant>)) {
+        return str.toString();
+    } else if constexpr ((std::is_same_v<T1, QString>) && (std::is_same_v<T2, int>)) {
+        return QString::number(str);
+    } else if constexpr ((std::is_same_v<T1, QString>) && (std::is_same_v<T2, QStringList>)) {
+        return str.join(", ");
+    } else if constexpr ((std::is_same_v<T1, QString>) && (std::is_same_v<T2, QVariantList>)) {
+        QStringList stringList;
+        for (const auto& variant : str) {
+            stringList.append(variant.toString());
+        }
+        return stringList.join(", ");
+    } else if constexpr ((std::is_same_v<T1, QVariant>) && (std::is_same_v<T2, QString>)) {
+        return QVariant(str);
+    } else if constexpr ((std::is_same_v<T1, QVariant>) && (std::is_same_v<T2, QStringList>)) {
+        return QVariant(str.join(", "));
+    } else if constexpr ((std::is_same_v<T1, QStringList>) && (std::is_same_v<T2, QVariantList>)) {
+        QStringList stringList;
+        for (const auto& variant : str) {
+            stringList.append(variant.toString());
+        }
+        return stringList;
+    } else if constexpr ((std::is_same_v<T1, QVariantList>) && (std::is_same_v<T2, QStringList>)) {
+        QVariantList variantList;
+        for (const auto& s : str) {
+            variantList.append(QVariant(s));
+        }
+        return variantList;
     } else {
-        return false;
+        static_assert(!std::is_same_v<T1, T2>, "Not Support Type : isConvertData");
+        return T1();
     }
-
-    QString containsStr;
-    if constexpr (std::is_same_v<T2, QString>) {
-        containsStr = contains;
-    } else if constexpr (std::is_same_v<T2, QVariant>) {
-        containsStr = contains.toString();
-    } else {
-        return false;
-    }
-
-    return orginStr.trimmed().startsWith(containsStr);
 }
 
+template <typename T1, typename T2>
+inline bool isContainsString(const T1& orign, const T2& contains, const bool& checkStartsWith = true) {
+    QString originStr = isConvertData<QString, T1>(orign);
+    QString containsStr = isConvertData<QString, T2>(contains);
+    bool state = ((checkStartsWith) ? (originStr.trimmed().startsWith(containsStr)) : (originStr.contains(containsStr)));
+    if ((originStr.isEmpty()) || (containsStr.isEmpty())) {
+        state = false;
+    }
+    // qDebug() << "isContainsString :" << state << originStr << containsStr;
+    return state;
+}
+
+template <typename T1, typename T2>
+inline bool isCompareString(const T1& orign, const T2& contains) {
+    QString originStr = isConvertData<QString, T1>(orign);
+    QString containsStr = isConvertData<QString, T2>(contains);
+    return (originStr.compare(containsStr, Qt::CaseInsensitive) == false);
+}
 
 class CheckTimer {
 public:

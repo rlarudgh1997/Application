@@ -44,7 +44,8 @@ def case_gen(str = ""):
 
     end_time = time.time()
     duration_time = end_time - start_time
-    print(f"Time taken by the generate_combinations() function (in milliseconds): {(duration_time * 1000):.0f}")
+    if __debug__:
+        print(f"Time taken by the generate_combinations() function (in milliseconds): {(duration_time * 1000):.0f}")
 
     # 현재 실행 중인 파일의 경로 가져오기
     current_file_path = os.path.dirname(os.path.abspath(__file__))

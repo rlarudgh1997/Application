@@ -63,13 +63,13 @@ message("INSTALL_PATH=$$INSTALL_PATH")
 !isEmpty(INSTALL_PATH) {
     target.path = $$INSTALL_PATH
     python.path = $$INSTALL_PATH
-    python.files = $$PWD/../Python/ExcelParser.py
+    python.files = $$PWD/../Python/ExcelParser.py $$PWD/../Python/CaseGen/
     node.path = $$INSTALL_PATH
     node.files = $$PWD/../Python/NodeAddress
 } else {
     target.path = $$OUT_PWD
     python.path = $$OUT_PWD
-    python.files = $$PWD/../Python/ExcelParser.py
+    python.files = $$PWD/../Python/ExcelParser.py $$PWD/../Python/CaseGen/
     node.path = $$OUT_PWD
     node.files = $$PWD/../Python/NodeAddress
 }

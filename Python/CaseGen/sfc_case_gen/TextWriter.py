@@ -63,7 +63,12 @@ class TextWriter:
     def get_signal_info(self):
         sig_list = dict()
         for idx, sig in enumerate(self.instance.signals):
-            sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "Enum": sig.InputValueEnumDict}
+            if sig.gen_type == "Default" or sig.gen_type == "Positive":
+                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
+            elif sig.gen_type == "Negative":
+                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.NegativeTriggerHex, "ValueEnum": sig.InputValueEnumDict}
+            else:
+                print("Not Defined Gen Type: ", sig.gen_type)
         return sig_list
 
     def get_all_case_str(self):
@@ -132,4 +137,5 @@ class TextWriter:
             print(f"Error occurred: {e}")
 
         file_size = os.path.getsize(self.output_file_path)
-        print(f'File size: {file_size} bytes')
+        if __debug__:
+            print(f'File size: {file_size} bytes')

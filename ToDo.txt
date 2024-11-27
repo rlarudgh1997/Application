@@ -1,5 +1,48 @@
 ======================================================================================================================================================
 # [ToDo]
+- timeout 인 경우
+	: 상엽이가 사용하는 케이스, vehicle.* 만 해당사항
+	: matching table 데이터 확인 하여 -> TIMEOUT, ELSE 있는지 확인
+		- TIMEOUT 인경우 TIMEOUT 에 매칭 되는 ValueEnum 이 Precondition 에서 빠져야함
+		- ELSE 인경우 TIMEOUT 에 매칭 되는 ValueEnum 이 Precondition 에서 빠져야함
+			-> 만약 TIMEOUT, ELSE 매칭 값이랑 같은 값이 convertData 에 중복으로 적어져 있으면
+			ex) OFF, timeout : timeout 에 해당하는 matchingTable의 ELSE: 0x0 이 valueEnum 의 0x0: "OFF" 임
+				originData : OFF, timeout
+				convertData : OFF, timeout
+				precondition : AMBER, BLACK_TEXT, BLACK_TEXT_BLINK, RED_TEXT, RED_TEXT_BLINK
+
+			- ADAS_Driving_CV.Input_IslaSpeedLimitTrafficSignStatus:
+				type: sensor
+				signalName: TT_ISLA_SpdLimTrffcSgnSta
+				dataType: HUInt64
+				abstractionName: Input_IslaSpeedLimitTrafficSignStatus
+				valueEnum:
+					0x0: "OFF"
+					0x1: "AMBER"
+					0x2: "BLACK_TEXT"
+					0x3: "BLACK_TEXT_BLINK"
+					0x4: "RED_TEXT"
+					0x5: "RED_TEXT_BLINK"
+				matchingTable:
+					0x1: 0x1
+					0x2: 0x2
+					0x3: 0x3
+					0x4: 0x4
+					0x5: 0x5
+					ELSE: 0x0
+
+
+		NotTrigger -> timeout, crc의 경우 MESSAGE_TIMEOUT과 CRC_ERROR가 enum에 없는 경우,
+		MatchTable에 ELSE, TIMEOUT, CRC_ERROR를 확인하고, 그에 matching되어 있는 추상화 Enum은 precondition(NotUsed)에서 빠져야 함
+		SFC 노드 NONE, MAX는 미사용 -> SFC 노드 중에 NONE이나 MAX를 유효한 값으로 사용하는 경우가 있는지
+		Vehicle은 NONE과 무관하게 사용해야 함
+
+
+
+- vsm, yml 파일 시그널 파싱 기능
+	: json 에 선택된 모듈에 해당하는 폴더에서 vsm, yml 파일 찾아서 내부에 시그널만 파싱
+		-> 해당 시그널마 node address 의 자동완성 리스트로 제공
+
 - 병합셀이 포함된 셀에서 insert, delete 동작시 merger 정보 구성 오류
 	: 머지 정보 구성 코드 최적화 필요
 

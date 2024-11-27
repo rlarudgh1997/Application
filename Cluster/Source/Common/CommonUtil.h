@@ -226,9 +226,9 @@ public:
     }
     void check(const QString& info = QString()) {
         if (info.size()) {
-            qDebug() << "CheckTime[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "CheckTimer[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms\n";
         } else {
-            qDebug() << "CheckTime :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "CheckTimer :" << mElapsedTimer.elapsed() << "ms\n";
         }
     }
 

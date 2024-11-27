@@ -18,8 +18,12 @@ class SignalCollection:
         signal_objects = []
         lines = input_str.strip().splitlines()
         i = 0
+        gen_type = "NotDefined"
         while i < len(lines):
-            if "InputSignalName" in lines[i]:
+            if "TcGenType" in lines[i]:
+                gen_type = lines[i].split(":")[1].strip()
+                i += 1
+            elif "InputSignalName" in lines[i]:
                 name = lines[i].split(":")[1].strip()
                 data_type = lines[i + 1].split(":")[1].strip()
                 keyword_type = lines[i + 2].split(":")[1].strip()
@@ -30,7 +34,7 @@ class SignalCollection:
                 precondition = [item.strip() for item in tmp_precondition.split(",")]
                 tmp_value_enum = ':'.join(lines[i + 5].split(":")[1:]).strip()
                 value_enum = [item.strip() for item in tmp_value_enum.split(",")]
-                signal_objects.append(SignalData(name, data_type, keyword_type, data, precondition, value_enum))
+                signal_objects.append(SignalData(gen_type, name, data_type, keyword_type, data, precondition, value_enum))
                 i += 5
             else:
                 i += 1
@@ -52,20 +56,26 @@ class SignalCollection:
     def generate_combinations(self):
         # Generate combinations from InputValueEnumHex and InputDataHex across all signals
         value_enum_hex_lists = [signal.InputValueEnumHex for signal in self.signals if signal.InputValueEnumHex]
-        data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
+        # data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
+        data_hex_lists = []
+        for signal in self.signals:
+            if signal.InputDataHex and len(signal.InputDataHex) == 1:
+                if signal.InputDataHex[0] == "[Empty]":
+                    # print("signal.InputPreconditionHex: ", signal.InputPreconditionHex)
+                    data_hex_lists.append(signal.InputPreconditionHex)
+                else:
+                    data_hex_lists.append(signal.InputDataHex)
+            elif signal.InputDataHex and len(signal.InputDataHex) > 1:
+                data_hex_lists.append(signal.InputDataHex)
+            else:
+                print("error")
+                pass
+
         # Create all combinations
-        if value_enum_hex_lists and data_hex_lists:
-            # self.all_case = list(itertools.product(*value_enum_hex_lists))
+        if data_hex_lists:
             self.satisfy_case = list(itertools.product(*data_hex_lists))
-            # self.others_case = copy.deepcopy(self.all_case)
-            # for combo in self.satisfy_case:
-            #     if combo in self.others_case:
-            #         self.others_case.remove(combo)
-            #     else:
-            #         print("[Error] There is no enum matching with : ", combo)
-            # print(f"전체 조합수: {len(self.all_case)}")
-            print(f"조건 만족 조합수: {len(self.satisfy_case)}")
-            # print(f"조건 이외 조합수: {len(self.others_case)}")
+            if __debug__:
+                print(f"조건 만족 조합수: {len(self.satisfy_case)}")
         else:
             print("[Error] Not a available input data set: ")
 

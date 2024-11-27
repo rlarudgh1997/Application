@@ -3,9 +3,11 @@ SignalData.py
 
 This module provides Data for VSM or SFC Signal
 """
+import numpy as np
 
 class SignalData:
-    def __init__(self, name, data_type, keyword_type, data, precondition, value_enum):
+    def __init__(self, gen_type, name, data_type, keyword_type, data, precondition, value_enum):
+        self.gen_type = gen_type
         self.InputSignalName = name
         self.InputDataType = data_type
         self.InputKeywordType = keyword_type
@@ -18,6 +20,7 @@ class SignalData:
         self.InputDataHex = self.convert_data_to_hex(data, value_enum)
         self.InputPreconditionHex = self.convert_data_to_hex(precondition, value_enum)
         self.InputValueEnumDict = self.getValueEnumHexKeyDict(value_enum)
+        self.NegativeTriggerHex = self.getNegativeTriggerHex(data, value_enum)
 
     def extract_hex_values(self, value_enum):
         hex_values = []
@@ -78,3 +81,49 @@ class SignalData:
             if key is not None and hex_value is not None:
                 value_enum_dict_hex_key[hex_value] = key.upper() # Lowercase for case-insensitive matching
         return value_enum_dict_hex_key
+
+    def getNegativeTriggerHex(self, data, value_enum):
+        # data가 비어 있으면 [Empty] 반환
+        if len(data) == 1:
+            if data[0] == "[Empty]":
+                return data
+
+        # Create a dictionary from InputValueEnum
+        if len(value_enum) == 1:
+            if value_enum[0] == "":
+                if len(data) >= 1:
+                    flag = True
+                    ret = np.iinfo(np.uint32).max
+                    while (flag == True):
+                        for elem in data:
+                            ret += 1
+                            if ret == elem:
+                                flag = True
+                                break
+                            if ret != elem:
+                                flag = False
+                    return ret
+
+        value_enum_dict = {}
+        for entry in value_enum:
+            parts = entry.split(":")
+            key = None
+            hex_value = None
+            # Find the hex and key values regardless of their position
+            for part in parts:
+                part = part.strip()
+                if part.startswith("0x"):
+                    hex_value = part
+                else:
+                    key = part
+            if key is not None and hex_value is not None:
+                value_enum_dict[key.upper()] = hex_value  # Lowercase for case-insensitive matching
+        # print("len(value_enum): ", len(value_enum))
+        if len(value_enum) == 1:
+            if value_enum[0] == "":
+                return data
+        # Map data inputs to their corresponding hex values
+        return [
+            value_enum_dict.get(key, "Unknown") for key in value_enum_dict.keys()
+            if key not in {item.upper() for item in data}
+        ]
