@@ -201,7 +201,7 @@ private:
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
     QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
-                                            const QMap<int, QStringList>& fileList, int& dataType);
+                                                 const QMap<int, QStringList>& fileList, int& dataType);
     QMap<int, QStringList> isSignalDataInfo(const QString& signalName, const QStringList& inputData, const QString& vehicleType,
                                             int& dataType);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);

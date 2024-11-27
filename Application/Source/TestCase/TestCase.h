@@ -24,6 +24,16 @@ public:
         ExcuteTypeRunTC,
     };
 
+    enum {
+        JsonCasesName = 0,
+        JsonCaseSizeName,
+        JsonAllCaseSizeName,
+        JsonOtherCaseSizeName,
+        Max,
+    };
+
+    QMap<int, QString> mJsonProperty;
+
 public:
     static QSharedPointer<TestCase>& instance();
 
@@ -39,7 +49,7 @@ public:
     void printJson(const QJsonObject& jsonObj);
     void appendCaseJson(QJsonObject& fileJson, QJsonObject& caseJson, const QString& caseName, const int& caseNumber,
                         const QString& resultName, const int& resultNumber, const QString& vehicleType, const QString& tcName,
-                        const int& tcNameNumber, const int& sheetNumber);
+                        const int& tcNameNumber, const int& sheetNumber, const QString& genType);
     void appendCase(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
                     const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
                     const int& sheetNumber);
@@ -52,6 +62,7 @@ public:
                              const int& sheetNumber);
     void removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& validArray);
     void genTestCaseFile(const QJsonObject& json);
+    void printCaseSize(const QString& genType);
 
 private:
     template <typename T>
@@ -60,6 +71,7 @@ private:
 
 private:
     QMap<QString, QSharedPointer<SignalDataInfo>> mSignalDataInfo = QMap<QString, QSharedPointer<SignalDataInfo>>();
+    QMap<QString, int> mCaseSizeMap;
     QJsonObject mDefaultFileJson;
     QJsonObject mNegativeFileJson;
     QJsonObject mPositiveFileJson;
