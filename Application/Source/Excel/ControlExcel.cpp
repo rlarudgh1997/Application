@@ -1268,16 +1268,16 @@ QMap<int, QStringList> ControlExcel::isSignalDataInfo(const QString& signalName,
         fileList = isSignalFileList(sfcCommonSignal, vehicleType);
         QMap<int, QStringList> sfcCommonDataInfo = isParsingFileDataInfo(sfcCommonSignal, inputData, fileList, dataType);
         QStringList sfcCommonValueEnum = sfcCommonDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
+        sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = sfcCommonValueEnum;
 #if 0
         qDebug() << "=================================================================================================";
         qDebug() << "Signal :" << signalName << "->" << sfcCommonSignal;
-        qDebug() << "\t DataType  :" << dataType;
-        qDebug() << "\t FileList  :" << fileList;
-        qDebug() << "\t ValueEnum :" <<  valueEnum;
-        qDebug() << "\t\t ->" << sfcCommonValueEnum;
+        qDebug() << "\t DataType   :" << dataType;
+        qDebug() << "\t FileList   :" << fileList;
+        qDebug() << "\t 1 ValueEnum :" << valueEnum;
+        qDebug() << "\t 2 ValueEnum :" << sfcCommonValueEnum;
         qDebug() << "=================================================================================================\n\n";
 #endif
-        sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = sfcCommonValueEnum;
     }
     return sfcDataInfo;
 }
@@ -1762,13 +1762,10 @@ QStringList ControlExcel::isSignalValueEnum(const bool& toEnum, const QString& s
 QStringList ControlExcel::isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
                                                 QString& matchingValue) {
     int signalType = isSignalType(signalName);
-    int enumIndex = 1;
-    int valueIndex = 0;
-    if ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
-        (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem))) {
-        enumIndex = 0;
-        valueIndex = 1;
-    }
+    bool vehicleState = ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
+                         (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)));
+    int enumIndex = (vehicleState) ? (1) : (0);
+    int valueIndex = (vehicleState) ? (0) : (1);
 
     QStringList currentValueEnum = valueEnum;
     if (currentValueEnum.size() == 0) {
@@ -1779,6 +1776,8 @@ QStringList ControlExcel::isConvertedSignalData(const bool& toEnum, const QStrin
     }
 
     QStringList convertDataInfo;
+    QString compareMatchingValue = matchingValue;
+    matchingValue.clear();
     for (const auto& v : currentValueEnum) {
         QString tempValueEnum = v;
         QStringList splitData = tempValueEnum.remove("\"").split(":");
@@ -1787,11 +1786,11 @@ QStringList ControlExcel::isConvertedSignalData(const bool& toEnum, const QStrin
         }
         QString data = ((toEnum) ? (splitData.at(enumIndex)) : (splitData.at(valueIndex)));
         convertDataInfo.append(data);
-        if (matchingValue.size() > 0) {
+        if (compareMatchingValue.size() > 0) {
             QString matchingData = ((toEnum) ? (splitData.at(valueIndex)) : (splitData.at(enumIndex)));
-            // qDebug() << "Matching :" << matchingValue << data << matchingData;
-            if (data.compare(matchingValue) == false) {
-                matchingValue = matchingData;
+            // qDebug() << "Matching :" << matchingData << compareMatchingValue << data;
+            if (matchingData.compare(compareMatchingValue) == false) {
+                matchingValue = data;
             }
         }
     }
@@ -1973,28 +1972,33 @@ QStringList ControlExcel::isCheckExceptionValueEnum(const QString& signalName, c
 
     QString matchingEnum = matchingValue;
     isConvertedSignalData(true, signalName, valueEnum, matchingEnum);
-
-    for (auto& origin : originData) {
-        if (origin.contains(originTimeOut)) {
-            origin.replace(originTimeOut, convertTimeOut);
-            // qDebug() << signalName << ":" << originTimeOut << "->" << convertTimeOut;
+    if (matchingEnum.size() > 0) {
+        originData.removeAll(originTimeOut);
+        originData.removeAll(convertTimeOut);
+        originData.removeAll(matchingEnum);
+    } else {
+        for (auto& origin : originData) {
+            if (origin.contains(originTimeOut)) {
+                origin.replace(originTimeOut, convertTimeOut);
+                // qDebug() << signalName << ":" << originTimeOut << "->" << convertTimeOut;
+            }
         }
     }
-
 
 #if 1
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     qDebug() << "isCheckExceptionValueEnum :" << signalName;
     qDebug() << "\t Matching        :" << matchingValue << matchingEnum;
     qDebug() << "\t InputData       :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
-    qDebug() << "\t OriginData      :" << originData;
+    qDebug() << "\t 1 OriginData    :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
+    qDebug() << "\t 2 OriginData    :" << originData;
     qDebug() << "\t ValueEnum       :" << valueEnum;
-    qDebug() << "\t 1 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
-    qDebug() << "\t 2 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
-    qDebug() << "\t 3 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
-    qDebug() << "\t 4 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV];
-    qDebug() << "\t 5 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV];
-    qDebug() << "\t 6 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem];
+    // qDebug() << "\t 1 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
+    // qDebug() << "\t 2 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
+    // qDebug() << "\t 3 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
+    // qDebug() << "\t 4 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV];
+    // qDebug() << "\t 5 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV];
+    // qDebug() << "\t 6 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem];
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
 #endif
 
@@ -2222,10 +2226,17 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
                     keywordType = isConvertedKeywordType(true, keywordType);
 
                     // Data Check : MESSAGE_TIMEOUT, timeout
+#if 1
+                    QStringList tempOriginData = isCheckExceptionValueEnum(signalName, dataInfo);
+                    if (originData != tempOriginData) {
+                        convertData = tempOriginData;
+                    }
+#else
                     originData = isCheckExceptionValueEnum(signalName, dataInfo);
                     if (originData.contains("timeout") && originData.size() == 1) {
                         convertData = originData;
                     }
+#endif
                 }
 #if 0  // NotUsedEnum 인 경우 ValueEnum 이 있는경우 추가 않하는 코드
             } else {
@@ -2251,7 +2262,7 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
                                                          QStringList(), QStringList(), ignPrecondition);
     }
 
-#if 0
+#if 1
     qDebug() << "=================================================================================================\n\n";
     for (auto iter = signalDataInfo.cbegin(); iter != signalDataInfo.cend(); ++iter) {
         SignalDataInfo dataInfo = iter.value();
@@ -2675,7 +2686,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
                 }
             }
         }
-        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
 
