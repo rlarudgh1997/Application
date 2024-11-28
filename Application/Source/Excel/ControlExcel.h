@@ -178,6 +178,7 @@ public:
     SheetConfigurationInfo isSheetConfigurationInfo(const int& sheetIndex);
     QString isIGNElapsedName(const int& ignType);
     QStringList isDescriptionDataInfo();
+    QString isKeywordString(const int keywordType);
 
 private:
     explicit ControlExcel();
@@ -207,7 +208,8 @@ private:
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
                                             const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
-    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3);
+    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
+                                      const bool& normal = true);
     QList<QStringList> isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo, const QPair<int, int>& columnInfo);
     QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result, const QString& caseInfo,
                                   const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
@@ -223,7 +225,8 @@ private:
                                 const QStringList& inputData, const QStringList& valueEnum);
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
     int isSignalType(const QString& signalName);
-    QStringList isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
+    QMap<int, QSet<QPair<QString, int>>> isSheetMergeInfo(const int& sheetIndex);
+    QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
     QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
                                                            const QStringList& columnDataInfo);
     void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
@@ -234,7 +237,6 @@ private:
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
-    QString isKeywordString(const int keywordType);
     int isKeywordType(const int& columnIndex, QString& inputData);
     QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex, const QList<int>& inputColumnList);
     bool isExcelDataValidation();
