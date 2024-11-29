@@ -2092,20 +2092,190 @@ QMap<int, QSet<QPair<QString, int>>> ControlExcel::isSheetMergeInfo(const int& s
         }
     }
 
-    // isContainsRowInfo
+    int rowMax = sheetData.size();
+
+    // QMap<TCNameIndex, QPair<TCName, ResultNameList>>
+    QMap<int, QPair<QString, QStringList>> tcNameRelationship;
+    // QMap<TCNameIndex, QPair<VehicleType, Config>>
+    QMap<int, QPair<QString, QString>> configRelationship;
+    int tcNameSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)].size();
+    int vehicleTypeSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)].size();
+    int configSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)].size();
+    if ((rowMax == tcNameSize) && (rowMax == vehicleTypeSize) && (rowMax == configSize)) {
+        QString foundTCName;
+        QPair<QString, QString> fountConfig;
+        QStringList resultNameList;
+
+        for (int index = 0; index < rowMax; ++index) {
+            QString resultName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)].at(index);
+            bool appendResult = ((ivis::common::isContainsString(resultName, merge) == false) &&
+                                 (ivis::common::isContainsString(resultName, mergeEnd) == false));
+            if (appendResult) {
+                ivis::common::getRemoved(resultName, mergeInfos);
+                resultNameList.append(resultName);
+            }
+
+            QString tcName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)].at(index);
+            bool foundState = false;
+            bool appendRelationship = false;
+            if (ivis::common::isContainsString(tcName, mergeStart)) {
+                foundState = true;
+            } else if (ivis::common::isContainsString(tcName, mergeEnd)) {
+                appendRelationship = true;
+            } else {
+                if (ivis::common::isContainsString(tcName, merge) == false) {
+                    foundState = true;
+                    appendRelationship = true;
+                }
+            }
+
+            if (foundState) {
+                foundTCName = tcName;
+                ivis::common::getRemoved(foundTCName, mergeInfos);
+            }
+            if (appendRelationship) {
+                tcNameRelationship[tcNameRelationship.size()] = qMakePair(foundTCName, resultNameList);
+                foundTCName.clear();
+                resultNameList.clear();
+
+                QString vehicleType =
+                    tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)].at(index);
+                QString config = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)].at(index);
+
+                ivis::common::getRemoved(vehicleType, mergeInfos);
+                ivis::common::getRemoved(config, mergeInfos);
+                configRelationship[configRelationship.size()] = qMakePair(vehicleType, config);
+            }
+        }
+    }
+    for (auto iter = tcNameRelationship.cbegin(); iter != tcNameRelationship.cend(); ++iter) {
+        qDebug() << "\t TcNameRelationship[" << iter.key() << "] :" << iter.value().second.size() << iter.value();
+    }
+    for (auto iter = configRelationship.cbegin(); iter != configRelationship.cend(); ++iter) {
+        qDebug() << "\t ConfigRelationship[" << iter.key() << "] :" << iter.value();
+    }
+    qDebug() << "\n\n\n";
+
+
+
+
+    // QMap<ResultIndex, QPair<ResultName, CaseNameList>>
+    QMap<int, QPair<QString, QStringList>> resultRelationship;
+    int resultSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)].size();
+    int caseSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)].size();
+    if ((rowMax == resultSize) && (rowMax == caseSize)) {
+        QString foundResultName;
+        QStringList caseNameList;
+
+        for (int index = 0; index < rowMax; ++index) {
+            QString caseName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)].at(index);
+            bool appendCase = ((ivis::common::isContainsString(caseName, merge) == false) &&
+                               (ivis::common::isContainsString(caseName, mergeEnd) == false));
+            if (appendCase) {
+                ivis::common::getRemoved(caseName, mergeInfos);
+                caseNameList.append(caseName);
+            }
+
+            QString resultName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)].at(index);
+            bool foundState = false;
+            bool appendRelationship = false;
+            if (ivis::common::isContainsString(resultName, mergeStart)) {
+                foundState = true;
+            } else if (ivis::common::isContainsString(resultName, mergeEnd)) {
+                appendRelationship = true;
+            } else {
+                if (ivis::common::isContainsString(resultName, merge) == false) {
+                    foundState = true;
+                    appendRelationship = true;
+                }
+            }
+
+            if (foundState) {
+                foundResultName = resultName;
+                ivis::common::getRemoved(foundResultName, mergeInfos);
+            }
+            if (appendRelationship) {
+                resultRelationship[resultRelationship.size()] = qMakePair(foundResultName, caseNameList);
+                foundResultName.clear();
+                caseNameList.clear();
+            }
+        }
+    }
+    for (auto iter = resultRelationship.cbegin(); iter != resultRelationship.cend(); ++iter) {
+        qDebug() << "\t ResultRelationship[" << iter.key() << "] :" << iter.value().second.size() << iter.value();
+    }
+    qDebug() << "\n\n\n";
+
+
+
+    // QMap<CaseIndex, QPair<CaseName, QPair<InputSignal, InputData>>>
+    QMap<int, QPair<QString, QPair<QStringList, QStringList>>> caseRelationship;
+    int inputSignalSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)].size();
+    int inputDataSize = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)].size();
+    if ((rowMax == inputSignalSize) && (rowMax == inputDataSize)) {
+        QString foundCaseName;
+        QStringList inputSignalList;
+        QStringList inputDataList;
+
+        for (int index = 0; index < rowMax; ++index) {
+            QString inputSignal = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)].at(index);
+            QString inputData = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)].at(index);
+            inputSignalList.append(inputSignal);
+            inputDataList.append(inputData);
+
+            QString caseName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)].at(index);
+            bool foundState = false;
+            bool appendRelationship = false;
+            if (ivis::common::isContainsString(caseName, mergeStart)) {
+                foundState = true;
+            } else if (ivis::common::isContainsString(caseName, mergeEnd)) {
+                appendRelationship = true;
+            } else {
+                if (ivis::common::isContainsString(caseName, merge) == false) {
+                    foundState = true;
+                    appendRelationship = true;
+                }
+            }
+
+            if (foundState) {
+                foundCaseName = caseName;
+                ivis::common::getRemoved(foundCaseName, mergeInfos);
+            }
+            if (appendRelationship) {
+                QPair<QStringList, QStringList> inputList = qMakePair(inputSignalList, inputDataList);
+                caseRelationship[caseRelationship.size()] = qMakePair(foundCaseName, inputList);
+                foundCaseName.clear();
+                inputSignalList.clear();
+                inputDataList.clear();
+            }
+        }
+    }
+    for (auto iter = caseRelationship.cbegin(); iter != caseRelationship.cend(); ++iter) {
+        qDebug() << "\t CaseRelationship[" << iter.key() << "] :" << iter.value().second.first.size()
+                 << iter.value().second.second.size();
+    }
+    qDebug() << "\n";
+
+
+
+
+
+
+
+    // Case 기준 병합 정보 구성
     QMap<int, QPair<int, QString>> caseRowInfo;
     QPair<int, QString> foundRow;
-    for (const auto& text : tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)]) {
-        if (ivis::common::isContainsString(text, mergeStart)) {
-            QString caseName = text;
+    rowIndex = 0;
+    for (auto caseName : tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)]) {
+        if (ivis::common::isContainsString(caseName, mergeStart)) {
             ivis::common::getRemoved(caseName, mergeInfos);
             foundRow = QPair<int, QString>(rowIndex, caseName);
-        } else if (ivis::common::isContainsString(text, merge)) {
-        } else if (ivis::common::isContainsString(text, mergeEnd)) {
+        } else if (ivis::common::isContainsString(caseName, merge)) {
+        } else if (ivis::common::isContainsString(caseName, mergeEnd)) {
             int count = rowIndex - foundRow.first + 1;
             caseRowInfo[caseRowInfo.size()] = QPair<int, QString>(count, foundRow.second);
         } else {
-            caseRowInfo[caseRowInfo.size()] = QPair<int, QString>(1, text);
+            caseRowInfo[caseRowInfo.size()] = QPair<int, QString>(1, caseName);
         }
         rowIndex++;
     }
@@ -2132,8 +2302,10 @@ QMap<int, QSet<QPair<QString, int>>> ControlExcel::isSheetMergeInfo(const int& s
     QString foundCaseName = tempSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)].at(3);
     ivis::common::getRemoved(foundCaseName, mergeInfos);
     int caseIndex = sheetDataInfo.isCaseIndex(foundCaseName);
-    sheetDataInfo.updateSheetDataInfo("TEST_CASE", {"Signal1", "Signal2", "Signal3"}, {"3", "2", "1"}, caseIndex);
+    sheetDataInfo.updateSheetDataInfo("TEST_CASE", {"Signal1", "Signal"}, {"2", "1"}, caseIndex);
     sheetDataInfo.printData();
+
+
 
 #else
     QMap<int, QPair<QString, int>> foundRowInfo;
@@ -2201,6 +2373,8 @@ QPair<QStringList, QStringList> ControlExcel::isCheckExceptionValueEnum(const QS
     }
     for (auto value : valueEnum) {
         if (value.contains(originTimeOut)) {
+            originData.removeAll(originTimeOut);
+            exceptionData = QPair<QStringList, QStringList>(QStringList({originTimeOut}), originData);
             return exceptionData;
         }
     }
@@ -2226,6 +2400,7 @@ QPair<QStringList, QStringList> ControlExcel::isCheckExceptionValueEnum(const QS
         originData.removeAll(originTimeOut);
         originData.removeAll(convertTimeOut);
         originData.removeAll(matchingEnum);
+        matchingEnum = convertTimeOut;
     } else {
         for (auto& origin : originData) {
             if (origin.contains(originTimeOut)) {
@@ -2941,11 +3116,11 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
                 }
             }
         }
-        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
 
-#if 1
+#if 0
     qDebug() << "==============================================================================================";
     qDebug() << "**********************************************************************************************";
     qDebug() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
