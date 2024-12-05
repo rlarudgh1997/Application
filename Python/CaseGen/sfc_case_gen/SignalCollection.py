@@ -13,6 +13,7 @@ class SignalCollection:
         self.all_case = []
         self.satisfy_case = []
         self.others_case = []
+        self.satisfy_case_size = 0
 
     def parse_input_string(self, input_str):
         signal_objects = []
@@ -55,7 +56,7 @@ class SignalCollection:
 
     def generate_combinations(self):
         # Generate combinations from InputValueEnumHex and InputDataHex across all signals
-        value_enum_hex_lists = [signal.InputValueEnumHex for signal in self.signals if signal.InputValueEnumHex]
+        # value_enum_hex_lists = [signal.InputValueEnumHex for signal in self.signals if signal.InputValueEnumHex]
         # data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
         data_hex_lists = []
         for signal in self.signals:
@@ -74,8 +75,9 @@ class SignalCollection:
         # Create all combinations
         if data_hex_lists:
             self.satisfy_case = list(itertools.product(*data_hex_lists))
+            self.satisfy_case_size = len(self.satisfy_case)
             if __debug__:
-                print(f"조건 만족 조합수: {len(self.satisfy_case)}")
+                print(f"조건 만족 조합수: {self.satisfy_case_size}")
         else:
             print("[Error] Not a available input data set: ")
 

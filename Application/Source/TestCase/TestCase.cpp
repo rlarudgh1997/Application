@@ -277,23 +277,24 @@ QString TestCase::getSignalInfoString(const QString& genType, const int& sheetNu
         ret += QString("InputSignalName   : ") + sig + QString("\n");
         ret += QString("InputDataType   : ") + QString::number(sigDataInfo.isDataType()) + QString("\n");
         ret += QString("InputKeywordType   : ") + QString::number(sigDataInfo.isKeywordType()) + QString("\n");
-        if (resultName == "" && caseName == "" &&
-            sigDataInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64) &&
-            sigDataInfo.isValueEnum().isEmpty() == false) {
-            QStringList allEnumList;
-            for (const auto& enumString : sigDataInfo.isValueEnum()) {
-                QStringList enumSplitList = enumString.split(":");
-                for (const auto& enumSplit : enumSplitList) {
-                    if (enumSplit.contains("0x") == false) {
-                        allEnumList.append(enumSplit);
-                        break;
-                    }
-                }
-            }
-            ret += QString("InputData   : ") + allEnumList.join(", ") + QString("\n");
-        } else {
-            ret += QString("InputData   : ") + sigDataInfo.isConvertData().join(", ") + QString("\n");
-        }
+        // if (resultName == "" && caseName == "" &&
+        //     sigDataInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64) &&
+        //     sigDataInfo.isValueEnum().isEmpty() == false) {
+        //     QStringList allEnumList;
+        //     for (const auto& enumString : sigDataInfo.isValueEnum()) {
+        //         QStringList enumSplitList = enumString.split(":");
+        //         for (const auto& enumSplit : enumSplitList) {
+        //             if (enumSplit.contains("0x") == false) {
+        //                 allEnumList.append(enumSplit);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     ret += QString("InputData   : ") + allEnumList.join(", ") + QString("\n");
+        // } else {
+        //     ret += QString("InputData   : ") + sigDataInfo.isConvertData().join(", ") + QString("\n");
+        // }
+        ret += QString("InputData   : ") + sigDataInfo.isConvertData().join(", ") + QString("\n");
         ret += QString("InputPrecondition   : ") + sigDataInfo.isPrecondition().join(", ") + QString("\n");
         ret += QString("InputValueEnum   : ") + sigDataInfo.isValueEnum().join(", ") + QString("\n");
         ret += "\n\n";
@@ -557,6 +558,7 @@ void TestCase::appendOtherCaseJson(QJsonObject& fileJson, const QString& caseNam
 
     QString genType = getGenType();
     QString sendStr = getSignalInfoString(genType, sheetNumber, tcName, "", "");
+    qDebug() << "send buffer: " << sendStr;
     callPython(sendStr);
     QJsonObject otherCase = readJson();
     otherCase[titleCase] =
@@ -609,6 +611,16 @@ void TestCase::appendOtherCaseJson(QJsonObject& fileJson, const QString& caseNam
     } else {
         qDebug() << "Other Case Key Error";
     }
+
+    processCases(otherCase, mOtherData, tcName);
+    makeOtherTcInfo(otherCase, mOtherInfo, tcName);
+#if 0
+    for (auto otherMapKey : mOtherInfo[tcName].keys()) {
+        qDebug() << "mOtherInfo"
+                 << "[" << tcName << "]: " << otherMapKey << "/// originKey: " << mOtherInfo[tcName][otherMapKey];
+    }
+#endif
+
     appendCaseJson(fileJson, otherCase, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName, tcNameNumber,
                    sheetNumber, "Default");
     checkTimer.check("appendOtherCaseJson");
@@ -669,6 +681,184 @@ void TestCase::removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& val
     otherJson[mJsonProperty[JsonCasesName]] = casesArray;
 }
 
+void TestCase::processCases(const QJsonObject& jsonObject, QMap<QString, TCNameDetail>& OtherDataSet, const QString& tcName) {
+    QJsonObject inputSignalList = jsonObject["InputSignalList"].toObject();
+    QJsonObject cases = jsonObject["cases"].toObject();
+
+    TCNameDetail tcNameDetail;  // 현재 TCName에 대한 데이터 저장
+
+    // 각 case를 처리
+    for (auto it = cases.begin(); it != cases.end(); ++it) {
+        QString caseKey = it.key();                    // 현재 case의 키
+        QJsonArray caseValues = it.value().toArray();  // 현재 case의 값 리스트
+        CaseDetail caseDetail;                         // 각 case의 세부 정보를 저장할 객체
+
+        // caseValues를 반복하여 InputSignalList에서 해당 신호 정보 가져오기
+        int index = 0;
+        for (auto sigIt = inputSignalList.begin(); sigIt != inputSignalList.end(); ++sigIt, ++index) {
+            QString signalKey = sigIt.key();
+            QJsonObject signalData = sigIt.value().toObject();
+
+            if (index >= caseValues.size()) {
+                break;  // caseValues 범위를 벗어나지 않도록
+            }
+
+            // 현재 신호의 InputData 배열과 caseValues 비교
+            QJsonArray inputDataArray = signalData["InputData"].toArray();
+            QJsonArray preconditionDataArray = signalData["Precondition"].toArray();
+            QString caseValue = caseValues[index].toString();
+            QVariantList updatedPreconditions;
+
+            if (signalKey == "SFC.Private.IGNElapsed.Elapsed") {
+                int ignIdx = 0;
+                for (const QJsonValue& value : inputDataArray) {
+                    if (value.toString() == caseValue) {
+                        break;
+                    } else {
+                        ignIdx++;
+                    }
+                }
+                if (ignIdx < inputDataArray.size() && ignIdx < preconditionDataArray.size()) {
+                    updatedPreconditions.append(preconditionDataArray[ignIdx].toString());
+                } else {
+                    qDebug() << "IGN Index Error";
+                }
+            } else {
+                // InputData와 caseValue 비교 후 다른 값들을 Precondition으로 설정
+                for (const QJsonValue& value : inputDataArray) {
+                    if (value.toString() != caseValue) {
+                        updatedPreconditions.append(value.toString());
+                    }
+                }
+            }
+
+            // 해당 신호 정보를 가져와 새로운 구조체에 저장
+            SignalDetail signalDetail;
+            signalDetail["DataType"] = signalData["DataType"].toInt();
+            signalDetail["InputData"] = caseValue;
+            signalDetail["KeywordType"] = signalData["KeywordType"].toInt();
+            signalDetail["Precondition"] = updatedPreconditions;
+            signalDetail["ValueEnum"] = signalData["ValueEnum"].toObject().toVariantMap();
+
+            // caseDetail에 신호별 데이터 추가
+            caseDetail.insert(signalKey, signalDetail);
+        }
+
+        // if (it == cases.begin()) {
+        //     qDebug() << "caseDetail: " << caseDetail;
+        // }
+
+        // 현재 caseKey에 대한 데이터를 TCNameDetail에 추가
+        tcNameDetail.insert(caseKey, caseDetail);
+    }
+
+    // 최종적으로 TCName을 기준으로 멤버 변수에 저장
+    OtherDataSet.insert(tcName, tcNameDetail);
+}
+
+void TestCase::makeOtherTcInfo(const QJsonObject& jsonObject, QMap<QString, QMap<QString, QString>>& OtherInfo,
+                               const QString& tcName) {
+    if (!OtherInfo.contains(tcName)) {
+        // tcName 이 없으면 빈 QMap을 추가
+        OtherInfo[tcName] = QMap<QString, QString>();
+    } else {
+        qDebug() << "Error: " << tcName << "Other data already exits...";
+        return;
+    }
+    QJsonObject inputSignalList = jsonObject["InputSignalList"].toObject();
+    QJsonObject cases = jsonObject["cases"].toObject();
+
+    // 각 case를 처리
+    for (auto it = cases.begin(); it != cases.end(); ++it) {
+        QString caseKey = it.key();                    // 현재 case의 키
+        QJsonArray caseValues = it.value().toArray();  // 현재 case의 값 리스트
+
+        // caseValues를 반복하여 InputSignalList에서 해당 신호 정보 가져오기
+        int index = 0;
+        for (auto sigIt = inputSignalList.begin(); sigIt != inputSignalList.end(); ++sigIt, ++index) {
+            QString signalKey = sigIt.key();
+            QJsonObject signalData = sigIt.value().toObject();
+
+            if (index >= caseValues.size()) {
+                break;  // caseValues 범위를 벗어나지 않도록
+            }
+
+            // 현재 신호의 InputData 배열과 caseValues 비교
+            QJsonArray inputDataArray = signalData["InputData"].toArray();
+            QJsonArray preconditionDataArray = signalData["Precondition"].toArray();
+            QString caseValue = caseValues[index].toString();
+
+            if (signalKey == "SFC.Private.IGNElapsed.Elapsed") {
+                int ignIdx = 0;
+                for (const QJsonValue& value : inputDataArray) {
+                    if (value.toString() == caseValue) {
+                        break;
+                    } else {
+                        ignIdx++;
+                    }
+                }
+                if (ignIdx < inputDataArray.size() && ignIdx < preconditionDataArray.size()) {
+                    QString triggerInfo = getTriggerInfo(caseValues, signalKey, index, preconditionDataArray[ignIdx]);
+                    // qDebug() << "triggerInfo: " << triggerInfo;
+                    insertTriggerInfo(OtherInfo, tcName, triggerInfo, caseKey);
+                } else {
+                    qDebug() << "IGN Index Error";
+                }
+            } else {
+                // InputData와 caseValue 비교 후 다른 값들을 Precondition으로 설정
+                for (const QJsonValue& value : inputDataArray) {
+                    if (value.toString() != caseValue) {
+                        QString triggerInfo = getTriggerInfo(caseValues, signalKey, index, value);
+                        // qDebug() << "triggerInfo: " << triggerInfo;
+                        insertTriggerInfo(OtherInfo, tcName, triggerInfo, caseKey);
+                    }
+                }
+            }
+        }
+    }
+}
+
+QString TestCase::getTriggerInfo(const QJsonArray& caseValues, const QString& triggerSigName, const int& triggerSigIndex,
+                                 const QJsonValue& preconditionValue) {
+    QStringList preconditionStrList;
+    for (int caseValueIdx = 0; caseValueIdx < caseValues.size(); caseValueIdx++) {
+        if (triggerSigIndex != caseValueIdx) {
+            preconditionStrList << caseValues[caseValueIdx].toString();
+        } else {
+            preconditionStrList << preconditionValue.toString();
+        }
+    }
+    QString preconditionStr = preconditionStrList.join(", ");
+    QString inputStr = QString("=>" + triggerSigName + ":" + caseValues[triggerSigIndex].toString());
+    return preconditionStr + inputStr;
+}
+
+void TestCase::insertTriggerInfo(QMap<QString, QMap<QString, QString>>& OtherInfo, const QString& tcName,
+                                 const QString& triggerInfo, const QString& originCasesKey) {
+    if (!OtherInfo.contains(tcName)) {
+        qDebug() << "Error: "
+                 << "You Cannot insert to OtherInfo[" << tcName << "]";
+        return;
+    }
+
+    if (OtherInfo[tcName].contains(triggerInfo)) {
+        qDebug() << "Redundancy error";
+        return;
+    } else {
+        OtherInfo[tcName].insert(triggerInfo, originCasesKey);
+    }
+
+    // Redundancy 확인해보려면 아래 라인처럼 구현하면 됨
+    // if (OtherInfo[tcName].contains(triggerInfo)) {
+    //     int redundancy = OtherInfo[tcName][triggerInfo].toInt();
+    //     redundancy++;
+    //     OtherInfo[tcName].insert(triggerInfo, QString::Number(redundancy));
+    // } else {
+    //     int redundancy = 1;
+    //     OtherInfo[tcName].insert(triggerInfo, QString::Number(redundancy));
+    // }
+}
+
 void TestCase::printCaseSize(const QString& genType) {
     qDebug() << genType + QString(" Result==============================================================================");
     int sum = 0;
@@ -704,6 +894,13 @@ void TestCase::genTestCaseFile(const QJsonObject& json) {
             QString vehicleType = tcObj["VehicleType"].toString();
 
             if (!tcName.isEmpty()) {
+                QString othersResultName;
+                QStringList othersInputSignalList;
+                QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> othersSignalListInfo;
+                QStringList othersOutputSignal;
+                QStringList othersOutputValue;
+                QVector<bool> othersIsInitialize;
+
                 qDebug().noquote() << QString("  ├ TCName: %1").arg(tcName);
                 qDebug().noquote() << QString("  ├ VehicleType: %1").arg(vehicleType);
 
@@ -804,17 +1001,23 @@ void TestCase::genTestCaseFile(const QJsonObject& json) {
                                     qDebug().noquote() << QString("  │  │  │  │  ├ [%1]").arg(subArrayValue);
                                 }
 #endif
-                                QString signalName;
-                                QString signalValue;
-                                QString enumString;
-                                QString triggerSignalName;
-                                QString triggerSignalValue;
-                                QString triggerSignalValueComment;
-                                // NOTE: Case의 시그널 갯수
-                                for (int i = 0; i < inputSignalList.size(); i++) {
-                                    if (caseName == ControlExcel::instance().data()->isKeywordString(
-                                                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other))) {
-                                                                        } else {
+                                if (caseName == ControlExcel::instance().data()->isKeywordString(
+                                                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other))) {
+                                    othersResultName = resultName;
+                                    othersInputSignalList = inputSignalList;
+                                    othersSignalListInfo = signalList;
+                                    othersOutputSignal = outputSignal;
+                                    othersOutputValue = outputValue;
+                                    othersIsInitialize = isInitialize;
+                                } else {
+                                    QString signalName;
+                                    QString signalValue;
+                                    QString enumString;
+                                    QString triggerSignalName;
+                                    QString triggerSignalValue;
+                                    QString triggerSignalValueComment;
+                                    // NOTE: Case의 시그널 갯수
+                                    for (int i = 0; i < inputSignalList.size(); i++) {
                                         // NOTE: inputSignal이 NotTrigger가 아니고 Empty가 아닐 경우에만 TC Case를 생성한다.
                                         if (std::get<2>(signalList[i]) !=
                                                 static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger) &&
@@ -925,6 +1128,104 @@ void TestCase::genTestCaseFile(const QJsonObject& json) {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+                if (mOtherInfo[tcName].isEmpty() == false) {
+                    int signalCount = 0;
+                    QStringList parts;
+                    QString signalName;
+                    QString signalValue;
+                    QStringList triggerInfo;
+                    QString triggerSignal;  // Vehicle.System.Undefined.Inter_ConfigEBS
+                    QString triggerValue;
+                    QString enumString;
+                    QString triggerEnumString;
+                    // NOTE: Others TC Case 생성
+                    // NOTE: othersResultName
+                    // NOTE: othersInputSignalList
+                    // NOTE: othersSignalListInfo
+                    // NOTE: othersOutputSignal
+                    // NOTE: othersOutputValue
+                    // NOTE: othersIsInitialize
+                    for (auto otherMapKey : mOtherInfo[tcName].keys()) {
+                        // NOTE: => 를 중심으로 앞의 데이터는 Prcondition 뒤는 input
+                        // NOTE: 분리된 input을 다시 :를 중심으로 name과 value로 분리.
+                        // NOTE: "10, 0x2, 0x1, 0x0, 0x1, 0x4=>Vehicle.System.Undefined.Inter_ConfigEBS:0x2"
+                        // NOTE: 1. => 기준으로 문자열 분리
+                        parts = otherMapKey.split("=>");
+
+                        if (parts.size() == 2) {
+                            // NOTE: 앞쪽 문자열 처리 (쉼표로 구분된 리스트)
+
+                            testCaseFile.write("- name: " + tcName + ", " + othersResultName + ", " + "Others" + " " +
+                                                   QString::number(testCaseCount++),
+                                               1);
+                            if (vehicleType.isEmpty() == false) {
+                                testCaseFile.write("tag: " + vehicleType, 2, 1);
+                            }
+                            testCaseFile.write("precondition:", 2, 1);
+
+                            // NOTE: 뒷쪽 문자열 처리 (:로 구분)
+                            triggerInfo = parts[1].split(":");
+
+                            // NOTE: 공백 제거 및 트리밍
+                            // NOTE: 여기서 ,로 분리된 value에 맞는 signal을 붙여서 precondition생성
+                            signalCount = 0;
+                            for (QString& number : parts[0].split(",", Qt::SkipEmptyParts)) {
+                                number = number.trimmed();
+                                enumString = std::get<4>(othersSignalListInfo[signalCount])[number].toString();
+                                if (triggerInfo[0] == std::get<0>(othersSignalListInfo[signalCount])) {
+                                    triggerEnumString = std::get<4>(othersSignalListInfo[signalCount])[triggerInfo[1]].toString();
+                                }
+                                if (std::get<0>(othersSignalListInfo[signalCount]).contains("SFC.Private.IGNElapsed")) {
+                                    signalName = ControlExcel::instance().data()->isIGNElapsedName(number.toInt());
+                                    signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                } else {
+                                    signalName = std::get<0>(othersSignalListInfo[signalCount]);
+                                    signalValue = number;
+                                }
+                                enumString = enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
+                                testCaseFile.write("- " + signalName + ": " + signalValue + enumString, 3);
+                                signalCount++;
+                            }
+
+                            if (othersIsInitialize.contains(true)) {
+                                testCaseFile.write("init:", 2, 1);
+                                for (int initCnt = 0; initCnt < othersIsInitialize.size(); initCnt++) {
+                                    if (othersIsInitialize[initCnt] == true) {
+                                        if (othersOutputValue[initCnt].contains("0x")) {
+                                            testCaseFile.write("- " + othersOutputSignal[initCnt] + ": 0x0", 3);
+                                        } else {
+                                            testCaseFile.write("- " + othersOutputSignal[initCnt] + ": 0", 3);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (parts[1].split(":").size() == 2) {
+                                testCaseFile.write("input:", 2, 1);
+                                if (triggerInfo[0].contains("SFC.Private.IGNElapsed")) {
+                                    triggerSignal = ControlExcel::instance().data()->isIGNElapsedName(triggerInfo[1].toInt());
+                                    triggerValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                } else {
+                                    triggerSignal = triggerInfo[0];
+                                    triggerValue = triggerInfo[1];
+                                }
+                                triggerEnumString =
+                                    triggerEnumString.isEmpty() ? QString() : QString(" # %1").arg(triggerEnumString);
+                                testCaseFile.write("- " + triggerSignal + ": " + triggerValue + triggerEnumString, 3);
+                            }
+                            testCaseFile.write("output:", 2);
+                            for (int outputCnt = 0; outputCnt < othersOutputSignal.size(); outputCnt++) {
+                                QString tempOutputSignal = othersOutputSignal[outputCnt];
+                                if (tempOutputSignal.contains("Collect")) {
+                                    tempOutputSignal = "collect";
+                                }
+                                (outputCnt == othersOutputSignal.size() - 1)
+                                    ? testCaseFile.write("- " + tempOutputSignal + ": " + othersOutputValue[outputCnt], 3, 2)
+                                    : testCaseFile.write("- " + tempOutputSignal + ": " + othersOutputValue[outputCnt], 3);
                             }
                         }
                     }

@@ -1,5 +1,40 @@
 ======================================================================================================================================================
 # [ToDo]
+- 특정 케이스 타임아웃인 경우
+	: isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
+							QStringList({"IMG_TelltaleABSAmberLamp_stat", "", ""}),
+							false);
+
+	: ValueEnum 의 값을 value 만 뽑아서 ConvertData 로 전달
+	: 아래 1번 케이스의 timeout 인 경우 MESSAGE_TIMEOUT 의 value 대신에 timeout 을 저장하여 전달
+
+		[1 "Vehicle.CV.EAPU.Input_EAPURedWarnStatus" ] : 1
+			DataType     : 1
+			Initialize   : false
+			KeywordType  : 0
+			OriginData   : 3 QList("MESSAGE_TIMEOUT", "[CustomNotTrigger]OFF", "ON")
+			ConvertData  : 3 QList("0x0", "0x1", "timeout")
+			ValueEnum    : 3 QList("0x0:\"OFF\"", "0x1:\"ON\"", "0x2:\"MESSAGE_TIMEOUT\"")
+			NotUsedEnum  : 0 QList()
+			Precondition : 1 QList("timeout")
+
+		[2 "Vehicle.CV.EAPU.Input_EAPURedWarnStatus" ] : 1
+			DataType     : 1
+			Initialize   : false
+			KeywordType  : 0
+			OriginData   : 3 QList("MESSAGE_TIMEOUT", "[CustomNotTrigger]OFF", "ON")
+			ConvertData  : 3 QList("0x0", "0x1", "0x2")
+			ValueEnum    : 3 QList("0x0:\"OFF\"", "0x1:\"ON\"", "0x2:\"DEFAULT\"")
+			NotUsedEnum  : 3 QList("0x0", "0x1", "timeout")
+			Precondition : 1 QList("DEFAULT")
+
+
+
+
+
+
+
+
 - timeout 인 경우
 	: 상엽이가 사용하는 케이스, vehicle.* 만 해당사항
 	: matching table 데이터 확인 하여 -> TIMEOUT, ELSE 있는지 확인

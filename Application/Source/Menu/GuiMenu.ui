@@ -432,7 +432,7 @@
   </action>
   <action name="actionRunTCMulti">
    <property name="text">
-    <string>RunMultiDocker</string>
+    <string>Gen TC New</string>
    </property>
    <property name="shortcut">
     <string>Alt+M</string>

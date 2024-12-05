@@ -104,15 +104,13 @@ private:
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
-            "ConfigTypeSheetName",
-            QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds", "Inters", "Outputs",
-                                   "Configs"})));
+            "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
+                                                          "Inters", "Outputs", "Configs"})));
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
 
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
-            "ConfigTypeConfigTitle",
-            QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
+            "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
 
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
@@ -122,7 +120,7 @@ private:
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeDeleteFileTC] = QPair<QString, QVariant>("ConfigTypeDeleteFileTC", QVariant(true));
-        mConfigInfoData[ConfigTypeSaveConvertExcel] = QPair<QString, QVariant>("ConfigTypeSaveConvertExcel", QVariant(false));
+        mConfigInfoData[ConfigTypeSaveConvertExcel] = QPair<QString, QVariant>("ConfigTypeSaveConvertExcel", QVariant(true));
 
         mConfigInfoData[ConfigTypeExcelMergeStart] =
             QPair<QString, QVariant>("ConfigTypeExcelMergeStart", QVariant("[MergeStart]"));

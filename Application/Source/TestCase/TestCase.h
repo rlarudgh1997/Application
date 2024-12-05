@@ -13,6 +13,12 @@
 #include "ConfigSetting.h"
 #include "ControlExcel.h"  // 임시방편임. 사라질 예정
 
+// for other case
+using SignalDetail = QMap<QString, QVariant>;    // 개별 신호 데이터를 저장할 구조
+using CaseDetail = QMap<QString, SignalDetail>;  // 각 Case의 전체 신호 데이터
+using TCNameDetail = QMap<QString, CaseDetail>;  // TCName을 추가한 전체 구조
+//
+
 class TestCase : public QObject {
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER2(QMap, int, QVariant, SheetData, false)
@@ -61,6 +67,12 @@ public:
                              const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
                              const int& sheetNumber);
     void removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& validArray);
+    void processCases(const QJsonObject& jsonObject, QMap<QString, TCNameDetail>& OtherDataSet, const QString& tcName);
+    void makeOtherTcInfo(const QJsonObject& jsonObject, QMap<QString, QMap<QString, QString>>& OtherInfo, const QString& tcName);
+    QString getTriggerInfo(const QJsonArray& caseValues, const QString& triggerSigName, const int& triggerSigIndex,
+                           const QJsonValue& preconditionValue);
+    void insertTriggerInfo(QMap<QString, QMap<QString, QString>>& OtherInfo, const QString& tcName, const QString& triggerInfo,
+                           const QString& originCasesKey);
     void genTestCaseFile(const QJsonObject& json);
     void printCaseSize(const QString& genType);
 
@@ -76,6 +88,8 @@ private:
     QJsonObject mNegativeFileJson;
     QJsonObject mPositiveFileJson;
     QJsonObject mAllFileJson;
+    QMap<QString, TCNameDetail> mOtherData;
+    QMap<QString, QMap<QString, QString>> mOtherInfo;
 };
 
 #endif  // TEST_CASE_H

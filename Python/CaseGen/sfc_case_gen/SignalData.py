@@ -59,8 +59,19 @@ class SignalData:
         if len(value_enum) == 1:
             if value_enum[0] == "":
                 return data
+        for item in data:
+            key = item.upper()
+            if key in value_enum_dict:
+                # print(value_enum_dict[key])  # 키가 있을 경우 해당 값을 출력
+                pass
+            else:
+                i = 0
+                for item in data:
+                    i+=1
+                    # print(self.InputSignalName, f"[{i}]", item)
+                print(self.InputSignalName, f"Not Defined enum key: {key}")  # 키가 없을 경우 키를 출력
         # Map data inputs to their corresponding hex values
-        return [value_enum_dict.get(item.upper(), "Unknown") for item in data]
+        return [value_enum_dict.get(item.upper(), item) for item in data]
 
     def getValueEnumHexKeyDict(self, value_enum):
         value_enum_dict_hex_key = {}

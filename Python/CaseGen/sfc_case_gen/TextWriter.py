@@ -101,8 +101,9 @@ class TextWriter:
     def make_Json_buffer(self):
         if self.check_instance_type():
             signal_name_list = self.get_signal_info()
-            # self.json_data["Cases"] = [list(item) for item in self.instance.satisfy_case]
-            self.json_data["Cases"] = {', '.join(item): list(item) for item in self.instance.satisfy_case}
+            # self.json_data["cases"] = [list(item) for item in self.instance.satisfy_case]
+            self.json_data["cases"] = {', '.join(item): list(item) for item in self.instance.satisfy_case}
+            self.json_data["CaseSize"] = self.instance.satisfy_case_size
             self.json_data["InputSignalList"] = signal_name_list
             return True
         else:

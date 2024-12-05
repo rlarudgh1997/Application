@@ -226,6 +226,7 @@ private:
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
     int isSignalType(const QString& signalName);
     QMap<int, QSet<QPair<QString, int>>> isSheetMergeInfo(const int& sheetIndex);
+    QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
     QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
                                                            const QStringList& columnDataInfo);
@@ -249,6 +250,8 @@ private:
     void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
     void constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
     void constructOutputConfigColumnDataInfo(const QList<int>& convertSheetIndexList);
+    QList<QList<QStringList>> constructConvertConfigSignalSet(const QString& configName);
+    bool appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
 
     QStringList deleteColumnRowData(const QStringList& rowData, const QList<int>& deleteColumnIndex);
