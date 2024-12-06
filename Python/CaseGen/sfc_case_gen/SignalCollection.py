@@ -57,20 +57,20 @@ class SignalCollection:
     def generate_combinations(self):
         # Generate combinations from InputValueEnumHex and InputDataHex across all signals
         # value_enum_hex_lists = [signal.InputValueEnumHex for signal in self.signals if signal.InputValueEnumHex]
-        # data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
-        data_hex_lists = []
-        for signal in self.signals:
-            if signal.InputDataHex and len(signal.InputDataHex) == 1:
-                if signal.InputDataHex[0] == "[Empty]":
-                    # print("signal.InputPreconditionHex: ", signal.InputPreconditionHex)
-                    data_hex_lists.append(signal.InputPreconditionHex)
-                else:
-                    data_hex_lists.append(signal.InputDataHex)
-            elif signal.InputDataHex and len(signal.InputDataHex) > 1:
-                data_hex_lists.append(signal.InputDataHex)
-            else:
-                print("error")
-                pass
+        data_hex_lists = [signal.InputDataHex for signal in self.signals if signal.InputDataHex]
+        # data_hex_lists = []
+        # for signal in self.signals:
+        #     if signal.InputDataHex and len(signal.InputDataHex) == 1:
+        #         if signal.InputDataHex[0] == "[Empty]":
+        #             # print("signal.InputPreconditionHex: ", signal.InputPreconditionHex)
+        #             data_hex_lists.append(signal.InputPreconditionHex)
+        #         else:
+        #             data_hex_lists.append(signal.InputDataHex)
+        #     elif signal.InputDataHex and len(signal.InputDataHex) > 1:
+        #         data_hex_lists.append(signal.InputDataHex)
+        #     else:
+        #         print("error")
+        #         pass
 
         # Create all combinations
         if data_hex_lists:

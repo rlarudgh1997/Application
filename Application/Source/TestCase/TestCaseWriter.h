@@ -4,11 +4,18 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QStorageInfo>
 
 class TestCaseWriter {
 public:
-    TestCaseWriter(const QString& basePath) : mTCFileDirPath(basePath) {
+    TestCaseWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
         mSfcDescription = ControlExcel::instance().data()->isDescriptionDataInfo();
+        if (mTCFileDirPath.size() == 0) {
+            QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+            int lastSlashIndex = path.lastIndexOf("/");
+            mTCFileDirPath = path.mid(0, lastSlashIndex);
+            mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
+        }
     }
 
     ~TestCaseWriter() {
@@ -23,14 +30,22 @@ public:
     }
 
     void write(const QString& text = "", const int& tabStep = 0, const int& newLineStep = 1) {
-        if (!mFile.isOpen()) {
-            openNewFile();
+        if (!mFile.isOpen() || mPrevSplitTcFileCount != mSplitTcFileCount) {
+            openNewFile(mSplitTcFileCount);
+            mPrevSplitTcFileCount = mSplitTcFileCount;
         }
         mStream << QString("  ").repeated(tabStep) << text << QString("\n").repeated(newLineStep);
         // mStream.flush();
         if (mFile.size() > mMaxFileSize) {
-            qDebug() << "@@@@@ File size: " << mFile.size();
-            QApplication::exit(1);
+            mFileSize += mFile.size();
+            // qDebug() << "@@@@@ File size: " << mFileSize;
+            // qDebug() << "@@@@@ mAvailableSpace: " << mAvailableSpace;
+            if (mFileSize > mAvailableSpace) {
+                qDebug() << "TC file size exceeds the available capacity of the current system.";
+                QApplication::exit(1);
+            } else {
+                mSplitTcFileCount++;
+            }
         }
     }
 
@@ -80,7 +95,7 @@ private:
         // mStream.flush();
     }
 
-    void openNewFile() {
+    void openNewFile(const int& splitTcFileCount) {
         if (mFile.isOpen()) {
             mFile.close();
         }
@@ -90,11 +105,17 @@ private:
             dir.mkpath(".");
         }
 
+        QString filename;
         QRegularExpression regex("\\[[A-Z]+\\d+\\]");
         QRegularExpressionMatch match = regex.match(mSfcDescription[2]);
 
         if (match.hasMatch()) {
-            QString filename = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0));
+            if (splitTcFileCount == 1) {
+                filename = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0));
+            } else {
+                filename = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
+                                                QString::number(splitTcFileCount) + ")");
+            }
 
             mFile.setFileName(filename);
             if (!mFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -113,7 +134,11 @@ private:
     QStringList mSfcDescription;
     // QIODevice* device;
     int mSplitSize = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTCFileSplitSize).toInt();
+    int mSplitTcFileCount = 1;
+    int mPrevSplitTcFileCount = 1;
     int mMaxFileSize = mSplitSize * 1024 * 1024;  // 100MB를 바이트로 변환
+    qint64 mAvailableSpace;
+    qint64 mFileSize;
 };
 
 #endif  // TEST_CASE_WRITER_H

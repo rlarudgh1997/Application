@@ -17,10 +17,10 @@ TestCase::TestCase() {
 }
 
 void TestCase::excuteTestCase(const int& type) {
-    if (getExcuteType() == type) {
-        qDebug() << "Running excute tc type :" << type;
-        return;
-    }
+    // if (getExcuteType() == type) {
+    //     qDebug() << "Running excute tc type :" << type;
+    //     return;
+    // }
 
     switch (type) {
         case ExcuteTypeGenTC: {
@@ -881,7 +881,9 @@ void TestCase::printCaseSize(const QString& genType) {
 }
 
 void TestCase::genTestCaseFile(const QJsonObject& json) {
-    TestCaseWriter testCaseFile("../deploy_x86");
+    TestCaseWriter testCaseFile;
+    // TestCaseWriter testCaseFile("../deploy_x86");
+
     int ignCount = 0;
     int testCaseCount = 1;
     for (const QString& sheet : json.keys()) {

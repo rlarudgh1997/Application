@@ -595,12 +595,11 @@ class DataInfoTypeEnum {
 public:
     enum class DataInfoType {
         Invalid = 0,
-        InputTCName,
-        // InputTCNameRemove,  // TCName 기준 시그널 에서 중복 시그널을 삭제 하고 중복 제거
-        InputCase,
-        InputCaseRemove,  // TCName 기준 시그널 에서 Case 기준 시그널을 삭제 하고 중복 제거
-        Ouput,
-        Config,
+        NormalCaseRemove,  // TCName 기준 시그널 에서 Case 기준 시그널을 삭제 하고 중복 제거
+        NoramlConfig,
+        TCDefault,
+        TCCase,
+        TCOuput,
         Max,
     };
 };

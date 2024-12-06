@@ -225,7 +225,6 @@ private:
                                 const QStringList& inputData, const QStringList& valueEnum);
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
     int isSignalType(const QString& signalName);
-    QMap<int, QSet<QPair<QString, int>>> isSheetMergeInfo(const int& sheetIndex);
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
     QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
@@ -259,6 +258,9 @@ private:
     QString constructKeywordCaseName(const QString& originCaseName, const QString& convertCaseName);
 
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
+
+
+    void constrtuctSheetTest(const int& sheetIndex);
 
 protected:
     virtual AbstractHandler* isHandler();

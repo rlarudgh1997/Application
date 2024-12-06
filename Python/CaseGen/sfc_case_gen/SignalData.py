@@ -3,7 +3,6 @@ SignalData.py
 
 This module provides Data for VSM or SFC Signal
 """
-import numpy as np
 
 class SignalData:
     def __init__(self, gen_type, name, data_type, keyword_type, data, precondition, value_enum):
@@ -104,7 +103,7 @@ class SignalData:
             if value_enum[0] == "":
                 if len(data) >= 1:
                     flag = True
-                    ret = np.iinfo(np.uint32).max
+                    ret = 0xFFFFFFFF # np.iinfo(np.uint32).max
                     while (flag == True):
                         for elem in data:
                             ret += 1
