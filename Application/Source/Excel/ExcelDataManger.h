@@ -9,16 +9,30 @@
 
 class InsertData {
 public:
-    InsertData(const QString& tcName, const QString& resultName, const QString& caseName,
-               const QPair<QStringList, QStringList>& inputList) {
-        updateInsertData(tcName, resultName, caseName, inputList);
+    InsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
+               const QString& caseName, const QPair<QStringList, QStringList>& inputList) {
+        updateInsertData(tcName, vehicleType, config, resultName, caseName, inputList);
     }
     InsertData() = default;
     InsertData(const InsertData& other) = default;
     InsertData& operator=(const InsertData& other) = default;
 
+    bool operator==(const InsertData& other) const {
+        return ((mTCName == other.mTCName) && (mVehicleType == other.mVehicleType) && (mConfig == other.mConfig) &&
+                (mResultName == other.mResultName) && (mCaseName == other.mCaseName) && (mInputList == other.mInputList));
+    }
+    bool operator!=(const InsertData& other) const {
+        return !(*this == other);
+    }
+
     QString isTCName() const {
         return mTCName;
+    }
+    QString isVehicleType() const {
+        return mVehicleType;
+    }
+    QString isConfig() const {
+        return mConfig;
     }
     QString isResultName() const {
         return mResultName;
@@ -31,9 +45,11 @@ public:
     }
 
 private:
-    void updateInsertData(const QString& tcName, const QString& resultName, const QString& caseName,
-                          const QPair<QStringList, QStringList>& inputList) {
+    void updateInsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
+                          const QString& caseName, const QPair<QStringList, QStringList>& inputList) {
         mTCName = tcName;
+        mVehicleType = vehicleType;
+        mConfig = config;
         mResultName = resultName;
         mCaseName = caseName;
         mInputList = inputList;
@@ -41,6 +57,8 @@ private:
 
 private:
     QString mTCName;
+    QString mVehicleType;
+    QString mConfig;
     QString mResultName;
     QString mCaseName;
     QPair<QStringList, QStringList> mInputList;
@@ -49,45 +67,44 @@ private:
 class ExcelDataManger : public QObject {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(QVariantList, SheetData, QVariantList(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, Merge, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, MergeEnd, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(bool, ReadStateNewData, true, false)
+    REGISTER_WRITABLE_PROPERTY_LIST(QList, InsertData, NewSheetData, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelSheetData, false)
 
 public:
     static QSharedPointer<ExcelDataManger>& instance();
 
-    QPair<QStringList, QStringList> isCaseInputList(const QString& tcName, const QString& resultName, const QString& caseName);
     QList<QStringList> isSheetDataInfo();
-    int isTCNameIndex(const QString& tcName, const bool& relationship);
-    int isResultIndex(const QString& tcName, const QString& resultName, const bool& relationship);
-    int isCaseIndex(const QString& caseName, const bool& relationship);
+    QStringList isTCNameDataList();
+    QString isConfigData(const QString& tcName);
+    QStringList isResultDataList(const QString& tcName);
+    QStringList isCaseDataList(const QString& tcName, const QString& resultName);
+    QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName);
+    QList<QStringList> isOutputDataList(const QString& tcName, const QString& resultName);
+
     void updateExcelData(const QVariantList& sheetData);
     void updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputList);
-    void clear(const bool& all = false);
-    void printData(const bool& relationship = false);
+    void insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
+                            const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
+                            const bool& insertBefore);
+    void clear();
 
 private:
     explicit ExcelDataManger();
 
-    void updateRelatonshipTCName(const int& rowMax, const QMap<int, QStringList>& excelData);
-    void updateRelationshipResult(const int& rowMax, const QMap<int, QStringList>& excelData);
-    void updateRelationshipCase(const int& rowMax, const QMap<int, QStringList>& excelData);
-
-private:
-    QList<InsertData> mExcelData;
-
-    // QMap<TCNameIndex, QPair<TCName, ResultNameList>>
-    QMap<int, QPair<QString, QStringList>> mTCNameRelationship;
-    // QMap<TCNameIndex, QPair<VehicleType, Config>>
-    QMap<int, QPair<QString, QString>> mConfigRelationship;
-    // QMap<ResultIndex, QPair<ResultName, CaseNameList>>
-    QMap<int, QPair<QString, QStringList>> mResultRelationship;
-    // QMap<CaseIndex, QPair<CaseName, QPair<InputSignal, InputData>>>
-    QMap<int, QPair<QString, QPair<QStringList, QStringList>>> mCaseRelationship;
-
-    QMap<int, QPair<QString, QStringList>> mTCNameData;
-    QMap<int, QPair<QString, QString>> mConfigData;
-    QMap<int, QPair<QString, QStringList>> mResultData;
-    QMap<int, QPair<QString, QPair<QStringList, QStringList>>> mCaseData;
+    QMap<int, QStringList> isConvertedExcelData();
+    QStringList isContainsMergeData(const int& columnIndex, const QPair<QStringList, QStringList> dataList);
+    QStringList isExcelSheetData(const int& columnIndex);
+    QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
+    QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace = false);
+    QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);
+    QString isVehicleTypeData(const QString& tcName);
+    int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
 };
 
 

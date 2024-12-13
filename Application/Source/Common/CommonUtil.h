@@ -45,39 +45,63 @@ public Q_SLOTS:                                                                 
     }                                                                                 \
 Q_SIGNALS:                                                                            \
     void signal##name##Changed(const type& name);                                     \
-                                                                                      \
 private:                                                                              \
     QMutex mMutex##name;                                                              \
     type m##name = value;
 
-// continer : QMap, QPair ....
-#define REGISTER_WRITABLE_PROPERTY_CONTAINER(CONTAINER, KEY, VALUE, NAME, NOTI)                        \
-    Q_PROPERTY(CONTAINER<KEY, VALUE> NAME READ get##NAME WRITE set##NAME NOTIFY signal##NAME##Changed) \
-public:                                                                                                \
-    CONTAINER<KEY, VALUE> get##NAME() const {                                                          \
-        return m##NAME;                                                                                \
-    }                                                                                                  \
-public Q_SLOTS:                                                                                        \
-    void set##NAME(const CONTAINER<KEY, VALUE>& info) {                                                \
-        QMutexLocker lock(&mMutex##NAME);                                                              \
-        if (m##NAME != info) {                                                                         \
-            m##NAME = info;                                                                            \
-            if (NOTI) {                                                                                \
-                emit signal##NAME##Changed(m##NAME);                                                   \
-            }                                                                                          \
-        }                                                                                              \
-    }                                                                                                  \
-Q_SIGNALS:                                                                                             \
-    void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                     \
-                                                                                                       \
-private:                                                                                               \
-    QMutex mMutex##NAMEe;                                                                              \
-    CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
+// continer : QList, QVariantList ....
+#define REGISTER_WRITABLE_PROPERTY_LIST(CONTAINER, VALUE, NAME, NOTI)                                \
+    Q_PROPERTY(CONTAINER<VALUE> NAME READ read##NAME WRITE write##NAME NOTIFY signal##NAME##Changed) \
+public:                                                                                              \
+    void clear##NAME() {                                                                             \
+        m##NAME.clear();                                                                             \
+    }                                                                                                \
+    int isSize##NAME() const {                                                                       \
+        return m##NAME.size();                                                                       \
+    }                                                                                                \
+    VALUE get##NAME(const int& index) const {                                                        \
+        if (index < m##NAME.size()) {                                                                \
+            return m##NAME.at(index);                                                                \
+        }                                                                                            \
+        throw std::out_of_range("Index out of range");                                               \
+        return VALUE();                                                                              \
+    }                                                                                                \
+    CONTAINER<VALUE> read##NAME() const {                                                            \
+        return m##NAME;                                                                              \
+    }                                                                                                \
+public Q_SLOTS:                                                                                      \
+    void set##NAME(const int& index, const VALUE& value) {                                           \
+        QMutexLocker lock(&mMutex##NAME);                                                            \
+        m##NAME.insert(index, value);                                                                \
+        if (NOTI) {                                                                                  \
+            emit signal##NAME##Changed(m##NAME);                                                     \
+        }                                                                                            \
+    }                                                                                                \
+    void write##NAME(const CONTAINER<VALUE>& info) {                                                 \
+        QMutexLocker lock(&mMutex##NAME);                                                            \
+        if (m##NAME != info) {                                                                       \
+            m##NAME = info;                                                                          \
+            if (NOTI) {                                                                              \
+                emit signal##NAME##Changed(m##NAME);                                                 \
+            }                                                                                        \
+        }                                                                                            \
+    }                                                                                                \
+Q_SIGNALS:                                                                                           \
+    void signal##NAME##Changed(const CONTAINER<VALUE>& info);                                        \
+private:                                                                                             \
+    QMutex mMutex##NAME;                                                                             \
+    CONTAINER<VALUE> m##NAME = CONTAINER<VALUE>();
 
-// continer : QMap, QPair ....
-#define REGISTER_WRITABLE_PROPERTY_CONTAINER2(CONTAINER, KEY, VALUE, NAME, NOTI)                          \
+// continer : QMap, QHash ....
+#define REGISTER_WRITABLE_PROPERTY_CONTAINER(CONTAINER, KEY, VALUE, NAME, NOTI)                           \
     Q_PROPERTY(CONTAINER<KEY, VALUE> NAME READ read##NAME WRITE write##NAME NOTIFY signal##NAME##Changed) \
 public:                                                                                                   \
+    void clear##NAME() {                                                                                  \
+        m##NAME.clear();                                                                                  \
+    }                                                                                                     \
+    int isSize##NAME() const {                                                                            \
+        return m##NAME.size();                                                                            \
+    }                                                                                                     \
     VALUE get##NAME(const KEY& key) const {                                                               \
         return m##NAME[key];                                                                              \
     }                                                                                                     \
@@ -107,9 +131,31 @@ public Q_SLOTS:                                                                 
 Q_SIGNALS:                                                                                                \
     void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                        \
     void signal##NAME##ValueChanged(const KEY& key, const VALUE& value);                                  \
-                                                                                                          \
 private:                                                                                                  \
     QMutex mMutex##NAME;                                                                                  \
+    CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
+
+// continer : ?? ....
+#define REGISTER_WRITABLE_PROPERTY_CONTAINER1(CONTAINER, KEY, VALUE, NAME, NOTI)                       \
+    Q_PROPERTY(CONTAINER<KEY, VALUE> NAME READ get##NAME WRITE set##NAME NOTIFY signal##NAME##Changed) \
+public:                                                                                                \
+    CONTAINER<KEY, VALUE> get##NAME() const {                                                          \
+        return m##NAME;                                                                                \
+    }                                                                                                  \
+public Q_SLOTS:                                                                                        \
+    void set##NAME(const CONTAINER<KEY, VALUE>& info) {                                                \
+        QMutexLocker lock(&mMutex##NAME);                                                              \
+        if (m##NAME != info) {                                                                         \
+            m##NAME = info;                                                                            \
+            if (NOTI) {                                                                                \
+                emit signal##NAME##Changed(m##NAME);                                                   \
+            }                                                                                          \
+        }                                                                                              \
+    }                                                                                                  \
+Q_SIGNALS:                                                                                             \
+    void signal##NAME##Changed(const CONTAINER<KEY, VALUE>& info);                                     \
+private:                                                                                               \
+    QMutex mMutex##NAME;                                                                               \
     CONTAINER<KEY, VALUE> m##NAME = CONTAINER<KEY, VALUE>();
 
 // enum

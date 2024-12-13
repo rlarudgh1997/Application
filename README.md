@@ -13,7 +13,8 @@
 
 # [Repo 정보]
 	git clone --recursive https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git
-
+	git clone --recursive https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos-core-sfc-kkh.git
+	
 # [hosts 추가]
 	sudo vi /etc/hosts
 		10.5.216.21     gitlab.hmc.co.kr

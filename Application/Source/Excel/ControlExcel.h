@@ -259,7 +259,6 @@ private:
 
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
 
-
     void constrtuctSheetTest(const int& sheetIndex);
 
 protected:

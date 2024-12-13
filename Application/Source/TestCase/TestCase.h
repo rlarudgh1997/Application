@@ -21,7 +21,7 @@ using TCNameDetail = QMap<QString, CaseDetail>;  // TCName을 추가한 전체 �
 
 class TestCase : public QObject {
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
-    REGISTER_WRITABLE_PROPERTY_CONTAINER2(QMap, int, QVariant, SheetData, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QVariant, SheetData, false)
 
 public:
     enum {
@@ -37,8 +37,6 @@ public:
         JsonOtherCaseSizeName,
         Max,
     };
-
-    QMap<int, QString> mJsonProperty;
 
 public:
     static QSharedPointer<TestCase>& instance();
@@ -88,7 +86,6 @@ private:
     QJsonObject mNegativeFileJson;
     QJsonObject mPositiveFileJson;
     QJsonObject mAllFileJson;
-    QMap<QString, TCNameDetail> mOtherData;
     QMap<QString, QMap<QString, QString>> mOtherInfo;
 };
 
