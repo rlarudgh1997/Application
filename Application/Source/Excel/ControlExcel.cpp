@@ -4441,6 +4441,7 @@ QString ControlExcel::constructKeywordCaseName(const QString& originCaseName, co
 }
 
 void ControlExcel::constrtuctSheetTest(const int& sheetIndex) {
+#if 1
     // sheet 데이터 저장
     QVariantList sheetData = getData(sheetIndex).toList();
     ExcelDataManger::instance().data()->updateExcelData(sheetData);
@@ -4454,15 +4455,12 @@ void ControlExcel::constrtuctSheetTest(const int& sheetIndex) {
             }
         }
     }
-
     QStringList inputSignalList = QStringList({"Signal.InputSignal1", "Signal.InputSignal2"});
     QStringList inputDataList = QStringList({"11111", "22222"});
     ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result3"), QString("Case6"),
                                                            qMakePair(inputSignalList, inputDataList));
 
-
     QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
-
     sheetData.clear();
     for (auto& data : currentSheetData) {
         sheetData.append(data);
@@ -4476,102 +4474,6 @@ void ControlExcel::constrtuctSheetTest(const int& sheetIndex) {
             qDebug() << "\t Excel Save :" << filePath;
         }
     }
-
-#if 0
-    ExcelDataManger::instance().data()->isTCNameDataList();
-
-    ExcelDataManger::instance().data()->isResultDataList("TC1");
-
-    ExcelDataManger::instance().data()->isCaseDataList("TC1", "Result2");
-
-    ExcelDataManger::instance().data()->isInputDataList("TC1", "Result2", "Case4");
-    ExcelDataManger::instance().data()->isInputDataList("TEST1", "ON", "TESTCASE1");
-
-    ExcelDataManger::instance().data()->isOutputDataList("IMG_TelltaleABSAmberLamp_stat", "ON");
-
-    // QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
-
-    // sheetData = getData(3014).toList();
-    // ExcelDataManger::instance().data()->updateExcelData(sheetData);
-    // ExcelDataManger::instance().data()->isTCNameDataList();
-
-    // tcName, result, case 입력하여 해당하는 inputSignal, inputData 리스트 리턴
-    QString tcName("TEST1");
-    QString resultName("ON");
-    QString caseName("TESTCASE1");
-    QPair<QStringList, QStringList> inputList = ExcelDataManger::instance().data()->isInputDataList(tcName, resultName, caseName);
-    ExcelDataManger::instance().data()->updateCaseDataInfo(tcName, resultName, caseName, inputList);
-
-    tcName = QString("IMG_TelltaleABSAmberLamp_stat");
-    resultName = QString("ON");
-    caseName = QString("Input_ABSEBSAmberWarningSignal == MESSAGE_TIMEOUT");
-    inputList = ExcelDataManger::instance().data()->isInputDataList(tcName, resultName, caseName);
-
-    // tcName, result, case, inputList(inputSignal, inputData) 구성하여 데이터 저장
-    qDebug() << "\n\n\n ###################################################################################################";
-    qDebug() << "***************************************** TEST : a *****************************************";
-
-    QStringList inputSignalList = QStringList({"Signal1"});
-    QStringList inputDataList = QStringList({"Data1"});
-    inputList = qMakePair(inputSignalList, inputDataList);
-
-    ExcelDataManger::instance().data()->updateCaseDataInfo(tcName, resultName, caseName, inputList);
-    inputSignalList = QStringList({"InputSignal1", "InputSignal2", "InputSignal3", "InputSignal4"});
-    inputDataList = QStringList({"400", "300", "200", "100"});
-    inputList = qMakePair(inputSignalList, inputDataList);
-
-    qDebug() << "***************************************** TEST : b *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(tcName, resultName, QString("AddCase1"), inputList);
-
-    qDebug() << "***************************************** TEST : c *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(tcName, QString("AddResult1"), QString("AddCase2"), inputList);
-
-    qDebug() << "***************************************** TEST : 1 *****************************************";
-    inputSignalList = QStringList({"InputSignal1"});
-    inputDataList = QStringList({"100"});
-    inputList = qMakePair(inputSignalList, inputDataList);
-
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC1"), QString("Result1"), QString("Case1"), inputList);
-
-    qDebug() << "***************************************** TEST : 2 *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC1"), QString("Result1"), QString("Case2"), inputList);
-
-    qDebug() << "***************************************** TEST : 3 *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC1"), QString("Result2"), QString("Case3"), inputList);
-
-    qDebug() << "***************************************** TEST : 4 *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC1"), QString("Result2"), QString("Case4"), inputList);
-
-    qDebug() << "***************************************** TEST : 5 *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result1"), QString("Case4"), inputList);
-
-    qDebug() << "***************************************** TEST : 6 *****************************************";
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result2"), QString("Case5"), inputList);
-
-    qDebug() << "***************************************** TEST : d *****************************************";
-    inputSignalList = QStringList({"InputSignal1", "InputSignal2", "InputSignal3", "InputSignal4", "InputSignal5"});
-    inputDataList = QStringList({"500", "400", "300", "200", "100"});
-    inputList = qMakePair(inputSignalList, inputDataList);
-
-    ExcelDataManger::instance().data()->insertCaseDataInfo(tcName, QString("AddResult1"), QString("AddCase5"), inputList,
-                                                           QString("AddCase2"), true);
-
-    qDebug() << "***************************************** TEST : e *****************************************";
-    inputSignalList = QStringList({"InputSignal1", "InputSignal2", "InputSignal3"});
-    inputDataList = QStringList({"300", "200", "100"});
-    inputList = qMakePair(inputSignalList, inputDataList);
-
-    ExcelDataManger::instance().data()->insertCaseDataInfo(tcName, QString("AddResult1"), QString("AddCase6"), inputList,
-                                                           QString("AddCase2"), false);
-
-    // 현재 저장되어 있는 시트 데이터 확인(머지 정보 구성하여 리턴)
-    QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
-    // QVariantList converteSheetData;
-    // for (auto& data : currentSheetData) {
-    //     converteSheetData.append(data);
-    // }
-    // // updateDataControl(sheetIndex, converteSheetData);
-    // updateSheetData(3013, converteSheetData);
 #endif
 }
 

@@ -10,8 +10,9 @@
 class InsertData {
 public:
     InsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
-               const QString& caseName, const QPair<QStringList, QStringList>& inputList) {
-        updateInsertData(tcName, vehicleType, config, resultName, caseName, inputList);
+               const QString& caseName, const QPair<QStringList, QStringList>& inputList,
+               const QList<QStringList>& outputList = QList<QStringList>()) {
+        updateInsertData(tcName, vehicleType, config, resultName, caseName, inputList, outputList);
     }
     InsertData() = default;
     InsertData(const InsertData& other) = default;
@@ -19,7 +20,8 @@ public:
 
     bool operator==(const InsertData& other) const {
         return ((mTCName == other.mTCName) && (mVehicleType == other.mVehicleType) && (mConfig == other.mConfig) &&
-                (mResultName == other.mResultName) && (mCaseName == other.mCaseName) && (mInputList == other.mInputList));
+                (mResultName == other.mResultName) && (mCaseName == other.mCaseName) && (mInputList == other.mInputList) &&
+                (mOutputList == other.mOutputList));
     }
     bool operator!=(const InsertData& other) const {
         return !(*this == other);
@@ -43,16 +45,21 @@ public:
     QPair<QStringList, QStringList> isInputList() const {
         return mInputList;
     }
+    QList<QStringList> isOutputList() const {
+        return mOutputList;
+    }
 
 private:
     void updateInsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
-                          const QString& caseName, const QPair<QStringList, QStringList>& inputList) {
+                          const QString& caseName, const QPair<QStringList, QStringList>& inputList,
+                          const QList<QStringList>& outputList) {
         mTCName = tcName;
         mVehicleType = vehicleType;
         mConfig = config;
         mResultName = resultName;
         mCaseName = caseName;
         mInputList = inputList;
+        mOutputList = outputList;
     }
 
 private:
@@ -62,6 +69,7 @@ private:
     QString mResultName;
     QString mCaseName;
     QPair<QStringList, QStringList> mInputList;
+    QList<QStringList> mOutputList;
 };
 
 class ExcelDataManger : public QObject {
@@ -98,7 +106,6 @@ private:
     explicit ExcelDataManger();
 
     QMap<int, QStringList> isConvertedExcelData();
-    QStringList isContainsMergeData(const int& columnIndex, const QPair<QStringList, QStringList> dataList);
     QStringList isExcelSheetData(const int& columnIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace = false);
