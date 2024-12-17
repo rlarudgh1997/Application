@@ -9,19 +9,27 @@
 
 class InsertData {
 public:
-    InsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
-               const QString& caseName, const QPair<QStringList, QStringList>& inputList,
-               const QList<QStringList>& outputList = QList<QStringList>()) {
-        updateInsertData(tcName, vehicleType, config, resultName, caseName, inputList, outputList);
+    InsertData(const QString& tcName, const QString& check, const QString& genType, const QString& vehicleType,
+               const QString& config, const QString& resultName, const QString& caseName,
+               const QPair<QStringList, QStringList>& inputList, const QList<QStringList>& outputList = QList<QStringList>()) {
+        mTCName = tcName;
+        mCheck = check;
+        mGenType = genType;
+        mVehicleType = vehicleType;
+        mConfig = config;
+        mResultName = resultName;
+        mCaseName = caseName;
+        mInputList = inputList;
+        mOutputList = outputList;
     }
     InsertData() = default;
     InsertData(const InsertData& other) = default;
     InsertData& operator=(const InsertData& other) = default;
 
     bool operator==(const InsertData& other) const {
-        return ((mTCName == other.mTCName) && (mVehicleType == other.mVehicleType) && (mConfig == other.mConfig) &&
-                (mResultName == other.mResultName) && (mCaseName == other.mCaseName) && (mInputList == other.mInputList) &&
-                (mOutputList == other.mOutputList));
+        return ((mTCName == other.mTCName) && (mCheck == other.mCheck) && (mGenType == other.mGenType) &&
+                (mVehicleType == other.mVehicleType) && (mConfig == other.mConfig) && (mResultName == other.mResultName) &&
+                (mCaseName == other.mCaseName) && (mInputList == other.mInputList) && (mOutputList == other.mOutputList));
     }
     bool operator!=(const InsertData& other) const {
         return !(*this == other);
@@ -29,6 +37,12 @@ public:
 
     QString isTCName() const {
         return mTCName;
+    }
+    QString isCheck() const {
+        return mCheck;
+    }
+    QString isGenType() const {
+        return mGenType;
     }
     QString isVehicleType() const {
         return mVehicleType;
@@ -50,20 +64,9 @@ public:
     }
 
 private:
-    void updateInsertData(const QString& tcName, const QString& vehicleType, const QString& config, const QString& resultName,
-                          const QString& caseName, const QPair<QStringList, QStringList>& inputList,
-                          const QList<QStringList>& outputList) {
-        mTCName = tcName;
-        mVehicleType = vehicleType;
-        mConfig = config;
-        mResultName = resultName;
-        mCaseName = caseName;
-        mInputList = inputList;
-        mOutputList = outputList;
-    }
-
-private:
     QString mTCName;
+    QString mCheck;
+    QString mGenType;
     QString mVehicleType;
     QString mConfig;
     QString mResultName;
@@ -110,6 +113,8 @@ private:
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace = false);
     QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);
+    QString isCheckData(const QString& tcName);
+    QString isGenTypeData(const QString& tcName);
     QString isVehicleTypeData(const QString& tcName);
     int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
 };

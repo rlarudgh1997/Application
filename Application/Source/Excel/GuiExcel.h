@@ -197,6 +197,7 @@ private:
     void syncSheetData(const int& sheetIndex);
     bool isSheetChanged(const int& sheetIndex);
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
+    bool isDrawCheckBox(const int& sheetIndex, const int& columnIndex);
     bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
                          const int& rowEnd);
     QMap<int, QList<QPair<int, int>>> findMergeInfo(const QMap<int, QVariantList>& sheetData);
@@ -212,6 +213,7 @@ private:
     void updateDisplayMergeSplit(const int& editType, const int& sheetIndex, const int& columnStart, const int& columnCount,
                                  const int& rowStart, const int& rowCount);
     void updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
+    void updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax);
     void updateDisplaySheetText(const int& sheetIndex);
     void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column);
     void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column);
@@ -227,6 +229,7 @@ private:
     void updateDisplayValueEnum(const QVariantList& data);
     void updateDisplayTCNameResult(const QStringList& data);
     void updateDisplayAutoInputDescrtion();
+    void updateDisplayGenType();
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);

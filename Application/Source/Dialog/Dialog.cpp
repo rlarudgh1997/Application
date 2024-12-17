@@ -81,6 +81,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
         case DialogTypeNodeView:
+        case DialogTypeGenType:
         case DialogTypeAutoCompleteNormal: {
             draw = updateAutoCompleteNormal(info);
             break;
@@ -530,6 +531,7 @@ QRect Dialog::updateMainRect() {
             rect = mGui->AutoCompleteNormalWidget->geometry();
             break;
         }
+        case DialogTypeGenType:
         case DialogTypeAutoCompleteNormal: {
             mGui->AutoCompleteNormalWidget->setGeometry(QRect(0, 0, 500, 300));
             rect = mGui->AutoCompleteNormalWidget->geometry();
@@ -1030,8 +1032,11 @@ bool Dialog::updateAutoCompleteNormal(const QVariantList& info) {
     setProperty(DataTypeAutoCompleteListInput, inputStr);
     setProperty(DataTypeAutoCompleteListNormal, list);
 
+    int dialogType = getProperty(DataTypeDialogType).toInt();
+    mGui->AutoCompleteNormalInput->setVisible(dialogType != DialogTypeGenType);
     mGui->AutoCompleteNormalInput->setText(inputStr);
 
     updateAutoCompleteSuggestionsList(true, false, false, false);
+
     return true;
 }

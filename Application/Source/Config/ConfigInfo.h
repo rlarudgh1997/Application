@@ -10,7 +10,7 @@
 
 #define SCREEN_POSITION_X 50
 #define SCREEN_POSITION_Y 100
-#define SCREEN_SIZE_WIDTH 1440
+#define SCREEN_SIZE_WIDTH 1350
 #define SCREEN_SIZE_HEIGHT 900
 
 class ConfigInfo {
@@ -24,6 +24,7 @@ public:
         ConfigTypeSfcModelPath,
         ConfigTypeNodeAddressPath,
         ConfigTypeNewSheetRowCount,
+        ConfigTypeGenType,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
         ConfigTypeConfigTitle,
@@ -103,19 +104,20 @@ private:
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>(
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
+        mConfigInfoData[ConfigTypeGenType] = QPair<QString, QVariant>(
+            "ConfigTypeGenType", QVariant(QVariantList({"Default", "Negative/Positive", "Positive"})));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
                                                           "Inters", "Outputs", "Configs"})));
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
-
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
-
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
-            QVariant(QVariantList({"TCName", "VehicleType", "Config", "Result", "Case", "Input_Signal", "Input_Data",
-                                   "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data", "Negative Test"})));
+            QVariant(QVariantList({"TCName", "Check", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
+                                   "Input_Data", "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data",
+                                   "Negative Test"})));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));

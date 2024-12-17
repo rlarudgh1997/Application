@@ -70,6 +70,9 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd,
                       ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd));
 
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenType,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenType));
+
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QStringList vehicleTypeList = QStringList();
     if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
@@ -302,6 +305,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     updateDataHandler(propertyType, originSheetData);
     // updateDataControl(propertyType, originSheetData);
     TestCase::instance().data()->setSheetData(propertyType, originSheetData);
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     checkTimer.check(QString("updateSheetData[%1] : data changed !!!").arg(propertyType));
@@ -372,7 +376,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                     continue;
                 }
 
-#if 1  // KKH_EDIT_ADD_CONFIGS
+#if 1  // USE_APPEND_SHEET_COLUMN
                 if (originTitleList.size() > 0) {
                     int insertIndex = (-1);
                     for (int index = 0; index < titleList.size(); ++index) {
@@ -2638,12 +2642,16 @@ void ControlExcel::updateAutoCompleteData(const QVariantList& inputData) {
         }
     }
 
+    // qDebug() << "updateAutoCompleteData()";
+    // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
+
     updateNodeAddress(false, tcNameList, configNameList);
 }
 
 void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
     if (cellDataInfo.size() != 5) {
         qDebug() << "Fail to cell data info size :" << cellDataInfo.size();
+        return;
     }
 
     QString signalName = cellDataInfo.at(0).toString();
@@ -2656,6 +2664,7 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
     qDebug() << "updateInputDataValidation :" << signalName << inputData;
 
     if (inputData.size() == 0) {
+        // qDebug() << "Fail to input data info size : 0";
         return;
     }
 
@@ -2769,6 +2778,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
             }
         }
     }
+    checkTimer.check("updateGenDataInfo : Convert.excel_Config");
 
     // NOTE(csh): 최종 signal 조합 set 구성(row data append) + 002 excel 파일 생성
     if (appendConvertAllTCSignalSet() == true) {
@@ -3225,6 +3235,7 @@ bool ControlExcel::isExcelDataValidation() {
 // TODO(csh): 최종 pr update 시에 debug log 삭제 예정
 // #define ENABLE_DEBUG_LOG_OUTPUT
 // #define ENABLE_DEBUG_LOG_KEYWORD
+// #define ENABLE_CONFIG_TEST_LOG
 bool ControlExcel::replaceGenDataInfo() {
     const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
@@ -4145,24 +4156,102 @@ bool ControlExcel::appendConvertConfigSignalSet() {
     const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
     // Private ~ Output Sheet Loop
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; sheetIndex++) {
+    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet : " << sheetIndex;
             continue;
         }
-        // will be modified using new interface
-        // for (const auto& rowDataList : getData(sheetIndex).toList()) {
-        //     QStringList rowData = rowDataList.toStringList();
-        //     QString configStr = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config));
-        //     if (configStr.isEmpty() == true) {
-        //         continue;
-        //     }
-        //     qDebug() << "@@@@ config Data Exist : " << constructMergeKeywords("", configStr);
-        //     QList<QList<QStringList>> configDataInfo = constructConvertConfigSignalSet(constructMergeKeywords("", configStr));
-        //     qDebug() << "@@@@ config Data List : " << configDataInfo;
-
-        // }
+        QVariantList sheetData = getData(sheetIndex).toList();
+        ExcelDataManger::instance().data()->updateExcelData(sheetData);
+        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
+#if defined(ENABLE_CONFIG_TEST_LOG)
+        qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
+        qDebug() << "Sheet Index     : " << sheetIndex;
+#endif
+        // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
+        for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
+            QString tcNameStr = tcNameList.at(tcIdx);
+            QStringList resultStrList = ExcelDataManger::instance().data()->isResultDataList(tcNameStr);
+            // get - config 관련 Signal List set
+            QString configStr = ExcelDataManger::instance().data()->isConfigData(tcNameStr);
+            QList<QList<QStringList>> configDataInfoList = constructConvertConfigSignalSet(constructMergeKeywords("", configStr));
+#if defined(ENABLE_CONFIG_TEST_LOG)
+            qDebug() << "TCName          : " << tcNameStr;
+            qDebug() << "Config          : " << configStr;
+            qDebug() << "############################################################################################";
+#endif
+            // TCName 하위의 Result 리스트 기반으로 Case Data 처리
+            for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
+                QString resultStr = resultStrList.at(resultIdx);
+                QStringList caseStrList = ExcelDataManger::instance().data()->isCaseDataList(tcNameStr, resultStr);
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                qDebug() << "Result          : " << resultStr;
+#endif
+                // config data set 기준으로 Result 배수 증가 (OR 기준 : A or B or C -> Case1_A, Case1_B, Case1_C ... )
+                for (int configSetIndex = 0; configSetIndex < configDataInfoList.size(); ++configSetIndex) {
+                    bool isOtherCase = false;
+                    for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
+                        QString caseStr = caseStrList.at(caseIdx);
+                        QPair<QStringList, QStringList> inputDataList =
+                            ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr);
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                        qDebug()
+                            << ""
+                               "--------------------------------------------------------------------------------------------";
+                        qDebug() << "Case            : " << caseStr;
+                        qDebug() << "InputData(sig)  : " << inputDataList.first;
+                        qDebug() << "InputData(val)  : " << inputDataList.second;
+#endif
+                        // other 예외 처리 조건 (other에는 config data set append (X))
+                        if (inputDataList.first.isEmpty() == false && inputDataList.second.isEmpty() == false) {
+                            QList<QStringList> tmpConfigDataSet = configDataInfoList.at(configSetIndex);
+                            for (int idx = 0; idx < tmpConfigDataSet.size(); ++idx) {
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                                qDebug() << "tmpConfigDataSet : " << tmpConfigDataSet.at(idx);
+#endif
+                                inputDataList.first.append(tmpConfigDataSet[idx][static_cast<int>(
+                                    ivis::common::ExcelSheetTitle::Other::InputSignal)]);  // InputSignal - StringList
+                                inputDataList.second.append(tmpConfigDataSet[idx][static_cast<int>(
+                                    ivis::common::ExcelSheetTitle::Other::InputData)]);  // InputData - StringList
+                            }
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                            qDebug() << "InputData(sig) after append : " << inputDataList.first;
+                            qDebug() << "InputData(val) after append : " << inputDataList.second;
+#endif
+                            ExcelDataManger::instance().data()->updateCaseDataInfo(
+                                tcNameStr, resultStr,
+                                QString("%1 %2_%3").arg(caseStr).arg("config").arg(QString::number(configSetIndex)),
+                                inputDataList);
+                        } else {
+                            // others 인 경우 (input signal/data가 존재하지 않기 때문에, config signal/data append set 수행 X)
+                            inputDataList.first.append("");
+                            inputDataList.second.append("");
+                            ExcelDataManger::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                            isOtherCase = true;
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                            qDebug() << "others case (not operated input signal/data)";
+#endif
+                        }
+                    }
+                    if (isOtherCase == true) {
+                        isOtherCase = false;
+                        break;
+                    }
+                }
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                qDebug() << "############################################################################################";
+#endif
+            }
+        }
+        QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
+        updateDataControl(sheetIndex, QVariant::fromValue(currentSheetData));
+        QVariantList tmpSheetData;
+        for (auto& data : currentSheetData) {
+            tmpSheetData.append(data);
+        }
+        // TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+        updateSheetData(sheetIndex, tmpSheetData);
     }
 
     return result;
@@ -4173,111 +4262,65 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
 
     const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
-    const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
-    const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
-    const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
 
-    QList<int> usedSheetIndexList;
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; sheetIndex++) {
+    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet : " << sheetIndex;
             continue;
         }
 
-        QVariantList convertRowData;
-        usedSheetIndexList.append(sheetIndex);
-        for (const auto& rowDataList : getData(sheetIndex).toList()) {
-            const QList<int> deleteDataColumnList = QList({
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal),
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::IsInitialize),
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue),
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal),
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data),
-                // static_cast<int>(ivis::common::ExcelSheetTitle::Other::NegativeTest),
-            });
-            QStringList convertRowDataList = deleteColumnRowData(rowDataList.toStringList(), deleteDataColumnList);
-            QList<QStringList> tmpAppendConvertRowDataList;
+        QVariantList sheetData = getData(sheetIndex).toList();
+        ExcelDataManger::instance().data()->updateExcelData(sheetData);
+        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
+#if defined(ENABLE_CONFIG_TEST_LOG)
+        qDebug() << "============================[appendConvertAllTCSignalSet]=====================================";
+        qDebug() << "Sheet Index     : " << sheetIndex;
+#endif
+        // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
+        for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
+            QString tcNameStr = tcNameList.at(tcIdx);
+            QStringList resultStrList = ExcelDataManger::instance().data()->isResultDataList(tcNameStr);
+#if defined(ENABLE_CONFIG_TEST_LOG)
+            qDebug() << "TCName          : " << tcNameStr;
+            qDebug() << "############################################################################################";
+#endif
+            // TCName 하위의 Result 리스트 기반으로 Case Data 처리
+            for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
+                QString resultStr = resultStrList.at(resultIdx);
+                QStringList caseStrList = ExcelDataManger::instance().data()->isCaseDataList(tcNameStr, resultStr);
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                qDebug() << "Result          : " << resultStr;
+                qDebug() << "caseStrList : " << caseStrList;
+#endif
+                for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
+                    QString caseStr = caseStrList.at(caseIdx);
+                    QMap<QString, SignalDataInfo> appendInputSignalDataInfoMap = isInputSignalDataInfo(
+                        sheetIndex,
+                        QStringList({constructMergeKeywords("", tcNameStr), constructMergeKeywords("", resultStr),
+                                     constructMergeKeywords("", caseStr)}),
+                        true);
 
-            QString tcNameStr = convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
-            QString vehicleTypeStr = convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType));
-            QString resultStr = convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
-            QString caseStr = convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
+                    QPair<QStringList, QStringList> inputDataList =
+                        ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr);
 
-            const int curTCNameMergeKeywordType = getMergeKeywordType(tcNameStr);
-            const int curVehicleTypeMergeKeywordType = getMergeKeywordType(vehicleTypeStr);
-            const int curResultMergeKeywordType = getMergeKeywordType(resultStr);
-            const int curCaseMergeKeywordType = getMergeKeywordType(caseStr);
-
-            const int columnDataMaxSize = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max);
-
-            // others 에서는 처리하지 않기 위함
-            if (convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)).isEmpty() == false &&
-                (curCaseMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::MergeEnd) ||
-                 curCaseMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType))) {
-                QMap<QString, SignalDataInfo> appendInputSignalDataInfoMap = isInputSignalDataInfo(
-                    sheetIndex,
-                    QStringList({constructMergeKeywords("", tcNameStr), constructMergeKeywords("", resultStr),
-                                 constructMergeKeywords("", caseStr)}),
-                    true);
-
-                if (appendInputSignalDataInfoMap.isEmpty() == false) {
-                    // 기존 Case의 MergeEnd의 rowData를 Merge로 변환하여 추가
-                    QStringList tmpConvertRowData(columnDataMaxSize, "");
-                    QString tcNameMergeStr = merge;
-                    QString vehicleTypeMergeStr = merge;
-                    QString resultMergeStr = (curCaseMergeKeywordType ==
-                                              static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType))
-                                                 ? mergeStart
-                                                 : merge;
-                    QString caseMergeStr = (curCaseMergeKeywordType ==
-                                            static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType))
-                                               ? mergeStart
-                                               : merge;
-
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)] = constructMergeKeywords(
-                        tcNameMergeStr, convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)] =
-                        constructMergeKeywords(
-                            vehicleTypeMergeStr,
-                            convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)));
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)] = constructMergeKeywords(
-                        resultMergeStr, convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)));
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)] = constructMergeKeywords(
-                        caseMergeStr, convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)));
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)] =
-                        convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
-                    tmpConvertRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)] =
-                        convertRowDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
-                    tmpAppendConvertRowDataList.append(tmpConvertRowData);
-
+                    // others 인 경우 (input signal/data가 존재하지 않기 때문에, appendAllTCSignalset 수행 X)
+                    if (inputDataList.first.isEmpty() == true && inputDataList.second.isEmpty() == true) {
+                        inputDataList.first.append("");
+                        inputDataList.second.append("");
+                        ExcelDataManger::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                        break;
+                    }
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                    qDebug() << "--------------------------------------------------------------------------------------------";
+                    qDebug() << "Case            : " << caseStr;
+                    qDebug() << "InputData(sig)  : " << inputDataList.first;
+                    qDebug() << "InputData(val)  : " << inputDataList.second;
+#endif
                     for (auto iter = appendInputSignalDataInfoMap.begin(); iter != appendInputSignalDataInfoMap.end(); ++iter) {
-                        QStringList tmpConvertAppendRowData(columnDataMaxSize, "");
-                        QString tmpTCNameStr;
-                        QString tmpVehicleTypeStr;
-                        QString tmpResultStr;
-                        QString tmpCaseStr;
-                        bool isLastIndex = (std::next(iter) == appendInputSignalDataInfoMap.end());
-                        if (isLastIndex == true) {
-                            tmpTCNameStr = tcNameStr;
-                            tmpVehicleTypeStr = vehicleTypeStr;
-                            tmpResultStr = (curCaseMergeKeywordType ==
-                                            static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType))
-                                               ? constructMergeKeywords(mergeEnd, resultStr)
-                                               : resultStr;
-                            tmpCaseStr = (curCaseMergeKeywordType ==
-                                          static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType))
-                                             ? constructMergeKeywords(mergeEnd, caseStr)
-                                             : caseStr;
-                        } else {
-                            tmpTCNameStr = constructMergeKeywords(merge, tcNameStr);
-                            tmpVehicleTypeStr = constructMergeKeywords(merge, vehicleTypeStr);
-                            tmpResultStr = constructMergeKeywords(merge, resultStr);
-                            tmpCaseStr = constructMergeKeywords(merge, caseStr);
-                        }
-
                         QString inputDataStr =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
+                        QString inputSignalStr = iter.key();
                         SignalDataInfo tmpInfo = iter.value();
                         if (tmpInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
                             QStringList tmpOriginData = tmpInfo.isOriginData();
@@ -4323,47 +4366,29 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                         } else {
                             // no operation
                         }
-                        if (inputDataStr.isEmpty() == false) {
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)] =
-                                tmpTCNameStr;
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType)] =
-                                tmpVehicleTypeStr;
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)] =
-                                tmpResultStr;
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)] = tmpCaseStr;
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)] =
-                                iter.key();
-                            tmpConvertAppendRowData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)] =
-                                inputDataStr;
-                            tmpAppendConvertRowDataList.append(tmpConvertAppendRowData);
-                        } else {
-                            tmpAppendConvertRowDataList.clear();
-                        }
+                        inputDataList.first.append(inputSignalStr);
+                        inputDataList.second.append(inputDataStr);
                     }
-                }
-            }
-
-            if (tmpAppendConvertRowDataList.size() == 0) {
-                convertRowData.append(QVariant(convertRowDataList));
-            } else {
-                for (int index = 0; index < tmpAppendConvertRowDataList.size(); index++) {
-                    convertRowData.append(QVariant(tmpAppendConvertRowDataList.at(index)));
-                }
-            }
-        }
-        if ((sheetIndex != 0) && (convertRowData.size() > 0)) {
-            updateDataControl(sheetIndex, convertRowData);
-            TestCase::instance().data()->setSheetData(sheetIndex, convertRowData);
-#if defined(ENABLE_DEBUG_LOG_OUTPUT)
-            qDebug() << "[Convert Append Signal Set] Origin[" << sheetIndex << "] -> Convert[" << sheetIndex
-                     << "] :" << convertRowData.size();
-            for (const auto& rowData : convertRowData) {
-                qDebug() << "\t" << rowData;
-            }
+                    ExcelDataManger::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                    qDebug() << "InputData(sig) after append : " << inputDataList.first;
+                    qDebug() << "InputData(val) after append : " << inputDataList.second;
 #endif
+                }
+#if defined(ENABLE_CONFIG_TEST_LOG)
+                qDebug() << "############################################################################################";
+#endif
+            }
         }
+        QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
+        updateDataControl(sheetIndex, QVariant::fromValue(currentSheetData));
+        QVariantList tmpSheetData;
+        for (auto& data : currentSheetData) {
+            tmpSheetData.append(data);
+        }
+        // TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+        updateSheetData(sheetIndex, tmpSheetData);
     }
-    constructOutputConfigColumnDataInfo(usedSheetIndexList);
 
     return result;
 }
@@ -4511,7 +4536,6 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData: {
             updateAutoCompleteData(value.toList());
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {

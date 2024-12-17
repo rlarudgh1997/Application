@@ -48,9 +48,9 @@ class ExcelParser:
             start_time = time.time()
             sheet_data = []
 
-#if 1    // KKH_EDIT_ADD_CONFIGS
+#if 1    // USE_APPEND_SHEET_COLUMN
             if (sheet not in wb.sheetnames) and (sheet == "Configs"):
-                print("Sheet Config - Append Data")
+                print("Append Sheet :", sheet)
                 sheet_data.append(self.title_config)
                 self.sheet_info.append(sheet_data)
                 continue
@@ -66,7 +66,6 @@ class ExcelParser:
 
                     read_cell_text = current_cell.value
                     check_merged = any(current_cell.coordinate in merged_cell for merged_cell in merged_cells)
-
                     # check_time_any = time.time() - start_time_sheet_sub
                     # start_time_sheet_sub = time.time()
 

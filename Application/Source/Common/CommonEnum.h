@@ -89,6 +89,7 @@ public:
         PropertyTypeNodeAddressConfigName,
         PropertyTypeNodeAddressModule,
         PropertyTypeAppMode,
+        PropertyTypeGenType,
         PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
         PropertyTypeValueEnum,
@@ -336,7 +337,9 @@ public:
         Max,
     };
     enum class Other {
-        TCName = 0,
+        Check = 0,
+        TCName,
+        GenType,
         VehicleType,
         Config,
         Result,
@@ -346,9 +349,11 @@ public:
         OutputSignal,
         IsInitialize,
         OutputValue,
+#if 1    // USE_APPEND_SHEET_COLUMN
         ConfigSignal,
         Data,
         NegativeTest,
+#endif
         Max,
     };
 };

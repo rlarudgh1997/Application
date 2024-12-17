@@ -66,6 +66,7 @@ public:
         DialogTypeViewLogFileInfo,
         DialogTypeNodeView,
         DialogTypeAutoComplete,
+        DialogTypeGenType,
         DialogTypeAutoCompleteNormal,
     };
 

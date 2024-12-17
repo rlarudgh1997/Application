@@ -30,6 +30,7 @@ void HandlerExcel::initPropertyInfo() {
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
