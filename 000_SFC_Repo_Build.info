@@ -1,3 +1,328 @@
+
+====================================================================================================
+[현대 GitLab 사용]
+	[Date : 20241217]
+====================================================================================================
+[환경 설정]
+	- 권한 설정
+		repo 접근 정보 파일 복사
+			.gitconfig
+			.git-credentials
+				별도 로컬 파일에서 확인 필요
+
+		ivc-suite 접근 권한 확인
+			https://bitbucket.org/ivc-suite/workspace/overview/
+				권항 없으면 도주현 & 신지산 이사님께 권한 획득 요청
+				3개월 미사용시 권한 삭제 됨
+
+	- lib version
+		설치 정보 : [개발 환경 설정] 참고
+		버전 고정 필요 : gcc, g++, protoc
+			gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+			g++ (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+			libprotoc 3.11.4
+
+		python --version
+		gcc --version
+		g++ --version
+		cmake --version
+		protoc --version
+		clang-format-13 --version
+		Python 3.8.18
+
+		gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+		Copyright (C) 2019 Free Software Foundation, Inc.
+		This is free software; see the source for copying conditions.  There is NO
+		warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+		g++ (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
+		Copyright (C) 2019 Free Software Foundation, Inc.
+		This is free software; see the source for copying conditions.  There is NO
+		warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+		cmake version 3.22.1
+		CMake suite maintained and supported by Kitware (kitware.com/cmake).
+
+		libprotoc 3.11.4
+
+		Ubuntu clang-format version 13.0.1-2ubuntu2.2
+
+	- 환경 변수 설정
+		Repo 소스 코드 폴더 : ${HOME}/900_Code/620_SFC
+		vi ~/.bashrc
+			# User Setting
+			USER_SET=yes
+			if [ "$USER_SET" = yes ]; then
+				alias s='cd ${HOME}/900_Code/620_SFC'
+				alias sa='cd ${HOME}/900_Code/620_SFC/tc_generator'
+
+				export ALTON_SFC_CONFIGURATION=${HOME}/900_Code/620_SFC/srcs/SFC/model/SFC/config
+				export ALTON_EOL_VEHICLETYPE=ICV
+				export ALTON_SFC_CONFIGURATION_FILENAME=CV
+				#export ALTON_SFC_CONFIGURATION_FILENAME=platform
+				export ALTON_ENG_SKIP_DUMMYCALL=ON
+			fi
+			# SFC SDK environment
+			if [ -f ${HOME}/.sfc_sdk_env ]; then
+				source ${HOME}/.sfc_sdk_env
+			fi
+		source ~/.bashrc
+
+----------------------------------------------------------------------------------------------
+[Repo 빌드]
+	- 폴더 생성
+		mkdir ~/900_Code
+		mkdir ~/900_Code/620_SFC
+		cd ~/900_Code/620_SFC
+
+	- Repo init
+		repo init --submodule -u https://kkh1997@bitbucket.org/ivc-suite/sfc.manifests.git
+		repo sync
+
+	- Build
+		cd ~/900_Code/620_SFC
+		rm -rf ~/usr
+		mkdir ~/usr
+
+		./sfc_local_build.sh -c PV
+		./sfc_local_build.sh -c CV
+		./sfc_local_build.sh -c CONN
+
+		clean build
+			./sfc_local_build.sh -c PV --clean
+			./sfc_local_build.sh -c CV --clean
+			./sfc_local_build.sh -c CONN --clean
+
+
+----------------------------------------------------------------------------------------------
+[SDK 생성]
+	- SDK 설정 관련 파일 복사 및 압축 해제 : CreateSDK.tar.gz
+		mkdir ~/900_Code/620_SFC/001_SDK
+		cd ~/900_Code/620_SFC/001_SDK
+		tar -xvf CreateSDK.tar.gz
+
+	- 빌드 완료 경로
+		${HOME}/usr
+
+	- 빌드 후 pkgconfig 파일 내용 수정 : ${HOME}/usr/lig/pkgconfig/전체 파일
+		기존 배포 SDK 파일 내부의 pkgconfig 파일 사용 가능함
+		Paht : /home/sfc/usr -> ${CCOS_LIB_DIR} 으로 변경
+			(원본)
+				libdir=/home/sfc/usr/lib
+				includedir=/home/sfc/usr/include/hutil
+			(변경)
+				CCOS_LIB_DIR=
+				libdir=${CCOS_LIB_DIR}/lib
+				includedir=${CCOS_LIB_DIR}/include/hutil
+
+	- 빌드 결과물 이동
+		[PV]
+			sudo rm -rf /opt/sfc
+			sudo mkdir /opt/sfc
+			sudo cp -rf ${HOME}/usr /opt/sfc/PV
+			sudo rm -rf /opt/sfc/PV/config
+			sudo cp -rf ${HOME}/900_Code/620_SFC/srcs/SFC/model/SFC/config /opt/sfc/PV
+			sudo rm -rf /opt/sfc/PV/services/altonservice/plugins/dbgsym
+			sudo ./SDK_LIB_INFO.sh /opt/sfc/PV
+
+			cd /opt/sfc/PV
+			tar -cvf ~/900_Code/002_SDK_Create/sfc_sdk_20241218.tar.gz *
+
+
+		[CV]
+			sudo rm -rf /opt/sfc
+			sudo mkdir /opt/sfc
+			sudo cp -rf ${HOME}/usr /opt/sfc/CV
+			sudo rm -rf /opt/sfc/CV/config
+			sudo cp -rf ${HOME}/900_Code/620_SFC/srcs/SFC/model/SFC/config /opt/sfc/CV
+			sudo rm -rf /opt/sfc/CV/services/altonservice/plugins/dbgsym
+			sudo ./SDK_LIB_INFO.sh /opt/sfc/CV
+
+			cd /opt/sfc/CV
+			tar -cvf ~/900_Code/002_SDK_Create/sfc_sdk_20241218.tar.gz *
+
+
+		[CONN]
+			sudo rm -rf /opt/sfc
+			sudo mkdir /opt/sfc
+			sudo cp -rf ${HOME}/usr /opt/sfc/CONN
+			sudo rm -rf /opt/sfc/CONN/config
+			sudo cp -rf ${HOME}/900_Code/630_SFC/srcs/SFC/model/SFC/config /opt/sfc/CONN
+			sudo rm -rf /opt/sfc/CONN/services/altonservice/plugins/dbgsym
+			sudo ./SDK_LIB_INFO.sh /opt/sfc/CONN
+
+			cd /opt/sfc/CONN
+			tar -cvf ~/900_Code/620_SFC/001_SDK/sfc_sdk.tar.gz *
+
+	- SDK default 설치 경로 수정 방법
+		SDK_HEAD.info : DefaultPath 경로 수정
+			# 기본 설치 위치
+			DefaultPath="/opt/sfc"
+
+
+	- SDK 파일 생성 방법
+		cd ~/900_Code/620_SFC/001_SDK
+
+		rm -rf sfc_sdk.data
+		rm -rf sfc_sdk_*.sh
+
+		base64 -w 0 sfc_sdk.tar.gz > sfc_sdk.data
+		cat SDK_HEAD.info >> sfc_sdk_20241218.sh
+		cat sfc_sdk.data >> sfc_sdk_20241218.sh
+		cat SDK_TAIL.info >> sfc_sdk_20241218.sh
+		chmod +x sfc_sdk_20241218.sh
+
+
+	- SDK 설치 테스트
+		sudo ./sfc_sdk_20241218.sh
+			[경로 지정]
+				/opt/sfc/CONN
+
+
+	- ~/.bashrc 권한 변경
+		sudo mv ~/.bashrc ~/.bashrc.backup
+		touch ~/.bashrc
+		chmod u+w ~/.bashrc
+
+
+- 테스트
+sudo rm -rf /opt/sfc
+rm -rf sfc_sdk.data
+rm -rf sfc_sdk_*.sh
+
+base64 -w 0 sfc_sdk.tar.gz > sfc_sdk.data
+cat SDK_HEAD.info >> sfc_sdk_20241218.sh
+cat sfc_sdk.data >> sfc_sdk_20241218.sh
+cat SDK_TAIL.info >> sfc_sdk_20241218.sh
+chmod +x sfc_sdk_20241218.sh
+
+sudo ./sfc_sdk_20241218.sh
+
+/opt/sfc/CONN
+
+
+
+
+
+
+
+
+
+====================================================================================================
+[개발 환경 설정]
+====================================================================================================
+[python 설치]
+	- 3.8 이상
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 0
+	sudo update-alternatives --config python
+	python --version
+
+
+[gcc, g++ 설치]
+	- 9.4 이상 : 우분투 22.04 에 설치시 9.5 로 설치됨
+	gcc --version
+	g++ --version
+
+	sudo apt install gcc-9 g++-9
+	sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 40
+	sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 40
+
+[cmake 설치]
+	- 3.15 이상
+	cmake --version
+
+	sudo apt-get install cmake
+
+	wget https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz
+	tar zxf cmake-3.16.2.tar.gz
+	cd cmake-3.16.2
+	./bootstrap
+	make
+	sudo make install
+
+
+[protobuf 설치]
+	- 3.11.4 (test app 빌드시 docker 버전과 통일화 위해서 추천) of 3.13.0(버전명만 변경하여 진행하면됨) 사용
+	protoc --version
+
+	cd ~/buildenv
+	wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz
+	tar -xzvf protobuf-all-3.11.4.tar.gz
+	cd protobuf-3.11.4
+	./configure
+
+	make -j$(nproc)
+	make check -j$(nproc)
+
+	sudo make install
+	sudo ldconfig
+
+
+[boost 설치]
+	sudo apt install libboost-dev libboost-all-dev
+
+
+[nlohmanjson 설치]
+	cd ~/buildenv
+	git clone https://github.com/nlohmann/json.git
+	cd json/
+	mkdir build
+	cd build/
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+[yaml-cpp 설치]
+	cd ~/buildenv
+	git clone https://github.com/jbeder/yaml-cpp.git
+	cd yaml-cpp/
+	mkdir build
+	cd build/
+	cmake ..
+	make -j$(nproc)
+	sudo make install
+
+
+[yaml 설치]
+	cd ~/buildenv
+	git clone https://github.com/yaml/libyaml.git
+	cd libyaml/
+	./bootstrap
+	./configure
+	make -j$(nproc)
+	sudo make install
+
+
+[libglibmm-2.4 설치]
+	sudo apt-get install -y libglibmm-2.4
+
+
+[기타 설치]
+	sudo apt-get update
+	sudo apt-get install python3-pip libxml2-utils libgtest-dev libgmock-dev lcov
+	pip install --upgrade pip
+	pip install openpyxl
+	pip install numpy
+
+
+[clang-format-13 설치]
+	cd ~/buildenv/
+	wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+	sudo apt-get update
+	sudo apt-get install clang-format-13
+	clang-format-13 --version
+
+	sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 100
+
+
+
+
+
+=================================================================================================================================
+[현대 GitLab 변경전 사용 방법 :20241216 이전 사용 방법]
+=================================================================================================================================
 [가이드 문서]
 	https://ivis.atlassian.net/wiki/spaces/SFC/pages/1981120559/Repo+Build#1)-SFC-Full-Build-Script
 

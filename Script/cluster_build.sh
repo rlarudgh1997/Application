@@ -9,9 +9,12 @@ SDK_TARGET=/opt/fsl-imx-xwayland/4.19-warrior/environment-setup-cortexa9hf-neon-
 # CCOS_LIB_DIR : SFC SDK 설치 path 를 사용해야함
 # ~/.bashrc 마지막 줄에 정의 된 CCOS_LIB_DIR 을 사용하거나 아래에 정의도니 CCOS_LIB_DIR 사용 가능
 # 현재 아래 CCOS_LIB_DIR 사용함
-CCOS_LIB_DIR="/opt/sfc/PV"
-# CCOS_LIB_DIR="/opt/sfc/CV"
-# CCOS_LIB_DIR="/opt/sfc/CONN"
+
+SFC_PLATFORM="CONN"
+#SFC_PLATFORM="PV"
+#SFC_PLATFORM="CV"
+
+CCOS_LIB_DIR="/opt/sfc/$SFC_PLATFORM"
 SDK_HOST=$CCOS_LIB_DIR/environment-setup-sfc
 
 SET_PLATFORM=target
@@ -45,7 +48,7 @@ function setEnvironments(){
 		SET_TARGET_BUILD=0
 		SET_PLATFORM=x86
 		SDK_ENVIROMENT_PATH=$SDK_HOST
-		source $SDK_ENVIROMENT_PATH PV
+		source $SDK_ENVIROMENT_PATH $SFC_PLATFORM
 	else
 		echo "[setEnvironments] fail !!!!!!!!!!!!!!!!!!!!"
 		exit

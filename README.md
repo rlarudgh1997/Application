@@ -14,7 +14,7 @@
 # [Repo 정보]
 	git clone --recursive https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git
 	git clone --recursive https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos-core-sfc-kkh.git
-	
+
 # [hosts 추가]
 	sudo vi /etc/hosts
 		10.5.216.21     gitlab.hmc.co.kr
@@ -295,6 +295,7 @@
 		sudo apt-get install qt6-base-dev
 		sudo apt-get install qt6-declarative-dev
 		sudo apt-get install qml6-module-*
+		sudo apt-get install qtchooser qtcreator
 
 	- qtchooser qmake6 사용하도록 설정 (QT6 사용시)
 		cd /usr/bin
