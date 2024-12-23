@@ -172,6 +172,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_PROPERTY(bool, SfcSignal, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, OutputState, false, false)
     REGISTER_WRITABLE_PROPERTY(bool, CellEditSkip, false, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, bool, SheetCheckState, false)
 
 private:
     enum CellMergeType {
@@ -240,6 +241,7 @@ private:
     void updateConstructClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
     void updateDisplayEditCellShortcut(const int& editType);
+    void updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex);
     void updateDescriptionInfo(const int& sheetIndex, const int& row);
 
 public slots:

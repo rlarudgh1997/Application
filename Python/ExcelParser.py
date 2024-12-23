@@ -61,6 +61,7 @@ class ExcelParser:
 
             for row in current_sheet.iter_rows(min_row=1, max_row=current_sheet.max_row, min_col=1, max_col=current_sheet.max_column):
                 data = []
+
                 for current_cell in row:
                     # start_time_sheet_sub = time.time()
 
@@ -74,7 +75,6 @@ class ExcelParser:
                         row_start, column_start = merged_cell.min_row, merged_cell.min_col
                         row_end, column_end = merged_cell.max_row, merged_cell.max_col
                         current_merge_cell = current_sheet.cell(row=row_start, column=column_start)
-
                         if current_cell.row == row_start:
                             merge_cell_text = excel_merge_start
                         elif current_cell.row == row_end:

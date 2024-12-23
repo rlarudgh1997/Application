@@ -28,6 +28,9 @@
 		cmake --version
 		protoc --version
 		clang-format-13 --version
+
+
+
 		Python 3.8.18
 
 		gcc (Ubuntu 9.5.0-1ubuntu1~22.04) 9.5.0
@@ -97,8 +100,9 @@
 ----------------------------------------------------------------------------------------------
 [SDK 생성]
 	- SDK 설정 관련 파일 복사 및 압축 해제 : CreateSDK.tar.gz
-		mkdir ~/900_Code/620_SFC/001_SDK
-		cd ~/900_Code/620_SFC/001_SDK
+		cd ~/900_Code/620_SFC
+		mkdir ~/900_Code/620_SFC/001_CreateSDK
+		cd ~/900_Code/620_SFC/001_CreateSDK
 		tar -xvf CreateSDK.tar.gz
 
 	- 빌드 완료 경로
@@ -217,6 +221,10 @@ sudo ./sfc_sdk_20241218.sh
 	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 0
 	sudo update-alternatives --config python
 	python --version
+
+	- python 없고 python3 만 있는 경우
+		sudo apt update
+		sudo apt install python-is-python3
 
 
 [gcc, g++ 설치]

@@ -651,6 +651,9 @@ void GuiExcel::updateDisplayInsertDelete(const int& editType, const int& sheetIn
             }
         } else {
             mExcelSheet[sheetIndex]->removeRow(rowStart);
+            if (mExcelSheet[sheetIndex]->rowCount() == 0) {
+                setSheetCheckState(sheetIndex, false);
+            }
         }
     }
     // mExcelSheet[sheetIndex]->setCurrentCell(currentRowIndex, columnIndex);
@@ -763,7 +766,7 @@ void GuiExcel::updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, c
         return;
     }
 
-    qDebug() << "updateDisplaySheetNew :" << sheetIndex << rowMax << columnMax;
+    // qDebug() << "updateDisplaySheetNew :" << sheetIndex << rowMax << columnMax;
     for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < rowMax; columnIndex++) {
             if (isDrawCheckBox(sheetIndex, columnIndex)) {
@@ -771,7 +774,7 @@ void GuiExcel::updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, c
                 item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
                 item->setCheckState(Qt::Unchecked);
                 mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, item);
-                qDebug() << "Item :" << rowIndex << columnIndex;
+                // qDebug() << "Item :" << rowIndex << columnIndex;
             }
         }
     }
@@ -1023,6 +1026,9 @@ void GuiExcel::updateDisplayExcelSheet() {
         mGui->TabWidget->addTab(mExcelSheet[sheetIndex], sheet);
         // qDebug() << "\t\t Sheet[" << sheetIndex << "] : draw sheet";
 
+        // Check State Init
+        setSheetCheckState(sheetIndex, false);
+
         // Draw Sheet Data
         if (excelOpen) {
             updateDisplaySheetText(sheetIndex);
@@ -1063,22 +1069,9 @@ void GuiExcel::updateDisplayExcelSheet() {
                 qDebug() << "Fail to menu right selection action item";
             }
         });
-#if 1
         connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
-            qDebug() << "1. sectionClicked_H[" << sheetIndex << "] :" << logicalIndex;
+            updateDisplaySheetCheckState(sheetIndex, logicalIndex);
         });
-        // connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
-        //     qDebug() << "2. sectionClicked_V[" << sheetIndex << "] :" << logicalIndex;
-        // });
-        // connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
-        //                                                         [=](int logicalIndex, int oldSize, int newSize) {
-        //     qDebug() << "11. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
-        // });
-        // connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized,
-        //                                                         [=](int logicalIndex, int oldSize, int newSize) {
-        //     qDebug() << "12. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
-        // });
-#endif
 #if 0
         connect(mExcelSheet[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
             qDebug() << "4 itemClicked[" << sheetIndex << "] :" << item;
@@ -1103,6 +1096,19 @@ void GuiExcel::updateDisplayExcelSheet() {
             }
             mGui->CellInfoContent->setText(text);
         });
+#if 0
+        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
+            qDebug() << "2. sectionClicked_V[" << sheetIndex << "] :" << logicalIndex;
+        });
+        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
+                                                                [=](int logicalIndex, int oldSize, int newSize) {
+            qDebug() << "11. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
+        });
+        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized,
+                                                                [=](int logicalIndex, int oldSize, int newSize) {
+            qDebug() << "12. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
+        });
+#endif
 #endif
 
         // Resize - Cell Width/Height
@@ -1846,6 +1852,32 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
     createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, columnStart}));
 
     setCellEditSkip(false);
+}
+
+void GuiExcel::updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+    if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs)) {
+        return;
+    }
+    if (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+        return;
+    }
+    if (mExcelSheet[sheetIndex]->rowCount() == 0) {
+        return;
+    }
+
+    bool allCheck = getSheetCheckState(sheetIndex);
+    for (int rowIndex = 0; rowIndex < mExcelSheet[sheetIndex]->rowCount(); ++rowIndex) {
+        if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+            continue;
+        }
+        Qt::CheckState checkState = (allCheck) ? (Qt::CheckState::Unchecked) : (Qt::CheckState::Checked);
+        mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->setCheckState(checkState);
+    }
+    setSheetCheckState(sheetIndex, (!allCheck));
 }
 
 void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {

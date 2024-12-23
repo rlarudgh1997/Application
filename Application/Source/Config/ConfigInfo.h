@@ -115,7 +115,7 @@ private:
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
-            QVariant(QVariantList({"TCName", "Check", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
+            QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
                                    "Input_Data", "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data",
                                    "Negative Test"})));
 

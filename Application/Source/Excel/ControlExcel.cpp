@@ -346,77 +346,98 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
             QVariantList sheetData = QVariantList();
             QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath.toString()).arg(sheetIndex).arg(sheet);
             QStringList readData = ivis::common::FileInfo::readFile(filePath);
-            QStringList originTitleList;
             QStringList titleList;
+            bool checkTitle = false;
 
             properytType = sheetIndex + ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-
             if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
                 titleList = descTitle;
             } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
                 titleList = configTitle;
             } else {
                 titleList = otherTitle;
+                checkTitle = true;
             }
-            int columnMax = titleList.size();
 
+            int columnMax = titleList.size();
+            QList<int> notSameTitleIndex;
+            QList<int> readTitleIndex;
             for (int rowIndex = 0; rowIndex < readData.size(); rowIndex++) {
                 QStringList rowData = readData[rowIndex].split("\t");
-                // qDebug() << properytType << ". rowData[" << rowIndex << "] :" << rowData.size() << "," << rowData;
+                if (rowIndex < 2) {
+                    // RowIndex[0] : column 인덱스(0, 1, 2, 3....) 정보
 
-                if ((rowIndex < 2) || (rowData.size() > columnMax)) {
-                    // RowIndex[0] : column 인덱스 정보,  RowIndex[1] : title(desc, other) 정보
-                    // columnMax 보다 큰 경우경우 유효하지 않은 데이터로 판단함
-                    if ((rowIndex == 1) && (rowData.size() != columnMax)) {
-                        originTitleList = rowData;
-                        // qDebug() << "[ProperytType] :" << properytType;
-                        // qDebug() << "\t Title Origin :" << originTitleList.size() << originTitleList;
-                        // qDebug() << "\t Title New    :" << otherTitle.size() << otherTitle;
+#if 1    // USE_APPEND_SHEET_COLUMN
+                    if ((rowIndex == 1) && (checkTitle)) {    // RowIndex[1] : title(desc, other) 정보
+                        for (const auto& title : titleList) {
+                            if (rowData.contains(title) == false) {
+                                notSameTitleIndex.append(titleList.indexOf(title));
+                            }
+                        }
+                        if (notSameTitleIndex.size() > 0) {
+                            std::reverse(notSameTitleIndex.begin(), notSameTitleIndex.end());
+                            qDebug() << "The title list is not the same :" << notSameTitleIndex << sheet;
+                        }
                     }
+#endif
                     continue;
                 }
 
-#if 1  // USE_APPEND_SHEET_COLUMN
-                if (originTitleList.size() > 0) {
-                    int insertIndex = (-1);
-                    for (int index = 0; index < titleList.size(); ++index) {
-                        if ((index >= originTitleList.size()) || (titleList[index] != originTitleList[index])) {
-                            insertIndex = index;
-                            break;
-                        }
-                    }
-                    if (insertIndex > 0) {
-                        QString appendText = rowData.at(0);
-                        QString mergeText;
-                        if (ivis::common::isContainsString(appendText, mergeStart)) {
-                            mergeText = mergeStart;
-                        } else if (ivis::common::isContainsString(appendText, mergeEnd)) {
-                            mergeText = mergeEnd;
-                        } else if (ivis::common::isContainsString(appendText, merge)) {
-                            mergeText = merge;
+                if (rowData.size() > columnMax) {
+                    rowData.resize(columnMax);
+                    qDebug() << "The row data sizes are not same :" << rowData.size() << columnMax;
+                }
+
+#if 1    // USE_APPEND_SHEET_COLUMN
+                if (notSameTitleIndex.size() > 0) {
+                    QStringList temp = rowData;
+                    for (const auto& index : notSameTitleIndex) {
+                        QString appendText;
+                        int insertIndex = 0;
+                        if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+                            insertIndex = 0;    // Befor index : TCName
+                            appendText = rowData.at(0);    // Read index : TCName
+                        } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
+                            insertIndex = 1;    // After index : TCName
+                            appendText = rowData.at(0);    // Read index : TCName
+                        } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
+                            insertIndex = 2;    // Befor index : Result
+                            appendText = rowData.at(2);    // Read index : Result
                         } else {
+                            continue;
                         }
-                        // qDebug() << rowIndex << ". AppendText["  << insertIndex << "] :" << appendText << "->" << mergeText;
-                        rowData.insert(insertIndex, mergeText);
+
+                        if (appendText.contains(mergeStart)) {
+                            appendText = mergeStart;
+                        } else if (appendText.contains(mergeEnd)) {
+                            appendText = mergeEnd;
+                        } else if (appendText.contains(merge)) {
+                            appendText = merge;
+                        } else {
+                            appendText.clear();
+                        }
+                        temp.insert(insertIndex, appendText);
                     }
+                    rowData = temp;
                 }
 #endif
 
+                // 자동완성 데이터 구성 : TCName, ConfigName
+                if (rowData.size() == columnMax) {
+                    QString readText;
+                    if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                        // Description : 자동완성 구성 불필요
+                    } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+                        readText = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
+                        configNameList.append(readText);
+                    } else {
+                        readText = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+                        tcNameList.append(readText);
+                    }
+                }
+
                 // Sheet 데이터 구성
                 sheetData.append(rowData);
-
-                // 자동완성 데이터 구성 : TCName, ConfigName
-                if (rowData.size() == 0) {
-                    continue;
-                }
-
-                if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
-                    // Description : 자동완성 구성 불필요
-                } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
-                    configNameList.append(rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)));
-                } else {
-                    tcNameList.append(rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
-                }
             }
 
             rowCount.append(sheetData.size());
@@ -2972,6 +2993,7 @@ int ControlExcel::isKeywordType(const int& columnIndex, QString& inputData) {
         isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
         isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect)),
         isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
         isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
     });
 
@@ -4431,7 +4453,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
         for (auto& data : currentSheetData) {
             tmpSheetData.append(data);
         }
-        // TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+        TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
         updateSheetData(sheetIndex, tmpSheetData);
     }
 
