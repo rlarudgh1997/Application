@@ -498,7 +498,7 @@ public:
         Under,
         // Equal,
         Other,
-        Or,
+        // Or,
         NotTrigger,
         Preset,  // 10
         ValueChanged,
@@ -511,6 +511,7 @@ public:
         DependentOn,
         MoreThanEqual,  // 19
         LessThanEqual,  // 20
+        Config,
 
         CustomNotUsed,
         CustomNotTrigger,
@@ -522,6 +523,7 @@ public:
         CustomIgn,
         CustomMoreThanEqual,
         CustomLessThanEqual,
+        CustomConfig,
         CustomNotDefined,
 
         // Invalid = 0x00000000,
@@ -664,7 +666,6 @@ public:
         VehicleSystem,
     };
 };
-
 
 }  // end of namespace common
 }  // end of namespace ivis

@@ -2907,6 +2907,10 @@ QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnI
             // qMakePair(QString("Other"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
             qMakePair(QString("others"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
         };
+    } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
+        keywordPattern = {
+            qMakePair(QString("Config"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)),
+        };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) {
         keywordPattern = {
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
@@ -2946,10 +2950,6 @@ QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnI
         keywordPattern = {
             qMakePair(QString("[Cal]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Cal)),
         };
-    } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)) {
-        keywordPattern = {
-            qMakePair(QString("|"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Or)),
-        };
     } else {
         keywordPattern = {
             qMakePair(QString("[CustomNotTrigger]"),
@@ -2964,6 +2964,7 @@ QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnI
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual)),
             qMakePair(QString("[CustomLessThanEqual]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)),
+            qMakePair(QString("[CustomConfig]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)),
             qMakePair(QString("[CustomNotDefined]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)),
         };
@@ -4193,6 +4194,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
 #if defined(ENABLE_CONFIG_TEST_LOG)
         qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
+        qDebug() << "TCName List     : " << tcNameList;
 #endif
         // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
         for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
@@ -4204,6 +4206,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
 #if defined(ENABLE_CONFIG_TEST_LOG)
             qDebug() << "TCName          : " << tcNameStr;
             qDebug() << "Config          : " << configStr << ", Data : " << configDataInfoList;
+            qDebug() << "Result List     : " << resultStrList;
             qDebug() << "############################################################################################";
 #endif
             // TCName 하위의 Result 리스트 기반으로 Case Data 처리
@@ -4251,8 +4254,11 @@ bool ControlExcel::appendConvertConfigSignalSet() {
 #if defined(ENABLE_CONFIG_TEST_LOG)
                                 qDebug() << "tmpConfigDataSet : " << tmpConfigDataSet.at(idx);
 #endif
-                                QString inputSignalName =
-                                    tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)];
+                                QString inputSignalName = QString("%1%2")
+                                                              .arg(isKeywordString(static_cast<int>(
+                                                                  ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)))
+                                                              .arg(tmpConfigDataSet[idx][static_cast<int>(
+                                                                  ivis::common::ExcelSheetTitle::Other::InputSignal)]);
                                 QString inputSignalData =
                                     tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)];
                                 // Config의 SignalData Pair와 Sheet의 InputSignalData Pair에 중복되는 pair가 존재할 경우 Config를
