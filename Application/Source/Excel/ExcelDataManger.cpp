@@ -112,7 +112,7 @@ QMap<int, QStringList> ExcelDataManger::isConvertedExcelData() {
             excelSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::IsInitialize)].append(QString());
             excelSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)].append(QString());
 
-#if 1    // USE_APPEND_SHEET_COLUMN
+#if 0    // USE_APPEND_SHEET_COLUMN
             excelSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)].append(QString());
             excelSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)].append(QString());
             excelSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::NegativeTest)].append(QString());
@@ -522,21 +522,21 @@ void ExcelDataManger::updateExcelData(const QVariantList& sheetData) {
         }
     }
 
-    clear();
-    setReadStateNewData(false);
-
-    if (excelSheetData.size() == 0) {
-        qDebug() << "Not support sheet data : check sheet(description or config)";
-        return;
-    }
-
 #if 1
-    qDebug() << "updateExcelData :" << sheetData.size();
+    qDebug() << "updateExcelData :" << sheetData.size() << excelSheetData.size();
     // for (auto iter = excelSheetData.cbegin(); iter != excelSheetData.cend(); ++iter) {
     //     qDebug() << "\t ExcelData[" << iter.key() << "] :" << iter.value().size();
     // }
     qDebug() << "\n\n";
 #endif
+
+    clear();
+    setReadStateNewData(false);
+
+    if (excelSheetData.size() == 0) {
+        qDebug() << "Not support sheet(description or config) data : 0";
+        return;
+    }
 
     writeExcelSheetData(excelSheetData);
 }

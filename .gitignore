@@ -1,6 +1,8 @@
 # Add Ignore
 
 # Custom ADD >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+__pycache__
+build
 release
 debug
 */release/

@@ -383,11 +383,6 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                     continue;
                 }
 
-                if (rowData.size() > columnMax) {
-                    rowData.resize(columnMax);
-                    qDebug() << "The row data sizes are not same :" << rowData.size() << columnMax;
-                }
-
 #if 1    // USE_APPEND_SHEET_COLUMN
                 if (notSameTitleIndex.size() > 0) {
                     QStringList temp = rowData;
@@ -402,7 +397,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                             appendText = rowData.at(0);    // Read index : TCName
                         } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
                             insertIndex = 2;    // Befor index : Result
-                            appendText = rowData.at(2);    // Read index : Result
+                            appendText = rowData.at(0);    // Read index : Result
                         } else {
                             continue;
                         }
@@ -421,6 +416,12 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                     rowData = temp;
                 }
 #endif
+
+                // 최대 사이즈 기준으로 정렬
+                if (rowData.size() > columnMax) {
+                    // qDebug() << "The row data sizes are not same :" << properytType << rowData.size() << columnMax;
+                    rowData.resize(columnMax);
+                }
 
                 // 자동완성 데이터 구성 : TCName, ConfigName
                 if (rowData.size() == columnMax) {
@@ -1738,6 +1739,7 @@ QList<QStringList> ControlExcel::isOutputDataInfo(const int& sheetIndex, const Q
 }
 
 QList<QStringList> ControlExcel::isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result) {
+#if 0    // USE_APPEND_SHEET_COLUMN
     const QPair<int, int> columnInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal),
                                      static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data));
     QList<QStringList> dataInfo = isDataInfo(sheetIndex, tcName, result, QString(), columnInfo, columnInfo.first);
@@ -1763,6 +1765,9 @@ QList<QStringList> ControlExcel::isConfigDataInfo(const int& sheetIndex, const Q
             dataInfo.append(data);
         }
     }
+#else
+    QList<QStringList> dataInfo;
+#endif
 
     // if (dataInfo.size() > 0) {
     //     qDebug() << "\t isConfigDataInfo :" << dataInfo;
@@ -2127,12 +2132,14 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
             readDataInfo = isOutputDataInfo(sheetIndex, tcNameInfo, resultInfo);
             break;
         }
+#if 0    // USE_APPEND_SHEET_COLUMN
         case (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NoramlConfig)): {
             signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
             signalDataIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data);
             readDataInfo = isConfigDataInfo(sheetIndex, tcNameInfo, resultInfo);
             break;
         }
+#endif
         default: {
             break;
         }
@@ -2812,7 +2819,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
                 }
             }
         }
-        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
 
@@ -2894,7 +2901,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     // isSignalValueEnum(true, "Vehicle.System.Undefined.Inter_ConfigEBS");
 
     qDebug() << "10. TEST ===========================================================================";
-    constrtuctSheetTest(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales);
+    constrtuctSheetTest();
 #endif
 #endif
 }
@@ -4030,6 +4037,7 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
                 outputDataListIndex++;
             }
 
+#if 0    // USE_APPEND_SHEET_COLUMN
             if (tmpOutputConvertData.isEmpty() == false && tmpConfigRowData.isEmpty() == false &&
                 configDataListIndex < tmpConfigRowData.length()) {
                 tmpOutputConvertData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)] =
@@ -4039,6 +4047,7 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
                     tmpConfigRowData.at(configDataListIndex).at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data));
                 configDataListIndex++;
             }
+#endif
 
 #if defined(ENABLE_DEBUG_LOG_KEYWORD)
             qDebug() << "=========================================================================================";
@@ -4185,7 +4194,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet : " << sheetIndex;
+            qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
         QVariantList sheetData = getData(sheetIndex).toList();
@@ -4339,7 +4348,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet : " << sheetIndex;
+            qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -4538,8 +4547,10 @@ QString ControlExcel::constructKeywordCaseName(const QString& originCaseName, co
     return returnStr;
 }
 
-void ControlExcel::constrtuctSheetTest(const int& sheetIndex) {
-#if 0
+void ControlExcel::constrtuctSheetTest() {
+#if 1
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
+
     // sheet 데이터 저장
     QVariantList sheetData = getData(sheetIndex).toList();
     ExcelDataManger::instance().data()->updateExcelData(sheetData);
@@ -4553,10 +4564,10 @@ void ControlExcel::constrtuctSheetTest(const int& sheetIndex) {
             }
         }
     }
-    QStringList inputSignalList = QStringList({"Signal.InputSignal1", "Signal.InputSignal2"});
-    QStringList inputDataList = QStringList({"11111", "22222"});
-    ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result3"), QString("Case6"),
-                                                           qMakePair(inputSignalList, inputDataList));
+    // QStringList inputSignalList = QStringList({"Signal.InputSignal1", "Signal.InputSignal2"});
+    // QStringList inputDataList = QStringList({"11111", "22222"});
+    // ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result3"), QString("Case6"),
+    //                                                        qMakePair(inputSignalList, inputDataList));
 
     QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
     sheetData.clear();

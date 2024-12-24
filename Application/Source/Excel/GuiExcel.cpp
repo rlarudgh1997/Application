@@ -1143,10 +1143,13 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
             updateDescriptionInfo(sheetIndex, row);
+#if 0    // USE_APPEND_SHEET_COLUMN
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal);
         } else {
+#else
         }
+#endif
     } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) {
             updateAutoCompleteData = true;
@@ -1156,12 +1159,14 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
             // } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
             //     columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
+        } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
+            columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config);
+#if 0    // USE_APPEND_SHEET_COLUMN
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
             updateAutoCompleteData = true;
-        } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
-            columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config);
+#endif
         } else {
         }
     }
@@ -1195,7 +1200,9 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
         notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Version)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Description)));
+#if 0    // USE_APPEND_SHEET_COLUMN
         supportDataInfo = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data));
+#endif
     } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
         // notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) ||
         //               (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::Operation)) ||
@@ -1208,11 +1215,15 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)) ||
-                      (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::IsInitialize)) ||
-                      (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::NegativeTest)));
+#if 0    // USE_APPEND_SHEET_COLUMN
+                      (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::NegativeTest)) ||
+#endif
+                      (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::IsInitialize)));
         supportDataInfo = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) ||
-                           (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) ||
-                           (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)));
+#if 0    // USE_APPEND_SHEET_COLUMN
+                           (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)) ||
+#endif
+                           (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)));
         supportGenType = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
         supportVehicleType = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType));
         supportConfigName = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config));
@@ -1232,7 +1243,9 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
     if (supportDataInfo) {
         int signalIndex = 0;
         if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+#if 0    // USE_APPEND_SHEET_COLUMN
             signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal);
+#endif
         } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
             // do nothing
         } else {
@@ -1242,8 +1255,10 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
                 signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
             } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
                 signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
-            } else {  // (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data))
+            } else {
+#if 0    // USE_APPEND_SHEET_COLUMN
                 signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
+#endif
             }
         }
 
@@ -1287,6 +1302,7 @@ void GuiExcel::updateDisplayAutoCompleteSignal(const bool& description, const in
     QStringList keywordList;
     int keyworedIndex = columnIndex;
 
+#if 0    // USE_APPEND_SHEET_COLUMN
     if (description) {
         if (keyworedIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal)) {
             keyworedIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
@@ -1295,6 +1311,7 @@ void GuiExcel::updateDisplayAutoCompleteSignal(const bool& description, const in
         } else {
         }
     }
+#endif
 
     if (keyworedIndex < keywordTypeInfo.size()) {
         keywordList = keywordTypeInfo.at(keyworedIndex).toStringList();

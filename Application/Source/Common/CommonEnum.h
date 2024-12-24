@@ -325,8 +325,10 @@ public:
         Test = 0,
         Version,
         Description,
+#if 0    // USE_APPEND_SHEET_COLUMN
         ConfigSignal,
         Data,
+#endif
         Max,
     };
     enum class Config {
@@ -349,7 +351,7 @@ public:
         OutputSignal,
         IsInitialize,
         OutputValue,
-#if 1    // USE_APPEND_SHEET_COLUMN
+#if 0    // USE_APPEND_SHEET_COLUMN
         ConfigSignal,
         Data,
         NegativeTest,
