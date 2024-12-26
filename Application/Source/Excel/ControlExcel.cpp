@@ -367,7 +367,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                 if (rowIndex < 2) {
                     // RowIndex[0] : column 인덱스(0, 1, 2, 3....) 정보
 
-#if 1    // USE_APPEND_SHEET_COLUMN
+#if !defined(USE_SHEET_COLUMN_OLD)
                     if ((rowIndex == 1) && (checkTitle)) {    // RowIndex[1] : title(desc, other) 정보
                         for (const auto& title : titleList) {
                             if (rowData.contains(title) == false) {
@@ -383,7 +383,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                     continue;
                 }
 
-#if 1    // USE_APPEND_SHEET_COLUMN
+#if !defined(USE_SHEET_COLUMN_OLD)
                 if (notSameTitleIndex.size() > 0) {
                     QStringList temp = rowData;
                     for (const auto& index : notSameTitleIndex) {
@@ -1739,7 +1739,7 @@ QList<QStringList> ControlExcel::isOutputDataInfo(const int& sheetIndex, const Q
 }
 
 QList<QStringList> ControlExcel::isConfigDataInfo(const int& sheetIndex, const QString& tcName, const QString& result) {
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
     const QPair<int, int> columnInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal),
                                      static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data));
     QList<QStringList> dataInfo = isDataInfo(sheetIndex, tcName, result, QString(), columnInfo, columnInfo.first);
@@ -2132,7 +2132,7 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
             readDataInfo = isOutputDataInfo(sheetIndex, tcNameInfo, resultInfo);
             break;
         }
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
         case (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NoramlConfig)): {
             signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
             signalDataIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data);
@@ -4037,7 +4037,7 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
                 outputDataListIndex++;
             }
 
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
             if (tmpOutputConvertData.isEmpty() == false && tmpConfigRowData.isEmpty() == false &&
                 configDataListIndex < tmpConfigRowData.length()) {
                 tmpOutputConvertData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal)] =

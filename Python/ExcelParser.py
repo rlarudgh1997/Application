@@ -48,7 +48,7 @@ class ExcelParser:
             start_time = time.time()
             sheet_data = []
 
-#if 1    // USE_APPEND_SHEET_COLUMN
+#if 1    // USE_SHEET_COLUMN_OLD
             if (sheet not in wb.sheetnames) and (sheet == "Configs"):
                 print("Append Sheet :", sheet)
                 sheet_data.append(self.title_config)

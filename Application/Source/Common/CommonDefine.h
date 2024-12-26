@@ -39,4 +39,6 @@
 
 #define USE_DEMO
 
+// #define USE_SHEET_COLUMN_OLD
+
 #endif  // COMMON_DEFINE_H

@@ -325,7 +325,7 @@ public:
         Test = 0,
         Version,
         Description,
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
         ConfigSignal,
         Data,
 #endif
@@ -351,7 +351,7 @@ public:
         OutputSignal,
         IsInitialize,
         OutputValue,
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
         ConfigSignal,
         Data,
         NegativeTest,

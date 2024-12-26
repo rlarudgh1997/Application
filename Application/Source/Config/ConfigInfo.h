@@ -113,7 +113,7 @@ private:
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
-#if 0    // USE_APPEND_SHEET_COLUMN
+#if defined(USE_SHEET_COLUMN_OLD)
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
             QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",

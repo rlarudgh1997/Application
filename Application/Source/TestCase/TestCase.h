@@ -73,6 +73,11 @@ public:
                            const QString& originCasesKey);
     void genTestCaseFile(const QJsonObject& json);
     void printCaseSize(const QString& genType);
+    QJsonObject getCaseInfoJson(const QJsonObject& caseJsonObject, const bool& isOther);
+    QString getPreconditionStr(const QJsonArray& caseValues, const QString& triggerSigName, const int& triggerSigIndex,
+                               const QJsonValue& preconditionValue);
+    QString getInputStr(const QString& caseValue, const QString& triggerSigName);
+    QString getTcLine(const QString& precondition, const QString& input);
 
 private:
     template <typename T>
@@ -83,10 +88,12 @@ private:
     QMap<QString, QSharedPointer<SignalDataInfo>> mSignalDataInfo = QMap<QString, QSharedPointer<SignalDataInfo>>();
     QMap<QString, int> mCaseSizeMap;
     QJsonObject mDefaultFileJson;
+    QJsonObject mDefaultFileJsonTest;
     QJsonObject mNegativeFileJson;
     QJsonObject mPositiveFileJson;
     QJsonObject mAllFileJson;
     QMap<QString, QMap<QString, QString>> mOtherInfo;
+    QMap<QString, QMap<QString, QString>> mTestInfo;
 };
 
 #endif  // TEST_CASE_H
