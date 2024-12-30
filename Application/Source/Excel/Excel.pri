@@ -1,3 +1,7 @@
+include($$PWD/DataManger/DataManger.pri)
+include($$PWD/Util/Util.pri)
+
+
 INCLUDEPATH += \
     $$PWD\
 
@@ -9,14 +13,12 @@ HEADERS += \
     $$PWD/GuiExcel.h\
     $$PWD/HandlerExcel.h\
     $$PWD/ControlExcel.h\
-    $$PWD/ExcelDataManger.h\
 
 
 SOURCES += \
     $$PWD/GuiExcel.cpp\
     $$PWD/HandlerExcel.cpp\
     $$PWD/ControlExcel.cpp\
-    $$PWD/ExcelDataManger.cpp\
 
 
 FORMS += \

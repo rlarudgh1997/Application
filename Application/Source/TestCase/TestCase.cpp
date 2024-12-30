@@ -140,6 +140,8 @@ QString TestCase::genCase() {
 #if 1
 
         QVariantList sheetdata = getSheetData(sheetIndex).toList();
+        // QVariantList sheetdata = ExcelData::instance().data()->getSheetData(propertyType);
+
         // qDebug() << "sheetdata[" << sheetIndex << "].size(): " << sheetdata.size();
         bool otherFlag = false;
         QString currentTCName;

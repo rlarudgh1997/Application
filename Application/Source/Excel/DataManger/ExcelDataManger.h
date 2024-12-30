@@ -84,7 +84,8 @@ class ExcelDataManger : public QObject {
     REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(bool, ReadStateNewData, true, false)
     REGISTER_WRITABLE_PROPERTY_LIST(QList, InsertData, NewSheetData, false)
-    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelSheetData, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelDataOther, false)
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelDataConfig, false)
 
 public:
     static QSharedPointer<ExcelDataManger>& instance();
@@ -96,20 +97,24 @@ public:
     QStringList isCaseDataList(const QString& tcName, const QString& resultName);
     QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName);
     QList<QStringList> isOutputDataList(const QString& tcName, const QString& resultName);
+    QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
-    void updateExcelData(const QVariantList& sheetData);
+    void updateExcelData(const int& sheetIndex, const QVariantList& sheetData);
     void updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputList);
     void insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
                             const bool& insertBefore);
-    void clear();
+    bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>>& inputList);
 
 private:
     explicit ExcelDataManger();
 
+    void updateExcelDataOther(const QVariantList& sheetData);
+    void updateExcelDataConfig(const QVariantList& sheetData);
     QMap<int, QStringList> isConvertedExcelData();
-    QStringList isExcelSheetData(const int& columnIndex);
+    QStringList isExcelDataOther(const int& columnIndex);
+    QStringList isExcelDataConfig(const int& columnIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace = false);
     QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);

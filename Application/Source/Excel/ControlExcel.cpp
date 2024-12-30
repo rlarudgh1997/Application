@@ -9,6 +9,7 @@
 
 #include "ExcelDataManger.h"
 #include "TestCase.h"
+#include "ExcelData.h"
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -305,6 +306,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     updateDataHandler(propertyType, originSheetData);
     // updateDataControl(propertyType, originSheetData);
     TestCase::instance().data()->setSheetData(propertyType, originSheetData);
+    ExcelData::instance().data()->setSheetData(propertyType, originSheetData);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
@@ -2132,14 +2134,22 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
             readDataInfo = isOutputDataInfo(sheetIndex, tcNameInfo, resultInfo);
             break;
         }
+        case (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NormalConfig)): {
 #if defined(USE_SHEET_COLUMN_OLD)
-        case (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NoramlConfig)): {
             signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
             signalDataIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data);
             readDataInfo = isConfigDataInfo(sheetIndex, tcNameInfo, resultInfo);
+#else
+            signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal);
+            signalDataIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData);
+
+            int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs;
+            ExcelDataManger::instance().data()->updateExcelData(sheetIndex, getData(sheetIndex).toList());
+            QString configName = ExcelDataManger::instance().data()->isConfigData(tcNameInfo);
+            readDataInfo = ExcelDataManger::instance().data()->isConfigDataList(configName);
+#endif
             break;
         }
-#endif
         default: {
             break;
         }
@@ -2454,7 +2464,7 @@ QMap<QString, SignalDataInfo> ControlExcel::isOutputSignalDataInfo(const int& sh
 }
 
 QMap<QString, SignalDataInfo> ControlExcel::isConfigSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo) {
-    int dataInfoType = (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NoramlConfig));
+    int dataInfoType = (static_cast<int>(ivis::common::DataInfoTypeEnum::DataInfoType::NormalConfig));
     QMap<QString, SignalDataInfo> signalDataInfo = isMatchingSignalDataInfo(dataInfoType, sheetIndex, columnDataInfo);
     return signalDataInfo;
 }
@@ -2823,87 +2833,7 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
 
-#if 1
-    qDebug() << "==============================================================================================";
-    qDebug() << "**********************************************************************************************";
-    qDebug() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-#if 0
-    SheetConfigurationInfo sheetDataList =
-        isSheetConfigurationInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants);
-    QList<QPair<QString, QPair<QString, QStringList>>> sheetDataInfo = sheetDataList.isSheetDataInfo();
-#endif
-
-#if 0  // Origin Sheet
-    // qDebug() << "0. TEST ===========================================================================";
-    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "ON",
-    //                                     "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
-    //                         true);
-
-    // qDebug() << "1. TEST ===========================================================================";
-    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "",
-    //                                     ""}),
-    //                         false);
-
-    // qDebug() << "2. TEST ===========================================================================";
-    // isOutputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "ON(with collect)",
-    //                                     ""}));
-#endif
-
-#if 0
-    qDebug() << "3. TEST ===========================================================================";
-    isConvertedIGNElapsedInfo(QStringList({"1", "2", "10", "11", "12"}));
-    qDebug() << "\t ConvertData  :" << QStringList({"1",  "2",  "10", "11", "12", "0"});
-    qDebug() << "\t Precondition :" << QStringList({"10", "10", "0",  "0",  "0",  "10"});
-    qDebug() << "\n";
-#endif
-
-#if 1  // Convert Sheet
-    // qDebug() << "4. TEST ===========================================================================";
-    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "ON",
-    //                                     "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
-    //                         true);
-
-    // qDebug() << "5. TEST ===========================================================================";
-    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     // "ON",
-    //                                     // "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
-    //                                     "ON(with collect)",
-    //                                     "Input_ABSEBSAmberWarningSignal == OFF => ON"}),
-    //                         false);
-
-    // qDebug() << "6. TEST ===========================================================================";
-    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "",
-    //                                     ""}),
-    //                         false);
-
-    // qDebug() << "7. TEST ===========================================================================";
-    // isOutputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
-    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
-    //                                     "ON",
-    //                                     ""}));
-
-    // qDebug() << "8. TEST ===========================================================================";
-    // isConfigDataInfo("Config1");
-
-    // qDebug() << "9. TEST ===========================================================================";
-    // isSignalValueEnum(true, "Vehicle.System.Undefined.Inter_ConfigEBS");
-
-    qDebug() << "10. TEST ===========================================================================";
     constrtuctSheetTest();
-#endif
-#endif
 }
 
 QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnIndex) {
@@ -3280,6 +3210,7 @@ bool ControlExcel::replaceGenDataInfo() {
         int convertIndex = convertStart + (originIndex - originStart);
         updateDataControl(convertIndex, getData(originIndex).toList());
         TestCase::instance().data()->setSheetData(convertIndex, getData(originIndex).toList());
+        ExcelData::instance().data()->setSheetData(convertIndex, getData(originIndex).toList());
     }
     const QList<int> columnListForSheetKeyword = QList({
         static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal),
@@ -3707,6 +3638,7 @@ void ControlExcel::constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& 
         if ((convertIndex != 0) && (convertRowData.size() > 0)) {
             updateDataControl(convertIndex, convertRowData);
             TestCase::instance().data()->setSheetData(convertIndex, convertRowData);
+            ExcelData::instance().data()->setSheetData(convertIndex, convertRowData);
 #if defined(ENABLE_DEBUG_LOG_OUTPUT)
             qDebug() << "[Convert Sheet Keyword] Origin[" << originIndex << "] -> Convert[" << convertIndex
                      << "] :" << convertRowData.size();
@@ -3971,6 +3903,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
         if ((convertIndex != 0) && (convertRowDataList.size() > 0)) {
             updateDataControl(convertIndex, convertRowDataList);
             TestCase::instance().data()->setSheetData(convertIndex, convertRowDataList);
+            ExcelData::instance().data()->setSheetData(convertIndex, convertRowDataList);
 #if defined(ENABLE_DEBUG_LOG_OUTPUT)
             qDebug() << "[Convert Non Sheet Keyword] Convert [" << convertIndex << "] -> Convert[" << convertIndex
                      << "] :" << convertRowDataList.size();
@@ -4092,6 +4025,7 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
         if ((convertSheetIndex != 0) && (convertRowData.size() > 0)) {
             updateDataControl(convertSheetIndex, convertRowData);
             TestCase::instance().data()->setSheetData(convertSheetIndex, convertRowData);
+            ExcelData::instance().data()->setSheetData(convertSheetIndex, convertRowData);
 #if defined(ENABLE_DEBUG_LOG_OUTPUT)
             qDebug() << "[Convert Output/Config] Before Convert[" << convertSheetIndex << "] -> After Convert["
                      << convertSheetIndex << "] :" << convertRowData.size();
@@ -4118,9 +4052,12 @@ QList<QList<QStringList>> ControlExcel::constructConvertConfigSignalSet(const QS
      *  )
      ******************************************************************/
 
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs;
+    ExcelDataManger::instance().data()->updateExcelData(sheetIndex, getData(sheetIndex).toList());
+
     QList<QList<QStringList>> retConfigList;
     QList<QStringList> convertConfigDataList;
-    QList<QStringList> tmpConfifDataList = isConfigDataInfo(configName);
+    QList<QStringList> tmpConfifDataList = ExcelDataManger::instance().data()->isConfigDataList(configName);
 
     for (const QStringList& configValueStrList : tmpConfifDataList) {
         QStringList andSignalList(columnDataMaxSize, "");
@@ -4192,13 +4129,15 @@ bool ControlExcel::appendConvertConfigSignalSet() {
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+        QVariantList sheetData = getData(sheetIndex).toList();
+        ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
+
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
-        QVariantList sheetData = getData(sheetIndex).toList();
-        ExcelDataManger::instance().data()->updateExcelData(sheetData);
+
         QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
 #if defined(ENABLE_CONFIG_TEST_LOG)
         qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
@@ -4325,6 +4264,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
                     tmpSheetData.append(data);
                 }
                 // TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+                // ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
                 updateSheetData(sheetIndex, tmpSheetData);
             } else {
                 // no data changed.
@@ -4346,14 +4286,15 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
     const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+        QVariantList sheetData = getData(sheetIndex).toList();
+        ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
+
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
 
-        QVariantList sheetData = getData(sheetIndex).toList();
-        ExcelDataManger::instance().data()->updateExcelData(sheetData);
         QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
 #if defined(ENABLE_CONFIG_TEST_LOG)
         qDebug() << "============================[appendConvertAllTCSignalSet]=====================================";
@@ -4469,6 +4410,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
             tmpSheetData.append(data);
         }
         TestCase::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+        ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
         updateSheetData(sheetIndex, tmpSheetData);
     }
 
@@ -4549,11 +4491,88 @@ QString ControlExcel::constructKeywordCaseName(const QString& originCaseName, co
 
 void ControlExcel::constrtuctSheetTest() {
 #if 1
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
+    qDebug() << "******************************************************************************************************";
+    qDebug() << "constrtuctSheetTest()";
+    qDebug() << "******************************************************************************************************";
 
-    // sheet 데이터 저장
-    QVariantList sheetData = getData(sheetIndex).toList();
-    ExcelDataManger::instance().data()->updateExcelData(sheetData);
+#if 0
+    SheetConfigurationInfo sheetDataList =
+        isSheetConfigurationInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants);
+    QList<QPair<QString, QPair<QString, QStringList>>> sheetDataInfo = sheetDataList.isSheetDataInfo();
+#endif
+
+#if 0  // Origin Sheet
+    // qDebug() << "0. TEST ===========================================================================";
+    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "ON",
+    //                                     "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
+    //                         true);
+
+    // qDebug() << "1. TEST ===========================================================================";
+    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "",
+    //                                     ""}),
+    //                         false);
+
+    // qDebug() << "2. TEST ===========================================================================";
+    // isOutputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "ON(with collect)",
+    //                                     ""}));
+#endif
+
+#if 0
+    qDebug() << "3. TEST ===========================================================================";
+    isConvertedIGNElapsedInfo(QStringList({"1", "2", "10", "11", "12"}));
+    qDebug() << "\t ConvertData  :" << QStringList({"1",  "2",  "10", "11", "12", "0"});
+    qDebug() << "\t Precondition :" << QStringList({"10", "10", "0",  "0",  "0",  "10"});
+    qDebug() << "\n";
+#endif
+
+#if 0
+    // qDebug() << "4. TEST ===========================================================================";
+    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "ON",
+    //                                     "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
+    //                         true);
+
+    // qDebug() << "5. TEST ===========================================================================";
+    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     // "ON",
+    //                                     // "IGN1 off ⇒ on 3sec after 500ms, BrakeAirType == OFF"}),
+    //                                     "ON(with collect)",
+    //                                     "Input_ABSEBSAmberWarningSignal == OFF => ON"}),
+    //                         false);
+
+    // qDebug() << "6. TEST ===========================================================================";
+    // isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "",
+    //                                     ""}),
+    //                         false);
+
+    // qDebug() << "7. TEST ===========================================================================";
+    // isOutputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
+    //                         QStringList({"IMG_TelltaleABSAmberLamp_stat",
+    //                                     "ON",
+    //                                     ""}));
+
+    // qDebug() << "9. TEST ===========================================================================";
+    // isSignalValueEnum(true, "Vehicle.System.Undefined.Inter_ConfigEBS");
+
+#endif
+
+
+    int sheetIndex;
+    QVariantList sheetData;
+
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
+    sheetData = getData(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants).toList();
+    ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
 
     for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList()) {
         for (const auto& resultName : ExcelDataManger::instance().data()->isResultDataList(tcName)) {
@@ -4574,6 +4593,7 @@ void ControlExcel::constrtuctSheetTest() {
     for (auto& data : currentSheetData) {
         sheetData.append(data);
     }
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
     updateSheetData(sheetIndex, sheetData);
 
     QVariant filePath = ivis::common::APP_PWD() + "/Temp.excel";
@@ -4582,6 +4602,18 @@ void ControlExcel::constrtuctSheetTest() {
         if (dirPath.size() > 0) {
             qDebug() << "\t Excel Save :" << filePath;
         }
+    }
+
+    qDebug() << "========================================================================================\n\n";
+    for (const auto& info : isConfigDataInfo("Config1")) {
+        qDebug() << "\t ConfigDataInfo :" << info;
+    }
+    qDebug() << "========================================================================================\n\n";
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
+    sheetData = getData(sheetIndex).toList();
+    ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
+    for (const auto& info : ExcelDataManger::instance().data()->isConfigDataList("Config1")) {
+        qDebug() << "\t ConfigDataInfo :" << info;
     }
 #endif
 }

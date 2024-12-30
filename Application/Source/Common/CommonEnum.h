@@ -605,7 +605,7 @@ public:
     enum class DataInfoType {
         Invalid = 0,
         NormalCaseRemove,  // TCName 기준 시그널 에서 Case 기준 시그널을 삭제 하고 중복 제거
-        NoramlConfig,
+        NormalConfig,
         TCDefault,
         TCCase,
         TCOuput,
