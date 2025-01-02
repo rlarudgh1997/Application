@@ -2,6 +2,7 @@
 
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
+#include "ExcelUtil.h"
 
 QSharedPointer<ExcelDataManger>& ExcelDataManger::instance() {
     static QSharedPointer<ExcelDataManger> gManger;
@@ -294,19 +295,28 @@ QPair<int, int> ExcelDataManger::isRowIndexInfo(const QString& tcName, const QSt
     return rowInfo;
 }
 
-QStringList ExcelDataManger::isTCNameDataList() {
+QStringList ExcelDataManger::isTCNameDataList(const bool& all) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
 
-    QStringList tcNameList = isParsingDataList(currentData);
+    QStringList tcNameList;
+    for (const auto& tcName : isParsingDataList(currentData, true)) {
+        if (all) {
+            tcNameList.append(tcName);
+        } else {
+            if (isCheckData(tcName)) {
+                tcNameList.append(tcName);
+            }
+        }
+    }
 
-    // qDebug() << "isTCNameDataList";
-    // qDebug() << "\t Info :" << tcNameList;
+    // qDebug() << "isTCNameDataList :" << all;
+    // qDebug() << "\t Info :" << tcNameList.size() << tcNameList;
     // qDebug() << "\n";
 
     return tcNameList;
 }
 
-QString ExcelDataManger::isCheckData(const QString& tcName) {
+bool ExcelDataManger::isCheckData(const QString& tcName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -316,11 +326,11 @@ QString ExcelDataManger::isCheckData(const QString& tcName) {
         list.append(text);
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
-    QStringList checkList = isParsingDataList(list);
-    QString check = (checkList.size() > 0) ? (checkList.at(0)) : (QString());
+    QStringList checkList = isParsingDataList(list, true);
+    bool check = ((checkList.size() > 0) && (checkList.at(0).compare("") != false));
 
-    // qDebug() << "isCheckData";
-    // qDebug() << "\t Info :" << checkList.size() << check;
+    // qDebug() << "isCheckData :" << tcName;
+    // qDebug() << "\t Info :" << check << checkList.size() << checkList;
     // qDebug() << "\n";
 
     return check;
@@ -336,10 +346,10 @@ QString ExcelDataManger::isGenTypeData(const QString& tcName) {
         list.append(text);
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
-    QStringList genTypeList = isParsingDataList(list);
+    QStringList genTypeList = isParsingDataList(list, true);
     QString genType = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
 
-    // qDebug() << "isGenTypeData";
+    // qDebug() << "isGenTypeData :" << tcName;
     // qDebug() << "\t Info :" << genTypeList.size() << genType;
     // qDebug() << "\n";
 
@@ -356,7 +366,7 @@ QString ExcelDataManger::isVehicleTypeData(const QString& tcName) {
         list.append(text);
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
-    QStringList vehicleTypeList = isParsingDataList(list);
+    QStringList vehicleTypeList = isParsingDataList(list, true);
     QString vehicleType = (vehicleTypeList.size() > 0) ? (vehicleTypeList.at(0)) : (QString());
 
     // qDebug() << "isVehicleTypeData";
@@ -376,7 +386,7 @@ QString ExcelDataManger::isConfigData(const QString& tcName) {
         list.append(text);
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
-    QStringList configList = isParsingDataList(list);
+    QStringList configList = isParsingDataList(list, true);
     QString config = (configList.size() > 0) ? (configList.at(0)) : (QString());
 
     // qDebug() << "isConfigDataList";
@@ -396,7 +406,7 @@ QStringList ExcelDataManger::isResultDataList(const QString& tcName) {
         list.append(text);
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
-    QStringList resultList = isParsingDataList(list);
+    QStringList resultList = isParsingDataList(list, true);
 
     // qDebug() << "isResultDataList :" << tcName;
     // qDebug() << "\t Info :" << resultList.size() << resultList;
@@ -426,10 +436,9 @@ QStringList ExcelDataManger::isCaseDataList(const QString& tcName, const QString
 }
 
 QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& tcName, const QString& resultName,
-                                                                 const QString& caseName) {
+                                                                 const QString& caseName, const bool& removeWhitespace) {
     const QStringList inputSignal = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
     const QStringList inputData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
-
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, resultName, caseName);
 
     QStringList signalInfo;
@@ -438,19 +447,34 @@ QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& 
         if ((rowIndex >= inputSignal.size()) || (rowIndex >= inputData.size())) {
             continue;
         }
-        signalInfo.append(inputSignal.at(rowIndex));
-        dataInfo.append(inputData.at(rowIndex));
+        QString signal = inputSignal.at(rowIndex);
+        QString data = inputData.at(rowIndex);
+        bool appendState = (removeWhitespace) ? (signal.size() > 0) : (true);
+        if (appendState) {
+            signalInfo.append(signal);
+            dataInfo.append(data);
+        }
     }
     QPair<QStringList, QStringList> inputList = qMakePair(signalInfo, dataInfo);
-    // case(others) 인 경우 inputList 가 있는 경우 일반적인 others 키워드로 동작 하지 않음
-    if ((caseName.compare("others") == false) && (inputList.first.size() == 1)) {
-        if (inputList.first.at(0).size() == 0) {
-            inputList.first.clear();
-            inputList.second.clear();
+    QString others = ExcelUtil::instance()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other));
+    bool tcNameBaseState = (tcName.size() > 0) && (resultName.size() == 0) && (caseName.size() == 0);
+    if (tcNameBaseState) {
+        QStringList caseList = isCaseDataList(tcName, QString());
+        if (caseList.contains(others)) {
+            inputList = QPair<QStringList, QStringList>();
+            // qDebug() << "Found others case in case list :" << others << inputList.first.size();
+        }
+    } else {
+        // case(others) 인 경우 inputList 가 있는 경우 일반적인 others 키워드로 동작 하지 않음
+        if ((caseName.compare(others) == false) && (inputList.first.size() == 1)) {
+            if (inputList.first.at(0).size() == 0) {
+                inputList.first.clear();
+                inputList.second.clear();
+            }
         }
     }
 
-    // qDebug() << "isInputDataList :" << tcName << resultName << caseName;
+    // qDebug() << "isInputDataList :" << tcName << resultName << caseName << removeWhitespace;
     // qDebug() << "\t Info :" << inputList.first.size() << inputList.first << inputList.second.size() << inputList.second;
     // qDebug() << "\n";
 
@@ -622,7 +646,7 @@ void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& r
         return;
     }
 
-    QString check = isCheckData(tcName);
+    QString check = (isCheckData(tcName)) ? (QString("O")) : (QString());
     QString genType = isGenTypeData(tcName);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
@@ -652,7 +676,7 @@ void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& r
         return;
     }
 
-    QString check = isCheckData(tcName);
+    QString check = (isCheckData(tcName)) ? (QString("O")) : (QString());
     QString genType = isGenTypeData(tcName);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
@@ -675,7 +699,7 @@ void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& r
 #endif
 }
 
-bool ExcelDataManger::isValidConfigCheck(const QString& configName, const QMap<QString, QString>>& inputList) {
+bool ExcelDataManger::isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList) {
     bool result = true;
     return result;
 }

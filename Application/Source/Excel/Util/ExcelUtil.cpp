@@ -257,6 +257,8 @@ QPair<QStringList, QStringList> ExcelUtil::isConvertedIGNElapsedInfo(const QStri
         ignAppend.append(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
     }
 
+    // qDebug() << "Ign Append Info :" << ignAppend.size() << appendOnOms << appendOffOms << appendOn0msOffOms;
+
     // Update - ConvertData
     QStringList ignConvertData = ignOriginData;
     for (const auto& ign : ignAppend) {
@@ -281,13 +283,90 @@ QPair<QStringList, QStringList> ExcelUtil::isConvertedIGNElapsedInfo(const QStri
         ignPrecondition.append(QString("%1").arg(ign));
     }
 
+    if ((ignConvertData.size() == 1) && (ignPrecondition.size() == 1)) {
+        // TCName 기준 Others 포함 Signal 구성시 On0ms / Off0ms  인 경우에
+        // ignConvertData, ignPrecondition 데이터 하나씩만 구성되는 이슈
+        // On0ms  : ConvertData  : 1 QList("0")       / Precondition : 1 QList("10")
+        //       -> ConvertData  : 2 QList("0", "10") / Precondition : 2 QList("10", "0")
+        // Off0ms : ConvertData  : 1 QList("10")      / Precondition : 1 QList("0")
+        //       -> ConvertData  : 2 QList("10", "0") / Precondition : 2 QList("0", "10")
+
+        // qDebug() << "\t ConvertData  :" << ignConvertData;
+        // qDebug() << "\t Precondition :" << ignPrecondition;
+
+        int covertValue = ignConvertData.at(0).toInt();
+        if (covertValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            covertValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms);
+        } else if (covertValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms)) {
+            covertValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms);
+        } else {
+        }
+
+        int preconditionValue = ignPrecondition.at(0).toInt();
+        if (preconditionValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            preconditionValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms);
+        } else if (preconditionValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms)) {
+            preconditionValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms);
+        } else {
+        }
+
+        if (covertValue >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            ignConvertData.append(QString("%1").arg(covertValue));
+        }
+        if (preconditionValue >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            ignPrecondition.append(QString("%1").arg(preconditionValue));
+        }
+    }
+
 #if 0
     qDebug() << "[isConvertedIGNElapsedInfo]";
-    qDebug() << "\t On :" << foundOn << ", On0ms :" << foundOn0ms << ", Off :" << foundOff<< ", Off0ms :"  << foundOff0ms;
+    qDebug() << "\t On           :" << foundOn << ", On0ms  :" << foundOn0ms;
+    qDebug() << "\t Off          :" << foundOff<< ", Off0ms :"  << foundOff0ms;
+    qDebug() << "\t On0msOffOms  :" << appendOn0msOffOms;
     qDebug() << "\t OriginData   :" << ignOriginData;
     qDebug() << "\t ConvertData  :" << ignConvertData;
     qDebug() << "\t Precondition :" << ignPrecondition;
 #endif
 
     return QPair<QStringList, QStringList>(ignConvertData, ignPrecondition);
+}
+
+int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordType) {
+    int convertKeywordType = keywordType;
+    if (toCustom) {
+        if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config);
+        } else {
+        }
+    } else {
+        if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
+        } else {
+        }
+    }
+    return convertKeywordType;
 }

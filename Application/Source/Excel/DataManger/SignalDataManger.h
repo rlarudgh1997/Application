@@ -7,13 +7,11 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-class SignalDataInfo {
+class SignalData {
 public:
-    SignalDataInfo() {
-    }
-    SignalDataInfo(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
-                   const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
-                   const QStringList& notUsedEnum, const QStringList& precondition)
+    SignalData(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
+               const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
+               const QStringList& notUsedEnum, const QStringList& precondition)
         : mDataType(dataType),
           mInitialize(initialize),
           mKeywordType(keywordType),
@@ -23,6 +21,19 @@ public:
           mNotUsedEnum(notUsedEnum),
           mPrecondition(precondition) {
     }
+    SignalData() = default;
+    SignalData(const SignalData& other) = default;
+    SignalData& operator=(const SignalData& other) = default;
+
+    bool operator==(const SignalData& other) const {
+        return ((mDataType == other.mDataType) && (mInitialize == other.mInitialize) && (mKeywordType == other.mKeywordType) &&
+                (mOriginData == other.mOriginData) && (mConvertData == other.mConvertData) && (mValueEnum == other.mValueEnum) &&
+                (mNotUsedEnum == other.mNotUsedEnum) && (mPrecondition == other.mPrecondition));
+    }
+    bool operator!=(const SignalData& other) const {
+        return !(*this == other);
+    }
+
     int isDataType() const {
         return mDataType;
     }
@@ -70,8 +81,7 @@ class SignalDataManger : public QObject {
 public:
     static QSharedPointer<SignalDataManger>& instance();
 
-    QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
-                                                           const QStringList& columnDataInfo);
+    QMap<QString, SignalData> isSignalDataInfo(const QPair<QStringList, QStringList>& list);
 
 private:
     explicit SignalDataManger();

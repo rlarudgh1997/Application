@@ -378,6 +378,15 @@ public:
     };
 };
 
+class GenTypeEnum {
+public:
+    enum GenType {
+        GenTypeDefault = 0,
+        GenTypeNegativePositive,
+        GenTypePositive,
+    };
+};
+
 class VehicleTypeEnum {
 public:
     enum VehicleType {

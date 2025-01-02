@@ -259,7 +259,8 @@ private:
 
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
 
-    void constrtuctSheetTest();
+    void testCode1();
+    void testCode2();
 
 protected:
     virtual AbstractHandler* isHandler();

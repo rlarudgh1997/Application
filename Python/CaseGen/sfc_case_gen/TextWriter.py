@@ -66,7 +66,7 @@ class TextWriter:
             if sig.gen_type == "Default" or sig.gen_type == "Positive":
                 sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
             elif sig.gen_type == "Negative":
-                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.NegativeTriggerHex, "ValueEnum": sig.InputValueEnumDict}
+                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
             else:
                 print("Not Defined Gen Type: ", sig.gen_type)
         return sig_list

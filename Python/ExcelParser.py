@@ -4,7 +4,7 @@ import time
 
 import pandas as pd
 from openpyxl import load_workbook
-from openpyxl.utils import coordinate_to_tuple
+from openpyxl.utils import coordinate_to_tuple, range_boundaries
 
 
 class ExcelParser:
@@ -57,23 +57,30 @@ class ExcelParser:
 #endif
 
             current_sheet = wb[sheet]
-            merged_cells = current_sheet.merged_cells.ranges
+
+            merged_cells_dict = {}
+            for merged_cell in current_sheet.merged_cells.ranges:
+                min_col, min_row, max_col, max_row = range_boundaries(str(merged_cell))
+                for row in range(min_row, max_row + 1):
+                    for col in range(min_col, max_col + 1):
+                        merged_cells_dict[current_sheet.cell(row=row, column=col).coordinate] = merged_cell
 
             for row in current_sheet.iter_rows(min_row=1, max_row=current_sheet.max_row, min_col=1, max_col=current_sheet.max_column):
                 data = []
-
                 for current_cell in row:
                     # start_time_sheet_sub = time.time()
 
                     read_cell_text = current_cell.value
-                    check_merged = any(current_cell.coordinate in merged_cell for merged_cell in merged_cells)
+
                     # check_time_any = time.time() - start_time_sheet_sub
                     # start_time_sheet_sub = time.time()
 
-                    if check_merged:
-                        merged_cell = next(merged_cell for merged_cell in merged_cells if current_cell.coordinate in merged_cell)
-                        row_start, column_start = merged_cell.min_row, merged_cell.min_col
-                        row_end, column_end = merged_cell.max_row, merged_cell.max_col
+                    if current_cell.coordinate in merged_cells_dict:
+                        merged_cell = merged_cells_dict[current_cell.coordinate]
+                        min_col, min_row, max_col, max_row = range_boundaries(str(merged_cell))
+                        row_start, column_start = min_row, min_col
+                        row_end, column_end = max_row, max_col
+
                         current_merge_cell = current_sheet.cell(row=row_start, column=column_start)
                         if current_cell.row == row_start:
                             merge_cell_text = excel_merge_start

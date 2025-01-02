@@ -7,9 +7,10 @@
 #include "CommonResource.h"
 #include "CommonPopup.h"
 
-#include "ExcelDataManger.h"
-#include "TestCase.h"
 #include "ExcelData.h"
+#include "ExcelDataManger.h"
+#include "SignalDataManger.h"
+#include "TestCase.h"
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -370,7 +371,7 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                     // RowIndex[0] : column 인덱스(0, 1, 2, 3....) 정보
 
 #if !defined(USE_SHEET_COLUMN_OLD)
-                    if ((rowIndex == 1) && (checkTitle)) {    // RowIndex[1] : title(desc, other) 정보
+                    if ((rowIndex == 1) && (checkTitle)) {  // RowIndex[1] : title(desc, other) 정보
                         for (const auto& title : titleList) {
                             if (rowData.contains(title) == false) {
                                 notSameTitleIndex.append(titleList.indexOf(title));
@@ -392,14 +393,14 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
                         QString appendText;
                         int insertIndex = 0;
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
-                            insertIndex = 0;    // Befor index : TCName
-                            appendText = rowData.at(0);    // Read index : TCName
+                            insertIndex = 0;             // Befor index : TCName
+                            appendText = rowData.at(0);  // Read index : TCName
                         } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
-                            insertIndex = 1;    // After index : TCName
-                            appendText = rowData.at(0);    // Read index : TCName
+                            insertIndex = 1;             // After index : TCName
+                            appendText = rowData.at(0);  // Read index : TCName
                         } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
-                            insertIndex = 2;    // Befor index : Result
-                            appendText = rowData.at(0);    // Read index : Result
+                            insertIndex = 2;             // Befor index : Result
+                            appendText = rowData.at(0);  // Read index : Result
                         } else {
                             continue;
                         }
@@ -1058,6 +1059,8 @@ QPair<QStringList, QStringList> ControlExcel::isConvertedIGNElapsedInfo(const QS
         ignAppend.append(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
     }
 
+    // qDebug() << "Ign Append Info :" << ignAppend.size() << appendOnOms << appendOffOms << appendOn0msOffOms;
+
     // Update - ConvertData
     QStringList ignConvertData = ignOriginData;
     for (const auto& ign : ignAppend) {
@@ -1082,9 +1085,46 @@ QPair<QStringList, QStringList> ControlExcel::isConvertedIGNElapsedInfo(const QS
         ignPrecondition.append(QString("%1").arg(ign));
     }
 
+    if ((ignConvertData.size() == 1) && (ignPrecondition.size() == 1)) {
+        // TCName 기준 Others 포함 Signal 구성시 On0ms / Off0ms  인 경우에
+        // ignConvertData, ignPrecondition 데이터 하나씩만 구성되는 이슈
+        // On0ms  : ConvertData  : 1 QList("0")       / Precondition : 1 QList("10")
+        //       -> ConvertData  : 2 QList("0", "10") / Precondition : 2 QList("10", "0")
+        // Off0ms : ConvertData  : 1 QList("10")      / Precondition : 1 QList("0")
+        //       -> ConvertData  : 2 QList("10", "0") / Precondition : 2 QList("0", "10")
+
+        // qDebug() << "\t ConvertData  :" << ignConvertData;
+        // qDebug() << "\t Precondition :" << ignPrecondition;
+
+        int covertValue = ignConvertData.at(0).toInt();
+        if (covertValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            covertValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms);
+        } else if (covertValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms)) {
+            covertValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms);
+        } else {
+        }
+
+        int preconditionValue = ignPrecondition.at(0).toInt();
+        if (preconditionValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            preconditionValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms);
+        } else if (preconditionValue == static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms)) {
+            preconditionValue = static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms);
+        } else {
+        }
+
+        if (covertValue >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            ignConvertData.append(QString("%1").arg(covertValue));
+        }
+        if (preconditionValue >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+            ignPrecondition.append(QString("%1").arg(preconditionValue));
+        }
+    }
+
 #if 0
     qDebug() << "[isConvertedIGNElapsedInfo]";
-    qDebug() << "\t On :" << foundOn << ", On0ms :" << foundOn0ms << ", Off :" << foundOff<< ", Off0ms :"  << foundOff0ms;
+    qDebug() << "\t On           :" << foundOn << ", On0ms  :" << foundOn0ms;
+    qDebug() << "\t Off          :" << foundOff<< ", Off0ms :"  << foundOff0ms;
+    qDebug() << "\t On0msOffOms  :" << appendOn0msOffOms;
     qDebug() << "\t OriginData   :" << ignOriginData;
     qDebug() << "\t ConvertData  :" << ignConvertData;
     qDebug() << "\t Precondition :" << ignPrecondition;
@@ -1286,6 +1326,7 @@ QMap<int, QStringList> ControlExcel::isSignalDataInfo(const QString& signalName,
     const int signalType = isSignalType(signalName);
     if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
         // ex) collected
+        // qDebug() << "\t Signal :" << signalName << "-> SignalType::Invalid";
         return QMap<int, QStringList>();
     }
 
@@ -1902,10 +1943,10 @@ int ControlExcel::isConvertedKeywordType(const bool& toCustom, const int& keywor
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
-            // } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn)) {
-            //     keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn);
         } else {
         }
     } else {
@@ -1918,11 +1959,11 @@ int ControlExcel::isConvertedKeywordType(const bool& toCustom, const int& keywor
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
-            // } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Ign)) {
-            //     keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn);
         } else {
         }
     }
@@ -2155,7 +2196,7 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
         }
     }
     // qDebug() << "isMatchingSignalDataInfo :" << sheetIndex << readDataInfo.size() << removeDataInfo.size() << signalIndex
-    //          << signalDataIndex << ", constructTCData :" << constructTCData;
+    //          << signalDataIndex << ", Info :" << tcDataDefault << tcDataCase;
 
     if ((signalIndex == 0) && (signalDataIndex == 0)) {
         return QMap<QString, SignalDataInfo>();
@@ -2333,6 +2374,10 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
                                 precondition = convertData.mid(0, splitSize);
                                 convertData = convertData.mid(splitSize, convertData.size());
                                 notUsedEnum.clear();
+                                break;
+                            }
+                            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig): {
+                                // TODO: Config 처리 로직 구현 필요
                                 break;
                             }
                             case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
@@ -2833,7 +2878,9 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
 
-    constrtuctSheetTest();
+    // Test Code
+    testCode1();
+    testCode2();
 }
 
 QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnIndex) {
@@ -3659,7 +3706,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
         QVariantList convertRowDataList;
 
         for (const auto& rowDataList : getData(convertIndex).toList()) {
-            QStringList convertRowData;
+            QStringList convertRowData = rowDataList.toStringList();
             for (KeywordInfo keyword : iter.value().toList()) {
                 QString customKeyword;
 
@@ -3668,7 +3715,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                 }
                 switch (keyword.isKeyword()) {
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword = isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver));
                         QString overValue = QString("%1[%2], [%3]")
                                                 .arg(customKeyword)
@@ -3684,7 +3731,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder));
                         QString underValue = QString("%1[%2], [%3]")
@@ -3701,7 +3748,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         QStringList rangeValueList = keyword.isText().remove(" ").split(",");
                         if (rangeValueList.length() == 2) {
                             customKeyword =
@@ -3732,7 +3779,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword = isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow));
                         QStringList flowValueList = keyword.isText().remove(" ").split(",");
                         QStringList preconditionValueList;
@@ -3752,10 +3799,16 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                                                 .arg(preconditionValueList.join(", "))
                                                 .arg(inputValueList.join(", "));
                         convertRowData[keyword.isColumn()] = flowValue;
+#if defined(ENABLE_DEBUG_LOG_KEYWORD)
+                        qDebug() << "[Flow] keyword Type    : " << keyword.isKeyword();
+                        qDebug() << "[Flow] keyword Data    : " << keyword.isText();
+                        qDebug() << "[Flow] Keyword RowData : " << convertRowData;
+                        qDebug() << "[Flow] Converted Value : " << flowValue;
+#endif
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay));
                         QStringList twoWayValueList = keyword.isText().remove(" ").split(",");
@@ -3784,7 +3837,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual));
                         QString moreThanEqualValue = QString("%1[%2], [%3]")
@@ -3795,7 +3848,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         customKeyword =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual));
                         QString lessThanEqualValue = QString("%1[%2], [%3]")
@@ -3806,7 +3859,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         if (keyword.isData().contains(SFC_IGN_ELAPSED) == true) {
                             convertRowData[keyword.isColumn()] = keyword.isText();
                         } else {
@@ -3850,7 +3903,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Not): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         QString signalName = keyword.isData();
                         QStringList keywordValueList = keyword.isText().split(",");
                         QStringList allSignalEnumList = isSignalValueEnum(true, signalName);
@@ -3874,7 +3927,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged):
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc):
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout): {
-                        convertRowData = rowDataList.toStringList();
+                        // convertRowData = rowDataList.toStringList();
                         convertRowData[keyword.isColumn()] = keyword.isText();
                         break;
                     }
@@ -3898,6 +3951,7 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                 convertRowDataList.append(QVariant(convertRowData));
             }
             rowIndex++;
+            convertRowData.clear();
         }
 
         if ((convertIndex != 0) && (convertRowDataList.size() > 0)) {
@@ -3924,7 +3978,9 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
         qDebug() << "> convertSheetIndex : " << convertSheetIndex << "\n";
 #endif
         int outputDataListIndex = 0;
+#if defined(USE_SHEET_COLUMN_OLD)
         int configDataListIndex = 0;
+#endif
         QVariantList convertRowData;
 
         QList<QStringList> tmpOutputRowData;
@@ -4002,7 +4058,9 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
 #endif
             if (curTCNameMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::MergeEnd) ||
                 curTCNameMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType)) {
+#if defined(USE_SHEET_COLUMN_OLD)
                 configDataListIndex = 0;
+#endif
                 currentTCNameStr.clear();
                 tmpConfigRowData.clear();
             }
@@ -4138,7 +4196,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
             continue;
         }
 
-        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
+        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList(true);
 #if defined(ENABLE_CONFIG_TEST_LOG)
         qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
@@ -4168,7 +4226,7 @@ bool ControlExcel::appendConvertConfigSignalSet() {
                 for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
-                        ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr);
+                        ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
 
                     // config 동작 조건이 없는 경우
                     if (configDataInfoList.size() == 0) {
@@ -4295,7 +4353,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
             continue;
         }
 
-        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList();
+        QStringList tcNameList = ExcelDataManger::instance().data()->isTCNameDataList(true);
 #if defined(ENABLE_CONFIG_TEST_LOG)
         qDebug() << "============================[appendConvertAllTCSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
@@ -4325,7 +4383,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                         true);
 
                     QPair<QStringList, QStringList> inputDataList =
-                        ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr);
+                        ExcelDataManger::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
 
                     // others 인 경우 (input signal/data가 존재하지 않기 때문에, appendAllTCSignalset 수행 X)
                     if (inputDataList.first.isEmpty() == true && inputDataList.second.isEmpty() == true) {
@@ -4349,9 +4407,12 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                             QStringList tmpOriginData = tmpInfo.isOriginData();
                             if (tmpOriginData.size() > 1) {
                                 inputDataStr = tmpOriginData.join(", ");
-                                inputDataStr.replace(isKeywordString(tmpInfo.isKeywordType()),
-                                                     isKeywordString(static_cast<int>(
-                                                         ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)));
+                                // inputDataStr.replace(isKeywordString(tmpInfo.isKeywordType()),
+                                //                      isKeywordString(static_cast<int>(
+                                //                          ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)));
+                                inputDataStr = isKeywordString(static_cast<int>(
+                                                   ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)) +
+                                               inputDataStr;
                             } else if (tmpOriginData.size() == 1) {
                                 inputDataStr.clear();
                                 inputDataStr = QString("%1[%2], [%3]")
@@ -4489,10 +4550,10 @@ QString ControlExcel::constructKeywordCaseName(const QString& originCaseName, co
     return returnStr;
 }
 
-void ControlExcel::constrtuctSheetTest() {
-#if 1
+void ControlExcel::testCode1() {
+#if 0
     qDebug() << "******************************************************************************************************";
-    qDebug() << "constrtuctSheetTest()";
+    qDebug() << "testCode1()";
     qDebug() << "******************************************************************************************************";
 
 #if 0
@@ -4566,23 +4627,56 @@ void ControlExcel::constrtuctSheetTest() {
 
 #endif
 
+#endif
+}
+
+void ControlExcel::testCode2() {
+#if 1
+    qDebug() << "******************************************************************************************************";
+    qDebug() << "testCode2()";
+    qDebug() << "******************************************************************************************************";
 
     int sheetIndex;
     QVariantList sheetData;
 
-    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
-    sheetData = getData(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants).toList();
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales;
+    sheetData = getData(sheetIndex).toList();
     ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
 
-    for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList()) {
+    ExcelDataManger::instance().data()->isTCNameDataList(true);
+    qDebug() << "=================================================================================================\n\n";
+
+    for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList(false)) {
         for (const auto& resultName : ExcelDataManger::instance().data()->isResultDataList(tcName)) {
             for (const auto& caseName : ExcelDataManger::instance().data()->isCaseDataList(tcName, resultName)) {
                 QPair<QStringList, QStringList> inputList =
-                    ExcelDataManger::instance().data()->isInputDataList(tcName, resultName, caseName);
+                    ExcelDataManger::instance().data()->isInputDataList(tcName, resultName, caseName, false);
                 ExcelDataManger::instance().data()->updateCaseDataInfo(tcName, resultName, caseName, inputList);
             }
         }
     }
+    qDebug() << "=================================================================================================\n\n";
+
+    for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList(false)) {
+        QPair<QStringList, QStringList> inputList = ExcelDataManger::instance().data()->isInputDataList(tcName, "", "", true);
+        SignalDataManger::instance().data()->isSignalDataInfo(inputList);
+    }
+
+#if 1
+    qDebug() << "=================================================================================================\n\n";
+    QMap<QString, SignalDataInfo> signalDataInfo =
+        isInputSignalDataInfo(sheetIndex, QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString(), QString()}), false);
+    qDebug() << "2=================================================================================================\n\n";
+
+    signalDataInfo = isInputSignalDataInfo(sheetIndex,
+        QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString("ON"),
+                     QString("Input_ABSEBSAmberWarningSignal == MESSAGE_TIMEOUT config_0")}), false);
+    qDebug() << "=================================================================================================\n\n";
+#endif
+
+
+
+#if 0
     // QStringList inputSignalList = QStringList({"Signal.InputSignal1", "Signal.InputSignal2"});
     // QStringList inputDataList = QStringList({"11111", "22222"});
     // ExcelDataManger::instance().data()->updateCaseDataInfo(QString("TC2"), QString("Result3"), QString("Case6"),
@@ -4603,18 +4697,21 @@ void ControlExcel::constrtuctSheetTest() {
             qDebug() << "\t Excel Save :" << filePath;
         }
     }
+#endif
 
-    qDebug() << "========================================================================================\n\n";
-    for (const auto& info : isConfigDataInfo("Config1")) {
-        qDebug() << "\t ConfigDataInfo :" << info;
-    }
-    qDebug() << "========================================================================================\n\n";
+#if 0
+    // qDebug() << "=================================================================================================\n\n";
+    // for (const auto& info : isConfigDataInfo("Config1")) {
+    //     qDebug() << "\t ConfigDataInfo :" << info;
+    // }
+    qDebug() << "=================================================================================================\n\n";
     sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
     sheetData = getData(sheetIndex).toList();
     ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
     for (const auto& info : ExcelDataManger::instance().data()->isConfigDataList("Config1")) {
         qDebug() << "\t ConfigDataInfo :" << info;
     }
+#endif
 #endif
 }
 

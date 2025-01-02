@@ -25,6 +25,7 @@ public:
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);
+    int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
 
 private:
     explicit ExcelUtil();

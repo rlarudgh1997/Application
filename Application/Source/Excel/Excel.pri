@@ -1,3 +1,4 @@
+include($$PWD/TestCase/TestCase.pri)
 include($$PWD/DataManger/DataManger.pri)
 include($$PWD/Util/Util.pri)
 

@@ -156,8 +156,6 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
 
 void ConfigSetting::readConfig() {
     for (int configType = ConfigInfo::ConfigTypeInvalid + 1; configType < ConfigInfo::ConfigTypeMax; configType++) {
-        QString configName =
-            mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName).toString();
         if (configType >= ConfigInfo::ConfigTypeMaxDoNotSave) {
             mConfigData[configType] =
                 mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeValue);

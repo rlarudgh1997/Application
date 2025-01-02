@@ -91,11 +91,13 @@ public:
     static QSharedPointer<ExcelDataManger>& instance();
 
     QList<QStringList> isSheetDataInfo();
-    QStringList isTCNameDataList();
+    QStringList isTCNameDataList(const bool& all);
+    bool isCheckData(const QString& tcName);
     QString isConfigData(const QString& tcName);
     QStringList isResultDataList(const QString& tcName);
     QStringList isCaseDataList(const QString& tcName, const QString& resultName);
-    QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName);
+    QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName,
+                                                    const bool& removeWhitespace);
     QList<QStringList> isOutputDataList(const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
@@ -105,7 +107,7 @@ public:
     void insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
                             const bool& insertBefore);
-    bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>>& inputList);
+    bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList);
 
 private:
     explicit ExcelDataManger();
@@ -116,9 +118,8 @@ private:
     QStringList isExcelDataOther(const int& columnIndex);
     QStringList isExcelDataConfig(const int& columnIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
-    QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace = false);
+    QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
     QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);
-    QString isCheckData(const QString& tcName);
     QString isGenTypeData(const QString& tcName);
     QString isVehicleTypeData(const QString& tcName);
     int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
