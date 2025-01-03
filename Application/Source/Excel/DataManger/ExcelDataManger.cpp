@@ -699,7 +699,42 @@ void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& r
 #endif
 }
 
-bool ExcelDataManger::isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList) {
+bool ExcelDataManger::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
     bool result = true;
+
+    QList<QStringList> configList = isConfigDataList(configName, other);
+
+    QStringList inputSignal;
+    QStringList inputData;
+
+    for (const auto& config : configList) {
+        qDebug() << "Found config data size :" << config.size();
+        if (config.size() == 2) {
+            inputSignal.append(config.at(0));
+            inputData.append(config.at(1));
+        } else if (config.size() == 4) {
+        } else {
+        }
+    }
+
+    if (other) {
+    } else {
+        for (auto iter = inputList.cbegin(); iter != inputList.cend(); ++iter) {
+            QString signal = iter.key();
+            QString data = iter.value();
+            if (inputSignal.contains(signal) == false) {
+                result = false;
+                break;
+            }
+            int signalIndex = inputSignal.indexOf(signal);
+            if (data != inputData.at(signalIndex)) {
+                result = false;
+                break;
+            }
+        }
+    }
+
+    qDebug() << "isValidConfigCheck :" << result;
+
     return result;
 }

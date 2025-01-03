@@ -9,6 +9,7 @@ const QString JSON_ALL_CASE_SIZE_NAME = QString("AllCaseSize");
 const QString JSON_OTHER_CASE_SIZE_NAME = QString("OtherCaseSize");
 
 const QString GEN_TYPE_DEFAULT = QString("Default");
+const QString GEN_TYPE_NEGATIVE_AND_POSITIVE = QString("NegativeAndPositive");
 const QString GEN_TYPE_NEGATIVE = QString("Negative");
 const QString GEN_TYPE_POSITIVE = QString("Positive");
 const QString TEXT_OTHERS = QString("Others");
@@ -111,6 +112,7 @@ QString TestCase::genCase() {
             if (it == sheetdata.begin()) {
                 currentCase = tmpCase;
                 currentResult = tmpResult;
+                currentVehicleType = tmpVehicleType;
                 currentTCName = tmpTCName;
             }
 
@@ -118,6 +120,9 @@ QString TestCase::genCase() {
                                            currentCase.toCaseFolded() != QString(TEXT_OTHERS).toCaseFolded())) {
                 appendCase(genType, currentCase, caseCnt, currentResult, resultCnt, currentVehicleType, currentTCName, tcNameCnt,
                            sheetIndex);
+                if (genType == GEN_TYPE_NEGATIVE_AND_POSITIVE) {
+                    caseCnt++;
+                }
                 caseCnt++;
                 currentCase = tmpCase;
             } else if (currentCase != tmpCase && (currentCase.toCaseFolded() == QString(TEXT_OTHERS).toCaseFolded() ||
@@ -139,6 +144,7 @@ QString TestCase::genCase() {
 
             if (currentTCName != tmpTCName) {
                 tcNameCnt++;
+                currentVehicleType = tmpVehicleType;
                 currentTCName = tmpTCName;
             }
 
@@ -190,13 +196,32 @@ void TestCase::appendCase(const QString& genType, const QString& caseName, const
     callPython(sendStr);
     QJsonObject caseJson = readJson();
 
-    QJsonObject newCaseJson = getCaseInfoJson(genType, caseJson, false);
-    appendCaseJson(mAllCaseJson, newCaseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName, tcNameNumber,
-                   sheetNumber, genType);
-
     if (genType == GEN_TYPE_DEFAULT) {
+        // Default case 추가
+        QJsonObject newCaseJson = getCaseInfoJson(genType, caseJson, false);
+        appendCaseJson(mAllCaseJson, newCaseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                       tcNameNumber, sheetNumber, genType);
+        // Other 연산을 위한 mDefaultFileJson 에 정보 추가 (TC 생성과 무관)
         appendCaseJson(mDefaultFileJson, caseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
                        tcNameNumber, sheetNumber, genType);
+    } else if (genType == GEN_TYPE_NEGATIVE_AND_POSITIVE) {
+        // Negative case 추가
+        QJsonObject negNewCaseJson = getCaseInfoJson(GEN_TYPE_NEGATIVE, caseJson, false);
+        auto negCaseName = caseName + "_Negative";
+        appendCaseJson(mAllCaseJson, negNewCaseJson, negCaseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                       tcNameNumber, sheetNumber, GEN_TYPE_NEGATIVE);
+        // Positive case 추가
+        QJsonObject posiNewCaseJson = getCaseInfoJson(GEN_TYPE_POSITIVE, caseJson, false);
+        auto posiCaseName = caseName + "_Positive";
+        appendCaseJson(mAllCaseJson, posiNewCaseJson, posiCaseName, caseNumber + 1, resultName, resultNumber, vehicleType, tcName,
+                       tcNameNumber, sheetNumber, GEN_TYPE_POSITIVE);
+    } else if (genType == GEN_TYPE_NEGATIVE) {
+        // Negative case 추가
+        QJsonObject newCaseJson = getCaseInfoJson(genType, caseJson, false);
+        appendCaseJson(mAllCaseJson, newCaseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                       tcNameNumber, sheetNumber, genType);
+    } else {
+        // no operation
     }
 }
 
@@ -306,11 +331,11 @@ void TestCase::appendCaseJson(QJsonObject& fileJson, QJsonObject& caseJson, cons
     QString titleCase = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
     QString titleSheet = TEXT_SHEET;
 
-    QString sheetKey = QString("%1[%2]").arg(titleSheet).arg(sheetNumber - sheetIdxStart);
+    QString sheetKey = QString("_%1[%2]").arg(titleSheet).arg(sheetNumber - sheetIdxStart);
     QString sheetName = sheetList[sheetNumber - sheetIdxStart];
-    QString tcNameKey = QString("%1[%2]").arg(titleTcName).arg(tcNameNumber);
-    QString resultKey = QString("%1[%2]").arg(titleResult).arg(resultNumber);
-    QString caseKey = QString("%1[%2]").arg(titleCase).arg(caseNumber);
+    QString tcNameKey = QString("_%1[%2]").arg(titleTcName).arg(tcNameNumber);
+    QString resultKey = QString("_%1[%2]").arg(titleResult).arg(resultNumber);
+    QString caseKey = QString("_%1[%2]").arg(titleCase).arg(caseNumber);
 
     // 1. SheetName 확인
     if (!fileJson.contains(sheetKey)) {
@@ -335,7 +360,6 @@ void TestCase::appendCaseJson(QJsonObject& fileJson, QJsonObject& caseJson, cons
             tcNameJson[titleConfigSig] = getConfigSig(sheetNumber, QStringList({tcName, "", ""}));
         }
 #endif
-        // tcNameJson[titleConfigSigData] = getConfigData(sheetNumber, QStringList({tcName, "", ""}));
     }
 
     // 3. Result 확인
@@ -383,6 +407,7 @@ QJsonArray TestCase::toJsonArray(const QList<T>& list) {
 QString TestCase::getGenType() {
     // API가 만들어지면 나중에 구현 필요
     QString ret = GEN_TYPE_DEFAULT;
+    // QString ret = GEN_TYPE_NEGATIVE_AND_POSITIVE;
     // QString ret = GEN_TYPE_NEGATIVE;
     return ret;
 }
@@ -481,8 +506,8 @@ void TestCase::appendOtherCaseJson(QJsonObject& fileJson, const QString& caseNam
     QString titleCase = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
     QString titleSheet = TEXT_SHEET;
 
-    QString sheetKey = QString("%1[%2]").arg(titleSheet).arg(sheetNumber - sheetIdxStart);
-    QString tcNameKey = QString("%1[%2]").arg(titleTcName).arg(tcNameNumber);
+    QString sheetKey = QString("_%1[%2]").arg(titleSheet).arg(sheetNumber - sheetIdxStart);
+    QString tcNameKey = QString("_%1[%2]").arg(titleTcName).arg(tcNameNumber);
 
     QString genType = getGenType();
     QString sendStr = getSignalInfoString(genType, sheetNumber, tcName, "", "");

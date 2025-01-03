@@ -2376,10 +2376,6 @@ QMap<QString, SignalDataInfo> ControlExcel::isMatchingSignalDataInfo(const int& 
                                 notUsedEnum.clear();
                                 break;
                             }
-                            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig): {
-                                // TODO: Config 처리 로직 구현 필요
-                                break;
-                            }
                             case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
                                 break;
                             }
@@ -2892,9 +2888,9 @@ QList<QPair<QString, int>> ControlExcel::isKeywordPatternInfo(const int& columnI
             qMakePair(QString("others"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
-        keywordPattern = {
-            qMakePair(QString("Config"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)),
-        };
+        // keywordPattern = {
+        //     qMakePair(QString("Config"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)),
+        // };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) {
         keywordPattern = {
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
@@ -4260,13 +4256,15 @@ bool ControlExcel::appendConvertConfigSignalSet() {
 #if defined(ENABLE_CONFIG_TEST_LOG)
                                 qDebug() << "tmpConfigDataSet : " << tmpConfigDataSet.at(idx);
 #endif
-                                QString inputSignalName = QString("%1%2")
-                                                              .arg(isKeywordString(static_cast<int>(
-                                                                  ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)))
-                                                              .arg(tmpConfigDataSet[idx][static_cast<int>(
-                                                                  ivis::common::ExcelSheetTitle::Other::InputSignal)]);
+                                QString inputSignalName =
+                                    tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)];
+
                                 QString inputSignalData =
-                                    tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)];
+                                    QString("%1%2")
+                                        .arg(isKeywordString(
+                                            static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)))
+                                        .arg(tmpConfigDataSet[idx]
+                                                             [static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)]);
                                 // Config의 SignalData Pair와 Sheet의 InputSignalData Pair에 중복되는 pair가 존재할 경우 Config를
                                 // 우선적으로 사용
                                 // TODO(csh): Error Type function 추가(arg: enum type / QStringList infoData)
@@ -4657,22 +4655,52 @@ void ControlExcel::testCode2() {
     }
     qDebug() << "=================================================================================================\n\n";
 
-    for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList(false)) {
-        QPair<QStringList, QStringList> inputList = ExcelDataManger::instance().data()->isInputDataList(tcName, "", "", true);
-        SignalDataManger::instance().data()->isSignalDataInfo(inputList);
-    }
-
 #if 1
-    qDebug() << "=================================================================================================\n\n";
-    QMap<QString, SignalDataInfo> signalDataInfo =
-        isInputSignalDataInfo(sheetIndex, QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString(), QString()}), false);
-    qDebug() << "2=================================================================================================\n\n";
+    QMap<QString, SignalDataInfo> signalDataInfo;
 
     signalDataInfo = isInputSignalDataInfo(sheetIndex,
         QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString("ON"),
                      QString("Input_ABSEBSAmberWarningSignal == MESSAGE_TIMEOUT config_0")}), false);
     qDebug() << "=================================================================================================\n\n";
+
+    signalDataInfo = isInputSignalDataInfo(sheetIndex,
+        QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString(), QString()}), false);
+    qDebug() << "=================================================================================================\n\n";
 #endif
+
+#if 0
+    // for (const auto& tcName : ExcelDataManger::instance().data()->isTCNameDataList(false)) {
+    //     QPair<QStringList, QStringList> inputList = ExcelDataManger::instance().data()->isInputDataList(tcName, "", "", true);
+    //     SignalDataManger::instance().data()->isSignalDataInfo(inputList);
+    // }
+    // qDebug() << "=================================================================================================\n\n";
+
+    SignalDataManger::instance().data()->isSignalDataInfo(sheetIndex,
+        QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString("ON"),
+                     QString("Input_ABSEBSAmberWarningSignal == MESSAGE_TIMEOUT config_0")}), false);
+    qDebug() << "=================================================================================================\n\n";
+
+    SignalDataManger::instance().data()->isSignalDataInfo(sheetIndex,
+        QStringList({QString("IMG_TelltaleABSAmberLamp_stat"), QString(), QString()}), false);
+    qDebug() << "=================================================================================================\n\n";
+#endif
+
+
+    QMap<QString, QString> inputList;
+
+    inputList = {
+        {"SFC.ABS_CV.Telltale.ABS_CV.Stat", "ON"},
+        {"SFC.ADAS_Driving_New.Constant.BlindSpotSafetyFailure.Stat", "OFF"},
+    };
+    ExcelDataManger::instance().data()->isValidConfigCheck(false, QString("Config1"), inputList);
+
+    inputList = {
+        {"SFC.ABS_CV.Telltale.ABS_CV.Stat", "ON"},
+        {"SFC.ADAS_Driving_New.Constant.BlindSpotSafetyFailure.Stat", "ON"},
+    };
+    ExcelDataManger::instance().data()->isValidConfigCheck(false, QString("Config1"), inputList);
+
+
 
 
 

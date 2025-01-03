@@ -49,7 +49,7 @@ public:
                     QStringList othersOutputValue;
                     QVector<bool> othersIsInitialize;
                     for (const QString& key : tcObj.keys()) {
-                        if (key.startsWith("Result[")) {
+                        if (key.startsWith("_Result[")) {
                             QJsonObject resultObj = tcObj[key].toObject();
                             QString resultName = resultObj["Result"].toString();
                             QStringList outputSignal;
@@ -64,7 +64,7 @@ public:
                                 isInitialize << signalObj["isInitialize"].toBool();
                             }
                             for (const QString& caseKey : resultObj.keys()) {
-                                if (caseKey.startsWith("Case[")) {
+                                if (caseKey.startsWith("_Case[")) {
                                     QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
                                     QJsonObject caseObj = resultObj[caseKey].toObject();
                                     QString caseName = caseObj["Case"].toString();

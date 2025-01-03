@@ -107,7 +107,7 @@ public:
     void insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
                             const bool& insertBefore);
-    bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList);
+    bool isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList);
 
 private:
     explicit ExcelDataManger();
