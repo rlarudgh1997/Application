@@ -3709,6 +3709,9 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                 if (rowIndex != keyword.isRow()) {
                     continue;
                 }
+#if defined(ENABLE_DEBUG_LOG_KEYWORD)
+                qDebug() << "====================================================================";
+#endif
                 switch (keyword.isKeyword()) {
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over): {
                         // convertRowData = rowDataList.toStringList();
@@ -3917,6 +3920,12 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                         //     }
                         // }
                         convertRowData[keyword.isColumn()] = notKeywordConvertDataList.join(", ");
+#if defined(ENABLE_DEBUG_LOG_KEYWORD)
+                        qDebug() << "[Not] keyword Type    : " << keyword.isKeyword();
+                        qDebug() << "[Not] keyword Data    : " << keyword.isText();
+                        qDebug() << "[Not] Keyword RowData : " << convertRowData;
+                        qDebug() << "[Not] Not Used Enum   : " << notKeywordConvertDataList;
+#endif
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect):
@@ -3925,6 +3934,11 @@ void ControlExcel::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout): {
                         // convertRowData = rowDataList.toStringList();
                         convertRowData[keyword.isColumn()] = keyword.isText();
+#if defined(ENABLE_DEBUG_LOG_KEYWORD)
+                        qDebug() << "[ETC] keyword Type    : " << keyword.isKeyword();
+                        qDebug() << "[ETC] keyword Data    : " << keyword.isText();
+                        qDebug() << "[ETC] Keyword RowData : " << convertRowData;
+#endif
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other): {
@@ -4034,24 +4048,26 @@ void ControlExcel::constructOutputConfigColumnDataInfo(const QList<int>& convert
             }
 #endif
 
-#if defined(ENABLE_DEBUG_LOG_KEYWORD)
-            qDebug() << "=========================================================================================";
-            qDebug() << "1 currentTCNameStr : " << currentTCNameStr << ", currentResultStr : " << currentResultStr;
-            qDebug() << "1 all tmpConfigRowData : " << tmpConfigRowData;
-            if (tmpOutputRowData.isEmpty() == false && outputDataListIndex < tmpOutputRowData.length()) {
-                qDebug() << "1 Output Data List : " << tmpOutputRowData.at(outputDataListIndex);
-            }
-            qDebug() << "\n";
-            qDebug() << "2 all tmpOutputRowData : " << tmpOutputRowData;
-            if (tmpConfigRowData.isEmpty() == false && configDataListIndex < tmpConfigRowData.length()) {
-                qDebug() << "2 Config Data List : " << tmpConfigRowData.at(configDataListIndex);
-            }
-            qDebug() << "\n";
-            if (tmpOutputConvertData.isEmpty() == false) {
-                qDebug() << "> Append tmpOutputConvertData : " << tmpOutputConvertData;
-            }
-            qDebug() << "=========================================================================================";
-#endif
+            // #if defined(ENABLE_DEBUG_LOG_KEYWORD)
+            //             qDebug() <<
+            //             "========================================================================================="; qDebug()
+            //             << "1 currentTCNameStr : " << currentTCNameStr << ", currentResultStr : " << currentResultStr; qDebug()
+            //             << "1 all tmpConfigRowData : " << tmpConfigRowData; if (tmpOutputRowData.isEmpty() == false &&
+            //             outputDataListIndex < tmpOutputRowData.length()) {
+            //                 qDebug() << "1 Output Data List : " << tmpOutputRowData.at(outputDataListIndex);
+            //             }
+            //             qDebug() << "\n";
+            //             qDebug() << "2 all tmpOutputRowData : " << tmpOutputRowData;
+            //             if (tmpConfigRowData.isEmpty() == false && configDataListIndex < tmpConfigRowData.length()) {
+            //                 qDebug() << "2 Config Data List : " << tmpConfigRowData.at(configDataListIndex);
+            //             }
+            //             qDebug() << "\n";
+            //             if (tmpOutputConvertData.isEmpty() == false) {
+            //                 qDebug() << "> Append tmpOutputConvertData : " << tmpOutputConvertData;
+            //             }
+            //             qDebug() <<
+            //             "=========================================================================================";
+            // #endif
             if (curTCNameMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::MergeEnd) ||
                 curTCNameMergeKeywordType == static_cast<int>(ivis::common::MergeKeywordEnum::MergeKeywordType::NoMergeType)) {
 #if defined(USE_SHEET_COLUMN_OLD)
@@ -4700,7 +4716,14 @@ void ControlExcel::testCode2() {
     };
     ExcelDataManger::instance().data()->isValidConfigCheck(false, QString("Config1"), inputList);
 
-
+    inputList = {
+        {"SFC.ABS_CV.Telltale.ABS_CV.Stat", "ON"},
+        {"SFC.ADAS_Driving_New.Constant.BlindSpotSafetyFailure.Stat", "OFF"},
+        {"SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus", "OFF"},
+        {"SFC.ADAS_Driving_New.Constant.ISLAAddtnlSign.Stat", "ON"},
+        {"Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV", "TRUCK"},
+    };
+    ExcelDataManger::instance().data()->isValidConfigCheck(true, QString("Config1"), inputList);
 
 
 

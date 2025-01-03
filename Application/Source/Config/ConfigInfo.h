@@ -27,8 +27,8 @@ public:
         ConfigTypeGenType,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
-        ConfigTypeConfigTitle,
         ConfigTypeOtherTitle,
+        ConfigTypeConfigTitle,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -109,23 +109,24 @@ private:
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
                                                           "Inters", "Outputs", "Configs"})));
+#if defined(USE_SHEET_COLUMN_OLD)
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
-        mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
-            "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
-#if defined(USE_SHEET_COLUMN_OLD)
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
             QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
                                    "Input_Data", "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data",
                                    "Negative Test"})));
 #else
+        mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
+            "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
             QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
-                                   "Input_Data", "Output_Signal", "isInitialize", "Output_Value"
-                                   })));
+                                   "Input_Data", "Output_Signal", "isInitialize", "Output_Value"})));
 #endif
+        mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
+            "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
