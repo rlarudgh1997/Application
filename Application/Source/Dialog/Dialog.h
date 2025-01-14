@@ -34,6 +34,7 @@ public:
         DataTypeScreenRect,
         DataTypeSelectAll,
         DataTypeMultiCheck,
+        DataTypeSelectInputData,
         DataTypeCheckModelIndex,
         DataTypeViewLogStop,
         DataTypeAutoCompleteListInput,

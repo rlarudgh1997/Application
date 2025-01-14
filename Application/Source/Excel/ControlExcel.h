@@ -5,6 +5,7 @@
 #include "CommonUtil.h"
 #include "CommonDefine.h"
 
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
 class KeywordInfo {
 public:
     KeywordInfo() {
@@ -162,6 +163,9 @@ private:
 private:
     QList<QPair<QString, QPair<QString, QStringList>>> mSheetData;
 };
+#else
+class KeywordInfo;
+#endif
 
 class ControlExcel : public AbstractControl {
     Q_OBJECT
@@ -171,14 +175,17 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     QMap<QString, SignalDataInfo> isInputSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo,
                                                         const bool& caseRemove);
     QMap<QString, SignalDataInfo> isOutputSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo);
     QMap<QString, SignalDataInfo> isConfigSignalDataInfo(const int& sheetIndex, const QStringList& columnDataInfo);
     SheetConfigurationInfo isSheetConfigurationInfo(const int& sheetIndex);
     QString isIGNElapsedName(const int& ignType);
+#endif
     QStringList isDescriptionDataInfo();
     QString isKeywordString(const int keywordType);
+    QString isSignalValueEnum(const QString& signalName, const QString& value);
 
 private:
     explicit ControlExcel();
@@ -196,6 +203,7 @@ private:
     void saveExcelFile(const bool& saveAs);
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     QString isSfcFileInfo(const QString& signalName);
     int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
@@ -206,10 +214,12 @@ private:
     QMap<int, QStringList> isSignalDataInfo(const QString& signalName, const QStringList& inputData, const QString& vehicleType,
                                             int& dataType);
     QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
+#endif
     QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
                                             const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
     QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
                                       const bool& normal = true);
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     QList<QStringList> isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo, const QPair<int, int>& columnInfo);
     QList<QStringList> isDataInfo(const int& sheetIndex, const QString& tcName, const QString& result, const QString& caseInfo,
                                   const QPair<int, int>& columnInfo, const int& checkColumnIndex = 0);
@@ -229,6 +239,7 @@ private:
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
     QMap<QString, SignalDataInfo> isMatchingSignalDataInfo(const int& dataInfoType, const int& sheetIndex,
                                                            const QStringList& columnDataInfo);
+#endif
     void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
     void updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType);
     void updateAutoCompleteSuggestions(const QVariantList& inputData);
@@ -236,10 +247,12 @@ private:
     void updateAutoCompleteData(const QVariantList& inputData);
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     int isKeywordType(const int& columnIndex, QString& inputData);
     QList<KeywordInfo> isKeywordTypeInfo(const int& sheetIndex, const QList<int>& inputColumnList);
     bool isExcelDataValidation();
+#endif
     bool replaceGenDataInfo();
 
     QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
@@ -248,7 +261,9 @@ private:
                                              const int& originSheetIndex, const bool& isEqualData);
     void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
     void constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     void constructOutputConfigColumnDataInfo(const QList<int>& convertSheetIndexList);
+#endif
     QList<QList<QStringList>> constructConvertConfigSignalSet(const QString& configName);
     bool appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();

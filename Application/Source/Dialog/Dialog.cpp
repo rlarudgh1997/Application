@@ -220,6 +220,10 @@ void Dialog::connectAppModeRadio(const bool& state) {
 
 void Dialog::connectSelectList(const bool& state) {
     if (state) {
+        connect(mGui->SelectListInput, &QLineEdit::textChanged, [=](const QString& text) {
+            setProperty(DataTypeSelectInputData, text);
+            qDebug() << "SelectListInput :" << text;
+        });
         connect(mGui->SelectListAll, &QPushButton::clicked,
                 [=]() { updateSelectListCheckState((getProperty(DataTypeSelectAll).toBool() == false), QStringList()); });
         connect(mGui->SelectListOK, &QPushButton::clicked, [=]() {
@@ -251,6 +255,7 @@ void Dialog::connectSelectList(const bool& state) {
                     }
                 });
     } else {
+        disconnect(mGui->SelectListInput, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListAll, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListOK, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListItemList->verticalScrollBar(), nullptr, nullptr, nullptr);
@@ -391,11 +396,12 @@ void Dialog::connectAutoComplete(const bool& state) {
             updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
         });
         connect(mGui->AutoCompleteDisplay, &QLineEdit::returnPressed, [=]() {
-            int index = mGui->SelectKeyword->currentIndex();
-            QString selectKeyword = (index == 0) ? ("") : (mGui->SelectKeyword->currentText());
-            QString currentText = selectKeyword + mGui->AutoCompleteDisplay->text();
+            QString currentText = mGui->AutoCompleteDisplay->text();
             emit signalAutoCompleteSelected(currentText);
             QMetaObject::invokeMethod(this, "accept", Qt::QueuedConnection);  // 다이얼로그 종료시 App crash 발생하여 변경
+        });
+        connect(mGui->AutoCompleteDisplayOK, &QPushButton::clicked, [=]() {
+            emit mGui->AutoCompleteDisplay->returnPressed();
         });
         connect(mGui->SelectKeyword, &QComboBox::currentIndexChanged, [=](const int index) {
             QString selectKeyword = (index == 0) ? ("") : (mGui->SelectKeyword->currentText());
@@ -410,12 +416,19 @@ void Dialog::connectAutoComplete(const bool& state) {
                 mGui->AutoCompleteDisplay->setText(currentText);
             }
         });
+        connect(mGui->AutoCompleteList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
+            if (item) {
+                emit mGui->AutoCompleteDisplay->returnPressed();
+            }
+        });
+
     } else {
+        disconnect(mGui->AutoCompleteInput, nullptr, nullptr, nullptr);
         disconnect(mGui->ListCheck1, nullptr, nullptr, nullptr);
         disconnect(mGui->ListCheck2, nullptr, nullptr, nullptr);
         disconnect(mGui->ListCheck3, nullptr, nullptr, nullptr);
-        disconnect(mGui->AutoCompleteInput, nullptr, nullptr, nullptr);
         disconnect(mGui->AutoCompleteDisplay, nullptr, nullptr, nullptr);
+        disconnect(mGui->AutoCompleteDisplayOK, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectKeyword, nullptr, nullptr, nullptr);
         disconnect(mGui->AutoCompleteList, nullptr, nullptr, nullptr);
     }
@@ -788,6 +801,9 @@ bool Dialog::updateSelectList(const QVariantList& info) {
 
     setProperty(DataTypeMultiCheck, multiCheck);
 
+    setProperty(DataTypeSelectInputData, QVariant());
+    mGui->SelectListInput->setVisible(false);
+
     mGui->SelectListAll->setVisible(multiCheck);
     mModel.setHorizontalHeaderLabels(columnList);
     mModel.setColumnCount(columnList.size());
@@ -1013,6 +1029,11 @@ bool Dialog::updateAutoComplete(const QVariantList& info) {
         mGui->ListCheck3->setCheckState((tcName) ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked));
         mGui->ListCheck3->setEnabled(tcName);
         mGui->ListCheck3->setText("TCName");
+
+
+        mGui->AutoCompleteListCheckTitle->setText("[Signal Type]");
+        mGui->AutoCompleteInputTitle->setText("Search :");
+        mGui->AutoCompleteDisplayTitle->setText("Select  :");
 
         updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
     }

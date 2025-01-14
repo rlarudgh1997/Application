@@ -37,8 +37,7 @@
 // #define USE_PYTHON_LIB_CHECK_READ_WRITE            // Excel Read/Write 동작시 파이썬 라이브러리 존재 유무로 동작 하도록 사용
 // #define USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING     // App 부팅 후 엑세 시트 표시
 
-#define USE_DEMO
-
 // #define USE_SHEET_COLUMN_OLD
+#define USE_CODE_BEFORE_CLASS_SPLIT
 
 #endif  // COMMON_DEFINE_H

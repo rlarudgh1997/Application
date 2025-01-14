@@ -7,6 +7,61 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
+class KeywordTypeInfo {
+public:
+    KeywordTypeInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
+        : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data) {
+    }
+    KeywordTypeInfo() = default;
+    KeywordTypeInfo(const KeywordTypeInfo& other) = default;
+    KeywordTypeInfo& operator=(const KeywordTypeInfo& other) = default;
+
+    bool operator==(const KeywordTypeInfo& other) const {
+        return ((mRow == other.mRow) && (mColumn == other.mColumn) && (mText == other.mText) && (mKeyword == other.mKeyword) &&
+                (mData == other.mData));
+    }
+    bool operator!=(const KeywordTypeInfo& other) const {
+        return !(*this == other);
+    }
+
+    int isRow() const {
+        return mRow;
+    }
+    int isColumn() const {
+        return mColumn;
+    }
+    QString isText() const {
+        return mText;
+    }
+    int isKeyword() const {
+        return mKeyword;
+    }
+    QString isData() const {
+        return mData;
+    }
+    QList<QStringList> isRowData() const {
+        return mRowData;
+    }
+    void updateRowData(const QList<QStringList>& rowData) {
+        mRowData = rowData;
+    }
+    QList<QStringList> isConvertData() const {
+        return mConvertData;
+    }
+    void updateConvertData(const QList<QStringList>& convertData) {
+        mConvertData = convertData;
+    }
+
+private:
+    int mRow = 0;
+    int mColumn = 0;
+    QString mText = QString();
+    int mKeyword = 0;
+    QString mData = QString();
+    QList<QStringList> mConvertData = QList<QStringList>();
+    QList<QStringList> mRowData = QList<QStringList>();
+};
+
 class ExcelUtil : public QObject {
     Q_OBJECT
 
@@ -21,11 +76,15 @@ public:
     QStringList isDescriptionDataInfo();
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
+    int isKeywordType(const int& columnIndex, QString& inputData);
+    QList<KeywordTypeInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
     int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
+    QString isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
+                                   const QStringList& inputData, const QStringList& valueEnum);
 
 private:
     explicit ExcelUtil();

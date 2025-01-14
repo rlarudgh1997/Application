@@ -81,11 +81,34 @@ class SignalDataManger : public QObject {
 public:
     static QSharedPointer<SignalDataManger>& instance();
 
-    QMap<QString, SignalData> isSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    int isDataType(const QString& dataTypeStr);
+    int isSignalType(const QString& signalName);
+    QString isSfcFileInfo(const QString& signalName);
+    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
+    QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
+    QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
+                                                 const QMap<int, QStringList>& fileList, int& dataType);
+    QMap<int, QStringList> isSignalDataList(const QString& signalName, const QStringList& inputData, const QString& vehicleType,
+                                            int& dataType);
+    QString isSignalValueEnum(const QString& signalName, const QString& value);
+    QStringList isSignalValueEnum(const bool& toEnum, const QString& signalName);
+    QStringList isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
+                                      QString& matchingValue);
+    QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
+                                               QMap<QString, QMap<int, QStringList>>& dataInfo);
+    QMap<QString, SignalData> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<QString, SignalData> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<QString, SignalData> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<QString, SignalData> isOutputSignalDataInfo(const QList<QStringList>& list);
+    QMap<QString, SignalData> isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    bool isExcelDataValidation();
 
 private:
     explicit SignalDataManger();
 
+    bool isExceptionSignal(const QString& signalName);
+    QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
+    QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
 };
 
 

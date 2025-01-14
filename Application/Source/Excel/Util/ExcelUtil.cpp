@@ -131,6 +131,213 @@ QString ExcelUtil::isKeywordString(const int keywordType) {
     return keywordPatternInfo[keywordType];
 }
 
+int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
+    int keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
+    QString tempInputData = inputData;
+
+    QList<QPair<QString, int>> keywordPatternList = isKeywordPatternInfo(columnIndex);
+    QStringList compareKeywordList = QStringList({
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
+        isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
+    });
+
+    // [입력된 inputData 중 아래에 텍스트에 해당 하는 경우 처리 방법]
+    //     [방법 1] 대소문자 구분 없이 비교 (compare(str, Qt::CaseInsensitive))
+    //     [방법 2] 선언된 키워드 패턴 스트링으로 변경
+    //         1. "Value Changed"  =>> "ValueChanged"
+    //         2. "CRC", "crc"  =>> "Crc"
+    //         3. "Time out", "TimeOut"  =>> "Timeout"
+    //         4. "COLLECT", "collect", "" =>> "Collect"
+    //         5. ""D’", "D`", "" =>> "D'"
+    //         6. "Others", "Other" | input_Signal 없으면 => "Others"
+
+    for (const auto& pair : keywordPatternList) {
+        QString currentKeyword = pair.first;
+        int currentKeywordType = pair.second;
+        bool compareState = false;
+
+        for (const auto& str : compareKeywordList) {
+            if (currentKeyword.compare(str, Qt::CaseInsensitive) == 0) {
+                compareState = true;
+                break;
+            }
+        }
+
+        if (compareState) {
+            if (tempInputData.compare(currentKeyword, Qt::CaseInsensitive) == 0) {
+                keywordType = currentKeywordType;
+                tempInputData = isKeywordString(keywordType);
+            }
+        } else {
+            if (tempInputData.contains(currentKeyword, Qt::CaseInsensitive) == true) {
+                if ((currentKeywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) ||
+                    (currentKeywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) ||
+                    (currentKeywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow))) {
+                    tempInputData.remove(" ");
+                    tempInputData.replace(currentKeyword, ", ");
+                } else {
+                    // no operation
+                }
+                keywordType = currentKeywordType;
+                tempInputData.remove(currentKeyword);
+            }
+        }
+    }
+
+    if (keywordType != static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+        // qDebug() << "isKeywordType :" << keywordType << ", InputData :" << inputData << "->" << tempInputData;
+        inputData = tempInputData;
+    } else {
+        QList<QPair<QString, int>> nonKeywordPatternList = {
+            qMakePair(QString("D’"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
+            qMakePair(QString("D`"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
+            qMakePair(QString("Value Changed"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)),
+            qMakePair(QString("Other"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)),
+            qMakePair(QString("Time Out"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
+            // qMakePair(QString("MESSAGE_TIMEOUT"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
+            qMakePair(QString("timeout"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
+            qMakePair(QString("Crc Error"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
+            qMakePair(QString("crc"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
+            // qMakePair(QString("CRC_ERROR"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
+        };
+        for (const auto& pair : nonKeywordPatternList) {
+            QString currentKeyword = pair.first;
+            int currentKeywordType = pair.second;
+            QString tmpValue = tempInputData;
+            QStringList enumValueList = tmpValue.remove(" ").split(",");
+            for (int i = 0; i < enumValueList.size(); ++i) {
+                QString val = enumValueList.at(i);
+                if (val.compare(currentKeyword, Qt::CaseInsensitive) == 0) {
+                    keywordType = currentKeywordType;
+                    enumValueList[i] = isKeywordString(keywordType);
+                }
+            }
+            inputData = enumValueList.join(", ");
+            if (keywordType != static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+                break;
+            }
+        }
+    }
+
+    // qDebug() << "isKeywordType :" << keywordType << ", InputData :" << inputData << "->" << tempInputData;
+    return keywordType;
+}
+
+QList<KeywordTypeInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList) {
+    const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
+    const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
+    const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
+    const QList<int> columnList = inputColumnList;
+
+    QList<KeywordTypeInfo> keywordTypeInfo;
+    int rowIndex = 0;
+    QList<QPair<int, int>> caseRowInfo;
+    QPair<int, int> rowInfo = QPair<int, int>((-1), (-1));
+
+    for (const auto& rowDataList : sheetData) {
+        QStringList rowData = rowDataList.toStringList();
+        if (rowData.size() < (static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max))) {
+            // qDebug() << "Fail to sheet data list size :" << rowData.size();
+            continue;
+        }
+
+        for (const auto& columnIndex : columnList) {
+            QString text = rowData.at(columnIndex);
+            int keywordType = isKeywordType(columnIndex, text);
+            QString data = QString();
+
+            if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+                continue;
+            }
+
+            if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)) {
+                data = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
+            } else if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) ||
+                       (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Not))) {
+                data = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+            } else if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)) ||
+                       (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)) ||
+                       (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)) ||
+                       (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)) ||
+                       (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout))) {
+                data = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect)) {
+                data = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
+            } else {
+                // no operation
+            }
+            keywordTypeInfo.append(KeywordTypeInfo(rowIndex, columnIndex, text, keywordType, data));
+        }
+
+        QString caseText = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
+
+        if (caseText.contains(mergeStart)) {
+            rowInfo = QPair<int, int>(rowIndex, (-1));
+        } else if (caseText.contains(mergeEnd)) {
+            rowInfo = QPair<int, int>(rowInfo.first, rowIndex);
+        } else {
+        }
+
+        if ((rowInfo.first >= 0) && (rowInfo.second >= 0)) {
+            caseRowInfo.append(rowInfo);
+            rowInfo = QPair<int, int>((-1), (-1));
+        }
+
+        rowIndex++;
+    }
+
+    for (auto& keyword : keywordTypeInfo) {
+        // if ((keyword.isKeyword() & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)) == false) {
+        //     continue;
+        // }
+
+        QPair<int, int> rowInfo = QPair<int, int>((-1), (-1));
+        for (const auto& row : caseRowInfo) {
+            if ((keyword.isRow() < row.first) || (keyword.isRow() > row.second)) {
+                continue;
+            }
+            rowInfo = row;
+            break;
+        }
+
+        QList<QStringList> rowData;
+        int getRowIndex = 0;
+        // Keyword 에 해당하는 Row 데이터 전체 구성
+        for (const auto& rowDataList : sheetData) {
+            if ((getRowIndex >= rowInfo.first) && (getRowIndex <= rowInfo.second)) {
+                QStringList rowDataInfo = rowDataList.toStringList();
+                QString inputSignalInfo = rowDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+                if (inputSignalInfo.contains(keyword.isText()) == false) {
+                    QStringList dataInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
+                    for (int index = 0; index < static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal); ++index) {
+                        dataInfo[index] = rowDataInfo.at(index);
+                    }
+                    rowData.append(dataInfo);
+                }
+            }
+            getRowIndex++;
+        }
+        keyword.updateRowData(rowData);
+    }
+
+#if 0
+    for (const auto& keyword : keywordTypeInfo) {
+        qDebug() << "-----------------------------------------------------------------------------------------";
+        qDebug() << "Keyword[" << sheetIndex << "]";
+        qDebug() << "\t Info        :" << keyword.isRow() << keyword.isColumn() << keyword.isKeyword() << keyword.isText();
+        qDebug() << "\t Data        :" << keyword.isData();
+        qDebug() << "\t RowData     :" << keyword.isRowData();
+        qDebug() << "\t ConvertData :" << keyword.isConvertData();
+    }
+#endif
+
+    return keywordTypeInfo;
+}
+
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
@@ -369,4 +576,33 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
         }
     }
     return convertKeywordType;
+}
+
+QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
+                                          const QStringList& inputData, const QStringList& valueEnum) {
+    const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
+
+    // qDebug() << "\t isPreconditionMaxValue :" << dataType << keywordType << inputData.size() << valueEnum.size();
+    if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
+        return QString();
+    }
+
+    if ((dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) &&
+        (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64))) {
+        return QString();
+    }
+
+    if (keywordType != static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+        return QString();
+    }
+
+    if (inputData.size() != 1) {
+        return QString();
+    }
+
+    if (valueEnum.size() > 0) {
+        return QString();
+    }
+
+    return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);
 }

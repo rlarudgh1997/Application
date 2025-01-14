@@ -4,6 +4,8 @@
 #include "ConfigSetting.h"
 #include "ExcelUtil.h"
 
+const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
+
 QSharedPointer<ExcelDataManger>& ExcelDataManger::instance() {
     static QSharedPointer<ExcelDataManger> gManger;
     if (gManger.isNull()) {
@@ -35,7 +37,7 @@ QList<QStringList> ExcelDataManger::isSheetDataInfo() {
     sheetData.reserve(rowMax);
     for (int index = 0; index < rowMax; ++index) {
         QStringList rowData;
-        for (const auto &columnData : excelSheetData) {
+        for (const auto& columnData : excelSheetData) {
             if (index < columnData.size()) {
                 rowData.append(columnData.at(index));
             }
@@ -336,7 +338,7 @@ bool ExcelDataManger::isCheckData(const QString& tcName) {
     return check;
 }
 
-QString ExcelDataManger::isGenTypeData(const QString& tcName) {
+int ExcelDataManger::isGenTypeData(const QString& tcName, QString& genTypeStr) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -347,11 +349,23 @@ QString ExcelDataManger::isGenTypeData(const QString& tcName) {
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
     QStringList genTypeList = isParsingDataList(list, true);
-    QString genType = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
+    genTypeStr = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
 
-    // qDebug() << "isGenTypeData :" << tcName;
-    // qDebug() << "\t Info :" << genTypeList.size() << genType;
-    // qDebug() << "\n";
+    int genType = ivis::common::GenTypeEnum::GenTypeDefault;
+    if (ivis::common::isCompareString(genTypeStr, QString("NegativePositive"))) {
+        genType = ivis::common::GenTypeEnum::GenTypeNegativePositive;
+    } else if (ivis::common::isCompareString(genTypeStr, QString("Positive"))) {
+        genType = ivis::common::GenTypeEnum::GenTypePositive;
+    } else {
+        if (genTypeStr.size() > 0) {
+            genType = ivis::common::GenTypeEnum::GenTypeInvalid;
+            qDebug() << "Fail to gen type(invaild) :" << genTypeStr;
+        }
+    }
+
+    qDebug() << "isGenTypeData :" << tcName;
+    qDebug() << "\t Info :" << genTypeList.size() << genType << genTypeStr;
+    qDebug() << "\n";
 
     return genType;
 }
@@ -436,7 +450,8 @@ QStringList ExcelDataManger::isCaseDataList(const QString& tcName, const QString
 }
 
 QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& tcName, const QString& resultName,
-                                                                 const QString& caseName, const bool& removeWhitespace) {
+                                                                 const QString& caseName, const bool& removeWhitespace,
+                                                                 const bool& checkOthers) {
     const QStringList inputSignal = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
     const QStringList inputData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, resultName, caseName);
@@ -456,26 +471,91 @@ QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& 
         }
     }
     QPair<QStringList, QStringList> inputList = qMakePair(signalInfo, dataInfo);
-    QString others = ExcelUtil::instance()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other));
-    bool tcNameBaseState = (tcName.size() > 0) && (resultName.size() == 0) && (caseName.size() == 0);
-    if (tcNameBaseState) {
-        QStringList caseList = isCaseDataList(tcName, QString());
-        if (caseList.contains(others)) {
-            inputList = QPair<QStringList, QStringList>();
-            // qDebug() << "Found others case in case list :" << others << inputList.first.size();
-        }
-    } else {
-        // case(others) 인 경우 inputList 가 있는 경우 일반적인 others 키워드로 동작 하지 않음
-        if ((caseName.compare(others) == false) && (inputList.first.size() == 1)) {
-            if (inputList.first.at(0).size() == 0) {
-                inputList.first.clear();
-                inputList.second.clear();
+
+    if (checkOthers) {
+        QString others =
+            ExcelUtil::instance()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other));
+        bool tcNameBaseState = (tcName.size() > 0) && (resultName.size() == 0) && (caseName.size() == 0);
+        if (tcNameBaseState) {
+            QStringList caseList = isCaseDataList(tcName, QString());
+            if (caseList.contains(others) == false) {
+                // qDebug() << "Found others case in case list : 0";
+                inputList = QPair<QStringList, QStringList>();
+            }
+        } else {
+            if ((caseName.compare(others) == false) && (inputList.first.size() == 1) && (inputList.first.at(0).size() == 0)) {
+                // case(others) 인 경우 inputList 가 있는 경우 일반적인 others 키워드로 동작 하지 않음
+                // qDebug() << "case(others) and if there is an inputList, it does not work as the general others keyword.";
+                inputList = QPair<QStringList, QStringList>();
             }
         }
     }
 
     // qDebug() << "isInputDataList :" << tcName << resultName << caseName << removeWhitespace;
-    // qDebug() << "\t Info :" << inputList.first.size() << inputList.first << inputList.second.size() << inputList.second;
+    // qDebug() << "\t Signal :" << inputList.first.size() << inputList.first;
+    // qDebug() << "\t Data   :" << inputList.second.size() << inputList.second;
+    // qDebug() << "\n";
+
+    return inputList;
+}
+
+QPair<QStringList, QStringList> ExcelDataManger::isInputDataWithoutCaseList(const QString& tcName, const QString& resultName,
+                                                                            const QString& caseName) {
+    const QPair<QStringList, QStringList> allInputList = isInputDataList(tcName, QString(), QString(), true, false);
+    const QStringList caseInputSignalList = isInputDataList(tcName, resultName, caseName, true).first;
+
+    bool allIgnSignalContains = false;
+    bool caseIgnSignalContains = false;
+
+    QMap<QString, QStringList> allInputInfo;
+    for (int index = 0; index < allInputList.first.size(); ++index) {
+        QString signal = allInputList.first.at(index);
+        if (signal.size() == 0) {
+            continue;
+        }
+        if (ivis::common::isContainsString(signal, SFC_IGN_ELAPSED)) {
+            allIgnSignalContains = true;
+        }
+        QString data = allInputList.second.at(index);
+        QStringList dataInfo = data.remove(" ").split(",");
+        allInputInfo[signal].append(dataInfo);
+    }
+    for (const auto& signal : caseInputSignalList) {
+        if (ivis::common::isContainsString(signal, SFC_IGN_ELAPSED)) {
+            caseIgnSignalContains = true;
+            break;
+        }
+    }
+
+    QPair<QStringList, QStringList> inputList;
+    for (auto iter = allInputInfo.cbegin(); iter != allInputInfo.cend(); ++iter) {
+        QString signal = iter.key();
+        QStringList dataInfo = iter.value();
+        dataInfo.removeAll("");
+        dataInfo.removeDuplicates();
+
+        for (const auto& removeSignal : caseInputSignalList) {
+            if (removeSignal.compare(signal) == false) {
+                signal.clear();
+                break;
+            }
+        }
+        if (signal.size() > 0) {
+            inputList.first.append(signal);
+            inputList.second.append(dataInfo.join(", "));
+        }
+    }
+
+    if ((allIgnSignalContains) && (caseIgnSignalContains == false)) {
+        QString dontCare =
+            ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare));
+        inputList.first.append(SFC_IGN_ELAPSED);
+        inputList.second.append(dontCare);
+    }
+
+    // qDebug() << "isInputDataWithoutCaseList :" << tcName << resultName << caseName;
+    // qDebug() << "\t Signal  :" << inputList.first.size() << inputList.first;
+    // qDebug() << "\t Data    :" << inputList.second.size() << inputList.second;
     // qDebug() << "\n";
 
     return inputList;
@@ -641,18 +721,19 @@ void ExcelDataManger::updateExcelDataConfig(const QVariantList& sheetData) {
 
 void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                                          const QPair<QStringList, QStringList>& inputList) {
-    if ((tcName.size() == 0) || (resultName.size() == 0) ||(caseName.size() == 0)) {
+    if ((tcName.size() == 0) || (resultName.size() == 0) || (caseName.size() == 0)) {
         qDebug() << "Fail to update info size :" << tcName.size() << resultName.size() << caseName.size();
         return;
     }
 
     QString check = (isCheckData(tcName)) ? (QString("O")) : (QString());
-    QString genType = isGenTypeData(tcName);
+    QString genTypeStr;
+    int genType = isGenTypeData(tcName, genTypeStr);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
     QList<QStringList> outputList = isOutputDataList(tcName, resultName);
     int caseIndex = isSizeNewSheetData();
-    InsertData insertData(tcName, check, genType, vehicleType, config, resultName, caseName, inputList, outputList);
+    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, inputList, outputList);
     setNewSheetData(caseIndex, insertData);
 
 #if 0
@@ -671,19 +752,20 @@ void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& r
 void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
                                          const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
                                          const bool& insertBefore) {
-    if ((tcName.size() == 0) || (resultName.size() == 0) ||(caseName.size() == 0)) {
+    if ((tcName.size() == 0) || (resultName.size() == 0) || (caseName.size() == 0)) {
         qDebug() << "Fail to update info size :" << tcName.size() << resultName.size() << caseName.size();
         return;
     }
 
     QString check = (isCheckData(tcName)) ? (QString("O")) : (QString());
-    QString genType = isGenTypeData(tcName);
+    QString genTypeStr;
+    int genType = isGenTypeData(tcName, genTypeStr);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
     QList<QStringList> outputList = isOutputDataList(tcName, resultName);
     int caseIndex = isCaseIndex(tcName, resultName, baseCaseName);
     caseIndex = (insertBefore) ? (caseIndex) : (caseIndex + 1);
-    InsertData insertData(tcName, check, genType, vehicleType, config, resultName, caseName, inputList, outputList);
+    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, inputList, outputList);
     setNewSheetData(caseIndex, insertData);
 
 #if 0
@@ -700,72 +782,78 @@ void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& r
 }
 
 bool ExcelDataManger::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
-    bool result = true;
     QList<QStringList> configList = isConfigDataList(configName, other);
-
-    QStringList inputSignal;
-    QStringList inputDatas;
-
     QMap<int, QPair<QStringList, QStringList>> inputMap;
+    QStringList signalList;
+    QStringList dataList;
+
+    // other = false
+    // configList : 시그널 리스트에서 시그널, 데이터 별로 구성
+    // inputList : 시그널과 데이터가 있는지 확인 후 전체가 시그널에 대한 결과를 만족해야 true
+
+    // other = true
+    // configList : 시그널 리스트에서 andGroup 의 묶음으로 시그널, 데이터 구성
+    // inputList : configList 와 동일하게 시그널 구성 되어 있으며 andGroup 별로 시그널, 데이터 하나만 만족해도 결과 true
 
     for (const auto& config : configList) {
         if (config.size() == 2) {
-            inputSignal.append(config.at(0));
-            inputDatas.append(config.at(1));
+            inputMap[0].first.append(config.at(0));
+            inputMap[0].second.append(config.at(1));
         } else if (config.size() == 4) {
             QString andGroup = config.at(1);
-            inputSignal.append(config.at(2));
-            inputDatas.append(config.at(3));
+            signalList.append(config.at(2));
+            dataList.append(config.at(3));
 
             if ((andGroup.compare(getMergeStart())) && (andGroup.compare(getMerge()))) {
-                inputMap[inputMap.size()] = qMakePair(inputSignal, inputDatas);
-                inputSignal.clear();
-                inputDatas.clear();
+                inputMap[inputMap.size()] = qMakePair(signalList, dataList);
+                signalList.clear();
+                dataList.clear();
             }
         } else {
         }
     }
 
-    if (other) {
-        for (auto iter = inputMap.cbegin(); iter != inputMap.cend(); ++iter) {
-            qDebug() << "InputData :" << iter.key() << iter.value().first << iter.value().second;
-        }
+    QMap<QString, bool> resultMap;
+    for (const auto& input : inputMap) {
+        signalList = input.first;
+        dataList = input.second;
 
-        // // Additional condition processing when other is true
-        // for (auto iter = inputList.cbegin(); iter != inputList.cend(); ++iter) {
-        //     QString signal = iter.key();
-        //     QString data = iter.value();
-        //     bool found = false;
-
-        //     for (const auto& entry : inputMap) {
-        //         if (entry.first.contains(signal) && entry.second.contains(data)) {
-        //             found = true;
-        //             break;
-        //         }
-        //     }
-
-        //     if (!found) {
-        //         result = false;
-        //         break;
-        //     }
-        // }
-    } else {
         for (auto iter = inputList.cbegin(); iter != inputList.cend(); ++iter) {
             QString signal = iter.key();
             QString data = iter.value();
-            if (inputSignal.contains(signal) == false) {
-                result = false;
-                break;
+            bool found = signalList.contains(signal);
+            if (found) {
+                int signalIndex = signalList.indexOf(signal);
+                if (signalIndex >= 0) {
+                    QString signalData = dataList.at(signalIndex);
+                    QStringList signalDataList = signalData.remove(" ").split(",");
+                    found = (signalDataList.contains(data));
+                }
             }
-            int signalIndex = inputSignal.indexOf(signal);
-            if (data != inputDatas.at(signalIndex)) {
-                result = false;
+            resultMap[signal] = (resultMap[signal]) ? (true) : (found);
+        }
+    }
+    bool result = false;
+    for (int index = 0; index < inputMap.size(); ++index) {
+        QStringList checkSignalList = (other) ? (inputMap[index].first) : (inputList.keys());
+        for (const auto& signal : checkSignalList) {
+            result = resultMap[signal];
+            if (result == false) {
                 break;
             }
         }
+        if (result) {
+            break;
+        }
     }
 
-    qDebug() << "isValidConfigCheck :" << result;
+    // qDebug() << "isValidConfigCheck :" << result;
+    // qDebug() << "\t inputMap  :" << inputMap;
+    // qDebug() << "\t inputList :" << inputList;
+    // for (const auto& resultKey : resultMap.keys()) {
+    //     qDebug() << "\t ResultMap :" << resultKey << resultMap[resultKey];
+    // }
+    // qDebug() << "\n";
 
     return result;
 }

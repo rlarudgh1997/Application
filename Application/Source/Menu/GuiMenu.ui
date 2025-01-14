@@ -75,8 +75,10 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionLastFile"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -154,6 +156,7 @@
    <addaction name="actionMergeSplit"/>
    <addaction name="separator"/>
    <addaction name="actionNodeView"/>
+   <addaction name="actionLastFile"/>
    <addaction name="separator"/>
    <addaction name="actionPath"/>
    <addaction name="actionRedo"/>
@@ -436,6 +439,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+M</string>
+   </property>
+  </action>
+  <action name="actionLastFile">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>LastFile</string>
    </property>
   </action>
  </widget>

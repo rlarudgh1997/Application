@@ -184,6 +184,7 @@ public:
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
+        EventTypeLastFile,
 
         EventTypeEditCut = 1100,
         EventTypeEditCopy,
@@ -251,7 +252,6 @@ public:
         EventTypeShortcutDelete,
 
         EventTypeTest = 3000,
-        EventTypeLastFile,
 
         EventTypeList = 4000,
         EventTypeListDescription,
@@ -381,7 +381,8 @@ public:
 class GenTypeEnum {
 public:
     enum GenType {
-        GenTypeDefault = 0,
+        GenTypeInvalid = 0,
+        GenTypeDefault,
         GenTypeNegativePositive,
         GenTypePositive,
     };

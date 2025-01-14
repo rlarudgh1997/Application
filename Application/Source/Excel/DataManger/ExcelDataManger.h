@@ -93,11 +93,15 @@ public:
     QList<QStringList> isSheetDataInfo();
     QStringList isTCNameDataList(const bool& all);
     bool isCheckData(const QString& tcName);
+    int isGenTypeData(const QString& tcName, QString& genTypeStr);
+    QString isVehicleTypeData(const QString& tcName);
     QString isConfigData(const QString& tcName);
     QStringList isResultDataList(const QString& tcName);
     QStringList isCaseDataList(const QString& tcName, const QString& resultName);
     QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName,
-                                                    const bool& removeWhitespace);
+                                                    const bool& removeWhitespace, const bool& checkOthers = true);
+    QPair<QStringList, QStringList> isInputDataWithoutCaseList(const QString& tcName, const QString& resultName,
+                                                               const QString& caseName);
     QList<QStringList> isOutputDataList(const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
@@ -120,8 +124,6 @@ private:
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
     QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);
-    QString isGenTypeData(const QString& tcName);
-    QString isVehicleTypeData(const QString& tcName);
     int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
 };
 

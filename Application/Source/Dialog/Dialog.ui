@@ -1146,35 +1146,42 @@ p, li { white-space: pre-wrap; }
           <number>0</number>
          </property>
          <item>
-          <widget class="QComboBox" name="SelectKeyword">
+          <widget class="QLabel" name="AutoCompleteListCheckTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>150</width>
              <height>16777215</height>
             </size>
            </property>
-           <item>
-            <property name="text">
-             <string>[Sheet]</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>[NotTrigger]</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>[Item 3]</string>
-            </property>
-           </item>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>[Signal Type]</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="ListCheck1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>16777215</width>
              <height>40</height>
             </size>
            </property>
@@ -1188,9 +1195,15 @@ p, li { white-space: pre-wrap; }
            <property name="enabled">
             <bool>true</bool>
            </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>16777215</width>
              <height>40</height>
             </size>
            </property>
@@ -1204,9 +1217,15 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QCheckBox" name="ListCheck3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>150</width>
+             <width>16777215</width>
              <height>40</height>
             </size>
            </property>
@@ -1216,16 +1235,6 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
         </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="AutoCompleteDisplay">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>23</height>
-         </size>
-        </property>
        </widget>
       </item>
       <item>
@@ -1247,7 +1256,19 @@ p, li { white-space: pre-wrap; }
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="AutoCompleteInputTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -1262,6 +1283,84 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QLineEdit" name="AutoCompleteInput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>600</width>
+             <height>23</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="SelectKeyword">
+           <property name="maximumSize">
+            <size>
+             <width>270</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>Select Keyword</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="AutoCompleteDisplayWidget" native="true">
+        <layout class="QHBoxLayout" name="AutoCompleteDisplayWidget_">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="AutoCompleteDisplayTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Select  :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="AutoCompleteDisplay">
            <property name="maximumSize">
             <size>
              <width>16777215</width>
@@ -1271,7 +1370,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="AutoCompleteDisplayOK">
            <property name="text">
             <string>OK</string>
            </property>

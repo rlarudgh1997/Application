@@ -1204,12 +1204,9 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
         supportDataInfo = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data));
 #endif
     } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
-        // notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) ||
-        //               (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::Operation)) ||
-        //               (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::Etc)));
-        // supportDataInfo = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal)) ||
-        //               (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData)) ||
-        //               (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::OperationSignal)));
+        notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) ||
+                      (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::AndGroup)));
+        supportDataInfo = (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData));
     } else {
         notSupport = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) ||
                       (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) ||
@@ -1247,7 +1244,9 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal);
 #endif
         } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
-            // do nothing
+            if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData)) {
+                signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal);
+            }
         } else {
             if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
                 signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config);
