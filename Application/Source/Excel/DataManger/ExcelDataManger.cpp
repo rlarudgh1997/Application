@@ -711,6 +711,8 @@ void ExcelDataManger::updateExcelDataConfig(const QVariantList& sheetData) {
         }
     }
 
+    clearExcelDataConfig();
+
     if (excelSheetData.size() == 0) {
         qDebug() << "Fail to config sheet data size : 0";
         return;
@@ -731,9 +733,21 @@ void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& r
     int genType = isGenTypeData(tcName, genTypeStr);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
+    QStringList inputSignalList = inputList.first;
+    QStringList inputDataList = inputList.second;
+    inputSignalList.removeAll("");
+    inputDataList.removeAll("");
     QList<QStringList> outputList = isOutputDataList(tcName, resultName);
+    int listSizeGap = outputList.size() - inputSignalList.size();
+    listSizeGap = (listSizeGap > 0) ? (listSizeGap) : (0);
+    for (int index = 0; index < listSizeGap; ++index) {
+        inputSignalList.append("");
+        inputDataList.append("");
+    }
+    QPair<QStringList, QStringList> currInputList = qMakePair(inputSignalList, inputDataList);
+    qDebug() << "KKH - Info :" << inputList.first.size() << currInputList.first.size() << outputList.size();
     int caseIndex = isSizeNewSheetData();
-    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, inputList, outputList);
+    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, currInputList, outputList);
     setNewSheetData(caseIndex, insertData);
 
 #if 0
@@ -762,10 +776,21 @@ void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& r
     int genType = isGenTypeData(tcName, genTypeStr);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
+    QStringList inputSignalList = inputList.first;
+    QStringList inputDataList = inputList.second;
+    inputSignalList.removeAll("");
+    inputDataList.removeAll("");
     QList<QStringList> outputList = isOutputDataList(tcName, resultName);
+    int listSizeGap = outputList.size() - inputSignalList.size();
+    listSizeGap = (listSizeGap > 0) ? (listSizeGap) : (0);
+    for (int index = 0; index < listSizeGap; ++index) {
+        inputSignalList.append("");
+        inputDataList.append("");
+    }
+    QPair<QStringList, QStringList> currInputList = qMakePair(inputSignalList, inputDataList);
     int caseIndex = isCaseIndex(tcName, resultName, baseCaseName);
     caseIndex = (insertBefore) ? (caseIndex) : (caseIndex + 1);
-    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, inputList, outputList);
+    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, currInputList, outputList);
     setNewSheetData(caseIndex, insertData);
 
 #if 0

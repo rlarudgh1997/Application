@@ -38,6 +38,6 @@
 // #define USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING     // App 부팅 후 엑세 시트 표시
 
 // #define USE_SHEET_COLUMN_OLD
-#define USE_CODE_BEFORE_CLASS_SPLIT
+// #define USE_CODE_BEFORE_CLASS_SPLIT
 
 #endif  // COMMON_DEFINE_H

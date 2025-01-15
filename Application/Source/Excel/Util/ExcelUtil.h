@@ -7,20 +7,21 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-class KeywordTypeInfo {
+#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
+class KeywordInfo {
 public:
-    KeywordTypeInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
+    KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
         : mRow(row), mColumn(column), mText(text), mKeyword(keyword), mData(data) {
     }
-    KeywordTypeInfo() = default;
-    KeywordTypeInfo(const KeywordTypeInfo& other) = default;
-    KeywordTypeInfo& operator=(const KeywordTypeInfo& other) = default;
+    KeywordInfo() = default;
+    KeywordInfo(const KeywordInfo& other) = default;
+    KeywordInfo& operator=(const KeywordInfo& other) = default;
 
-    bool operator==(const KeywordTypeInfo& other) const {
+    bool operator==(const KeywordInfo& other) const {
         return ((mRow == other.mRow) && (mColumn == other.mColumn) && (mText == other.mText) && (mKeyword == other.mKeyword) &&
                 (mData == other.mData));
     }
-    bool operator!=(const KeywordTypeInfo& other) const {
+    bool operator!=(const KeywordInfo& other) const {
         return !(*this == other);
     }
 
@@ -61,6 +62,7 @@ private:
     QList<QStringList> mConvertData = QList<QStringList>();
     QList<QStringList> mRowData = QList<QStringList>();
 };
+#endif
 
 class ExcelUtil : public QObject {
     Q_OBJECT
@@ -77,7 +79,9 @@ public:
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
     int isKeywordType(const int& columnIndex, QString& inputData);
-    QList<KeywordTypeInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
+#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
+    QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
+#endif
     int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);

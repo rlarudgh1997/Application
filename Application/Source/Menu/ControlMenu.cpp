@@ -921,6 +921,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             ivis::common::Popup::drawPopup(ivis::common::PopupType::AboutQt, isHandler(), popupData);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeLastFolder:
         case ivis::common::EventTypeEnum::EventTypeLastFile:
         case ivis::common::EventTypeEnum::EventTypeFileNew:
         case ivis::common::EventTypeEnum::EventTypeFileOpen: {

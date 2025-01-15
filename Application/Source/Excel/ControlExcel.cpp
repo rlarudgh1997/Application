@@ -797,6 +797,27 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             }
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeLastFolder: {
+            QVariant filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
+            QFileInfo fileInfo(filePath.toString());
+            QString directory = fileInfo.absolutePath();
+            QString fileName = fileInfo.fileName();
+
+            qDebug() << "Folder :" << directory << fileName;
+
+            if (directory.size() == 0) {
+                directory = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath).toString();
+            }
+
+            filePath.clear();
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
+                                                QVariantList({STRING_FILE_OPEN, directory})) ==
+                ivis::common::PopupButton::OK) {
+                openExcelFile(filePath);
+            }
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeLastFile: {
             QVariant lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
             if (lastFilePath.toString().size() == 0) {
@@ -2836,9 +2857,7 @@ void ControlExcel::updateAutoCompleteData(const QVariantList& inputData) {
         }
     }
 
-    // qDebug() << "updateAutoCompleteData()";
-    // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
-
+    // qDebug() << "updateAutoCompleteData :" << tcNameList << configNameList;
     updateNodeAddress(false, tcNameList, configNameList);
 }
 
@@ -3429,7 +3448,7 @@ QMap<int, QList<KeywordInfo>> ControlExcel::constructKeywordTypeInfoList(const i
         QList<KeywordInfo> keywordTypeInfo = isKeywordTypeInfo(sheetIndex, columnList);
 #else
         auto sheetData = getData(sheetIndex).toList();
-        QList<KeywordTypeInfo> keywordTypeInfo = ExcelUtil::instance().data()->isKeywordTypeInfo(sheetData, columnList);
+        QList<KeywordInfo> keywordTypeInfo = ExcelUtil::instance().data()->isKeywordTypeInfo(sheetData, columnList);
 #endif
         for (auto& keyword : keywordTypeInfo) {
             if ((keyword.isKeyword() & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet))) {
@@ -4645,9 +4664,9 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                 for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
                     QString caseStr = caseStrList.at(caseIdx);
 
-                    QPair<QStringList, QStringList> inputList =
+                    auto inputList =
                         ExcelDataManger::instance().data()->isInputDataWithoutCaseList(tcNameStr, resultStr, caseStr);
-                    QMap<QString, SignalData> appendInputSignalDataInfoMap =
+                    auto appendInputSignalDataInfoMap =
                         SignalDataManger::instance().data()->isNormalInputSignalDataInfo(inputList);
 
                     QPair<QStringList, QStringList> inputDataList =
@@ -4666,7 +4685,7 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                     qDebug() << "2) InputData(sig)  : " << inputDataList.first;
                     qDebug() << "3) InputData(val)  : " << inputDataList.second;
 #endif
-                    for (auto iter = appendInputSignalDataInfoMap.begin(); iter != appendInputSignalDataInfoMap.end(); ++iter) {
+                    for (const auto& mapKey : appendInputSignalDataInfoMap.keys()) {
 #if defined(USE_CODE_BEFORE_CLASS_SPLIT)
                         QString inputDataStr =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
@@ -4675,13 +4694,13 @@ bool ControlExcel::appendConvertAllTCSignalSet() {
                                                 static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
 #endif
 
-                        QString inputSignalStr = iter.key();
+                        QString inputSignalStr = appendInputSignalDataInfoMap[mapKey].first;
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
                         qDebug() << "--------------------------------------------------------";
                         qDebug() << " - inputSignalStr : " << inputSignalStr;
                         qDebug() << " - inputDataStr   : " << inputDataStr;
 #endif
-                        SignalData tmpInfo = iter.value();
+                        SignalData tmpInfo = appendInputSignalDataInfoMap[mapKey].second;
 #if defined(USE_CODE_BEFORE_CLASS_SPLIT)
                         QString keywordStr =
                             isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined));
@@ -4989,7 +5008,7 @@ void ControlExcel::testCode2() {
     qDebug() << "=================================================================================================\n\n";
 #endif
 
-#if 1
+#if 0
     sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales;
     sheetData = getData(sheetIndex).toList();
     ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
@@ -5016,6 +5035,22 @@ void ControlExcel::testCode2() {
         {"Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV", "TRUCK1"},  // TRUCK
     };
     ExcelDataManger::instance().data()->isValidConfigCheck(true, QString("Config1"), inputList);
+#endif
+
+#if 0
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetEvents;
+    sheetData = getData(sheetIndex).toList();
+    ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
+
+    for (const auto& tcName : QStringList({"E76401", "E76402"})) {
+        for (const auto& configName : ExcelDataManger::instance().data()->isConfigData(tcName)) {
+            auto configList = ExcelDataManger::instance().data()->isConfigDataList(configName, true);
+            for (const auto& config : configList) {
+                qDebug() << "Config :" << config;
+            }
+        }
+    }
+    qDebug() << "=================================================================================================\n\n";
 #endif
 
 #if 0
@@ -5054,6 +5089,16 @@ void ControlExcel::testCode2() {
         qDebug() << "\t ConfigDataInfo :" << info;
     }
 #endif
+
+#if 0
+    qDebug() << "=================================================================================================\n\n";
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetEvents;
+    sheetData = getData(sheetIndex).toList();
+    ExcelDataManger::instance().data()->updateExcelData(sheetIndex, sheetData);
+    QList<QStringList> currentSheetData = ExcelDataManger::instance().data()->isSheetDataInfo();
+    qDebug() << "SheetData :" << currentSheetData.size();
+#endif
+
 #endif
 }
 
@@ -5172,6 +5217,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, true, true);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeLastFolder:
         case ivis::common::EventTypeEnum::EventTypeLastFile:
         case ivis::common::EventTypeEnum::EventTypeFileNew:
         case ivis::common::EventTypeEnum::EventTypeFileOpen: {

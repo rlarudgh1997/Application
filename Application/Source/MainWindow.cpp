@@ -3,15 +3,17 @@
 #include "ScreenInfo.h"
 #include "ConfigSetting.h"
 #include "ControlManager.h"
+#include "ControlExcel.h"
 
 #include <QApplication>
 
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(const QStringList& arguments) {
     qInfo() << "================================================================================================";
     qInfo() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
     qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
+    qInfo() << "ARGUMENTS   :" << arguments;
     ivis::common::CheckTimer checkTimer;
 
     ConfigSetting::instance().data();
@@ -19,29 +21,36 @@ MainWindow::MainWindow() {
     qInfo() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
     checkTimer.check("ConfigSetting");
 
-    this->setWindowTitle("TC Creator");
-    this->setGeometry(mScreenInfo);
-    this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
-    // this->setMaximumSize(QSize(SCREEN_MAXIMUM_WIDTH, SCREEN_MAXIMUM_HEIGHT));
-    this->setObjectName(QString("RootWidget"));
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    this->show();
-
-    ScreenInfo::instance().data()->updateRootItem(this);
-    checkTimer.check("ScreenInfo");
-
-    ControlManager::instance().data()->init();
-    checkTimer.check("ControlManager");
-
     mCheckLib.data()->setLibInfo(QStringList({"openpyxl", "pandas"}));
     mCheckLib.data()->check();
     checkTimer.check("CheckLib");
 
-    controlConnect();
+    bool graphicsMode = (arguments.size() == 0);
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
 
-    // Title Text
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
+    if (graphicsMode) {
+        this->setWindowTitle("TC Creator");
+        this->setGeometry(mScreenInfo);
+        this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
+        // this->setMaximumSize(QSize(SCREEN_MAXIMUM_WIDTH, SCREEN_MAXIMUM_HEIGHT));
+        this->setObjectName(QString("RootWidget"));
+        this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        this->show();
+
+        ScreenInfo::instance().data()->updateRootItem(this);
+        checkTimer.check("ScreenInfo");
+
+        ControlManager::instance().data()->init();
+        checkTimer.check("ControlManager");
+
+        controlConnect();
+
+        // Title Text
+        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+        emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
+    } else {
+        qInfo() << "CLI Mode :" << ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    }
 }
 
 MainWindow::~MainWindow() {

@@ -6,7 +6,7 @@
 #include <QDateTime>
 #include <QStorageInfo>
 
-#include "CommonDefine.h"   // USE_CODE_BEFORE_CLASS_SPLIT
+#include "CommonDefine.h"  // USE_CODE_BEFORE_CLASS_SPLIT
 #include "ExcelUtil.h"
 
 class TestCaseWriter {
@@ -39,6 +39,7 @@ public:
     }
 
     void genTestCaseFile(const QJsonObject& json) {
+        ivis::common::CheckTimer checkTimer;
         int ignCount = 0;
         int testCaseCount = 1;
         auto quoteIfNotNumeric = [](const QString& value) {
@@ -50,7 +51,6 @@ public:
             QJsonObject sectionObj = json[sheet].toObject();
             for (auto tcIt = sectionObj.begin(); tcIt != sectionObj.end(); ++tcIt) {
                 QJsonObject tcObj = tcIt.value().toObject();
-                QString genType = tcObj["GenType"].toString();
                 QString tcName = tcObj["TCName"].toString();
                 QString vehicleType = tcObj["VehicleType"].toString();
                 if (!tcName.isEmpty()) {
@@ -80,6 +80,7 @@ public:
                                     QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
                                     QJsonObject caseObj = resultObj[caseKey].toObject();
                                     QString caseName = caseObj["Case"].toString();
+                                    QString genType = caseObj["GenType"].toString();
                                     QStringList inputSignalList =
                                         resultObj[caseKey][QString("InputSignalList")].toObject().keys();
                                     for (const QString& inputSignal : inputSignalList) {
@@ -142,8 +143,7 @@ public:
                                                     signalName =
                                                         ControlExcel::instance().data()->isIGNElapsedName(number.toInt());
 #else
-                                                    signalName =
-                                                        ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
+                                                    signalName = ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
 #endif
                                                     signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
                                                 } else {
@@ -234,6 +234,7 @@ public:
                 }
             }
         }
+        checkTimer.check("genTestCaseFile()");
     }
 
 private:

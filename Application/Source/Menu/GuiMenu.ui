@@ -75,6 +75,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionLastFolder"/>
     <addaction name="actionLastFile"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -156,6 +157,8 @@
    <addaction name="actionMergeSplit"/>
    <addaction name="separator"/>
    <addaction name="actionNodeView"/>
+   <addaction name="separator"/>
+   <addaction name="actionLastFolder"/>
    <addaction name="actionLastFile"/>
    <addaction name="separator"/>
    <addaction name="actionPath"/>
@@ -447,6 +450,11 @@
    </property>
    <property name="text">
     <string>LastFile</string>
+   </property>
+  </action>
+  <action name="actionLastFolder">
+   <property name="text">
+    <string>LastFolder</string>
    </property>
   </action>
  </widget>

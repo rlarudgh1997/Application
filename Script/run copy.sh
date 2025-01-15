@@ -61,6 +61,7 @@ function setEnvironments(){
 
 	echo "SDK_HOST  = $SDK_HOST"
 	echo "APP_PATH  = $APP_PATH"
+	echo "ARGUMENTS = $ARGUMENTS"
 	echo "=========================================================================================================="
 	echo
 }
@@ -74,7 +75,6 @@ function runProcess(){
 
 	echo "SERVICE   = $SERVICE"
 	echo "FULL_PATH = $FULL_PATH"
-	echo "ARGUMENTS = $ARGUMENTS"
 
 	if pgrep -x $SERVICE > /dev/null
 	then
@@ -87,11 +87,11 @@ function runProcess(){
 		echo "Start Launching [$SERVICE]"
 
 		if [ "$3" = "" ]; then
-			# $FULL_PATH &
-			$FULL_PATH $ARGUMENTS &
+			$FULL_PATH &
+			# $FULL_PATH $ARGUMENTS &
 		else
-			# nohup $FULL_PATH > /dev/null 2>&1 &
-			nohup $FULL_PATH $ARGUMENTS > /dev/null 2>&1 &
+			nohup $FULL_PATH > /dev/null 2>&1 &
+			# nohup $FULL_PATH $ARGUMENTS > /dev/null 2>&1 &
 		fi
 
 		sleep 0.1
@@ -136,8 +136,8 @@ elif [ "$1" = host ] || [ "$1" = h ]; then
 	PLATFORM=host
 	ENV=host
 
-	shift	# remove $1
-	ARGUMENTS="$*"	# set $2, $3, ...
+	shift
+	ARGUMENTS="$*"
 elif [ "$1" = xserverc ] || [ "$1" = xsc ]; then
 	PLATFORM=host
 	ENV=xserver

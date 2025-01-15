@@ -115,7 +115,11 @@ int main(int argc, char* argv[]) {
     // qputenv("QT_LOGGING_RULES", "qt.scenegraph*=true");
     // qputenv("QT_LOGGING_RULES", "myApp.debug=true;myApp.info=true;myApp.warning=false;myApp.critical=false");
 
-    MainWindow mainWindow;
+    QStringList arguments;
+    for (int index = 1; index < argc; index++) {
+        arguments.append(argv[index]);
+    }
+    MainWindow mainWindow(arguments);
 
     return app.exec();
 }

@@ -227,13 +227,14 @@ int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
     return keywordType;
 }
 
-QList<KeywordTypeInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList) {
+#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
+QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList) {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
     const QList<int> columnList = inputColumnList;
 
-    QList<KeywordTypeInfo> keywordTypeInfo;
+    QList<KeywordInfo> keywordTypeInfo;
     int rowIndex = 0;
     QList<QPair<int, int>> caseRowInfo;
     QPair<int, int> rowInfo = QPair<int, int>((-1), (-1));
@@ -270,7 +271,7 @@ QList<KeywordTypeInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetDat
             } else {
                 // no operation
             }
-            keywordTypeInfo.append(KeywordTypeInfo(rowIndex, columnIndex, text, keywordType, data));
+            keywordTypeInfo.append(KeywordInfo(rowIndex, columnIndex, text, keywordType, data));
         }
 
         QString caseText = rowData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
@@ -337,6 +338,7 @@ QList<KeywordTypeInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetDat
 
     return keywordTypeInfo;
 }
+#endif
 
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);

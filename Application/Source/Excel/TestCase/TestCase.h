@@ -7,15 +7,12 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QHash>
+#include <QSet>
 
 #include "CommonDefine.h"
 #include "CommonEnum.h"
 #include "CommonUtil.h"
 #include "ConfigSetting.h"
-#include "ControlExcel.h"  // 임시방편임. 사라질 예정
-#include "ExcelDataManger.h"
-#include "SignalDataManger.h"
-#include "TestCaseWriter.h"
 
 class TestCase : public QObject {
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
@@ -68,10 +65,14 @@ private:
     void removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& validArray);
     QJsonObject getCaseInfoJson(const QString& genType, const QString& tcName, const QJsonObject& caseJsonObject,
                                 const bool& isOther);
+    QStringList getPreconditionList(const QJsonObject& inputSignalList, const QJsonArray& caseValues);
+    QMap<QString, int> getFlowKeywordIdxMap(const QJsonObject& inputSignalList);
+    QMap<QString, int> getConfigIdxMap(const QJsonObject& inputSignalList);
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QMap<QString, int>& configIdxMap,
-                            const QJsonArray& caseValues, const int& triggerSigIndex, const QString& triggerSigValue);
-    QString getPreconditionStr(const QJsonArray& caseValues, const int& triggerSigIndex, const QJsonValue& preconditionValue);
-    QString getPreconditionStr(const QJsonArray& caseValues);
+                            const QStringList& preconditionList, const int& triggerSigIndex, const QString& triggerSigValue);
+    QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex,
+                               const QJsonValue& preconditionValue);
+    QString getPreconditionStr(const QStringList& preconditionList);
     QString getInputStr(const QString& triggerSigName, const QString& caseValue);
     QString getTcLine(const QString& tag, const QString& precondition, const QString& input);
     void printCaseSize(const QString& genType);

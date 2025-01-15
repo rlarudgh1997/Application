@@ -73,6 +73,8 @@ void GuiMenu::drawMenuFile() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeFileSave, QVariant()); });
     connect(mGui->actionSaveAs, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeFileSaveAs, QVariant()); });
+    connect(mGui->actionLastFolder, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeLastFolder, QVariant()); });
     connect(mGui->actionLastFile, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeLastFile, QVariant()); });
     connect(mGui->actionExit, &QAction::triggered,

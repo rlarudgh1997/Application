@@ -96,11 +96,11 @@ public:
                                       QString& matchingValue);
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
-    QMap<QString, SignalData> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<QString, SignalData> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<QString, SignalData> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<QString, SignalData> isOutputSignalDataInfo(const QList<QStringList>& list);
-    QMap<QString, SignalData> isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const QList<QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list);
     bool isExcelDataValidation();
 
 private:

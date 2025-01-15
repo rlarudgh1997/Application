@@ -184,6 +184,7 @@ public:
         EventTypeFileOpen,
         EventTypeFileSave,
         EventTypeFileSaveAs,
+        EventTypeLastFolder,
         EventTypeLastFile,
 
         EventTypeEditCut = 1100,
@@ -325,7 +326,7 @@ public:
         Test = 0,
         Version,
         Description,
-#if defined(USE_SHEET_COLUMN_OLD)
+#if 1   // defined(USE_SHEET_COLUMN_OLD)
         ConfigSignal,
         Data,
 #endif

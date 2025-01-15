@@ -1157,16 +1157,14 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     } else {
         if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
-            // } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
-            //     columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config);
 #if defined(USE_SHEET_COLUMN_OLD)
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data)) {
             columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
+#endif
         } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
             updateAutoCompleteData = true;
-#endif
         } else {
         }
     }
