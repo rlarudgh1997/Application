@@ -1,5 +1,5 @@
-#ifndef TEST_CASE_WRITER_H
-#define TEST_CASE_WRITER_H
+#ifndef CASE_DATA_WRITER_H
+#define CASE_DATA_WRITER_H
 
 #include <QFile>
 #include <QTextStream>
@@ -9,9 +9,9 @@
 #include "CommonDefine.h"  // USE_CODE_BEFORE_CLASS_SPLIT
 #include "ExcelUtil.h"
 
-class TestCaseWriter {
+class CaseDataWriter {
 public:
-    TestCaseWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
+    CaseDataWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
 #if defined(USE_CODE_BEFORE_CLASS_SPLIT)
         mSfcDescription = ControlExcel::instance().data()->isDescriptionDataInfo();
 #else
@@ -23,10 +23,10 @@ public:
             mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
         }
-        qDebug() << "TestCaseWriter::TestCaseWriter() complete.";
+        qDebug() << "CaseDataWriter::CaseDataWriter() complete.";
     }
 
-    ~TestCaseWriter() {
+    ~CaseDataWriter() {
         if (mStream.device()) {
             mStream << "  - name: timeout for gcov\n";
             mStream << "    input:\n";
@@ -405,4 +405,4 @@ private:
     QString mOpenFilePath;
 };
 
-#endif  // TEST_CASE_WRITER_H
+#endif  // CASE_DATA_WRITER_H

@@ -7,12 +7,12 @@ DEFINES += __DATA_MANAGER__
 
 HEADERS += \
     $$PWD/ExcelData.h\
-    $$PWD/EditDataManager.h\
+    $$PWD/ConvertDataManager.h\
     $$PWD/ExcelDataManager.h\
     $$PWD/SignalDataManager.h\
 
 
 SOURCES += \
-    $$PWD/EditDataManager.cpp\
+    $$PWD/ConvertDataManager.cpp\
     $$PWD/ExcelDataManager.cpp\
     $$PWD/SignalDataManager.cpp\

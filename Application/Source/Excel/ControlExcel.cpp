@@ -12,6 +12,7 @@
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
 #include "TestCase.h"
+#include "ConvertDataManager.h"
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -528,7 +529,11 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath, const bool& backup)
         sheetData.append(contentTitle);
 
         // Data - Append
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
         sheetData.append(getData(propertyType++).toList());
+#else
+        sheetData.append(ExcelData::instance().data()->getSheetData(propertyType++).toList());
+#endif
 
         for (const auto& dataInfo : sheetData) {
             QString rowData = QString();
@@ -818,22 +823,24 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                 openExcelFile(filePath);
             }
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeLastFile: {
             QVariant lastFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
             if (lastFilePath.toString().size() == 0) {
                 QVariant defaultFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
-                QVariant filePath = QVariant();
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
+                lastFilePath.clear();
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), lastFilePath,
                                                    QVariantList({STRING_FILE_OPEN, defaultFilePath})) ==
                     ivis::common::PopupButton::OK) {
-                    openExcelFile(filePath);
+                    openExcelFile(lastFilePath);
                 }
             } else {
                 openExcelFile(lastFilePath);
             }
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, lastFilePath.toString());
             break;
         }
         default: {
@@ -1465,7 +1472,6 @@ QMap<int, QStringList> ControlExcel::isSignalFileList(const QString& signalName,
     // qDebug() << "isSignalFileList :" << signalName << vehicleType << fileList;
     return fileList;
 }
-#endif
 
 QMap<int, QStringList> ControlExcel::isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
                                                       const bool& convert, const bool& mergeInfoErase,
@@ -1747,6 +1753,7 @@ QPair<int, int> ControlExcel::isContainsRowInfo(const int& sheetIndex, const QSt
 
     return rowInfo;
 }
+#endif
 
 #if defined(USE_CODE_BEFORE_CLASS_SPLIT)
 QList<QStringList> ControlExcel::isRowDataInfo(const int& sheetIndex, const QPair<int, int>& rowInfo,
@@ -2985,6 +2992,8 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     }
 #endif
 
+    bool testCaseExcute = false;
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
     // NOTE(csh): [Sheet] Keyword 기능 수행(row data append) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
     if (replaceGenDataInfo() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
@@ -3013,7 +3022,6 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     checkTimer.check("updateGenDataInfo : Convert.excel_Config");
 
     // NOTE(csh): 최종 signal 조합 set 구성(row data append) + 002 excel 파일 생성
-    bool testCaseExcute = false;
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
@@ -3027,8 +3035,11 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
         testCaseExcute = true;
     }
     checkTimer.check("updateGenDataInfo : Convert.excel_002");
-
+#else
+    testCaseExcute = true;
+#endif
     if (testCaseExcute) {
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData);
         TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
     }
     checkTimer.check("updateGenDataInfo : Test Case Excute");
@@ -3397,6 +3408,7 @@ bool ControlExcel::isExcelDataValidation() {
 }
 #endif
 
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
 // TODO(csh): 최종 pr update 시에 debug log 삭제 예정
 // #define ENABLE_DEBUG_LOG_OUTPUT
 // #define ENABLE_DEBUG_LOG_KEYWORD
@@ -4850,6 +4862,7 @@ QString ControlExcel::constructKeywordCaseName(const QString& originCaseName, co
 
     return returnStr;
 }
+#endif
 
 void ControlExcel::testCode1() {
 #if 0

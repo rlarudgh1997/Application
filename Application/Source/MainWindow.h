@@ -18,7 +18,7 @@ public:
     ~MainWindow();
 
 private:
-    void controlConnect();
+    void controlConnect(const bool& graphicsMode = true);
 
 protected:
     void mousePressEvent(QMouseEvent* mouseEvent) override;

@@ -4,15 +4,19 @@
 #include "ConfigSetting.h"
 #include "ControlManager.h"
 #include "ControlExcel.h"
+#include "TestCase.h"
 
 #include <QApplication>
 
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
 MainWindow::MainWindow(const QStringList& arguments) {
+    bool graphicsMode = (arguments.size() == 0);
+
     qInfo() << "================================================================================================";
     qInfo() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
     qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
+    qInfo() << "GUI_MODE    :" << ((graphicsMode) ? ("Graphic") : ("CLI"));
     qInfo() << "ARGUMENTS   :" << arguments;
     ivis::common::CheckTimer checkTimer;
 
@@ -25,8 +29,9 @@ MainWindow::MainWindow(const QStringList& arguments) {
     mCheckLib.data()->check();
     checkTimer.check("CheckLib");
 
-    bool graphicsMode = (arguments.size() == 0);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
+
+    controlConnect(graphicsMode);
 
     if (graphicsMode) {
         this->setWindowTitle("TC Creator");
@@ -43,13 +48,15 @@ MainWindow::MainWindow(const QStringList& arguments) {
         ControlManager::instance().data()->init();
         checkTimer.check("ControlManager");
 
-        controlConnect();
-
         // Title Text
         int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
         emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
     } else {
-        qInfo() << "CLI Mode :" << ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData, arguments);
+        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+
+        // ControlManager::instance().data()->exitProgram(false);
+        // emit ControlManager::instance().data()->signalExitProgram();
     }
 }
 
@@ -57,32 +64,10 @@ MainWindow::~MainWindow() {
     qInfo() << "Complete - Exit Application !!!!!!!! \n\n";
 }
 
-void MainWindow::controlConnect() {
+void MainWindow::controlConnect(const bool& graphicsMode) {
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
             &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
-    connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged, [=](const int& type, const QVariant& value) {
-        if (type == ConfigInfo::ConfigTypeInit) {
-            mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-            this->setGeometry(mScreenInfo);
-        }
-    });
-    connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle,
-            [=](const QString& title, const int& appMode) {
-                QString text = QString("TC Creator");
-                if (appMode == ivis::common::AppModeEnum::AppModeTypeCV) {
-                    text.append("[CV]");
-                } else if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-                    text.append("[PV]");
-                } else {
-                }
-
-                if (title.size() > 0) {
-                    text.append(" : ");
-                    text.append(title);
-                }
-                this->setWindowTitle(text);
-            });
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
             qInfo() << "openpyxl :" << ((state) ? ("valid") : ("invalid"));
@@ -94,6 +79,32 @@ void MainWindow::controlConnect() {
             mCheckLib.clear();
         }
     });
+
+    if (graphicsMode) {
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalConfigChanged,
+                [=](const int& type, const QVariant& value) {
+                    if (type == ConfigInfo::ConfigTypeInit) {
+                        mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+                        this->setGeometry(mScreenInfo);
+                    }
+        });
+        connect(ConfigSetting::instance().data(), &ConfigSetting::signalUpdateWindowTitle,
+                [=](const QString& title, const int& appMode) {
+                    QString text = QString("TC Creator");
+                    if (appMode == ivis::common::AppModeEnum::AppModeTypeCV) {
+                        text.append("[CV]");
+                    } else if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+                        text.append("[PV]");
+                    } else {
+                    }
+
+                    if (title.size() > 0) {
+                        text.append(" : ");
+                        text.append(title);
+                    }
+                    this->setWindowTitle(text);
+                });
+    }
 }
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
     Q_UNUSED(mouseEvent)
