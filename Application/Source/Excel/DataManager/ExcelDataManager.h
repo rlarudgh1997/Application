@@ -1,5 +1,5 @@
-#ifndef EXCEL_DATA_MANGER_H
-#define EXCEL_DATA_MANGER_H
+#ifndef EXCEL_DATA_MANAGER_H
+#define EXCEL_DATA_MANAGER_H
 
 #include <QObject>
 #include <QSharedPointer>
@@ -75,7 +75,7 @@ private:
     QList<QStringList> mOutputList;
 };
 
-class ExcelDataManger : public QObject {
+class ExcelDataManager : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
@@ -88,7 +88,7 @@ class ExcelDataManger : public QObject {
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelDataConfig, false)
 
 public:
-    static QSharedPointer<ExcelDataManger>& instance();
+    static QSharedPointer<ExcelDataManager>& instance();
 
     QList<QStringList> isSheetDataInfo();
     QStringList isTCNameDataList(const bool& all);
@@ -107,14 +107,12 @@ public:
 
     void updateExcelData(const int& sheetIndex, const QVariantList& sheetData);
     void updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
-                            const QPair<QStringList, QStringList>& inputList);
-    void insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
-                            const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
-                            const bool& insertBefore);
+                            const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName = QString(),
+                            const bool& insertBefore = false);
     bool isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList);
 
 private:
-    explicit ExcelDataManger();
+    explicit ExcelDataManager();
 
     void updateExcelDataOther(const QVariantList& sheetData);
     void updateExcelDataConfig(const QVariantList& sheetData);
@@ -127,5 +125,4 @@ private:
     int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
 };
 
-
-#endif  // EXCEL_DATA_MANGER_H
+#endif  // EXCEL_DATA_MANAGER_H

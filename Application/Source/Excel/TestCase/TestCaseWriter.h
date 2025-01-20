@@ -23,6 +23,7 @@ public:
             mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
         }
+        qDebug() << "TestCaseWriter::TestCaseWriter() complete.";
     }
 
     ~TestCaseWriter() {
@@ -66,6 +67,7 @@ public:
                             QString resultName = resultObj["Result"].toString();
                             QStringList outputSignal;
                             QStringList outputValue;
+                            QStringList outputEnum;
                             QVector<bool> isInitialize;
                             QJsonObject outputSignalList = resultObj["Output_Signal"].toObject();
                             QJsonObject signalObj;
@@ -73,7 +75,24 @@ public:
                                 signalObj = sigIt.value().toObject();
                                 outputSignal << sigIt.key();
                                 outputValue << signalObj["Output_Value"].toString();
+                                outputEnum.clear();
                                 isInitialize << signalObj["isInitialize"].toBool();
+                                // NOTE: 여기서 Output_Value Enum String map으로 담을 수 있는 구현이 필요함.
+                                for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
+                                    QString tempOutputEnum;
+#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
+                                    tempOutputEnum = ControlExcel::instance().data()->isSignalValueEnum(outputSignal[outputCnt],
+                                                                                                        outputValue[outputCnt]);
+#else
+                                    tempOutputEnum = SignalDataManager::instance().data()->isSignalValueEnum(
+                                        outputSignal[outputCnt], outputValue[outputCnt]);
+#endif
+                                    if (tempOutputEnum.isEmpty() == false) {
+                                        outputEnum << " # " + tempOutputEnum;
+                                    } else {
+                                        outputEnum << tempOutputEnum;
+                                    }
+                                }
                             }
                             for (const QString& caseKey : resultObj.keys()) {
                                 if (caseKey.startsWith("_Case[")) {
@@ -85,7 +104,8 @@ public:
                                         resultObj[caseKey][QString("InputSignalList")].toObject().keys();
                                     for (const QString& inputSignal : inputSignalList) {
                                         signalList.emplace_back(std::make_tuple(
-                                            inputSignal,
+                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("SignalName")]
+                                                .toString(),
                                             resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("DataType")]
                                                 .toInt(),
                                             resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("KeywordType")]
@@ -108,27 +128,30 @@ public:
                                     QString triggerEnumString;
                                     QString triggerSignal;
                                     QString triggerValue;
+                                    QString testCase;
                                     for (const QJsonValue& subArrayValue : casesArray) {
+                                        testCase.clear();
                                         parts = subArrayValue.toString().split("=>");
                                         signalValueList = parts[0].split(",", Qt::SkipEmptyParts);
                                         inputDataInfo = parts[1].split(":");
                                         signalOrder = 0;
-                                        write("- name: " + tcName + ", " + resultName + ", " + caseName + " " +
-                                                  QString::number(testCaseCount++),
-                                              1);
+                                        testCase += "  - name: " + tcName + ", " + resultName + ", " + caseName + " " +
+                                                    QString::number(testCaseCount++) + "\n";
                                         if (vehicleType.isEmpty() == false) {
-                                            write("tag: " + vehicleType, 2, 1);
+                                            testCase += "    tag: " + vehicleType + "\n";
                                         }
                                         if (signalValueList[0].contains("config") == true) {
                                             signalValueList[0].remove("[");
                                             signalValueList[0].remove("]");
-                                            write(signalValueList[0], 2, 1);
+                                            testCase += "    " + signalValueList[0] + "\n";
                                             signalValueList.removeAt(0);
                                         }
                                         if (genType.contains("Negative", Qt::CaseInsensitive) == true) {
-                                            write("state: negative", 2, 1);
+                                            testCase += "    state: negative\n";
+                                        } else if (genType.contains("Positive", Qt::CaseInsensitive) == true) {
+                                            testCase += "    state: positive\n";
                                         }
-                                        write("precondition:", 2, 1);
+                                        testCase += "    precondition:\n";
                                         for (QString& number : signalValueList) {
                                             number = number.trimmed();
                                             if (number.contains("[Empty]") == false) {
@@ -151,38 +174,34 @@ public:
                                                     signalValue = number;
                                                 }
                                                 enumString = enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
-                                                write("- " + signalName + ": " + quoteIfNotNumeric(signalValue) + enumString, 3);
+                                                testCase += "      - " + signalName + ": " + quoteIfNotNumeric(signalValue) +
+                                                            enumString + "\n";
                                             }
                                             signalOrder++;
                                         }
 
                                         if (isInitialize.contains(true)) {
-                                            write("init:", 2, 1);
+                                            testCase += "    init:\n";
                                             for (int initCnt = 0; initCnt < isInitialize.size(); initCnt++) {
                                                 if (isInitialize[initCnt] == true) {
                                                     if (outputValue[initCnt][0].isDigit() == true) {
                                                         if (outputValue[initCnt].contains("0x")) {
-                                                            write("- " + outputSignal[initCnt] + ": 0x0" + " # " +
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                                                      ControlExcel::instance().data()->isSignalValueEnum(
-#else
-                                                                      SignalDataManger::instance().data()->isSignalValueEnum(
-#endif
-                                                                          outputSignal[initCnt], "0x0"),
-                                                                  3);
+                                                            testCase += "      - " + outputSignal[initCnt] + ": 0x0 # NONE\n";
                                                         } else {
-                                                            write("- " + outputSignal[initCnt] + ": 0", 3);
+                                                            testCase += "      - " + outputSignal[initCnt] + ": 0\n";
                                                         }
                                                     } else {
-                                                        write("- " + outputSignal[initCnt] + ": " +
-                                                                  quoteIfNotNumeric(outputValue[initCnt]),
-                                                              3);
+                                                        if (outputSignal[initCnt].contains("E")) {
+                                                            testCase += "      - " + outputSignal[initCnt] + ": E00000" + +"\n";
+                                                        } else if (outputSignal[initCnt].contains("SND")) {
+                                                            testCase += "      - " + outputSignal[initCnt] + ": SND_None" + +"\n";
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                         if (parts[1].split(":").size() == 2) {
-                                            write("input:", 2, 1);
+                                            testCase += "    input:\n";
                                             if (inputDataInfo[0].contains("SFC.Private.IGNElapsed")) {
 #if defined(USE_CODE_BEFORE_CLASS_SPLIT)
                                                 triggerSignal =
@@ -198,34 +217,25 @@ public:
                                             }
                                             triggerEnumString =
                                                 triggerEnumString.isEmpty() ? QString() : QString(" # %1").arg(triggerEnumString);
-                                            write("- " + triggerSignal + ": " + quoteIfNotNumeric(triggerValue.trimmed()) +
-                                                      triggerEnumString,
-                                                  3);
+                                            testCase += "      - " + triggerSignal + ": " +
+                                                        quoteIfNotNumeric(triggerValue.trimmed()) + triggerEnumString + "\n";
                                         }
-                                        write("output:", 2);
+                                        // write("output:", 2);
+                                        testCase += "    output:\n";
                                         for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
                                             QString tempOutputSignal = outputSignal[outputCnt];
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                            QString outputEnumString = ControlExcel::instance().data()->isSignalValueEnum(
-                                                tempOutputSignal, outputValue[outputCnt]);
-#else
-                                            QString outputEnumString = SignalDataManger::instance().data()->isSignalValueEnum(
-                                                tempOutputSignal, outputValue[outputCnt]);
-#endif
-                                            if (outputEnumString.isEmpty() == false) {
-                                                outputEnumString = " # " + outputEnumString;
-                                            }
                                             if (tempOutputSignal.contains("Collect")) {
                                                 tempOutputSignal = "collect";
                                             }
                                             (outputCnt == outputSignal.size() - 1)
-                                                ? write("- " + tempOutputSignal + ": " +
-                                                            quoteIfNotNumeric(outputValue[outputCnt]) + outputEnumString,
-                                                        3, 2)
-                                                : write("- " + tempOutputSignal + ": " +
-                                                            quoteIfNotNumeric(outputValue[outputCnt]) + outputEnumString,
-                                                        3);
+                                                ? testCase += "      - " + tempOutputSignal + ": " +
+                                                              quoteIfNotNumeric(outputValue[outputCnt]) + outputEnum[outputCnt] +
+                                                              "\n\n"
+                                                : testCase += "      - " + tempOutputSignal + ": " +
+                                                              quoteIfNotNumeric(outputValue[outputCnt]) + outputEnum[outputCnt] +
+                                                              "\n";
                                         }
+                                        write(testCase);
                                     }
                                 }
                             }
@@ -238,24 +248,24 @@ public:
     }
 
 private:
-    void write(const QString& text = "", const int& tabStep = 0, const int& newLineStep = 1) {
+    void write(const QString& testCase = "") {
         if (!mFile.isOpen() || mPrevSplitTcFileCount != mSplitTcFileCount) {
             openNewFile(mSplitTcFileCount);
             mPrevSplitTcFileCount = mSplitTcFileCount;
-        }
-        if (mStream.device()) {
-            mStream << QString("  ").repeated(tabStep) << text << QString("\n").repeated(newLineStep);
-        } else {
-            qWarning() << "QTextStream: No device";
         }
         if (mFile.size() > mMaxFileSize) {
             mFileSize += mFile.size();
             if (mFileSize > mAvailableSpace) {
                 qDebug() << "TC file size exceeds the available capacity of the current system.";
-                QApplication::exit(1);
+                exit(-1);
             } else {
                 mSplitTcFileCount++;
             }
+        }
+        if (mStream.device() && testCase.isEmpty() == false) {
+            mStream << testCase;
+        } else {
+            qWarning() << "QTextStream: No device";
         }
     }
 
@@ -317,22 +327,46 @@ private:
             dir.mkpath(".");
         }
 
-        QString filename;
+        QString tcFileName;
         if (mSfcDescription[2].isEmpty() == false) {
             QRegularExpression regex("\\[[A-Z]+\\d+\\]");
             QRegularExpressionMatch match = regex.match(mSfcDescription[2]);
-
             if (match.hasMatch()) {
                 if (splitTcFileCount == 1) {
-                    filename = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0));
+                    QDir dir(mTCFileDirPath);
+                    QStringList files = dir.entryList(QDir::Files);
+                    for (const QString& fileName : files) {
+                        QString filePath = dir.filePath(fileName);
+                        QFile file(filePath);
+
+                        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                            qWarning() << "Failed to open file:" << filePath;
+                            continue;
+                        }
+
+                        QTextStream in(&file);
+                        QString fileContent = in.readAll();
+                        file.close();
+
+                        if (fileName.contains(mSfcDescription[0] + match.captured(0), Qt::CaseSensitive) &&
+                            fileName.endsWith(".tc", Qt::CaseInsensitive)) {
+                            if (QFile::remove(filePath)) {
+                                qDebug() << "Deleted file:" << filePath;
+                            } else {
+                                qWarning() << "Failed to delete file:" << filePath;
+                            }
+                        }
+                    }
+                    tcFileName = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0));
                 } else {
                     if (splitTcFileCount == 2) {
+                        QFile::remove(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(001).tc");
                         QFile::rename(QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0)),
                                       QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
                                                            QString::number(1).rightJustified(3, '0') + ")"));
                     }
-                    filename = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
-                                                    QString::number(splitTcFileCount).rightJustified(3, '0') + ")");
+                    tcFileName = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
+                                                      QString::number(splitTcFileCount).rightJustified(3, '0') + ")");
                 }
             } else {
                 qWarning() << "SFC Description Error.";
@@ -340,14 +374,15 @@ private:
             }
         } else {
             qWarning() << "Cannot create test, version, and description in tc file due to unreadable Description in Excel file.";
-            filename = mOpenFilePath.section('.', 0, -2) + ".tc";
+            tcFileName = mOpenFilePath.section('.', 0, -2) + ".tc";
         }
 
-        if (filename.isEmpty() == true) {
-            filename = "NO_SFC_DESCRIPTION_AND_FILE_NAME.tc";
+        if (tcFileName.isEmpty() == true) {
+            tcFileName = "NO_SFC_DESCRIPTION_AND_FILE_NAME.tc";
         }
 
-        mFile.setFileName(filename);
+        mFile.setFileName(tcFileName);
+
         if (!mFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
             mStream.setDevice(nullptr);  // 명시적으로 디바이스를 제거
             return;
@@ -365,8 +400,8 @@ private:
     int mSplitTcFileCount = 1;
     int mPrevSplitTcFileCount = 1;
     int mMaxFileSize = mSplitSize * 1024 * 1024;  // 100MB를 바이트로 변환
-    qint64 mAvailableSpace;
-    qint64 mFileSize;
+    qint64 mAvailableSpace = 0;
+    qint64 mFileSize = 0;
     QString mOpenFilePath;
 };
 

@@ -192,6 +192,7 @@ private:
 
     void updateNodeAddress(const bool& all, const QStringList& tcNameList, const QStringList& cofigNameList);
     void updateSheetData(const int& propertyType, const QVariantList& sheetData);
+    void updateConvertSheetData(const int& propertyType, const QVariantList& sheetData);
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelSheet(const QVariant& filePath, const bool& backup);
     bool writeExcelFile(const QVariant& filePath);

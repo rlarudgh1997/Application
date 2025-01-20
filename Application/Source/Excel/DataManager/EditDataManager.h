@@ -1,5 +1,5 @@
-#ifndef EDIT_DATA_MANGER_H
-#define EDIT_DATA_MANGER_H
+#ifndef EDIT_DATA_MANAGER_H
+#define EDIT_DATA_MANAGER_H
 
 #include <QObject>
 #include <QSharedPointer>
@@ -7,7 +7,7 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-class EditDataManger : public QObject {
+class EditDataManager : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
@@ -16,12 +16,10 @@ class EditDataManger : public QObject {
     REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
 
 public:
-    static QSharedPointer<EditDataManger>& instance();
+    static QSharedPointer<EditDataManager>& instance();
 
 private:
-    explicit EditDataManger();
-
+    explicit EditDataManager();
 };
 
-
-#endif  // EDIT_DATA_MANGER_H
+#endif  // EDIT_DATA_MANAGER_H

@@ -1,5 +1,5 @@
-#ifndef SIGNAL_DATA_MANGER_H
-#define SIGNAL_DATA_MANGER_H
+#ifndef SIGNAL_DATA_MANAGER_H
+#define SIGNAL_DATA_MANAGER_H
 
 #include <QObject>
 #include <QSharedPointer>
@@ -70,7 +70,7 @@ private:
     QStringList mPrecondition = QStringList();
 };
 
-class SignalDataManger : public QObject {
+class SignalDataManager : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
@@ -79,7 +79,7 @@ class SignalDataManger : public QObject {
     REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
 
 public:
-    static QSharedPointer<SignalDataManger>& instance();
+    static QSharedPointer<SignalDataManager>& instance();
 
     int isDataType(const QString& dataTypeStr);
     int isSignalType(const QString& signalName);
@@ -97,19 +97,22 @@ public:
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
     QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
+                                                                        QMap<QString, SignalData>& newSignalDataInfo);
+    QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
+                                                                     QMap<QString, SignalData>& newSignalDataInfo);
     QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const QList<QStringList>& list);
     QMap<int, QPair<QString, SignalData>> isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list);
     bool isExcelDataValidation();
 
 private:
-    explicit SignalDataManger();
+    explicit SignalDataManager();
 
     bool isExceptionSignal(const QString& signalName);
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
+    QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
+                                                                   const QStringList& signalList);
 };
 
-
-#endif  // SIGNAL_DATA_MANGER_H
+#endif  // SIGNAL_DATA_MANAGER_H

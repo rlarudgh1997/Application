@@ -1,4 +1,4 @@
-#include "ExcelDataManger.h"
+#include "ExcelDataManager.h"
 
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
@@ -6,15 +6,15 @@
 
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
-QSharedPointer<ExcelDataManger>& ExcelDataManger::instance() {
-    static QSharedPointer<ExcelDataManger> gManger;
-    if (gManger.isNull()) {
-        gManger = QSharedPointer<ExcelDataManger>(new ExcelDataManger());
+QSharedPointer<ExcelDataManager>& ExcelDataManager::instance() {
+    static QSharedPointer<ExcelDataManager> gManager;
+    if (gManager.isNull()) {
+        gManager = QSharedPointer<ExcelDataManager>(new ExcelDataManager());
     }
-    return gManger;
+    return gManager;
 }
 
-ExcelDataManger::ExcelDataManger() {
+ExcelDataManager::ExcelDataManager() {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
@@ -26,7 +26,7 @@ ExcelDataManger::ExcelDataManger() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-QList<QStringList> ExcelDataManger::isSheetDataInfo() {
+QList<QStringList> ExcelDataManager::isSheetDataInfo() {
     QMap<int, QStringList> excelSheetData = isConvertedExcelData();
     int rowMax = 0;
     for (auto iter = excelSheetData.cbegin(); iter != excelSheetData.cend(); ++iter) {
@@ -48,7 +48,7 @@ QList<QStringList> ExcelDataManger::isSheetDataInfo() {
     return sheetData;
 }
 
-QMap<int, QStringList> ExcelDataManger::isConvertedExcelData() {
+QMap<int, QStringList> ExcelDataManager::isConvertedExcelData() {
     // Read Type
     setReadStateNewData(true);
     // InsertData to ExcelData
@@ -167,7 +167,7 @@ QMap<int, QStringList> ExcelDataManger::isConvertedExcelData() {
     return excelSheetData;
 }
 
-QStringList ExcelDataManger::isExcelDataOther(const int& columnIndex) {
+QStringList ExcelDataManager::isExcelDataOther(const int& columnIndex) {
     QStringList sheetData;
     if (getReadStateNewData()) {
         QMap<int, QStringList> newSheetData;
@@ -180,7 +180,10 @@ QStringList ExcelDataManger::isExcelDataOther(const int& columnIndex) {
             QString resultName = data.isResultName();
             QString caseName = data.isCaseName();
             QPair<QStringList, QStringList> inputList = data.isInputList();
-            for (int index = 0; index < inputList.first.size(); ++index) {
+            QStringList signalList = inputList.first;
+            QStringList dataList = inputList.second;
+
+            for (int index = 0; index < signalList.size(); ++index) {
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)].append(check);
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)].append(tcName);
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)].append(genType);
@@ -189,8 +192,8 @@ QStringList ExcelDataManger::isExcelDataOther(const int& columnIndex) {
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)].append(resultName);
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case)].append(caseName);
 
-                QString inputSignal = inputList.first[index];
-                QString inputData = inputList.second[index];
+                QString inputSignal = signalList.at(index);
+                QString inputData = (index < dataList.size()) ? (dataList.at(index)) : (QString());
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)].append(inputSignal);
                 newSheetData[static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)].append(inputData);
             }
@@ -203,12 +206,12 @@ QStringList ExcelDataManger::isExcelDataOther(const int& columnIndex) {
     return sheetData;
 }
 
-QStringList ExcelDataManger::isExcelDataConfig(const int& columnIndex) {
+QStringList ExcelDataManager::isExcelDataConfig(const int& columnIndex) {
     QStringList sheetData = getExcelDataConfig(columnIndex);
     return sheetData;
 }
 
-QPair<int, int> ExcelDataManger::isIndexOf(const QStringList& dataList, const QString& data) {
+QPair<int, int> ExcelDataManager::isIndexOf(const QStringList& dataList, const QString& data) {
     QPair<int, int> foundIndex(1, 0);
     int startIndex = dataList.indexOf(data);
     int endIndex = dataList.lastIndexOf(data);
@@ -220,7 +223,7 @@ QPair<int, int> ExcelDataManger::isIndexOf(const QStringList& dataList, const QS
     return foundIndex;
 }
 
-QStringList ExcelDataManger::isParsingDataList(const QStringList& data, const bool& removeWhitespace) {
+QStringList ExcelDataManager::isParsingDataList(const QStringList& data, const bool& removeWhitespace) {
     QStringList parsingData;
 
     for (const auto& text : data) {
@@ -237,7 +240,7 @@ QStringList ExcelDataManger::isParsingDataList(const QStringList& data, const bo
     return parsingData;
 }
 
-QPair<int, int> ExcelDataManger::isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName) {
+QPair<int, int> ExcelDataManager::isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName) {
     const QStringList tcNameData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
     const QStringList resultData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
     const QStringList caseData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
@@ -297,7 +300,7 @@ QPair<int, int> ExcelDataManger::isRowIndexInfo(const QString& tcName, const QSt
     return rowInfo;
 }
 
-QStringList ExcelDataManger::isTCNameDataList(const bool& all) {
+QStringList ExcelDataManager::isTCNameDataList(const bool& all) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
 
     QStringList tcNameList;
@@ -318,7 +321,7 @@ QStringList ExcelDataManger::isTCNameDataList(const bool& all) {
     return tcNameList;
 }
 
-bool ExcelDataManger::isCheckData(const QString& tcName) {
+bool ExcelDataManager::isCheckData(const QString& tcName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -338,9 +341,10 @@ bool ExcelDataManger::isCheckData(const QString& tcName) {
     return check;
 }
 
-int ExcelDataManger::isGenTypeData(const QString& tcName, QString& genTypeStr) {
+int ExcelDataManager::isGenTypeData(const QString& tcName, QString& genTypeStr) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
+    QStringList genTypeListInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenType).toStringList();
 
     QStringList list;
     for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
@@ -351,26 +355,27 @@ int ExcelDataManger::isGenTypeData(const QString& tcName, QString& genTypeStr) {
     QStringList genTypeList = isParsingDataList(list, true);
     genTypeStr = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
 
-    int genType = ivis::common::GenTypeEnum::GenTypeDefault;
-    if (ivis::common::isCompareString(genTypeStr, QString("NegativePositive"))) {
-        genType = ivis::common::GenTypeEnum::GenTypeNegativePositive;
-    } else if (ivis::common::isCompareString(genTypeStr, QString("Positive"))) {
-        genType = ivis::common::GenTypeEnum::GenTypePositive;
-    } else {
-        if (genTypeStr.size() > 0) {
+    // genTypeListInfo : at(0) - Default, at(1) - Negative/Positive, at(2) - Positive
+    int genType = ivis::common::GenTypeEnum::GenTypeDefault + genTypeListInfo.indexOf(genTypeStr);
+
+    if (genType == ivis::common::GenTypeEnum::GenTypeInvalid) {
+        if (genTypeStr.size() == 0) {
+            genType = ivis::common::GenTypeEnum::GenTypeDefault;
+            genTypeStr = genTypeListInfo.at(0);
+        } else {
             genType = ivis::common::GenTypeEnum::GenTypeInvalid;
             qDebug() << "Fail to gen type(invaild) :" << genTypeStr;
         }
     }
 
-    qDebug() << "isGenTypeData :" << tcName;
-    qDebug() << "\t Info :" << genTypeList.size() << genType << genTypeStr;
-    qDebug() << "\n";
+    // qDebug() << "isGenTypeData :" << tcName;
+    // qDebug() << "\t Info :" << genTypeList.size() << genType << genTypeStr;
+    // qDebug() << "\n";
 
     return genType;
 }
 
-QString ExcelDataManger::isVehicleTypeData(const QString& tcName) {
+QString ExcelDataManager::isVehicleTypeData(const QString& tcName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -390,7 +395,7 @@ QString ExcelDataManger::isVehicleTypeData(const QString& tcName) {
     return vehicleType;
 }
 
-QString ExcelDataManger::isConfigData(const QString& tcName) {
+QString ExcelDataManager::isConfigData(const QString& tcName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -410,7 +415,7 @@ QString ExcelDataManger::isConfigData(const QString& tcName) {
     return config;
 }
 
-QStringList ExcelDataManger::isResultDataList(const QString& tcName) {
+QStringList ExcelDataManager::isResultDataList(const QString& tcName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
@@ -429,7 +434,7 @@ QStringList ExcelDataManger::isResultDataList(const QString& tcName) {
     return resultList;
 }
 
-QStringList ExcelDataManger::isCaseDataList(const QString& tcName, const QString& resultName) {
+QStringList ExcelDataManager::isCaseDataList(const QString& tcName, const QString& resultName) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, resultName, QString());
 
@@ -440,18 +445,22 @@ QStringList ExcelDataManger::isCaseDataList(const QString& tcName, const QString
         // qDebug() << "\t Case[" << rowIndex << "] :" << text;
     }
 
-    QStringList caseList = isParsingDataList(list, false);
+    QStringList caseList = isParsingDataList(list, true);
 
     // qDebug() << "isCaseDataList :" << tcName << resultName;
-    // qDebug() << "\t Info :" << caseList.size() << caseList;
+    // // qDebug() << "\t Info :" << caseList.size() << caseList;
+    // qDebug() << "\t Size :" << caseList.size();
+    // for (const auto& info : caseList) {
+    //     qDebug() << "\t Case :" << info;
+    // }
     // qDebug() << "\n";
 
     return caseList;
 }
 
-QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& tcName, const QString& resultName,
-                                                                 const QString& caseName, const bool& removeWhitespace,
-                                                                 const bool& checkOthers) {
+QPair<QStringList, QStringList> ExcelDataManager::isInputDataList(const QString& tcName, const QString& resultName,
+                                                                  const QString& caseName, const bool& removeWhitespace,
+                                                                  const bool& checkOthers) {
     const QStringList inputSignal = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
     const QStringList inputData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData));
     const QPair<int, int> rowInfo = isRowIndexInfo(tcName, resultName, caseName);
@@ -499,8 +508,8 @@ QPair<QStringList, QStringList> ExcelDataManger::isInputDataList(const QString& 
     return inputList;
 }
 
-QPair<QStringList, QStringList> ExcelDataManger::isInputDataWithoutCaseList(const QString& tcName, const QString& resultName,
-                                                                            const QString& caseName) {
+QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(const QString& tcName, const QString& resultName,
+                                                                             const QString& caseName) {
     const QPair<QStringList, QStringList> allInputList = isInputDataList(tcName, QString(), QString(), true, false);
     const QStringList caseInputSignalList = isInputDataList(tcName, resultName, caseName, true).first;
 
@@ -561,7 +570,7 @@ QPair<QStringList, QStringList> ExcelDataManger::isInputDataWithoutCaseList(cons
     return inputList;
 }
 
-QList<QStringList> ExcelDataManger::isOutputDataList(const QString& tcName, const QString& resultName) {
+QList<QStringList> ExcelDataManager::isOutputDataList(const QString& tcName, const QString& resultName) {
     const bool readState = getReadStateNewData();
     setReadStateNewData(false);
     const QStringList outputSignal = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal));
@@ -591,7 +600,7 @@ QList<QStringList> ExcelDataManger::isOutputDataList(const QString& tcName, cons
     return outputList;
 }
 
-QList<QStringList> ExcelDataManger::isConfigDataList(const QString& configName, const bool& allData) {
+QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName, const bool& allData) {
     const QStringList configNameList = isExcelDataConfig(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
     const QStringList andGroupList = isExcelDataConfig(static_cast<int>(ivis::common::ExcelSheetTitle::Config::AndGroup));
     const QStringList inputSignalList = isExcelDataConfig(static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal));
@@ -631,7 +640,7 @@ QList<QStringList> ExcelDataManger::isConfigDataList(const QString& configName, 
     return dataInfo;
 }
 
-int ExcelDataManger::isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName) {
+int ExcelDataManager::isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName) {
     int caseIndex = 0;
     for (const auto& data : readNewSheetData()) {
         QString currentTCName = data.isTCName();
@@ -651,7 +660,7 @@ int ExcelDataManger::isCaseIndex(const QString& tcName, const QString& resultNam
     return caseIndex;
 }
 
-void ExcelDataManger::updateExcelData(const int& sheetIndex, const QVariantList& sheetData) {
+void ExcelDataManager::updateExcelData(const int& sheetIndex, const QVariantList& sheetData) {
     qDebug() << "updateExcelData :" << sheetIndex << sheetData.size();
 
     if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
@@ -665,7 +674,7 @@ void ExcelDataManger::updateExcelData(const int& sheetIndex, const QVariantList&
     }
 }
 
-void ExcelDataManger::updateExcelDataOther(const QVariantList& sheetData) {
+void ExcelDataManager::updateExcelDataOther(const QVariantList& sheetData) {
     const int columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max);
 
     QMap<int, QStringList> excelSheetData;
@@ -694,7 +703,7 @@ void ExcelDataManger::updateExcelDataOther(const QVariantList& sheetData) {
     writeExcelDataOther(excelSheetData);
 }
 
-void ExcelDataManger::updateExcelDataConfig(const QVariantList& sheetData) {
+void ExcelDataManager::updateExcelDataConfig(const QVariantList& sheetData) {
     const int columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Config::Max);
 
     QMap<int, QStringList> excelSheetData;
@@ -721,8 +730,9 @@ void ExcelDataManger::updateExcelDataConfig(const QVariantList& sheetData) {
     writeExcelDataConfig(excelSheetData);
 }
 
-void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
-                                         const QPair<QStringList, QStringList>& inputList) {
+void ExcelDataManager::updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
+                                          const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
+                                          const bool& insertBefore) {
     if ((tcName.size() == 0) || (resultName.size() == 0) || (caseName.size() == 0)) {
         qDebug() << "Fail to update info size :" << tcName.size() << resultName.size() << caseName.size();
         return;
@@ -733,10 +743,19 @@ void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& r
     int genType = isGenTypeData(tcName, genTypeStr);
     QString vehicleType = isVehicleTypeData(tcName);
     QString config = isConfigData(tcName);
-    QStringList inputSignalList = inputList.first;
-    QStringList inputDataList = inputList.second;
-    inputSignalList.removeAll("");
-    inputDataList.removeAll("");
+
+    QStringList inputSignalList;
+    QStringList inputDataList;
+    for (const auto& signal : inputList.first) {
+        if (signal.size() == 0) {
+            continue;
+        }
+        int index = inputList.first.indexOf(signal);
+        QString data = (index < inputList.second.size()) ? (inputList.second.at(index)) : (QString());
+        inputSignalList.append(signal);
+        inputDataList.append(data);
+    }
+
     QList<QStringList> outputList = isOutputDataList(tcName, resultName);
     int listSizeGap = outputList.size() - inputSignalList.size();
     listSizeGap = (listSizeGap > 0) ? (listSizeGap) : (0);
@@ -744,69 +763,32 @@ void ExcelDataManger::updateCaseDataInfo(const QString& tcName, const QString& r
         inputSignalList.append("");
         inputDataList.append("");
     }
+
     QPair<QStringList, QStringList> currInputList = qMakePair(inputSignalList, inputDataList);
-    qDebug() << "KKH - Info :" << inputList.first.size() << currInputList.first.size() << outputList.size();
     int caseIndex = isSizeNewSheetData();
-    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, currInputList, outputList);
-    setNewSheetData(caseIndex, insertData);
+    if (baseCaseName.size() > 0) {
+        caseIndex = isCaseIndex(tcName, resultName, baseCaseName);
+        caseIndex = (insertBefore) ? (caseIndex) : (caseIndex + 1);
+    }
+
+    if (caseIndex >= 0) {
+        InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, currInputList, outputList);
+        setNewSheetData(caseIndex, insertData);
+    }
 
 #if 0
-    qDebug() << "[updateCaseDataInfo]";
-    // qDebug() << "\t caseIndex   :" << caseIndex;
+    qDebug() << "[updateCaseDataInfo] :" << inputSignalList.size() << inputDataList.size();
     qDebug() << "\t TCName      :" << tcName;
     qDebug() << "\t Result      :" << resultName;
-    qDebug() << "\t Case        :" << caseName;
-    // qDebug() << "\t InputList   :" << inputList.first.size() << inputList.first;
-    qDebug() << "\t InputSignal :" << inputList.first.size() << inputList.first;
+    qDebug() << "\t Case        :" << caseIndex << caseName;
+    qDebug() << "\t InputSignal :" << inputSignalList.size() << inputSignalList;
+    qDebug() << "\t InputData   :" << inputDataList.size() << inputDataList;
     qDebug() << "\t OutputList  :" << outputList.size() << outputList;
     qDebug() << "\n";
 #endif
 }
 
-void ExcelDataManger::insertCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
-                                         const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
-                                         const bool& insertBefore) {
-    if ((tcName.size() == 0) || (resultName.size() == 0) || (caseName.size() == 0)) {
-        qDebug() << "Fail to update info size :" << tcName.size() << resultName.size() << caseName.size();
-        return;
-    }
-
-    QString check = (isCheckData(tcName)) ? (QString("O")) : (QString());
-    QString genTypeStr;
-    int genType = isGenTypeData(tcName, genTypeStr);
-    QString vehicleType = isVehicleTypeData(tcName);
-    QString config = isConfigData(tcName);
-    QStringList inputSignalList = inputList.first;
-    QStringList inputDataList = inputList.second;
-    inputSignalList.removeAll("");
-    inputDataList.removeAll("");
-    QList<QStringList> outputList = isOutputDataList(tcName, resultName);
-    int listSizeGap = outputList.size() - inputSignalList.size();
-    listSizeGap = (listSizeGap > 0) ? (listSizeGap) : (0);
-    for (int index = 0; index < listSizeGap; ++index) {
-        inputSignalList.append("");
-        inputDataList.append("");
-    }
-    QPair<QStringList, QStringList> currInputList = qMakePair(inputSignalList, inputDataList);
-    int caseIndex = isCaseIndex(tcName, resultName, baseCaseName);
-    caseIndex = (insertBefore) ? (caseIndex) : (caseIndex + 1);
-    InsertData insertData(tcName, check, genTypeStr, vehicleType, config, resultName, caseName, currInputList, outputList);
-    setNewSheetData(caseIndex, insertData);
-
-#if 0
-    qDebug() << "[insertCaseDataInfo]";
-    // qDebug() << "\t caseIndex   :" << caseIndex;
-    qDebug() << "\t TCName      :" << tcName;
-    qDebug() << "\t Result      :" << resultName;
-    qDebug() << "\t Case        :" << caseName;
-    // qDebug() << "\t InputList   :" << inputList.first.size() << inputList.first;
-    qDebug() << "\t InputSignal :" << inputList.first.size() << inputList.first;
-    qDebug() << "\t OutputList  :" << outputList.size() << outputList;
-    qDebug() << "\n";
-#endif
-}
-
-bool ExcelDataManger::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
+bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
     QList<QStringList> configList = isConfigDataList(configName, other);
     QMap<int, QPair<QStringList, QStringList>> inputMap;
     QStringList signalList;

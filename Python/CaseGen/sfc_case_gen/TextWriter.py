@@ -63,12 +63,7 @@ class TextWriter:
     def get_signal_info(self):
         sig_list = dict()
         for idx, sig in enumerate(self.instance.signals):
-            if sig.gen_type == "Default" or sig.gen_type == "Positive":
-                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
-            elif sig.gen_type == "Negative":
-                sig_list[sig.InputSignalName] = {"DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
-            else:
-                print("Not Defined Gen Type: ", sig.gen_type)
+            sig_list[idx] = {"SignalName": sig.InputSignalName, "DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
         return sig_list
 
     def get_all_case_str(self):

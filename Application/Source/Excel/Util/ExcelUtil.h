@@ -94,5 +94,4 @@ private:
     explicit ExcelUtil();
 };
 
-
 #endif  // EXCEL_UTIL_H

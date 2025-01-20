@@ -1,18 +1,18 @@
-#include "EditDataManger.h"
+#include "EditDataManager.h"
 
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
 #include "ExcelUtil.h"
 
-QSharedPointer<EditDataManger>& EditDataManger::instance() {
-    static QSharedPointer<EditDataManger> gManger;
-    if (gManger.isNull()) {
-        gManger = QSharedPointer<EditDataManger>(new EditDataManger());
+QSharedPointer<EditDataManager>& EditDataManager::instance() {
+    static QSharedPointer<EditDataManager> gManager;
+    if (gManager.isNull()) {
+        gManager = QSharedPointer<EditDataManager>(new EditDataManager());
     }
-    return gManger;
+    return gManager;
 }
 
-EditDataManger::EditDataManger() {
+EditDataManager::EditDataManager() {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();

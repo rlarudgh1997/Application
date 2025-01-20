@@ -30,5 +30,4 @@ private:
     explicit ExcelData() = default;
 };
 
-
 #endif  // EXCEL_DATA_H

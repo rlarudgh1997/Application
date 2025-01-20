@@ -1,4 +1,4 @@
-#include "SignalDataManger.h"
+#include "SignalDataManager.h"
 
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
@@ -12,15 +12,15 @@ const QString VEHICLE_TYPE_HEV = QString("HEV");
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 const QString SFC_DONT_CARE = QString("D'");
 
-QSharedPointer<SignalDataManger>& SignalDataManger::instance() {
-    static QSharedPointer<SignalDataManger> gManger;
-    if (gManger.isNull()) {
-        gManger = QSharedPointer<SignalDataManger>(new SignalDataManger());
+QSharedPointer<SignalDataManager>& SignalDataManager::instance() {
+    static QSharedPointer<SignalDataManager> gManager;
+    if (gManager.isNull()) {
+        gManager = QSharedPointer<SignalDataManager>(new SignalDataManager());
     }
-    return gManger;
+    return gManager;
 }
 
-SignalDataManger::SignalDataManger() {
+SignalDataManager::SignalDataManager() {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
@@ -32,7 +32,7 @@ SignalDataManger::SignalDataManger() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-int SignalDataManger::isDataType(const QString& dataTypeStr) {
+int SignalDataManager::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
     if (dataTypeStr.compare("HUInt64") == false) {
@@ -47,7 +47,7 @@ int SignalDataManger::isDataType(const QString& dataTypeStr) {
     return dataType;
 }
 
-int SignalDataManger::isSignalType(const QString& signalName) {
+int SignalDataManager::isSignalType(const QString& signalName) {
     int signalType = static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid);
     if (signalName.trimmed().startsWith("SFC.")) {
         if (signalName.trimmed().startsWith("SFC.Event.")) {
@@ -72,7 +72,7 @@ int SignalDataManger::isSignalType(const QString& signalName) {
     return signalType;
 }
 
-QString SignalDataManger::isSfcFileInfo(const QString& signalName) {
+QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
     int signalType = isSignalType(signalName);
@@ -134,7 +134,7 @@ QString SignalDataManger::isSfcFileInfo(const QString& signalName) {
     return foundYml;
 }
 
-QStringList SignalDataManger::isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
+QStringList SignalDataManager::isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
     QStringList fileName = QStringList();
     QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     vsmPath.append("/VSM");
@@ -154,7 +154,7 @@ QStringList SignalDataManger::isVsmFileInfo(const QString& vehicleName, const QS
     return fileName;
 }
 
-QMap<int, QStringList> SignalDataManger::isSignalFileList(const QString& signalName, const QString& vehicleType) {
+QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signalName, const QString& vehicleType) {
     QMap<int, QStringList> fileList = QMap<int, QStringList>();
     int signalType = isSignalType(signalName);
 
@@ -200,8 +200,8 @@ QMap<int, QStringList> SignalDataManger::isSignalFileList(const QString& signalN
     return fileList;
 }
 
-QMap<int, QStringList> SignalDataManger::isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
-                                                               const QMap<int, QStringList>& fileList, int& dataType) {
+QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
+                                                                const QMap<int, QStringList>& fileList, int& dataType) {
     const QString PREFIX_TYPE = QString("type:");
     const QString PREFIX_SIGNAL_NAME = QString("signalName:");
     const QString PREFIX_DATA_TYPE = QString("dataType:");
@@ -368,8 +368,8 @@ QMap<int, QStringList> SignalDataManger::isParsingFileDataInfo(const QString& si
     return sfcDataInfo;
 }
 
-QMap<int, QStringList> SignalDataManger::isSignalDataList(const QString& signalName, const QStringList& inputData,
-                                                          const QString& vehicleType, int& dataType) {
+QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signalName, const QStringList& inputData,
+                                                           const QString& vehicleType, int& dataType) {
     const int signalType = isSignalType(signalName);
     if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
         // ex) collected
@@ -402,7 +402,7 @@ QMap<int, QStringList> SignalDataManger::isSignalDataList(const QString& signalN
     return sfcDataInfo;
 }
 
-QString SignalDataManger::isSignalValueEnum(const QString& signalName, const QString& value) {
+QString SignalDataManager::isSignalValueEnum(const QString& signalName, const QString& value) {
     QString matchingValue;  // not used
     QStringList currentEnum = isSignalValueEnum(true, signalName);
     QStringList currentValue = isSignalValueEnum(false, signalName);
@@ -417,19 +417,19 @@ QString SignalDataManger::isSignalValueEnum(const QString& signalName, const QSt
             resultValue = currentList.at(index);
         }
     }
-    qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
+    // qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
     return resultValue;
 }
 
-QStringList SignalDataManger::isSignalValueEnum(const bool& toEnum, const QString& signalName) {
+QStringList SignalDataManager::isSignalValueEnum(const bool& toEnum, const QString& signalName) {
     QString matchingValue;  // not used
     QStringList valueEnum = isConvertedSignalData(toEnum, signalName, QStringList(), matchingValue);
     // qDebug() << "isSignalValueEnum :" << toEnum << signalName << valueEnum;
     return valueEnum;
 }
 
-QStringList SignalDataManger::isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
-                                                QString& matchingValue) {
+QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
+                                                     QString& matchingValue) {
     int signalType = isSignalType(signalName);
     bool vehicleState = ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
                          (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)));
@@ -466,8 +466,8 @@ QStringList SignalDataManger::isConvertedSignalData(const bool& toEnum, const QS
     return convertDataInfo;
 }
 
-QString SignalDataManger::isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
-                                                    const QString& checkStr) {
+QString SignalDataManager::isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+                                                     const QString& checkStr) {
     QString exceptionValue;
     bool foundStr = false;  // Check --> (ValueEnum : MESSAGE_TIMEOUT) && (MatchingTable : TIMEOUT)
     int checkIndex = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
@@ -499,8 +499,8 @@ QString SignalDataManger::isCheckBothExceptionValue(const QMap<int, QStringList>
     return exceptionValue;
 }
 
-QPair<QStringList, QStringList> SignalDataManger::isCheckExceptionValueEnum(const QString& signalName,
-                                                                            const QMap<int, QStringList>& dataInfo) {
+QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(const QString& signalName,
+                                                                             const QMap<int, QStringList>& dataInfo) {
     const QString originTimeOut =
         ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
     const QString checkTimeOut = QString("TIMEOUT");
@@ -596,15 +596,15 @@ QPair<QStringList, QStringList> SignalDataManger::isCheckExceptionValueEnum(cons
     return exceptionData;
 }
 
-bool SignalDataManger::isExceptionSignal(const QString& signalName) {
+bool SignalDataManager::isExceptionSignal(const QString& signalName) {
     if (ivis::common::isCompareString(signalName, QString("collect"))) {
         return true;
     }
     return false;
 }
 
-QMap<QString, SignalData> SignalDataManger::isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
-                                                             QMap<QString, QMap<int, QStringList>>& dataInfo) {
+QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
+                                                              QMap<QString, QMap<int, QStringList>>& dataInfo) {
     QMap<QString, SignalData> signalDataInfo;
 
     const int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
@@ -655,8 +655,8 @@ QMap<QString, SignalData> SignalDataManger::isSignalDataInfo(const QStringList& 
             }
         } else {
             QString keywordContainStr = (signalData.size() == 0) ? (QString()) : (signalData.at(0));  // 0 : 키워드 포함 데이터
-            keywordType = ExcelUtil::instance().data()->isKeywordType(
-                            static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max), keywordContainStr);
+            keywordType = ExcelUtil::instance().data()->isKeywordType(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max),
+                                                                      keywordContainStr);
 
             originData = currDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
             convertData = originData;
@@ -682,7 +682,35 @@ QMap<QString, SignalData> SignalDataManger::isSignalDataInfo(const QStringList& 
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManger::isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list) {
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
+                                                                                  const QStringList& signalList) {
+    QMap<int, QPair<QString, SignalData>> signalDataInfo;
+    QStringList newSignalList;
+
+    for (const auto& signalName : signalList) {
+        if (ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED)) {
+            // qDebug() << "\t Found ign signal :" << signalName;
+            newSignalList.append(SFC_IGN_ELAPSED);
+        } else {
+            newSignalList.append(signalName);
+        }
+    }
+    newSignalList.removeDuplicates();
+
+    for (const auto& signalName : newSignalList) {
+        // qDebug() << "Signal :" << signalName;
+        if (dataInfo.contains(signalName) == false) {
+            // qDebug() << "\t Not found signal :" << signalName;
+            continue;
+        }
+        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, dataInfo[signalName]);
+    }
+
+    return signalDataInfo;
+}
+
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalDataInfo(
+    const QPair<QStringList, QStringList>& list) {
     QStringList signalList = list.first;
     QStringList dataList = list.second;
     signalList.removeAll("");
@@ -700,15 +728,11 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isNormalInputSignalDataI
         }
         newSignalDataInfo[signalName] = currentSignalDataInfo[signalName];
     }
-
-    QMap<int, QPair<QString, SignalData>> signalDataInfo;
-    for (const auto& signalName : signalList) {
-        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
-    }
+    QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
 #if 1
     qDebug() << "*************************************************************************************************";
-    qDebug() << "1. isNormalInputSignalDataInfo :" << signalList.size() << dataList.size();
+    qDebug() << "1. isNormalInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
@@ -730,8 +754,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isNormalInputSignalDataI
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManger::isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>&
-                                                                                      list) {
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDataInfo(
+    const QPair<QStringList, QStringList>& list, QMap<QString, SignalData>& newSignalDataInfo) {
     QStringList signalList = list.first;
     QStringList dataList = list.second;
     signalList.removeAll("");
@@ -739,7 +763,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isTestCaseInputSignalDat
 
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
-    QMap<QString, SignalData> newSignalDataInfo;
 
     for (auto signalName : currentSignalDataInfo.keys()) {
         SignalData signalData = currentSignalDataInfo[signalName];
@@ -813,7 +836,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isTestCaseInputSignalDat
                 }
             } else {
                 QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                                            static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
+                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
                 QString checkTimeOut = QString("TIMEOUT");
                 auto currDataInfo = dataInfo[signalName];
 
@@ -833,18 +856,14 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isTestCaseInputSignalDat
         convertData.removeDuplicates();
         precondition.removeDuplicates();
 
-        newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
-                                                   notUsedEnum, precondition);
+        newSignalDataInfo[signalName] =
+            SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
     }
-
-    QMap<int, QPair<QString, SignalData>> signalDataInfo;
-    for (const auto& signalName : signalList) {
-        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
-    }
+    QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
 #if 1
     qDebug() << "*************************************************************************************************";
-    qDebug() << "2. isTestCaseInputSignalDataInfo :" << signalList.size() << dataList.size();
+    qDebug() << "2. isTestCaseInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
@@ -866,7 +885,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isTestCaseInputSignalDat
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list) {
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataInfo(
+    const QPair<QStringList, QStringList>& list, QMap<QString, SignalData>& newSignalDataInfo) {
     QStringList signalList = list.first;
     QStringList dataList = list.second;
     signalList.removeAll("");
@@ -874,7 +894,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataIn
 
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
-    QMap<QString, SignalData> newSignalDataInfo;
 
     QStringList ignOriginData;
     for (auto signalName : currentSignalDataInfo.keys()) {
@@ -900,7 +919,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataIn
             precondition = QStringList({preconditionMaxValue});
         } else {
             QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
             QString checkTimeOut = QString("TIMEOUT");
             QString tempMatchingValue;  // not used
             convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
@@ -919,8 +938,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataIn
         convertData.removeDuplicates();
         precondition.removeDuplicates();
 
-        newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
-                                                   notUsedEnum, precondition);
+        newSignalDataInfo[signalName] =
+            SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
     }
 
     if (ignOriginData.size() > 0) {
@@ -933,19 +952,18 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataIn
         newSignalDataInfo[SFC_IGN_ELAPSED] = SignalData(SFC_IGN_ELAPSED, ignDataType, false, ignKeywordType, ignOriginData,
                                                         ignConvertData, QStringList(), QStringList(), ignPrecondition);
     }
-
-    QMap<int, QPair<QString, SignalData>> signalDataInfo;
-    for (const auto& signalName : signalList) {
-        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
-    }
+    QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
 #if 1
     qDebug() << "*************************************************************************************************";
-    qDebug() << "3. isOtherInputSignalDataInfo :" << signalList.size() << dataList.size();
+    qDebug() << "3. isOtherInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
         auto signalData = signalDataInfo[mapKey].second;
+        // for (const auto& key : newSignalDataInfo.keys()) {
+        //     auto signalName = key;
+        //     auto signalData = newSignalDataInfo[key];
         qDebug() << "[" << signalName << "]";
         qDebug() << "\t DataType     :" << signalData.isDataType();
         qDebug() << "\t Initialize   :" << signalData.isInitialize();
@@ -963,13 +981,13 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOtherInputSignalDataIn
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManger::isOutputSignalDataInfo(const QList<QStringList>& list) {
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isOutputSignalDataInfo(const QList<QStringList>& list) {
     QStringList signalList;
     QStringList dataList;
     QMap<QString, QString> initList;
 
     for (const auto& info : list) {
-        if (info.size() != 3) {    // Output : Signal, Init, Data
+        if (info.size() != 3) {  // Output : Signal, Init, Data
             continue;
         }
         QString signal = info.at(0);
@@ -999,8 +1017,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOutputSignalDataInfo(c
         QStringList notUsedEnum = signalData.isNotUsedEnum();
         QStringList precondition = signalData.isPrecondition();
 
-        newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
-                                                   notUsedEnum, precondition);
+        newSignalDataInfo[signalName] =
+            SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
     }
 
     QMap<int, QPair<QString, SignalData>> signalDataInfo;
@@ -1010,7 +1028,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOutputSignalDataInfo(c
 
 #if 1
     qDebug() << "*************************************************************************************************";
-    qDebug() << "4. isOutputSignalDataInfo :" << signalList.size() << dataList.size();
+    qDebug() << "4. isOutputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
@@ -1032,7 +1050,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isOutputSignalDataInfo(c
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManger::isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list) {
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list) {
     QStringList signalList = list.first;
     QStringList dataList = list.second;
     signalList.removeAll("");
@@ -1042,14 +1060,11 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isConfigSignalDataInfo(c
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
     QMap<QString, SignalData> newSignalDataInfo;
 
-    QMap<int, QPair<QString, SignalData>> signalDataInfo;
-    for (const auto& signalName : signalList) {
-        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
-    }
+    QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
 #if 1
     qDebug() << "*************************************************************************************************";
-    qDebug() << "5. isConfigSignalDataInfo :" << signalList.size() << dataList.size();
+    qDebug() << "5. isConfigSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
@@ -1070,7 +1085,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManger::isConfigSignalDataInfo(c
     return signalDataInfo;
 }
 
-bool SignalDataManger::isExcelDataValidation() {
+bool SignalDataManager::isExcelDataValidation() {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
@@ -1089,7 +1104,7 @@ bool SignalDataManger::isExcelDataValidation() {
     QVariantList temp;
     for (int sheetIndex = originStart; sheetIndex < originEnd; ++sheetIndex) {
         for (const auto& rowDataList : temp) {
-        // for (const auto& rowDataList : getData(sheetIndex).toList()) {
+            // for (const auto& rowDataList : getData(sheetIndex).toList()) {
             QStringList rowData = rowDataList.toStringList();
             if (rowData.size() < (static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max))) {
                 // qDebug() << "Fail to sheet data list size :" << rowData.size();

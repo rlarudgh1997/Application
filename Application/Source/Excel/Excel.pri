@@ -1,5 +1,5 @@
 include($$PWD/TestCase/TestCase.pri)
-include($$PWD/DataManger/DataManger.pri)
+include($$PWD/DataManager/DataManager.pri)
 include($$PWD/Util/Util.pri)
 
 

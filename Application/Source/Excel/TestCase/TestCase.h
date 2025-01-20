@@ -45,8 +45,8 @@ private:
     void appendCase(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
                     const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
                     const int& sheetNumber);
-    QString getSignalInfoString(const QString& genType, const int& sheetNum, const QString& tcName, const QString& resultName,
-                                const QString& caseName, const bool& isOther);
+    QPair<QString, QString> getSignalInfoString(const QString& genType, const int& sheetNum, const QString& tcName,
+                                                const QString& resultName, const QString& caseName, const bool& isOther);
     void callPython(const QString& str);
     QJsonObject readJson(const QString& filePath = "");
     void printJson(const QJsonObject& jsonObj);

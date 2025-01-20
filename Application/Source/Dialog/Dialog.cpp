@@ -1030,7 +1030,6 @@ bool Dialog::updateAutoComplete(const QVariantList& info) {
         mGui->ListCheck3->setEnabled(tcName);
         mGui->ListCheck3->setText("TCName");
 
-
         mGui->AutoCompleteListCheckTitle->setText("[Signal Type]");
         mGui->AutoCompleteInputTitle->setText("Search :");
         mGui->AutoCompleteDisplayTitle->setText("Select  :");
