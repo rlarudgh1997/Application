@@ -25,7 +25,6 @@ public:
 private:
     explicit ConvertDataManager();
 
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
     bool replaceGenDataInfo();
     QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
                                                                const QList<int>& columnList);
@@ -47,7 +46,6 @@ private:
                                             const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
     QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
                                       const bool& normal = true);
-#endif
 };
 
 #endif  // CONVERT_DATA_MANAGER_H

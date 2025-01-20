@@ -491,11 +491,7 @@ QJsonObject GenerateCaseData::getConfigSig(const int& sheetIdx, const QStringLis
 #else
     QString titleConfigSigData;
 #endif
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-    auto configSigMap = ControlExcel::instance().data()->isConfigSignalDataInfo(sheetIdx, strList);
-#else
     QMap<QString, SignalData> configSigMap;  // = SignalDataManager::instance().data()->isConfigSignalDataInfo(sheetIdx, strList);
-#endif
 
     for (const auto& configSigKey : configSigMap.keys()) {
         auto tmpSignalDataInfo = configSigMap[configSigKey];
@@ -527,17 +523,10 @@ QJsonObject GenerateCaseData::getOutputSig(const int& sheetIdx, const QString& t
         auto tmpValueEnum = tmpSignalDataInfo.isValueEnum();
         auto tmpIsInitialize = tmpSignalDataInfo.isInitialize();
         auto tmpOutputSigKey = outputSigKey;
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-        if (tmpOutputSigKey == ControlExcel::instance().data()->isKeywordString(
-                                   static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect))) {
-            tmpOutputSigKey = TEXT_COLLECT;
-        }
-#else
         if (tmpOutputSigKey == ExcelUtil::instance().data()->isKeywordString(
                                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect))) {
             tmpOutputSigKey = TEXT_COLLECT;
         }
-#endif
         // 1. ret에서 QJsonObject를 가져오기
         QJsonObject outputObj = ret[tmpOutputSigKey].toObject();
         // 3. 수정된 객체를 다시 ret에 설정
@@ -634,13 +623,8 @@ void GenerateCaseData::appendOtherCaseJson(QJsonObject& fileJson, const QString&
                    sheetNumber, GEN_TYPE_DEFAULT);
 
     QJsonObject newOtherJson = getCaseInfoJson(genType, tcName, otherCase, true);
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-    newOtherJson[titleCase] =
-        ControlExcel::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other));
-#else
     newOtherJson[titleCase] =
         ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other));
-#endif
     appendCaseJson(mAllCaseJson, newOtherJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName, tcNameNumber,
                    sheetNumber, GEN_TYPE_DEFAULT);
 
@@ -879,11 +863,7 @@ QString GenerateCaseData::getConfigTagStr(const bool& isOther, const QString& tc
     for (const auto& key : configIdxMap.keys()) {
         QString enumValue;
         QString signalName = (configIdxMap[key] == triggerSigIndex) ? (triggerSigValue) : (preconditionList[configIdxMap[key]]);
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-        enumValue = ControlExcel::instance().data()->isSignalValueEnum(key, signalName);
-#else
         enumValue = SignalDataManager::instance().data()->isSignalValueEnum(key, signalName);
-#endif
         configSigValueMap.insert(key, enumValue);
     }
 

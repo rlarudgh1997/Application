@@ -7,7 +7,6 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
 class KeywordInfo {
 public:
     KeywordInfo(const int& row, const int& column, const QString& text, const int& keyword, const QString& data)
@@ -62,7 +61,6 @@ private:
     QList<QStringList> mConvertData = QList<QStringList>();
     QList<QStringList> mRowData = QList<QStringList>();
 };
-#endif
 
 class ExcelUtil : public QObject {
     Q_OBJECT
@@ -79,9 +77,7 @@ public:
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
     int isKeywordType(const int& columnIndex, QString& inputData);
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
     QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
-#endif
     int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);

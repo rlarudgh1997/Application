@@ -6,17 +6,12 @@
 #include <QDateTime>
 #include <QStorageInfo>
 
-#include "CommonDefine.h"  // USE_CODE_BEFORE_CLASS_SPLIT
 #include "ExcelUtil.h"
 
 class CaseDataWriter {
 public:
     CaseDataWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-        mSfcDescription = ControlExcel::instance().data()->isDescriptionDataInfo();
-#else
         mSfcDescription = ExcelUtil::instance().data()->isDescriptionDataInfo();
-#endif
         if (mTCFileDirPath.size() == 0) {
             mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
             int lastSlashIndex = mOpenFilePath.lastIndexOf("/");
@@ -80,13 +75,8 @@ public:
                                 // NOTE: 여기서 Output_Value Enum String map으로 담을 수 있는 구현이 필요함.
                                 for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
                                     QString tempOutputEnum;
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                    tempOutputEnum = ControlExcel::instance().data()->isSignalValueEnum(outputSignal[outputCnt],
-                                                                                                        outputValue[outputCnt]);
-#else
                                     tempOutputEnum = SignalDataManager::instance().data()->isSignalValueEnum(
                                         outputSignal[outputCnt], outputValue[outputCnt]);
-#endif
                                     if (tempOutputEnum.isEmpty() == false) {
                                         outputEnum << " # " + tempOutputEnum;
                                     } else {
@@ -162,12 +152,7 @@ public:
                                                             .toString();
                                                 }
                                                 if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                                    signalName =
-                                                        ControlExcel::instance().data()->isIGNElapsedName(number.toInt());
-#else
                                                     signalName = ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
-#endif
                                                     signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
                                                 } else {
                                                     signalName = std::get<0>(signalList[signalOrder]);
@@ -203,13 +188,8 @@ public:
                                         if (parts[1].split(":").size() == 2) {
                                             testCase += "    input:\n";
                                             if (inputDataInfo[0].contains("SFC.Private.IGNElapsed")) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                                triggerSignal =
-                                                    ControlExcel::instance().data()->isIGNElapsedName(inputDataInfo[1].toInt());
-#else
                                                 triggerSignal =
                                                     ExcelUtil::instance().data()->isIGNElapsedName(inputDataInfo[1].toInt());
-#endif
                                                 triggerValue = "0x" + QString::number(++ignCount, 16).toUpper();
                                             } else {
                                                 triggerSignal = inputDataInfo[0];

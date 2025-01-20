@@ -227,7 +227,6 @@ int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
     return keywordType;
 }
 
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
 QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList) {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
@@ -338,7 +337,6 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 
     return keywordTypeInfo;
 }
-#endif
 
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);

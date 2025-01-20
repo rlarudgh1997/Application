@@ -40,7 +40,6 @@ ConvertDataManager::ConvertDataManager() {
 }
 
 void ConvertDataManager::excuteConvertDataManager() {
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
     ivis::common::CheckTimer checkTimer;
 
     // NOTE(csh): [Sheet] Keyword 기능 수행(row data append) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
@@ -83,10 +82,8 @@ void ConvertDataManager::excuteConvertDataManager() {
         }
     }
     checkTimer.check("excuteConvertDataManager : Convert.excel_002");
-#endif
 }
 
-#if !defined(USE_CODE_BEFORE_CLASS_SPLIT)
 bool ConvertDataManager::replaceGenDataInfo() {
     const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
@@ -131,12 +128,8 @@ QMap<int, QList<KeywordInfo>> ConvertDataManager::constructKeywordTypeInfoList(c
     QMap<int, QList<KeywordInfo>> keywordTypeInfoList;
 
     for (int sheetIndex = startSheetIndex; sheetIndex < endSheetIndex; ++sheetIndex) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-        QList<KeywordInfo> keywordTypeInfo = isKeywordTypeInfo(sheetIndex, columnList);
-#else
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         QList<KeywordInfo> keywordTypeInfo = ExcelUtil::instance().data()->isKeywordTypeInfo(sheetData, columnList);
-#endif
         for (auto& keyword : keywordTypeInfo) {
             if ((keyword.isKeyword() & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet))) {
                 QList<int> columnList = QList<int>({
@@ -596,10 +589,6 @@ void ConvertDataManager::constructConvertSheetDataInfo(QMap<int, QList<KeywordIn
 #endif
         }
     }
-
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-    // constructOutputConfigColumnDataInfo(usedSheetIndexList);
-#endif
 }
 
 void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList) {
@@ -624,13 +613,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                 switch (keyword.isKeyword()) {
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword = isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver));
-#endif
-
                         QString overValue = QString("%1[%2], [%3]")
                                                 .arg(customKeyword)
                                                 .arg(QString::number(keyword.isText().toULongLong()))
@@ -646,13 +630,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder));
-#endif
                         QString underValue = QString("%1[%2], [%3]")
                                                  .arg(customKeyword)
                                                  .arg(QString::number(keyword.isText().toULongLong()))
@@ -670,13 +649,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                         // convertRowData = rowDataList.toStringList();
                         QStringList rangeValueList = keyword.isText().remove(" ").split(",");
                         if (rangeValueList.length() == 2) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                            customKeyword =
-                                isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange));
-#else
                             customKeyword = ExcelUtil::instance().data()->isKeywordString(
                                 static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange));
-#endif
                             quint64 preconditionMaxValue = static_cast<quint64>(UINT32_MAX) + 1;
                             quint64 rangeLValue = rangeValueList.at(0).toULongLong();
                             quint64 rangeRValue = rangeValueList.at(1).toULongLong();
@@ -704,12 +678,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword = isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow));
-#endif
                         QStringList flowValueList = keyword.isText().remove(" ").split(",");
                         QStringList preconditionValueList;
                         QStringList inputValueList;
@@ -738,13 +708,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay));
-#endif
                         QStringList twoWayValueList = keyword.isText().remove(" ").split(",");
                         QStringList preconditionValueList;
                         QStringList inputValueList;
@@ -772,13 +737,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual));
-#endif
                         QString moreThanEqualValue = QString("%1[%2], [%3]")
                                                          .arg(customKeyword)
                                                          .arg(QString::number(keyword.isText().toULongLong() - 1))
@@ -788,13 +748,8 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual): {
                         // convertRowData = rowDataList.toStringList();
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        customKeyword =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual));
-#else
                         customKeyword = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual));
-#endif
                         QString lessThanEqualValue = QString("%1[%2], [%3]")
                                                          .arg(customKeyword)
                                                          .arg(QString::number(keyword.isText().toULongLong() + 1))
@@ -828,14 +783,9 @@ void ConvertDataManager::constructConvertKeywordDataInfo(QMap<int, QList<Keyword
                                 vehicleType.append(vehicle);
                             }
                             // TODO(csh): 추후 toEnum API로 변경 예정
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                            QMap<int, QStringList> dataInfoFromSingnalName =
-                                isSignalDataInfo(signalName, signalData, vehicleType, dataType);
-#else
                             QMap<int, QStringList> dataInfoFromSingnalName =
                                 SignalDataManager::instance().data()->isSignalDataList(signalName, signalData, vehicleType,
                                                                                        dataType);
-#endif
                             QStringList valueEnum =
                                 dataInfoFromSingnalName[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
                             for (QString enumString : valueEnum) {
@@ -1098,13 +1048,8 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                                 QString inputSignalName =
                                     tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)];
 
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                QString kyewordStr =
-                                    isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig));
-#else
                                 QString kyewordStr = ExcelUtil::instance().data()->isKeywordString(
                                     static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig));
-#endif
                                 QString inputSignalData =
                                     QString("%1%2")
                                         .arg(kyewordStr)
@@ -1239,13 +1184,8 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                     qDebug() << "3) InputData(val)  : " << inputDataList.second;
 #endif
                     for (const auto& mapKey : appendInputSignalDataInfoMap.keys()) {
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        QString inputDataStr =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
-#else
                         QString inputDataStr = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
-#endif
 
                         QString inputSignalStr = appendInputSignalDataInfoMap[mapKey].first;
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
@@ -1254,13 +1194,8 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         qDebug() << " - inputDataStr   : " << inputDataStr;
 #endif
                         SignalData tmpInfo = appendInputSignalDataInfoMap[mapKey].second;
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                        QString keywordStr =
-                            isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined));
-#else
                         QString keywordStr = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined));
-#endif
 
                         if (tmpInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
                             QStringList tmpOriginData = tmpInfo.isOriginData();
@@ -1268,13 +1203,8 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                             if (tmpOriginData.size() > 1) {
                                 inputDataStr = tmpOriginData.join(", ");
 #if 0
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                QString keywordStr1 = isKeywordString(tmpInfo.isKeywordType());
-                                inputDataStr.replace(keywordStr1, keywordStr);
-#else
                                 QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.isKeywordType());
                                 inputDataStr.replace(keywordStr1, keywordStr);
-#endif
 #endif
                                 inputDataStr = keywordStr + inputDataStr;
                             } else if (tmpOriginData.size() == 1) {
@@ -1306,11 +1236,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                                 QStringList tmpOriginData = tmpInfo.isOriginData();
                                 if (tmpOriginData.size() > 1) {
                                     inputDataStr = tmpOriginData.join(", ");
-#if defined(USE_CODE_BEFORE_CLASS_SPLIT)
-                                    QString keywordStr1 = isKeywordString(tmpInfo.isKeywordType());
-#else
                                     QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.isKeywordType());
-#endif
                                     inputDataStr.replace(keywordStr1, keywordStr);
                                 }
                             }
@@ -1695,4 +1621,3 @@ QPair<int, int> ConvertDataManager::isContainsRowInfo(const int& sheetIndex, con
 
     return rowInfo;
 }
-#endif
