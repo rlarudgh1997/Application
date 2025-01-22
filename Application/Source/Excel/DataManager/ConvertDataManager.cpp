@@ -39,7 +39,7 @@ ConvertDataManager::ConvertDataManager() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-void ConvertDataManager::excuteConvertDataManager() {
+bool ConvertDataManager::excuteConvertDataManager() {
     ivis::common::CheckTimer checkTimer;
 
     // NOTE(csh): [Sheet] Keyword 기능 수행(row data append) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
@@ -53,8 +53,8 @@ void ConvertDataManager::excuteConvertDataManager() {
                 }
             }
         }
+        checkTimer.check("excuteConvertDataManager : Convert.excel_001");
     }
-    checkTimer.check("excuteConvertDataManager : Convert.excel_001");
 
     if (appendConvertConfigSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
@@ -66,8 +66,8 @@ void ConvertDataManager::excuteConvertDataManager() {
                 }
             }
         }
+        checkTimer.check("excuteConvertDataManager : Convert.excel_Config");
     }
-    checkTimer.check("excuteConvertDataManager : Convert.excel_Config");
 
     // NOTE(csh): 최종 signal 조합 set 구성(row data append) + 002 excel 파일 생성
     if (appendConvertAllTCSignalSet() == true) {
@@ -80,8 +80,10 @@ void ConvertDataManager::excuteConvertDataManager() {
                 }
             }
         }
+        checkTimer.check("excuteConvertDataManager : Convert.excel_002");
     }
-    checkTimer.check("excuteConvertDataManager : Convert.excel_002");
+
+    return true;
 }
 
 bool ConvertDataManager::replaceGenDataInfo() {

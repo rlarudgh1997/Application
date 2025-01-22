@@ -20,7 +20,7 @@ class ConvertDataManager : public QObject {
 public:
     static QSharedPointer<ConvertDataManager>& instance();
 
-    void excuteConvertDataManager();
+    bool excuteConvertDataManager();
 
 private:
     explicit ConvertDataManager();

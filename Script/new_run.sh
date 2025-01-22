@@ -63,6 +63,57 @@ setEnvironments() {
     separator
 }
 
+# Function to choose an option from a list with numbers
+selectOptionWithNumbers() {
+    local prompt=$1
+    shift
+    local options=("$@")
+
+    echo "$prompt"
+    for i in "${!options[@]}"; do
+        echo "$((i + 1)): ${options[$i]}"
+    done
+
+    # Wait for valid input
+    while true; do
+        echo -n "Enter the number of your choice: "
+        read choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#options[@]})); then
+            echo "${options[$((choice - 1))]}"
+            return
+        else
+            echo "Invalid choice, please enter a valid number between 1 and ${#options[@]}."
+        fi
+    done
+}
+
+# Handle user input for mode and module selection
+getUserInput() {
+    local service=$1
+    local app_path=$2
+    # local full_path="$app_path/$service"
+    local full_path="/home/ivis/900_Code/610_Application/tc_creator/Script/../deploy_x86/Application"
+
+    while true; do
+        # Get input from the user
+        echo "Enter mode (cv/pv) or type 'exit' to quit: "
+        read -r mode
+        if [ "$mode" == "exit" ]; then
+            break
+        fi
+
+        # Check if the input is already in the arguments to avoid duplication
+        if [[ ! " ${ARGUMENTS[@]} " =~ " ${mode} " ]]; then
+            ARGUMENTS+=("$mode")
+        fi
+
+        # Run the app with the latest input
+        echo "Running app with input: ${ARGUMENTS[*]}"
+        "$full_path" "${ARGUMENTS[@]}"
+    done
+}
+
 # Run the process
 runProcess() {
     local service=$1
@@ -84,10 +135,8 @@ runProcess() {
 
     if [ -f "$full_path" ]; then
         if [ "$background" == "true" ]; then
-            # nohup "$full_path" > /dev/null 2>&1 &
             nohup "$full_path" "${ARGUMENTS[@]}" > /dev/null 2>&1 &
         else
-            # "$full_path" &
             "$full_path" "${ARGUMENTS[@]}" &
         fi
 
@@ -135,6 +184,7 @@ PLATFORM=$1
 
 shift # Remove the first argument
 
+# Environment setup based on platform
 case "$PLATFORM" in
     target|t)
         setEnvironments target
@@ -153,6 +203,12 @@ case "$PLATFORM" in
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
         runProcess "$BIN_NAME" "$APP_PATH"
+        ;;
+    cli|c)
+        setEnvironments target
+        killProcess "$BIN_NAME"
+        runProcess "$BIN_NAME" "$APP_PATH"
+        getUserInput "$BIN_NAME" "$APP_PATH"
         ;;
     *)
         echo "Usage: $0 {host|h|target|t|xserver|xs} [optional arguments]"

@@ -162,7 +162,6 @@ public:
         PropertyTypeViewLogInfoPrevious,
         PropertyTypeProcessStartPath,
         PropertyTypeTestResultCancel,
-        PropertyTypeCreateExcelSheeet,
         PropertyTypeOnlyControlMax,
     };
     enum PropertyValue {

@@ -12,8 +12,7 @@
 
 MainWindow::MainWindow(const QStringList& arguments) {
     bool graphicsMode = (arguments.size() == 0);
-
-    qInfo() << "================================================================================================";
+    qInfo() << "\n\n==========================================================================================================";
     qInfo() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
     qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
     qInfo() << "GUI_MODE    :" << ((graphicsMode) ? ("Graphic") : ("CLI"));
@@ -21,19 +20,20 @@ MainWindow::MainWindow(const QStringList& arguments) {
     ivis::common::CheckTimer checkTimer;
 
     ConfigSetting::instance().data();
-    mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
-    qInfo() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
     checkTimer.check("ConfigSetting");
 
     mCheckLib.data()->setLibInfo(QStringList({"openpyxl", "pandas"}));
     mCheckLib.data()->check();
     checkTimer.check("CheckLib");
 
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
-
     controlConnect(graphicsMode);
+    setArguments(arguments);
 
     if (graphicsMode) {
+        mScreenInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect();
+        qInfo() << "SCREEN_INFO :" << mScreenInfo << "\n\n";
+
         this->setWindowTitle("TC Creator");
         this->setGeometry(mScreenInfo);
         this->setMinimumSize(QSize(SCREEN_MINIMUM_WIDTH, SCREEN_MINIMUM_HEIGHT));
@@ -52,8 +52,10 @@ MainWindow::MainWindow(const QStringList& arguments) {
         int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
         emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
     } else {
-        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData, arguments);
-        TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
+        this->hide();
+
+        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData, arguments);
+        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
 
         // ControlManager::instance().data()->exitProgram(false);
         // emit ControlManager::instance().data()->signalExitProgram();
@@ -65,6 +67,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::controlConnect(const bool& graphicsMode) {
+    connect(this, &MainWindow::signalBootingCompleted, [=]() {
+        if (graphicsMode == false) {
+            TestCase::instance().data()->inputOption(getArguments());
+        }
+    });
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
             &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
@@ -77,6 +84,7 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
         } else {
             mCheckLib.clear();
+            emit signalBootingCompleted();
         }
     });
 

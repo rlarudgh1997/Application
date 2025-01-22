@@ -13,6 +13,8 @@
 class MainWindow : public QWidget {
     Q_OBJECT
 
+    REGISTER_WRITABLE_PROPERTY(QStringList, Arguments, QStringList(), false)
+
 public:
     explicit MainWindow(const QStringList& arguments = QStringList());
     ~MainWindow();
@@ -28,6 +30,9 @@ protected:
     void closeEvent(QCloseEvent* closeEvent) override;
     void moveEvent(QMoveEvent* moveEvent) override;
     void resizeEvent(QResizeEvent* resizeEvent) override;
+
+signals:
+    void signalBootingCompleted();
 
 private:
     QSharedPointer<ivis::common::CheckLib> mCheckLib =

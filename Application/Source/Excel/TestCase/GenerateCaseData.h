@@ -16,18 +16,9 @@
 
 class GenerateCaseData : public QObject {
 public:
-    enum {
-        JsonCasesName = 0,
-        JsonCaseSizeName,
-        JsonAllCaseSizeName,
-        JsonOtherCaseSizeName,
-        Max,
-    };
-
-public:
     static QSharedPointer<GenerateCaseData>& instance();
 
-    void excuteGenerateCaseData();
+    bool excuteGenerateCaseData();
 
 private:
     explicit GenerateCaseData();
@@ -68,12 +59,17 @@ private:
     QString getPreconditionStr(const QStringList& preconditionList);
     QString getInputStr(const QString& triggerSigName, const QString& caseValue);
     QString getTcLine(const QString& tag, const QString& precondition, const QString& input);
+    QString getInitStr(const QJsonObject& inputSignalList);
+    void checkNegativeAndPositive(const QString& genType, const QString& caseName, const int& caseNumber,
+                                  const QString& resultName, const int& resultNumber, const QString& tcName,
+                                  const int& tcNameNumber, const int& sheetNumber);
     void printCaseSize(const QString& genType);
 
 private:
     QMap<QString, int> mCaseSizeMap;
     QJsonObject mIntermediateDefaultJson;
     QJsonObject mAllCaseJson;
+    int mTotalTestCaseCount = 0;
 };
 
 #endif  // GENERATE_CASE_DATA_H

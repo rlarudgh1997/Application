@@ -13,7 +13,7 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
-    bool writeExcelSheet(const QVariant& filePath, const bool& backup);
+    bool writeExcelSheet(const QVariant& filePath, const bool& convert);
     QString sytemCall(const bool& readFile, const QVariant& filePath);
 
 private:

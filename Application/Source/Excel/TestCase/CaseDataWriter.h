@@ -1,6 +1,7 @@
 #ifndef CASE_DATA_WRITER_H
 #define CASE_DATA_WRITER_H
 
+#include <iostream>
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
@@ -29,12 +30,13 @@ public:
             mStream << "  - name: dump for gcov\n";
             mStream << "    input:\n";
             mStream << "      - dump: true\n";
+            copyTcFiles(mTCFileDirPath, "TC");
         } else {
             qWarning() << "QTextStream: No device";
         }
     }
 
-    void genTestCaseFile(const QJsonObject& json) {
+    void genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount) {
         ivis::common::CheckTimer checkTimer;
         int ignCount = 0;
         int testCaseCount = 1;
@@ -72,7 +74,6 @@ public:
                                 outputValue << signalObj["Output_Value"].toString();
                                 outputEnum.clear();
                                 isInitialize << signalObj["isInitialize"].toBool();
-                                // NOTE: 여기서 Output_Value Enum String map으로 담을 수 있는 구현이 필요함.
                                 for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
                                     QString tempOutputEnum;
                                     tempOutputEnum = SignalDataManager::instance().data()->isSignalValueEnum(
@@ -107,7 +108,8 @@ public:
                                             resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("InputData")]
                                                 .toArray()));
                                     }
-                                    QJsonArray casesArray = caseObj["cases"].toArray();
+                                    QJsonObject casesMap = caseObj["cases"].toObject();
+                                    QJsonObject initMap = caseObj["InitCase"].toObject();
                                     QStringList parts;
                                     QStringList inputDataInfo;
                                     QStringList signalValueList;
@@ -119,9 +121,9 @@ public:
                                     QString triggerSignal;
                                     QString triggerValue;
                                     QString testCase;
-                                    for (const QJsonValue& subArrayValue : casesArray) {
+                                    for (auto it = casesMap.begin(); it != casesMap.end(); ++it) {
                                         testCase.clear();
-                                        parts = subArrayValue.toString().split("=>");
+                                        parts = it.key().split("=>");
                                         signalValueList = parts[0].split(",", Qt::SkipEmptyParts);
                                         inputDataInfo = parts[1].split(":");
                                         signalOrder = 0;
@@ -144,25 +146,29 @@ public:
                                         testCase += "    precondition:\n";
                                         for (QString& number : signalValueList) {
                                             number = number.trimmed();
-                                            if (number.contains("[Empty]") == false) {
-                                                enumString = std::get<4>(signalList[signalOrder])[number].toString();
-                                                if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
-                                                    triggerEnumString =
-                                                        std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
-                                                            .toString();
+                                            if (number.isEmpty() == false) {
+                                                if (number.contains("[Empty]") == false) {
+                                                    enumString = std::get<4>(signalList[signalOrder])[number].toString();
+                                                    if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
+                                                        triggerEnumString =
+                                                            std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
+                                                                .toString();
+                                                    }
+                                                    if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
+                                                        signalName =
+                                                            ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
+                                                        signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                                    } else {
+                                                        signalName = std::get<0>(signalList[signalOrder]);
+                                                        signalValue = number;
+                                                    }
+                                                    enumString =
+                                                        enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
+                                                    testCase += "      - " + signalName + ": " + quoteIfNotNumeric(signalValue) +
+                                                                enumString + "\n";
                                                 }
-                                                if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
-                                                    signalName = ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
-                                                    signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
-                                                } else {
-                                                    signalName = std::get<0>(signalList[signalOrder]);
-                                                    signalValue = number;
-                                                }
-                                                enumString = enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
-                                                testCase += "      - " + signalName + ": " + quoteIfNotNumeric(signalValue) +
-                                                            enumString + "\n";
+                                                signalOrder++;
                                             }
-                                            signalOrder++;
                                         }
 
                                         if (isInitialize.contains(true)) {
@@ -177,9 +183,11 @@ public:
                                                         }
                                                     } else {
                                                         if (outputSignal[initCnt].contains("E")) {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": E00000" + +"\n";
+                                                            testCase += "      - " + outputSignal[initCnt] + ": " +
+                                                                        quoteIfNotNumeric(outputValue[initCnt]) + "\n";
                                                         } else if (outputSignal[initCnt].contains("SND")) {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": SND_None" + +"\n";
+                                                            testCase += "      - " + outputSignal[initCnt] + ": " +
+                                                                        quoteIfNotNumeric(outputValue[initCnt]) + "\n";
                                                         }
                                                     }
                                                 }
@@ -200,7 +208,6 @@ public:
                                             testCase += "      - " + triggerSignal + ": " +
                                                         quoteIfNotNumeric(triggerValue.trimmed()) + triggerEnumString + "\n";
                                         }
-                                        // write("output:", 2);
                                         testCase += "    output:\n";
                                         for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
                                             QString tempOutputSignal = outputSignal[outputCnt];
@@ -217,6 +224,53 @@ public:
                                         }
                                         write(testCase);
                                     }
+
+                                    if (!initMap.isEmpty()) {
+                                        QStringList initParts;
+                                        QString initEnumString;
+                                        QString initSignalName;
+                                        QString initSignalValue;
+                                        QString initCase;
+                                        int initSignalOrder = 0;
+                                        initCase.clear();
+                                        initCase += "  - name: " + tcName + ", " + resultName + ", " + caseName +
+                                                    " Input Signal Initialization." + "\n";
+                                        if (vehicleType.isEmpty() == false) {
+                                            initCase += "    tag: " + vehicleType + "\n";
+                                        }
+                                        initCase += "    input:\n";
+                                        for (auto it = initMap.begin(); it != initMap.end(); ++it) {
+                                            initParts = it.key().split("=>");
+                                            for (QString& number : initParts[0].split(",", Qt::SkipEmptyParts)) {
+                                                number = number.trimmed();
+                                                if (number.isEmpty() == false) {
+                                                    if (number.contains("[Empty]") == false) {
+                                                        initEnumString =
+                                                            std::get<4>(signalList[initSignalOrder])[number].toString();
+                                                        if (std::get<0>(signalList[initSignalOrder])
+                                                                .contains("SFC.Private.IGNElapsed")) {
+                                                            initSignalName =
+                                                                ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
+                                                            initSignalValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                                        } else {
+                                                            initSignalName = std::get<0>(signalList[initSignalOrder]);
+                                                            initSignalValue = number;
+                                                        }
+                                                        initEnumString = initEnumString.isEmpty()
+                                                                             ? QString()
+                                                                             : QString(" # %1").arg(initEnumString);
+                                                        initCase += "      - " + initSignalName + ": " +
+                                                                    quoteIfNotNumeric(initSignalValue) + initEnumString + "\n";
+                                                    }
+                                                    initSignalOrder++;
+                                                }
+                                            }
+                                        }
+                                        initCase += "\n";
+                                        write(initCase);
+                                    }
+                                    printProgressBar(static_cast<double>(testCaseCount) /
+                                                     static_cast<double>(totalTestCaseCount));
                                 }
                             }
                         }
@@ -224,10 +278,80 @@ public:
                 }
             }
         }
+        std::cout << std::endl;
+        std::cout << "\033[92mTest case file generation completed!!!\033[0m" << std::endl;
         checkTimer.check("genTestCaseFile()");
     }
 
 private:
+    bool removeMatchingFiles(const QString& dirPath) {
+        QDir dir(dirPath);
+        if (!dir.exists()) {
+            qDebug() << "Source directory does not exist: " << dirPath;
+            return false;
+        }
+
+        QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+        foreach (const QFileInfo& fileInfo, fileInfoList) {
+            if (fileInfo.fileName().contains("[CV") && fileInfo.suffix().toLower() == "tc") {
+                QString filePath = fileInfo.absoluteFilePath();
+                if (QFile::remove(filePath)) {
+                    qDebug() << "File deletion successful: " << filePath;
+                } else {
+                    qDebug() << "File deletion failed: " << filePath;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool copyTcFiles(const QString& sourceDir, const QString& destDir) {
+        QString aaa = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(destDir);
+        QDir source(sourceDir);
+        if (!source.exists()) {
+            qDebug() << "Source directory does not exist: " << sourceDir;
+            return false;
+        }
+        removeMatchingFiles(aaa);
+        QFileInfoList fileInfoList = source.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+        foreach (const QFileInfo& fileInfo, fileInfoList) {
+            if (fileInfo.fileName().contains("[CV") && fileInfo.suffix().toLower() == "tc") {
+                QString destFilePath = aaa + "/" + fileInfo.fileName();
+                qDebug() << "Files to copy: " << fileInfo.absoluteFilePath() << " -> " << destFilePath;
+                if (QFile::copy(fileInfo.absoluteFilePath(), destFilePath)) {
+                    if (QFile::exists(destFilePath)) {
+                        qDebug() << "File copy and verification successful: " << fileInfo.fileName();
+                    } else {
+                        qDebug() << "File copy and verification failed: " << fileInfo.fileName();
+                        return false;
+                    }
+                } else {
+                    qDebug() << "File copy failed: " << fileInfo.fileName();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void printProgressBar(double progress) {
+        int barWidth = 50;
+
+        std::cout << "\033[92mGenerating test cases files... [";
+        int pos = barWidth * progress;
+        for (int i = 0; i < barWidth; ++i) {
+            if (i < pos)
+                std::cout << "=";
+            else if (i == pos)
+                std::cout << ">";
+            else
+                std::cout << " ";
+        }
+        std::cout << "] " << std::fixed << std::setprecision(1) << std::min(100.0, progress * 100.0) << " %\r\033[0m";
+        std::cout.flush();
+    }
+
     void write(const QString& testCase = "") {
         if (!mFile.isOpen() || mPrevSplitTcFileCount != mSplitTcFileCount) {
             openNewFile(mSplitTcFileCount);

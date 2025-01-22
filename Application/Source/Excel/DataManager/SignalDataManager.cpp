@@ -489,7 +489,7 @@ QString SignalDataManager::isCheckBothExceptionValue(const QMap<int, QStringList
                 // checkStr : TIMEOUT or CRC
                 if (matchingTableData.contains(checkStr)) {
                     exceptionValue = checkStr.toLower();
-                    index = ivis::common::InputDataTypeEnum::InputDataTypeInputData;
+                    index = ivis::common::InputDataTypeEnum::InputDataTypeMax;
                     break;
                 }
             }
@@ -526,7 +526,7 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
     }
 
     QString exceptionValue = isCheckBothExceptionValue(dataInfo, originTimeOut, checkTimeOut);
-    if (exceptionValue.size()) {  // Chceck MatchingTable : TIMEOUT
+    if (exceptionValue.size() > 0) {  // Chceck MatchingTable : TIMEOUT
         // qDebug() << "both value contains is ValueEnum(MESSAGE_TIMEOUT), MatchingTable(TIMEOUT) :" << signalName;
         exceptionData = QPair<QStringList, QStringList>(QStringList(), QStringList({exceptionValue}));
         return exceptionData;
@@ -575,7 +575,7 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
 
     exceptionData = QPair<QStringList, QStringList>(QStringList({matchingEnum}), originData);
 
-#if 1
+#if 0
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     qDebug() << "isCheckExceptionValueEnum :" << signalName;
     qDebug() << "\t Matching        :" << matchingValue << matchingEnum;
@@ -594,6 +594,13 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
 #endif
 
     return exceptionData;
+}
+
+QString SignalDataManager::isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+                                                       const QString& checkStr) {
+    QString exceptionValue = isCheckBothExceptionValue(dataInfo, origintStr, checkStr);
+
+    return exceptionValue;
 }
 
 bool SignalDataManager::isExceptionSignal(const QString& signalName) {
@@ -843,11 +850,13 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                 for (auto& data : convertData) {  // ConvertData Check : MESSAGE_TIMEOUT 이 있는 경우 변경
                     if (data.contains(originTimeOut)) {
                         data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
+                        // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
                     }
                 }
                 for (auto& data : precondition) {  // Precondition Check : MESSAGE_TIMEOUT 이 있는 경우 변경
                     if (data.contains(originTimeOut)) {
                         data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
+                        // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
                     }
                 }
             }
@@ -861,7 +870,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 1
+#if 0
     qDebug() << "*************************************************************************************************";
     qDebug() << "2. isTestCaseInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
@@ -954,7 +963,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 1
+#if 0
     qDebug() << "*************************************************************************************************";
     qDebug() << "3. isOtherInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
@@ -1026,7 +1035,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOutputSignalDataInfo(
         signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
     }
 
-#if 1
+#if 0
     qDebug() << "*************************************************************************************************";
     qDebug() << "4. isOutputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";

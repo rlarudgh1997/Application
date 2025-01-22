@@ -111,6 +111,8 @@ private:
     bool isExceptionSignal(const QString& signalName);
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
+    QString isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+                                        const QString& checkStr);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);
 };

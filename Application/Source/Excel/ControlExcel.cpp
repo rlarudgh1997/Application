@@ -12,7 +12,6 @@
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
 #include "TestCase.h"
-#include "ConvertDataManager.h"
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -474,13 +473,12 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
         }
     }
     updateNodeAddress(false, tcNameList, configNameList);
-    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeCreateExcelSheeet, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
 }
 
-bool ControlExcel::writeExcelSheet(const QVariant& filePath, const bool& backup) {
+bool ControlExcel::writeExcelSheet(const QVariant& filePath, const bool& convert) {
     // Set Path : file, directory
     QStringList fileInfo = filePath.toString().split("/");
     QString writePath = QString();
@@ -502,8 +500,8 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath, const bool& backup)
 
     int writeSize = 0;
     int sheetIndex = 0;
-    int propertyType = (backup) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
-                                : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    int propertyType = (convert) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
+                                 : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
     for (const auto& sheet : sheetName) {
         QString file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(sheet);
         QString writeData = QString();
@@ -523,7 +521,13 @@ bool ControlExcel::writeExcelSheet(const QVariant& filePath, const bool& backup)
         sheetData.append(contentTitle);
 
         // Data - Append
-        sheetData.append(ExcelData::instance().data()->getSheetData(propertyType++).toList());
+        if (propertyType >= ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) {
+            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
+        } else {
+            sheetData.append(getData(propertyType).toList());
+        }
+        propertyType++;
+
         for (const auto& dataInfo : sheetData) {
             QString rowData = QString();
             int count = 0;
@@ -1155,13 +1159,6 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
 }
 
 void ControlExcel::updateGenDataInfo(const int& eventType) {
-    ivis::common::CheckTimer checkTimer;
-
-    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeCreateExcelSheeet).toBool() == false) {
-        qDebug() << "No exist excel sheet !!!!!!";
-        return;
-    }
-
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
         qDebug() << "Fail to excel data validation.";
         return;
@@ -1169,7 +1166,6 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
     TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData);
     TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
-    checkTimer.check("updateGenDataInfo : Test Case Excute");
 
 #if 1  // Test Code
     testCode1();
