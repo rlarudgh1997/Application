@@ -6,30 +6,49 @@
 #include "CommonUtil.h"
 
 class TestCase : public QObject {
+    Q_OBJECT
+
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ExcuteData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ModuleList, QStringList(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, NextStep, false, false)
+    REGISTER_WRITABLE_PROPERTY(QString, SelectMode, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, SelectMoudles, QStringList(), false)
 
 public:
     enum {
         ExcuteTypeInvalid = 0,
+        ExcuteTypeStart,
+        ExcuteTypeParsingMode,
+        ExcuteTypeParsingModule,
+        ExcuteTypeExcelOpen,
         ExcuteTypeGenConvertData,
         ExcuteTypeGenTC,
         ExcuteTypeRunTC,
+
+        ExcuteTypeCompleted = 100,
+        ExcuteTypeFailed,
+
+        ExcuteTypeInvalidSelectItem = 200,
     };
 
 public:
     static QSharedPointer<TestCase>& instance();
 
-    void excuteTestCase(const int& type, const QStringList& data = QStringList());
-    void inputOption(const QStringList& args);
+    void start(const QStringList& data = QStringList());
+
+signals:
+    void signalTestCaseCompleted(const int& type, const bool& result);
 
 private:
     explicit TestCase();
 
-    bool parsingExcuteOption(const bool& graphicsMode, const QStringList& data);
-    QString selectOptionWithNumbers(const QString& prompt, const QStringList& options);
+    int excuteTestCase(const int& excuteType);
+    bool inputArguments(const int& excuteType);
+    void terminateApplicaton();
+    void drawTerminalMenu(const int& excuteType, const QStringList& itemList);
+    QStringList selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& options);
+
+private:
 };
 
 #endif  // TEST_CASE_H

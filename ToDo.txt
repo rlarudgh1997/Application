@@ -1,5 +1,45 @@
 ======================================================================================================================================================
 # [ToDo]
+- CLI 모드
+	: 실행 방법
+		- ./Application gen
+			: Mode 선택 메뉴
+			: Module 선택 메뉴
+		- ./Application gen [cv/pv]
+			: Module 선택 메뉴
+		- ./Application gen ABS_CV AEM AFS
+			: Mode 선택 메뉴
+			: Moduel 유효성 검사 후 유효한 모듈만 리스트업
+		- ./Application gen [cv/pv] ABS_CV AEM AFS
+			: Moduel 유효성 검사 후 유효한 모듈만 리스트업
+
+	: CV, PV 선택 메뉴
+		- 유효성 검사
+	: Module 선택 메뉴
+		- Module 리스트는 cv.json, platfomr.json 파일에서 선택 가능한 모듈에 대한 리스트업
+		- 기존 기능에서 Gen TC 동작시 모듈 선택 기능 사용하여 신규 Gen TC 동작하도록
+		- 여러개의 모듈인 경우 하나씩 절차로 수행하도록
+
+
+- DependOn 관련 기능
+	: Depends 시트 추가
+		- Title : DependName, InputSignal, InputData
+	: DependOn 컬럼 추가
+	: DependOn 자동 완성
+		- 다중 선택 기능
+	: DependOn 정보 read 기능
+		- isDependSignalDataInfo()
+
+- TC Viewer
+	: 현재 모듈에 대한 gen tc 종료후 file path 전달하여 화면상에 업데이트
+	: 하나의 모듈인 경우 GenTC 종료후 팝업을 표시 하여 Viewer : View, Cancel 팝업 표시
+	: 여러개의 모듈인 경우 전체 모듈에 대한 GenTC 종료후 모듈별 리스트 화면 표시 후 선택한 모듈만 Viewer 실행하도록
+	: *.tc 파일이 있는 경우의 모듈만 표시 하여 Viewer 기능 하도록 (TBD)
+
+
+
+
+
 - 특정 케이스 타임아웃인 경우
 	: isInputSignalDataInfo(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetTelltales,
 							QStringList({"IMG_TelltaleABSAmberLamp_stat", "", ""}),
@@ -27,12 +67,6 @@
 			ValueEnum    : 3 QList("0x0:\"OFF\"", "0x1:\"ON\"", "0x2:\"DEFAULT\"")
 			NotUsedEnum  : 3 QList("0x0", "0x1", "timeout")
 			Precondition : 1 QList("DEFAULT")
-
-
-
-
-
-
 
 
 - timeout 인 경우
@@ -338,4 +372,4 @@
 	: 이미지 - 좌표, 파일명, 등등 에 대한 표 형태로 자동 추가 및 저장
 	: 텍스트 - 좌표, 다국어 테이블(존재하면) 에서 정보 추출 후 표 형태로 자동 추가 및 저장
 	: 저장 - 툴 사용 확장자(*.uxinfo) 전용(텍스트, 이미지 등 좌표 정보포함), png, ppt, pdf 등등 저장
-	: 열기 - 파일(*.uxinfo) 열기시 해당 정보들을 기반으로
+	: 열기 - 파일(*.uxinfo) 열기시 해당 정보들을 기반

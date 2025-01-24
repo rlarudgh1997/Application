@@ -11,13 +11,13 @@
 // Q_LOGGING_CATEGORY(MAINWINDOW, "MainWindow")
 
 MainWindow::MainWindow(const QStringList& arguments) {
+    ivis::common::CheckTimer checkTimer;
     bool graphicsMode = (arguments.size() == 0);
     qInfo() << "\n\n==========================================================================================================";
     qInfo() << "APP_PATH    :" << QApplication::applicationDirPath().toLatin1().data();
     qInfo() << "QT_VERSION  :" << QT_VERSION_STR;
     qInfo() << "GUI_MODE    :" << ((graphicsMode) ? ("Graphic") : ("CLI"));
     qInfo() << "ARGUMENTS   :" << arguments;
-    ivis::common::CheckTimer checkTimer;
 
     ConfigSetting::instance().data();
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
@@ -51,14 +51,6 @@ MainWindow::MainWindow(const QStringList& arguments) {
         // Title Text
         int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
         emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
-    } else {
-        this->hide();
-
-        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenConvertData, arguments);
-        // TestCase::instance().data()->excuteTestCase(TestCase::ExcuteTypeGenTC);
-
-        // ControlManager::instance().data()->exitProgram(false);
-        // emit ControlManager::instance().data()->signalExitProgram();
     }
 }
 
@@ -69,7 +61,15 @@ MainWindow::~MainWindow() {
 void MainWindow::controlConnect(const bool& graphicsMode) {
     connect(this, &MainWindow::signalBootingCompleted, [=]() {
         if (graphicsMode == false) {
-            TestCase::instance().data()->inputOption(getArguments());
+            const QString keyGen("GEN");
+            QStringList arguments;
+            for (const auto& arg : getArguments()) {
+                arguments.append(arg.toUpper());
+            }
+            if (arguments.indexOf(keyGen) >= 0) {
+                arguments.removeAll(keyGen);
+                TestCase::instance().data()->start(arguments);
+            }
         }
     });
     connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,

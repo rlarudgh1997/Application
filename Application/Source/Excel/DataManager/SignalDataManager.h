@@ -102,7 +102,7 @@ public:
     QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
                                                                      QMap<QString, SignalData>& newSignalDataInfo);
     QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const QList<QStringList>& list);
-    QMap<int, QPair<QString, SignalData>> isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const QList<QStringList>& list);
     bool isExcelDataValidation();
 
 private:

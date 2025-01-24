@@ -13,9 +13,6 @@ public:
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 
-    bool writeExcelSheet(const QVariant& filePath, const bool& convert);
-    QString sytemCall(const bool& readFile, const QVariant& filePath);
-
 private:
     explicit ControlExcel();
 
@@ -39,8 +36,7 @@ private:
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
 
-    void testCode1();
-    void testCode2();
+    void testCode();
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -56,6 +52,7 @@ protected:
     virtual void sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue = QVariant());
 
 public slots:
+    void slotTestCaseCompleted(const int& type, const bool& result);
     virtual void slotControlUpdate(const int& type, const QVariant& value = QVariant());
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);

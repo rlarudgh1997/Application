@@ -6,14 +6,11 @@
 #include "ConfigSetting.h"
 #include "CommonResource.h"
 #include "CommonPopup.h"
+#include "ExcelUtil.h"
 
 #include <QFileSystemWatcher>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
 
 // Q_LOGGING_CATEGORY(C_TOP, "ControlMenu")
-
 // #define USE_TEST_RESULT_TEMP
 
 QSharedPointer<ControlMenu>& ControlMenu::instance() {
@@ -165,64 +162,12 @@ void ControlMenu::updateSelectAppMode() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(appMode), true);
 }
 
-QStringList ControlMenu::isModuleListFromJson() {
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
-    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
-    QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
-
-    // Json Parsing
-    QJsonParseError error;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &error);
-    if (error.error != QJsonParseError::NoError) {
-        qDebug() << "Fail to json parsing error :" << error.errorString();
-        return QStringList();
-    }
-    if (jsonDoc.isObject() == false) {
-        qDebug() << "Fail to json format invalid";
-        return QStringList();
-    }
-
-    // Read : Json Data
-    QStringList moduleList = QStringList();
-    QJsonObject jsonObj = jsonDoc.object();
-    if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
-        QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
-        // if (sfcConfig.contains("Version") && sfcConfig["Version"].isString()) {    // Read : Version
-        //     QString version = sfcConfig["Version"].toString();
-        // }
-        // if (sfcConfig.contains("Description") && sfcConfig["Description"].isString()) {   // Read : Description
-        //     QString description = sfcConfig["Description"].toString();
-        // }
-        if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
-            for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
-                if (module.isString()) {
-                    // qDebug() << "\t Module Json :" << module.toString();
-                    moduleList.append(module.toString());
-                }
-            }
-        }
-    }
-    if (appModeCV) {
-        QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
-        for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-            moduleList.append(commonModule);
-            // qDebug() << "\t Module  Dir :" << commonModule;
-        }
-    }
-    qDebug() << "Moudle Json File :" << jsonFile;
-
-    moduleList.sort();
-    moduleList.removeDuplicates();
-    return moduleList;
-}
-
 void ControlMenu::updateAllModuleList(const QString& filter) {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
+    QStringList sfcModules;
+
 #if defined(USE_DEFAULT_MODULE_INFO_FILE)
-    QStringList sfcModules = QStringList();
     QStringList findPath = QStringList();
     QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     if (appModePV) {
@@ -269,7 +214,7 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
         sfcModules = ivis::common::FileInfo::readFile(QString("%1/DefaultModule.info").arg(path));
     }
 #else
-    QStringList sfcModules = isModuleListFromJson();
+    sfcModules = ExcelUtil::instance().data()->isModuleListFromJson();
 #endif
 
     qDebug() << ((appModePV) ? ("[PV]") : ("[CV]")) << "SFC Module :" << sfcModules.size() << ", Filter :" << filter;

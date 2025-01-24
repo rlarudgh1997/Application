@@ -15,8 +15,6 @@
 #include "SignalDataManager.h"
 #include "TestCase.h"
 
-#include "ControlExcel.h"
-
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
 QSharedPointer<ConvertDataManager>& ConvertDataManager::instance() {
@@ -46,8 +44,8 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (replaceGenDataInfo() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
-            if (ControlExcel::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ControlExcel::instance().data()->sytemCall(false, filePath);
+            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
+                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }
@@ -59,8 +57,8 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (appendConvertConfigSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
-            if (ControlExcel::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ControlExcel::instance().data()->sytemCall(false, filePath);
+            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
+                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }
@@ -73,8 +71,8 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
-            if (ControlExcel::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ControlExcel::instance().data()->sytemCall(false, filePath);
+            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
+                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }

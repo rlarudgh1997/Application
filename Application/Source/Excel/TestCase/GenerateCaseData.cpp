@@ -43,6 +43,7 @@ GenerateCaseData::GenerateCaseData() {
 }
 
 bool GenerateCaseData::excuteGenerateCaseData() {
+    bool result = false;
     mIntermediateDefaultJson = QJsonObject();
     mAllCaseJson = QJsonObject();
     mCaseSizeMap = QMap<QString, int>();
@@ -54,9 +55,9 @@ bool GenerateCaseData::excuteGenerateCaseData() {
     printCaseSize(GEN_TYPE_DEFAULT);
     if (!mAllCaseJson.empty()) {
         CaseDataWriter testCaseFile;
-        testCaseFile.genTestCaseFile(mAllCaseJson, mTotalTestCaseCount);
+        result = testCaseFile.genTestCaseFile(mAllCaseJson, mTotalTestCaseCount);
     }
-    return true;
+    return result;
 }
 
 QString GenerateCaseData::genCase() {

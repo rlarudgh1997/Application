@@ -30,13 +30,10 @@ public:
             mStream << "  - name: dump for gcov\n";
             mStream << "    input:\n";
             mStream << "      - dump: true\n";
-            copyTcFiles(mTCFileDirPath, "TC");
-        } else {
-            qWarning() << "QTextStream: No device";
         }
     }
 
-    void genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount) {
+    bool genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount) {
         ivis::common::CheckTimer checkTimer;
         int ignCount = 0;
         int testCaseCount = 1;
@@ -281,60 +278,11 @@ public:
         std::cout << std::endl;
         std::cout << "\033[92mTest case file generation completed!!!\033[0m" << std::endl;
         checkTimer.check("genTestCaseFile()");
+
+        return (testCaseCount > 1);
     }
 
 private:
-    bool removeMatchingFiles(const QString& dirPath) {
-        QDir dir(dirPath);
-        if (!dir.exists()) {
-            qDebug() << "Source directory does not exist: " << dirPath;
-            return false;
-        }
-
-        QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
-        foreach (const QFileInfo& fileInfo, fileInfoList) {
-            if (fileInfo.fileName().contains("[CV") && fileInfo.suffix().toLower() == "tc") {
-                QString filePath = fileInfo.absoluteFilePath();
-                if (QFile::remove(filePath)) {
-                    qDebug() << "File deletion successful: " << filePath;
-                } else {
-                    qDebug() << "File deletion failed: " << filePath;
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    bool copyTcFiles(const QString& sourceDir, const QString& destDir) {
-        QString aaa = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(destDir);
-        QDir source(sourceDir);
-        if (!source.exists()) {
-            qDebug() << "Source directory does not exist: " << sourceDir;
-            return false;
-        }
-        removeMatchingFiles(aaa);
-        QFileInfoList fileInfoList = source.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
-        foreach (const QFileInfo& fileInfo, fileInfoList) {
-            if (fileInfo.fileName().contains("[CV") && fileInfo.suffix().toLower() == "tc") {
-                QString destFilePath = aaa + "/" + fileInfo.fileName();
-                qDebug() << "Files to copy: " << fileInfo.absoluteFilePath() << " -> " << destFilePath;
-                if (QFile::copy(fileInfo.absoluteFilePath(), destFilePath)) {
-                    if (QFile::exists(destFilePath)) {
-                        qDebug() << "File copy and verification successful: " << fileInfo.fileName();
-                    } else {
-                        qDebug() << "File copy and verification failed: " << fileInfo.fileName();
-                        return false;
-                    }
-                } else {
-                    qDebug() << "File copy failed: " << fileInfo.fileName();
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     void printProgressBar(double progress) {
         int barWidth = 50;
 
@@ -368,8 +316,6 @@ private:
         }
         if (mStream.device() && testCase.isEmpty() == false) {
             mStream << testCase;
-        } else {
-            qWarning() << "QTextStream: No device";
         }
     }
 
@@ -416,8 +362,6 @@ private:
             mStream << "  - name: init AEMInitializeComplete\n";
             mStream << "    input:\n";
             mStream << "      - SFC.Extension.AEM.Inter_AEMInitializeComplete: true\n\n";
-        } else {
-            qWarning() << "QTextStream: No device";
         }
     }
 

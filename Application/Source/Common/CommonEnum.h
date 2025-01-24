@@ -156,6 +156,7 @@ public:
         PropertyTypeListMax,
 
         PropertyTypeOnlyControl = PROPETRY_START_CONTROL,
+        PropertyTypeLastSavedFile,
         PropertyTypeViewLogFileListInfo,
         PropertyTypeKeySkip,
         PropertyTypeSaveFilePath,

@@ -737,7 +737,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 1
+#if 0
     qDebug() << "*************************************************************************************************";
     qDebug() << "1. isNormalInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
@@ -1059,9 +1059,24 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOutputSignalDataInfo(
     return signalDataInfo;
 }
 
-QMap<int, QPair<QString, SignalData>> SignalDataManager::isConfigSignalDataInfo(const QPair<QStringList, QStringList>& list) {
-    QStringList signalList = list.first;
-    QStringList dataList = list.second;
+QMap<int, QPair<QString, SignalData>> SignalDataManager::isDependSignalDataInfo(const QList<QStringList>& list) {
+    QStringList signalList;
+    QStringList dataList;
+    QMap<QString, QString> initList;
+
+    for (const auto& info : list) {
+        if (info.size() != 3) {  // Output : Signal, Init, Data
+            continue;
+        }
+        QString signal = info.at(0);
+        QString init = info.at(1);
+        QString data = info.at(2);
+
+        signalList.append(signal);
+        dataList.append(data);
+        initList[signal] = init;
+    }
+
     signalList.removeAll("");
     dataList.removeAll("");
 
@@ -1069,11 +1084,17 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isConfigSignalDataInfo(
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
     QMap<QString, SignalData> newSignalDataInfo;
 
-    QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
+    for (const auto& signalName : currentSignalDataInfo.keys()) {
+    }
 
-#if 1
+    QMap<int, QPair<QString, SignalData>> signalDataInfo;
+    for (const auto& signalName : signalList) {
+        signalDataInfo[signalDataInfo.size()] = qMakePair(signalName, newSignalDataInfo[signalName]);
+    }
+
+#if 0
     qDebug() << "*************************************************************************************************";
-    qDebug() << "5. isConfigSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
+    qDebug() << "5. isDependSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
     for (const auto& mapKey : signalDataInfo.keys()) {
         auto signalName = signalDataInfo[mapKey].first;
@@ -1091,6 +1112,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isConfigSignalDataInfo(
     }
     qDebug() << "*************************************************************************************************\n\n";
 #endif
+
     return signalDataInfo;
 }
 

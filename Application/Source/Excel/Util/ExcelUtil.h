@@ -73,6 +73,9 @@ class ExcelUtil : public QObject {
 public:
     static QSharedPointer<ExcelUtil>& instance();
 
+    QString sytemCall(const bool& readFile, const QVariant& filePath);
+    bool writeExcelSheet(const QVariant& filePath, const bool& convert);
+    QStringList isModuleListFromJson(const bool& toUpper = false);
     QStringList isDescriptionDataInfo();
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);

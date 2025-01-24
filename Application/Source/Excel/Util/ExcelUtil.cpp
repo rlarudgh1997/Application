@@ -4,6 +4,10 @@
 #include "ConfigSetting.h"
 #include "ExcelData.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
 QSharedPointer<ExcelUtil>& ExcelUtil::instance() {
     static QSharedPointer<ExcelUtil> gUtil;
     if (gUtil.isNull()) {
@@ -22,6 +26,194 @@ ExcelUtil::ExcelUtil() {
     setMerge(merge);
     setMergeEnd(mergeEnd);
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+}
+
+QString ExcelUtil::sytemCall(const bool& readFile, const QVariant& filePath) {
+    QString cmdType = ((readFile) ? ("read") : ("write"));
+    QStringList fileInfo = filePath.toString().split("/");
+
+    qDebug() << "ControlExcel::sytemCall() ->" << cmdType << "," << filePath;
+
+    if (fileInfo.size() == 0) {
+        qDebug() << "Fail to input file path (size : 0)";
+    }
+
+    QString dirPath = QString();
+    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+        dirPath.append(fileInfo[index]);
+        dirPath.append("/");
+    }
+
+    QString fileName = fileInfo[fileInfo.size() - 1];
+    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false) || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
+        fileName.append(".xlsx");
+    }
+
+    QString cmd =
+        QString("python3 %1/ExcelParser.py %2 %3 %4").arg(ivis::common::APP_PWD()).arg(dirPath).arg(fileName).arg(cmdType);
+    ivis::common::ExcuteProgram process(false);
+    QStringList log;
+    bool result = process.start(cmd, log);
+
+    if (result) {
+        dirPath.append("TC");
+    } else {
+        dirPath.clear();
+    }
+
+    qDebug() << "*************************************************************************************************";
+    qDebug() << "PWD      :" << ivis::common::APP_PWD();
+    qDebug() << "System   :" << ((result) ? ("<Success>") : ("<fail>")) << cmd;
+    qDebug() << "FilePath :" << filePath;
+    qDebug() << "DirPath  :" << dirPath;
+    for (const auto& d : log) {
+        qDebug() << "LogData  :" << d;
+    }
+    qDebug() << "*************************************************************************************************\n";
+
+    return dirPath;
+}
+
+bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
+    // Set Path : file, directory
+    QStringList fileInfo = filePath.toString().split("/");
+    QString writePath = QString();
+    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+        writePath.append(fileInfo[index]);
+        writePath.append("/");
+    }
+    writePath.append("TC");
+
+    QDir dir(writePath);
+    if (dir.exists() == false) {
+        dir.mkdir(writePath);
+    }
+
+    QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
+    QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
+    QStringList configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
+    QStringList otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
+
+    int writeSize = 0;
+    int sheetIndex = 0;
+    int propertyType = (convert) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
+                                 : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    for (const auto& sheet : sheetName) {
+        QString file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(sheet);
+        QString writeData = QString();
+        QVariantList sheetData = QVariantList();
+
+        // Title - Append
+        QStringList contentTitle;
+        if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+            (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) {
+            contentTitle = descTitle;
+        } else if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
+                   (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
+            contentTitle = configTitle;
+        } else {
+            contentTitle = otherTitle;
+        }
+        sheetData.append(contentTitle);
+
+        // Data - Append
+        if (propertyType >= ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) {
+            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
+        } else {
+            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
+        }
+        propertyType++;
+
+        for (const auto& dataInfo : sheetData) {
+            QString rowData = QString();
+            int count = 0;
+            for (QVariant info : dataInfo.toList()) {
+                rowData.append(info.toString());
+                if (count++ < (dataInfo.toList().size() - 1)) {
+                    rowData.append("\t");
+                }
+            }
+            rowData.append("\n");
+            writeData.append(rowData);
+            // qDebug() << "RowData :" << rowData;
+        }
+
+        if (writeData.size() > 0) {
+            QString writeFielPath = QString("%1/%2").arg(writePath).arg(file);
+            int size = ivis::common::FileInfo::writeFile(writeFielPath, writeData, false);
+            writeSize += size;
+            if (size == 0) {
+                qDebug() << "Fail to write size : 0, filePath :" << writeFielPath;
+            }
+        }
+    }
+    return (writeSize > 0);
+}
+
+QStringList ExcelUtil::isModuleListFromJson(const bool& toUpper) {
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
+    QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
+
+    // Json Parsing
+    QJsonParseError error;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &error);
+    if (error.error != QJsonParseError::NoError) {
+        qDebug() << "Fail to json parsing error :" << error.errorString();
+        return QStringList();
+    }
+    if (jsonDoc.isObject() == false) {
+        qDebug() << "Fail to json format invalid";
+        return QStringList();
+    }
+
+    // Read : Json Data
+    QStringList tempModuleList = QStringList();
+    QJsonObject jsonObj = jsonDoc.object();
+    if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
+        QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
+        // if (sfcConfig.contains("Version") && sfcConfig["Version"].isString()) {    // Read : Version
+        //     QString version = sfcConfig["Version"].toString();
+        // }
+        // if (sfcConfig.contains("Description") && sfcConfig["Description"].isString()) {   // Read : Description
+        //     QString description = sfcConfig["Description"].toString();
+        // }
+        if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
+            for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
+                if (module.isString()) {
+                    // qDebug() << "\t Module Json :" << module.toString();
+                    tempModuleList.append(module.toString());
+                }
+            }
+        }
+    }
+    if (appModeCV) {
+        QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
+        for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+            tempModuleList.append(commonModule);
+            // qDebug() << "\t Module  Dir :" << commonModule;
+        }
+    }
+    tempModuleList.sort();
+    tempModuleList.removeDuplicates();
+
+    QStringList moduleList;
+    if (toUpper) {
+        for (const auto& module : tempModuleList) {
+            moduleList.append(module.toUpper());
+        }
+    } else {
+        moduleList = tempModuleList;
+    }
+
+    qDebug() << "ModuelList :" << jsonFile << moduleList.size();
+    // for (const auto& module : moduleList) {
+    //     qDebug() << "\t Module :" << module;
+    // }
+
+    return moduleList;
 }
 
 QStringList ExcelUtil::isDescriptionDataInfo() {
