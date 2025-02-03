@@ -273,7 +273,7 @@ private:
         for (const QFileInfo& file : fileList) {
             QStringList tempList = file.fileName().split(".");
             QString currentExtesion = QString(".%1").arg((tempList.size() == 0) ? ("") : (tempList.at(tempList.size() - 1)));
-            bool validExtension = (currentExtesion.compare(fileExtesion) == false);
+            bool validExtension = (currentExtesion.compare(fileExtesion) == 0);
             if (validExtension == false) {
                 continue;
             }
@@ -381,7 +381,7 @@ public:
                     QString readAllData = process.readAll();
                     QString logData = QString();
                     for (const QString& data : readAllData) {
-                        if (data.compare("\n") == false) {
+                        if (data.compare("\n") == 0) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
                             logData.clear();
@@ -478,7 +478,7 @@ private:
                     QString readAllData = mProcess.readAll();
                     QString logData = QString();
                     for (const QString& data : readAllData) {
-                        if (data.compare("\n") == false) {
+                        if (data.compare("\n") == 0) {
                             // qDebug() << "\t Log :" << logData;
                             log.append(logData);
                             logData.clear();

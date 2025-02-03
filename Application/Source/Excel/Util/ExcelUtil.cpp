@@ -28,130 +28,7 @@ ExcelUtil::ExcelUtil() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-QString ExcelUtil::sytemCall(const bool& readFile, const QVariant& filePath) {
-    QString cmdType = ((readFile) ? ("read") : ("write"));
-    QStringList fileInfo = filePath.toString().split("/");
-
-    qDebug() << "ControlExcel::sytemCall() ->" << cmdType << "," << filePath;
-
-    if (fileInfo.size() == 0) {
-        qDebug() << "Fail to input file path (size : 0)";
-    }
-
-    QString dirPath = QString();
-    for (int index = 0; index < (fileInfo.size() - 1); index++) {
-        dirPath.append(fileInfo[index]);
-        dirPath.append("/");
-    }
-
-    QString fileName = fileInfo[fileInfo.size() - 1];
-    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false) || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
-        fileName.append(".xlsx");
-    }
-
-    QString cmd =
-        QString("python3 %1/ExcelParser.py %2 %3 %4").arg(ivis::common::APP_PWD()).arg(dirPath).arg(fileName).arg(cmdType);
-    ivis::common::ExcuteProgram process(false);
-    QStringList log;
-    bool result = process.start(cmd, log);
-
-    if (result) {
-        dirPath.append("TC");
-    } else {
-        dirPath.clear();
-    }
-
-    qDebug() << "*************************************************************************************************";
-    qDebug() << "PWD      :" << ivis::common::APP_PWD();
-    qDebug() << "System   :" << ((result) ? ("<Success>") : ("<fail>")) << cmd;
-    qDebug() << "FilePath :" << filePath;
-    qDebug() << "DirPath  :" << dirPath;
-    for (const auto& d : log) {
-        qDebug() << "LogData  :" << d;
-    }
-    qDebug() << "*************************************************************************************************\n";
-
-    return dirPath;
-}
-
-bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
-    // Set Path : file, directory
-    QStringList fileInfo = filePath.toString().split("/");
-    QString writePath = QString();
-    for (int index = 0; index < (fileInfo.size() - 1); index++) {
-        writePath.append(fileInfo[index]);
-        writePath.append("/");
-    }
-    writePath.append("TC");
-
-    QDir dir(writePath);
-    if (dir.exists() == false) {
-        dir.mkdir(writePath);
-    }
-
-    QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
-    QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
-    QStringList configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
-    QStringList otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
-
-    int writeSize = 0;
-    int sheetIndex = 0;
-    int propertyType = (convert) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
-                                 : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    for (const auto& sheet : sheetName) {
-        QString file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(sheet);
-        QString writeData = QString();
-        QVariantList sheetData = QVariantList();
-
-        // Title - Append
-        QStringList contentTitle;
-        if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
-            (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) {
-            contentTitle = descTitle;
-        } else if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
-                   (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
-            contentTitle = configTitle;
-        } else {
-            contentTitle = otherTitle;
-        }
-        sheetData.append(contentTitle);
-
-        // Data - Append
-        if (propertyType >= ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) {
-            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
-        } else {
-            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
-        }
-        propertyType++;
-
-        for (const auto& dataInfo : sheetData) {
-            QString rowData = QString();
-            int count = 0;
-            for (QVariant info : dataInfo.toList()) {
-                rowData.append(info.toString());
-                if (count++ < (dataInfo.toList().size() - 1)) {
-                    rowData.append("\t");
-                }
-            }
-            rowData.append("\n");
-            writeData.append(rowData);
-            // qDebug() << "RowData :" << rowData;
-        }
-
-        if (writeData.size() > 0) {
-            QString writeFielPath = QString("%1/%2").arg(writePath).arg(file);
-            int size = ivis::common::FileInfo::writeFile(writeFielPath, writeData, false);
-            writeSize += size;
-            if (size == 0) {
-                qDebug() << "Fail to write size : 0, filePath :" << writeFielPath;
-            }
-        }
-    }
-    return (writeSize > 0);
-}
-
-QStringList ExcelUtil::isModuleListFromJson(const bool& toUpper) {
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
     bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
@@ -253,7 +130,6 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)) {
         keywordPattern = {
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
-            qMakePair(QString("[Dependent_On]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn)),
             qMakePair(QString("[Not_Trigger]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)),
             qMakePair(QString("[Preset]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Preset)),
         };
@@ -533,11 +409,11 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
-    if (dataTypeStr.compare("HUInt64") == false) {
+    if (dataTypeStr.compare("HUInt64") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
-    } else if (dataTypeStr.compare("HInt64") == false) {
+    } else if (dataTypeStr.compare("HInt64") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
-    } else if (dataTypeStr.compare("HString") == false) {
+    } else if (dataTypeStr.compare("HString") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HString);
     } else {
         // qDebug() << "isDataType -> DataType is incorrect :" << dataTypeStr;
@@ -547,37 +423,37 @@ int ExcelUtil::isDataType(const QString& dataTypeStr) {
 
 QPair<int, int> ExcelUtil::isIGNElapsedType(const QString& singalName) {
     QPair<int, int> ignInfo;
-    if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn0ms") == false) {
+    if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn0ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn500ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3000ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn3000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3500ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn3500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn4000ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn4000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn4000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn10s") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn10s") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn10s),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff0ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff0ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff500ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff700ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff700ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff700ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1000ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff1000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1500ms") == false) {
+    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff1500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
     } else {
@@ -797,4 +673,279 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
     }
 
     return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);
+}
+
+bool ExcelUtil::isCheckPythonLibrary() {
+#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
+    bool openpyxl = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl).toBool();
+    bool pandas = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibPandas).toBool();
+    bool checkLib = ((openpyxl) && (pandas));
+
+    if (checkLib == false) {
+        ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+        QVariantList text =
+            QVariantList({STRING_POPUP_LIB, STRING_POPUP_LIB_INSTALL_TIP, STRING_POPUP_INSTALL, STRING_POPUP_CANCEL});
+        QVariant popupData = QVariant();
+        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), popupData, QVariant(text));
+        if (button == ivis::common::PopupButton::Install) {
+            mProcess.data()->setCommandInfo(QString("pip install openpyxl pandas"));
+            mProcess.data()->start();
+            connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [&](const bool& result) {
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, true);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, true);
+                ivis::common::Popup::drawPopup(ivis::common::PopupType::InstallComplete, isHandler(), popupData,
+                                               QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_NOW_INSTALLING_TIP})));
+            });
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::NowInstalling, isHandler(), popupData,
+                                           QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_INSTALL_COMPLETE_TIP})));
+        }
+    }
+    qDebug() << "Check lib - openpyxl :" << openpyxl << ", pandas :" << pandas;
+    return checkLib;
+#else
+    return true;
+#endif
+}
+
+QString ExcelUtil::systemCall(const bool& readFile, const QVariant& filePath) {
+    QString cmdType = ((readFile) ? ("read") : ("write"));
+    QStringList fileInfo = filePath.toString().split("/");
+
+    qDebug() << "systemCall() ->" << cmdType << "," << filePath;
+
+    if (fileInfo.size() == 0) {
+        qDebug() << "Fail to input file path (size : 0)";
+    }
+
+    QString dirPath = QString();
+    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+        dirPath.append(fileInfo[index]);
+        dirPath.append("/");
+    }
+
+    QString fileName = fileInfo[fileInfo.size() - 1];
+    if ((fileName.contains(".xlsx", Qt::CaseInsensitive) == false) || (fileName.contains(".xls", Qt::CaseInsensitive) == false)) {
+        fileName.append(".xlsx");
+    }
+
+    QString cmd =
+        QString("python3 %1/ExcelParser.py %2 %3 %4").arg(ivis::common::APP_PWD()).arg(dirPath).arg(fileName).arg(cmdType);
+    ivis::common::ExcuteProgram process(false);
+    QStringList log;
+    bool result = process.start(cmd, log);
+
+    if (result) {
+        dirPath.append("TC");
+    } else {
+        dirPath.clear();
+    }
+
+    qDebug() << "*************************************************************************************************";
+    qDebug() << "PWD      :" << ivis::common::APP_PWD();
+    qDebug() << "System   :" << ((result) ? ("<Success>") : ("<fail>")) << cmd;
+    qDebug() << "FilePath :" << filePath;
+    qDebug() << "DirPath  :" << dirPath;
+    for (const auto& d : log) {
+        qDebug() << "LogData  :" << d;
+    }
+    qDebug() << "*************************************************************************************************\n";
+
+    return dirPath;
+}
+
+bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
+    // Set Path : file, directory
+    QStringList fileInfo = filePath.toString().split("/");
+    QString writePath = QString();
+    for (int index = 0; index < (fileInfo.size() - 1); index++) {
+        writePath.append(fileInfo[index]);
+        writePath.append("/");
+    }
+    writePath.append("TC");
+
+    QDir dir(writePath);
+    if (dir.exists() == false) {
+        dir.mkdir(writePath);
+    }
+
+    QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
+    QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
+    QStringList configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
+    QStringList otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
+
+    int writeSize = 0;
+    int sheetIndex = 0;
+    int propertyType = (convert) ? (ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)
+                                 : (ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    for (const auto& sheet : sheetName) {
+        QString file = QString("%1_%2.toExcel").arg(sheetIndex++).arg(sheet);
+        QString writeData = QString();
+        QVariantList sheetData = QVariantList();
+
+        // Title - Append
+        QStringList contentTitle;
+        if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+            (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) {
+            contentTitle = descTitle;
+        } else if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
+                   (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
+            contentTitle = configTitle;
+        } else {
+            contentTitle = otherTitle;
+        }
+        sheetData.append(contentTitle);
+
+        // Data - Append
+        if (propertyType >= ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) {
+            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
+        } else {
+            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
+        }
+        propertyType++;
+
+        for (const auto& dataInfo : sheetData) {
+            QString rowData = QString();
+            int count = 0;
+            for (QVariant info : dataInfo.toList()) {
+                rowData.append(info.toString());
+                if (count++ < (dataInfo.toList().size() - 1)) {
+                    rowData.append("\t");
+                }
+            }
+            rowData.append("\n");
+            writeData.append(rowData);
+            // qDebug() << "RowData :" << rowData;
+        }
+
+        if (writeData.size() > 0) {
+            QString writeFielPath = QString("%1/%2").arg(writePath).arg(file);
+            int size = ivis::common::FileInfo::writeFile(writeFielPath, writeData, false);
+            writeSize += size;
+            if (size == 0) {
+                qDebug() << "Fail to write size : 0, filePath :" << writeFielPath;
+            }
+        }
+    }
+    return (writeSize > 0);
+}
+
+QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
+    if (isCheckPythonLibrary() == false) {
+        return QList<QVariantList>();
+    }
+
+    QString dirPath = systemCall(true, filePath);
+    if (dirPath.size() == 0) {
+        qDebug() << "Fail to dir path :" << filePath;
+        return QList<QVariantList>();
+    }
+
+    const QString mergeStart = getMergeStart();
+    const QString merge = getMergeStart();
+    const QString mergeEnd = getMergeStart();
+    const QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
+    const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
+    const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
+    const QVariant otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle);
+
+    QList<QVariantList> sheetDataList;
+
+    for (int sheetIndex = 0; sheetIndex < sheetName.size(); ++sheetIndex) {
+        QString currSheetName = sheetName.at(sheetIndex);
+        QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath).arg(sheetIndex).arg(currSheetName);
+        QStringList readData = ivis::common::FileInfo::readFile(filePath);
+        QStringList titleList;
+        bool checkTitle = false;
+
+        int properytType = sheetIndex + ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+        if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+            titleList = descTitle.toStringList();
+        } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+            titleList = configTitle.toStringList();
+        } else {
+            titleList = otherTitle.toStringList();
+            checkTitle = true;
+        }
+
+        QVariantList sheetData;
+        int columnMax = titleList.size();
+        QList<int> notSameTitleIndex;
+        QList<int> readTitleIndex;
+        for (int rowIndex = 0; rowIndex < readData.size(); rowIndex++) {
+            QStringList rowData = readData[rowIndex].split("\t");
+            if (rowIndex < 2) {
+                // RowIndex[0] : column 인덱스(0, 1, 2, 3....) 정보
+
+#if !defined(USE_SHEET_COLUMN_OLD)
+                if ((rowIndex == 1) && (checkTitle)) {  // RowIndex[1] : title(desc, other) 정보
+                    for (const auto& title : titleList) {
+                        if (rowData.contains(title) == false) {
+                            notSameTitleIndex.append(titleList.indexOf(title));
+                        }
+                    }
+                    if (notSameTitleIndex.size() > 0) {
+                        std::reverse(notSameTitleIndex.begin(), notSameTitleIndex.end());
+                        qDebug() << "The title list is not the same :" << notSameTitleIndex << currSheetName;
+                    }
+                }
+#endif
+                continue;
+            }
+
+#if !defined(USE_SHEET_COLUMN_OLD)
+            if (notSameTitleIndex.size() > 0) {
+                QStringList temp = rowData;
+                for (const auto& index : notSameTitleIndex) {
+                    QString appendText;
+                    int insertIndex = 0;
+                    if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+                        insertIndex = 0;             // Befor index : TCName
+                        appendText = rowData.at(0);  // Read index : TCName
+                    } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
+                        insertIndex = 1;             // After index : TCName
+                        appendText = rowData.at(0);  // Read index : TCName
+                    } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
+                        insertIndex = 2;             // Befor index : Result
+                        appendText = rowData.at(0);  // Read index : Result
+                    } else {
+                        continue;
+                    }
+
+                    if (appendText.contains(mergeStart)) {
+                        appendText = mergeStart;
+                    } else if (appendText.contains(mergeEnd)) {
+                        appendText = mergeEnd;
+                    } else if (appendText.contains(merge)) {
+                        appendText = merge;
+                    } else {
+                        appendText.clear();
+                    }
+                    temp.insert(insertIndex, appendText);
+                }
+                rowData = temp;
+            }
+#endif
+
+            // 최대 사이즈 기준으로 정렬
+            if (rowData.size() > columnMax) {
+                // qDebug() << "The row data sizes are not same :" << properytType << rowData.size() << columnMax;
+                rowData.resize(columnMax);
+            }
+
+            sheetData.append(rowData);
+        }
+        sheetDataList.append(sheetData);
+        // qDebug() << "File Open :" << filePath << ", Length :" << sheetData.size();
+        // qDebug() << currSheetName << ":" << sheetData;
+        // qDebug() << "==================================================================================================\n";
+    }
+
+    // Delete : Folder(TC)
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
+        QStringList log;
+        ivis::common::ExcuteProgram process(false);
+        process.start(QString("rm -rf %1").arg(dirPath), log);  // Delete : /TC/*.fromExcel
+    }
+
+    return sheetDataList;
 }

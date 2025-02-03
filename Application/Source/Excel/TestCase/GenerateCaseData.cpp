@@ -1,7 +1,7 @@
 #include "GenerateCaseData.h"
+
 #include "ExcelData.h"
 #include "ExcelUtil.h"
-#include "ControlExcel.h"  // 임시방편임. 사라질 예정
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
 #include "CaseDataWriter.h"
@@ -75,11 +75,7 @@ QString GenerateCaseData::genCase() {
         }
 
         // Manager 내부의 data 컨테이너를 해당 sheetIndex 에 해당하는 데이터로 업데이트
-#if 0
-        QVariantList sheetData = ControlExcel::instance().data()->getData(sheetIndex).toList();
-#else
         QVariantList sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-#endif
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
 
         // Json 파일 내부에서 순서 보장을 위한 Index 할당
@@ -216,8 +212,6 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
                                                               const QString& resultName, const QString& caseName,
                                                               const bool& isOther) {
     QPair<QString, QString> ret;
-    // auto sigDataInfoMap =
-    // ControlExcel::instance().data()->isInputSignalDataInfo(sheetNum, QStringList({tcName, resultName, caseName}), false);
     QMap<int, QPair<QString, SignalData>> signalDataList;
     QMap<QString, SignalData> sigDataInfoMap;
 
@@ -461,7 +455,6 @@ QJsonObject GenerateCaseData::getOutputSig(const int& sheetIdx, const QString& t
     QString titleOutputValue = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
     auto outputList = ExcelDataManager::instance().data()->isOutputDataList(tcName, resultName);
     auto outputSigMap = SignalDataManager::instance().data()->isOutputSignalDataInfo(outputList);
-    // auto outputSigMap = ControlExcel::instance().data()->isOutputSignalDataInfo(sheetIdx, strList);
     for (const auto& mapKey : outputSigMap.keys()) {
         auto outputSigKey = outputSigMap[mapKey].first;
         auto tmpSignalDataInfo = outputSigMap[mapKey].second;

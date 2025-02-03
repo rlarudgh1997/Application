@@ -4,16 +4,12 @@
 #include "CommonUtil.h"
 
 #include "CommonEnum.h"
-#include "ControlManager.h"
 #include "ConfigSetting.h"
-#include "CommonResource.h"
-#include "CommonPopup.h"
 
 #include "ExcelData.h"
 #include "ExcelUtil.h"
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
-#include "TestCase.h"
 
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
@@ -41,11 +37,11 @@ bool ConvertDataManager::excuteConvertDataManager() {
     ivis::common::CheckTimer checkTimer;
 
     // NOTE(csh): [Sheet] Keyword 기능 수행(row data append) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
-    if (replaceGenDataInfo() == true) {
+    if (convertKeywordData() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
             if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
+                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }
@@ -58,7 +54,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
             if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
+                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }
@@ -72,7 +68,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
             if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
+                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
                 if (dirPath.size() > 0) {
                     qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
                 }
@@ -84,7 +80,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     return true;
 }
 
-bool ConvertDataManager::replaceGenDataInfo() {
+bool ConvertDataManager::convertKeywordData() {
     const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
     const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
@@ -139,8 +135,7 @@ QMap<int, QList<KeywordInfo>> ConvertDataManager::constructKeywordTypeInfoList(c
                 });
 
                 QList<QStringList> convertData = keyword.isRowData();
-                isTCNameDataInfo(
-                    keyword.isText(), keyword.isData(), columnList, false, false, convertData);
+                isTCNameDataInfo(keyword.isText(), keyword.isData(), columnList, false, false, convertData);
                 keyword.updateConvertData(convertData);
             } else {
                 // no operation
@@ -1214,7 +1209,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                             } else {
                                 // no operation
                             }
-                        } else if (inputSignalStr.compare(SFC_IGN_ELAPSED) == false) {
+                        } else if (inputSignalStr.compare(SFC_IGN_ELAPSED) == 0) {
                             // [Not_Trigger] SFC.Private.IGNElapsed.Elapsed
                             // no operation
                         } else if ((tmpInfo.isValueEnum().isEmpty() == false) && (tmpInfo.isNotUsedEnum().isEmpty() == false)) {

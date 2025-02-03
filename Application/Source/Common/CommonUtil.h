@@ -386,7 +386,7 @@ template <typename T1, typename T2>
 inline bool isCompareString(const T1& orign, const T2& contains) {
     QString originStr = isConvertData<QString, T1>(orign);
     QString containsStr = isConvertData<QString, T2>(contains);
-    return (originStr.compare(containsStr, Qt::CaseInsensitive) == false);
+    return (originStr.compare(containsStr, Qt::CaseInsensitive) == 0);
 }
 
 class CheckTimer {
@@ -451,7 +451,7 @@ private:
         for (const QFileInfo& file : fileList) {
             QStringList tempList = file.fileName().split(".");
             QString currentExtesion = QString(".%1").arg((tempList.size() == 0) ? ("") : (tempList.at(tempList.size() - 1)));
-            bool validExtension = (currentExtesion.compare(fileExtesion) == false);
+            bool validExtension = (currentExtesion.compare(fileExtesion) == 0);
             if (validExtension == false) {
                 continue;
             }
@@ -569,7 +569,7 @@ public:
                     QString readAllData = process.readAll();
                     QString logData = QString();
                     for (const QString& data : readAllData) {
-                        if (data.compare("\n") == false) {
+                        if (data.compare("\n") == 0) {
                             // qDebug() << "Log :" << logData;
                             log.append(logData);
                             logData.clear();
@@ -666,7 +666,7 @@ private:
                     QString readAllData = mProcess.readAll();
                     QString logData = QString();
                     for (const QString& data : readAllData) {
-                        if (data.compare("\n") == false) {
+                        if (data.compare("\n") == 0) {
                             // qDebug() << "\t Log :" << logData;
                             log.append(logData);
                             logData.clear();

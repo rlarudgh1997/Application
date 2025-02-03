@@ -6,6 +6,7 @@ CONFIG += c++17
 
 QT += \
     widgets\
+    qml\
 #    xml webenginewidgets\
 #    core\
 #    gui\

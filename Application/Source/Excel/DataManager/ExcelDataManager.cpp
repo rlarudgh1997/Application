@@ -302,10 +302,13 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const QString& tcName, const QS
 
 QStringList ExcelDataManager::isTCNameDataList(const bool& all) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    const bool appendAll = ((all) || (graphicsMode == false));
+    // const bool appendAll = all;
 
     QStringList tcNameList;
     for (const auto& tcName : isParsingDataList(currentData, true)) {
-        if (all) {
+        if (appendAll) {
             tcNameList.append(tcName);
         } else {
             if (isCheckData(tcName)) {
@@ -314,7 +317,7 @@ QStringList ExcelDataManager::isTCNameDataList(const bool& all) {
         }
     }
 
-    // qDebug() << "isTCNameDataList :" << all;
+    // qDebug() << "isTCNameDataList :" << all << appendAll;
     // qDebug() << "\t Info :" << tcNameList.size() << tcNameList;
     // qDebug() << "\n";
 
@@ -332,7 +335,7 @@ bool ExcelDataManager::isCheckData(const QString& tcName) {
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
     QStringList checkList = isParsingDataList(list, true);
-    bool check = ((checkList.size() > 0) && (checkList.at(0).compare("") != false));
+    bool check = ((checkList.size() > 0) && (checkList.at(0).compare("") != 0));
 
     // qDebug() << "isCheckData :" << tcName;
     // qDebug() << "\t Info :" << check << checkList.size() << checkList;
@@ -492,7 +495,7 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataList(const QString&
                 inputList = QPair<QStringList, QStringList>();
             }
         } else {
-            if ((caseName.compare(others) == false) && (inputList.first.size() == 1) && (inputList.first.at(0).size() == 0)) {
+            if ((caseName.compare(others) == 0) && (inputList.first.size() == 1) && (inputList.first.at(0).size() == 0)) {
                 // case(others) 인 경우 inputList 가 있는 경우 일반적인 others 키워드로 동작 하지 않음
                 // qDebug() << "case(others) and if there is an inputList, it does not work as the general others keyword.";
                 inputList = QPair<QStringList, QStringList>();
@@ -544,7 +547,7 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(con
         dataInfo.removeDuplicates();
 
         for (const auto& removeSignal : caseInputSignalList) {
-            if (removeSignal.compare(signal) == false) {
+            if (removeSignal.compare(signal) == 0) {
                 signal.clear();
                 break;
             }
@@ -651,8 +654,8 @@ int ExcelDataManager::isCaseIndex(const QString& tcName, const QString& resultNa
         ivis::common::getRemoved(currentResult, getMergeInfos());
         ivis::common::getRemoved(currentCase, getMergeInfos());
 
-        if ((currentTCName.compare(tcName) == false) && (currentResult.compare(resultName) == false) &&
-            (currentCase.compare(caseName) == false)) {
+        if ((currentTCName.compare(tcName) == 0) && (currentResult.compare(resultName) == 0) &&
+            (currentCase.compare(caseName) == 0)) {
             break;
         }
         caseIndex++;
@@ -811,7 +814,7 @@ bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& conf
             signalList.append(config.at(2));
             dataList.append(config.at(3));
 
-            if ((andGroup.compare(getMergeStart())) && (andGroup.compare(getMerge()))) {
+            if ((andGroup.compare(getMergeStart()) != 0) && (andGroup.compare(getMerge()) != 0)) {
                 inputMap[inputMap.size()] = qMakePair(signalList, dataList);
                 signalList.clear();
                 dataList.clear();

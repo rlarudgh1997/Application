@@ -1389,15 +1389,15 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
         QVariant matchingTableData = QVariant();
         for (const auto& vehicle : vehicleTypeList.toStringList()) {
             int propertyType = 0;
-            if (vehicle.compare(VEHICLE_TYPE_ICV) == false) {
+            if (vehicle.compare(VEHICLE_TYPE_ICV) == 0) {
                 propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV;
-            } else if (vehicle.compare(VEHICLE_TYPE_EV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_EV) == 0) {
                 propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == 0) {
                 propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == 0) {
                 propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == 0) {
                 propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV;
             } else {
                 continue;

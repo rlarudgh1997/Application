@@ -214,7 +214,7 @@ void ControlMenu::updateAllModuleList(const QString& filter) {
         sfcModules = ivis::common::FileInfo::readFile(QString("%1/DefaultModule.info").arg(path));
     }
 #else
-    sfcModules = ExcelUtil::instance().data()->isModuleListFromJson();
+    sfcModules = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
 #endif
 
     qDebug() << ((appModePV) ? ("[PV]") : ("[CV]")) << "SFC Module :" << sfcModules.size() << ", Filter :" << filter;
@@ -283,17 +283,17 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
                     continue;
                 }
                 QString id = info.at(0);
-                if (id.compare("CURRENT") == false) {
+                if (id.compare("CURRENT") == 0) {
                     currentCount += info.at(1).toInt();
-                } else if (id.compare("TOTAL") == false) {
+                } else if (id.compare("TOTAL") == 0) {
                     // totalCount = info.at(1).toInt();
-                } else if (id.compare("COMPLETE") == false) {
+                } else if (id.compare("COMPLETE") == 0) {
                     complete = true;
                     completeString = info.at(1);
-                } else if (id.compare("ERROR_INFO") == false) {
+                } else if (id.compare("ERROR_INFO") == 0) {
                     errorString = data;
                 } else {
-                    if (id.compare("CURRENT_POWER_TRAIN") == false) {
+                    if (id.compare("CURRENT_POWER_TRAIN") == 0) {
                         moduleStateInfo.append("---------------------------------------------------------------");
                     }
                     moduleStateInfo.append(data);
@@ -388,17 +388,17 @@ void ControlMenu::updateViewLogFile() {
     QStringList logFileName = QStringList();
     for (const auto& file : fileInfo) {
         QPair<int, QString> title = QPair<int, QString>();
-        if (file.compare(baseName.arg(0)) == false) {
+        if (file.compare(baseName.arg(0)) == 0) {
             title = QPair<int, QString>(0, QString("Generate TC"));
-        } else if (file.compare(baseName.arg(1)) == false) {
+        } else if (file.compare(baseName.arg(1)) == 0) {
             title = QPair<int, QString>(1, QString("Run TC"));
-        } else if (file.compare(baseName.arg(2)) == false) {
+        } else if (file.compare(baseName.arg(2)) == 0) {
             title = QPair<int, QString>(2, QString("TC Report"));
-        } else if (file.compare(baseName.arg(3)) == false) {
+        } else if (file.compare(baseName.arg(3)) == 0) {
             title = QPair<int, QString>(3, QString("GCOV Report"));
-        } else if (file.compare(baseName.arg(4)) == false) {
+        } else if (file.compare(baseName.arg(4)) == 0) {
             title = QPair<int, QString>(4, QString("Enter Script Text"));
-        } else if (file.compare(baseName.arg(5)) == false) {
+        } else if (file.compare(baseName.arg(5)) == 0) {
             title = QPair<int, QString>(5, QString("Gen SSFS"));
         } else {
             continue;
@@ -419,7 +419,7 @@ void ControlMenu::updateViewLogDisplay(const QString& titleName) {
             continue;
         }
         // qDebug() << "updateViewLogDisplay :" << titleName << title.at(0).toInt() << title.at(1).toString();
-        if (titleName.compare(title.at(1).toString()) == false) {
+        if (titleName.compare(title.at(1).toString()) == 0) {
             fileName = QString("%1_RunScript.log").arg(title.at(0).toInt());
             break;
         }

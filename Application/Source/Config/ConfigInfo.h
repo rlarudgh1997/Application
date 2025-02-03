@@ -69,6 +69,7 @@ public:
         ConfigTypeInit,
         ConfigTypeMode,
         ConfigTypeGraphicsMode,
+        ConfigTypeTCFilePath,
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
@@ -182,6 +183,7 @@ private:
         mConfigInfoData[ConfigTypeInit] = QPair<QString, QVariant>("ConfigTypeInit", QVariant(false));
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant(1));
         mConfigInfoData[ConfigTypeGraphicsMode] = QPair<QString, QVariant>("ConfigTypeGraphicsMode", QVariant(true));
+        mConfigInfoData[ConfigTypeTCFilePath] = QPair<QString, QVariant>("ConfigTypeTCFilePath", QVariant(""));
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));

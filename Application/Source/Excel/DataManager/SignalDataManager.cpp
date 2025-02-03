@@ -35,11 +35,11 @@ SignalDataManager::SignalDataManager() {
 int SignalDataManager::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
-    if (dataTypeStr.compare("HUInt64") == false) {
+    if (dataTypeStr.compare("HUInt64") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
-    } else if (dataTypeStr.compare("HInt64") == false) {
+    } else if (dataTypeStr.compare("HInt64") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
-    } else if (dataTypeStr.compare("HString") == false) {
+    } else if (dataTypeStr.compare("HString") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HString);
     } else {
         // qDebug() << "isDataType -> DataType is incorrect :" << dataTypeStr;
@@ -145,7 +145,7 @@ QStringList SignalDataManager::isVsmFileInfo(const QString& vehicleName, const Q
     }
 
     for (const auto& spec : specType) {
-        if (vehicleName.compare("System") == false) {
+        if (vehicleName.compare("System") == 0) {
             fileName.append(QString("%1/%2.%3.vsm").arg(vsmPath).arg(vehicleName).arg(spec));
         } else {
             fileName.append(QString("%1/%2").arg(vsmPath).arg(fileNameBase.arg(vehicleName).arg(spec)));
@@ -172,15 +172,15 @@ QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signal
         // MatchinigTable : CV(ICV, EV, FCEV)        PV(ICV, EV, FCEV, PHEV, HEV)
         for (const auto& vehicle : vehicleType.split(", ")) {
             int inputDataType = 0;
-            if (vehicle.compare(VEHICLE_TYPE_ICV) == false) {
+            if (vehicle.compare(VEHICLE_TYPE_ICV) == 0) {
                 inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV;
-            } else if (vehicle.compare(VEHICLE_TYPE_EV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_EV) == 0) {
                 inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == 0) {
                 inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == 0) {
                 inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == false) {
+            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == 0) {
                 inputDataType = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV;
             } else {
                 continue;
@@ -294,7 +294,7 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
                         foundSignal = true;
                         if ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
                             (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem))) {
-                            foundSignal = (lineStr.compare(signal) == false);
+                            foundSignal = (lineStr.compare(signal) == 0);
                         }
                         // qDebug() << ((foundSignal) ? ("\t Found") : ("\t Skip ")) << "Signal[" << inputDataType
                         //          << "] :" << lineStr;
@@ -458,7 +458,7 @@ QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const Q
         if (compareMatchingValue.size() > 0) {
             QString matchingData = ((toEnum) ? (splitData.at(valueIndex)) : (splitData.at(enumIndex)));
             // qDebug() << "Matching :" << matchingData << compareMatchingValue << data;
-            if (matchingData.compare(compareMatchingValue) == false) {
+            if (matchingData.compare(compareMatchingValue) == 0) {
                 matchingValue = data;
             }
         }
@@ -510,7 +510,7 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
 
     int signalType = isSignalType(signalName);
 
-    qDebug() << "isCheckExceptionValueEnum :" << signalName << signalType << originData;
+    // qDebug() << "isCheckExceptionValueEnum :" << signalName << signalType << originData;
 
     if ((signalType > static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) &&
         (signalType < static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle))) {
@@ -674,7 +674,9 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             for (auto& data : convertData) {
                 keywordString.append("[");
                 keywordString.append("]");
-                ivis::common::getRemoved(data, keywordString);  // convertData 에서 키워드 정보만 삭제
+                if (data.contains("[Cal]") == false) {
+                    ivis::common::getRemoved(data, keywordString);  // convertData 에서 키워드 정보만 삭제
+                }
                 notUsedEnum.removeAll(data);
             }
         }
@@ -933,7 +935,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
             QString tempMatchingValue;  // not used
             convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
             for (auto& data : convertData) {
-                if (data.compare(originTimeOut) == false) {
+                if (data.compare(originTimeOut) == 0) {
                     data.replace(originTimeOut, checkTimeOut.toLower());
                     break;
                 }

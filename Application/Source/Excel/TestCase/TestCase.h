@@ -11,8 +11,8 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ExcuteData, QStringList(), false)
     REGISTER_WRITABLE_PROPERTY(QStringList, ModuleList, QStringList(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, SelectMode, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, SelectMoudles, QStringList(), false)
+    REGISTER_WRITABLE_PROPERTY(QString, SelectAppMode, QString(), false)
+    REGISTER_WRITABLE_PROPERTY(QStringList, SelectModules, QStringList(), false)
 
 public:
     enum {
@@ -47,6 +47,7 @@ private:
     void terminateApplicaton();
     void drawTerminalMenu(const int& excuteType, const QStringList& itemList);
     QStringList selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& options);
+    bool openExcelFile();
 
 private:
 };

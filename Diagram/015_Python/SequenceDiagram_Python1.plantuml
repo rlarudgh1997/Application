@@ -15,7 +15,7 @@ User -> ExcelControl: popup : select open button
 activate ExcelControl
 ExcelControl -> ExcelControl : openExcelFile()
 activate ExcelControl
-ExcelControl -> ExcelControl : sytemCall()
+ExcelControl -> ExcelControl : systemCall()
 activate ExcelControl
 ExcelControl --> Python : sytem call : file path, open
 activate Python

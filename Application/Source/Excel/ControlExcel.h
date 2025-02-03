@@ -22,7 +22,6 @@ private:
     void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
     bool writeExcelFile(const QVariant& filePath);
     bool writeSheetInfo(const QVariant& filePath);
-    bool checkPythonLibrary();
     bool openExcelFile(const QVariant& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);

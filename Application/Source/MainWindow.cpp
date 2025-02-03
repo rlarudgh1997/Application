@@ -51,7 +51,9 @@ MainWindow::MainWindow(const QStringList& arguments) {
         // Title Text
         int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
         emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
-    }
+    } else {
+         // CLI Mode
+	}
 }
 
 MainWindow::~MainWindow() {
@@ -76,10 +78,10 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
             &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
             Qt::UniqueConnection);
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
-        if (lib.compare("openpyxl", Qt::CaseInsensitive) == false) {
+        if (lib.compare("openpyxl", Qt::CaseInsensitive) == 0) {
             qInfo() << "openpyxl :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, state);
-        } else if (lib.compare("pandas", Qt::CaseInsensitive) == false) {
+        } else if (lib.compare("pandas", Qt::CaseInsensitive) == 0) {
             qInfo() << "pandas   :" << ((state) ? ("valid") : ("invalid"));
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, state);
         } else {

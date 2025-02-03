@@ -8,13 +8,19 @@
 #include <QStorageInfo>
 
 #include "ExcelUtil.h"
+#include "JSEngineManager.h"
 
 class CaseDataWriter {
 public:
     CaseDataWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
         mSfcDescription = ExcelUtil::instance().data()->isDescriptionDataInfo();
         if (mTCFileDirPath.size() == 0) {
-            mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+            bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+            if (graphicsMode) {
+                mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+            } else {
+                mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTCFilePath).toString();
+            }
             int lastSlashIndex = mOpenFilePath.lastIndexOf("/");
             mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
@@ -141,6 +147,7 @@ public:
                                             testCase += "    state: positive\n";
                                         }
                                         testCase += "    precondition:\n";
+                                        QMap<QString, QString> sigValueMap;
                                         for (QString& number : signalValueList) {
                                             number = number.trimmed();
                                             if (number.isEmpty() == false) {
@@ -150,6 +157,9 @@ public:
                                                         triggerEnumString =
                                                             std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
                                                                 .toString();
+                                                        sigValueMap.insert(inputDataInfo[0], inputDataInfo[1].trimmed());
+                                                    } else {
+                                                        sigValueMap.insert(std::get<0>(signalList[signalOrder]), number);
                                                     }
                                                     if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
                                                         signalName =
@@ -211,13 +221,26 @@ public:
                                             if (tempOutputSignal.contains("Collect")) {
                                                 tempOutputSignal = "collect";
                                             }
+                                            // Cal logic 구현 (단, Sheet 는 먼저 풀려있어야 함)
+                                            QString tempOutputValue = outputValue[outputCnt];
+                                            if (tempOutputValue.contains("[Cal]")) {
+                                                if (tempOutputValue.contains("math.")) {
+                                                    tempOutputValue.replace("math.", "Math.");
+                                                }
+                                                tempOutputValue.remove("[Cal]");
+                                                for (const auto& sigNameKey : sigValueMap.keys()) {
+                                                    if (tempOutputValue.contains(sigNameKey)) {
+                                                        tempOutputValue.replace(sigNameKey, sigValueMap[sigNameKey]);
+                                                    }
+                                                }
+                                                tempOutputValue =
+                                                    JSEngineManager::instance().getEngine().evaluate(tempOutputValue).toString();
+                                            }
                                             (outputCnt == outputSignal.size() - 1)
                                                 ? testCase += "      - " + tempOutputSignal + ": " +
-                                                              quoteIfNotNumeric(outputValue[outputCnt]) + outputEnum[outputCnt] +
-                                                              "\n\n"
+                                                              quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] + "\n\n"
                                                 : testCase += "      - " + tempOutputSignal + ": " +
-                                                              quoteIfNotNumeric(outputValue[outputCnt]) + outputEnum[outputCnt] +
-                                                              "\n";
+                                                              quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] + "\n";
                                         }
                                         write(testCase);
                                     }

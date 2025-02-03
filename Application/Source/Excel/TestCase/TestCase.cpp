@@ -2,6 +2,7 @@
 
 #include "ConfigSetting.h"
 
+#include "ExcelData.h"
 #include "ExcelUtil.h"
 #include "ConvertDataManager.h"
 #include "GenerateCaseData.h"
@@ -17,9 +18,14 @@ QSharedPointer<TestCase>& TestCase::instance() {
 }
 
 TestCase::TestCase() {
+    bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    if (graphicsMode == false) {
+        terminateApplicaton();
+    }
 }
 
 void TestCase::start(const QStringList& data) {
+    bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     int excuteType = ExcuteTypeStart;
     setExcuteData(data);
 
@@ -28,6 +34,10 @@ void TestCase::start(const QStringList& data) {
 
         if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
             emit signalTestCaseCompleted(getExcuteType(), (nextType != ExcuteTypeFailed));
+
+            // if (graphicsMode == false) {
+            //     emit ControlManager::instance().data()->signalExitProgram();
+            // }
             break;
         }
         excuteType = nextType;
@@ -42,22 +52,20 @@ int TestCase::excuteTestCase(const int& excuteType) {
 
     switch (excuteType) {
         case ExcuteTypeStart: {
-            if (graphicsMode) {
-                nextType = ExcuteTypeGenConvertData;
-            } else {
-                terminateApplicaton();
-                nextType = ExcuteTypeParsingMode;
-            }
+            nextType = (graphicsMode) ? (ExcuteTypeGenConvertData) : (ExcuteTypeParsingMode);
             break;
         }
         case ExcuteTypeParsingMode:
         case ExcuteTypeParsingModule: {
             if (inputArguments(excuteType)) {
-                nextType = (excuteType == ExcuteTypeParsingMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeCompleted);
+                nextType = (excuteType == ExcuteTypeParsingMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeExcelOpen);
             }
             break;
         }
         case ExcuteTypeExcelOpen: {
+            if (openExcelFile()) {
+                nextType = ExcuteTypeGenConvertData;
+            }
             break;
         }
         case ExcuteTypeGenConvertData: {
@@ -68,7 +76,13 @@ int TestCase::excuteTestCase(const int& excuteType) {
         }
         case ExcuteTypeGenTC: {
             if (GenerateCaseData::instance().data()->excuteGenerateCaseData()) {
-                nextType = ExcuteTypeCompleted;
+                QStringList selectModules = getSelectModules();
+                if (selectModules.size() == 0) {
+                    nextType = ExcuteTypeCompleted;
+                    // nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
+                } else {
+                    nextType = ExcuteTypeExcelOpen;
+                }
             }
             break;
         }
@@ -108,21 +122,28 @@ bool TestCase::inputArguments(const int& excuteType) {
         } else {
             selectedItems.append(selectMode);
         }
-        setSelectMode(selectMode);
+        setSelectAppMode(selectMode);
     } else if (excuteType == ExcuteTypeParsingModule) {
-        itemList.append(ExcelUtil::instance().data()->isModuleListFromJson(true));
-        for (const auto& item : arguments) {
-            if (itemList.indexOf(item) >= 0) {
-                selectedItems.append(item);
+        int appMode = ((getSelectAppMode() == QString("CV")) ? (ivis::common::AppModeEnum::AppModeTypeCV)
+                                                             : (ivis::common::AppModeEnum::AppModeTypePV));
+
+        itemList.append(ExcelUtil::instance().data()->isModuleListFromJson(appMode, false));
+        for (const auto& arg : arguments) {
+            for (const auto& item : itemList) {
+                if (arg.compare(item, Qt::CaseInsensitive) == 0) {    // 대소문자 구분 없이 비교
+                    selectedItems.append(item);
+                    break;
+                }
             }
         }
         if (selectedItems.size() == 0) {
             selectedItems = selectMultipleOptionsWithNumbers(excuteType, itemList);
         }
-        setSelectMoudles(selectedItems);
+        setSelectModules(selectedItems);
     } else {
         return false;
     }
+    setExcuteData(arguments);
 
     bool result = false;
     bool exitProgram = ((selectedItems.size() == 1) && (selectedItems.at(0) == "0"));
@@ -134,7 +155,8 @@ bool TestCase::inputArguments(const int& excuteType) {
         output << "\nSelected Items : " << selectedItems.join(", ") << "\n\n" << Qt::endl;
     }
 
-    // ./gen_tc.sh -c [CV/PV/CONN] -m ["ABS_CV ABS_NO_ABS_Trailer ...."]
+    // ./gen_tc.sh -c [CV/PV/CONN] -m ["ABS_CV AEM ...."]
+    // ../deploy_x86/Application gen cv abs_cv aem
 
     return result;
 }
@@ -144,35 +166,36 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
     const int itemsPerLine = 4;
     const int lineCount = 140;
     const int fixedWidth = ((lineCount - 10) * (1.0 / itemsPerLine));
-    const bool multipleSelect = (excuteType == ExcuteTypeParsingModule);
 
+    bool subTips = true;
     QString displayText;
 
     if (excuteType == ExcuteTypeInvalidSelectItem) {
         displayText.append(QString("Invalid choice.\n"));
         displayText.append(QString("Please enter valid numbers between : 1 ~ %1\n").arg(itemList.size() - 1));
     } else {
-        // system("clear");
-
         displayText.append(QString(lineCount, '*') + QString("\n"));
-
         if (excuteType == ExcuteTypeParsingMode) {
-            displayText.append("\033[32m[Mode]\033[0m\n");
+            subTips = false;
+            displayText.append("\033[32m[Select App Mode]\n\033[0m\n");
         } else if (excuteType == ExcuteTypeParsingModule) {
-            displayText.append("\033[32m[Module]\033[0m\n");
+            displayText.append(QString("\033[32m[Select Module : %1]\n\033[0m\n").arg(getSelectAppMode()));
         } else {
             return;
         }
+
+        system("clear");
 
         for (int index = 1; index < itemList.size(); ++index) {                         // itemList.at(0) = Exit
             displayText.append(QString("%1. %2").arg(index, 3)                          // 번호를 3자리 폭으로 맞춤
                                                 .arg(itemList[index], -fixedWidth));    // 옵션 이름을 왼쪽 정렬, 고정 폭 설정
 
-            if ((((index) % itemsPerLine) == 0) || (index == (itemList.size() - 1))) {
+            if (((index % itemsPerLine) == 0) || (index == (itemList.size() - 1))) {
                 displayText.append("\n");
             }
         }
         displayText.append(QString(lineCount, '-') + QString("\n"));
+
         if (excuteType == ExcuteTypeParsingModule) {
             displayText.append(
                 QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(999, 3).arg("Select All Modules", -fixedWidth));
@@ -181,7 +204,7 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 
         displayText.append(QString(lineCount, '*') + QString("\n\n\n"));
     }
-    displayText.append(QString("Enter the numbers of your choices %1: ").arg((multipleSelect) ? ("separated by spaces ") : ("")));
+    displayText.append(QString("Enter the numbers of your choices %1: ").arg((subTips) ? ("separated by spaces ") : ("")));
 
     QTextStream output(stdout);
     output << displayText << Qt::flush;
@@ -189,18 +212,17 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 
 QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& itemList) {
     QTextStream input(stdin);
-    // QTextStream output(stdout);
 
-    bool multipleSelect = (excuteType == ExcuteTypeParsingModule);
+    QStringList selecteItems;
+    bool inputState = true;
 
     drawTerminalMenu(excuteType, itemList);
 
-    while (true) {
-        QStringList selecteItems;
+    while (inputState) {
         QString inputLine = input.readLine().trimmed();
         QStringList choices({inputLine});
 
-        if (multipleSelect) {
+        if (excuteType == ExcuteTypeParsingModule) {
             choices = inputLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
         }
 
@@ -226,11 +248,14 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
 
         if (selecteItems.size() == 0) {
             drawTerminalMenu(ExcuteTypeInvalidSelectItem, itemList);
-            continue;
+        } else {
+            selecteItems.sort();
+            selecteItems.removeDuplicates();
+            inputState = false;
         }
-
-        return selecteItems;
     }
+
+    return selecteItems;
 }
 
 void TestCase::terminateApplicaton() {
@@ -254,4 +279,61 @@ void TestCase::terminateApplicaton() {
             QProcess::execute("kill", QStringList() << "-9" << pid);
         }
     }
+}
+
+bool TestCase::openExcelFile() {
+    QStringList selectModules = getSelectModules();
+    QString currModule = (selectModules.size() > 0) ? (selectModules.at(0)) : ("");
+    if (currModule.size() == 0) {
+        qDebug() << "Fail to select module size : 0";
+        return false;
+    }
+
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
+
+    QDir directory(QString("%1/%2").arg(defaultFilePath).arg(currModule));
+#if 0
+    QFileInfoList fileList = directory.entryInfoList(QStringList({"*.xlsx", "*.xls"}), QDir::Files);
+#else
+    QFileInfoList allFiles = directory.entryInfoList(QDir::Files);
+    QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
+    QFileInfoList fileList;
+
+    for (const QFileInfo &file : allFiles) {
+        if (file.fileName().contains(excelRegex)) {
+            fileList.append(file);
+        }
+    }
+#endif
+
+    qDebug() << "\n\n\n\n\n\n\n\n\n\n\n";
+    qDebug() << "SelectModules :" << selectModules << "->" << currModule;
+    qDebug() << "\t Path     :" << directory.absolutePath();
+
+    if (fileList.size() == 0) {
+        qDebug() << "Fail to file list size : 0";
+        return false;
+    }
+
+    // QString filePath = QString("%1/%2/%3.xlsx").arg(defaultFilePath).arg(currModule).arg(currModule);
+    QString filePath = fileList.at(0).absoluteFilePath();
+    QList<QVariantList> sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+    bool result = (sheetDataList.size() > 0);
+    if (result) {
+        qDebug() << "\t FilePath :" << filePath;
+
+        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+        for (const auto& sheetData : sheetDataList) {
+            // qDebug() << "Sheet[" << propertyType << "] :" << sheetData.toList().size() << sheetData.toList();
+            ExcelData::instance().data()->setSheetData(propertyType++, sheetData);
+        }
+
+        selectModules.removeAll(currModule);
+        setSelectModules(selectModules);
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);
+    }
+
+    return result;
 }

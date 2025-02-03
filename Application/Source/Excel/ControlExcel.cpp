@@ -95,7 +95,7 @@ void ControlExcel::initNormalData() {
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, keywordTypeInfo);
 
-#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)  // Firt Booting : new excel sheet
+#if defined(USE_SHOW_NEW_EXCEL_SHEET_AFTER_BOOTING)  // First Booting : new excel sheet
     updateExcelSheet(false, QVariant());
 #endif
 }
@@ -486,14 +486,13 @@ void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPa
 }
 
 bool ControlExcel::writeExcelFile(const QVariant& filePath) {
-    bool result = false;
-    if (checkPythonLibrary() == false) {
-        qDebug() << "Fail to python lib not install.";
-        return result;
+    if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
+        return false;
     }
 
+    bool result = false;
     if (ExcelUtil::instance().data()->writeExcelSheet(filePath, false)) {
-        QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
+        QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
         if (dirPath.size() > 0) {
             result = true;
             // Delete : Folder(TC)
@@ -568,50 +567,20 @@ bool ControlExcel::writeSheetInfo(const QVariant& filePath) {
     return (writeSize > 0);
 }
 
-bool ControlExcel::checkPythonLibrary() {
-#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
-    bool openpyxl = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl).toBool();
-    bool pandas = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibPandas).toBool();
-    bool checkLib = ((openpyxl) && (pandas));
-
-    if (checkLib == false) {
-        ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
-        QVariantList text =
-            QVariantList({STRING_POPUP_LIB, STRING_POPUP_LIB_INSTALL_TIP, STRING_POPUP_INSTALL, STRING_POPUP_CANCEL});
-        QVariant popupData = QVariant();
-        button = ivis::common::Popup::drawPopup(ivis::common::PopupType::NoInstallLib, isHandler(), popupData, QVariant(text));
-        if (button == ivis::common::PopupButton::Install) {
-            mProcess.data()->setCommandInfo(QString("pip install openpyxl pandas"));
-            mProcess.data()->start();
-            connect(mProcess.data(), &ivis::common::ExcuteProgramThread::signalExcuteProgramCompleted, [&](const bool& result) {
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl, true);
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCheckLibPandas, true);
-                ivis::common::Popup::drawPopup(ivis::common::PopupType::InstallComplete, isHandler(), popupData,
-                                               QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_NOW_INSTALLING_TIP})));
-            });
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::NowInstalling, isHandler(), popupData,
-                                           QVariant(QVariantList({STRING_POPUP_LIB, STRING_POPUP_INSTALL_COMPLETE_TIP})));
-        }
-    }
-    qDebug() << "Check lib - openpyxl :" << openpyxl << ", pandas :" << pandas;
-    return checkLib;
-#else
-    return true;
-#endif
-}
-
 bool ControlExcel::openExcelFile(const QVariant& filePath) {
+    if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
+        return false;
+    }
+
     bool result = false;
-    if (checkPythonLibrary()) {
-        QString dirPath = ExcelUtil::instance().data()->sytemCall(true, filePath);
-        if (dirPath.size() > 0) {
-            updateExcelSheet(true, dirPath);
-            result = true;
-        } else {
-            QVariant popupData = QVariant();
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
-                                           QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
-        }
+    QString dirPath = ExcelUtil::instance().data()->systemCall(true, filePath);
+    if (dirPath.size() > 0) {
+        updateExcelSheet(true, dirPath);
+        result = true;
+    } else {
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
+                                        QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
     }
     return result;
 }
@@ -816,7 +785,7 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
     bool update = false;
     QStringList tcNameList = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList();
     for (const auto& tcName : tcNameList) {
-        if (tcName.compare(signalName) == false) {
+        if (tcName.compare(signalName) == 0) {
             update = true;
             break;
         }
@@ -1025,7 +994,7 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
             if (splitData.size() < 2) {
                 continue;
             }
-            if (splitData.at(validDataIndex).toUpper().compare(data.toUpper()) == false) {
+            if (splitData.at(validDataIndex).toUpper().compare(data.toUpper()) == 0) {
                 qDebug() << "\t Matching[" << validCount << "] :" << data << originData;
                 validCount++;
                 break;
@@ -1238,7 +1207,7 @@ void ControlExcel::testCode() {
 
     QVariant filePath = ivis::common::APP_PWD() + "/Temp.excel";
     if (writeExcelSheet(filePath, false)) {
-        QString dirPath = ExcelUtil::instance().data()->sytemCall(false, filePath);
+        QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
         if (dirPath.size() > 0) {
             qDebug() << "\t Excel Save :" << filePath;
         }

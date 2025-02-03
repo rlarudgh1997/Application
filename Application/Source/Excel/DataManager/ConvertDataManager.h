@@ -25,7 +25,7 @@ public:
 private:
     explicit ConvertDataManager();
 
-    bool replaceGenDataInfo();
+    bool convertKeywordData();
     QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
                                                                const QList<int>& columnList);
     bool isDataAlreadyExistInKeywordInfoList(const QStringList& rowDataList, const KeywordInfo& keywordInfo,

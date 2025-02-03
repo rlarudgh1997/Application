@@ -56,7 +56,7 @@ alt ButtonType == OK
 
     ExcelControl -> ExcelControl : openExcelFile()
     activate ExcelControl
-    ExcelControl -> ExcelControl : sytemCall()
+    ExcelControl -> ExcelControl : systemCall()
     activate ExcelControl
     ExcelControl --> Python : sytem call : file path, open
     activate Python
