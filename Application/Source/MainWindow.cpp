@@ -53,7 +53,7 @@ MainWindow::MainWindow(const QStringList& arguments) {
         emit ConfigSetting::instance().data()->signalUpdateWindowTitle(QString(), appMode);
     } else {
          // CLI Mode
-	}
+    }
 }
 
 MainWindow::~MainWindow() {

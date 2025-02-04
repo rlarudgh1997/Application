@@ -490,6 +490,8 @@ bool ControlExcel::writeExcelFile(const QVariant& filePath) {
         return false;
     }
 
+    // qDebug() << "writeExcelFile :" << filePath;
+
     bool result = false;
     if (ExcelUtil::instance().data()->writeExcelSheet(filePath, false)) {
         QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
@@ -572,6 +574,8 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
         return false;
     }
 
+    // qDebug() << "openExcelFile :" << filePath;
+
     bool result = false;
     QString dirPath = ExcelUtil::instance().data()->systemCall(true, filePath);
     if (dirPath.size() > 0) {
@@ -630,7 +634,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
 
                 if (openExcelFile(filePath)) {
                     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, filePath);
-                    // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+                    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
                     if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
