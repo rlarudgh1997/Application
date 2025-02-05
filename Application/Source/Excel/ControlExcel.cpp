@@ -71,7 +71,7 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd,
                       ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd));
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenType,
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName,
                       ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenType));
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
@@ -761,6 +761,14 @@ void ControlExcel::updateShortcutInfo(const int& eventType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, shortcutType, true);
 }
 
+void ControlExcel::updateGenType(const int& genType) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenType, genType, true);
+}
+
+void ControlExcel::updateTCCheck(const int& allCheck) {
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, allCheck, true);
+}
+
 void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex) {
     QStringList signalData = QStringList();
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
@@ -1254,7 +1262,7 @@ void ControlExcel::testCode() {
 }
 
 void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
-    qDebug() << "\n\n\n\n\t\t slotTestCaseCompleted :" << type << result;
+    qDebug() << "\n\t slotTestCaseCompleted :" << type << result;
 }
 
 void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {
@@ -1361,7 +1369,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlExcel::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & displayType) == false) {
         return;
     }
 
@@ -1396,6 +1404,14 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
         case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
             updateShortcutInfo(eventType);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeEditGenType: {
+            updateGenType(eventValue.toInt());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeEditTCCheck: {
+            updateTCCheck(eventValue.toInt());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {

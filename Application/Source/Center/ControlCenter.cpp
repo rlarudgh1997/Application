@@ -406,7 +406,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlCenter::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & displayType) == false) {
         return;
     }
 

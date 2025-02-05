@@ -78,8 +78,8 @@ int TestCase::excuteTestCase(const int& excuteType) {
             if (GenerateCaseData::instance().data()->excuteGenerateCaseData()) {
                 QStringList selectModules = getSelectModules();
                 if (selectModules.size() == 0) {
-                    nextType = ExcuteTypeCompleted;
-                    // nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
+                    // nextType = ExcuteTypeCompleted;
+                    nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
                 } else {
                     nextType = ExcuteTypeExcelOpen;
                 }
@@ -97,6 +97,7 @@ int TestCase::excuteTestCase(const int& excuteType) {
     qDebug() << (QString(120, '*'));
     qDebug() << "\t excuteTestCase :" << excuteType << "->" << nextType;
     qDebug() << (QString(120, '-'));
+    qDebug() << "\n\n\n\n";
 
     return nextType;
 }
@@ -124,10 +125,8 @@ bool TestCase::inputArguments(const int& excuteType) {
         }
         setSelectAppMode(selectMode);
     } else if (excuteType == ExcuteTypeParsingModule) {
-        int appMode = ((getSelectAppMode() == QString("CV")) ? (ivis::common::AppModeEnum::AppModeTypeCV)
-                                                             : (ivis::common::AppModeEnum::AppModeTypePV));
+        itemList.append(isModuleList());
 
-        itemList.append(ExcelUtil::instance().data()->isModuleListFromJson(appMode, false));
         for (const auto& arg : arguments) {
             for (const auto& item : itemList) {
                 if (arg.compare(item, Qt::CaseInsensitive) == 0) {    // 대소문자 구분 없이 비교
@@ -161,7 +160,7 @@ bool TestCase::inputArguments(const int& excuteType) {
     return result;
 }
 
-void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemList) {
+void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemList, const bool& clear) {
     // 고정 폭 정의 (줄당 4개 표시, 최대폭 140 기준으로 정렬)
     const int itemsPerLine = 4;
     const int lineCount = 140;
@@ -171,8 +170,11 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
     QString displayText;
 
     if (excuteType == ExcuteTypeInvalidSelectItem) {
-        displayText.append(QString("Invalid choice.\n"));
+        displayText.append(QString("\n\033[31m[Input Invalid]\033[0m\n"));
         displayText.append(QString("Please enter valid numbers between : 1 ~ %1\n").arg(itemList.size() - 1));
+        displayText.append(QString("Enter the numbers of your choices separated by spaces : "));
+    } else if (excuteType == ExcuteTypeManualInput) {
+        displayText.append(QString("Please enter manual module name : "));
     } else {
         displayText.append(QString(lineCount, '*') + QString("\n"));
         if (excuteType == ExcuteTypeParsingMode) {
@@ -184,7 +186,9 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
             return;
         }
 
-        system("clear");
+        if (clear) {
+            // system("clear");
+        }
 
         for (int index = 1; index < itemList.size(); ++index) {                         // itemList.at(0) = Exit
             displayText.append(QString("%1. %2").arg(index, 3)                          // 번호를 3자리 폭으로 맞춤
@@ -198,13 +202,15 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 
         if (excuteType == ExcuteTypeParsingModule) {
             displayText.append(
-                QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(999, 3).arg("Select All Modules", -fixedWidth));
+                QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(mNumSelectAll, 3).arg("Select All", -fixedWidth));
+            displayText.append(
+                QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(mNumManualInput, 3).arg("Manual Input", -fixedWidth));
         }
-        displayText.append(QString("\033[31m%1\033[0m. \033[31m%2\033[0m\n").arg(0, 3).arg(itemList.at(0), -fixedWidth));
+        displayText.append(QString("\033[31m%1\033[0m. \033[31m%2\033[0m\n").arg(mNumExit, 3).arg(itemList.at(0), -fixedWidth));
 
         displayText.append(QString(lineCount, '*') + QString("\n\n\n"));
+        displayText.append(QString("Enter the numbers of your choices %1: ").arg((subTips) ? ("separated by spaces ") : ("")));
     }
-    displayText.append(QString("Enter the numbers of your choices %1: ").arg((subTips) ? ("separated by spaces ") : ("")));
 
     QTextStream output(stdout);
     output << displayText << Qt::flush;
@@ -215,6 +221,7 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
 
     QStringList selecteItems;
     bool inputState = true;
+    bool manualInput = false;
 
     drawTerminalMenu(excuteType, itemList);
 
@@ -222,32 +229,37 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
         QString inputLine = input.readLine().trimmed();
         QStringList choices({inputLine});
 
-        if (excuteType == ExcuteTypeParsingModule) {
+        if ((excuteType == ExcuteTypeParsingModule) || (manualInput)) {
             choices = inputLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
         }
 
-        for (const QString& choice : choices) {
-            bool valid;
-            int selectIndex = choice.toInt(&valid);
+        if (manualInput) {
+            qDebug() << "Manual Input :" << choices;
+            selecteItems.append(choices);
+        } else {
+            for (const QString& choice : choices) {
+                bool valid;
+                int selectIndex = choice.toInt(&valid);
 
-            if (valid) {
-                if (selectIndex == 0) {
-                    selecteItems.append(choice);
-                    break;
-                } else if (selectIndex == 999) {
-                    for (int index = 1; index < itemList.size(); ++index) {
-                        selecteItems.append(itemList[index]);
+                if (valid) {
+                    if (selectIndex == mNumExit) {
+                        selecteItems.append(choice);
+                    } else if (selectIndex == mNumSelectAll) {
+                        for (int index = 1; index < itemList.size(); ++index) {
+                            selecteItems.append(itemList[index]);
+                        }
+                    } else if (selectIndex == mNumManualInput) {
+                        manualInput = true;
+                    } else if ((selectIndex > 0) && (selectIndex < itemList.size())) {
+                        selecteItems.append(itemList[selectIndex]);
+                    } else {
                     }
-                    break;
-                } else if ((selectIndex > 0) && (selectIndex < itemList.size())) {
-                    selecteItems.append(itemList[selectIndex]);
-                } else {
                 }
             }
         }
 
         if (selecteItems.size() == 0) {
-            drawTerminalMenu(ExcuteTypeInvalidSelectItem, itemList);
+            drawTerminalMenu((manualInput) ? (ExcuteTypeManualInput) : (ExcuteTypeInvalidSelectItem), itemList);
         } else {
             selecteItems.sort();
             selecteItems.removeDuplicates();
@@ -279,6 +291,43 @@ void TestCase::terminateApplicaton() {
             QProcess::execute("kill", QStringList() << "-9" << pid);
         }
     }
+}
+
+QStringList TestCase::isModuleList() {
+    int appMode = ((getSelectAppMode() == QString("CV")) ? (ivis::common::AppModeEnum::AppModeTypeCV)
+                                                         : (ivis::common::AppModeEnum::AppModeTypePV));
+    QStringList modules;
+    QStringList allModules = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+
+    // isModuleListFromJson() 함수 내부 수정 필요
+    //  1. AEM 처럼 엑셀 파일이 없는것도 존재함 -> 엑셀 파일 존재 유무 확인 필요
+    //  2. 1번 같은 경우에 대한 예외 처리를 위해서 isModuleListFromJson() 리턴시 모듈의 경로도 함께 리턴
+    //  3. 리턴된 모듈 경로 내부에 엑셀 파일이 존재 하는 경우에만 모듈로 리스트업
+
+
+#if 0    // [cv.json / platform.json] 파일의 전체 모듈 사용
+    modules = allModules;
+#else
+    QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
+
+    for (const auto& module : allModules) {
+        QDir directory(QString("%1/%2").arg(defaultFilePath).arg(module));
+        QFileInfoList allFiles = directory.entryInfoList(QDir::Files);
+        QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
+        QFileInfoList fileList;
+
+        for (const QFileInfo &file : allFiles) {
+            if (file.fileName().contains(excelRegex)) {
+                modules.append(module);
+                break;
+            }
+        }
+    }
+    qDebug() << "isModuleList :" << allModules.size() << modules.size();
+#endif
+
+    return modules;
 }
 
 bool TestCase::openExcelFile() {

@@ -78,10 +78,10 @@ private:
 class ExcelDataManager : public QObject {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, Merge, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, MergeEnd, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
+    REGISTER_WRITABLE_VALUE(QString, MergeStart, QString())
+    REGISTER_WRITABLE_VALUE(QString, Merge, QString())
+    REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
+    REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
     REGISTER_WRITABLE_PROPERTY(bool, ReadStateNewData, true, false)
     REGISTER_WRITABLE_PROPERTY_LIST(QList, InsertData, NewSheetData, false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, QStringList, ExcelDataOther, false)

@@ -26,6 +26,19 @@
 namespace ivis {
 namespace common {
 
+#define REGISTER_WRITABLE_VALUE(type, name, value)                                    \
+public:                                                                               \
+    type is##name() const {                                                           \
+        return m##name;                                                               \
+    }                                                                                 \
+    void update##name(const type& name) {                                             \
+        if (m##name != name) {                                                        \
+            m##name = name;                                                           \
+        }                                                                             \
+    }                                                                                 \
+private:                                                                              \
+    type m##name = value;
+
 // name : The first letter starts with an uppercase letter
 #define REGISTER_WRITABLE_PROPERTY(type, name, value, notify)                         \
     Q_PROPERTY(type name READ get##name WRITE set##name NOTIFY signal##name##Changed) \

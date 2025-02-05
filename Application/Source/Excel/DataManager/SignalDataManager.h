@@ -8,6 +8,47 @@
 #include "CommonUtil.h"
 
 class SignalData {
+#if 1
+    REGISTER_WRITABLE_VALUE(int, DataType, 0)
+    REGISTER_WRITABLE_VALUE(bool, Initialize, false)
+    REGISTER_WRITABLE_VALUE(int, KeywordType, 0)
+    REGISTER_WRITABLE_VALUE(QStringList, OriginData, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, ConvertData, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, ValueEnum, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, NotUsedEnum, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, Precondition, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, AllConvertData, QStringList())
+
+public:
+    SignalData(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
+               const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
+               const QStringList& notUsedEnum, const QStringList& precondition,
+               const QStringList& allConvertData = QStringList()) {
+        updateDataType(dataType);
+        updateInitialize(initialize);
+        updateKeywordType(keywordType);
+        updateOriginData(originData);
+        updateConvertData(convertData);
+        updateValueEnum(valueEnum);
+        updateNotUsedEnum(notUsedEnum);
+        updatePrecondition(precondition);
+        updateAllConvertData(allConvertData);
+    }
+    SignalData() = default;
+    SignalData(const SignalData& other) = default;
+    SignalData& operator=(const SignalData& other) = default;
+
+    bool operator==(const SignalData& other) const {
+        return ((isDataType() == other.isDataType()) && (isInitialize() == other.isInitialize()) &&
+                (isKeywordType() == other.isKeywordType()) && (isOriginData() == other.isOriginData()) &&
+                (isConvertData() == other.isConvertData()) && (isValueEnum() == other.isValueEnum()) &&
+                (isNotUsedEnum() == other.isNotUsedEnum()) && (isPrecondition() == other.isPrecondition()) &&
+                (isAllConvertData() == other.isAllConvertData()));
+    }
+    bool operator!=(const SignalData& other) const {
+        return !(*this == other);
+    }
+#else
 public:
     SignalData(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
                const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
@@ -68,15 +109,16 @@ private:
     QStringList mValueEnum = QStringList();
     QStringList mNotUsedEnum = QStringList();
     QStringList mPrecondition = QStringList();
+#endif
 };
 
 class SignalDataManager : public QObject {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(QString, MergeStart, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, Merge, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, MergeEnd, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, MergeInfos, QStringList(), false)
+    REGISTER_WRITABLE_VALUE(QString, MergeStart, QString())
+    REGISTER_WRITABLE_VALUE(QString, Merge, QString())
+    REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
+    REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
 
 public:
     static QSharedPointer<SignalDataManager>& instance();

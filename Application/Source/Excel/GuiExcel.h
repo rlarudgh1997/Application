@@ -169,9 +169,9 @@ private:
 class GuiExcel : public AbstractGui {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(bool, SfcSignal, false, false)
-    REGISTER_WRITABLE_PROPERTY(bool, OutputState, false, false)
-    REGISTER_WRITABLE_PROPERTY(bool, CellEditSkip, false, false)
+    REGISTER_WRITABLE_VALUE(bool, SfcSignal, false)
+    REGISTER_WRITABLE_VALUE(bool, OutputState, false)
+    REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
     REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, bool, SheetCheckState, false)
 
 private:
@@ -230,7 +230,9 @@ private:
     void updateDisplayValueEnum(const QVariantList& data);
     void updateDisplayTCNameResult(const QStringList& data);
     void updateDisplayAutoInputDescrtion();
-    void updateDisplayGenType();
+    void updateDisplaySelectGenType();
+    void updateDisplayGenType(const int& genType);
+    void updateDisplayTCCheck(const int& allCheck);
     void printMergeInfo(const QString& title, const bool& mergeSplit);
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);

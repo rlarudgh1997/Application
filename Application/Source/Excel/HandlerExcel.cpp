@@ -30,7 +30,7 @@ void HandlerExcel::initPropertyInfo() {
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(0));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
@@ -57,6 +57,8 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, QVariant());

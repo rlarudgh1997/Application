@@ -27,6 +27,8 @@ private:
     void saveExcelFile(const bool& saveAs);
     void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
+    void updateGenType(const int& genType);
+    void updateTCCheck(const int& allCheck);
     void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
     void updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType);
     void updateAutoCompleteSuggestions(const QVariantList& inputData);

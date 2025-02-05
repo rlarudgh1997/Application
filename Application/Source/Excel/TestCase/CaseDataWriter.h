@@ -16,11 +16,9 @@ public:
         mSfcDescription = ExcelUtil::instance().data()->isDescriptionDataInfo();
         if (mTCFileDirPath.size() == 0) {
             bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-            if (graphicsMode) {
-                mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
-            } else {
-                mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTCFilePath).toString();
-            }
+            int configType = (graphicsMode) ? (ConfigInfo::ConfigTypeLastSavedFilePath) : (ConfigInfo::ConfigTypeTCFilePath);
+            mOpenFilePath = ConfigSetting::instance().data()->readConfig(configType).toString();
+
             int lastSlashIndex = mOpenFilePath.lastIndexOf("/");
             mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;

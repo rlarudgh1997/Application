@@ -92,6 +92,21 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <widget class="QMenu" name="menuTCCheck">
+     <property name="title">
+      <string>TC Check</string>
+     </property>
+     <addaction name="actionAllCheck"/>
+     <addaction name="actionAllUncheck"/>
+    </widget>
+    <widget class="QMenu" name="menuGenType">
+     <property name="title">
+      <string>Gen Type</string>
+     </property>
+     <addaction name="actionDefault"/>
+     <addaction name="actionNegativePositive"/>
+     <addaction name="actionPositive"/>
+    </widget>
     <addaction name="actionCopy"/>
     <addaction name="actionCut"/>
     <addaction name="actionPaste"/>
@@ -99,6 +114,9 @@
     <addaction name="actionInsert"/>
     <addaction name="actionDelete"/>
     <addaction name="actionMergeSplit"/>
+    <addaction name="separator"/>
+    <addaction name="menuTCCheck"/>
+    <addaction name="menuGenType"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -455,6 +473,31 @@
   <action name="actionLastFolder">
    <property name="text">
     <string>LastFolder</string>
+   </property>
+  </action>
+  <action name="actionAllCheck">
+   <property name="text">
+    <string>All Check</string>
+   </property>
+  </action>
+  <action name="actionAllUncheck">
+   <property name="text">
+    <string>All Uncheck</string>
+   </property>
+  </action>
+  <action name="actionDefault">
+   <property name="text">
+    <string>All Default</string>
+   </property>
+  </action>
+  <action name="actionNegativePositive">
+   <property name="text">
+    <string>All Negative/Positive</string>
+   </property>
+  </action>
+  <action name="actionPositive">
+   <property name="text">
+    <string>All Positive</string>
    </property>
   </action>
  </widget>

@@ -27,10 +27,10 @@ ConvertDataManager::ConvertDataManager() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    setMergeStart(mergeStart);
-    setMerge(merge);
-    setMergeEnd(mergeEnd);
-    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    updateMergeStart(mergeStart);
+    updateMerge(merge);
+    updateMergeEnd(mergeEnd);
+    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
 bool ConvertDataManager::excuteConvertDataManager() {

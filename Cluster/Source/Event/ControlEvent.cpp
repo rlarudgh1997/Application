@@ -161,7 +161,7 @@ void ControlEvent::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlEvent::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if ((getData(ivis::common::PropertyEnum::CommonDisplay).toInt() & QVariant(displayType).toInt()) == false) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & displayType) == false) {
         return;
     }
 

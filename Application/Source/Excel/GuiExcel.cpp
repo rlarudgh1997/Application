@@ -113,9 +113,9 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
                     if (lineStr.size() != 2) {
                         continue;
                     }
-                    QString temp = (getSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
-                    if (getOutputState()) {
-                        temp = (getSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
+                    QString temp = (isSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
+                    if (isOutputState()) {
+                        temp = (isSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
                     }
                     temp.remove("\"");
 
@@ -688,7 +688,6 @@ void GuiExcel::updateDisplayMergeSplit(const int& editType, const int& sheetInde
     }
     updateSheetMergeInfo(editType, sheetIndex, rowStart, rowCount, columnStart, columnCount);
 
-
 #if 0    // 예전 코드
     if (updateMergeInfo(false, sheetIndex, columnStart, rowStart, rowCount)) {
         updateDisplaySplitCell(sheetIndex);
@@ -1130,7 +1129,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         return;
     }
 
-    if (getCellEditSkip()) {
+    if (isCellEditSkip()) {
         // qDebug() << "Skip cell editing event handling.";
         return;
     }
@@ -1282,7 +1281,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
         QVariantList inputData = QVariantList({signalName, vehicleType, column, signalIndex});
         createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions, inputData);
     } else if (supportGenType) {
-        updateDisplayGenType();
+        updateDisplaySelectGenType();
     } else if (supportVehicleType) {
         updateDisplayAutoCompleteVehicle();
     } else if (supportConfigName) {
@@ -1417,8 +1416,8 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
     } else {
         dialogType = Dialog::DialogTypeSelectValueEnumInput;
     }
-    setSfcSignal(sfcSignal);
-    setOutputState(outputState);
+    updateSfcSignal(sfcSignal);
+    updateOutputState(outputState);
 
     QVariantList info = QVariantList({
         QString("Select Data"),
@@ -1459,13 +1458,53 @@ void GuiExcel::updateDisplayAutoInputDescrtion() {
     }
 }
 
-void GuiExcel::updateDisplayGenType() {
+void GuiExcel::updateDisplaySelectGenType() {
     QVariantList info = QVariantList({
         QString("Select Type"),
         QString(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeGenType, info);
+}
+
+void GuiExcel::updateDisplayGenType(const int& genType) {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs;
+    const int columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType);
+
+    QStringList genTypeNames("");    // GenTypeName index 와 genType 값을 동일하게 구성하기 위해서
+    genTypeNames.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName).toStringList());
+    QString currGenTypeName = (genType < genTypeNames.size()) ? (genTypeNames.at(genType)) : ("");
+
+    for (int sheetIndex = startIndex; sheetIndex <= endIndex; ++sheetIndex) {
+        if (chcekExcelSheet(sheetIndex) || (mExcelSheet[sheetIndex]->rowCount() == 0)) {
+            continue;
+        }
+        for (int rowIndex = 0; rowIndex < mExcelSheet[sheetIndex]->rowCount(); ++rowIndex) {
+            if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+                continue;
+            }
+            mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->setText(currGenTypeName);
+        }
+        // updateDisplaySheetHeaderAdjust(sheetIndex, true);  // 편집시 화면 변경 되는 이슈
+        syncSheetData(sheetIndex);
+    }
+}
+
+
+void GuiExcel::updateDisplayTCCheck(const int& allCheck) {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs;
+
+    for (int sheetIndex = startIndex; sheetIndex <= endIndex; ++sheetIndex) {
+        setSheetCheckState(sheetIndex, (!allCheck));
+#if 1
+        updateDisplaySheetCheckState(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
+#else
+        emit mExcelSheet[sheetIndex]->horizontalHeader()->sectionClicked(
+            static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
+#endif
+    }
 }
 
 void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {
@@ -1611,7 +1650,7 @@ void GuiExcel::pasteClipboardInfo() {
         return;
     }
 
-    setCellEditSkip(true);
+    updateCellEditSkip(true);
 
     QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
     int rowStart = (selectCellCount == 1) ? (modelIndexs.at(0).row()) : (0);
@@ -1679,7 +1718,7 @@ void GuiExcel::pasteClipboardInfo() {
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, updateIndex}));
     }
 
-    setCellEditSkip(false);
+    updateCellEditSkip(false);
 }
 
 QList<QStringList> GuiExcel::isSheetData(const int& sheetIndex, const bool& removeMerge, const QPair<int, int>& maxInfo) {
@@ -1838,7 +1877,7 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
         return;
     }
 
-    setCellEditSkip(true);
+    updateCellEditSkip(true);
 
     const SelectedCellInfo selectedCellInfo(mExcelSheet[sheetIndex]);
     const QPair<int, int> rowInfo = selectedCellInfo.isRowInfo();
@@ -1865,7 +1904,7 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
     updateDisplaySheetHeaderAdjust(sheetIndex, false);  // 편집시 화면 변경 되는 이슈
     createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, columnStart}));
 
-    setCellEditSkip(false);
+    updateCellEditSkip(false);
 }
 
 void GuiExcel::updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex) {
@@ -1963,6 +2002,14 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo: {
             updateDisplayAutoInputDescrtion();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeGenType: {
+            updateDisplayGenType(value.toInt());
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTCCheck: {
+            updateDisplayTCCheck(value.toInt());
             break;
         }
         default: {

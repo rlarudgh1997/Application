@@ -3,6 +3,19 @@
 [현대 GitLab 사용]
 	[Date : 20241217]
 ====================================================================================================
+[gitlab 계정 업데이트]
+	- 기본 정리 문서 참조 : /900_Code/100_Document/610_SFC/gitLab 계정 업데이트/UpdateUserInfo.zip
+	- access tockens 업데이트
+		https://gitlab.hmc.co.kr/-/user_settings/personal_access_tokens
+	- Ver. 2025-02-04
+	- .git-credentials 파일 내용 수정
+		https://kkh1997%40ivis.ai:[PASSWORD_HASH_INFO]@gitlab.hmc.co.kr
+
+	- 계정 정보 업데이트 후 필수 사항 : repo init 부터 다시 시작
+		repo init --submodule -u https://kkh1997@bitbucket.org/ivc-suite/sfc.manifests.git
+		repo sync
+
+----------------------------------------------------------------------------------------------
 [환경 설정]
 	- 권한 설정
 		repo 접근 정보 파일 복사

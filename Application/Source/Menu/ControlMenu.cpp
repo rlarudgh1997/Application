@@ -885,7 +885,9 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeEditRedo:
         case ivis::common::EventTypeEnum::EventTypeEditCellInsert:
         case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
-        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
+        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit:
+        case ivis::common::EventTypeEnum::EventTypeEditGenType:
+        case ivis::common::EventTypeEnum::EventTypeEditTCCheck: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);
             break;
         }
@@ -1028,7 +1030,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
 }
 
 void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue) {
-    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & QVariant(displayType).toInt()) == false) {
+    if ((getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt() & displayType) == false) {
         return;
     }
 

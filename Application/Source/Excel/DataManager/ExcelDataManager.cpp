@@ -20,10 +20,10 @@ ExcelDataManager::ExcelDataManager() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    setMergeStart(mergeStart);
-    setMerge(merge);
-    setMergeEnd(mergeEnd);
-    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    updateMergeStart(mergeStart);
+    updateMerge(merge);
+    updateMergeEnd(mergeEnd);
+    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
 QList<QStringList> ExcelDataManager::isSheetDataInfo() {
@@ -139,11 +139,11 @@ QMap<int, QStringList> ExcelDataManager::isConvertedExcelData() {
                     continue;
                 }
                 if (index == start) {
-                    columnData[index].prepend(getMergeStart());
+                    columnData[index].prepend(isMergeStart());
                 } else if (index == end) {
-                    columnData[index].prepend(getMergeEnd());
+                    columnData[index].prepend(isMergeEnd());
                 } else {
-                    columnData[index].prepend(getMerge());
+                    columnData[index].prepend(isMerge());
                 }
             }
         }
@@ -611,7 +611,7 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
 
     QStringList tempConfigNameList;
     for (auto configInfo : configNameList) {
-        ivis::common::getRemoved(configInfo, getMergeInfos());
+        ivis::common::getRemoved(configInfo, isMergeInfos());
         tempConfigNameList.append(configInfo);
     }
 
@@ -650,9 +650,9 @@ int ExcelDataManager::isCaseIndex(const QString& tcName, const QString& resultNa
         QString currentResult = data.isResultName();
         QString currentCase = data.isCaseName();
 
-        ivis::common::getRemoved(currentTCName, getMergeInfos());
-        ivis::common::getRemoved(currentResult, getMergeInfos());
-        ivis::common::getRemoved(currentCase, getMergeInfos());
+        ivis::common::getRemoved(currentTCName, isMergeInfos());
+        ivis::common::getRemoved(currentResult, isMergeInfos());
+        ivis::common::getRemoved(currentCase, isMergeInfos());
 
         if ((currentTCName.compare(tcName) == 0) && (currentResult.compare(resultName) == 0) &&
             (currentCase.compare(caseName) == 0)) {
@@ -689,7 +689,7 @@ void ExcelDataManager::updateExcelDataOther(const QVariantList& sheetData) {
 
         for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
             QString readColumnText = rowData.at(columnIndex);
-            ivis::common::getRemoved(readColumnText, getMergeInfos());
+            ivis::common::getRemoved(readColumnText, isMergeInfos());
             excelSheetData[columnIndex].append(readColumnText);
         }
     }
@@ -718,7 +718,7 @@ void ExcelDataManager::updateExcelDataConfig(const QVariantList& sheetData) {
 
         for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
             QString readColumnText = rowData.at(columnIndex);
-            // ivis::common::getRemoved(readColumnText, getMergeInfos());
+            // ivis::common::getRemoved(readColumnText, isMergeInfos());
             excelSheetData[columnIndex].append(readColumnText);
         }
     }
@@ -814,7 +814,7 @@ bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& conf
             signalList.append(config.at(2));
             dataList.append(config.at(3));
 
-            if ((andGroup.compare(getMergeStart()) != 0) && (andGroup.compare(getMerge()) != 0)) {
+            if ((andGroup.compare(isMergeStart()) != 0) && (andGroup.compare(isMerge()) != 0)) {
                 inputMap[inputMap.size()] = qMakePair(signalList, dataList);
                 signalList.clear();
                 dataList.clear();

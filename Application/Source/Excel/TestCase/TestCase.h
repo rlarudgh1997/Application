@@ -29,6 +29,7 @@ public:
         ExcuteTypeFailed,
 
         ExcuteTypeInvalidSelectItem = 200,
+        ExcuteTypeManualInput,
     };
 
 public:
@@ -45,11 +46,15 @@ private:
     int excuteTestCase(const int& excuteType);
     bool inputArguments(const int& excuteType);
     void terminateApplicaton();
-    void drawTerminalMenu(const int& excuteType, const QStringList& itemList);
+    void drawTerminalMenu(const int& excuteType, const QStringList& itemList, const bool& clear = true);
     QStringList selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& options);
+    QStringList isModuleList();
     bool openExcelFile();
 
 private:
+    const int mNumExit = 0;
+    const int mNumSelectAll = 800;
+    const int mNumManualInput = 900;
 };
 
 #endif  // TEST_CASE_H

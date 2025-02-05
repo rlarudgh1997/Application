@@ -98,6 +98,23 @@ void GuiMenu::drawMenuEdit() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditUndo, QVariant()); });
     connect(mGui->actionRedo, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditRedo, QVariant()); });
+    // Gen Type
+    connect(mGui->actionDefault, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypeDefault);
+    });
+    connect(mGui->actionNegativePositive, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypeNegativePositive);
+    });
+    connect(mGui->actionPositive, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypePositive);
+    });
+    // TC Check
+    connect(mGui->actionAllCheck, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, true);
+    });
+    connect(mGui->actionAllUncheck, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, false);
+    });
 }
 
 void GuiMenu::drawMenuView() {

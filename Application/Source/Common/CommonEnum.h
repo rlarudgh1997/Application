@@ -90,6 +90,7 @@ public:
         PropertyTypeNodeAddressModule,
         PropertyTypeAppMode,
         PropertyTypeGenType,
+        PropertyTypeTCCheck,
         PropertyTypeAppModeList,
         PropertyTypeAllModuleList,
         PropertyTypeValueEnum,
@@ -122,6 +123,8 @@ public:
         PropertyTypeExcelMergeEnd,
         PropertyTypeClipboardType,
         PropertyTypeShortcutType,
+        PropertyTypeGenTypeName,
+
         PropertyTypeTestReport,
         PropertyTypeKey,
         PropertyTypeArrowKey,
@@ -195,6 +198,8 @@ public:
         EventTypeEditCellInsert,
         EventTypeEditCellDelete,
         EventTypeEditCellMergeSplit,
+        EventTypeEditGenType,
+        EventTypeEditTCCheck,
 
         EventTypeViewConfig = 1200,
         EventTypeViewNodeAddress,

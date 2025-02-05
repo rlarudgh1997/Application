@@ -22,10 +22,10 @@ ExcelUtil::ExcelUtil() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    setMergeStart(mergeStart);
-    setMerge(merge);
-    setMergeEnd(mergeEnd);
-    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    updateMergeStart(mergeStart);
+    updateMerge(merge);
+    updateMergeEnd(mergeEnd);
+    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
 QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
@@ -85,7 +85,7 @@ QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUp
         moduleList = tempModuleList;
     }
 
-    qDebug() << "ModuelList :" << jsonFile << moduleList.size();
+    qDebug() << "ModuleList :" << moduleList.size() << jsonFile;
     // for (const auto& module : moduleList) {
     //     qDebug() << "\t Module :" << module;
     // }
@@ -650,25 +650,32 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
                                           const QStringList& inputData, const QStringList& valueEnum) {
     const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
-    // qDebug() << "\t isPreconditionMaxValue :" << dataType << keywordType << inputData.size() << valueEnum.size();
+    // qDebug() << "isPreconditionMaxValue :" << signalName;
+    // qDebug() << "\t Info :" << dataType << keywordType << inputData.size() << valueEnum.size();
+
     if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
+        // qDebug() << "\t Skip : 1";
         return QString();
     }
 
     if ((dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) &&
         (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64))) {
+        // qDebug() << "\t Skip : 2";
         return QString();
     }
 
     if (keywordType != static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+        // qDebug() << "\t Skip : 3";
         return QString();
     }
 
     if (inputData.size() != 1) {
+        // qDebug() << "\t Skip : 4";
         return QString();
     }
 
     if (valueEnum.size() > 0) {
+        // qDebug() << "\t Skip : 5";
         return QString();
     }
 
@@ -840,9 +847,9 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
         return QList<QVariantList>();
     }
 
-    const QString mergeStart = getMergeStart();
-    const QString merge = getMergeStart();
-    const QString mergeEnd = getMergeStart();
+    const QString mergeStart = isMergeStart();
+    const QString merge = isMergeStart();
+    const QString mergeEnd = isMergeStart();
     const QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
     const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
