@@ -47,21 +47,18 @@ QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUp
     }
 
     // Read : Json Data
-    QStringList tempModuleList = QStringList();
+    QStringList tempModuleList;
+    QList<QPair<QString, QString>> moduleInfo;
     QJsonObject jsonObj = jsonDoc.object();
     if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
         QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
-        // if (sfcConfig.contains("Version") && sfcConfig["Version"].isString()) {    // Read : Version
-        //     QString version = sfcConfig["Version"].toString();
-        // }
-        // if (sfcConfig.contains("Description") && sfcConfig["Description"].isString()) {   // Read : Description
-        //     QString description = sfcConfig["Description"].toString();
-        // }
         if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
             for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
                 if (module.isString()) {
                     // qDebug() << "\t Module Json :" << module.toString();
                     tempModuleList.append(module.toString());
+                    QString path = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
+                    moduleInfo.append(qMakePair(module.toString(), path));
                 }
             }
         }
@@ -70,8 +67,26 @@ QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUp
         QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
         for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
             tempModuleList.append(commonModule);
+            QString path = QString("%1/%2").arg(commonModuleDir.absolutePath()).arg(commonModule);
+            moduleInfo.append(qMakePair(commonModule, path));
+
             // qDebug() << "\t Module  Dir :" << commonModule;
         }
+
+        // for (const auto& module : moduleInfo) {
+        //     qDebug() << "\t ModuleInfo :" << module.first << module.second;
+
+        //     QDir directory(module.second);
+        //     QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
+        //     QFileInfoList fileList;
+
+        //     for (const auto& file : directory.entryInfoList(QDir::Files)) {
+        //         if (file.fileName().contains(excelRegex)) {
+        //             modules.append(module);
+        //             break;
+        //         }
+        //     }
+        // }
     }
     tempModuleList.sort();
     tempModuleList.removeDuplicates();
@@ -458,6 +473,7 @@ QPair<int, int> ExcelUtil::isIGNElapsedType(const QString& singalName) {
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
     } else {
         ignInfo = QPair<int, int>(-1, -1);
+        qDebug() << "Fail to read elapsed value(-1, -1) :" << singalName;
     }
     return ignInfo;
 }

@@ -18,8 +18,10 @@
 
 
 [Run]
-    ./run.sh h
-
+    - Graphic Mode
+        ./run.sh h
+    - CLI Mode
+        ./Application gen [cv/pv] [moduel1 modue2 ....]
 
 [Menu]
     - File : New, Open, Save, Save As, Exit
@@ -56,91 +58,111 @@
     │   ├── Alton
     │   │   ├── alton_client
     │   │   └── altonservice
-    │   ├── Application
-    │   │   ├── Application.pro
-    │   │   ├── README.md
-    │   │   ├── ReleaseNote.info
-    │   │   ├── Resource
-    │   │   │   ├── Image
-    │   │   │   │   ├── Menu
-    │   │   │   │   │   ├── Copy.png
-    │   │   │   │   │   ├── Cut.png
-    │   │   │   │   │   ├── MergeSplit.png
-    │   │   │   │   │   ├── New.png
-    │   │   │   │   │   ├── Open.png
-    │   │   │   │   │   ├── Paste.png
-    │   │   │   │   │   └── Save.png
-    │   │   │   │   └── Popup
-    │   │   │   │       └── Loading.png
-    │   │   │   └── Image.qrc
-    │   │   ├── Source
-    │   │   │   ├── Abstract
-    │   │   │   │   ├── Abstract.pri
-    │   │   │   │   ├── AbstractControl.cpp
-    │   │   │   │   ├── AbstractControl.h
-    │   │   │   │   ├── AbstractGui.h
-    │   │   │   │   ├── AbstractHandler.cpp
-    │   │   │   │   ├── AbstractHandler.h
-    │   │   │   │   └── AbstractThread.cpp
-    │   │   │   ├── Center
-    │   │   │   │   ├── Center.pri
-    │   │   │   │   ├── ControlCenter.cpp
-    │   │   │   │   ├── ControlCenter.h
-    │   │   │   │   ├── GuiCenter.cpp
-    │   │   │   │   ├── GuiCenter.h
-    │   │   │   │   ├── GuiCenter.ui
-    │   │   │   │   ├── HandlerCenter.cpp
-    │   │   │   │   └── HandlerCenter.h
-    │   │   │   ├── Common
-    │   │   │   │   ├── Common.pri
-    │   │   │   │   ├── CommonDefine.h
-    │   │   │   │   ├── CommonEnum.h
-    │   │   │   │   ├── CommonFunction.h
-    │   │   │   │   ├── CommonPopup.h
-    │   │   │   │   ├── CommonResource.h
-    │   │   │   │   ├── CommonUtil.h
-    │   │   │   │   ├── LogUtil.cpp
-    │   │   │   │   └── LogUtil.h
-    │   │   │   ├── Config
-    │   │   │   │   ├── Config.pri
-    │   │   │   │   ├── ConfigInfo.h
-    │   │   │   │   ├── ConfigSetting.cpp
-    │   │   │   │   └── ConfigSetting.h
-    │   │   │   ├── Dialog
-    │   │   │   │   ├── Dialog.cpp
-    │   │   │   │   ├── Dialog.h
-    │   │   │   │   ├── Dialog.pri
-    │   │   │   │   └── Dialog.ui
-    │   │   │   ├── Excel
-    │   │   │   │   ├── ControlExcel.cpp
-    │   │   │   │   ├── ControlExcel.h
-    │   │   │   │   ├── Excel.pri
-    │   │   │   │   ├── GuiExcel.cpp
-    │   │   │   │   ├── GuiExcel.h
-    │   │   │   │   ├── GuiExcel.ui
-    │   │   │   │   ├── HandlerExcel.cpp
-    │   │   │   │   └── HandlerExcel.h
-    │   │   │   ├── MainWindow.cpp
-    │   │   │   ├── MainWindow.h
-    │   │   │   ├── Manager
-    │   │   │   │   ├── ControlManager.cpp
-    │   │   │   │   ├── ControlManager.h
-    │   │   │   │   └── Manager.pri
-    │   │   │   ├── Menu
-    │   │   │   │   ├── ControlMenu.cpp
-    │   │   │   │   ├── ControlMenu.h
-    │   │   │   │   ├── GuiMenu.cpp
-    │   │   │   │   ├── GuiMenu.h
-    │   │   │   │   ├── GuiMenu.ui
-    │   │   │   │   ├── HandlerMenu.cpp
-    │   │   │   │   ├── HandlerMenu.h
-    │   │   │   │   └── Menu.pri
-    │   │   │   ├── Screen
-    │   │   │   │   ├── Screen.pri
-    │   │   │   │   ├── ScreenInfo.cpp
-    │   │   │   │   └── ScreenInfo.h
-    │   │   │   ├── Source.pri
-    │   │   │   └── main.cpp
+    │   │   ├── Application.pro
+    │   │   │   │   ├── README.md
+    │   │   │   │   ├── ReleaseNote.info
+    │   │   │   │   ├── Resource
+    │   │   │   ├── Image
+    │   │   │   │   ├── Menu
+    │   │   │   │   │   ├── Copy.png
+    │   │   │   │   │   ├── Cut.png
+    │   │   │   │   │   ├── MergeSplit.png
+    │   │   │   │   │   ├── New.png
+    │   │   │   │   │   ├── Open.png
+    │   │   │   │   │   ├── Paste.png
+    │   │   │   │   │   └── Save.png
+    │   │   │   │   └── Popup
+    │   │   │   │       └── Loading.png
+    │   │   │   └── Image.qrc
+    │   │   ├── Source
+    │   │   │   ├── Abstract
+    │   │   │   │   ├── Abstract.pri
+    │   │   │   │   ├── AbstractControl.cpp
+    │   │   │   │   ├── AbstractControl.h
+    │   │   │   │   ├── AbstractGui.h
+    │   │   │   │   ├── AbstractHandler.cpp
+    │   │   │   │   ├── AbstractHandler.h
+    │   │   │   │   └── AbstractThread.cpp
+    │   │   │   ├── Center
+    │   │   │   │   ├── Center.pri
+    │   │   │   │   ├── ControlCenter.cpp
+    │   │   │   │   ├── ControlCenter.h
+    │   │   │   │   ├── GuiCenter.cpp
+    │   │   │   │   ├── GuiCenter.h
+    │   │   │   │   ├── GuiCenter.ui
+    │   │   │   │   ├── HandlerCenter.cpp
+    │   │   │   │   └── HandlerCenter.h
+    │   │   │   ├── Common
+    │   │   │   │   ├── Common.pri
+    │   │   │   │   ├── CommonDefine.h
+    │   │   │   │   ├── CommonEnum.h
+    │   │   │   │   ├── CommonFunction.h
+    │   │   │   │   ├── CommonPopup.h
+    │   │   │   │   ├── CommonResource.h
+    │   │   │   │   ├── CommonUtil.h
+    │   │   │   │   ├── LogUtil.cpp
+    │   │   │   │   └── LogUtil.h
+    │   │   │   ├── Config
+    │   │   │   │   ├── Config.pri
+    │   │   │   │   ├── ConfigInfo.h
+    │   │   │   │   ├── ConfigSetting.cpp
+    │   │   │   │   └── ConfigSetting.h
+    │   │   │   ├── Dialog
+    │   │   │   │   ├── Dialog.cpp
+    │   │   │   │   ├── Dialog.h
+    │   │   │   │   ├── Dialog.pri
+    │   │   │   │   └── Dialog.ui
+    │   │   │   ├── Excel
+    │   │   │   │   ├── ControlExcel.cpp
+    │   │   │   │   ├── ControlExcel.h
+    │   │   │   │   ├── DataManager
+    │   │   │   │   │   ├── ConvertDataManager.cpp
+    │   │   │   │   │   ├── ConvertDataManager.h
+    │   │   │   │   │   ├── DataManager.pri
+    │   │   │   │   │   ├── ExcelData.h
+    │   │   │   │   │   ├── ExcelDataManager.cpp
+    │   │   │   │   │   ├── ExcelDataManager.h
+    │   │   │   │   │   ├── SignalDataManager.cpp
+    │   │   │   │   │   └── SignalDataManager.h
+    │   │   │   │   ├── Excel.pri
+    │   │   │   │   ├── GuiExcel.cpp
+    │   │   │   │   ├── GuiExcel.h
+    │   │   │   │   ├── GuiExcel.ui
+    │   │   │   │   ├── HandlerExcel.cpp
+    │   │   │   │   ├── HandlerExcel.h
+    │   │   │   │   ├── TestCase
+    │   │   │   │   │   ├── CaseDataWriter.h
+    │   │   │   │   │   ├── GenerateCaseData.cpp
+    │   │   │   │   │   ├── GenerateCaseData.h
+    │   │   │   │   │   ├── JSEngineManager.h
+    │   │   │   │   │   ├── TestCase.cpp
+    │   │   │   │   │   ├── TestCase.h
+    │   │   │   │   │   └── TestCase.pri
+    │   │   │   │   └── Util
+    │   │   │   │       ├── ExcelUtil.cpp
+    │   │   │   │       ├── ExcelUtil.h
+    │   │   │   │       └── Util.pri
+    │   │   │   ├── MainWindow.cpp
+    │   │   │   ├── MainWindow.h
+    │   │   │   ├── Manager
+    │   │   │   │   ├── ControlManager.cpp
+    │   │   │   │   ├── ControlManager.h
+    │   │   │   │   └── Manager.pri
+    │   │   │   ├── Menu
+    │   │   │   │   ├── ControlMenu.cpp
+    │   │   │   │   ├── ControlMenu.h
+    │   │   │   │   ├── GuiMenu.cpp
+    │   │   │   │   ├── GuiMenu.h
+    │   │   │   │   ├── GuiMenu.ui
+    │   │   │   │   ├── HandlerMenu.cpp
+    │   │   │   │   ├── HandlerMenu.h
+    │   │   │   │   └── Menu.pri
+    │   │   │   ├── Screen
+    │   │   │   │   ├── Screen.pri
+    │   │   │   │   ├── ScreenInfo.cpp
+    │   │   │   │   └── ScreenInfo.h
+    │   │   │   ├── Source.pri
+    │   │   │   └── main.cpp
     │   │   └── deployment.pri
     │   ├── Document
     │   │   └── TC Creator Guide.pptx

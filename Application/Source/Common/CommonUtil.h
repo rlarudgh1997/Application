@@ -419,6 +419,9 @@ public:
             qDebug() << "[CheckTime] :" << mElapsedTimer.elapsed() << "ms\n";
         }
     }
+    qint64 getTime() {
+        return mElapsedTimer.elapsed();
+    }
 
 private:
     QElapsedTimer mElapsedTimer;

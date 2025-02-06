@@ -811,8 +811,14 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         if (ignElaspedSingal) {
             QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
             signalName = SFC_IGN_ELAPSED;
-            convertData = QStringList({QString("%1").arg(ignInfo.first)});
-            precondition = QStringList({QString("%1").arg(ignInfo.second)});
+            if (ignInfo.first >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+                convertData = QStringList({QString("%1").arg(ignInfo.first)});
+                precondition = QStringList({QString("%1").arg(ignInfo.second)});
+            }
+            if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
+                convertData.clear();
+                precondition.clear();
+            }
         } else if (preconditionMaxValue.size() > 0) {
             precondition = QStringList({preconditionMaxValue});
         } else {
@@ -892,7 +898,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 0
+#if 1
     qDebug() << "*************************************************************************************************";
     qDebug() << "2. isTestCaseInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
@@ -946,7 +952,9 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
 
         if (ignElaspedSingal) {
             QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
-            ignOriginData.append(QString("%1").arg(ignInfo.first));
+            if (ignInfo.first >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
+                ignOriginData.append(QString("%1").arg(ignInfo.first));
+            }
             continue;
         } else if (preconditionMaxValue.size() > 0) {
             precondition = QStringList({preconditionMaxValue});

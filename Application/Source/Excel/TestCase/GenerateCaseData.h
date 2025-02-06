@@ -52,8 +52,10 @@ private:
     QStringList getPreconditionList(const QJsonObject& inputSignalList, const QJsonArray& caseValues);
     QMap<QString, int> getFlowKeywordIdxMap(const QJsonObject& inputSignalList);
     QMap<QString, int> getConfigIdxMap(const QJsonObject& inputSignalList);
+    QMap<QString, QMap<QString, QString>> getCongigSigHexEnumMap(const QJsonObject& inputSignalList);
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QMap<QString, int>& configIdxMap,
-                            const QStringList& preconditionList, const int& triggerSigIndex, const QString& triggerSigValue);
+                            const QMap<QString, QMap<QString, QString>>& configHexEnumMap, const QStringList& preconditionList,
+                            const int& triggerSigIndex, const QString& triggerSigValue);
     QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex,
                                const QJsonValue& preconditionValue);
     QString getPreconditionStr(const QStringList& preconditionList);

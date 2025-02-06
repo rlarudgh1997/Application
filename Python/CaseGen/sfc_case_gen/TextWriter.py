@@ -63,7 +63,8 @@ class TextWriter:
     def get_signal_info(self):
         sig_list = dict()
         for idx, sig in enumerate(self.instance.signals):
-            sig_list[idx] = {"SignalName": sig.InputSignalName, "DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
+            formatted_index = str(idx).zfill(3)
+            sig_list[formatted_index] = {"SignalName": sig.InputSignalName, "DataType": int(sig.InputDataType), "KeywordType": int(sig.InputKeywordType), "InputData": sig.InputDataHex, "Precondition": sig.InputPreconditionHex, "ValueEnum": sig.InputValueEnumDict}
         return sig_list
 
     def get_all_case_str(self):

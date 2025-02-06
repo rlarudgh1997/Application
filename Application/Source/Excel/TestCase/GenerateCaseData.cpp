@@ -646,6 +646,7 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
         return QJsonObject();
     }
     QMap<QString, int> configIdxMap = getConfigIdxMap(inputSignalList);
+    QMap<QString, QMap<QString, QString>> configHexEnumMap = getCongigSigHexEnumMap(inputSignalList);
 
     // 각 case를 처리
     for (auto it = cases.begin(); it != cases.end(); ++it) {
@@ -702,12 +703,13 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
                 if (ignIdx < inputDataArray.size() && ignIdx < preconditionDataArray.size() && caseValue != "[Empty]") {
                     QString tag, input, precondition;
                     if (genType == GEN_TYPE_NEGATIVE) {
-                        tag = getConfigTagStr(isOther, tcName, configIdxMap, preconditionList, triggerSigIndex,
+                        tag = getConfigTagStr(isOther, tcName, configIdxMap, configHexEnumMap, preconditionList, triggerSigIndex,
                                               preconditionDataArray[ignIdx].toString());
                         precondition = getPreconditionStr(preconditionList);
                         input = getInputStr(signalName, preconditionDataArray[ignIdx].toString());
                     } else {
-                        tag = getConfigTagStr(isOther, tcName, configIdxMap, preconditionList, triggerSigIndex, caseValue);
+                        tag = getConfigTagStr(isOther, tcName, configIdxMap, configHexEnumMap, preconditionList, triggerSigIndex,
+                                              caseValue);
                         precondition = getPreconditionStr(preconditionList, triggerSigIndex, preconditionDataArray[ignIdx]);
                         input = getInputStr(signalName, caseValue);
                     }
@@ -725,12 +727,13 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
                     if (preconditionValue.toString() != caseValue && caseValue != "[Empty]" && preconditionValue != "[Empty]") {
                         QString tag, input, precondition;
                         if (genType == GEN_TYPE_NEGATIVE) {
-                            tag = getConfigTagStr(isOther, tcName, configIdxMap, preconditionList, triggerSigIndex,
-                                                  preconditionValue.toString());
+                            tag = getConfigTagStr(isOther, tcName, configIdxMap, configHexEnumMap, preconditionList,
+                                                  triggerSigIndex, preconditionValue.toString());
                             precondition = getPreconditionStr(preconditionList);
                             input = getInputStr(signalName, preconditionValue.toString());
                         } else {
-                            tag = getConfigTagStr(isOther, tcName, configIdxMap, preconditionList, triggerSigIndex, caseValue);
+                            tag = getConfigTagStr(isOther, tcName, configIdxMap, configHexEnumMap, preconditionList,
+                                                  triggerSigIndex, caseValue);
                             precondition = getPreconditionStr(preconditionList, triggerSigIndex, preconditionValue);
                             input = getInputStr(signalName, caseValue);
                         }
@@ -802,7 +805,30 @@ QMap<QString, int> GenerateCaseData::getConfigIdxMap(const QJsonObject& inputSig
     return configIdxMap;
 }
 
+QMap<QString, QMap<QString, QString>> GenerateCaseData::getCongigSigHexEnumMap(const QJsonObject& inputSignalList) {
+    QMap<QString, QMap<QString, QString>> congigSigHexEnumMap;
+    int configIdx = 0;
+    for (auto sigItr = inputSignalList.begin(); sigItr != inputSignalList.end(); ++sigItr, ++configIdx) {
+        QString signalKey = sigItr.key();
+        QJsonObject sigInfo = inputSignalList[signalKey].toObject();
+        if (sigInfo.contains(TEXT_INPUT_SIGNAL_NAME) && sigInfo.contains("KeywordType")) {
+            QString signalName = sigInfo[TEXT_INPUT_SIGNAL_NAME].toString();
+            if (sigInfo["KeywordType"].toInt() == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config) &&
+                sigInfo.contains("ValueEnum")) {
+                QMap<QString, QString> tmpMap;
+                QJsonObject tepJson = sigInfo["ValueEnum"].toObject();
+                for (const QString& key : tepJson.keys()) {
+                    tmpMap.insert(key, tepJson.value(key).toString());
+                }
+                congigSigHexEnumMap.insert(signalName, tmpMap);
+            }
+        }
+    }
+    return congigSigHexEnumMap;
+}
+
 QString GenerateCaseData::getConfigTagStr(const bool& isOther, const QString& tcName, const QMap<QString, int>& configIdxMap,
+                                          const QMap<QString, QMap<QString, QString>>& configHexEnumMap,
                                           const QStringList& preconditionList, const int& triggerSigIndex,
                                           const QString& triggerSigValue) {
     QMap<QString, QString> configSigValueMap;
@@ -812,10 +838,21 @@ QString GenerateCaseData::getConfigTagStr(const bool& isOther, const QString& tc
     }
 
     for (const auto& key : configIdxMap.keys()) {
+        QString signalValue = (configIdxMap[key] == triggerSigIndex) ? (triggerSigValue) : (preconditionList[configIdxMap[key]]);
+        // enumValue = SignalDataManager::instance().data()->isSignalValueEnum(key, signalName);
         QString enumValue;
-        QString signalName = (configIdxMap[key] == triggerSigIndex) ? (triggerSigValue) : (preconditionList[configIdxMap[key]]);
-        enumValue = SignalDataManager::instance().data()->isSignalValueEnum(key, signalName);
-        configSigValueMap.insert(key, enumValue);
+        if (configHexEnumMap.contains(key)) {
+            if (configHexEnumMap[key].contains(signalValue)) {
+                enumValue = configHexEnumMap[key][signalValue];
+            } else {
+                qDebug() << "No Config Enum@";
+            }
+        } else {
+            qDebug() << "No Config Enum@@";
+        }
+        if (enumValue.isEmpty() == false) {
+            configSigValueMap.insert(key, enumValue);
+        }
     }
 
     bool isConfigTrue = ExcelDataManager::instance().data()->isValidConfigCheck(

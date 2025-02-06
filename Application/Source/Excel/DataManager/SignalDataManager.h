@@ -8,7 +8,6 @@
 #include "CommonUtil.h"
 
 class SignalData {
-#if 1
     REGISTER_WRITABLE_VALUE(int, DataType, 0)
     REGISTER_WRITABLE_VALUE(bool, Initialize, false)
     REGISTER_WRITABLE_VALUE(int, KeywordType, 0)
@@ -48,68 +47,6 @@ public:
     bool operator!=(const SignalData& other) const {
         return !(*this == other);
     }
-#else
-public:
-    SignalData(const QString& signalName, const int& dataType, const int& initialize, const int& keywordType,
-               const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
-               const QStringList& notUsedEnum, const QStringList& precondition)
-        : mDataType(dataType),
-          mInitialize(initialize),
-          mKeywordType(keywordType),
-          mOriginData(originData),
-          mConvertData(convertData),
-          mValueEnum(valueEnum),
-          mNotUsedEnum(notUsedEnum),
-          mPrecondition(precondition) {
-    }
-    SignalData() = default;
-    SignalData(const SignalData& other) = default;
-    SignalData& operator=(const SignalData& other) = default;
-
-    bool operator==(const SignalData& other) const {
-        return ((mDataType == other.mDataType) && (mInitialize == other.mInitialize) && (mKeywordType == other.mKeywordType) &&
-                (mOriginData == other.mOriginData) && (mConvertData == other.mConvertData) && (mValueEnum == other.mValueEnum) &&
-                (mNotUsedEnum == other.mNotUsedEnum) && (mPrecondition == other.mPrecondition));
-    }
-    bool operator!=(const SignalData& other) const {
-        return !(*this == other);
-    }
-
-    int isDataType() const {
-        return mDataType;
-    }
-    bool isInitialize() const {
-        return mInitialize;
-    }
-    int isKeywordType() const {
-        return mKeywordType;
-    }
-    QStringList isOriginData() const {
-        return mOriginData;
-    }
-    QStringList isConvertData() const {
-        return mConvertData;
-    }
-    QStringList isValueEnum() const {
-        return mValueEnum;
-    }
-    QStringList isNotUsedEnum() const {
-        return mNotUsedEnum;
-    }
-    QStringList isPrecondition() const {
-        return mPrecondition;
-    }
-
-private:
-    int mDataType = 0;
-    bool mInitialize = false;
-    int mKeywordType = 0;
-    QStringList mOriginData = QStringList();
-    QStringList mConvertData = QStringList();
-    QStringList mValueEnum = QStringList();
-    QStringList mNotUsedEnum = QStringList();
-    QStringList mPrecondition = QStringList();
-#endif
 };
 
 class SignalDataManager : public QObject {

@@ -305,8 +305,26 @@ QStringList TestCase::isModuleList() {
     //  3. 리턴된 모듈 경로 내부에 엑셀 파일이 존재 하는 경우에만 모듈로 리스트업
 
 
-#if 0    // [cv.json / platform.json] 파일의 전체 모듈 사용
+#if 1    // [cv.json / platform.json] 파일의 전체 모듈 사용
     modules = allModules;
+
+
+    // AEM
+        // PV 폴더임
+
+    // Common_Module
+        // Blue_Light_Filter
+        // Master_Warning
+        // Navigation_DIS
+        // Seatbelt_Warning
+        // Speed_Gauge
+        // VESS
+
+    // Event_Control_Logic_CV
+    // Memory_CV
+    // Memory_IGN_CV
+    // Param_CV
+        // 엑셀 파일없음
 #else
     QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
