@@ -198,7 +198,7 @@ QString ExcelUtil::isKeywordString(const int keywordType) {
     return keywordPatternInfo[keywordType];
 }
 
-int ExcelUtil::getKeywordType(const int& columnIndex, QString& inputData) {
+int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
     int keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
     QString tempInputData = inputData;
 
@@ -314,7 +314,7 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 
         for (const auto& columnIndex : columnList) {
             QString text = rowData.at(columnIndex);
-            int keywordType = getKeywordType(columnIndex, text);
+            int keywordType = isKeywordType(columnIndex, text);
             QString data = QString();
 
             if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
@@ -405,7 +405,7 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
     return keywordTypeInfo;
 }
 
-int ExcelUtil::getDataType(const QString& dataTypeStr) {
+int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
     if (dataTypeStr.compare("HUInt64") == 0) {

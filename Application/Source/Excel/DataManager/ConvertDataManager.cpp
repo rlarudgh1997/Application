@@ -152,7 +152,7 @@ QMap<int, QList<KeywordInfo>> ConvertDataManager::constructKeywordTypeInfoList(c
             qDebug() << "\t Info        :" << keyword.isRow() << keyword.isColumn() << keyword.isKeyword() << keyword.isText();
             qDebug() << "\t Data        :" << keyword.isData();
             qDebug() << "\t RowData     :" << keyword.isRowData();
-            qDebug() << "\t ConvertData :" << keyword.getConvertData();
+            qDebug() << "\t ConvertData :" << keyword.isConvertData();
         }
 #endif
     }
@@ -313,7 +313,7 @@ void ConvertDataManager::constructConvertSheetDataInfo(QMap<int, QList<KeywordIn
             for (KeywordInfo keyword : iter.value().toList()) {
                 if ((rowIndex == keyword.isRow()) &&
                     (keyword.isKeyword() & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet))) {
-                    convertData = keyword.getConvertData();
+                    convertData = keyword.isConvertData();
                 } else {
                     isEqualData = isDataAlreadyExistInKeywordInfoList(tmpRowDataList, keyword, originIndex, isEqualData);
                 }
@@ -1198,7 +1198,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                             if (tmpOriginData.size() > 1) {
                                 inputDataStr = tmpOriginData.join(", ");
 #if 0
-                                QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.getKeywordType());
+                                QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.isKeywordType());
                                 inputDataStr.replace(keywordStr1, keywordStr);
 #endif
                                 inputDataStr = keywordStr + inputDataStr;

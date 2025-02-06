@@ -45,7 +45,7 @@ public:
     void updateRowData(const QList<QStringList>& rowData) {
         mRowData = rowData;
     }
-    QList<QStringList> getConvertData() const {
+    QList<QStringList> isConvertData() const {
         return mConvertData;
     }
     void updateConvertData(const QList<QStringList>& convertData) {
@@ -77,9 +77,9 @@ public:
     QStringList isDescriptionDataInfo();
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
-    int getKeywordType(const int& columnIndex, QString& inputData);
+    int isKeywordType(const int& columnIndex, QString& inputData);
     QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
-    int getDataType(const QString& dataTypeStr);
+    int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);

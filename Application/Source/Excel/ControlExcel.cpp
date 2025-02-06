@@ -838,7 +838,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
         return;
     }
 
-    int keywordType = ExcelUtil::instance().data()->getKeywordType(signalIndex, signalName);
+    int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
     int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
     qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
@@ -971,7 +971,7 @@ void ControlExcel::updateInputDataValidation(const QVariantList& cellDataInfo) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
     QMap<int, QStringList> dataInfo =
         SignalDataManager::instance().data()->isSignalDataList(signalName, signalData, vehicleType, dataType);
-    int keywordType = ExcelUtil::instance().data()->getKeywordType(columnIndex, signalName);
+    int keywordType = ExcelUtil::instance().data()->isKeywordType(columnIndex, signalName);
 
     if ((keywordType != static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) ||
         (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) ||

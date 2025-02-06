@@ -32,7 +32,7 @@ SignalDataManager::SignalDataManager() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-int SignalDataManager::getDataType(const QString& dataTypeStr) {
+int SignalDataManager::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
     if (dataTypeStr.compare("HUInt64") == 0) {
@@ -362,7 +362,7 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
     if (inputData.size() > 0) {
         sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData] = inputData;
     }
-    dataType = getDataType(dataTypeStr);
+    dataType = isDataType(dataTypeStr);
     // qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
 
     return sfcDataInfo;
@@ -664,8 +664,8 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             }
         } else {
             QString keywordContainStr = (signalData.size() == 0) ? (QString()) : (signalData.at(0));  // 0 : 키워드 포함 데이터
-            keywordType = ExcelUtil::instance().data()->getKeywordType(
-                static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max), keywordContainStr);
+            keywordType = ExcelUtil::instance().data()->isKeywordType(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max),
+                                                                      keywordContainStr);
 
             originData = currDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
             convertData = originData;

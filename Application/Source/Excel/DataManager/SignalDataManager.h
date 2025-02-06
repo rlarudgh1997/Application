@@ -60,7 +60,7 @@ class SignalDataManager : public QObject {
 public:
     static QSharedPointer<SignalDataManager>& instance();
 
-    int getDataType(const QString& dataTypeStr);
+    int isDataType(const QString& dataTypeStr);
     int isSignalType(const QString& signalName);
     QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);

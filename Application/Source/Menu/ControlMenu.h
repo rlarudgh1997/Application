@@ -18,7 +18,7 @@ public:
 private:
     ControlMenu();
 
-    void setSelectAppMode();
+    void updateSelectAppMode();
     void updateAllModuleList(const QString& filter);
     void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);

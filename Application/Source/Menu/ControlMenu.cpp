@@ -151,7 +151,7 @@ void ControlMenu::sendEventInfo(const int& destination, const int& eventType, co
                                                      destination, eventType, eventValue);
 }
 
-void ControlMenu::setSelectAppMode() {
+void ControlMenu::updateSelectAppMode() {
     QVariant appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode);
     QVariantList appModeList = QVariantList({"Vehicle CV", "Vehicle PV"});
 #if defined(USE_APP_MODE_TAV)
@@ -917,7 +917,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSettingAppMode: {
-            setSelectAppMode();
+            updateSelectAppMode();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectAppMode: {
