@@ -134,7 +134,7 @@ private:
     bool isDateTimeValid(const QString& base, const QString& input);
     QStringList isVsmFileInfo(const QStringList& powerTrainList, const QStringList& signalList);
     QList<QPair<QString, QString>> isReplaceSignal(const QStringList& abstractionList, const QStringList& vsmFileList);
-    QString isDataType(const QString& value);
+    QString getDataType(const QString& value);
     void settingPath(const int& pathType);
     QString openTavFile();
     bool deleteFile(const int& deleteType);

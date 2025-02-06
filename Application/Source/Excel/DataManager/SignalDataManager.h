@@ -23,26 +23,26 @@ public:
                const QStringList& originData, const QStringList& convertData, const QStringList& valueEnum,
                const QStringList& notUsedEnum, const QStringList& precondition,
                const QStringList& allConvertData = QStringList()) {
-        updateDataType(dataType);
-        updateInitialize(initialize);
-        updateKeywordType(keywordType);
-        updateOriginData(originData);
-        updateConvertData(convertData);
-        updateValueEnum(valueEnum);
-        updateNotUsedEnum(notUsedEnum);
-        updatePrecondition(precondition);
-        updateAllConvertData(allConvertData);
+        setDataType(dataType);
+        setInitialize(initialize);
+        setKeywordType(keywordType);
+        setOriginData(originData);
+        setConvertData(convertData);
+        setValueEnum(valueEnum);
+        setNotUsedEnum(notUsedEnum);
+        setPrecondition(precondition);
+        setAllConvertData(allConvertData);
     }
     SignalData() = default;
     SignalData(const SignalData& other) = default;
     SignalData& operator=(const SignalData& other) = default;
 
     bool operator==(const SignalData& other) const {
-        return ((isDataType() == other.isDataType()) && (isInitialize() == other.isInitialize()) &&
-                (isKeywordType() == other.isKeywordType()) && (isOriginData() == other.isOriginData()) &&
-                (isConvertData() == other.isConvertData()) && (isValueEnum() == other.isValueEnum()) &&
-                (isNotUsedEnum() == other.isNotUsedEnum()) && (isPrecondition() == other.isPrecondition()) &&
-                (isAllConvertData() == other.isAllConvertData()));
+        return ((getDataType() == other.getDataType()) && (getInitialize() == other.getInitialize()) &&
+                (getKeywordType() == other.getKeywordType()) && (getOriginData() == other.getOriginData()) &&
+                (getConvertData() == other.getConvertData()) && (getValueEnum() == other.getValueEnum()) &&
+                (getNotUsedEnum() == other.getNotUsedEnum()) && (getPrecondition() == other.getPrecondition()) &&
+                (getAllConvertData() == other.getAllConvertData()));
     }
     bool operator!=(const SignalData& other) const {
         return !(*this == other);
@@ -60,7 +60,7 @@ class SignalDataManager : public QObject {
 public:
     static QSharedPointer<SignalDataManager>& instance();
 
-    int isDataType(const QString& dataTypeStr);
+    int getDataType(const QString& dataTypeStr);
     int isSignalType(const QString& signalName);
     QString isSfcFileInfo(const QString& signalName);
     QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);

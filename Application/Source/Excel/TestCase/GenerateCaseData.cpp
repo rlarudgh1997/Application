@@ -231,11 +231,11 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
         auto sig1 = signalDataList[mapKey].first;
         auto sigDataInfo1 = signalDataList[mapKey].second;
         tmpListFirst << QString("InputSignalName   : ") + sig1;
-        tmpListFirst << QString("InputDataType   : ") + QString::number(sigDataInfo1.isDataType());
-        tmpListFirst << QString("InputKeywordType   : ") + QString::number(sigDataInfo1.isKeywordType());
-        tmpListFirst << QString("InputData   : ") + sigDataInfo1.isConvertData().join(", ");
-        tmpListFirst << QString("InputPrecondition   : ") + sigDataInfo1.isPrecondition().join(", ");
-        tmpListFirst << QString("InputValueEnum   : ") + sigDataInfo1.isValueEnum().join(", ");
+        tmpListFirst << QString("InputDataType   : ") + QString::number(sigDataInfo1.getDataType());
+        tmpListFirst << QString("InputKeywordType   : ") + QString::number(sigDataInfo1.getKeywordType());
+        tmpListFirst << QString("InputData   : ") + sigDataInfo1.getConvertData().join(", ");
+        tmpListFirst << QString("InputPrecondition   : ") + sigDataInfo1.getPrecondition().join(", ");
+        tmpListFirst << QString("InputValueEnum   : ") + sigDataInfo1.getValueEnum().join(", ");
         tmpListFirst << "\n";
     }
     ret.first = tmpListFirst.join("\n");
@@ -247,11 +247,11 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
     for (const auto& sig2 : sigDataInfoMap.keys()) {
         auto sigDataInfo2 = sigDataInfoMap[sig2];
         tmpListSecond << QString("InputSignalName   : ") + sig2;
-        tmpListSecond << QString("InputDataType   : ") + QString::number(sigDataInfo2.isDataType());
-        tmpListSecond << QString("InputKeywordType   : ") + QString::number(sigDataInfo2.isKeywordType());
-        tmpListSecond << QString("InputData   : ") + sigDataInfo2.isConvertData().join(", ");
-        tmpListSecond << QString("InputPrecondition   : ") + sigDataInfo2.isPrecondition().join(", ");
-        tmpListSecond << QString("InputValueEnum   : ") + sigDataInfo2.isValueEnum().join(", ");
+        tmpListSecond << QString("InputDataType   : ") + QString::number(sigDataInfo2.getDataType());
+        tmpListSecond << QString("InputKeywordType   : ") + QString::number(sigDataInfo2.getKeywordType());
+        tmpListSecond << QString("InputData   : ") + sigDataInfo2.getConvertData().join(", ");
+        tmpListSecond << QString("InputPrecondition   : ") + sigDataInfo2.getPrecondition().join(", ");
+        tmpListSecond << QString("InputValueEnum   : ") + sigDataInfo2.getValueEnum().join(", ");
         tmpListSecond << "\n";
     }
     ret.second = tmpListSecond.join("\n");
@@ -435,7 +435,7 @@ QJsonObject GenerateCaseData::getConfigSig(const int& sheetIdx, const QStringLis
 
     for (const auto& configSigKey : configSigMap.keys()) {
         auto tmpSignalDataInfo = configSigMap[configSigKey];
-        auto tmpInputDataList = tmpSignalDataInfo.isConvertData();
+        auto tmpInputDataList = tmpSignalDataInfo.getConvertData();
         // 1. ret에서 QJsonObject를 가져오기
         QJsonObject configObj = ret[configSigKey].toObject();
         // 2. 가져온 객체에 데이터 추가
@@ -458,9 +458,9 @@ QJsonObject GenerateCaseData::getOutputSig(const int& sheetIdx, const QString& t
     for (const auto& mapKey : outputSigMap.keys()) {
         auto outputSigKey = outputSigMap[mapKey].first;
         auto tmpSignalDataInfo = outputSigMap[mapKey].second;
-        auto tmpInputDataList = tmpSignalDataInfo.isConvertData();
-        auto tmpValueEnum = tmpSignalDataInfo.isValueEnum();
-        auto tmpIsInitialize = tmpSignalDataInfo.isInitialize();
+        auto tmpInputDataList = tmpSignalDataInfo.getConvertData();
+        auto tmpValueEnum = tmpSignalDataInfo.getValueEnum();
+        auto tmpIsInitialize = tmpSignalDataInfo.getInitialize();
         auto tmpOutputSigKey = outputSigKey;
         if (tmpOutputSigKey == ExcelUtil::instance().data()->isKeywordString(
                                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect))) {

@@ -8,11 +8,11 @@
 class TestCase : public QObject {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(int, ExcuteType, 0, false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, ExcuteData, QStringList(), false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, ModuleList, QStringList(), false)
-    REGISTER_WRITABLE_PROPERTY(QString, SelectAppMode, QString(), false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, SelectModules, QStringList(), false)
+    REGISTER_WRITABLE_VALUE(int, ExcuteType, 0)
+    REGISTER_WRITABLE_VALUE(QStringList, ExcuteData, QStringList())
+    REGISTER_WRITABLE_VALUE(QString, SelectAppMode, QString())
+    REGISTER_WRITABLE_VALUE(QStringList, SelectModules, QStringList())
+    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, QString, QString, ModuleList, false)
 
 public:
     enum {

@@ -222,7 +222,7 @@ void Dialog::connectSelectList(const bool& state) {
     if (state) {
         connect(mGui->SelectListInput, &QLineEdit::textChanged, [=](const QString& text) {
             setProperty(DataTypeSelectInputData, text);
-            qDebug() << "SelectListInput :" << text;
+            // qDebug() << "SelectListInput :" << text;
         });
         connect(mGui->SelectListAll, &QPushButton::clicked,
                 [=]() { updateSelectListCheckState((getProperty(DataTypeSelectAll).toBool() == false), QStringList()); });

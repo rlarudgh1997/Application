@@ -28,10 +28,10 @@ namespace common {
 
 #define REGISTER_WRITABLE_VALUE(type, name, value)                                    \
 public:                                                                               \
-    type is##name() const {                                                           \
+    type get##name() const {                                                           \
         return m##name;                                                               \
     }                                                                                 \
-    void update##name(const type& name) {                                             \
+    void set##name(const type& name) {                                             \
         if (m##name != name) {                                                        \
             m##name = name;                                                           \
         }                                                                             \
@@ -346,7 +346,7 @@ inline T1 getRemoved(T1& origin, const T2& toRemove) {
 }
 
 template <typename T1, typename T2>
-inline T1 isConvertData(const T2& str) {
+inline T1 convertDataType(const T2& str) {
     if constexpr (std::is_same_v<T1, T2>) {
         return str;
     } else if constexpr ((std::is_same_v<T1, QString>) && (std::is_same_v<T2, QVariant>)) {
@@ -378,15 +378,15 @@ inline T1 isConvertData(const T2& str) {
         }
         return variantList;
     } else {
-        static_assert(!std::is_same_v<T1, T2>, "Not Support Type : isConvertData");
+        static_assert(!std::is_same_v<T1, T2>, "Not Support Type : convertDataType");
         return T1();
     }
 }
 
 template <typename T1, typename T2>
 inline bool isContainsString(const T1& orign, const T2& contains, const bool& checkStartsWith = true) {
-    QString originStr = isConvertData<QString, T1>(orign);
-    QString containsStr = isConvertData<QString, T2>(contains);
+    QString originStr = convertDataType<QString, T1>(orign);
+    QString containsStr = convertDataType<QString, T2>(contains);
     bool state = ((checkStartsWith) ? (originStr.trimmed().startsWith(containsStr)) : (originStr.contains(containsStr)));
     if ((originStr.isEmpty()) || (containsStr.isEmpty())) {
         state = false;
@@ -397,8 +397,8 @@ inline bool isContainsString(const T1& orign, const T2& contains, const bool& ch
 
 template <typename T1, typename T2>
 inline bool isCompareString(const T1& orign, const T2& contains) {
-    QString originStr = isConvertData<QString, T1>(orign);
-    QString containsStr = isConvertData<QString, T2>(contains);
+    QString originStr = convertDataType<QString, T1>(orign);
+    QString containsStr = convertDataType<QString, T2>(contains);
     return (originStr.compare(containsStr, Qt::CaseInsensitive) == 0);
 }
 

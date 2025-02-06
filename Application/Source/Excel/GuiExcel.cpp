@@ -113,9 +113,9 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
                     if (lineStr.size() != 2) {
                         continue;
                     }
-                    QString temp = (isSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
-                    if (isOutputState()) {
-                        temp = (isSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
+                    QString temp = (getSfcSignal()) ? (lineStr.at(0)) : (lineStr.at(1));
+                    if (getOutputState()) {
+                        temp = (getSfcSignal()) ? (lineStr.at(1)) : (lineStr.at(0));
                     }
                     temp.remove("\"");
 
@@ -1129,7 +1129,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         return;
     }
 
-    if (isCellEditSkip()) {
+    if (getCellEditSkip()) {
         // qDebug() << "Skip cell editing event handling.";
         return;
     }
@@ -1416,8 +1416,8 @@ void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
     } else {
         dialogType = Dialog::DialogTypeSelectValueEnumInput;
     }
-    updateSfcSignal(sfcSignal);
-    updateOutputState(outputState);
+    setSfcSignal(sfcSignal);
+    setOutputState(outputState);
 
     QVariantList info = QVariantList({
         QString("Select Data"),
@@ -1650,7 +1650,7 @@ void GuiExcel::pasteClipboardInfo() {
         return;
     }
 
-    updateCellEditSkip(true);
+    setCellEditSkip(true);
 
     QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
     int rowStart = (selectCellCount == 1) ? (modelIndexs.at(0).row()) : (0);
@@ -1718,7 +1718,7 @@ void GuiExcel::pasteClipboardInfo() {
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, updateIndex}));
     }
 
-    updateCellEditSkip(false);
+    setCellEditSkip(false);
 }
 
 QList<QStringList> GuiExcel::isSheetData(const int& sheetIndex, const bool& removeMerge, const QPair<int, int>& maxInfo) {
@@ -1877,7 +1877,7 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
         return;
     }
 
-    updateCellEditSkip(true);
+    setCellEditSkip(true);
 
     const SelectedCellInfo selectedCellInfo(mExcelSheet[sheetIndex]);
     const QPair<int, int> rowInfo = selectedCellInfo.isRowInfo();
@@ -1904,7 +1904,7 @@ void GuiExcel::updateDisplayEditCellShortcut(const int& editType) {
     updateDisplaySheetHeaderAdjust(sheetIndex, false);  // 편집시 화면 변경 되는 이슈
     createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, columnStart}));
 
-    updateCellEditSkip(false);
+    setCellEditSkip(false);
 }
 
 void GuiExcel::updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex) {

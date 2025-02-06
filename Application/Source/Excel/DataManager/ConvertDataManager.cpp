@@ -27,10 +27,10 @@ ConvertDataManager::ConvertDataManager() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    updateMergeStart(mergeStart);
-    updateMerge(merge);
-    updateMergeEnd(mergeEnd);
-    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    setMergeStart(mergeStart);
+    setMerge(merge);
+    setMergeEnd(mergeEnd);
+    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
 bool ConvertDataManager::excuteConvertDataManager() {
@@ -152,7 +152,7 @@ QMap<int, QList<KeywordInfo>> ConvertDataManager::constructKeywordTypeInfoList(c
             qDebug() << "\t Info        :" << keyword.isRow() << keyword.isColumn() << keyword.isKeyword() << keyword.isText();
             qDebug() << "\t Data        :" << keyword.isData();
             qDebug() << "\t RowData     :" << keyword.isRowData();
-            qDebug() << "\t ConvertData :" << keyword.isConvertData();
+            qDebug() << "\t ConvertData :" << keyword.getConvertData();
         }
 #endif
     }
@@ -313,7 +313,7 @@ void ConvertDataManager::constructConvertSheetDataInfo(QMap<int, QList<KeywordIn
             for (KeywordInfo keyword : iter.value().toList()) {
                 if ((rowIndex == keyword.isRow()) &&
                     (keyword.isKeyword() & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet))) {
-                    convertData = keyword.isConvertData();
+                    convertData = keyword.getConvertData();
                 } else {
                     isEqualData = isDataAlreadyExistInKeywordInfoList(tmpRowDataList, keyword, originIndex, isEqualData);
                 }
@@ -1192,13 +1192,13 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         QString keywordStr = ExcelUtil::instance().data()->isKeywordString(
                             static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined));
 
-                        if (tmpInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
-                            QStringList tmpOriginData = tmpInfo.isOriginData();
+                        if (tmpInfo.getDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
+                            QStringList tmpOriginData = tmpInfo.getOriginData();
 
                             if (tmpOriginData.size() > 1) {
                                 inputDataStr = tmpOriginData.join(", ");
 #if 0
-                                QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.isKeywordType());
+                                QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.getKeywordType());
                                 inputDataStr.replace(keywordStr1, keywordStr);
 #endif
                                 inputDataStr = keywordStr + inputDataStr;
@@ -1212,26 +1212,26 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         } else if (inputSignalStr.compare(SFC_IGN_ELAPSED) == 0) {
                             // [Not_Trigger] SFC.Private.IGNElapsed.Elapsed
                             // no operation
-                        } else if ((tmpInfo.isValueEnum().isEmpty() == false) && (tmpInfo.isNotUsedEnum().isEmpty() == false)) {
+                        } else if ((tmpInfo.getValueEnum().isEmpty() == false) && (tmpInfo.getNotUsedEnum().isEmpty() == false)) {
                             // Enum Value
-                            inputDataStr += tmpInfo.isNotUsedEnum().join(", ");
-                        } else if (tmpInfo.isValueEnum().isEmpty() == true &&
-                                   tmpInfo.isDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) {
-                            if (tmpInfo.isKeywordType() !=
+                            inputDataStr += tmpInfo.getNotUsedEnum().join(", ");
+                        } else if (tmpInfo.getValueEnum().isEmpty() == true &&
+                                   tmpInfo.getDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) {
+                            if (tmpInfo.getKeywordType() !=
                                     static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver) &&
-                                tmpInfo.isKeywordType() !=
+                                tmpInfo.getKeywordType() !=
                                     static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder) &&
-                                tmpInfo.isKeywordType() !=
+                                tmpInfo.getKeywordType() !=
                                     static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual) &&
-                                tmpInfo.isKeywordType() !=
+                                tmpInfo.getKeywordType() !=
                                     static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)) {
                                 uint64_t maxValue = static_cast<uint64_t>(UINT32_MAX) + 1;
                                 inputDataStr += QString::number(maxValue);
                             } else {
-                                QStringList tmpOriginData = tmpInfo.isOriginData();
+                                QStringList tmpOriginData = tmpInfo.getOriginData();
                                 if (tmpOriginData.size() > 1) {
                                     inputDataStr = tmpOriginData.join(", ");
-                                    QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.isKeywordType());
+                                    QString keywordStr1 = ExcelUtil::instance().data()->isKeywordString(tmpInfo.getKeywordType());
                                     inputDataStr.replace(keywordStr1, keywordStr);
                                 }
                             }

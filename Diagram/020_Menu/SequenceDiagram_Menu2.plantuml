@@ -26,7 +26,7 @@ deactivate MenuGui
 
 activate MenuControl
     MenuControl -> MenuControl : slotHandlerEvent()
-    MenuControl -> MenuControl : updateSelectAppMode()
+    MenuControl -> MenuControl : setSelectAppMode()
 
     MenuControl -> ConfigSetting : readConfig()
     activate ConfigSetting

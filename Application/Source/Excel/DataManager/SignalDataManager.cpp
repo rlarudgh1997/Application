@@ -26,13 +26,13 @@ SignalDataManager::SignalDataManager() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    updateMergeStart(mergeStart);
-    updateMerge(merge);
-    updateMergeEnd(mergeEnd);
-    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    setMergeStart(mergeStart);
+    setMerge(merge);
+    setMergeEnd(mergeEnd);
+    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-int SignalDataManager::isDataType(const QString& dataTypeStr) {
+int SignalDataManager::getDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
     if (dataTypeStr.compare("HUInt64") == 0) {
@@ -362,7 +362,7 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
     if (inputData.size() > 0) {
         sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData] = inputData;
     }
-    dataType = isDataType(dataTypeStr);
+    dataType = getDataType(dataTypeStr);
     // qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
 
     return sfcDataInfo;
@@ -664,8 +664,8 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             }
         } else {
             QString keywordContainStr = (signalData.size() == 0) ? (QString()) : (signalData.at(0));  // 0 : 키워드 포함 데이터
-            keywordType = ExcelUtil::instance().data()->isKeywordType(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max),
-                                                                      keywordContainStr);
+            keywordType = ExcelUtil::instance().data()->getKeywordType(
+                static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max), keywordContainStr);
 
             originData = currDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
             convertData = originData;
@@ -703,7 +703,7 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
         auto data = allConvertData[key];
         data.removeDuplicates();
         // data.sort();
-        signalDataInfo[key].updateAllConvertData(data);
+        signalDataInfo[key].setAllConvertData(data);
     }
 
 
@@ -766,15 +766,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
         auto signalName = signalDataInfo[mapKey].first;
         auto signalData = signalDataInfo[mapKey].second;
         qDebug() << "[" << signalName << "]";
-        qDebug() << "\t DataType       :" << signalData.isDataType();
-        qDebug() << "\t Initialize     :" << signalData.isInitialize();
-        qDebug() << "\t KeywordType    :" << signalData.isKeywordType();
-        qDebug() << "\t OriginData     :" << signalData.isOriginData().size() << signalData.isOriginData();
-        qDebug() << "\t ConvertData    :" << signalData.isConvertData().size() << signalData.isConvertData();
-        qDebug() << "\t ValueEnum      :" << signalData.isValueEnum().size() << signalData.isValueEnum();
-        qDebug() << "\t NotUsedEnum    :" << signalData.isNotUsedEnum().size() << signalData.isNotUsedEnum();
-        qDebug() << "\t Precondition   :" << signalData.isPrecondition().size() << signalData.isPrecondition();
-        qDebug() << "\t AllConvertData :" << signalData.isAllConvertData().size() << signalData.isAllConvertData();
+        qDebug() << "\t DataType       :" << signalData.getDataType();
+        qDebug() << "\t Initialize     :" << signalData.getInitialize();
+        qDebug() << "\t KeywordType    :" << signalData.getKeywordType();
+        qDebug() << "\t OriginData     :" << signalData.getOriginData().size() << signalData.getOriginData();
+        qDebug() << "\t ConvertData    :" << signalData.getConvertData().size() << signalData.getConvertData();
+        qDebug() << "\t ValueEnum      :" << signalData.getValueEnum().size() << signalData.getValueEnum();
+        qDebug() << "\t NotUsedEnum    :" << signalData.getNotUsedEnum().size() << signalData.getNotUsedEnum();
+        qDebug() << "\t Precondition   :" << signalData.getPrecondition().size() << signalData.getPrecondition();
+        qDebug() << "\t AllConvertData :" << signalData.getAllConvertData().size() << signalData.getAllConvertData();
         qDebug() << "\n\n";
     }
     qDebug() << "*************************************************************************************************\n\n";
@@ -795,14 +795,14 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
 
     for (auto signalName : currentSignalDataInfo.keys()) {
         SignalData signalData = currentSignalDataInfo[signalName];
-        int dataType = signalData.isDataType();
+        int dataType = signalData.getDataType();
         bool init = false;
-        int keywordType = signalData.isKeywordType();
-        QStringList originData = signalData.isOriginData();
-        QStringList convertData = signalData.isConvertData();
-        QStringList valueEnum = signalData.isValueEnum();
-        QStringList notUsedEnum = signalData.isNotUsedEnum();
-        QStringList precondition = signalData.isPrecondition();
+        int keywordType = signalData.getKeywordType();
+        QStringList originData = signalData.getOriginData();
+        QStringList convertData = signalData.getConvertData();
+        QStringList valueEnum = signalData.getValueEnum();
+        QStringList notUsedEnum = signalData.getNotUsedEnum();
+        QStringList precondition = signalData.getPrecondition();
 
         bool ignElaspedSingal = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
         QString preconditionMaxValue =
@@ -898,7 +898,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 1
+#if 0
     qDebug() << "*************************************************************************************************";
     qDebug() << "2. isTestCaseInputSignalDataInfo :" << signalList.size() << dataList.size() << signalDataInfo.size();
     qDebug() << "=================================================================================================";
@@ -906,15 +906,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         auto signalName = signalDataInfo[mapKey].first;
         auto signalData = signalDataInfo[mapKey].second;
         qDebug() << "[" << signalName << "]";
-        qDebug() << "\t DataType       :" << signalData.isDataType();
-        qDebug() << "\t Initialize     :" << signalData.isInitialize();
-        qDebug() << "\t KeywordType    :" << signalData.isKeywordType();
-        qDebug() << "\t OriginData     :" << signalData.isOriginData().size() << signalData.isOriginData();
-        qDebug() << "\t ConvertData    :" << signalData.isConvertData().size() << signalData.isConvertData();
-        qDebug() << "\t ValueEnum      :" << signalData.isValueEnum().size() << signalData.isValueEnum();
-        qDebug() << "\t NotUsedEnum    :" << signalData.isNotUsedEnum().size() << signalData.isNotUsedEnum();
-        qDebug() << "\t Precondition   :" << signalData.isPrecondition().size() << signalData.isPrecondition();
-        qDebug() << "\t AllConvertData :" << signalData.isAllConvertData().size() << signalData.isAllConvertData();
+        qDebug() << "\t DataType       :" << signalData.getDataType();
+        qDebug() << "\t Initialize     :" << signalData.getInitialize();
+        qDebug() << "\t KeywordType    :" << signalData.getKeywordType();
+        qDebug() << "\t OriginData     :" << signalData.getOriginData().size() << signalData.getOriginData();
+        qDebug() << "\t ConvertData    :" << signalData.getConvertData().size() << signalData.getConvertData();
+        qDebug() << "\t ValueEnum      :" << signalData.getValueEnum().size() << signalData.getValueEnum();
+        qDebug() << "\t NotUsedEnum    :" << signalData.getNotUsedEnum().size() << signalData.getNotUsedEnum();
+        qDebug() << "\t Precondition   :" << signalData.getPrecondition().size() << signalData.getPrecondition();
+        qDebug() << "\t AllConvertData :" << signalData.getAllConvertData().size() << signalData.getAllConvertData();
         qDebug() << "\n\n";
     }
     qDebug() << "*************************************************************************************************\n\n";
@@ -936,15 +936,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
     QStringList ignOriginData;
     for (auto signalName : currentSignalDataInfo.keys()) {
         SignalData signalData = currentSignalDataInfo[signalName];
-        int dataType = signalData.isDataType();
+        int dataType = signalData.getDataType();
         bool init = false;
-        int keywordType = signalData.isKeywordType();
-        QStringList originData = signalData.isOriginData();
-        QStringList convertData = signalData.isConvertData();
-        QStringList valueEnum = signalData.isValueEnum();
-        QStringList notUsedEnum = signalData.isNotUsedEnum();
-        QStringList precondition = signalData.isPrecondition();
-        QStringList allConvertData = signalData.isAllConvertData();
+        int keywordType = signalData.getKeywordType();
+        QStringList originData = signalData.getOriginData();
+        QStringList convertData = signalData.getConvertData();
+        QStringList valueEnum = signalData.getValueEnum();
+        QStringList notUsedEnum = signalData.getNotUsedEnum();
+        QStringList precondition = signalData.getPrecondition();
+        QStringList allConvertData = signalData.getAllConvertData();
 
         bool ignElaspedSingal = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
         QString preconditionMaxValue =
@@ -1012,15 +1012,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
         //     auto signalName = key;
         //     auto signalData = newSignalDataInfo[key];
         qDebug() << "[" << signalName << "]";
-        qDebug() << "\t DataType       :" << signalData.isDataType();
-        qDebug() << "\t Initialize     :" << signalData.isInitialize();
-        qDebug() << "\t KeywordType    :" << signalData.isKeywordType();
-        qDebug() << "\t OriginData     :" << signalData.isOriginData().size() << signalData.isOriginData();
-        qDebug() << "\t ConvertData    :" << signalData.isConvertData().size() << signalData.isConvertData();
-        qDebug() << "\t ValueEnum      :" << signalData.isValueEnum().size() << signalData.isValueEnum();
-        qDebug() << "\t NotUsedEnum    :" << signalData.isNotUsedEnum().size() << signalData.isNotUsedEnum();
-        qDebug() << "\t Precondition   :" << signalData.isPrecondition().size() << signalData.isPrecondition();
-        qDebug() << "\t AllConvertData :" << signalData.isAllConvertData().size() << signalData.isAllConvertData();
+        qDebug() << "\t DataType       :" << signalData.getDataType();
+        qDebug() << "\t Initialize     :" << signalData.getInitialize();
+        qDebug() << "\t KeywordType    :" << signalData.getKeywordType();
+        qDebug() << "\t OriginData     :" << signalData.getOriginData().size() << signalData.getOriginData();
+        qDebug() << "\t ConvertData    :" << signalData.getConvertData().size() << signalData.getConvertData();
+        qDebug() << "\t ValueEnum      :" << signalData.getValueEnum().size() << signalData.getValueEnum();
+        qDebug() << "\t NotUsedEnum    :" << signalData.getNotUsedEnum().size() << signalData.getNotUsedEnum();
+        qDebug() << "\t Precondition   :" << signalData.getPrecondition().size() << signalData.getPrecondition();
+        qDebug() << "\t AllConvertData :" << signalData.getAllConvertData().size() << signalData.getAllConvertData();
         qDebug() << "\n\n";
     }
     qDebug() << "*************************************************************************************************\n\n";
@@ -1056,14 +1056,14 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOutputSignalDataInfo(
 
     for (const auto& signalName : currentSignalDataInfo.keys()) {
         SignalData signalData = currentSignalDataInfo[signalName];
-        int dataType = signalData.isDataType();
+        int dataType = signalData.getDataType();
         bool init = (initList[signalName].size() > 0);
-        int keywordType = signalData.isKeywordType();
-        QStringList originData = signalData.isOriginData();
-        QStringList convertData = signalData.isConvertData();
-        QStringList valueEnum = signalData.isValueEnum();
-        QStringList notUsedEnum = signalData.isNotUsedEnum();
-        QStringList precondition = signalData.isPrecondition();
+        int keywordType = signalData.getKeywordType();
+        QStringList originData = signalData.getOriginData();
+        QStringList convertData = signalData.getConvertData();
+        QStringList valueEnum = signalData.getValueEnum();
+        QStringList notUsedEnum = signalData.getNotUsedEnum();
+        QStringList precondition = signalData.getPrecondition();
 
         newSignalDataInfo[signalName] =
             SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
@@ -1082,15 +1082,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOutputSignalDataInfo(
         auto signalName = signalDataInfo[mapKey].first;
         auto signalData = signalDataInfo[mapKey].second;
         qDebug() << "[" << signalName << "]";
-        qDebug() << "\t DataType       :" << signalData.isDataType();
-        qDebug() << "\t Initialize     :" << signalData.isInitialize();
-        qDebug() << "\t KeywordType    :" << signalData.isKeywordType();
-        qDebug() << "\t OriginData     :" << signalData.isOriginData().size() << signalData.isOriginData();
-        qDebug() << "\t ConvertData    :" << signalData.isConvertData().size() << signalData.isConvertData();
-        qDebug() << "\t ValueEnum      :" << signalData.isValueEnum().size() << signalData.isValueEnum();
-        qDebug() << "\t NotUsedEnum    :" << signalData.isNotUsedEnum().size() << signalData.isNotUsedEnum();
-        qDebug() << "\t Precondition   :" << signalData.isPrecondition().size() << signalData.isPrecondition();
-        qDebug() << "\t AllConvertData :" << signalData.isAllConvertData().size() << signalData.isAllConvertData();
+        qDebug() << "\t DataType       :" << signalData.getDataType();
+        qDebug() << "\t Initialize     :" << signalData.getInitialize();
+        qDebug() << "\t KeywordType    :" << signalData.getKeywordType();
+        qDebug() << "\t OriginData     :" << signalData.getOriginData().size() << signalData.getOriginData();
+        qDebug() << "\t ConvertData    :" << signalData.getConvertData().size() << signalData.getConvertData();
+        qDebug() << "\t ValueEnum      :" << signalData.getValueEnum().size() << signalData.getValueEnum();
+        qDebug() << "\t NotUsedEnum    :" << signalData.getNotUsedEnum().size() << signalData.getNotUsedEnum();
+        qDebug() << "\t Precondition   :" << signalData.getPrecondition().size() << signalData.getPrecondition();
+        qDebug() << "\t AllConvertData :" << signalData.getAllConvertData().size() << signalData.getAllConvertData();
         qDebug() << "\n\n";
     }
     qDebug() << "*************************************************************************************************\n\n";
@@ -1140,15 +1140,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isDependSignalDataInfo(
         auto signalName = signalDataInfo[mapKey].first;
         auto signalData = signalDataInfo[mapKey].second;
         qDebug() << "[" << signalName << "]";
-        qDebug() << "\t DataType       :" << signalData.isDataType();
-        qDebug() << "\t Initialize     :" << signalData.isInitialize();
-        qDebug() << "\t KeywordType    :" << signalData.isKeywordType();
-        qDebug() << "\t OriginData     :" << signalData.isOriginData().size() << signalData.isOriginData();
-        qDebug() << "\t ConvertData    :" << signalData.isConvertData().size() << signalData.isConvertData();
-        qDebug() << "\t ValueEnum      :" << signalData.isValueEnum().size() << signalData.isValueEnum();
-        qDebug() << "\t NotUsedEnum    :" << signalData.isNotUsedEnum().size() << signalData.isNotUsedEnum();
-        qDebug() << "\t Precondition   :" << signalData.isPrecondition().size() << signalData.isPrecondition();
-        qDebug() << "\t AllConvertData :" << signalData.isAllConvertData().size() << signalData.isAllConvertData();
+        qDebug() << "\t DataType       :" << signalData.getDataType();
+        qDebug() << "\t Initialize     :" << signalData.getInitialize();
+        qDebug() << "\t KeywordType    :" << signalData.getKeywordType();
+        qDebug() << "\t OriginData     :" << signalData.getOriginData().size() << signalData.getOriginData();
+        qDebug() << "\t ConvertData    :" << signalData.getConvertData().size() << signalData.getConvertData();
+        qDebug() << "\t ValueEnum      :" << signalData.getValueEnum().size() << signalData.getValueEnum();
+        qDebug() << "\t NotUsedEnum    :" << signalData.getNotUsedEnum().size() << signalData.getNotUsedEnum();
+        qDebug() << "\t Precondition   :" << signalData.getPrecondition().size() << signalData.getPrecondition();
+        qDebug() << "\t AllConvertData :" << signalData.getAllConvertData().size() << signalData.getAllConvertData();
         qDebug() << "\n\n";
     }
     qDebug() << "*************************************************************************************************\n\n";

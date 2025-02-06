@@ -54,7 +54,7 @@ class ControlMenu {
     -virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue)
     -virtual void slotHandlerEvent(const int& type, const QVariant& value)
 
-    -void updateSelectAppMode()
+    -void setSelectAppMode()
     -QStringList isModuleListFromJson()
     -void updateAllModuleList(const QString& filter)
     -void updateSelectModueList(const int& eventType, const QVariantList& selectModule)

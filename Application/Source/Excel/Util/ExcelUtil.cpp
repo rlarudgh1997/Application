@@ -22,90 +22,74 @@ ExcelUtil::ExcelUtil() {
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
     const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
 
-    updateMergeStart(mergeStart);
-    updateMerge(merge);
-    updateMergeEnd(mergeEnd);
-    updateMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+    setMergeStart(mergeStart);
+    setMerge(merge);
+    setMergeEnd(mergeEnd);
+    setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-QStringList ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
+QMap<QString, QString> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
     bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
     QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
+    QMap<QString, QString> moduleInfo;
 
     // Json Parsing
     QJsonParseError error;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &error);
     if (error.error != QJsonParseError::NoError) {
         qDebug() << "Fail to json parsing error :" << error.errorString();
-        return QStringList();
+        return moduleInfo;
     }
     if (jsonDoc.isObject() == false) {
         qDebug() << "Fail to json format invalid";
-        return QStringList();
+        return moduleInfo;
     }
 
     // Read : Json Data
-    QStringList tempModuleList;
-    QList<QPair<QString, QString>> moduleInfo;
     QJsonObject jsonObj = jsonDoc.object();
     if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
         QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
         if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
             for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
                 if (module.isString()) {
-                    // qDebug() << "\t Module Json :" << module.toString();
-                    tempModuleList.append(module.toString());
-                    QString path = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
-                    moduleInfo.append(qMakePair(module.toString(), path));
+                    QString moduleName = (toUpper) ? (module.toString().toUpper()) : (module.toString());
+                    QString modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
+                    moduleInfo[moduleName] = modulePath;
                 }
             }
         }
     }
+
     if (appModeCV) {
         QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
         for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-            tempModuleList.append(commonModule);
-            QString path = QString("%1/%2").arg(commonModuleDir.absolutePath()).arg(commonModule);
-            moduleInfo.append(qMakePair(commonModule, path));
-
-            // qDebug() << "\t Module  Dir :" << commonModule;
+            QString moduleName = (toUpper) ? (commonModule.toUpper()) : (commonModule);
+            QString modulePath = QString("%1/%2").arg(commonModuleDir.absolutePath()).arg(commonModule);
+            moduleInfo[moduleName] = modulePath;
         }
 
-        // for (const auto& module : moduleInfo) {
-        //     qDebug() << "\t ModuleInfo :" << module.first << module.second;
+        QMap<QString, QString> tempModuleInfo = moduleInfo;
+        moduleInfo.clear();
 
-        //     QDir directory(module.second);
-        //     QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
-        //     QFileInfoList fileList;
+        for (const auto& moduleName : tempModuleInfo.keys()) {
+            QString modulePath = tempModuleInfo[moduleName];
+            QDir directory(modulePath);
+            QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
 
-        //     for (const auto& file : directory.entryInfoList(QDir::Files)) {
-        //         if (file.fileName().contains(excelRegex)) {
-        //             modules.append(module);
-        //             break;
-        //         }
-        //     }
-        // }
-    }
-    tempModuleList.sort();
-    tempModuleList.removeDuplicates();
-
-    QStringList moduleList;
-    if (toUpper) {
-        for (const auto& module : tempModuleList) {
-            moduleList.append(module.toUpper());
+            for (const auto& file : directory.entryInfoList(QDir::Files)) {
+                if (file.fileName().contains(excelRegex)) {
+                    QString filePath = QString("%1/%2").arg(modulePath).arg(file.fileName());
+                    moduleInfo[moduleName] = filePath;
+                    break;
+                }
+            }
         }
-    } else {
-        moduleList = tempModuleList;
     }
+    // qDebug() << "ModuleList :" << moduleInfo.size() << jsonFile;
 
-    qDebug() << "ModuleList :" << moduleList.size() << jsonFile;
-    // for (const auto& module : moduleList) {
-    //     qDebug() << "\t Module :" << module;
-    // }
-
-    return moduleList;
+    return moduleInfo;
 }
 
 QStringList ExcelUtil::isDescriptionDataInfo() {
@@ -214,7 +198,7 @@ QString ExcelUtil::isKeywordString(const int keywordType) {
     return keywordPatternInfo[keywordType];
 }
 
-int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
+int ExcelUtil::getKeywordType(const int& columnIndex, QString& inputData) {
     int keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
     QString tempInputData = inputData;
 
@@ -330,7 +314,7 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 
         for (const auto& columnIndex : columnList) {
             QString text = rowData.at(columnIndex);
-            int keywordType = isKeywordType(columnIndex, text);
+            int keywordType = getKeywordType(columnIndex, text);
             QString data = QString();
 
             if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
@@ -414,14 +398,14 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
         qDebug() << "\t Info        :" << keyword.isRow() << keyword.isColumn() << keyword.isKeyword() << keyword.isText();
         qDebug() << "\t Data        :" << keyword.isData();
         qDebug() << "\t RowData     :" << keyword.isRowData();
-        qDebug() << "\t ConvertData :" << keyword.isConvertData();
+        qDebug() << "\t ConvertData :" << keyword.getConvertData();
     }
 #endif
 
     return keywordTypeInfo;
 }
 
-int ExcelUtil::isDataType(const QString& dataTypeStr) {
+int ExcelUtil::getDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 
     if (dataTypeStr.compare("HUInt64") == 0) {
@@ -863,9 +847,9 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
         return QList<QVariantList>();
     }
 
-    const QString mergeStart = isMergeStart();
-    const QString merge = isMergeStart();
-    const QString mergeEnd = isMergeStart();
+    const QString mergeStart = getMergeStart();
+    const QString merge = getMergeStart();
+    const QString mergeEnd = getMergeStart();
     const QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
     const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);

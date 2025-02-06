@@ -296,56 +296,10 @@ void TestCase::terminateApplicaton() {
 QStringList TestCase::isModuleList() {
     int appMode = ((getSelectAppMode() == QString("CV")) ? (ivis::common::AppModeEnum::AppModeTypeCV)
                                                          : (ivis::common::AppModeEnum::AppModeTypePV));
-    QStringList modules;
-    QStringList allModules = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-
-    // isModuleListFromJson() 함수 내부 수정 필요
-    //  1. AEM 처럼 엑셀 파일이 없는것도 존재함 -> 엑셀 파일 존재 유무 확인 필요
-    //  2. 1번 같은 경우에 대한 예외 처리를 위해서 isModuleListFromJson() 리턴시 모듈의 경로도 함께 리턴
-    //  3. 리턴된 모듈 경로 내부에 엑셀 파일이 존재 하는 경우에만 모듈로 리스트업
-
-
-#if 1    // [cv.json / platform.json] 파일의 전체 모듈 사용
-    modules = allModules;
-
-
-    // AEM
-        // PV 폴더임
-
-    // Common_Module
-        // Blue_Light_Filter
-        // Master_Warning
-        // Navigation_DIS
-        // Seatbelt_Warning
-        // Speed_Gauge
-        // VESS
-
-    // Event_Control_Logic_CV
-    // Memory_CV
-    // Memory_IGN_CV
-    // Param_CV
-        // 엑셀 파일없음
-#else
-    QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
-
-    for (const auto& module : allModules) {
-        QDir directory(QString("%1/%2").arg(defaultFilePath).arg(module));
-        QFileInfoList allFiles = directory.entryInfoList(QDir::Files);
-        QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
-        QFileInfoList fileList;
-
-        for (const QFileInfo &file : allFiles) {
-            if (file.fileName().contains(excelRegex)) {
-                modules.append(module);
-                break;
-            }
-        }
-    }
-    qDebug() << "isModuleList :" << allModules.size() << modules.size();
-#endif
-
-    return modules;
+    QMap<QString, QString> moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QStringList moduleList = moduleInfo.keys();
+    writeModuleList(moduleInfo);
+    return moduleList;
 }
 
 bool TestCase::openExcelFile() {
@@ -356,44 +310,12 @@ bool TestCase::openExcelFile() {
         return false;
     }
 
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    QString defaultFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    defaultFilePath.append((appMode == ivis::common::AppModeEnum::AppModeTypePV) ? ("/SFC") : ("/SFC/CV"));
-
-    QDir directory(QString("%1/%2").arg(defaultFilePath).arg(currModule));
-#if 0
-    QFileInfoList fileList = directory.entryInfoList(QStringList({"*.xlsx", "*.xls"}), QDir::Files);
-#else
-    QFileInfoList allFiles = directory.entryInfoList(QDir::Files);
-    QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
-    QFileInfoList fileList;
-
-    for (const QFileInfo &file : allFiles) {
-        if (file.fileName().contains(excelRegex)) {
-            fileList.append(file);
-        }
-    }
-#endif
-
-    qDebug() << "\n\n\n\n\n\n\n\n\n\n\n";
-    qDebug() << "SelectModules :" << selectModules << "->" << currModule;
-    qDebug() << "\t Path     :" << directory.absolutePath();
-
-    if (fileList.size() == 0) {
-        qDebug() << "Fail to file list size : 0";
-        return false;
-    }
-
-    // QString filePath = QString("%1/%2/%3.xlsx").arg(defaultFilePath).arg(currModule).arg(currModule);
-    QString filePath = fileList.at(0).absoluteFilePath();
+    QString filePath = getModuleList(currModule);
     QList<QVariantList> sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
     bool result = (sheetDataList.size() > 0);
     if (result) {
-        qDebug() << "\t FilePath :" << filePath;
-
         int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
         for (const auto& sheetData : sheetDataList) {
-            // qDebug() << "Sheet[" << propertyType << "] :" << sheetData.toList().size() << sheetData.toList();
             ExcelData::instance().data()->setSheetData(propertyType++, sheetData);
         }
 

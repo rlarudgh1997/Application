@@ -45,7 +45,7 @@ public:
     void updateRowData(const QList<QStringList>& rowData) {
         mRowData = rowData;
     }
-    QList<QStringList> isConvertData() const {
+    QList<QStringList> getConvertData() const {
         return mConvertData;
     }
     void updateConvertData(const QList<QStringList>& convertData) {
@@ -73,13 +73,13 @@ class ExcelUtil : public QObject {
 public:
     static QSharedPointer<ExcelUtil>& instance();
 
-    QStringList isModuleListFromJson(const int& appMode, const bool& toUpper);
+    QMap<QString, QString> isModuleListFromJson(const int& appMode, const bool& toUpper);
     QStringList isDescriptionDataInfo();
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
-    int isKeywordType(const int& columnIndex, QString& inputData);
+    int getKeywordType(const int& columnIndex, QString& inputData);
     QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
-    int isDataType(const QString& dataTypeStr);
+    int getDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);

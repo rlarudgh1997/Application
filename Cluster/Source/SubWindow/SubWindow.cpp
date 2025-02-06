@@ -601,7 +601,7 @@ QString SubWindow::isDetailSignalInfo(const int& type, const QString& inputStr, 
     } else {
         if (type == DetailSubInfoNormal) {
             if (inputStr.contains("SFC.")) {
-                convertStr = QString("$ALTON_CLIENT set %1 %2 %3").arg(signal).arg(isDataType(value)).arg(value);
+                convertStr = QString("$ALTON_CLIENT set %1 %2 %3").arg(signal).arg(getDataType(value)).arg(value);
             } else if (inputStr.contains("delay")) {
                 convertStr = QString("sleep %1").arg(value.toDouble() * (double)0.001);
             } else {
@@ -1201,7 +1201,7 @@ QList<QPair<QString, QString>> SubWindow::isReplaceSignal(const QStringList& abs
     return signalList;
 }
 
-QString SubWindow::isDataType(const QString& value) {
+QString SubWindow::getDataType(const QString& value) {
     bool result;
     value.toULongLong(&result);
     if (result) {
