@@ -98,6 +98,13 @@ void GuiMenu::drawMenuEdit() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditUndo, QVariant()); });
     connect(mGui->actionRedo, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditRedo, QVariant()); });
+    // TC Check
+    connect(mGui->actionAllCheck, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, true);
+    });
+    connect(mGui->actionAllUncheck, &QAction::triggered, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, false);
+    });
     // Gen Type
     connect(mGui->actionDefault, &QAction::triggered, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypeDefault);
@@ -107,13 +114,6 @@ void GuiMenu::drawMenuEdit() {
     });
     connect(mGui->actionPositive, &QAction::triggered, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypePositive);
-    });
-    // TC Check
-    connect(mGui->actionAllCheck, &QAction::triggered, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, true);
-    });
-    connect(mGui->actionAllUncheck, &QAction::triggered, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, false);
     });
 }
 

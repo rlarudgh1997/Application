@@ -28,10 +28,10 @@ namespace common {
 
 #define REGISTER_WRITABLE_VALUE(type, name, value)                                    \
 public:                                                                               \
-    type get##name() const {                                                           \
+    type get##name() const {                                                          \
         return m##name;                                                               \
     }                                                                                 \
-    void set##name(const type& name) {                                             \
+    void set##name(const type& name) {                                                \
         if (m##name != name) {                                                        \
             m##name = name;                                                           \
         }                                                                             \

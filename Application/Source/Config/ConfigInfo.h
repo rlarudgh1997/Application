@@ -24,7 +24,7 @@ public:
         ConfigTypeSfcModelPath,
         ConfigTypeNodeAddressPath,
         ConfigTypeNewSheetRowCount,
-        ConfigTypeGenType,
+        ConfigTypeGenTypeList,
         ConfigTypeSheetName,
         ConfigTypeDescTitle,
         ConfigTypeOtherTitle,
@@ -70,6 +70,8 @@ public:
         ConfigTypeMode,
         ConfigTypeGraphicsMode,
         ConfigTypeTCFilePath,
+        ConfigTypeCLIModeTCCheck,
+        ConfigTypeCLIModeGenType,
         ConfigTypeCheckLibOpenpyxl,
         ConfigTypeCheckLibPandas,
         ConfigTypeDoFileSave,
@@ -106,8 +108,8 @@ private:
         mConfigInfoData[ConfigTypeNodeAddressPath] = QPair<QString, QVariant>(
             "ConfigTypeNodeAddressPath", QVariant(QApplication::applicationDirPath() + QString("/NodeAddress")));
         mConfigInfoData[ConfigTypeNewSheetRowCount] = QPair<QString, QVariant>("ConfigTypeNewSheetRowCount", QVariant(10));
-        mConfigInfoData[ConfigTypeGenType] = QPair<QString, QVariant>(
-            "ConfigTypeGenType", QVariant(QVariantList({"Default", "Negative/Positive", "Positive"})));
+        mConfigInfoData[ConfigTypeGenTypeList] = QPair<QString, QVariant>(
+            "ConfigTypeGenTypeList", QVariant(QVariantList({"Default", "Negative/Positive", "Positive"})));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
                                                           "Inters", "Outputs", "Configs"})));
@@ -184,6 +186,8 @@ private:
         mConfigInfoData[ConfigTypeMode] = QPair<QString, QVariant>("ConfigTypeMode", QVariant(1));
         mConfigInfoData[ConfigTypeGraphicsMode] = QPair<QString, QVariant>("ConfigTypeGraphicsMode", QVariant(true));
         mConfigInfoData[ConfigTypeTCFilePath] = QPair<QString, QVariant>("ConfigTypeTCFilePath", QVariant(""));
+        mConfigInfoData[ConfigTypeCLIModeTCCheck] = QPair<QString, QVariant>("ConfigTypeCLIModeTCCheck", QVariant(false));
+        mConfigInfoData[ConfigTypeCLIModeGenType] = QPair<QString, QVariant>("ConfigTypeCLIModeGenType", QVariant(0));
         mConfigInfoData[ConfigTypeCheckLibOpenpyxl] = QPair<QString, QVariant>("ConfigTypeCheckLibOpenpyxl", QVariant(false));
         mConfigInfoData[ConfigTypeCheckLibPandas] = QPair<QString, QVariant>("ConfigTypeCheckLibPandas", QVariant(false));
         mConfigInfoData[ConfigTypeDoFileSave] = QPair<QString, QVariant>("ConfigTypeDoFileSave", QVariant(false));

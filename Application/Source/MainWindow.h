@@ -13,7 +13,7 @@
 class MainWindow : public QWidget {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(QStringList, Arguments, QStringList(), false)
+    REGISTER_WRITABLE_VALUE(QStringList, Arguments, QStringList())
 
 public:
     explicit MainWindow(const QStringList& arguments = QStringList());

@@ -71,8 +71,8 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd,
                       ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd));
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName,
-                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenType));
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenTypeList));
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QStringList vehicleTypeList = QStringList();
@@ -313,7 +313,8 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     }
 
     updateDataHandler(propertyType, originSheetData);
-    updateConvertSheetData(propertyType, originSheetData);
+    ExcelData::instance().data()->setSheetData(propertyType, originSheetData);
+
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
@@ -325,11 +326,6 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     }
 #endif
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n\n";
-}
-
-void ControlExcel::updateConvertSheetData(const int& propertyType, const QVariantList& sheetData) {
-    ExcelData::instance().data()->setSheetData(propertyType, sheetData);
-    updateDataControl(propertyType, sheetData);
 }
 
 void ControlExcel::updateExcelSheet(const bool& excelOpen, const QVariant& dirPath) {
@@ -587,6 +583,51 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
                                         QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
     }
     return result;
+}
+
+bool ControlExcel::updateExcelDataInfo(const QString& filePath) {
+    const QVariant sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName);
+    const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
+    const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
+    const QVariant otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle);
+    QVariantList rowCount;
+
+    bool excelOpen = filePath.size();
+    QList<QVariantList> sheetDataList;
+
+    if (excelOpen) {
+        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+        for (const auto& sheetData : sheetDataList) {
+            rowCount.append(sheetData.size());
+        }
+    } else {
+        int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
+        for (const auto& sheet : sheetName.toStringList()) {
+            rowCount.append(rowMax);
+            sheetDataList.append(QVariantList());
+        }
+    }
+
+    QStringList tcNameList;
+    QStringList configNameList;
+    updateNodeAddress(false, tcNameList, configNameList);
+
+    int properytType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    for (const auto& sheetData : sheetDataList) {
+        updateSheetData(properytType++, sheetData);
+    }
+
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, sheetName);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, descTitle);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, configTitle);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, otherTitle);
+
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+
+
+    return true;
 }
 
 void ControlExcel::loadExcelFile(const int& eventType) {
@@ -1032,7 +1073,14 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
         return;
     }
 
-    TestCase::instance().data()->start();
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
+    QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+    QFileInfo fileInfo(filePath);
+    QString moduleName = QDir(fileInfo.path()).dirName();
+
+    TestCase::instance().data()->start(QStringList({appModeInfo, moduleName}));
+
     // Test Code
     testCode();
 }

@@ -87,7 +87,10 @@ QMap<QString, QString> ExcelUtil::isModuleListFromJson(const int& appMode, const
             }
         }
     }
-    // qDebug() << "ModuleList :" << moduleInfo.size() << jsonFile;
+    // qDebug() << "ModuleInfo :" << moduleInfo.size() << jsonFile;
+    // for (const auto& moduleName : moduleInfo.keys()) {
+    //     qDebug() << "Module :" << moduleInfo[moduleName];
+    // }
 
     return moduleInfo;
 }

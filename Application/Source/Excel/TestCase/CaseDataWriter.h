@@ -15,10 +15,7 @@ public:
     CaseDataWriter(const QString& basePath = QString()) : mTCFileDirPath(basePath) {
         mSfcDescription = ExcelUtil::instance().data()->isDescriptionDataInfo();
         if (mTCFileDirPath.size() == 0) {
-            bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-            int configType = (graphicsMode) ? (ConfigInfo::ConfigTypeLastSavedFilePath) : (ConfigInfo::ConfigTypeTCFilePath);
-            mOpenFilePath = ConfigSetting::instance().data()->readConfig(configType).toString();
-
+            mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTCFilePath).toString();
             int lastSlashIndex = mOpenFilePath.lastIndexOf("/");
             mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
@@ -94,6 +91,13 @@ public:
                                     QString genType = caseObj["GenType"].toString();
                                     QStringList inputSignalList =
                                         resultObj[caseKey][QString("InputSignalList")].toObject().keys();
+                                    QVector<int> preconditionOrder;
+                                    for (const QJsonValue& value :
+                                         resultObj[caseKey][QString("InputSignalList")][QString("PreconditionOrder")].toArray()) {
+                                        if (value.isDouble()) {
+                                            preconditionOrder.append(value.toInt());
+                                        }
+                                    }
                                     for (const QString& inputSignal : inputSignalList) {
                                         signalList.emplace_back(std::make_tuple(
                                             resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("SignalName")]
@@ -146,33 +150,43 @@ public:
                                         }
                                         testCase += "    precondition:\n";
                                         QMap<QString, QString> sigValueMap;
+                                        QVector<QString> preconditionString;
                                         for (QString& number : signalValueList) {
                                             number = number.trimmed();
                                             if (number.isEmpty() == false) {
-                                                if (number.contains("[Empty]") == false) {
-                                                    enumString = std::get<4>(signalList[signalOrder])[number].toString();
-                                                    if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
-                                                        triggerEnumString =
-                                                            std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
-                                                                .toString();
-                                                        sigValueMap.insert(inputDataInfo[0], inputDataInfo[1].trimmed());
-                                                    } else {
-                                                        sigValueMap.insert(std::get<0>(signalList[signalOrder]), number);
-                                                    }
-                                                    if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
-                                                        signalName =
-                                                            ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
-                                                        signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
-                                                    } else {
-                                                        signalName = std::get<0>(signalList[signalOrder]);
-                                                        signalValue = number;
-                                                    }
-                                                    enumString =
-                                                        enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
-                                                    testCase += "      - " + signalName + ": " + quoteIfNotNumeric(signalValue) +
-                                                                enumString + "\n";
+                                                enumString = std::get<4>(signalList[signalOrder])[number].toString();
+                                                if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
+                                                    triggerEnumString =
+                                                        std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
+                                                            .toString();
+                                                    sigValueMap.insert(inputDataInfo[0], inputDataInfo[1].trimmed());
+                                                } else {
+                                                    sigValueMap.insert(std::get<0>(signalList[signalOrder]), number);
                                                 }
+                                                if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
+                                                    signalName = ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
+                                                    signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                                } else {
+                                                    signalName = std::get<0>(signalList[signalOrder]);
+                                                    signalValue = number;
+                                                }
+
+                                                enumString = enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
+                                                preconditionString << "      - " + signalName + ": " +
+                                                                          quoteIfNotNumeric(signalValue) + enumString + "\n";
                                                 signalOrder++;
+                                            }
+                                        }
+
+                                        if (preconditionString.size() != preconditionOrder.size()) {
+                                            qWarning() << "The number of signals in the precondition and the number of "
+                                                          "precondition orders are different.\nA review of the generated "
+                                                          "TcGenHistory.json file is required.";
+                                        } else {
+                                            for (int order = 0; order < preconditionOrder.size(); order++) {
+                                                if (preconditionString[preconditionOrder[order]].contains("[Empty]") == false) {
+                                                    testCase += preconditionString[preconditionOrder[order]];
+                                                }
                                             }
                                         }
 

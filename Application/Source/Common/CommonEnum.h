@@ -123,7 +123,7 @@ public:
         PropertyTypeExcelMergeEnd,
         PropertyTypeClipboardType,
         PropertyTypeShortcutType,
-        PropertyTypeGenTypeName,
+        PropertyTypeGenTypeList,
 
         PropertyTypeTestReport,
         PropertyTypeKey,

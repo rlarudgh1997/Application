@@ -466,35 +466,38 @@ QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const Q
     return convertDataInfo;
 }
 
-QString SignalDataManager::isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+QString SignalDataManager::isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,
                                                      const QString& checkStr) {
-    QString exceptionValue;
-    bool foundStr = false;  // Check --> (ValueEnum : MESSAGE_TIMEOUT) && (MatchingTable : TIMEOUT)
-    int checkIndex = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum;
+    const auto valueEnumData = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
 
-    for (const auto& valueEnumData : dataInfo[checkIndex]) {
-        // valueEnum: 0x2: "MESSAGE_TIMEOUT" or "CRC_ERROR"  -->> Signal : EAPU.Input_EAPURedWarnStatus 인 경우
-        // matchingTable: TIMEOUT: 0x2 or CRCERROR: 0x2  -->>  이 경우 별도 조건 처리 위해서 (특정 케이스 동작)
-        // origintStr : MESSAGE_TIMEOUT or CRC_ERROR
-        if (valueEnumData.contains(origintStr)) {
-            foundStr = true;
-            break;
-        }
-    }
-    if (foundStr) {
-        checkIndex = ivis::common::InputDataTypeEnum::InputDataTypeValueEnum + 1;
-        for (int index = checkIndex; index < ivis::common::InputDataTypeEnum::InputDataTypeInputData; ++index) {
-            for (const auto& matchingTableData : dataInfo[checkIndex]) {
-                // Check MatchingTable : TIMEOUT or CRC
-                // checkStr : TIMEOUT or CRC
-                if (matchingTableData.contains(checkStr)) {
-                    exceptionValue = checkStr.toLower();
-                    index = ivis::common::InputDataTypeEnum::InputDataTypeMax;
-                    break;
-                }
+    QString exceptionValue;
+
+    // 1. Check : (ValueEnum : MESSAGE_TIMEOUT) && (MatchingTable : TIMEOUT) =>> timeout
+    // 2. Check : (ValueEnum : CRC_ERROR)       && (MatchingTable : CRC)     =>> crc
+    if (valueEnumData.filter(originStr).isEmpty() == false) {
+        for (const auto& key : dataInfo.keys()) {
+            if ((key <= ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) ||
+                (key >= ivis::common::InputDataTypeEnum::InputDataTypeInputData)) {
+                continue;
+            }
+
+            auto matchingTableData = dataInfo[key];
+            // qDebug() << "\t\t ContainString :" << matchingTableData << ">>" << checkStr;
+            if (matchingTableData.filter(checkStr).isEmpty() == false) {
+                exceptionValue = checkStr.toLower();
+                break;
             }
         }
     }
+
+    // qDebug() << "isCheckBothExceptionValue :" << originStr << checkStr;
+    // qDebug() << "\t ValueEnum :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
+    // qDebug() << "\t MatchingTableICV  :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
+    // qDebug() << "\t MatchingTableEV   :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
+    // qDebug() << "\t MatchingTableFCEV :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
+    // qDebug() << "\t MatchingTablePHEV :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV];
+    // qDebug() << "\t MatchingTableHEV  :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV];
+    // qDebug() << "\t Found             :" << foundState << exceptionValue;
 
     return exceptionValue;
 }
@@ -596,9 +599,9 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
     return exceptionData;
 }
 
-QString SignalDataManager::isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+QString SignalDataManager::isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& originStr,
                                                        const QString& checkStr) {
-    QString exceptionValue = isCheckBothExceptionValue(dataInfo, origintStr, checkStr);
+    QString exceptionValue = isCheckBothExceptionValue(dataInfo, originStr, checkStr);
 
     return exceptionValue;
 }
@@ -751,7 +754,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
     for (const auto& signalName : currentSignalDataInfo.keys()) {
         if ((ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED)) &&
             (ivis::common::isCompareString(signalName, SFC_IGN_ELAPSED) == false)) {
-            qDebug() << "\t Skip IgnElapsed Signal :" << signalName;
+            // qDebug() << "\t Skip IgnElapsed Signal :" << signalName;
             continue;
         }
         newSignalDataInfo[signalName] = currentSignalDataInfo[signalName];
@@ -805,8 +808,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         QStringList precondition = signalData.getPrecondition();
 
         bool ignElaspedSingal = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
-        QString preconditionMaxValue =
-            ExcelUtil::instance().data()->isPreconditionMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
 
         if (ignElaspedSingal) {
             QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
@@ -819,72 +820,77 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                 convertData.clear();
                 precondition.clear();
             }
-        } else if (preconditionMaxValue.size() > 0) {
-            precondition = QStringList({preconditionMaxValue});
         } else {
-            bool checkExceptionValueEnum = true;
-            switch (keywordType) {
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotUsed): {
-                    convertData.clear();
-                    notUsedEnum.clear();
-                    precondition.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                    precondition = convertData;
-                    convertData.clear();
-                    notUsedEnum.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined): {
-                    int splitSize = convertData.size() * 0.5;
-                    precondition = convertData.mid(0, splitSize);
-                    convertData = convertData.mid(splitSize, convertData.size());
-                    notUsedEnum.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
-                    break;
-                }
-                default: {
-                    checkExceptionValueEnum = false;
-                    precondition = notUsedEnum;
-                    notUsedEnum.clear();
-                    break;
-                }
-            }
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
+            QString preconditionMaxValue =
+                ExcelUtil::instance().data()->isPreconditionMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
 
-            if (checkExceptionValueEnum) {
-                // Data Check : MESSAGE_TIMEOUT, timeout
-                QPair<QStringList, QStringList> exceptionData = isCheckExceptionValueEnum(signalName, dataInfo[signalName]);
-                if (exceptionData.first != exceptionData.second) {
-                    convertData = exceptionData.first;
-                    precondition = exceptionData.second;
-                }
+            if (preconditionMaxValue.size() > 0) {
+                precondition = QStringList({preconditionMaxValue});
             } else {
-                QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
-                QString checkTimeOut = QString("TIMEOUT");
-                auto currDataInfo = dataInfo[signalName];
-
-                for (auto& data : convertData) {  // ConvertData Check : MESSAGE_TIMEOUT 이 있는 경우 변경
-                    if (data.contains(originTimeOut)) {
-                        data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
-                        // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
+                bool checkExceptionValueEnum = true;
+                switch (keywordType) {
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotUsed): {
+                        convertData.clear();
+                        notUsedEnum.clear();
+                        precondition.clear();
+                        break;
+                    }
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
+                        precondition = convertData;
+                        convertData.clear();
+                        notUsedEnum.clear();
+                        break;
+                    }
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual):
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined): {
+                        int splitSize = convertData.size() * 0.5;
+                        precondition = convertData.mid(0, splitSize);
+                        convertData = convertData.mid(splitSize, convertData.size());
+                        notUsedEnum.clear();
+                        break;
+                    }
+                    case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
+                        break;
+                    }
+                    default: {
+                        checkExceptionValueEnum = false;
+                        precondition = notUsedEnum;
+                        notUsedEnum.clear();
+                        break;
                     }
                 }
-                for (auto& data : precondition) {  // Precondition Check : MESSAGE_TIMEOUT 이 있는 경우 변경
-                    if (data.contains(originTimeOut)) {
-                        data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
-                        // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
+                keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
+
+                if (checkExceptionValueEnum) {
+                    // Data Check : MESSAGE_TIMEOUT, timeout
+                    QPair<QStringList, QStringList> exceptionData = isCheckExceptionValueEnum(signalName, dataInfo[signalName]);
+                    if (exceptionData.first != exceptionData.second) {
+                        convertData = exceptionData.first;
+                        precondition = exceptionData.second;
+                    }
+                } else {
+                    QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
+                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
+                    QString checkTimeOut = QString("TIMEOUT");
+                    auto currDataInfo = dataInfo[signalName];
+
+                    for (auto& data : convertData) {  // ConvertData Check : MESSAGE_TIMEOUT 이 있는 경우 변경
+                        if (data.contains(originTimeOut)) {
+                            data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
+                            // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
+                        }
+                    }
+                    for (auto& data : precondition) {  // Precondition Check : MESSAGE_TIMEOUT 이 있는 경우 변경
+                        if (data.contains(originTimeOut)) {
+                            data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
+                            // data = isCheckExceptionSpecialText(currDataInfo, originTimeOut, checkTimeOut);
+                        }
                     }
                 }
             }
@@ -947,8 +953,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
         QStringList allConvertData = signalData.getAllConvertData();
 
         bool ignElaspedSingal = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
-        QString preconditionMaxValue =
-            ExcelUtil::instance().data()->isPreconditionMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
 
         if (ignElaspedSingal) {
             QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
@@ -956,30 +960,35 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
                 ignOriginData.append(QString("%1").arg(ignInfo.first));
             }
             continue;
-        } else if (preconditionMaxValue.size() > 0) {
-            precondition = QStringList({preconditionMaxValue});
         } else {
-            if (valueEnum.size() == 0) {
-                if (allConvertData.size() > 0) {
-                    convertData = allConvertData;
-                }
+            QString preconditionMaxValue =
+                ExcelUtil::instance().data()->isPreconditionMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
+
+            if (preconditionMaxValue.size() > 0) {
+                precondition = QStringList({preconditionMaxValue});
             } else {
-                QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
-                QString checkTimeOut = QString("TIMEOUT");
-                QString tempMatchingValue;  // not used
-                convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
-                for (auto& data : convertData) {
-                    if (data.compare(originTimeOut) == 0) {
-                        data.replace(originTimeOut, checkTimeOut.toLower());
-                        break;
+                if (valueEnum.size() == 0) {
+                    if (allConvertData.size() > 0) {
+                        convertData = allConvertData;
+                    }
+                } else {
+                    QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
+                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
+                    QString checkTimeOut = QString("TIMEOUT");
+                    QString tempMatchingValue;  // not used
+                    convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
+                    for (auto& data : convertData) {
+                        if (data.compare(originTimeOut) == 0) {
+                            data.replace(originTimeOut, checkTimeOut.toLower());
+                            break;
+                        }
                     }
                 }
-            }
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
+                keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
 
-            notUsedEnum.clear();
-            precondition.clear();
+                notUsedEnum.clear();
+                precondition.clear();
+            }
         }
 
         convertData.removeDuplicates();

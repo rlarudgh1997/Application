@@ -88,9 +88,9 @@ private:
     explicit SignalDataManager();
 
     bool isExceptionSignal(const QString& signalName);
-    QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& origintStr, const QString& checkStr);
+    QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr, const QString& checkStr);
     QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
-    QString isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& origintStr,
+    QString isCheckExceptionSpecialText(const QMap<int, QStringList>& dataInfo, const QString& originStr,
                                         const QString& checkStr);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);

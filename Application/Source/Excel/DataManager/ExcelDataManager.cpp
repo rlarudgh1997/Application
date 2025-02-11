@@ -302,8 +302,8 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const QString& tcName, const QS
 
 QStringList ExcelDataManager::isTCNameDataList(const bool& all) {
     const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
-    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    const bool appendAll = ((all) || (graphicsMode == false));
+    const bool cliTCCheck = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCLIModeTCCheck).toBool();
+    const bool appendAll = ((all) || (cliTCCheck));
     // const bool appendAll = all;
 
     QStringList tcNameList;
@@ -345,34 +345,42 @@ bool ExcelDataManager::isCheckData(const QString& tcName) {
 }
 
 int ExcelDataManager::isGenTypeData(const QString& tcName, QString& genTypeStr) {
-    const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
-    const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
-    QStringList genTypeListInfo = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenType).toStringList();
+    const int cliGenType = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCLIModeGenType).toInt();
 
-    QStringList list;
-    for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
-        QString text = currentData.at(rowIndex);
-        list.append(text);
-        // qDebug() << "\t Result[" << rowIndex << "] :" << text;
-    }
-    QStringList genTypeList = isParsingDataList(list, true);
-    genTypeStr = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
+    QStringList genTypeNames("");    // 0: Invalid, 1: Default, 2: Negative/Positive, 3: Positive
+    genTypeNames.append(ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenTypeList).toStringList());
+    int genType = ivis::common::GenTypeEnum::GenTypeInvalid;
 
-    // genTypeListInfo : at(0) - Default, at(1) - Negative/Positive, at(2) - Positive
-    int genType = ivis::common::GenTypeEnum::GenTypeDefault + genTypeListInfo.indexOf(genTypeStr);
+    if (cliGenType == ivis::common::GenTypeEnum::GenTypeInvalid) {
+        const QStringList currentData = isExcelDataOther(static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
+        const QPair<int, int> rowInfo = isRowIndexInfo(tcName, QString(), QString());
 
-    if (genType == ivis::common::GenTypeEnum::GenTypeInvalid) {
-        if (genTypeStr.size() == 0) {
-            genType = ivis::common::GenTypeEnum::GenTypeDefault;
-            genTypeStr = genTypeListInfo.at(0);
-        } else {
-            genType = ivis::common::GenTypeEnum::GenTypeInvalid;
-            qDebug() << "Fail to gen type(invaild) :" << genTypeStr;
+        QStringList list;
+        for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
+            QString text = currentData.at(rowIndex);
+            list.append(text);
+            // qDebug() << "\t Result[" << rowIndex << "] :" << text;
         }
+        QStringList genTypeList = isParsingDataList(list, true);
+        genTypeStr = (genTypeList.size() > 0) ? (genTypeList.at(0)) : (QString());
+
+        genType = genTypeNames.indexOf(genTypeStr);
+
+        if (genType == ivis::common::GenTypeEnum::GenTypeInvalid) {
+            if (genTypeStr.size() == 0) {
+                genType = ivis::common::GenTypeEnum::GenTypeDefault;
+                genTypeStr = (genType < genTypeNames.size()) ? (genTypeNames.at(genType)) : ("Default");
+            } else {
+                qDebug() << "Fail to gen type(invaild) :" << genTypeStr;
+            }
+        }
+    } else {
+        genTypeStr = (cliGenType < genTypeNames.size()) ? (genTypeNames.at(cliGenType)) : ("");
+        genType = cliGenType;
     }
 
     // qDebug() << "isGenTypeData :" << tcName;
-    // qDebug() << "\t Info :" << genTypeList.size() << genType << genTypeStr;
+    // qDebug() << "\t Info :" << genType << genTypeStr;
     // qDebug() << "\n";
 
     return genType;

@@ -24,13 +24,16 @@ TestCase::TestCase() {
     }
 }
 
-void TestCase::start(const QStringList& data) {
-    bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+void TestCase::start(const QStringList& arguments) {
+    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     int excuteType = ExcuteTypeStart;
-    setExcuteData(data);
+
+    parsingOptions(arguments);
 
     while (true) {
         int nextType = excuteTestCase(excuteType);
+
+        excuteType = nextType;
 
         if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
             emit signalTestCaseCompleted(getExcuteType(), (nextType != ExcuteTypeFailed));
@@ -40,7 +43,6 @@ void TestCase::start(const QStringList& data) {
             // }
             break;
         }
-        excuteType = nextType;
     }
 }
 
@@ -52,13 +54,14 @@ int TestCase::excuteTestCase(const int& excuteType) {
 
     switch (excuteType) {
         case ExcuteTypeStart: {
-            nextType = (graphicsMode) ? (ExcuteTypeGenConvertData) : (ExcuteTypeParsingMode);
+            // nextType = (graphicsMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeParsingAppMode);
+            nextType = ExcuteTypeParsingAppMode;
             break;
         }
-        case ExcuteTypeParsingMode:
+        case ExcuteTypeParsingAppMode:
         case ExcuteTypeParsingModule: {
-            if (inputArguments(excuteType)) {
-                nextType = (excuteType == ExcuteTypeParsingMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeExcelOpen);
+            if (parsingInputArguments(excuteType)) {
+                nextType = (excuteType == ExcuteTypeParsingAppMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeExcelOpen);
             }
             break;
         }
@@ -94,39 +97,91 @@ int TestCase::excuteTestCase(const int& excuteType) {
         }
     }
 
-    qDebug() << (QString(120, '*'));
-    qDebug() << "\t excuteTestCase :" << excuteType << "->" << nextType;
-    qDebug() << (QString(120, '-'));
-    qDebug() << "\n\n\n\n";
+    // qDebug() << (QString(120, '='));
+    qDebug() << "ExcuteTestCase :" << excuteType << "->" << nextType;
+    // qDebug() << (QString(120, '='));
 
     return nextType;
 }
 
-bool TestCase::inputArguments(const int& excuteType) {
-    QStringList arguments = getExcuteData();
-    QStringList selectedItems;
-    QStringList itemList("Exit");
+void TestCase::parsingOptions(const QStringList& arguments) {
+    const QString tcCheckInfo("ALL");
+    const QMap<QString, int> genTypeInfo = QMap<QString, int>({
+        {"DEFAULT", ivis::common::GenTypeEnum::GenTypeDefault},
+        {"NEGATIVE", ivis::common::GenTypeEnum::GenTypeNegativePositive},
+        {"POSITIVE", ivis::common::GenTypeEnum::GenTypePositive},
+    });
 
-    if (excuteType == ExcuteTypeParsingMode) {
-        QStringList appMode({"CV", "PV"});
-        QString selectMode;
-        for (const auto& mode : appMode) {
-            if ((arguments.indexOf(mode) >= 0) && (selectMode.size() == 0)) {
-                selectMode = mode;
+    // ./gen_tc.sh -c [CV/PV/CONN] -m ["ABS_CV AEM ...."]
+    // ./Applicaton gen [cv/pv] all [default/negative/positive] [module1 moduel2 .....]
+
+    QStringList currArguments = arguments;
+
+    // CLI Mode : all
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeTCCheck, false);
+    if (currArguments.indexOf(tcCheckInfo) >= 0) {
+        currArguments.removeAll(tcCheckInfo);
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeTCCheck, true);
+    }
+
+    // CLI Mode : default/negative/positive
+    int genType = ivis::common::GenTypeEnum::GenTypeInvalid;
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeGenType, genType);
+    for (const auto& key : genTypeInfo.keys()) {
+        if (currArguments.indexOf(key) >= 0) {
+            currArguments.removeAll(key);
+            if (genType == ivis::common::GenTypeEnum::GenTypeInvalid) {
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeGenType, genTypeInfo[key]);
             }
-            arguments.removeAll(mode);
         }
-        if (selectMode.size() == 0) {
-            itemList.append(appMode);
-            selectedItems = selectMultipleOptionsWithNumbers(excuteType, itemList);
-            selectMode = (selectedItems.size() == 1) ? (selectedItems.at(0)) : ("CV");
-        } else {
-            selectedItems.append(selectMode);
-        }
-        setSelectAppMode(selectMode);
-    } else if (excuteType == ExcuteTypeParsingModule) {
-        itemList.append(isModuleList());
+    }
 
+    qDebug() << "Arguments :" << arguments << "->" << currArguments;
+
+    setArguments(currArguments);
+}
+
+QStringList TestCase::parsingAppMode(const QStringList& arguments) {
+    QStringList currArguments = arguments;
+    QStringList itemList(mStrExit);
+    QStringList appModeInfo({"CV", "PV"});
+    QString selectMode;
+
+    for (const auto& mode : appModeInfo) {
+        if ((currArguments.indexOf(mode) >= 0) && (selectMode.size() == 0)) {
+            selectMode = mode;
+        }
+        currArguments.removeAll(mode);
+    }
+    if (selectMode.size() == 0) {
+        itemList.append(appModeInfo);
+        QStringList selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingAppMode, itemList);
+        for (const auto& item : selectedItems) {
+            if (appModeInfo.indexOf(item) >= 0) {
+                selectMode = item;
+                break;
+            }
+        }
+    }
+
+    int appMode = (selectMode == appModeInfo.at(1)) ? (ivis::common::AppModeEnum::AppModeTypePV)
+                                                    : (ivis::common::AppModeEnum::AppModeTypeCV);
+    setSelectAppMode(appMode);
+    setArguments(currArguments);
+
+    return QStringList(selectMode);
+}
+
+QStringList TestCase::parsingModules(const QStringList& arguments) {
+    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    QStringList itemList(mStrExit);
+    QStringList selectedItems;
+
+    itemList.append(isModuleList());
+
+    if (graphicsMode) {
+        selectedItems = arguments;
+    } else {
         for (const auto& arg : arguments) {
             for (const auto& item : itemList) {
                 if (arg.compare(item, Qt::CaseInsensitive) == 0) {    // 대소문자 구분 없이 비교
@@ -135,32 +190,49 @@ bool TestCase::inputArguments(const int& excuteType) {
                 }
             }
         }
+
         if (selectedItems.size() == 0) {
-            selectedItems = selectMultipleOptionsWithNumbers(excuteType, itemList);
+            QStringList tempSelItems;
+            selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
+            for (const auto& item : selectedItems) {
+                if (itemList.indexOf(item) >= 0) {
+                    tempSelItems.append(item);
+                }
+            }
+            selectedItems = tempSelItems;
         }
-        setSelectModules(selectedItems);
-    } else {
-        return false;
     }
-    setExcuteData(arguments);
+    setSelectModules(selectedItems);
+    setArguments(arguments);
+
+    return selectedItems;
+}
+
+bool TestCase::parsingInputArguments(const int& excuteType) {
+    QStringList selectedItems;
+
+    if (excuteType == ExcuteTypeParsingAppMode) {
+        selectedItems = parsingAppMode(getArguments());
+    } else if (excuteType == ExcuteTypeParsingModule) {
+        selectedItems = parsingModules(getArguments());
+    } else {
+    }
 
     bool result = false;
-    bool exitProgram = ((selectedItems.size() == 1) && (selectedItems.at(0) == "0"));
-    if (exitProgram) {
-        emit ControlManager::instance().data()->signalExitProgram();
-    } else {
-        result = true;
-        QTextStream output(stdout);
-        output << "\nSelected Items : " << selectedItems.join(", ") << "\n\n" << Qt::endl;
+    if (selectedItems.size() > 0) {
+        if (selectedItems.indexOf(mStrExit) >= 0) {
+            emit ControlManager::instance().data()->signalExitProgram();
+        } else {
+            result = true;
+        }
     }
 
-    // ./gen_tc.sh -c [CV/PV/CONN] -m ["ABS_CV AEM ...."]
-    // ../deploy_x86/Application gen cv abs_cv aem
+    // qDebug() << "Parsing Arg :" << result << getTCCheck() << getGenType() << getSelectAppMode();
 
     return result;
 }
 
-void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemList, const bool& clear) {
+void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemList) {
     // 고정 폭 정의 (줄당 4개 표시, 최대폭 140 기준으로 정렬)
     const int itemsPerLine = 4;
     const int lineCount = 140;
@@ -177,18 +249,17 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
         displayText.append(QString("Please enter manual module name : "));
     } else {
         displayText.append(QString(lineCount, '*') + QString("\n"));
-        if (excuteType == ExcuteTypeParsingMode) {
+        if (excuteType == ExcuteTypeParsingAppMode) {
             subTips = false;
             displayText.append("\033[32m[Select App Mode]\n\033[0m\n");
         } else if (excuteType == ExcuteTypeParsingModule) {
-            displayText.append(QString("\033[32m[Select Module : %1]\n\033[0m\n").arg(getSelectAppMode()));
+            QString appMode = (getSelectAppMode() == ivis::common::AppModeEnum::AppModeTypePV) ? ("PV") : ("CV");
+            displayText.append(QString("\033[32m[Select Module : %1]\n\033[0m\n").arg(appMode));
         } else {
             return;
         }
 
-        if (clear) {
-            // system("clear");
-        }
+        // system("clear");
 
         for (int index = 1; index < itemList.size(); ++index) {                         // itemList.at(0) = Exit
             displayText.append(QString("%1. %2").arg(index, 3)                          // 번호를 3자리 폭으로 맞춤
@@ -219,37 +290,36 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& itemList) {
     QTextStream input(stdin);
 
+    int currExcuteType = excuteType;
     QStringList selecteItems;
-    bool inputState = true;
-    bool manualInput = false;
-
     drawTerminalMenu(excuteType, itemList);
 
-    while (inputState) {
+    while (true) {
         QString inputLine = input.readLine().trimmed();
-        QStringList choices({inputLine});
+        QStringList inputList({inputLine});
 
-        if ((excuteType == ExcuteTypeParsingModule) || (manualInput)) {
-            choices = inputLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+        if ((currExcuteType == ExcuteTypeParsingModule) || (currExcuteType == ExcuteTypeManualInput)) {
+            inputList = inputLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+        } else {
+            currExcuteType = ExcuteTypeInvalidSelectItem;
         }
 
-        if (manualInput) {
-            qDebug() << "Manual Input :" << choices;
-            selecteItems.append(choices);
-        } else {
-            for (const QString& choice : choices) {
-                bool valid;
-                int selectIndex = choice.toInt(&valid);
+        for (const QString& input : inputList) {
+            if (currExcuteType == ExcuteTypeManualInput) {
+                selecteItems.append(input.toUpper());
+            } else {
+                bool valid = false;
+                int selectIndex = input.toInt(&valid);
 
                 if (valid) {
                     if (selectIndex == mNumExit) {
-                        selecteItems.append(choice);
+                        selecteItems.append(mStrExit);
                     } else if (selectIndex == mNumSelectAll) {
                         for (int index = 1; index < itemList.size(); ++index) {
                             selecteItems.append(itemList[index]);
                         }
                     } else if (selectIndex == mNumManualInput) {
-                        manualInput = true;
+                        currExcuteType = ExcuteTypeManualInput;
                     } else if ((selectIndex > 0) && (selectIndex < itemList.size())) {
                         selecteItems.append(itemList[selectIndex]);
                     } else {
@@ -259,11 +329,12 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
         }
 
         if (selecteItems.size() == 0) {
-            drawTerminalMenu((manualInput) ? (ExcuteTypeManualInput) : (ExcuteTypeInvalidSelectItem), itemList);
+            drawTerminalMenu(currExcuteType, itemList);
         } else {
             selecteItems.sort();
             selecteItems.removeDuplicates();
-            inputState = false;
+            // qDebug() << "Selected Items :" << selecteItems;
+            break;
         }
     }
 
@@ -294,31 +365,67 @@ void TestCase::terminateApplicaton() {
 }
 
 QStringList TestCase::isModuleList() {
-    int appMode = ((getSelectAppMode() == QString("CV")) ? (ivis::common::AppModeEnum::AppModeTypeCV)
-                                                         : (ivis::common::AppModeEnum::AppModeTypePV));
-    QMap<QString, QString> moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QMap<QString, QString> moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(getSelectAppMode(), false);
     QStringList moduleList = moduleInfo.keys();
     writeModuleList(moduleInfo);
+
+    // for (const auto& key : moduleInfo.keys()) {
+    //     qDebug() << "ModuleList :" << getModuleList(key);
+    // }
+
     return moduleList;
+}
+
+QList<QVariantList> TestCase::isSheetData() {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+    QList<QVariantList> sheetDataList;
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        QVariantList sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
+        sheetDataList.append(sheetData);
+    }
+
+    qDebug() << "isSheetData :" << sheetDataList.size();
+
+    return sheetDataList;
+}
+
+void TestCase::updateSheetData(const QList<QVariantList>& sheetDataList) {
+    qDebug() << "updateSheetData :" << sheetDataList.size();
+
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    for (const auto& sheetData : sheetDataList) {
+        ExcelData::instance().data()->setSheetData(sheetIndex++, sheetData);
+    }
 }
 
 bool TestCase::openExcelFile() {
     QStringList selectModules = getSelectModules();
     QString currModule = (selectModules.size() > 0) ? (selectModules.at(0)) : ("");
+
     if (currModule.size() == 0) {
         qDebug() << "Fail to select module size : 0";
         return false;
     }
 
-    QString filePath = getModuleList(currModule);
-    QList<QVariantList> sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
-    bool result = (sheetDataList.size() > 0);
-    if (result) {
-        int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-        for (const auto& sheetData : sheetDataList) {
-            ExcelData::instance().data()->setSheetData(propertyType++, sheetData);
-        }
+    const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+    const QString filePath = getModuleList(currModule);
 
+    QList<QVariantList> sheetDataList;
+
+    if (sheetEditState) {
+        sheetDataList = isSheetData();
+    } else {
+        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+    }
+
+    bool result = (sheetDataList.size() > 0);
+
+    qDebug() << "openExcelFile :" << sheetEditState << result << currModule << filePath;
+
+    if (result) {
+        updateSheetData(sheetDataList);
         selectModules.removeAll(currModule);
         setSelectModules(selectModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);

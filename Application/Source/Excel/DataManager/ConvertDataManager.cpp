@@ -11,6 +11,9 @@
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
 
+// #define ENABLE_CONFIG_DEBUG_LOG
+// #define ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG
+
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
 QSharedPointer<ConvertDataManager>& ConvertDataManager::instance() {
@@ -80,7 +83,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     return true;
 }
 
-bool ConvertDataManager::convertKeywordData() {
+bool ConvertDataManager::replaceGenDataInfo() {
     const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
     const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
@@ -115,6 +118,35 @@ bool ConvertDataManager::convertKeywordData() {
     constructConvertKeywordDataInfo(keywordTypeInfoListForNonSheet);
 
     qDebug() << "\n=========================================================================================================\n\n";
+    return result;
+}
+
+bool ConvertDataManager::convertKeywordData() {
+    bool result = false;
+
+    if (convertInputSignalKeyword() == true) {
+        result = true;
+    }
+
+    // 추 후 하기 API로 변경 예정
+    // if (convertInputDataKeyword() == true) {
+    //     result = true;
+    // }
+    const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+    const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
+    const int convertEnd = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
+
+    const QList<int> columnListForNonSheetKeyword = QList({
+        static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case),
+        static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal),
+        static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData),
+        static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal),
+    });
+    QMap<int, QList<KeywordInfo>> keywordTypeInfoListForNonSheet =
+        constructKeywordTypeInfoList(convertStart, convertEnd, columnListForNonSheetKeyword);
+    constructConvertKeywordDataInfo(keywordTypeInfoListForNonSheet);
+
     return result;
 }
 
@@ -976,7 +1008,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
         }
 
         QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(true);
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
         qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
         qDebug() << "TCName List     : " << tcNameList;
@@ -988,7 +1020,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
             // get - config 관련 Signal List set
             QString configStr = ExcelDataManager::instance().data()->isConfigData(tcNameStr);
             QList<QList<QStringList>> configDataInfoList = constructConvertConfigSignalSet(constructMergeKeywords("", configStr));
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
             qDebug() << "TCName          : " << tcNameStr;
             qDebug() << "Config          : " << configStr << ", Data : " << configDataInfoList;
             qDebug() << "Result List     : " << resultStrList;
@@ -999,7 +1031,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                 QString resultStr = resultStrList.at(resultIdx);
                 QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(tcNameStr, resultStr);
 
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                 qDebug() << "Result          : " << resultStr;
 #endif
                 // config data set 기준으로 Result 배수 증가 (OR 기준 : A or B or C -> Case1_A, Case1_B, Case1_C ... )
@@ -1016,7 +1048,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                             caseInputDataList.second.append("");
                         }
                         ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, caseInputDataList);
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                         qDebug() << "No Config Data Exist Condition";
 #endif
                         continue;
@@ -1025,7 +1057,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                     // config 동작 조건이 있는 경우
                     for (int configSetIndex = 0; configSetIndex < configDataInfoList.size(); ++configSetIndex) {
                         QPair<QStringList, QStringList> inputDataList = caseInputDataList;
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                         qDebug()
                             << ""
                                "--------------------------------------------------------------------------------------------";
@@ -1037,7 +1069,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                         if (inputDataList.first.isEmpty() == false && inputDataList.second.isEmpty() == false) {
                             QList<QStringList> tmpConfigDataSet = configDataInfoList.at(configSetIndex);
                             for (int idx = 0; idx < tmpConfigDataSet.size(); ++idx) {
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                                 qDebug() << "tmpConfigDataSet : " << tmpConfigDataSet.at(idx);
 #endif
                                 QString inputSignalName =
@@ -1066,7 +1098,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                                     inputDataList.second.append(inputSignalData);  // InputData - StringList
                                 }
                             }
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                             qDebug() << "InputData(sig) after append : " << inputDataList.first;
                             qDebug() << "InputData(val) after append : " << inputDataList.second;
 #endif
@@ -1079,7 +1111,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                             inputDataList.first.append("");
                             inputDataList.second.append("");
                             ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                             qDebug() << "others case (not operated input signal/data)";
 #endif
                             break;
@@ -1087,11 +1119,11 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                     }
                     // config 동작 조건이 한개 이상인 경우 (Config excel 생성)
                     result = true;
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                     qDebug() << "Config Data Exist : " << configDataInfoList;
 #endif
                 }
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                 qDebug() << "############################################################################################";
 #endif
             }
@@ -1106,7 +1138,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                 ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
             } else {
                 // no data changed.
-#if defined(ENABLE_CONFIG_TEST_LOG)
+#if defined(ENABLE_CONFIG_DEBUG_LOG)
                 qDebug("[appendConvertConfigSignalSet] No Config Data (sheet index : %d) -> No need to create excel file",
                        sheetIndex);
 #endif
@@ -1261,6 +1293,327 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
     }
 
     return result;
+}
+
+bool ConvertDataManager::convertInputSignalKeyword() {
+    bool result = false;
+
+    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+
+    // Private ~ Output Sheet Loop
+    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+        int convertSheetIndex = sheetIndex -
+                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) +
+                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
+        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
+            qDebug() << "Not support sheet :" << sheetIndex;
+            auto originSheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
+            ExcelData::instance().data()->setSheetData(convertSheetIndex, originSheetData);
+            continue;
+        }
+        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
+        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+        // List => TCName, ResultName, CaseName, <InputSignalList, InputDataList>
+        QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>> backupCurSheetIndexData;
+        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(true);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+        qDebug() << "============================[convertInputSignalKeyword]=====================================";
+        qDebug() << "Sheet Index     : " << sheetIndex;
+        qDebug() << "TCName List     : " << tcNameList;
+#endif
+        // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
+        for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
+            QString tcNameStr = tcNameList.at(tcIdx);
+            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(tcNameStr);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+            qDebug() << "TCName          : " << tcNameStr;
+            qDebug() << "Result List     : " << resultStrList;
+            qDebug() << "############################################################################################";
+#endif
+            // TCName 하위의 Result 리스트 기반으로 Case Data 처리
+            for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
+                QString resultStr = resultStrList.at(resultIdx);
+                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(tcNameStr, resultStr);
+
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                qDebug() << "tcNameStr       : " << tcNameStr;
+                qDebug() << "Result          : " << resultStr;
+                qDebug() << "Case List       : " << caseStrList;
+#endif
+                for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
+                    QString caseStr = caseStrList.at(caseIdx);
+                    QPair<QStringList, QStringList> caseInputDataList =
+                        ExcelDataManager::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                    qDebug() << ""
+                                "--------------------------------------------------------------------------------------------";
+                    qDebug() << "Case            : " << caseStr;
+                    qDebug() << "InputData(sig)  : " << caseInputDataList.first;
+                    qDebug() << "InputData(val)  : " << caseInputDataList.second;
+#endif
+                    QStringList inputSignalStringList = caseInputDataList.first;
+
+                    QString sheetKeywordStr = ExcelUtil::instance().data()->isKeywordString(
+                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet));
+                    QString notTriggerKeywordStr = ExcelUtil::instance().data()->isKeywordString(
+                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger));
+                    QString presetKeywordStr = ExcelUtil::instance().data()->isKeywordString(
+                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Preset));
+
+                    // Case 하위의 input signal list 중에 [Sheet] 키워드가 있는지 확인하는 방법
+                    bool hasSheetKeyword = !inputSignalStringList.filter(sheetKeywordStr).isEmpty();
+                    if (hasSheetKeyword == true) {
+                        auto sheetKeywordResultInfo = convertSheetKeyword(caseInputDataList, sheetIndex);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                        qDebug() << "[[[Result]]] sheetKeywordResultInfo : " << sheetKeywordResultInfo;
+#endif
+                        QString tmpCaseName = caseStr;
+
+                        for (int i = 0; i < sheetKeywordResultInfo.size(); ++i) {
+                            QString sheetCaseName = sheetKeywordResultInfo.at(i).first;
+                            QPair<QStringList, QStringList> sheetInputPairData = sheetKeywordResultInfo.at(i).second;
+                            QString caseNameStr = mergeCaseName(tmpCaseName, sheetCaseName);
+                            appendCurSheetData(tcNameStr, resultStr, caseNameStr, sheetInputPairData, backupCurSheetIndexData);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                            qDebug() << ":::: tcNameStr : " << tcNameStr;
+                            qDebug() << ":::: resultStr : " << resultStr;
+                            qDebug() << ":::: caseNameStr : " << caseNameStr;
+                            qDebug() << ":::: sheetInputPairData : " << sheetInputPairData;
+#endif
+                        }
+                    }
+                    bool hasNotTriggerKeyword = !inputSignalStringList.filter(notTriggerKeywordStr).isEmpty();
+                    // TODO(csh): TBD
+                    bool hasPresetKeyword = !inputSignalStringList.filter(presetKeywordStr).isEmpty();
+                    // TODO(csh): TBD
+
+                    if (hasSheetKeyword == false && hasNotTriggerKeyword == false && hasPresetKeyword == false) {
+                        appendCurSheetData(tcNameStr, resultStr, caseStr, caseInputDataList, backupCurSheetIndexData);
+                    }
+                    result = true;
+                }
+            }
+        }
+
+        if (result == true) {
+            updateCurSheetData(backupCurSheetIndexData);
+            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo();
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+            qDebug() << "[[Set Sheet Data] currentSheetData : " << currentSheetData;
+#endif
+            if (currentSheetData.size() > 0) {
+                QVariantList tmpSheetData;
+                for (auto& data : currentSheetData) {
+                    tmpSheetData.append(data);
+                }
+                ExcelData::instance().data()->setSheetData(convertSheetIndex, tmpSheetData);
+            } else {
+                // no data changed.
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                qDebug("[convertInputSignalKeyword] No Data Changed (sheet index : %d) -> No need to create excel file",
+                       convertSheetIndex);
+#endif
+            }
+        }
+    }
+
+    return result;
+}
+
+void ConvertDataManager::appendCurSheetData(
+    const QString& tcName, const QString& resultName, const QString& caseName,
+    const QPair<QStringList, QStringList>& inputDataInfo,
+    QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData) {
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+    qDebug() << "======================= [appendCurSheetData] ==========================================";
+    qDebug() << "insert Cur Sheet Data : ";
+    qDebug() << "1) tcName        : " << tcName;
+    qDebug() << "2) resultName    : " << resultName;
+    qDebug() << "3) caseName      : " << caseName;
+    qDebug() << "4) inputDataInfo : " << inputDataInfo;
+#endif
+    retCurSheetData.append(make_tuple(tcName, resultName, caseName, inputDataInfo));
+}
+
+void ConvertDataManager::updateCurSheetData(
+    const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData) {
+    for (int i = 0; i < retCurSheetData.size(); ++i) {
+        auto tmpSheetData = retCurSheetData.at(i);
+        ExcelDataManager::instance().data()->updateCaseDataInfo(std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
+                                                                std::get<2>(tmpSheetData), std::get<3>(tmpSheetData));
+    }
+}
+
+bool ConvertDataManager::convertInputDataKeyword() {
+    bool result = false;
+
+    return result;
+}
+
+// [Sheet] 키워드 해석 기능
+QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::convertSheetKeyword(
+    const QPair<QStringList, QStringList>& inputDataPairInfo, const int& currentSheetIndex) {
+    QList<QPair<QString, QPair<QStringList, QStringList>>> sheetDataInfo;
+    QStringList inputSignalStrList = inputDataPairInfo.first;
+    QStringList inputDataStrList = inputDataPairInfo.second;
+
+    if ((inputSignalStrList.isEmpty() == false && inputDataStrList.isEmpty() == false) &&
+        (inputSignalStrList.size() == inputDataStrList.size())) {
+        for (int index = 0; index < inputSignalStrList.size(); ++index) {
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+            qDebug() << "-------------------------------------------------------------------------------";
+            qDebug() << "---> signal : " << inputSignalStrList.at(index);
+            qDebug() << "--->   data : " << inputDataStrList.at(index);
+#endif
+            QString inputSignalStr = inputSignalStrList.at(index);
+            QString inputDataStr = inputDataStrList.at(index);
+            if (inputSignalStrList.at(index).contains("[Sheet]") == true) {
+                inputSignalStr.remove("[Sheet]");
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                qDebug() << "----> [Sheet] keyword Exist!";
+                qDebug() << "----> remove [Sheet] : " << inputSignalStr;
+#endif
+                // input signal : [Sheet]Private_A
+                // input data   : ON, OFF... (2개 이상의 data 지원하기 위함)
+                QStringList inputDataSplitStr = inputDataStr.remove(" ").split(",");
+                for (int i = 0; i < inputDataSplitStr.size(); ++i) {
+                    // QList<QPair<QString, QPair<QStringList, QStringList>>>
+                    auto sheetSignalDataInfo = getSheetSignalDataInfo(inputSignalStr, inputDataSplitStr.at(i));
+
+                    if (sheetSignalDataInfo.isEmpty() == false) {
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                        qDebug() << "-----> [Sheet] Info : " << sheetSignalDataInfo;
+#endif
+                        for (int i = 0; i < sheetSignalDataInfo.size(); ++i) {
+                            // [CaseName, <InputSignalList, InputDataList>]
+                            QString sheetCaseName = sheetSignalDataInfo.at(i).first;
+                            QPair<QStringList, QStringList> sheetInputDataInfo = sheetSignalDataInfo.at(i).second;
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                            qDebug() << "====================================================================================";
+                            qDebug() << "1. caseName      : " << sheetCaseName;
+                            qDebug() << "2. [Sheet] inputSignalStrList : " << sheetInputDataInfo.first;
+                            qDebug() << "3. [Sheet] inputDataInfo      : " << sheetInputDataInfo.second;
+                            qDebug() << "4. [Excel] inputSignalStrList : " << inputSignalStrList;
+                            qDebug() << "5. [Excel] inputDataInfo      : " << inputDataStrList;
+#endif
+                            auto tmpInputDataInfo = getMergedInputDataInfo(inputDataPairInfo, sheetInputDataInfo);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                            qDebug() << "[[[Result]]] tmpInputDataInfo : " << tmpInputDataInfo;
+#endif
+                            sheetDataInfo.append(qMakePair(sheetCaseName, tmpInputDataInfo));
+                        }
+                    }
+                }
+            } else {
+                // [Sheet] 키워드 존재하지 않음
+                // 원래 data 삽입
+                // sheetDataInfo Empty
+            }
+        }
+    }
+
+    auto sheetData = ExcelData::instance().data()->getSheetData(currentSheetIndex).toList();
+    ExcelDataManager::instance().data()->updateExcelData(currentSheetIndex, sheetData);
+
+    return sheetDataInfo;
+}
+
+// List = [CaseName1, (InputSignalList, InputDataList)] + [CaseName2, (InputSignalList, InputDataList)] + ...
+QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSheetSignalDataInfo(const QString& name,
+                                                                                                  const QString& data) {
+    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) + 1;
+    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    QList<QPair<QString, QPair<QStringList, QStringList>>> sheetKeywordSignalDataInfo;
+
+    // Private ~ Output Sheet Loop
+    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+        if (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs)) {
+            qDebug() << "Not support sheet :" << sheetIndex;
+            continue;
+        }
+        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
+        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+
+        QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(name, data);
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+        qDebug() << "-----> Find Sheet Case List : " << caseStrList;
+#endif
+        for (int caseIndex = 0; caseIndex < caseStrList.size(); ++caseIndex) {
+            QString caseNameStr = caseStrList.at(caseIndex);
+            QPair<QStringList, QStringList> caseInputDataList =
+                ExcelDataManager::instance().data()->isInputDataList(name, data, caseNameStr, false);
+
+            if (caseInputDataList.first.isEmpty() == false && caseInputDataList.second.isEmpty() == false) {
+                sheetKeywordSignalDataInfo.append(qMakePair(caseNameStr, caseInputDataList));
+            }
+        }
+        if (caseStrList.isEmpty() == false) {
+            break;
+        }
+    }
+
+    return sheetKeywordSignalDataInfo;
+}
+
+QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const QPair<QStringList, QStringList>& origin,
+                                                                           const QPair<QStringList, QStringList>& sheet) {
+    QPair<QStringList, QStringList> retVal;
+
+    QSet<QString> seen;  // 중복 확인용 Set
+    QStringList mergedSignalList;
+    QStringList mergedDataList;
+
+    const QStringList& originSignalList = origin.first;
+    const QStringList& originDataList = origin.second;
+    const QStringList& sheetSignalList = sheet.first;
+    const QStringList& sheetDataList = sheet.second;
+
+    bool sheetInserted = false;
+
+    for (int i = 0; i < originSignalList.size(); ++i) {
+        const QString& signal = originSignalList[i];
+        const QString& data = originDataList[i];
+
+        // [Sheet]가 포함된 항목을 만나면 삭제하고 sheet 리스트 삽입
+        if (signal.contains("[Sheet]")) {
+            if (!sheetInserted) {
+                // sheet 데이터를 현재 위치부터 삽입
+                for (int j = 0; j < sheetSignalList.size(); ++j) {
+                    if (!seen.contains(sheetSignalList[j])) {
+                        seen.insert(sheetSignalList[j]);
+                        mergedSignalList.append(sheetSignalList[j]);
+                        mergedDataList.append(sheetDataList[j]);
+                    }
+                }
+                sheetInserted = true;  // 한 번만 삽입
+            }
+            continue;  // 기존의 [Sheet] 포함된 원본 signal/data는 삭제
+        }
+
+        // 중복 방지 후 추가
+        if (!seen.contains(signal)) {
+            seen.insert(signal);
+            mergedSignalList.append(signal);
+            mergedDataList.append(data);
+        }
+    }
+
+    retVal.first = mergedSignalList;
+    retVal.second = mergedDataList;
+
+    return retVal;
+}
+
+QString ConvertDataManager::mergeCaseName(const QString& prefix, const QString& suffix) {
+    QString mergedCaseName;
+
+    if (prefix.isEmpty() == false && suffix.isEmpty() == false) {
+        mergedCaseName = prefix + "_" + suffix;
+    }
+
+    return mergedCaseName;
 }
 
 inline QString ConvertDataManager::constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const {

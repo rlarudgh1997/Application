@@ -63,6 +63,9 @@ MainWindow::~MainWindow() {
 void MainWindow::controlConnect(const bool& graphicsMode) {
     connect(this, &MainWindow::signalBootingCompleted, [=]() {
         if (graphicsMode == false) {
+            if (getArguments().size() == 0) {
+                return;    // start : graphicsMode
+            }
             const QString keyGen("GEN");
             QStringList arguments;
             for (const auto& arg : getArguments()) {
@@ -71,6 +74,11 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
             if (arguments.indexOf(keyGen) >= 0) {
                 arguments.removeAll(keyGen);
                 TestCase::instance().data()->start(arguments);
+            } else {
+                qInfo() << "Option value error when running in cli mode.";
+                qInfo() << "\t arguments :" << arguments;
+
+                emit ControlManager::instance().data()->signalExitProgram();
             }
         }
     });

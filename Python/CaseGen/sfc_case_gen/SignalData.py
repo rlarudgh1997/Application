@@ -5,13 +5,14 @@ This module provides Data for VSM or SFC Signal
 """
 
 class SignalData:
-    def __init__(self, gen_type, name, data_type, keyword_type, data, precondition, value_enum):
+    def __init__(self, gen_type, name, data_type, keyword_type, data, precondition, precondition_idx, value_enum):
         self.gen_type = gen_type
         self.InputSignalName = name
         self.InputDataType = data_type
         self.InputKeywordType = keyword_type
         self.InputData = data  # Keep this as list
         self.InputPrecondition = precondition
+        self.PreconditionIdx = precondition_idx
         self.InputValueEnum = value_enum  # Keep this as list
         # Extract hex values only from InputValueEnum
         self.InputValueEnumHex = self.extract_hex_values(value_enum)

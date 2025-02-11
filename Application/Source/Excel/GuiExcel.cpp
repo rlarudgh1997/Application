@@ -1462,7 +1462,7 @@ void GuiExcel::updateDisplaySelectGenType() {
     QVariantList info = QVariantList({
         QString("Select Type"),
         QString(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeGenType, info);
 }
@@ -1473,7 +1473,7 @@ void GuiExcel::updateDisplayGenType(const int& genType) {
     const int columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType);
 
     QStringList genTypeNames("");    // GenTypeName index 와 genType 값을 동일하게 구성하기 위해서
-    genTypeNames.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeName).toStringList());
+    genTypeNames.append(isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList).toStringList());
     QString currGenTypeName = (genType < genTypeNames.size()) ? (genTypeNames.at(genType)) : ("");
 
     for (int sheetIndex = startIndex; sheetIndex <= endIndex; ++sheetIndex) {
@@ -1490,7 +1490,6 @@ void GuiExcel::updateDisplayGenType(const int& genType) {
         syncSheetData(sheetIndex);
     }
 }
-
 
 void GuiExcel::updateDisplayTCCheck(const int& allCheck) {
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
