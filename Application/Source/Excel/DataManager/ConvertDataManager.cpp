@@ -991,6 +991,7 @@ QList<QList<QStringList>> ConvertDataManager::constructConvertConfigSignalSet(co
     return retConfigList;
 }
 
+#define NO_DUPLICATED_SIGNAL -1
 bool ConvertDataManager::appendConvertConfigSignalSet() {
     bool result = false;
     const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
@@ -1047,7 +1048,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                             caseInputDataList.first.append("");
                             caseInputDataList.second.append("");
                         }
-                        ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, caseInputDataList);
+                        ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, caseInputDataList);
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
                         qDebug() << "No Config Data Exist Condition";
 #endif
@@ -1056,61 +1057,80 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
 
                     // config 동작 조건이 있는 경우
                     for (int configSetIndex = 0; configSetIndex < configDataInfoList.size(); ++configSetIndex) {
-                        QPair<QStringList, QStringList> inputDataList = caseInputDataList;
+                        QPair<QStringList, QStringList> inputDataPairList = caseInputDataList;
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
-                        qDebug()
-                            << ""
-                               "--------------------------------------------------------------------------------------------";
+                        qDebug() << "---------------------------------- [Case] ----------------------------------";
                         qDebug() << "Case            : " << caseStr;
-                        qDebug() << "InputData(sig)  : " << inputDataList.first;
-                        qDebug() << "InputData(val)  : " << inputDataList.second;
+                        qDebug() << "InputData(sig)  : " << inputDataPairList.first;
+                        qDebug() << "InputData(val)  : " << inputDataPairList.second;
 #endif
                         // other 예외 처리 조건 (other에는 config data set append (X))
-                        if (inputDataList.first.isEmpty() == false && inputDataList.second.isEmpty() == false) {
+                        if (inputDataPairList.first.isEmpty() == false && inputDataPairList.second.isEmpty() == false) {
                             QList<QStringList> tmpConfigDataSet = configDataInfoList.at(configSetIndex);
+                            QString customConfigKeywordStr = ExcelUtil::instance().data()->isKeywordString(
+                                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig));
+
                             for (int idx = 0; idx < tmpConfigDataSet.size(); ++idx) {
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
-                                qDebug() << "tmpConfigDataSet : " << tmpConfigDataSet.at(idx);
+                                qDebug() << "[AND Case] Merged Config Data Set for Insert : " << tmpConfigDataSet.at(idx);
 #endif
                                 QString inputSignalName =
                                     tmpConfigDataSet[idx][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)];
 
-                                QString kyewordStr = ExcelUtil::instance().data()->isKeywordString(
-                                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig));
                                 QString inputSignalData =
                                     QString("%1%2")
-                                        .arg(kyewordStr)
+                                        .arg(customConfigKeywordStr)
                                         .arg(tmpConfigDataSet[idx]
                                                              [static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)]);
-                                // Config의 SignalData Pair와 Sheet의 InputSignalData Pair에 중복되는 pair가 존재할 경우 Config를
-                                // 우선적으로 사용
+
                                 // TODO(csh): Error Type function 추가(arg: enum type / QStringList infoData)
-                                bool isDuplicatedConfigDataPair = false;
-                                int findSignalIndex = inputDataList.first.indexOf(inputSignalName);
-                                if (findSignalIndex != -1) {  // config signal과 inputSignal과 중복
-                                    if (inputDataList.second.size() > findSignalIndex) {
-                                        inputDataList.second[findSignalIndex] = inputSignalData;
-                                    }
-                                    isDuplicatedConfigDataPair = true;
+                                // Config의 SignalData Pair와 Sheet의 InputSignalData Pair에 중복되는 pair가 존재할 경우
+                                // InputData를 우선적으로 사용하기 위한 로직
+                                // Data Format : [CustomConfig]+InputData
+                                int findSignalIndex = inputDataPairList.first.indexOf(inputSignalName);
+
+                                if (findSignalIndex == NO_DUPLICATED_SIGNAL) {  // config 와 input signal 간 중복 항목 X 조건
+                                    inputDataPairList.first.append(inputSignalName);   // InputSignal - StringList
+                                    inputDataPairList.second.append(inputSignalData);  // InputData - StringList
                                 }
-                                if (isDuplicatedConfigDataPair == false) {
-                                    inputDataList.first.append(inputSignalName);   // InputSignal - StringList
-                                    inputDataList.second.append(inputSignalData);  // InputData - StringList
+                                // (Config OR 조건인 경우) input signal/data에서 Config(동작조건)의 signal/data가 이미
+                                // 사용되어지는 경우, 해당 사용 signal도 [CustomConfig] 키워드 추가 필요
+                                for (int configIdx = 0; configIdx < configDataInfoList.size(); ++configIdx) {
+                                    QList<QStringList> configDataSet = configDataInfoList.at(configIdx);
+                                    for (int i = 0; i < configDataSet.size(); ++i) {
+                                        QString configSignalName =
+                                            configDataSet[i][static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal)];
+
+                                        int findConfigSignalIndex = inputDataPairList.first.indexOf(configSignalName);
+                                        if (findConfigSignalIndex != NO_DUPLICATED_SIGNAL) {  // config와 input signal 중복 조건
+                                            if (inputDataPairList.second.size() > findConfigSignalIndex) {
+                                                QString tmpConfigDataInInputData =
+                                                    inputDataPairList.second[findConfigSignalIndex];
+                                                // [CustomConfig] 키워드가 없는 경우에만 추가
+                                                if (tmpConfigDataInInputData.contains(customConfigKeywordStr) == false) {
+                                                    inputDataPairList.second[findConfigSignalIndex] =
+                                                        QString("%1%2").arg(customConfigKeywordStr).arg(tmpConfigDataInInputData);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
+
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
-                            qDebug() << "InputData(sig) after append : " << inputDataList.first;
-                            qDebug() << "InputData(val) after append : " << inputDataList.second;
+                            qDebug() << "InputData(sig) after append : " << inputDataPairList.first;
+                            qDebug() << "InputData(val) after append : " << inputDataPairList.second;
 #endif
-                            ExcelDataManager::instance().data()->updateCaseDataInfo(
+                            ExcelDataManager::instance().data()->updateInputDataInfo(
                                 tcNameStr, resultStr,
                                 QString("%1 %2_%3").arg(caseStr).arg("config").arg(QString::number(configSetIndex)),
-                                inputDataList);
+                                inputDataPairList);
                         } else {
                             // others 인 경우 (input signal/data가 존재하지 않기 때문에, config signal/data append set 수행 X)
-                            inputDataList.first.append("");
-                            inputDataList.second.append("");
-                            ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                            inputDataPairList.first.append("");
+                            inputDataPairList.second.append("");
+                            ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr,
+                                                                                    inputDataPairList);
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
                             qDebug() << "others case (not operated input signal/data)";
 #endif
@@ -1201,7 +1221,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                     if (inputDataList.first.isEmpty() == true && inputDataList.second.isEmpty() == true) {
                         inputDataList.first.append("");
                         inputDataList.second.append("");
-                        ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                        ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
                         break;
                     }
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
@@ -1273,7 +1293,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         inputDataList.first.append(inputSignalStr);
                         inputDataList.second.append(inputDataStr);
                     }
-                    ExcelDataManager::instance().data()->updateCaseDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                    ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
                     qDebug() << "InputData(sig) after append : " << inputDataList.first;
                     qDebug() << "InputData(val) after append : " << inputDataList.second;
@@ -1441,8 +1461,15 @@ void ConvertDataManager::updateCurSheetData(
     const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData) {
     for (int i = 0; i < retCurSheetData.size(); ++i) {
         auto tmpSheetData = retCurSheetData.at(i);
-        ExcelDataManager::instance().data()->updateCaseDataInfo(std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
-                                                                std::get<2>(tmpSheetData), std::get<3>(tmpSheetData));
+        ExcelDataManager::instance().data()->updateInputDataInfo(std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
+                                                                 std::get<2>(tmpSheetData), std::get<3>(tmpSheetData));
+#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+        qDebug() << "======================= [updateCurSheetData] ==========================================";
+        qDebug() << "1. tcName        : " << std::get<0>(tmpSheetData);
+        qDebug() << "2. resultName    : " << std::get<1>(tmpSheetData);
+        qDebug() << "3. caseName      : " << std::get<2>(tmpSheetData);
+        qDebug() << "4. inputDataInfo : " << std::get<3>(tmpSheetData);
+#endif
     }
 }
 

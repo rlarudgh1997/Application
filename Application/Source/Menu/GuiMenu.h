@@ -32,9 +32,9 @@
 class GuiMenu : public AbstractGui {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(QVariantList, SelectModuleList, QVariantList(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, TestResultComplted, false, false)
-    REGISTER_WRITABLE_PROPERTY(QVariantList, ProgressInfo, QVariantList({0, 0}), false)
+    REGISTER_WRITABLE_VALUE(QVariantList, SelectModuleList, QVariantList())
+    REGISTER_WRITABLE_VALUE(bool, TestResultComplted, false)
+    REGISTER_WRITABLE_VALUE(QVariantList, ProgressInfo, QVariantList({0, 0}))
 
 public:
     static QSharedPointer<GuiMenu>& instance(AbstractHandler* handler = nullptr);

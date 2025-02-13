@@ -18,7 +18,7 @@ QT_END_NAMESPACE
 class Dialog : public QDialog {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY_CONTAINER(QHash, int, QVariant, Property, false)
+    REGISTER_WRITABLE_CONTAINER(QHash, int, QVariant, Property)
 
 public:
     enum {

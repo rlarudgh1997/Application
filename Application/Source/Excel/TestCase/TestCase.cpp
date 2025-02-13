@@ -409,27 +409,29 @@ bool TestCase::openExcelFile() {
         return false;
     }
 
+    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
-    const QString filePath = getModuleList(currModule);
+    QString filePath;
 
     QList<QVariantList> sheetDataList;
 
-    if (sheetEditState) {
+    if ((graphicsMode) || (sheetEditState)) {   // 임시코드 : 경로 이상 문제 수정
         sheetDataList = isSheetData();
+        filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
     } else {
         sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+        filePath = getModuleList(currModule);
     }
 
     bool result = (sheetDataList.size() > 0);
-
-    qDebug() << "openExcelFile :" << sheetEditState << result << currModule << filePath;
-
     if (result) {
         updateSheetData(sheetDataList);
         selectModules.removeAll(currModule);
         setSelectModules(selectModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);
     }
+
+    qDebug() << "openExcelFile :" << sheetEditState << result << currModule << filePath;
 
     return result;
 }

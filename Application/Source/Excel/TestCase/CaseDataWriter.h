@@ -83,6 +83,7 @@ public:
                                     }
                                 }
                             }
+
                             for (const QString& caseKey : resultObj.keys()) {
                                 if (caseKey.startsWith("_Case[")) {
                                     QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
@@ -92,8 +93,7 @@ public:
                                     QStringList inputSignalList =
                                         resultObj[caseKey][QString("InputSignalList")].toObject().keys();
                                     QVector<int> preconditionOrder;
-                                    for (const QJsonValue& value :
-                                         resultObj[caseKey][QString("InputSignalList")][QString("PreconditionOrder")].toArray()) {
+                                    for (const QJsonValue& value : resultObj[caseKey][QString("PreconditionOrder")].toArray()) {
                                         if (value.isDouble()) {
                                             preconditionOrder.append(value.toInt());
                                         }

@@ -4,14 +4,19 @@
 #include <QObject>
 
 #include "AbstractControl.h"
+#include "CommonDefine.h"
 #include "CommonUtil.h"
 
 class ControlManager : public QObject {
     Q_OBJECT
 
+#if defined(USE_RESIZE_SIGNAL)
     REGISTER_WRITABLE_PROPERTY(QSize, ScreenSize, QSize(), true)
-    REGISTER_WRITABLE_PROPERTY(int, PreviousMode, 0, true)
-    REGISTER_WRITABLE_PROPERTY(int, CurrentMode, 0, true)
+#else
+    REGISTER_WRITABLE_VALUE(QSize, ScreenSize, QSize())
+#endif
+    REGISTER_WRITABLE_VALUE(int, PreviousMode, 0)
+    REGISTER_WRITABLE_VALUE(int, CurrentMode, 0)
 
 public:
     static QSharedPointer<ControlManager>& instance();

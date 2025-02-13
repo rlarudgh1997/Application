@@ -24,6 +24,7 @@ const QString TEXT_SHEET = QString("Sheet");
 const QString TEXT_COLLECT = QString("Collect");
 const QString TEXT_VALUE_ENUM = QString("ValueEnum");
 const QString TEXT_EMPTY = QString("[Empty]");
+const QString TEXT_PRECONDITION_ORDER = QString("PreconditionOrder");
 const QString TEXT_INPUT_SIGNAL_LIST = QString("InputSignalList");
 const QString TEXT_INPUT_SIGNAL_NAME = QString("SignalName");
 const QString TEXT_INPUT_DATA = QString("InputData");
@@ -630,10 +631,12 @@ void GenerateCaseData::removeMatchingKeys(QJsonObject& otherJson, const QJsonObj
 QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QString& tcName, const QJsonObject& caseJsonObject,
                                               const bool& isOther) {
     QJsonObject inputSignalList = caseJsonObject[TEXT_INPUT_SIGNAL_LIST].toObject();
+    auto preconditionOrder = caseJsonObject[TEXT_PRECONDITION_ORDER];
     QJsonObject cases = caseJsonObject[JSON_CASES_NAME].toObject();
     QJsonObject newCaseJsonObject;
     QJsonObject newCases = newCaseJsonObject[JSON_CASES_NAME].toObject();
     newCaseJsonObject[TEXT_INPUT_SIGNAL_LIST] = inputSignalList;
+    newCaseJsonObject[TEXT_PRECONDITION_ORDER] = preconditionOrder;
 
     QMap<QString, int> flowIdxMap;
     // other 에서는 flow keyword 판단 안함.
@@ -875,14 +878,14 @@ QString GenerateCaseData::getConfigTagStr(const bool& isOther, const QString& tc
     return configTag;
 }
 
-QString GenerateCaseData::getPreconditionStr(const QStringList& preconditionList) {
-    QStringList preconditionStrList;
-    for (int caseValueIdx = 0; caseValueIdx < preconditionList.size(); caseValueIdx++) {
-        preconditionStrList << preconditionList[caseValueIdx];
-    }
-    QString preconditionStr = preconditionStrList.join(", ");
-    return preconditionStr;
-}
+// QString GenerateCaseData::getPreconditionStr(const QStringList& preconditionList) {
+//     QStringList preconditionStrList;
+//     for (int caseValueIdx = 0; caseValueIdx < preconditionList.size(); caseValueIdx++) {
+//         preconditionStrList << preconditionList[caseValueIdx];
+//     }
+//     QString preconditionStr = preconditionStrList.join(", ");
+//     return preconditionStr;
+// }
 
 QString GenerateCaseData::getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex,
                                              const QJsonValue& preconditionValue) {

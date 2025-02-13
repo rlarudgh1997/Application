@@ -56,9 +56,9 @@ private:
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QMap<QString, int>& configIdxMap,
                             const QMap<QString, QMap<QString, QString>>& configHexEnumMap, const QStringList& preconditionList,
                             const int& triggerSigIndex, const QString& triggerSigValue);
-    QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex,
-                               const QJsonValue& preconditionValue);
-    QString getPreconditionStr(const QStringList& preconditionList);
+    QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex = -1,
+                               const QJsonValue& preconditionValue = "");
+    // QString getPreconditionStr(const QStringList& preconditionList);
     QString getInputStr(const QString& triggerSigName, const QString& caseValue);
     QString getTcLine(const QString& tag, const QString& precondition, const QString& input);
     QString getInitStr(const QJsonObject& inputSignalList);

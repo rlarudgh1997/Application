@@ -37,8 +37,6 @@ private:
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
 
-    void testCode();
-
 protected:
     virtual AbstractHandler* isHandler();
     virtual bool initControl();

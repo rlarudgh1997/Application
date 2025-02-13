@@ -27,9 +27,9 @@
 class GuiCenter : public AbstractGui {
     Q_OBJECT
 
-    REGISTER_WRITABLE_PROPERTY(int, ScrolBarValue, 0, false)
-    REGISTER_WRITABLE_PROPERTY(QStringList, NodeAddress, QStringList(), false)
-    REGISTER_WRITABLE_PROPERTY(bool, ConfigUpdating, false, false)
+    REGISTER_WRITABLE_VALUE(int, ScrolBarValue, 0)
+    REGISTER_WRITABLE_VALUE(QStringList, NodeAddress, QStringList())
+    REGISTER_WRITABLE_VALUE(bool, ConfigUpdating, false)
 
 public:
     static QSharedPointer<GuiCenter>& instance(AbstractHandler* handler = nullptr);

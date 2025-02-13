@@ -172,7 +172,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(bool, SfcSignal, false)
     REGISTER_WRITABLE_VALUE(bool, OutputState, false)
     REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
-    REGISTER_WRITABLE_PROPERTY_CONTAINER(QMap, int, bool, SheetCheckState, false)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
 
 private:
     enum CellMergeType {

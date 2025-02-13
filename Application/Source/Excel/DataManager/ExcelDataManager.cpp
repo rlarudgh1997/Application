@@ -3,6 +3,7 @@
 #include "CommonEnum.h"
 #include "ConfigSetting.h"
 #include "ExcelUtil.h"
+#include "ExcelData.h"
 
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
@@ -60,14 +61,14 @@ QMap<int, QStringList> ExcelDataManager::isConvertedExcelData() {
     QString previousCase;
 
     for (const auto& data : readNewSheetData()) {
-        QString tcName = data.isTCName();
-        QString check = data.isCheck();
-        QString genType = data.isGenType();
-        QString vehicleType = data.isVehicleType();
-        QString config = data.isConfig();
-        QString resultName = data.isResultName();
-        QString caseName = data.isCaseName();
-        QPair<QStringList, QStringList> inputList = data.isInputList();
+        QString tcName = data.getTCName();
+        QString check = data.getCheck();
+        QString genType = data.getGenType();
+        QString vehicleType = data.getVehicleType();
+        QString config = data.getConfig();
+        QString resultName = data.getResultName();
+        QString caseName = data.getCaseName();
+        QPairStringList inputList = data.getInputList();
         QPair<int, int> rowIndex;
 
         if (previousTCName != tcName) {
@@ -84,7 +85,7 @@ QMap<int, QStringList> ExcelDataManager::isConvertedExcelData() {
             mergeIndex[static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result)].append(rowIndex);
             previousCase.clear();
 
-            QList<QStringList> outputList = data.isOutputList();
+            QList<QStringList> outputList = data.getOutputList();
             if (outputList.size() > 0) {
                 outputListInfo[qMakePair(tcName, resultName)] = outputList;
             }
@@ -172,14 +173,14 @@ QStringList ExcelDataManager::isExcelDataOther(const int& columnIndex) {
     if (getReadStateNewData()) {
         QMap<int, QStringList> newSheetData;
         for (const auto& data : readNewSheetData()) {
-            QString tcName = data.isTCName();
-            QString check = data.isCheck();
-            QString genType = data.isGenType();
-            QString vehicleTYpe = data.isVehicleType();
-            QString config = data.isConfig();
-            QString resultName = data.isResultName();
-            QString caseName = data.isCaseName();
-            QPair<QStringList, QStringList> inputList = data.isInputList();
+            QString tcName = data.getTCName();
+            QString check = data.getCheck();
+            QString genType = data.getGenType();
+            QString vehicleTYpe = data.getVehicleType();
+            QString config = data.getConfig();
+            QString resultName = data.getResultName();
+            QString caseName = data.getCaseName();
+            QPairStringList inputList = data.getInputList();
             QStringList signalList = inputList.first;
             QStringList dataList = inputList.second;
 
@@ -654,9 +655,9 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
 int ExcelDataManager::isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName) {
     int caseIndex = 0;
     for (const auto& data : readNewSheetData()) {
-        QString currentTCName = data.isTCName();
-        QString currentResult = data.isResultName();
-        QString currentCase = data.isCaseName();
+        QString currentTCName = data.getTCName();
+        QString currentResult = data.getResultName();
+        QString currentCase = data.getCaseName();
 
         ivis::common::getRemoved(currentTCName, getMergeInfos());
         ivis::common::getRemoved(currentResult, getMergeInfos());
@@ -670,6 +671,11 @@ int ExcelDataManager::isCaseIndex(const QString& tcName, const QString& resultNa
     }
     return caseIndex;
 }
+
+void ExcelDataManager::initExcelData() {
+    auto sheetDataList = ExcelData::instance().data()->readSheetData();
+}
+
 
 void ExcelDataManager::updateExcelData(const int& sheetIndex, const QVariantList& sheetData) {
     qDebug() << "updateExcelData :" << sheetIndex << sheetData.size();
@@ -741,9 +747,9 @@ void ExcelDataManager::updateExcelDataConfig(const QVariantList& sheetData) {
     writeExcelDataConfig(excelSheetData);
 }
 
-void ExcelDataManager::updateCaseDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
-                                          const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
-                                          const bool& insertBefore) {
+void ExcelDataManager::updateInputDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
+                                           const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName,
+                                           const bool& insertBefore) {
     if ((tcName.size() == 0) || (resultName.size() == 0) || (caseName.size() == 0)) {
         qDebug() << "Fail to update info size :" << tcName.size() << resultName.size() << caseName.size();
         return;
@@ -758,9 +764,9 @@ void ExcelDataManager::updateCaseDataInfo(const QString& tcName, const QString& 
     QStringList inputSignalList;
     QStringList inputDataList;
     for (const auto& signal : inputList.first) {
-        if (signal.size() == 0) {
-            continue;
-        }
+        // if (signal.size() == 0) {    // Output 없는 경우에 Others Case 만 있는 경우 시그널, 데이터가 null 이여서 문제 생김
+        //     continue;
+        // }
         int index = inputList.first.indexOf(signal);
         QString data = (index < inputList.second.size()) ? (inputList.second.at(index)) : (QString());
         inputSignalList.append(signal);
@@ -788,13 +794,29 @@ void ExcelDataManager::updateCaseDataInfo(const QString& tcName, const QString& 
     }
 
 #if 0
-    qDebug() << "[updateCaseDataInfo] :" << inputSignalList.size() << inputDataList.size();
+    qDebug() << "[updateInputDataInfo] :" << inputSignalList.size() << inputDataList.size();
     qDebug() << "\t TCName      :" << tcName;
     qDebug() << "\t Result      :" << resultName;
     qDebug() << "\t Case        :" << caseIndex << caseName;
     qDebug() << "\t InputSignal :" << inputSignalList.size() << inputSignalList;
     qDebug() << "\t InputData   :" << inputDataList.size() << inputDataList;
     qDebug() << "\t OutputList  :" << outputList.size() << outputList;
+    qDebug() << "\n";
+#endif
+}
+
+void ExcelDataManager::updateOutputDataInfo(const QString& tcName, const QString& resultName, const QList<QStringList>& list) {
+    if ((tcName.size() == 0) || (resultName.size() == 0)) {
+        qDebug() << "Fail to update info size :" << tcName.size() << resultName.size();
+        return;
+    }
+
+    #if 0
+    qDebug() << "[updateOutputDataInfo] :" << inputSignalList.size() << inputDataList.size();
+    qDebug() << "\t TCName      :" << tcName;
+    qDebug() << "\t Result      :" << resultName;
+    qDebug() << "\t OutputSignal :" << inputSignalList.size() << inputSignalList;
+    qDebug() << "\t OutputData   :" << inputDataList.size() << inputDataList;
     qDebug() << "\n";
 #endif
 }
