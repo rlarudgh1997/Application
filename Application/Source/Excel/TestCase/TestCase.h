@@ -12,6 +12,7 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_VALUE(QStringList, Arguments, QStringList())
     REGISTER_WRITABLE_VALUE(int, SelectAppMode, 0)
     REGISTER_WRITABLE_VALUE(QStringList, SelectModules, QStringList())
+    REGISTER_WRITABLE_VALUE(QStringList, RemainingModules, QStringList())
     REGISTER_WRITABLE_CONTAINER(QMap, QString, QString, ModuleList)
 
 public:
@@ -20,16 +21,18 @@ public:
         ExcuteTypeStart,
         ExcuteTypeParsingAppMode,
         ExcuteTypeParsingModule,
-        ExcuteTypeExcelOpen,
+
+        ExcuteTypeExcelOpen = 10,
         ExcuteTypeGenConvertData,
-        ExcuteTypeGenTC,
+
+        ExcuteTypeGenTC = 20,
         ExcuteTypeRunTC,
 
-        ExcuteTypeCompleted = 100,
-        ExcuteTypeFailed,
-
-        ExcuteTypeInvalidSelectItem = 200,
+        ExcuteTypeInvalidSelectItem = 40,
         ExcuteTypeManualInput,
+
+        ExcuteTypeCompleted = 100,
+        ExcuteTypeFailed = 200,
     };
 
 public:

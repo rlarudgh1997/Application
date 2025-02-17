@@ -78,14 +78,11 @@ int TestCase::excuteTestCase(const int& excuteType) {
             break;
         }
         case ExcuteTypeGenTC: {
-            if (GenerateCaseData::instance().data()->excuteGenerateCaseData()) {
-                QStringList selectModules = getSelectModules();
-                if (selectModules.size() == 0) {
-                    // nextType = ExcuteTypeCompleted;
-                    nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
-                } else {
-                    nextType = ExcuteTypeExcelOpen;
-                }
+            GenerateCaseData::instance().data()->excuteGenerateCaseData();
+            if (getRemainingModules().size() == 0) {
+                nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
+            } else {
+                nextType = ExcuteTypeExcelOpen;
             }
             break;
         }
@@ -135,7 +132,6 @@ void TestCase::parsingOptions(const QStringList& arguments) {
             }
         }
     }
-
     qDebug() << "Arguments :" << arguments << "->" << currArguments;
 
     setArguments(currArguments);
@@ -202,7 +198,10 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
             selectedItems = tempSelItems;
         }
     }
+    qDebug() << "parsingModules :" << selectedItems;
+
     setSelectModules(selectedItems);
+    setRemainingModules(selectedItems);
     setArguments(arguments);
 
     return selectedItems;
@@ -227,7 +226,7 @@ bool TestCase::parsingInputArguments(const int& excuteType) {
         }
     }
 
-    // qDebug() << "Parsing Arg :" << result << getTCCheck() << getGenType() << getSelectAppMode();
+    // qDebug() << "parsingInputArguments :" << result << getTCCheck() << getGenType() << getSelectAppMode();
 
     return result;
 }
@@ -401,37 +400,42 @@ void TestCase::updateSheetData(const QList<QVariantList>& sheetDataList) {
 }
 
 bool TestCase::openExcelFile() {
-    QStringList selectModules = getSelectModules();
-    QString currModule = (selectModules.size() > 0) ? (selectModules.at(0)) : ("");
+    QStringList remainingModules = getRemainingModules();
+    QString currModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : ("");
 
     if (currModule.size() == 0) {
-        qDebug() << "Fail to select module size : 0";
+        qDebug() << "Fail to select module size 0 :" << remainingModules;
         return false;
     }
 
     const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
-    QString filePath;
 
+    QString filePath;
     QList<QVariantList> sheetDataList;
 
     if ((graphicsMode) || (sheetEditState)) {   // 임시코드 : 경로 이상 문제 수정
-        sheetDataList = isSheetData();
         filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+        sheetDataList = isSheetData();
     } else {
-        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
         filePath = getModuleList(currModule);
+        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
     }
 
     bool result = (sheetDataList.size() > 0);
     if (result) {
         updateSheetData(sheetDataList);
-        selectModules.removeAll(currModule);
-        setSelectModules(selectModules);
+        remainingModules.removeAll(currModule);
+        setRemainingModules(remainingModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);
     }
 
-    qDebug() << "openExcelFile :" << sheetEditState << result << currModule << filePath;
+    qDebug() << "\n\n";
+    qDebug() << (QString(120, '=').toLatin1().data());
+    qDebug() << "ExcelOpen :" << sheetEditState << result << currModule << filePath;
+    qDebug() << "\t All Modules  :" << getSelectModules();
+    qDebug() << "\t Start Module :" << currModule;
+    qDebug() << "\n\n\n";
 
     return result;
 }

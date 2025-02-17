@@ -56,11 +56,7 @@ public:                                                                         
         }                                                                             \
     }                                                                                 \
     inline void set##NAME(const int& index, const VALUE& value) {                     \
-        if (index < m##NAME.size()) {                                                 \
-            m##NAME[index] = value;                                                   \
-        } else {                                                                      \
-            throw std::out_of_range("Index out of range");                            \
-        }                                                                             \
+        m##NAME.insert(index, value);                                                 \
     }                                                                                 \
     LIST<VALUE> read##NAME() const {                                                  \
         return m##NAME;                                                               \
@@ -141,11 +137,10 @@ public:                                                                         
     }                                                                                                \
 public Q_SLOTS:                                                                                      \
     inline void set##NAME(const int& index, const VALUE& value) {                                    \
-        if (index < m##NAME.size()) {                                                                \
-            QMutexLocker lock(&mMutex##NAME);                                                        \
-            m##NAME[index] = value;                                                                  \
-        } else {                                                                                     \
-            throw std::out_of_range("Index out of range");                                           \
+        QMutexLocker lock(&mMutex##NAME);                                                            \
+        m##NAME.insert(index, value);                                                                \
+        if (NOTI) {                                                                                  \
+            emit signal##NAME##Changed(m##NAME);                                                     \
         }                                                                                            \
     }                                                                                                \
     inline void write##NAME(const CONTAINER<VALUE>& value) {                                         \
