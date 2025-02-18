@@ -9,7 +9,5 @@ HEADERS += \
 #    $$PWD/AbstractThread.h\
 
 SOURCES += \
-#    $$PWD/AbstractGui.cpp\
     $$PWD/AbstractHandler.cpp\
     $$PWD/AbstractControl.cpp\
-#    $$PWD/AbstractThread.cpp\

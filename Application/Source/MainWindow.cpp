@@ -66,25 +66,37 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
             if (getArguments().size() == 0) {
                 return;    // start : graphicsMode
             }
-            const QString keyGen("GEN");
             QStringList arguments;
             for (const auto& arg : getArguments()) {
                 arguments.append(arg.toUpper());
             }
-            if (arguments.indexOf(keyGen) >= 0) {
-                arguments.removeAll(keyGen);
-                TestCase::instance().data()->start(arguments);
-            } else {
-                qInfo() << "Option value error when running in cli mode.";
-                qInfo() << "\t arguments :" << arguments;
 
+            bool foundKey = false;
+            bool exitState = true;
+            for (QString keyGen : QStringList({"HELP", "GEN"})) {
+                if ((arguments.indexOf(keyGen) >= 0)) {
+                    if (keyGen == "GEN") {
+                        arguments.removeAll(keyGen);
+                    }
+                    foundKey = true;
+                    exitState = (TestCase::instance().data()->start(arguments) == false);
+                    break;
+                }
+            }
+            if (exitState) {
+                if (foundKey == false) {
+                    qInfo() << "Option value error when running in cli mode.";
+                    qInfo() << "\t arguments :" << arguments;
+                }
                 emit ControlManager::instance().data()->signalExitProgram();
             }
         }
     });
-    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, this,
-            &QApplication::quit,  // &QWidget::close, &QApplication::closeAllWindows()
-            Qt::UniqueConnection);
+    connect(ControlManager::instance().data(), &ControlManager::signalExitProgram, [=]() {
+        // QWidget::close();
+        // QApplication::closeAllWindows();
+        QApplication::quit();
+    });
     connect(mCheckLib.data(), &ivis::common::CheckLib::signalCheckLibResult, [=](const QString& lib, const bool& state) {
         if (lib.compare("openpyxl", Qt::CaseInsensitive) == 0) {
             qInfo() << "openpyxl :" << ((state) ? ("valid") : ("invalid"));

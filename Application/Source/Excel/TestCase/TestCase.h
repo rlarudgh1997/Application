@@ -5,6 +5,12 @@
 
 #include "CommonUtil.h"
 
+#define USE_TEST_CASE_THREAD
+#if defined (USE_TEST_CASE_THREAD)
+#include <QThread>
+#include <QWaitCondition>
+#endif
+
 class TestCase : public QObject {
     Q_OBJECT
 
@@ -28,26 +34,30 @@ public:
         ExcuteTypeGenTC = 20,
         ExcuteTypeRunTC,
 
-        ExcuteTypeInvalidSelectItem = 40,
+        ExcuteTypeHelpMode = 40,
+        ExcuteTypeInvalidSelectItem,
         ExcuteTypeManualInput,
 
         ExcuteTypeCompleted = 100,
         ExcuteTypeFailed = 200,
+        ExcuteTypeExit,
     };
 
 public:
     static QSharedPointer<TestCase>& instance();
+    ~TestCase();
 
-    void start(const QStringList& arguments = QStringList());
-
-signals:
-    void signalTestCaseCompleted(const int& type, const bool& result);
+    bool start(const QStringList& arguments = QStringList());
 
 private:
     explicit TestCase();
 
+#if defined (USE_TEST_CASE_THREAD)
+    void runThread();
+    void controlThread(QThread* thread, QWaitCondition& waitCondition, QMutex& mutex, const int& type);
+#endif
     int excuteTestCase(const int& excuteType);
-    void parsingOptions(const QStringList& arguments);
+    bool parsingOptions(const QStringList& arguments);
     QStringList parsingAppMode(const QStringList& arguments);
     QStringList parsingModules(const QStringList& arguments);
     bool parsingInputArguments(const int& excuteType);
@@ -59,11 +69,20 @@ private:
     void updateSheetData(const QList<QVariantList>& sheetDataList);
     bool openExcelFile();
 
+signals:
+    void signalTestCaseCompleted(const int& type, const bool& result);
+
 private:
     const QString mStrExit = QString("Exit");
     const int mNumExit = 0;
     const int mNumSelectAll = 800;
     const int mNumManualInput = 900;
+
+#if defined (USE_TEST_CASE_THREAD)
+    QScopedPointer<QThread> mThread;
+    QWaitCondition mWaitCondition;
+    QMutex mMutex;
+#endif
 };
 
 #endif  // TEST_CASE_H

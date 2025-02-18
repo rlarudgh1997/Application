@@ -1,14 +1,13 @@
 #include "ConfigSetting.h"
 
 #include "CommonDefine.h"
+#if !defined(USE_CONFIG_SETTING_OLD)
+#include "CommonEnum.h"
+#endif
 
 #include <QApplication>
 #include <QDir>
 #include <QFile>
-
-#include <QDebug>
-
-// Q_LOGGING_CATEGORY(CONFIG, "ConfigSetting")
 
 #define CONFIG_PATH QApplication::applicationDirPath().toLatin1().data()
 #define CONFIG_NAME "Application.ini"
@@ -32,11 +31,12 @@ ConfigSetting::ConfigSetting() : mSetting(new QSettings(CONFIG_FILE, QSettings::
     init();
 }
 
-// ConfigSetting::~ConfigSetting() {
-//     mThreadRun = false;
-//     delete mSetting;
-//     qDebug() << "~ConfigSetting";
-// }
+ConfigSetting::~ConfigSetting() {
+#if defined(USE_CONFIG_SETTING_NEW)
+    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate));
+    qDebug() << "ConfigSetting::terminateThread";
+#endif
+}
 
 void ConfigSetting::init() {
     QFile configSettingFile(CONFIG_FILE);
@@ -50,29 +50,40 @@ void ConfigSetting::init() {
     readConfig();
 
     // Thread Init
+#if defined(USE_CONFIG_SETTING_NEW)
+    mThread.reset(new QThread());
+    moveToThread(mThread.get());
+    connect(mThread.get(), &QThread::finished, this, &QObject::deleteLater);
+    connect(mThread.get(), &QThread::started, this, &ConfigSetting::runThread);
+    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Start));
+#else
     this->moveToThread(mThread);
     connect(mThread, &QThread::finished, this, &QObject::deleteLater);
-    connect(mThread, &QThread::started, this, &ConfigSetting::threadFunc);
+    connect(mThread, &QThread::started, this, &ConfigSetting::runThread);
     mThread->start();
+#endif
 }
 
 QVariant ConfigSetting::readConfig(const int& configType) {
     if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMaxDoNotSave) ||
         (configType == ConfigInfo::ConfigTypeMax)) {
         return QVariant();
-    } else {
-        return mConfigData[configType];
     }
+    return mConfigData[configType];
 }
 
 void ConfigSetting::writeConfig(const int& configType, const QVariant& configValue) {
     if (mConfigData[configType] != configValue) {
+#if defined(USE_CONFIG_SETTING_NEW)
+        mConfigData[configType] = configValue;
+        controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
+#else
         QMutexLocker lock(&mMutex);
         mConfigData[configType] = configValue;
-        if (mThreadDataSave == false) {
-            mThreadDataSave = (configType < ConfigInfo::ConfigTypeMaxDoNotSave);
+        if (configType < ConfigInfo::ConfigTypeMaxDoNotSave) {
+            mThreadDataSave = true;
         }
-
+#endif
         if (configType == ConfigInfo::ConfigTypeWindowTitle) {
             emit signalUpdateWindowTitle(configValue.toString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
         } else {
@@ -90,16 +101,17 @@ QVariant ConfigSetting::isConfigName(const int& configType) {
     if ((configType == ConfigInfo::ConfigTypeInvalid) || (configType == ConfigInfo::ConfigTypeMaxDoNotSave) ||
         (configType == ConfigInfo::ConfigTypeMax)) {
         return QVariant();
-    } else {
-        QString configName =
-            mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName).toString();
-        QStringList temp = configName.split("ConfigType");
-        if (temp.size() == 2) {
-            return temp.at(1);
-        } else {
-            return QVariant();
-        }
     }
+
+    QString configName =
+        mConfigInfo.getConfigInfo(static_cast<ConfigInfo::ConfigType>(configType), ConfigInfo::ConfigGetTypeName).toString();
+    configName = configName.remove("ConfigType");
+
+    if (configName.size() == 0) {
+        return QVariant();
+    }
+
+    return configName;
 }
 
 void ConfigSetting::editConfig(const int& configType, const QVariant& configValue) {
@@ -235,8 +247,15 @@ void ConfigSetting::resetConfig(const int& resetType) {
     emit signalConfigChanged(ConfigInfo::ConfigTypeInit, true);
 }
 
-void ConfigSetting::threadFunc() {
-    while (mThreadRun) {
+void ConfigSetting::runThread() {
+#if defined(USE_CONFIG_SETTING_NEW)
+    while (true) {
+        controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait));
+        qDebug() << "runThread : writeConfig";
+        writeConfig();
+    }
+#else
+    while (true) {
         if (mThreadDataSave) {
             QMutexLocker lock(&mMutex);
             writeConfig();
@@ -244,6 +263,49 @@ void ConfigSetting::threadFunc() {
         }
         QThread::msleep(100);
     }
-    QThread::currentThread()->quit();
-    QThread::currentThread()->wait();
+    // QThread::currentThread()->quit();
+    // QThread::currentThread()->wait();
+#endif
 }
+
+#if defined(USE_CONFIG_SETTING_NEW)
+void ConfigSetting::controlThread(QThread* thread, QWaitCondition& waitCondition, QMutex& mutex, const int& type) {
+    if (thread == nullptr) {
+        qDebug() << "ConfigSetting thread is nullptr !!!";
+        return;
+    }
+
+    QMutexLocker lock(&mutex);
+    switch (type) {
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate): {
+            if (thread->isRunning()) {
+                thread->quit();
+                if (QThread::currentThread() != thread) {
+                    thread->wait();
+                }
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Start):
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume): {
+            if (thread->isRunning() == false) {
+                thread->start();
+            }
+            if (type == static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume)) {
+                waitCondition.wakeOne();
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait): {
+            // if ((thread->isRunning()) && (QThread::currentThread() != thread)) {
+            if (thread->isRunning()) {
+                waitCondition.wait(&mutex);
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
+#endif

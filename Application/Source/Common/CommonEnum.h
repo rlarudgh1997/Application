@@ -289,6 +289,17 @@ public:
     };
 };
 
+class ThreadEnum {
+public:
+    enum class ControlType {
+        Invalid = 0,
+        Terminate,
+        Start,
+        Resume,
+        Wait,
+    };
+};
+
 class ControlUpdateTypeEnum {
 public:
     enum ControlUpdateType {

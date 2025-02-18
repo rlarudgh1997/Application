@@ -22,29 +22,114 @@ TestCase::TestCase() {
     if (graphicsMode == false) {
         terminateApplicaton();
     }
+
+#if defined (USE_TEST_CASE_THREAD)
+    mThread.reset(new QThread());
+    moveToThread(mThread.get());
+    connect(mThread.get(), &QThread::finished, this, &QObject::deleteLater);
+    connect(mThread.get(), &QThread::started, this, &TestCase::runThread);
+    // controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Start));
+#endif
 }
 
-void TestCase::start(const QStringList& arguments) {
-    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    int excuteType = ExcuteTypeStart;
+TestCase::~TestCase() {
+#if defined (USE_TEST_CASE_THREAD)
+    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate));
+    qDebug() << "TestCase::terminateThread";
+#endif
+}
 
-    parsingOptions(arguments);
+bool TestCase::start(const QStringList& arguments) {
+    if (parsingOptions(arguments)) {
+        system("clear");
+        drawTerminalMenu(ExcuteTypeHelpMode, QStringList());
+        return false;
+    }
+
+#if defined (USE_TEST_CASE_THREAD)
+    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
+#else
+    int excuteType = ExcuteTypeStart;
 
     while (true) {
         int nextType = excuteTestCase(excuteType);
-
         excuteType = nextType;
-
         if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
             emit signalTestCaseCompleted(getExcuteType(), (nextType != ExcuteTypeFailed));
+            break;
+        } else if (nextType == ExcuteTypeExit) {
+            emit ControlManager::instance().data()->signalExitProgram();
+            break;
+        }
+    }
+#endif
 
-            // if (graphicsMode == false) {
-            //     emit ControlManager::instance().data()->signalExitProgram();
-            // }
+    return true;
+}
+
+#if defined (USE_TEST_CASE_THREAD)
+void TestCase::runThread() {
+    // const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    int excuteType = ExcuteTypeStart;
+
+    while (true) {
+        if (excuteType == ExcuteTypeInvalid) {
+            qDebug() << "TestCase thread is waiting :" << excuteType;
+            controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait));
+            excuteType = ExcuteTypeStart;
+        }
+
+        int nextType = excuteTestCase(excuteType);
+        excuteType = nextType;
+        if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
+            excuteType = ExcuteTypeInvalid;
+            emit signalTestCaseCompleted(getExcuteType(), (nextType != ExcuteTypeFailed));
+        } else if (nextType == ExcuteTypeExit) {
+            emit ControlManager::instance().data()->signalExitProgram();
             break;
         }
     }
 }
+
+void TestCase::controlThread(QThread* thread, QWaitCondition& waitCondition, QMutex& mutex, const int& type) {
+    if (thread == nullptr) {
+        return;
+    }
+
+    QMutexLocker lock(&mutex);
+    switch (type) {
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate): {
+            if (thread->isRunning()) {
+                thread->quit();
+                // if (QThread::currentThread() != thread) {
+                    thread->wait();
+                // }
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Start):
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume): {
+            if (thread->isRunning() == false) {
+                thread->start();
+            }
+            if (type == static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume)) {
+                waitCondition.wakeOne();
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait): {
+            // if ((thread->isRunning()) && (QThread::currentThread() != thread)) {
+            if (thread->isRunning()) {
+                waitCondition.wait(&mutex);
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
+#endif
 
 int TestCase::excuteTestCase(const int& excuteType) {
     bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
@@ -54,7 +139,6 @@ int TestCase::excuteTestCase(const int& excuteType) {
 
     switch (excuteType) {
         case ExcuteTypeStart: {
-            // nextType = (graphicsMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeParsingAppMode);
             nextType = ExcuteTypeParsingAppMode;
             break;
         }
@@ -62,6 +146,8 @@ int TestCase::excuteTestCase(const int& excuteType) {
         case ExcuteTypeParsingModule: {
             if (parsingInputArguments(excuteType)) {
                 nextType = (excuteType == ExcuteTypeParsingAppMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeExcelOpen);
+            } else {
+                nextType = ExcuteTypeExit;
             }
             break;
         }
@@ -101,7 +187,8 @@ int TestCase::excuteTestCase(const int& excuteType) {
     return nextType;
 }
 
-void TestCase::parsingOptions(const QStringList& arguments) {
+bool TestCase::parsingOptions(const QStringList& arguments) {
+    const QString helpInfo("HELP");
     const QString tcCheckInfo("ALL");
     const QMap<QString, int> genTypeInfo = QMap<QString, int>({
         {"DEFAULT", ivis::common::GenTypeEnum::GenTypeDefault},
@@ -113,6 +200,11 @@ void TestCase::parsingOptions(const QStringList& arguments) {
     // ./Applicaton gen [cv/pv] all [default/negative/positive] [module1 moduel2 .....]
 
     QStringList currArguments = arguments;
+
+    // CLI Mode : help
+    if (currArguments.indexOf(helpInfo) >= 0) {
+        return true;
+    }
 
     // CLI Mode : all
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeTCCheck, false);
@@ -135,6 +227,8 @@ void TestCase::parsingOptions(const QStringList& arguments) {
     qDebug() << "Arguments :" << arguments << "->" << currArguments;
 
     setArguments(currArguments);
+
+    return false;
 }
 
 QStringList TestCase::parsingAppMode(const QStringList& arguments) {
@@ -152,18 +246,17 @@ QStringList TestCase::parsingAppMode(const QStringList& arguments) {
     if (selectMode.size() == 0) {
         itemList.append(appModeInfo);
         QStringList selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingAppMode, itemList);
-        for (const auto& item : selectedItems) {
-            if (appModeInfo.indexOf(item) >= 0) {
-                selectMode = item;
-                break;
-            }
+        if (selectedItems.size() > 0) {
+            selectMode = selectedItems.at(0);
         }
     }
 
-    int appMode = (selectMode == appModeInfo.at(1)) ? (ivis::common::AppModeEnum::AppModeTypePV)
-                                                    : (ivis::common::AppModeEnum::AppModeTypeCV);
-    setSelectAppMode(appMode);
-    setArguments(currArguments);
+    if (selectMode.size() > 0) {
+        int appMode = (selectMode == appModeInfo.at(1)) ? (ivis::common::AppModeEnum::AppModeTypePV)
+                                                        : (ivis::common::AppModeEnum::AppModeTypeCV);
+        setSelectAppMode(appMode);
+        setArguments(currArguments);
+    }
 
     return QStringList(selectMode);
 }
@@ -202,7 +295,7 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
 
     setSelectModules(selectedItems);
     setRemainingModules(selectedItems);
-    setArguments(arguments);
+    setArguments(QStringList());    // setArguments(arguments);  [Application gen cv abs_cv ams -> gen tc 완료후 계속 반복됨]
 
     return selectedItems;
 }
@@ -217,16 +310,11 @@ bool TestCase::parsingInputArguments(const int& excuteType) {
     } else {
     }
 
-    bool result = false;
-    if (selectedItems.size() > 0) {
-        if (selectedItems.indexOf(mStrExit) >= 0) {
-            emit ControlManager::instance().data()->signalExitProgram();
-        } else {
-            result = true;
-        }
+    bool result = (selectedItems.size() > 0);
+    if (selectedItems.indexOf(mStrExit) >= 0) {
+        result = false;
     }
-
-    // qDebug() << "parsingInputArguments :" << result << getTCCheck() << getGenType() << getSelectAppMode();
+    qDebug() << "parsingInputArguments :" << result << selectedItems;
 
     return result;
 }
@@ -240,7 +328,17 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
     bool subTips = true;
     QString displayText;
 
-    if (excuteType == ExcuteTypeInvalidSelectItem) {
+    if (excuteType == ExcuteTypeHelpMode) {
+        displayText.append(QString("\n") + QString(lineCount, '=') + QString("\n"));
+        displayText.append(QString("Usage: \033[32mApplication gen all [GenType] [AppMode] [Modules]\033[0m\n"));
+        displayText.append(QString("Options:\n"));
+        displayText.append(QString("    gen                CLI Mode Start\n"));
+        displayText.append(QString("    all                TC select all and create\n"));
+        displayText.append(QString("    [GenType]          TC gen type(default/negative/positive) Specify all and create\n"));
+        displayText.append(QString("    [AppMode]          App mode(cv, pv) selection\n"));
+        displayText.append(QString("    [Modules]          Enter multiple modules(abs_cv aem ...)\n"));
+        displayText.append(QString("\n\n") + QString(lineCount, '=') + QString("\n\n\n"));
+    } else if (excuteType == ExcuteTypeInvalidSelectItem) {
         displayText.append(QString("\n\033[31m[Input Invalid]\033[0m\n"));
         displayText.append(QString("Please enter valid numbers between : 1 ~ %1\n").arg(itemList.size() - 1));
         displayText.append(QString("Enter the numbers of your choices separated by spaces : "));
@@ -423,19 +521,24 @@ bool TestCase::openExcelFile() {
     }
 
     bool result = (sheetDataList.size() > 0);
+
+    qDebug() << "\n\033[32m";
+    int currStep = (getSelectModules().size() - getRemainingModules().size() + 1);
+    qDebug() << (QString(120, '>').toLatin1().data());
+    qDebug() << (QString("[Test Case - Excel Open] : %1/%2").arg(currStep).arg(getSelectModules().size()).toLatin1().data());
+    qDebug() << "\t Selected Modules    :" << getSelectModules();
+    qDebug() << "\t Remaining Modules   :" << getRemainingModules();
+    qDebug() << "\t Gen TC Module       :" << currModule.toLatin1().data();
+    qDebug() << "\t File Open           :" << result << filePath.toLatin1().data();
+    qDebug() << (QString(120, '<').toLatin1().data());
+    qDebug() << "\n\033[0m";
+
     if (result) {
         updateSheetData(sheetDataList);
         remainingModules.removeAll(currModule);
         setRemainingModules(remainingModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);
     }
-
-    qDebug() << "\n\n";
-    qDebug() << (QString(120, '=').toLatin1().data());
-    qDebug() << "ExcelOpen :" << sheetEditState << result << currModule << filePath;
-    qDebug() << "\t All Modules  :" << getSelectModules();
-    qDebug() << "\t Start Module :" << currModule;
-    qDebug() << "\n\n\n";
 
     return result;
 }
