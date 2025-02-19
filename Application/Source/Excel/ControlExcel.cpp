@@ -713,6 +713,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                                                QVariantList({STRING_FILE_OPEN, directory})) == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
             }
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
             break;
@@ -848,14 +849,14 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
         QStringList suggestionsDataInfo;
         int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
         int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
-        for (int index = startIndex; index < endIndex; ++index) {
-            ExcelDataManager::instance().data()->updateExcelData(index, getData(index).toList());
-            for (const auto& tcName : ExcelDataManager::instance().data()->isTCNameDataList(true)) {
-                for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(tcName)) {
+        for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+            ExcelDataManager::instance().data()->updateExcelData(sheetIndex, getData(sheetIndex).toList());
+            for (const auto& tcName : ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true)) {
+                for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {
                     suggestionsDataInfo.append(resultName);
                 }
                 if (suggestionsDataInfo.size() > 0) {
-                    index = endIndex;
+                    sheetIndex = endIndex;
                     break;
                 }
             }

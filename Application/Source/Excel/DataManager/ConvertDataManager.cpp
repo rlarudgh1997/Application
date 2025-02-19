@@ -1008,7 +1008,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
             continue;
         }
 
-        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(true);
+        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
         qDebug() << "============================[appendConvertConfigSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
@@ -1017,9 +1017,9 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
         // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
         for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
             QString tcNameStr = tcNameList.at(tcIdx);
-            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(tcNameStr);
+            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcNameStr);
             // get - config 관련 Signal List set
-            QString configStr = ExcelDataManager::instance().data()->isConfigData(tcNameStr);
+            QString configStr = ExcelDataManager::instance().data()->isConfigData(sheetIndex, tcNameStr);
             QList<QList<QStringList>> configDataInfoList = constructConvertConfigSignalSet(constructMergeKeywords("", configStr));
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
             qDebug() << "TCName          : " << tcNameStr;
@@ -1030,7 +1030,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
             // TCName 하위의 Result 리스트 기반으로 Case Data 처리
             for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
                 QString resultStr = resultStrList.at(resultIdx);
-                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(tcNameStr, resultStr);
+                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcNameStr, resultStr);
 
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
                 qDebug() << "Result          : " << resultStr;
@@ -1039,7 +1039,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                 for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
-                        ExcelDataManager::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
+                        ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
 
                     // config 동작 조건이 없는 경우
                     if (configDataInfoList.size() == 0) {
@@ -1048,7 +1048,8 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                             caseInputDataList.first.append("");
                             caseInputDataList.second.append("");
                         }
-                        ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, caseInputDataList);
+                        ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
+                                                                                 caseInputDataList);
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
                         qDebug() << "No Config Data Exist Condition";
 #endif
@@ -1122,14 +1123,14 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
                             qDebug() << "InputData(val) after append : " << inputDataPairList.second;
 #endif
                             ExcelDataManager::instance().data()->updateInputDataInfo(
-                                tcNameStr, resultStr,
+                                sheetIndex, tcNameStr, resultStr,
                                 QString("%1 %2_%3").arg(caseStr).arg("config").arg(QString::number(configSetIndex)),
                                 inputDataPairList);
                         } else {
                             // others 인 경우 (input signal/data가 존재하지 않기 때문에, config signal/data append set 수행 X)
                             inputDataPairList.first.append("");
                             inputDataPairList.second.append("");
-                            ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr,
+                            ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
                                                                                     inputDataPairList);
 #if defined(ENABLE_CONFIG_DEBUG_LOG)
                             qDebug() << "others case (not operated input signal/data)";
@@ -1149,7 +1150,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
             }
         }
         if (result == true) {
-            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo();
+            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
             if (currentSheetData.size() > 0) {
                 QVariantList tmpSheetData;
                 for (auto& data : currentSheetData) {
@@ -1185,7 +1186,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
             continue;
         }
 
-        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(true);
+        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
         qDebug() << "============================[appendConvertAllTCSignalSet]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
@@ -1193,7 +1194,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
         // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
         for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
             QString tcNameStr = tcNameList.at(tcIdx);
-            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(tcNameStr);
+            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcNameStr);
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
             qDebug() << "TCName          : " << tcNameStr;
             qDebug() << "############################################################################################";
@@ -1201,7 +1202,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
             // TCName 하위의 Result 리스트 기반으로 Case Data 처리
             for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
                 QString resultStr = resultStrList.at(resultIdx);
-                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(tcNameStr, resultStr);
+                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcNameStr, resultStr);
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
                 qDebug() << "Result          : " << resultStr;
                 qDebug() << "caseStrList : " << caseStrList;
@@ -1210,18 +1211,20 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                     QString caseStr = caseStrList.at(caseIdx);
 
                     auto inputList =
-                        ExcelDataManager::instance().data()->isInputDataWithoutCaseList(tcNameStr, resultStr, caseStr);
+                        ExcelDataManager::instance().data()->isInputDataWithoutCaseList(sheetIndex, tcNameStr, resultStr,
+                                                                                        caseStr);
                     auto appendInputSignalDataInfoMap =
                         SignalDataManager::instance().data()->isNormalInputSignalDataInfo(inputList);
 
                     QPair<QStringList, QStringList> inputDataList =
-                        ExcelDataManager::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
+                        ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
 
                     // others 인 경우 (input signal/data가 존재하지 않기 때문에, appendAllTCSignalset 수행 X)
                     if (inputDataList.first.isEmpty() == true && inputDataList.second.isEmpty() == true) {
                         inputDataList.first.append("");
                         inputDataList.second.append("");
-                        ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                        ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
+                                                                                 inputDataList);
                         break;
                     }
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
@@ -1293,7 +1296,8 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         inputDataList.first.append(inputSignalStr);
                         inputDataList.second.append(inputDataStr);
                     }
-                    ExcelDataManager::instance().data()->updateInputDataInfo(tcNameStr, resultStr, caseStr, inputDataList);
+                    ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
+                                                                             inputDataList);
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
                     qDebug() << "InputData(sig) after append : " << inputDataList.first;
                     qDebug() << "InputData(val) after append : " << inputDataList.second;
@@ -1304,7 +1308,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
 #endif
             }
         }
-        QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo();
+        QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
         QVariantList tmpSheetData;
         for (auto& data : currentSheetData) {
             tmpSheetData.append(data);
@@ -1337,7 +1341,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
         // List => TCName, ResultName, CaseName, <InputSignalList, InputDataList>
         QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>> backupCurSheetIndexData;
-        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(true);
+        QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
         qDebug() << "============================[convertInputSignalKeyword]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
@@ -1346,7 +1350,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
         // Sheet에서 TCName 리스트 기반으로 Result/Case 하위 Data 처리
         for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
             QString tcNameStr = tcNameList.at(tcIdx);
-            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(tcNameStr);
+            QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcNameStr);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
             qDebug() << "TCName          : " << tcNameStr;
             qDebug() << "Result List     : " << resultStrList;
@@ -1355,7 +1359,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
             // TCName 하위의 Result 리스트 기반으로 Case Data 처리
             for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
                 QString resultStr = resultStrList.at(resultIdx);
-                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(tcNameStr, resultStr);
+                QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcNameStr, resultStr);
 
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                 qDebug() << "tcNameStr       : " << tcNameStr;
@@ -1365,7 +1369,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
                 for (int caseIdx = 0; caseIdx < caseStrList.size(); ++caseIdx) {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
-                        ExcelDataManager::instance().data()->isInputDataList(tcNameStr, resultStr, caseStr, false);
+                        ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                     qDebug() << ""
                                 "--------------------------------------------------------------------------------------------";
@@ -1418,8 +1422,8 @@ bool ConvertDataManager::convertInputSignalKeyword() {
         }
 
         if (result == true) {
-            updateCurSheetData(backupCurSheetIndexData);
-            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo();
+            updateCurSheetData(sheetIndex, backupCurSheetIndexData);
+            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
             qDebug() << "[[Set Sheet Data] currentSheetData : " << currentSheetData;
 #endif
@@ -1457,14 +1461,15 @@ void ConvertDataManager::appendCurSheetData(
     retCurSheetData.append(make_tuple(tcName, resultName, caseName, inputDataInfo));
 }
 
-void ConvertDataManager::updateCurSheetData(
+void ConvertDataManager::updateCurSheetData(const int& sheetIndex,
     const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData) {
     for (int i = 0; i < retCurSheetData.size(); ++i) {
         auto tmpSheetData = retCurSheetData.at(i);
-        ExcelDataManager::instance().data()->updateInputDataInfo(std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
+        ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
                                                                  std::get<2>(tmpSheetData), std::get<3>(tmpSheetData));
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
         qDebug() << "======================= [updateCurSheetData] ==========================================";
+        qDebug() << "0. sheetIndex    : " << sheetIndex;
         qDebug() << "1. tcName        : " << std::get<0>(tmpSheetData);
         qDebug() << "2. resultName    : " << std::get<1>(tmpSheetData);
         qDebug() << "3. caseName      : " << std::get<2>(tmpSheetData);
@@ -1563,14 +1568,14 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSh
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
 
-        QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(name, data);
+        QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, name, data);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
         qDebug() << "-----> Find Sheet Case List : " << caseStrList;
 #endif
         for (int caseIndex = 0; caseIndex < caseStrList.size(); ++caseIndex) {
             QString caseNameStr = caseStrList.at(caseIndex);
             QPair<QStringList, QStringList> caseInputDataList =
-                ExcelDataManager::instance().data()->isInputDataList(name, data, caseNameStr, false);
+                ExcelDataManager::instance().data()->isInputDataList(sheetIndex, name, data, caseNameStr, false);
 
             if (caseInputDataList.first.isEmpty() == false && caseInputDataList.second.isEmpty() == false) {
                 sheetKeywordSignalDataInfo.append(qMakePair(caseNameStr, caseInputDataList));

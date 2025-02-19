@@ -34,7 +34,7 @@ public:
         }
     }
 
-    bool genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount) {
+    QString genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount) {
         ivis::common::CheckTimer checkTimer;
         int ignCount = 0;
         int testCaseCount = 1;
@@ -201,10 +201,10 @@ public:
                                                             testCase += "      - " + outputSignal[initCnt] + ": 0\n";
                                                         }
                                                     } else {
-                                                        if (outputSignal[initCnt].contains("E")) {
+                                                        if (outputValue[initCnt].contains("E")) {
                                                             testCase += "      - " + outputSignal[initCnt] + ": " +
                                                                         quoteIfNotNumeric(outputValue[initCnt]) + "\n";
-                                                        } else if (outputSignal[initCnt].contains("SND")) {
+                                                        } else if (outputValue[initCnt].contains("SND")) {
                                                             testCase += "      - " + outputSignal[initCnt] + ": " +
                                                                         quoteIfNotNumeric(outputValue[initCnt]) + "\n";
                                                         }
@@ -314,7 +314,8 @@ public:
         std::cout << "\033[92mTest case file generation completed!!!\033[0m" << std::endl;
         checkTimer.check("genTestCaseFile()");
 
-        return (testCaseCount > 1);
+        QString fileName = (testCaseCount > 1) ? (mFile.fileName()) : ("");
+        return fileName;
     }
 
 private:

@@ -63,7 +63,8 @@ private:
     void appendCurSheetData(const QString& tcName, const QString& resultName, const QString& caseName,
                             const QPair<QStringList, QStringList>& inputDataInfo,
                             QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
-    void updateCurSheetData(const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
+    void updateCurSheetData(const int& sheetIndex,
+                            const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
 };
 
 #endif  // CONVERT_DATA_MANAGER_H

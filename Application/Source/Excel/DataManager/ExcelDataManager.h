@@ -9,6 +9,7 @@
 
 // using QMapIntStringList = QMap<int, QStringList>;
 using QPairStringList = QPair<QStringList, QStringList>;
+using QMapIntString = QMap<int, QStringList>;
 
 class InsertData {
     REGISTER_WRITABLE_VALUE(QString, TCName, QString())
@@ -58,31 +59,38 @@ class ExcelDataManager : public QObject {
     REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
     REGISTER_WRITABLE_VALUE(bool, ReadStateNewData, true)
+
     REGISTER_WRITABLE_LIST(QList, InsertData, NewSheetData)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataOther)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataConfig)
 
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntString, ExcelSheetData)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QList<InsertData>, InsertSheetData)
+
+
 public:
     static QSharedPointer<ExcelDataManager>& instance();
 
-    QList<QStringList> isSheetDataInfo();
-    QStringList isTCNameDataList(const bool& all);
-    bool isCheckData(const QString& tcName);
-    int isGenTypeData(const QString& tcName, QString& genTypeStr);
-    QString isVehicleTypeData(const QString& tcName);
-    QString isConfigData(const QString& tcName);
-    QStringList isResultDataList(const QString& tcName);
-    QStringList isCaseDataList(const QString& tcName, const QString& resultName);
-    QPair<QStringList, QStringList> isInputDataList(const QString& tcName, const QString& resultName, const QString& caseName,
-                                                    const bool& removeWhitespace, const bool& checkOthers = true);
-    QPair<QStringList, QStringList> isInputDataWithoutCaseList(const QString& tcName, const QString& resultName,
-                                                               const QString& caseName);
-    QList<QStringList> isOutputDataList(const QString& tcName, const QString& resultName);
+    QList<QStringList> isSheetDataInfo(const int& sheetIndex);
+    QStringList isTCNameDataList(const int& sheetIndex, const bool& all);
+    bool isCheckData(const int& sheetIndex, const QString& tcName);
+    int isGenTypeData(const int& sheetIndex, const QString& tcName, QString& genTypeStr);
+    QString isVehicleTypeData(const int& sheetIndex, const QString& tcName);
+    QString isConfigData(const int& sheetIndex, const QString& tcName);
+    QStringList isResultDataList(const int& sheetIndex, const QString& tcName);
+    QStringList isCaseDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
+    QPair<QStringList, QStringList> isInputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName,
+                                                    const QString& caseName, const bool& removeWhitespace,
+                                                    const bool& checkOthers = true);
+    QPair<QStringList, QStringList> isInputDataWithoutCaseList(const int& sheetIndex, const QString& tcName,
+                                                               const QString& resultName, const QString& caseName);
+    QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
-    void initExcelData();
+    void resetExcelData(const bool& convertState);
+
     void updateExcelData(const int& sheetIndex, const QVariantList& sheetData);
-    void updateInputDataInfo(const QString& tcName, const QString& resultName, const QString& caseName,
+    void updateInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName,
                              const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName = QString(),
                              const bool& insertBefore = false);
     void updateOutputDataInfo(const QString& tcName, const QString& resultName, const QList<QStringList>& list);
@@ -91,14 +99,19 @@ public:
 private:
     explicit ExcelDataManager();
 
-    void updateExcelDataOther(const QVariantList& sheetData);
+    void updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
+
+    void updateExcelDataOther(const int& sheetIndex, const QVariantList& sheetData);
     void updateExcelDataConfig(const QVariantList& sheetData);
-    QMap<int, QStringList> isConvertedExcelData();
-    QStringList isExcelDataOther(const int& columnIndex);
-    QStringList isExcelDataConfig(const int& columnIndex);
+    QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex);
+    QStringList isExcelDataOther(const int& sheetIndex, const int& columnIndex);
+    QStringList isExcelDataConfig(const int& sheetIndex, const int& columnIndex);
+    QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex);
+    QStringList isInsertSheetData(const int& sheetIndex, const int& columnIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
-    QPair<int, int> isRowIndexInfo(const QString& tcName, const QString& resultName, const QString& caseName);
+    QPair<int, int> isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
+                                   const QString& caseName, const bool& origin);
     int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
 };
 
