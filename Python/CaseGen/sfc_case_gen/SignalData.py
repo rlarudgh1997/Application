@@ -4,8 +4,19 @@ SignalData.py
 This module provides Data for VSM or SFC Signal
 """
 
+
 class SignalData:
-    def __init__(self, gen_type, name, data_type, keyword_type, data, precondition, precondition_idx, value_enum):
+    def __init__(
+        self,
+        gen_type,
+        name,
+        data_type,
+        keyword_type,
+        data,
+        precondition,
+        precondition_idx,
+        value_enum,
+    ):
         self.gen_type = gen_type
         self.InputSignalName = name
         self.InputDataType = data_type
@@ -53,7 +64,9 @@ class SignalData:
                 else:
                     key = part
             if key is not None and hex_value is not None:
-                value_enum_dict[key.upper()] = hex_value  # Lowercase for case-insensitive matching
+                value_enum_dict[key.upper()] = (
+                    hex_value  # Lowercase for case-insensitive matching
+                )
         # print("len(value_enum): ", len(value_enum))
         if len(value_enum) == 1:
             if value_enum[0] == "":
@@ -87,5 +100,7 @@ class SignalData:
                 else:
                     key = part
             if key is not None and hex_value is not None:
-                value_enum_dict_hex_key[hex_value] = key.upper() # Lowercase for case-insensitive matching
+                value_enum_dict_hex_key[hex_value] = (
+                    key.upper()
+                )  # Lowercase for case-insensitive matching
         return value_enum_dict_hex_key

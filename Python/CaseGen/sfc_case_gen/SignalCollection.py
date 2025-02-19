@@ -3,12 +3,14 @@ SignalCollection.py
 
 This module provides Signal list
 """
+
 import itertools
 import copy
 from .SignalData import SignalData
 
+
 class SignalCollection:
-    def __init__(self, signal_objects = {}):
+    def __init__(self, signal_objects={}):
         self.signals = signal_objects
         self.all_case = []
         self.satisfy_case = []
@@ -30,13 +32,22 @@ class SignalCollection:
                 data_type = lines[i + 1].split(":")[1].strip()
                 keyword_type = lines[i + 2].split(":")[1].strip()
                 # Split data and value_enum into lists
-                tmp_data = ':'.join(lines[i + 3].split(":")[1:]).strip()
+                tmp_data = ":".join(lines[i + 3].split(":")[1:]).strip()
                 data = [item.strip() for item in tmp_data.split(",")]
-                tmp_precondition = ':'.join(lines[i + 4].split(":")[1:]).strip()
+                tmp_precondition = ":".join(lines[i + 4].split(":")[1:]).strip()
                 precondition = [item.strip() for item in tmp_precondition.split(",")]
-                tmp_value_enum = ':'.join(lines[i + 5].split(":")[1:]).strip()
+                tmp_value_enum = ":".join(lines[i + 5].split(":")[1:]).strip()
                 value_enum = [item.strip() for item in tmp_value_enum.split(",")]
-                signal_objects[name] = SignalData(gen_type, name, data_type, keyword_type, data, precondition, signalOrder, value_enum)
+                signal_objects[name] = SignalData(
+                    gen_type,
+                    name,
+                    data_type,
+                    keyword_type,
+                    data,
+                    precondition,
+                    signalOrder,
+                    value_enum,
+                )
                 signalOrder += 1
                 i += 5
             else:
@@ -49,17 +60,25 @@ class SignalCollection:
         idx = 0
         for key in self.signals:
             signal = self.signals[key]
-            print("--------------------------------------------------------------------------")
+            print(
+                "--------------------------------------------------------------------------"
+            )
             print(f"Signal{idx}: {signal.InputSignalName}")
             # print(f"  InputValueEnum: {signal.InputValueEnum}")  # Display the original InputValueEnum
             # print(f"  InputValueEnumHex: {signal.InputValueEnumHex}")
             print(f"  InputData: {signal.InputData}")  # Display the original InputData
             print(f"  InputDataHex: {signal.InputDataHex}")
-            print("--------------------------------------------------------------------------\n")
+            print(
+                "--------------------------------------------------------------------------\n"
+            )
             idx += 1
 
     def generate_combinations(self):
-        data_hex_lists = [self.signals[key].InputDataHex for key in self.signals if self.signals[key].InputDataHex]
+        data_hex_lists = [
+            self.signals[key].InputDataHex
+            for key in self.signals
+            if self.signals[key].InputDataHex
+        ]
         if data_hex_lists:
             self.satisfy_case = list(itertools.product(*data_hex_lists))
             self.satisfy_case_size = len(self.satisfy_case)

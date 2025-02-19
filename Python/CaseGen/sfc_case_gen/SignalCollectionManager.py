@@ -8,6 +8,7 @@ from .SignalCollection import SignalCollection
 import itertools
 import copy
 
+
 class SignalCollectionManager:
     def __init__(self):
         # 여러 SignalCollection 객체를 보관할 리스트
@@ -50,6 +51,7 @@ class SignalCollectionManager:
                     results.append(collection)
                     break
         return results
+
 
 # 사용 예제
 # SignalCollection을 추가하고 관리하는 객체 생성
