@@ -178,6 +178,7 @@
    <addaction name="separator"/>
    <addaction name="actionLastFolder"/>
    <addaction name="actionLastFile"/>
+   <addaction name="actionRunTCMulti"/>
    <addaction name="separator"/>
    <addaction name="actionPath"/>
    <addaction name="actionRedo"/>
