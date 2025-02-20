@@ -580,7 +580,7 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
     } else {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
-                                        QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+                                       QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
     }
     return result;
 }
@@ -625,7 +625,6 @@ bool ControlExcel::updateExcelDataInfo(const QString& filePath) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowCount);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-
 
     return true;
 }
@@ -713,9 +712,9 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                                                QVariantList({STRING_FILE_OPEN, directory})) == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
             }
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeLastFile: {
@@ -734,6 +733,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             }
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
+            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             break;
         }
         default: {
