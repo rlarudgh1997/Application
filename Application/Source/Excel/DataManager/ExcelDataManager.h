@@ -7,9 +7,10 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-// using QMapIntStringList = QMap<int, QStringList>;
-using QPairStringList = QPair<QStringList, QStringList>;
-using QMapIntString = QMap<int, QStringList>;
+// #define USE_EXCEL_DATA_MANAGER_OLD
+
+using QPairStrList = QPair<QStringList, QStringList>;
+using QMapIntStrList = QMap<int, QStringList>;
 
 class InsertData {
     REGISTER_WRITABLE_VALUE(QString, TCName, QString())
@@ -19,13 +20,13 @@ class InsertData {
     REGISTER_WRITABLE_VALUE(QString, Config, QString())
     REGISTER_WRITABLE_VALUE(QString, ResultName, QString())
     REGISTER_WRITABLE_VALUE(QString, CaseName, QString())
-    REGISTER_WRITABLE_VALUE(QPairStringList, InputList, QPairStringList())
+    REGISTER_WRITABLE_VALUE(QPairStrList, InputList, QPairStrList())
     REGISTER_WRITABLE_VALUE(QList<QStringList>, OutputList, QList<QStringList>())
 
 public:
     InsertData(const QString& tcName, const QString& check, const QString& genType, const QString& vehicleType,
                const QString& config, const QString& resultName, const QString& caseName,
-               const QPairStringList& inputList, const QList<QStringList>& outputList) {
+               const QPairStrList& inputList, const QList<QStringList>& outputList) {
         setTCName(tcName);
         setCheck(check);
         setGenType(genType);
@@ -59,14 +60,16 @@ class ExcelDataManager : public QObject {
     REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
     REGISTER_WRITABLE_VALUE(bool, ReadStateNewData, true)
-
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
     REGISTER_WRITABLE_LIST(QList, InsertData, NewSheetData)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataOther)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataConfig)
-
-    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntString, ExcelSheetData)
+#else
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetData)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetDataOrigin)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetDataConvert)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QList<InsertData>, InsertSheetData)
-
+#endif
 
 public:
     static QSharedPointer<ExcelDataManager>& instance();
@@ -87,9 +90,11 @@ public:
     QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
-    void resetExcelData(const bool& convertState);
-
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
     void updateExcelData(const int& sheetIndex, const QVariantList& sheetData);
+#else
+    void resetExcelData(const bool& convertState);
+#endif
     void updateInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName,
                              const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName = QString(),
                              const bool& insertBefore = false);
@@ -99,20 +104,23 @@ public:
 private:
     explicit ExcelDataManager();
 
-    void updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
-
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
     void updateExcelDataOther(const int& sheetIndex, const QVariantList& sheetData);
     void updateExcelDataConfig(const QVariantList& sheetData);
-    QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex);
     QStringList isExcelDataOther(const int& sheetIndex, const int& columnIndex);
     QStringList isExcelDataConfig(const int& sheetIndex, const int& columnIndex);
-    QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex);
+#else
+    QMapIntStrList updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
+    QStringList isOriginSheetData(const int& sheetIndex, const int& columnIndex);
     QStringList isInsertSheetData(const int& sheetIndex, const int& columnIndex);
+    QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex, const bool& origin);
+#endif
+    QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
     QPair<int, int> isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                                    const QString& caseName, const bool& origin);
-    int isCaseIndex(const QString& tcName, const QString& resultName, const QString& caseName);
+    int isCaseIndex(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName);
 };
 
 #endif  // EXCEL_DATA_MANAGER_H

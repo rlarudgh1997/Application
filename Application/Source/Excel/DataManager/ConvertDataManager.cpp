@@ -920,9 +920,13 @@ QList<QList<QStringList>> ConvertDataManager::constructConvertConfigSignalSet(co
      *  )
      ******************************************************************/
 
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs;
     auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
     ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#else
+    ExcelDataManager::instance().data()->resetExcelData(true);
+#endif
 
     QList<QList<QStringList>> retConfigList;
     QList<QStringList> convertConfigDataList;
@@ -994,17 +998,23 @@ QList<QList<QStringList>> ConvertDataManager::constructConvertConfigSignalSet(co
 #define NO_DUPLICATED_SIGNAL -1
 bool ConvertDataManager::appendConvertConfigSignalSet() {
     bool result = false;
-    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
-    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+
+#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
+    ExcelDataManager::instance().data()->resetExcelData(true);
+#endif
 
     // Private ~ Output Sheet Loop
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#endif
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            qDebug() << "Not support sheet : 1" << sheetIndex;
             continue;
         }
 
@@ -1173,16 +1183,22 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
 bool ConvertDataManager::appendConvertAllTCSignalSet() {
     bool result = true;
 
-    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
-    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
+    ExcelDataManager::instance().data()->resetExcelData(true);
+#endif
+
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#endif
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            qDebug() << "Not support sheet : 2" << sheetIndex;
             continue;
         }
 
@@ -1322,23 +1338,32 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
 bool ConvertDataManager::convertInputSignalKeyword() {
     bool result = false;
 
-    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+
+#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
+    ExcelDataManager::instance().data()->resetExcelData(false);
+#endif
 
     // Private ~ Output Sheet Loop
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
         int convertSheetIndex = sheetIndex -
                                 static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) +
                                 static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            qDebug() << "Not support sheet : 3" << sheetIndex;
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
             auto originSheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
             ExcelData::instance().data()->setSheetData(convertSheetIndex, originSheetData);
+#endif
             continue;
         }
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#endif
+
         // List => TCName, ResultName, CaseName, <InputSignalList, InputDataList>
         QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>> backupCurSheetIndexData;
         QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
@@ -1546,8 +1571,12 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
         }
     }
 
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
     auto sheetData = ExcelData::instance().data()->getSheetData(currentSheetIndex).toList();
     ExcelDataManager::instance().data()->updateExcelData(currentSheetIndex, sheetData);
+#else
+    ExcelDataManager::instance().data()->resetExcelData(false);
+#endif
 
     return sheetDataInfo;
 }
@@ -1555,18 +1584,24 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
 // List = [CaseName1, (InputSignalList, InputDataList)] + [CaseName2, (InputSignalList, InputDataList)] + ...
 QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSheetSignalDataInfo(const QString& name,
                                                                                                   const QString& data) {
-    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) + 1;
-    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) + 1;
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
     QList<QPair<QString, QPair<QStringList, QStringList>>> sheetKeywordSignalDataInfo;
 
+#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
+    ExcelDataManager::instance().data()->resetExcelData(false);
+#endif
+
     // Private ~ Output Sheet Loop
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
         if (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs)) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            qDebug() << "Not support sheet : 4" << sheetIndex;
             continue;
         }
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
         auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#endif
 
         QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, name, data);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)

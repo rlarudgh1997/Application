@@ -67,6 +67,10 @@ QString GenerateCaseData::genCase() {
     const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     const int convertEnd = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
 
+#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
+    ExcelDataManager::instance().data()->resetExcelData(true);
+#endif
+
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) ||
             (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetPrivates) ||
@@ -78,8 +82,10 @@ QString GenerateCaseData::genCase() {
         }
 
         // Manager 내부의 data 컨테이너를 해당 sheetIndex 에 해당하는 데이터로 업데이트
+#if defined(USE_EXCEL_DATA_MANAGER_OLD)
         QVariantList sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
         ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
+#endif
 
         // Json 파일 내부에서 순서 보장을 위한 Index 할당
         int caseCnt = 0;
@@ -1022,17 +1028,25 @@ void GenerateCaseData::checkNegativeAndPositive(const QString& genType, const QS
 }
 
 void GenerateCaseData::printCaseSize(const QString& genType) {
-    qDebug() << genType + QString(" Result==============================================================================");
+    qDebug() << "\n\033[31m";
+    qDebug() << (QString(120, '=').toLatin1().data());
+    qDebug() << "[GenerateCaseData Result] :" << genType.toLatin1().data();
+    qDebug() << (QString(120, '-').toLatin1().data());
+
     int sum = 0;
     int idx = 0;
     QString allCasekey;
     for (const auto& key : mCaseSizeMap.keys()) {
         sum += mCaseSizeMap[key];
-        qDebug() << "Case[" << idx << "], "
-                 << "Identifier: '" << key << "', Size: " << mCaseSizeMap[key] << Qt::endl;
+        qDebug().nospace() << "Case[" << QString::number(idx).rightJustified(2, ' ').toLatin1().data() << "] : "
+                        << QString::number(mCaseSizeMap[key]).rightJustified(5, ' ').toLatin1().data() << ",  "
+                        << key.toLatin1().data();
         idx++;
     }
     mTotalTestCaseCount = sum;
-    qDebug() << QString("Sum of cases => ") + QString::number(sum);
-    qDebug() << QString("============================================================================================") << "\n\n";
+
+    qDebug() << (QString(120, '-').toLatin1().data());
+    qDebug() << (QString("Sum of cases => ") + QString::number(sum)).toLatin1().data();
+    qDebug() << (QString(120, '=').toLatin1().data());
+    qDebug() << "\n\n\033[0m";
 }
