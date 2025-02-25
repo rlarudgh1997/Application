@@ -1014,7 +1014,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet : 1" << sheetIndex;
+            qDebug() << "1. Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -1198,7 +1198,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet : 2" << sheetIndex;
+            qDebug() << "2. Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -1319,6 +1319,20 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                     qDebug() << "InputData(val) after append : " << inputDataList.second;
 #endif
                 }
+
+#if 0    // updateOutputDataInfo 테스트 코드
+                QList<QStringList> outputList;
+                for (int index = 0; index < 10; ++index) {
+                    QStringList output({
+                        QString("Singal_%1").arg(index),
+                        QString("%1").arg(((index % 3) == 0)? ("O") : ("")),
+                        QString("Data_%1").arg(index),
+                    });
+                    outputList.append(output);
+                }
+                ExcelDataManager::instance().data()->updateOutputDataInfo(sheetIndex, tcNameStr, resultStr, outputList);
+#endif
+
 #if defined(ENABLE_ALL_TC_SIGNAL_SET_LOG)
                 qDebug() << "############################################################################################";
 #endif
@@ -1352,7 +1366,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
                                 static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
-            qDebug() << "Not support sheet : 3" << sheetIndex;
+            qDebug() << "3. Not support sheet :" << sheetIndex;
 #if defined(USE_EXCEL_DATA_MANAGER_OLD)
             auto originSheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
             ExcelData::instance().data()->setSheetData(convertSheetIndex, originSheetData);

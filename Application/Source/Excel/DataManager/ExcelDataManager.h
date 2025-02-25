@@ -24,8 +24,8 @@ class InsertData {
     REGISTER_WRITABLE_VALUE(QList<QStringList>, OutputList, QList<QStringList>())
 
 public:
-    InsertData(const QString& tcName, const QString& check, const QString& genType, const QString& vehicleType,
-               const QString& config, const QString& resultName, const QString& caseName,
+    InsertData(const int& sheetIndex, const int& rowIndex, const QString& tcName, const QString& check, const QString& genType,
+               const QString& vehicleType, const QString& config, const QString& resultName, const QString& caseName,
                const QPairStrList& inputList, const QList<QStringList>& outputList) {
         setTCName(tcName);
         setCheck(check);
@@ -36,6 +36,17 @@ public:
         setCaseName(caseName);
         setInputList(inputList);
         setOutputList(outputList);
+#if 0
+        qDebug() << "   InsertData :" << sheetIndex;
+        qDebug() << "\t Info   :" << rowIndex << check << tcName << genType << vehicleType << config << resultName << caseName
+                 << inputList.first.size() << outputList.size();
+        for (int index = 0; index < inputList.first.size(); ++index) {
+            qDebug() << "\t Input  :" << inputList.first.at(index) << inputList.second.at(index);
+        }
+        for (const auto& outputData : outputList) {
+            qDebug() << "\t Output :" << outputData.at(0) << outputData.at(1) << outputData.at(2);
+        }
+#endif
     }
     InsertData() = default;
     InsertData(const InsertData& other) = default;
@@ -98,29 +109,32 @@ public:
     void updateInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName,
                              const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName = QString(),
                              const bool& insertBefore = false);
-    void updateOutputDataInfo(const QString& tcName, const QString& resultName, const QList<QStringList>& list);
+    void updateOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
+                              const QList<QStringList>& outputList);
     bool isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList);
 
 private:
     explicit ExcelDataManager();
 
 #if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    void updateExcelDataOther(const int& sheetIndex, const QVariantList& sheetData);
-    void updateExcelDataConfig(const QVariantList& sheetData);
+    void updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
+    void updateParsingExcelDataConfig(const int& sheetIndex, const QVariantList& sheetData);
     QStringList isExcelDataOther(const int& sheetIndex, const int& columnIndex);
     QStringList isExcelDataConfig(const int& sheetIndex, const int& columnIndex);
 #else
     QMapIntStrList updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
     QStringList isOriginSheetData(const int& sheetIndex, const int& columnIndex);
     QStringList isInsertSheetData(const int& sheetIndex, const int& columnIndex);
-    QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex, const bool& origin);
+    QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex, const bool& origin, const bool& log = false);
 #endif
     QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
     QPair<int, int> isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
-                                   const QString& caseName, const bool& origin);
+                                   const QString& caseName, const bool& origin, const bool& log = false);
     int isCaseIndex(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName);
+    QPair<QStringList, QStringList> reconstructInputData(const QPair<QStringList, QStringList>& inputList,
+                                                         const QList<QStringList>& outputList);
 };
 
 #endif  // EXCEL_DATA_MANAGER_H

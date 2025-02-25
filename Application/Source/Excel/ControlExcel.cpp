@@ -314,11 +314,11 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
 
     updateDataHandler(propertyType, originSheetData);
     ExcelData::instance().data()->setSheetData(propertyType, originSheetData);
-
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
+    int originSize = ExcelData::instance().data()->getSheetData(propertyType).toList().size();
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    checkTimer.check(QString("updateSheetData[%1] : data changed !!!").arg(propertyType));
+    checkTimer.check(QString("updateSheetData[%1] : data[%2] changed !!!").arg(propertyType).arg(originSize));
 #if 0
     int rowIndex = 0;
     for (const auto& rowDataList : originSheetData.toList()) {
@@ -1078,6 +1078,16 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
         qDebug() << "Fail to excel data validation.";
         return;
+    }
+
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+    int convertSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
+    // Update : Convert Data
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
+        ExcelData::instance().data()->setSheetData(convertSheetIndex, sheetData);
+        convertSheetIndex++;
     }
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
