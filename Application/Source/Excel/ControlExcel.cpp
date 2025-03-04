@@ -259,6 +259,7 @@ void ControlExcel::updateNodeAddress(const bool& all, const QStringList& tcNameL
 
 void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& sheetData) {
     if (getData(propertyType).toList() == sheetData) {
+        qDebug() << "There are no changes to the data :" << propertyType << sheetData.size();
         return;
     }
     ivis::common::CheckTimer checkTimer;
@@ -318,7 +319,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
 
     int originSize = ExcelData::instance().data()->getSheetData(propertyType).toList().size();
     qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    checkTimer.check(QString("updateSheetData[%1] : data[%2] changed !!!").arg(propertyType).arg(originSize));
+    checkTimer.check(QString("updateSheetData[%1] : data changed !!! -> Size : %2").arg(propertyType).arg(originSize));
 #if 0
     int rowIndex = 0;
     for (const auto& rowDataList : originSheetData.toList()) {
@@ -745,13 +746,13 @@ void ControlExcel::loadExcelFile(const int& eventType) {
 void ControlExcel::saveExcelFile(const bool& saveAs) {
     bool fileSave = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
     if ((fileSave == false) && (saveAs == false)) {
-        qDebug() << "The file is not saved because the contents of the excel have not changed.";
+        qDebug() << "The file is not saved because the contents of the excel have not changed :" << saveAs << fileSave;
         return;
     }
 
     ivis::common::PopupButton button = ivis::common::PopupButton::OK;
-    QVariant saveFilePath = (saveAs) ? (QVariant()) : (getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile));
-        // (saveAs) ? (QVariant()) : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
+    QVariant saveFilePath =
+        (saveAs) ? (QVariant()) : (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath));
 
     if (saveFilePath.toString().size() == 0) {
         QVariant filePath = QVariant();
@@ -773,33 +774,26 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
     }
 }
 
-void ControlExcel::updateClipboardInfo(const int& eventType) {
-    int clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
-    if (eventType == ivis::common::EventTypeEnum::EventTypeEditCut) {
-        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeCut;
-    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCopy) {
-        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypeCopy;
-    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditPaste) {
-        clipboardType = ivis::common::ShortcutTypeEnum::ShortcutTypePaste;
-    } else {
-        qDebug() << "Fail to clipboard eventType :" << eventType;
-        return;
-    }
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, clipboardType, true);
-}
-
 void ControlExcel::updateShortcutInfo(const int& eventType) {
     int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
-    if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellInsert) {
+
+    if (eventType == ivis::common::EventTypeEnum::EventTypeEditCut) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCut;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCopy) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCopy;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditPaste) {
+        shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypePaste;
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditInsert) {
         shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
-    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellDelete) {
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditDelete) {
         shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
-    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit) {
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeEditMergeSplit) {
         shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
     } else {
         qDebug() << "Fail to shortcut eventType :" << eventType;
         return;
     }
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, shortcutType, true);
 }
 
@@ -1143,10 +1137,17 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             updateAutoInputDescriptionInfo(value.toList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeWarningMergeSplit: {
+        case ivis::common::EventTypeEnum::EventTypeWarningMergeSplit:
+        case ivis::common::EventTypeEnum::EventTypeWarningCopyCut: {
+            ivis::common::PopupType popupType = ivis::common::PopupType::SelectCellColumnError;
+            QVariantList popupInfo = QVariantList({STRING_POPUP_CELL_COLUMN, STRING_POPUP_CELL_COLUMN_TIP});
             QVariant popupData = QVariant();
-            ivis::common::Popup::drawPopup(ivis::common::PopupType::SelectCellColumnError, isHandler(), popupData,
-                                           QVariantList({STRING_POPUP_CELL_COLUMN, STRING_POPUP_CELL_COLUMN_TIP}));
+
+            if (type == ivis::common::EventTypeEnum::EventTypeWarningCopyCut) {
+                popupType = ivis::common::PopupType::MultipleSelectedCellError;
+                popupInfo = QVariantList({STRING_POPUP_CELL_SELECTION_ERROR, STRING_POPUP_CELL_SELECTION_ERROR_TIP});
+            }
+            ivis::common::Popup::drawPopup(popupType, isHandler(), popupData, popupInfo);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions: {
@@ -1157,49 +1158,14 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             updateInputDataValidation(value.toList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeShortcutInsert: {
-            QVariantList insertInfo = value.toList();
-            if (insertInfo.size() == 3) {
-                int sheetIndex = insertInfo.at(0).toInt();
-                int rowStart = insertInfo.at(1).toInt();
-                int rowCount = insertInfo.at(1).toInt();
-
-                qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-                qDebug() << "EventTypeShortcutInsert :" << sheetIndex << rowStart << rowCount;
-#if 0
-                int rowIndex = 0;
-                QVariantList newSheetDataList;
-                QVariantList currentSheetDataList = getData(sheetIndex).toList();
-
-                int rowEnd = currentSheetDataList.size() + rowCount;
-
-                QStringList dataInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
-                for (const auto& sheetDataList : getData(sheetIndex).toList()) {
-                    if ((rowIndex >= rowStart) && (rowIndex < rowEnd)) {
-                        newSheetDataList.append(dataInfo);
-                        qDebug() << "\t Append Data[" << rowIndex << "] :" << dataInfo;
-                    } else {
-                        newSheetDataList.append(sheetDataList.toStringList());
-                        qDebug() << "\t Origin Data[" << rowIndex << "] :" << sheetDataList.toStringList();
-                    }
-                    rowIndex++;
-                }
-
-                rowIndex = 0;
-                for (const auto& sheetDataList : newSheetDataList.toList()) {
-                    qDebug() << "\t Data[" << rowIndex << "] :" << sheetDataList.toStringList();
-                    rowIndex++;
-                }
-#endif
-                qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n\n";
-            }
-            break;
-        }
         default: {
             if ((type > ivis::common::EventTypeEnum::EventTypeList) && (type < ivis::common::EventTypeEnum::EventTypeListMax)) {
-                int propertyType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription +
-                                   (type - ivis::common::EventTypeEnum::EventTypeListDescription);
-                updateSheetData(propertyType, value.toList());
+                QVariantList data = value.toList();
+                if (data.size() == 2) {
+                    int propertyType = data.at(0).toInt();
+                    QVariantList sheetData = data.at(1).toList();
+                    updateSheetData(propertyType, sheetData);
+                }
             }
             break;
         }
@@ -1234,13 +1200,10 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         case ivis::common::EventTypeEnum::EventTypeEditRedo:
         case ivis::common::EventTypeEnum::EventTypeEditCut:
         case ivis::common::EventTypeEnum::EventTypeEditCopy:
-        case ivis::common::EventTypeEnum::EventTypeEditPaste: {
-            updateClipboardInfo(eventType);
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeEditCellInsert:
-        case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
-        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit: {
+        case ivis::common::EventTypeEnum::EventTypeEditPaste:
+        case ivis::common::EventTypeEnum::EventTypeEditInsert:
+        case ivis::common::EventTypeEnum::EventTypeEditDelete:
+        case ivis::common::EventTypeEnum::EventTypeEditMergeSplit: {
             updateShortcutInfo(eventType);
             break;
         }

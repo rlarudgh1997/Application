@@ -884,9 +884,9 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeEditPaste:
         case ivis::common::EventTypeEnum::EventTypeEditUndo:
         case ivis::common::EventTypeEnum::EventTypeEditRedo:
-        case ivis::common::EventTypeEnum::EventTypeEditCellInsert:
-        case ivis::common::EventTypeEnum::EventTypeEditCellDelete:
-        case ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit:
+        case ivis::common::EventTypeEnum::EventTypeEditInsert:
+        case ivis::common::EventTypeEnum::EventTypeEditDelete:
+        case ivis::common::EventTypeEnum::EventTypeEditMergeSplit:
         case ivis::common::EventTypeEnum::EventTypeEditGenType:
         case ivis::common::EventTypeEnum::EventTypeEditTCCheck: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type, value);

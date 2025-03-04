@@ -90,80 +90,100 @@ private:
     QMap<int, QList<QPair<int, int>>> mInfo = QMap<int, QList<QPair<int, int>>>();
 };
 
-class SelectedCellInfo {
+class CellSelectedInfo {
+    REGISTER_WRITABLE_VALUE(int, RowStart, 0)
+    REGISTER_WRITABLE_VALUE(int, RowEnd, 0)
+    REGISTER_WRITABLE_VALUE(int, ColumnStart, 0)
+    REGISTER_WRITABLE_VALUE(int, ColumnEnd, 0)
+    REGISTER_WRITABLE_VALUE(QModelIndexList, ModelIndexs, QModelIndexList())
+
 public:
-    explicit SelectedCellInfo(QTableWidget* tableWidget) {
-        clear();
-        updateSelectedCellInfo(tableWidget);
+    CellSelectedInfo(const int& rowStart, const int& rowEnd, const int& columnStart, const int& columnEnd) {
+        setRowStart(rowStart);
+        setRowEnd(rowEnd);
+        setColumnStart(columnStart);
+        setColumnEnd(columnEnd);
     }
-    SelectedCellInfo() = default;
-    SelectedCellInfo(const SelectedCellInfo& other) = default;
-    SelectedCellInfo& operator=(const SelectedCellInfo& other) = default;
-
-    QPair<int, int> isRowInfo() const {
-        return QPair<int, int>(mRowStart, mRowCount);
-    }
-    QPair<int, int> isColumnInfo() const {
-        return QPair<int, int>(mColumnStart, mColumnCount);
-    }
-    QPair<int, int> isEndInfo() const {
-        return QPair<int, int>((mRowStart + mRowCount), (mColumnStart + mColumnCount));
-    }
-    QPair<int, int> isMaxInfo() const {
-        return QPair<int, int>(mRowMax, mColumnMax);
-    }
-    QModelIndexList isModelIndexsInfo() const {
-        return mModelIndexs;
-    }
-
-private:
-    void updateSelectedCellInfo(QTableWidget* tableWidget) {
-        if (tableWidget == nullptr) {
+    explicit CellSelectedInfo(const QModelIndexList& modelIndexs) {
+        if (modelIndexs.isEmpty()) {
+            qDebug() << "Selected Cell is empty";
             return;
         }
-        const QModelIndexList modelIndexs = tableWidget->selectionModel()->selectedIndexes();
-        const bool selected = (modelIndexs.size() > 0);
 
-        mRowStart = (selected) ? (modelIndexs.at(0).row()) : (tableWidget->currentRow());
-        mRowCount = (selected) ? (modelIndexs.last().row() - mRowStart + 1) : (1);
-        mRowMax = tableWidget->rowCount();
+        int rowStart = modelIndexs.first().row();
+        int rowEnd = rowStart;
+        int columnStart = modelIndexs.first().column();
+        int columnEnd = columnStart;
 
-        mColumnStart = (selected) ? (modelIndexs.at(0).column()) : (tableWidget->currentColumn());
-        mColumnCount = (selected) ? (modelIndexs.last().column() - mColumnStart + 1) : (1);
-        mColumnMax = tableWidget->columnCount();
+        for (const auto& currCell : modelIndexs) {
+            int row = currCell.row();
+            int column = currCell.column();
 
-        if (mRowCount <= 0) {
-            QList<int> rowList = QList<int>();
-            for (const auto& index : modelIndexs) {
-                rowList.append(index.row());
-            }
-            if (rowList.size() > 0) {
-                mRowStart = (*std::min_element(rowList.constBegin(), rowList.constEnd()));
-                mRowCount = (*std::max_element(rowList.constBegin(), rowList.constEnd())) - mRowStart + 1;
+            rowStart = qMin(rowStart, row);
+            rowEnd = qMax(rowEnd, row);
+            columnStart = qMin(columnStart, column);
+            columnEnd = qMax(columnEnd, column);
+        }
+
+        setRowStart(rowStart);
+        setRowEnd(rowEnd);
+        setColumnStart(columnStart);
+        setColumnEnd(columnEnd);
+        setModelIndexs(modelIndexs);
+    }
+
+    CellSelectedInfo() = default;
+    CellSelectedInfo(const CellSelectedInfo& other) = default;
+    CellSelectedInfo& operator=(const CellSelectedInfo& other) = default;
+
+    bool operator==(const CellSelectedInfo& other) const {
+        return ((getRowStart() == other.getRowStart()) && (getRowEnd() == other.getRowEnd()) &&
+                (getColumnStart() == other.getColumnStart()) && (getColumnEnd() == other.getColumnEnd()) &&
+                (getModelIndexs() == other.getModelIndexs()));
+    }
+    bool operator!=(const CellSelectedInfo& other) const {
+        return !(*this == other);
+    }
+
+    int getRowCount() const {
+        return (getRowEnd() - getRowStart() + 1);
+    }
+    int getColumnCount() const {
+        return (getColumnEnd() - getColumnStart() + 1);
+    }
+    QMap<int, QPair<int, int>> getRowRangeList() const {
+        QMap<int, QPair<int, int>> rowRangeList;
+        for (const auto& currCell : getModelIndexs()) {
+            int row = currCell.row();
+            int column = currCell.column();
+
+            auto& range = rowRangeList[column];
+            if (rowRangeList.contains(column)) {
+                range.first = qMin(range.first, row);
+                range.second = qMax(range.second, row);
+            } else {
+                range = qMakePair(row, row);
             }
         }
-        ivis::common::LIMIT(mRowStart, 0, mRowMax);
-        ivis::common::LIMIT(mColumnStart, 0, mColumnMax);
+        // qDebug() << "\t getRowRangeList :" << rowRangeList;
+        return rowRangeList;
     }
-    void clear() {
-        mRowStart = Default;
-        mRowCount = Default;
-        mRowMax = Default;
-        mColumnStart = Default;
-        mColumnCount = Default;
-        mColumnMax = Default;
-        mModelIndexs.clear();
+    bool getNotSupport() const {
+        auto rowRangeList = getRowRangeList();
+        if (rowRangeList.size() == 0) {
+            return false;
+        }
+        auto& rangeInfo = rowRangeList[getColumnStart()];
+        for (const auto& key : rowRangeList.keys()) {
+            // qDebug() << "\t RowInfo[" << key << "] :" << rowRangeList[key] << rangeInfo;
+            if (rangeInfo != rowRangeList[key]) {
+                return true;
+                break;
+            }
+            rangeInfo = rowRangeList[key];
+        }
+        return false;
     }
-
-private:
-    const int Default = (-1);
-    int mRowStart = Default;
-    int mRowCount = Default;
-    int mColumnStart = Default;
-    int mColumnCount = Default;
-    int mRowMax = Default;
-    int mColumnMax = Default;
-    QModelIndexList mModelIndexs = QModelIndexList();
 };
 
 class GuiExcel : public AbstractGui {
@@ -172,6 +192,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(bool, SfcSignal, false)
     REGISTER_WRITABLE_VALUE(bool, OutputState, false)
     REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
+    REGISTER_WRITABLE_VALUE(int, CurrSheetIndex, 0)
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
 
 private:
@@ -194,8 +215,9 @@ private:
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     bool chcekExcelSheet(const int& sheetIndex);
-    QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
-    void syncSheetData(const int& sheetIndex);
+    QVariantList readSheetProperty(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
+    QVariantList readSheetDisplay(const int& sheetIndex);
+    void syncSheetData(const int& sheetIndex, const bool& readProperty);
     bool isSheetChanged(const int& sheetIndex);
     int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
     bool isDrawCheckBox(const int& sheetIndex, const int& columnIndex);
@@ -206,13 +228,11 @@ private:
     void constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart);
     void updateDisplaySplitCell(const int& sheetIndex);
     void updateDisplayMergeCell(const int& sheetIndex);
-    QMap<int, QSet<QPair<int, int>>> isSheetMergeInfo(const int& sheetIndex);
-    void updateSheetMergeInfo(const int& editType, const int& sheetIndex, const int& rowStart, const int& rowCount,
-                              const int& columnStart, const int& columnCount);
-    void updateDisplayInsertDelete(const int& editType, const int& sheetIndex, const int& columnIndex, const int& rowStart,
-                                   const int& rowCount);
-    void updateDisplayMergeSplit(const int& editType, const int& sheetIndex, const int& columnStart, const int& columnCount,
-                                 const int& rowStart, const int& rowCount);
+    QMap<int, QSet<QPair<int, int>>> isSheetMergeInfo(const int& sheetIndex, const bool& refreshInfo);
+    int updateDisplayInsertDelete(const int& sheetIndex, const bool& insert);
+    int updateDisplayMergeSplit(const int& sheetIndex);
+    int updateDisplayCopy(const int& sheetIndex, const bool& cutState);
+    int updateDisplayPaste(const int& sheetIndex);
     void updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
     void updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax);
     void updateDisplaySheetText(const int& sheetIndex);
@@ -237,12 +257,10 @@ private:
     void copyClipboardInfo(const bool& cutState);
     int clearClipboardInfo(const bool& escapeKeyClear);
     void pasteClipboardInfo();
-    QList<QStringList> isSheetData(const int& sheetIndex, const bool& removeMerge, const QPair<int, int>& maxInfo);
+    QList<QStringList> isSheetData(const int& sheetIndex, const bool& removeMerge, const bool& readProperty);
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
-    QString isSeletedSheetData(const int& sheetIndex);
-    void updateConstructClipboardInfo(const int& clipboardType);
     void updateDisplayReceiveKeyFocus();
-    void updateDisplayEditCellShortcut(const int& editType);
+    void updateDisplayShortcut(const int& shortcutType);
     void updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex);
     void updateDescriptionInfo(const int& sheetIndex, const int& row);
 

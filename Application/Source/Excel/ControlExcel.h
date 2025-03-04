@@ -25,7 +25,6 @@ private:
     bool updateExcelDataInfo(const QString& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);
-    void updateClipboardInfo(const int& eventType);
     void updateShortcutInfo(const int& eventType);
     void updateGenType(const int& genType);
     void updateTCCheck(const int& allCheck);

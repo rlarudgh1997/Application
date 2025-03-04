@@ -121,7 +121,6 @@ public:
         PropertyTypeExcelMergeStart,
         PropertyTypeExcelMerge,
         PropertyTypeExcelMergeEnd,
-        PropertyTypeClipboardType,
         PropertyTypeShortcutType,
         PropertyTypeGenTypeList,
 
@@ -195,9 +194,9 @@ public:
         EventTypeEditPaste,
         EventTypeEditUndo,
         EventTypeEditRedo,
-        EventTypeEditCellInsert,
-        EventTypeEditCellDelete,
-        EventTypeEditCellMergeSplit,
+        EventTypeEditInsert,
+        EventTypeEditDelete,
+        EventTypeEditMergeSplit,
         EventTypeEditGenType,
         EventTypeEditTCCheck,
 
@@ -230,7 +229,6 @@ public:
         EventTypeSheetRowDelete,
         EventTypeAutoCompleteSuggestions,
         EventTypeCellMergeSplit,
-        EventTypeWarningMergeSplit,
         EventTypeViewInfoClose,
         EventTypeUpdateConfig,
         EventTypeConfigReset,
@@ -254,8 +252,8 @@ public:
         EventTypeRunTestReport,
         EventTypeSelectModuleError,
         EventTypeSelectAppMode,
-        EventTypeShortcutInsert,
-        EventTypeShortcutDelete,
+        EventTypeWarningMergeSplit,
+        EventTypeWarningCopyCut,
 
         EventTypeTest = 3000,
 

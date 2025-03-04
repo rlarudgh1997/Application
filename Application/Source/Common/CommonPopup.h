@@ -31,6 +31,7 @@ enum class PopupType {
     RunPathError,
     ModuleSelectError,
     SelectCellColumnError,
+    MultipleSelectedCellError,
 
     Exit,
     New,
@@ -62,7 +63,7 @@ class Popup : public QObject {
 
 public:
     static PopupButton drawPopup(const PopupType& popupType, AbstractHandler* handler, QVariant& popupData,
-                                 const QVariant& value = QVariant()) {
+                                 const QVariant& popupInfo = QVariant()) {
         PopupButton button = PopupButton::Invalid;
 
         qDebug() << "Popup::drawPopup() -> PopupType :" << static_cast<int>(gPopupType) << "->" << static_cast<int>(popupType);
@@ -85,8 +86,9 @@ public:
             case PopupType::GcovReportError:
             case PopupType::RunPathError:
             case PopupType::ModuleSelectError:
-            case PopupType::SelectCellColumnError: {
-                QVariantList infoData = value.toList();
+            case PopupType::SelectCellColumnError:
+            case PopupType::MultipleSelectedCellError: {
+                QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     bool warning = ((popupType != PopupType::About) && (popupType != PopupType::ScriptRunnigCompleted));
                     button = drawPopupNoraml(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
@@ -99,7 +101,7 @@ public:
             case PopupType::NoInstallLib:
             case PopupType::FileNotExist:
             case PopupType::RestConfigValue: {
-                button = drawPopupSelect(popupType, handler, value);
+                button = drawPopupSelect(popupType, handler, popupInfo);
                 break;
             }
             case PopupType::AboutQt: {
@@ -107,21 +109,21 @@ public:
                 break;
             }
             case PopupType::Open: {
-                QVariantList infoData = value.toList();
+                QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     button = drawPopupOpen(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }
                 break;
             }
             case PopupType::Save: {
-                QVariantList infoData = value.toList();
+                QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 1) {
                     button = drawPopupSave(handler, infoData.at(0).toString());
                 }
                 break;
             }
             case PopupType::SettingPath: {
-                QVariantList infoData = value.toList();
+                QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     button = drawPopupSettingPath(handler, infoData.at(0).toString(), infoData.at(1).toString());
                 }

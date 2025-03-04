@@ -89,11 +89,11 @@ void GuiMenu::drawMenuEdit() {
     connect(mGui->actionPaste, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditPaste, QVariant()); });
     connect(mGui->actionInsert, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditCellInsert, QVariant()); });
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditInsert, QVariant()); });
     connect(mGui->actionDelete, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditCellDelete, QVariant()); });
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditDelete, QVariant()); });
     connect(mGui->actionMergeSplit, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditCellMergeSplit, QVariant()); });
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditMergeSplit, QVariant()); });
     connect(mGui->actionUndo, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditUndo, QVariant()); });
     connect(mGui->actionRedo, &QAction::triggered,

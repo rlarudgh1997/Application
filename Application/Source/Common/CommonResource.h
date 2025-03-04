@@ -138,6 +138,9 @@
 #define STRING_POPUP_DATA_VALIDATION QString("Data Validation")
 #define STRING_POPUP_DATA_VALIDATION_TIP QString("The input data contains %1.\nPlease enter the enumeration string.")
 
+#define STRING_POPUP_CELL_SELECTION_ERROR QString("Cell selection error")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP QString("Multiple selection feature is not supported.")
+
 // =============================================================================================================
 // Image Define
 // =============================================================================================================

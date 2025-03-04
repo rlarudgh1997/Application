@@ -55,7 +55,6 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeClipboardType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShortcutType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, QVariant());

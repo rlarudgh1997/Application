@@ -27,7 +27,7 @@ class GuiExcel {
 
     -void updateDrawDialog(const int& dialogType, const QVariantList& info)
     -bool chcekExcelSheet(const int& sheetIndex)
-    -QVariantList readExcelSheet(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString)
+    -QVariantList readSheetProperty(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString)
     -void syncSheetData()
     -int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart)
     -bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart, const int& rowEnd)
@@ -51,9 +51,8 @@ class GuiExcel {
     -void copyClipboardInfo(const bool& cutState)
     -int clearClipboardInfo(const bool& escapeKeyClear)
     -void pasteClipboardInfo()
-    -void updateDisplayClipboardInfo(const int& clipboardType)
     -void updateDisplayReceiveKeyFocus()
-    -void updateDisplayEditCellShortcut(const int& editType)
+    -void updateDisplayShortcut(const int& shortcutType)
 
     -void setSfcSignal(const bool& sfcSignal)
     -bool getSfcSignal()

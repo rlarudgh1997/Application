@@ -6,8 +6,15 @@
 
 #include "CommonDefine.h"
 #include "CommonUtil.h"
+#include "CommonEnum.h"
 
 class KeywordInfo;
+
+struct ConvertKeywordInfo {
+    ivis::common::KeywordTypeEnum::KeywordType keywordType = ivis::common::KeywordTypeEnum::KeywordType::Invalid;
+    QString inputSignal = QString();
+    QString inputValue = QString();
+};
 
 class ConvertDataManager : public QObject {
     Q_OBJECT
@@ -30,21 +37,40 @@ private:
     bool appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
 
+    bool convertOutputDataKeyword();
     bool convertInputSignalKeyword();
     bool convertInputDataKeyword();
+    bool convertNonInputSignalKeyword();
 
 private:
+    ConvertKeywordInfo interpretInputValueKeyword(const QString& signal, const QString& value);
+    QString findVehicleSignalElseTimeoutCrcValue(const QString& vehicleSignal, const QString& elseTimeoutCrc);
     QList<QPair<QString, QPair<QStringList, QStringList>>> convertSheetKeyword(
         const QPair<QStringList, QStringList>& inputDataPairInfo, const int& currentSheetIndex);
     QList<QPair<QString, QPair<QStringList, QStringList>>> getSheetSignalDataInfo(const QString& name, const QString& data);
+    QString convertCustomKeywordType(const int& keywordType);
+    void appendCurSheetData(const QString& tcName, const QString& resultName, const QString& caseName,
+                            const QPair<QStringList, QStringList>& inputDataInfo,
+                            QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
+    void updateCurSheetData(const int& sheetIndex,
+                            const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
 
+    QString constructConvertKeywordDataInfo(const int& keywordType, const QString& inputData);
+    QList<QList<QStringList>> constructConvertConfigSignalSet(const QString& configName);
+
+    QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
+                                            const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
+    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
+                                      const bool& normal = true);
+
+    /***** will be deleted *****/
+    void duplicatedConstructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
+    QString constructConvertKeywordDataInfoBackup(const int& keywordType, const QString& inputData);
+    void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
     QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
                                                                const QList<int>& columnList);
     bool isDataAlreadyExistInKeywordInfoList(const QStringList& rowDataList, const KeywordInfo& keywordInfo,
                                              const int& originSheetIndex, const bool& isEqualData);
-    void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
-    void constructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
-    QList<QList<QStringList>> constructConvertConfigSignalSet(const QString& configName);
 
     QStringList deleteColumnRowData(const QStringList& rowData, const QList<int>& deleteColumnIndex);
     int getMergeKeywordType(const QString& data);
@@ -52,19 +78,9 @@ private:
 
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
 
-    QMap<int, QStringList> isTCNameDataInfo(const QString& tcName, const QString& result, const QList<int>& columnList,
-                                            const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
-    QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
-                                      const bool& normal = true);
-
     QPair<QStringList, QStringList> getMergedInputDataInfo(const QPair<QStringList, QStringList>& origin,
                                                            const QPair<QStringList, QStringList>& sheet);
     QString mergeCaseName(const QString& prefix, const QString& suffix);
-    void appendCurSheetData(const QString& tcName, const QString& resultName, const QString& caseName,
-                            const QPair<QStringList, QStringList>& inputDataInfo,
-                            QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
-    void updateCurSheetData(const int& sheetIndex,
-                            const QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData);
 };
 
 #endif  // CONVERT_DATA_MANAGER_H
