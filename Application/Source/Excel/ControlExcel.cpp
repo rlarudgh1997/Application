@@ -891,15 +891,12 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
     }
 }
 
-void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo) {
-    if (autoInputInfo.size() != 3) {
-        qDebug() << "Fail to auto input info size :" << autoInputInfo.size();
+void ControlExcel::updateAutoInputDescriptionInfo(const QString& moduleName) {
+    if (moduleName.size() == 0) {
+        qDebug() << "Fail to auto input moduel name size : 0";
         return;
     }
 
-    // int sheetIndex = autoInputInfo.at(0).toInt();
-    // int row = autoInputInfo.at(1).toInt();
-    QString moduleName = autoInputInfo.at(2).toString();
     QString fileName = SignalDataManager::instance().data()->isSfcFileInfo(moduleName);
     // qDebug() << "updateAutoInputDescriptionInfo :" << moduleName << fileName;
 
@@ -1134,7 +1131,7 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {
-            updateAutoInputDescriptionInfo(value.toList());
+            updateAutoInputDescriptionInfo(value.toString());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeWarningMergeSplit:

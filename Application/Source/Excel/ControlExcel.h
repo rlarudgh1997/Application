@@ -31,7 +31,7 @@ private:
     void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
     void updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType);
     void updateAutoCompleteSuggestions(const QVariantList& inputData);
-    void updateAutoInputDescriptionInfo(const QVariantList& autoInputInfo);
+    void updateAutoInputDescriptionInfo(const QString& moduleName);
     void updateAutoCompleteData(const QVariantList& inputData);
     void updateInputDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);

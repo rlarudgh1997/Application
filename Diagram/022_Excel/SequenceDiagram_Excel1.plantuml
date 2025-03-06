@@ -89,22 +89,22 @@ alt ButtonType == OK
     activate ExcelGui
     ExcelGui -> ExcelGui : updateDisplayExcelSheet()
     activate ExcelGui
-    ExcelGui -> ExcelGui : updateInitialExcelSheet()
+    ExcelGui -> ExcelGui : updateInitExcelSheet()
 
     loop SheetIndex < SheetCount
-        ExcelGui -> ExcelGui : updateInitialExcelSheet()
+        ExcelGui -> ExcelGui : updateInitExcelSheet()
 
         alt Open
-            ExcelGui -> ExcelGui : updateDisplaySheetText()
+            ExcelGui -> ExcelGui : updateSheetProperty()
         end
 
-        ExcelGui -> ExcelGui : updateDefaultSheetFocus()
-        ExcelGui -> ExcelGui : updateCellInfoContent()
+        ExcelGui -> ExcelGui : updateSheetDefaultFocus()
+        ExcelGui -> ExcelGui : updateCellContent()
         ExcelGui -> ExcelGui : connect()
     end
     deactivate ExcelGui
 
-    ExcelGui -> ExcelGui : updateDisplaySheetHeaderAdjust()
+    ExcelGui -> ExcelGui : updateSheetHeaderAdjust()
 end
 
 @enduml

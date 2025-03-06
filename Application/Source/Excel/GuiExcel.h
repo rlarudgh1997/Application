@@ -24,96 +24,42 @@
 #include "Dialog.h"
 #include "ui_GuiExcel.h"
 
-class ExcelSheet {
-public:
-    ExcelSheet() {
-        clear();
-    }
-    void clear() {
-        mInfo.clear();
-    }
-    QMap<int, QList<QPair<int, int>>> isMergeInfo() {
-        return mInfo;
-    }
-    bool isContains(const int& columnIndex, const int& rowStart, const int& rowEnd) {
-        if (mInfo.contains(columnIndex)) {
-            for (const auto& v : mInfo[columnIndex]) {
-                if ((v.first == rowStart) && (v.second == rowEnd)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    bool isContains(const int& columnIndex, const int& rowStart) {
-        if (mInfo.contains(columnIndex)) {
-            for (const auto& v : mInfo[columnIndex]) {
-                if (v.first == rowStart) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    int isMergeCellCount(const int& columnIndex, const int& rowStart) {
-        if (mInfo.contains(columnIndex)) {
-            for (const auto& v : mInfo[columnIndex]) {
-                if (v.first == rowStart) {
-                    return v.second;
-                }
-            }
-        }
-        return 0;
-    }
-    void insert(const int& columnIndex, const int& rowStart, const int& rowEnd) {
-        mInfo[columnIndex].append(QPair<int, int>(rowStart, rowEnd));
-    }
-    void erase(const int& columnIndex, const int& rowStart, const int& rowEnd) {
-        QMap<int, QList<QPair<int, int>>> mergeInfo = mInfo;
-        QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
-        mInfo.clear();
-        while (iter.hasNext()) {
-            iter.next();
-            int currColumnIndex = iter.key();
-            for (const auto& v : iter.value()) {
-                if ((currColumnIndex == columnIndex) && (rowStart == v.first) && (rowEnd == v.second)) {
-                    // qDebug() << "\t\t 3. Erase Merge Cell :" << currColumnIndex << rowStart<< rowEnd;
-                    continue;
-                }
-                // qDebug() << "\t\t 4. Append Merge Cell :" << currColumnIndex << v.first<< v.second;
-                insert(currColumnIndex, v.first, v.second);
-            }
-        }
-    }
-
-private:
-    QMap<int, QList<QPair<int, int>>> mInfo = QMap<int, QList<QPair<int, int>>>();
-};
+using QPairInt = QPair<int, int>;
 
 class CellSelectedInfo {
     REGISTER_WRITABLE_VALUE(int, RowStart, 0)
     REGISTER_WRITABLE_VALUE(int, RowEnd, 0)
+    REGISTER_WRITABLE_VALUE(int, RowMax, 0)
     REGISTER_WRITABLE_VALUE(int, ColumnStart, 0)
     REGISTER_WRITABLE_VALUE(int, ColumnEnd, 0)
+    REGISTER_WRITABLE_VALUE(int, ColumnMax, 0)
     REGISTER_WRITABLE_VALUE(QModelIndexList, ModelIndexs, QModelIndexList())
 
+    REGISTER_WRITABLE_VALUE(int, SheetIndex, 0)
+    REGISTER_WRITABLE_VALUE(bool, ClearData, false)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QList<QPairInt>, ClearMergeInfo)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QList<QPairInt>, SpanMergeInfo)
+
 public:
-    CellSelectedInfo(const int& rowStart, const int& rowEnd, const int& columnStart, const int& columnEnd) {
-        setRowStart(rowStart);
-        setRowEnd(rowEnd);
-        setColumnStart(columnStart);
-        setColumnEnd(columnEnd);
-    }
-    explicit CellSelectedInfo(const QModelIndexList& modelIndexs) {
+    explicit CellSelectedInfo(const QTableWidget* excelSheet) {
+        if (excelSheet == nullptr) {
+            qDebug() << "ExcelSheet is nullptr";
+            return;
+        }
+
+        const QModelIndexList& modelIndexs = excelSheet->selectionModel()->selectedIndexes();
         if (modelIndexs.isEmpty()) {
-            qDebug() << "Selected Cell is empty";
+            qDebug() << "Selected cell is empty";
             return;
         }
 
         int rowStart = modelIndexs.first().row();
         int rowEnd = rowStart;
+        int rowMax = excelSheet->rowCount();
+
         int columnStart = modelIndexs.first().column();
         int columnEnd = columnStart;
+        int columnMax = excelSheet->columnCount();
 
         for (const auto& currCell : modelIndexs) {
             int row = currCell.row();
@@ -127,9 +73,18 @@ public:
 
         setRowStart(rowStart);
         setRowEnd(rowEnd);
+        setRowMax(rowMax);
+
         setColumnStart(columnStart);
         setColumnEnd(columnEnd);
+        setColumnMax(columnMax);
+
         setModelIndexs(modelIndexs);
+
+        setSheetIndex(0);
+        setClearData(false);
+        clearClearMergeInfo();
+        clearSpanMergeInfo();
     }
 
     CellSelectedInfo() = default;
@@ -168,7 +123,14 @@ public:
         // qDebug() << "\t getRowRangeList :" << rowRangeList;
         return rowRangeList;
     }
-    bool getNotSupport() const {
+    bool isEmpty() const {
+        if (getModelIndexs().isEmpty()) {
+            qDebug() << "Selected cell is empty";
+            return true;
+        }
+        return false;
+    }
+    bool isNotSupport() const {
         auto rowRangeList = getRowRangeList();
         if (rowRangeList.size() == 0) {
             return false;
@@ -184,6 +146,17 @@ public:
         }
         return false;
     }
+    void clear() {
+        setRowStart(0);
+        setRowEnd(0);
+        setRowMax(0);
+
+        setColumnStart(0);
+        setColumnEnd(0);
+        setColumnMax(0);
+
+        setModelIndexs(QModelIndexList());
+    }
 };
 
 class GuiExcel : public AbstractGui {
@@ -193,6 +166,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(bool, OutputState, false)
     REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
     REGISTER_WRITABLE_VALUE(int, CurrSheetIndex, 0)
+    REGISTER_WRITABLE_VALUE(CellSelectedInfo, CopyInfo, CellSelectedInfo())
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
 
 private:
@@ -214,55 +188,48 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
-    bool chcekExcelSheet(const int& sheetIndex);
-    QVariantList readSheetProperty(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString);
-    QVariantList readSheetDisplay(const int& sheetIndex);
-    void syncSheetData(const int& sheetIndex, const bool& readProperty);
-    bool isSheetChanged(const int& sheetIndex);
-    int isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart);
+    void updateDialogAutoCompleteVehicle();
+    void updateDialogAutoCompleteConfigName();
+    void updateDialogValueEnum(const QVariantList& data);
+    void updateDialogTCNameResult(const QStringList& data);
+    void updateDialogSelectGenType();
+
+    bool isSheetContentChanged(const int& sheetIndex);
     bool isDrawCheckBox(const int& sheetIndex, const int& columnIndex);
-    bool updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
-                         const int& rowEnd);
-    QMap<int, QList<QPair<int, int>>> findMergeInfo(const QMap<int, QVariantList>& sheetData);
-    void constructMergeInfo(const int& sheetIndex, const QMap<int, QVariantList>& sheetData);
-    void constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart);
-    void updateDisplaySplitCell(const int& sheetIndex);
-    void updateDisplayMergeCell(const int& sheetIndex);
-    QMap<int, QSet<QPair<int, int>>> isSheetMergeInfo(const int& sheetIndex, const bool& refreshInfo);
-    int updateDisplayInsertDelete(const int& sheetIndex, const bool& insert);
-    int updateDisplayMergeSplit(const int& sheetIndex);
-    int updateDisplayCopy(const int& sheetIndex, const bool& cutState);
-    int updateDisplayPaste(const int& sheetIndex);
-    void updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
-    void updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax);
-    void updateDisplaySheetText(const int& sheetIndex);
-    void updateCellInfoContent(const int& sheetIndex, const int& row, const int& column);
-    void updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column);
-    void updateInitialExcelSheet();
-    void updateDisplayKey(const int& keyValue);
-    void updateDisplayArrowKey(const int& keyValue);
-    void updateDisplayExcelSheet();
-    void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);
-    void updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column);
-    void updateDisplayAutoCompleteSignal(const bool& description, const int& columnIndex);
-    void updateDisplayAutoCompleteVehicle();
-    void updateDisplayAutoCompleteConfigName();
-    void updateDisplayValueEnum(const QVariantList& data);
-    void updateDisplayTCNameResult(const QStringList& data);
-    void updateDisplayAutoInputDescrtion();
-    void updateDisplaySelectGenType();
-    void updateDisplayGenType(const int& genType);
-    void updateDisplayTCCheck(const int& allCheck);
-    void printMergeInfo(const QString& title, const bool& mergeSplit);
-    void copyClipboardInfo(const bool& cutState);
-    int clearClipboardInfo(const bool& escapeKeyClear);
-    void pasteClipboardInfo();
     QList<QStringList> isSheetData(const int& sheetIndex, const bool& removeMerge, const bool& readProperty);
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    QMap<int, QSet<QPair<int, int>>> isPropertyMergeInfo(const int& sheetIndex);
+    QMap<int, QList<QPair<int, int>>> isDisplayMergeInfo(const int& sheetIndex, const QVariantList& info);
+    bool chcekExcelSheet(const int& sheetIndex);
+    QVariantList readSheetDisplay(const int& sheetIndex);
+    void syncSheetData(const int& sheetIndex, const bool& readProperty);
+    void syncAutoComplete(const int& sheetIndex, const int& columnIndex, const QVariant& data = QVariant());
+    int updateShortcutInsertDelete(const int& sheetIndex, const bool& insert);
+    int updateShortcutMergeSplit(const int& sheetIndex);
+    int updateShortcutCopy(const int& sheetIndex, const bool& cutState);
+    int updateShortcutPaste(const int& sheetIndex);
+    void updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& hilight);
+    void updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax);
+    void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
+    void updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column);
+    void updateCellContent(const int& sheetIndex, const int& row, const int& column);
+    void updateSheetProperty(const int& sheetIndex);
+    void updateSheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax);
+    void updateInitExcelSheet();
+    void updateDescriptionInfo(const int& sheetIndex, const int& row);
+    void updateAutoCompleteSignal(const bool& description, const int& columnIndex);
+
+    void updateDisplayKey(const int& keyValue);
+    void updateDisplayArrowKey(const int& keyValue);
+    void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);
+    void updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column);
+    void updateDisplayAutoInputDescrtion();
+    void updateDisplayGenType(const int& genType);
+    void updateDisplayTCCheck(const int& allCheck);
     void updateDisplayReceiveKeyFocus();
     void updateDisplayShortcut(const int& shortcutType);
     void updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex);
-    void updateDescriptionInfo(const int& sheetIndex, const int& row);
+    void updateDisplayExcelSheet();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
@@ -272,15 +239,12 @@ private:
     QWidget* mMainView = nullptr;
     QSharedPointer<Dialog> mDialog = nullptr;
     QMap<int, QTableWidget*> mExcelSheet = QMap<int, QTableWidget*>();
-    QMap<int, ExcelSheet> mMergeInfo = QMap<int, ExcelSheet>();
-    QMap<int, QPair<int, int>> mModelIndex = QMap<int, QPair<int, int>>();
-    ExcelSheet mCopyMergeInfo = ExcelSheet();
-    ExcelSheet mClearMergeInfo = ExcelSheet();
-    QList<int> mClearCellInfo = QList<int>();
     QMenu* mMenuRight = nullptr;
     QMap<int, QAction*> mMenuActionItem = QMap<int, QAction*>();
+    QMap<int, QPair<int, int>> mModelIndex = QMap<int, QPair<int, int>>();
     QTableWidgetItem* mSelectItem = nullptr;
-    int mCurrentSheetIndex = 0;
+
+    // const QString mEmptyString = QString("[Empty]");
 };
 
 #endif  // GUI_EXCEL_H

@@ -51,8 +51,8 @@ void GuiExcel::drawDisplayDepth0() {
         int currSheetIndex = getCurrSheetIndex();
         int currentIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription + index;
         if (currSheetIndex != currentIndex) {
-            currSheetIndex = currentIndex;
-            updateCellInfoContent(currentIndex, mModelIndex[currentIndex].first, mModelIndex[currentIndex].second);
+            setCurrSheetIndex(currentIndex);
+            updateCellContent(currentIndex, mModelIndex[currentIndex].first, mModelIndex[currentIndex].second);
         }
     });
 }
@@ -172,6 +172,322 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
     mDialog.data()->drawDialog(dialogType, info);
 }
 
+void GuiExcel::updateDialogAutoCompleteVehicle() {
+    QVariantList info = QVariantList({
+        QString("Select Vehicle"),
+        QString(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList(),
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectVehicleType, info);
+}
+
+void GuiExcel::updateDialogAutoCompleteConfigName() {
+    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
+    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
+    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
+    const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
+
+    QString currentCellText = (mSelectItem) ? (mSelectItem->text()) : (QString());
+    ivis::common::getRemoved(currentCellText, mergeInfos);
+
+    QVariantList info = QVariantList({
+        QString("Select Config"),
+        currentCellText,
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName).toStringList(),
+    });
+    updateDrawDialog(Dialog::DialogTypeAutoCompleteNormal, info);
+}
+
+void GuiExcel::updateDialogValueEnum(const QVariantList& data) {
+    if (data.size() != 2) {
+        qDebug() << "Fail to value enum data size :" << data.size();
+        return;
+    }
+
+    const QString VEHICLE_TYPE_ICV = QString("ICV");
+    const QString VEHICLE_TYPE_EV = QString("EV");
+    const QString VEHICLE_TYPE_FCEV = QString("FCEV");
+    const QString VEHICLE_TYPE_PHEV = QString("PHEV");
+    const QString VEHICLE_TYPE_HEV = QString("HEV");
+
+    QString signalName = data.at(0).toString();
+    int columnIndex = data.at(1).toInt();
+
+    bool sfcSignal = (signalName.trimmed().startsWith("SFC.") || signalName.trimmed().startsWith("SFCFuel."));
+    // bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
+    bool outputState = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
+
+    int dialogType = Dialog::DialogTypeSelectValueEnumInput;
+    QStringList subTitle = QStringList({"Value Enum"});
+    QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
+    QStringList valueEnum =
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum).toStringList();
+    QVariantList matchingTableList = QVariantList();
+    if ((sfcSignal == false) && (outputState == false)) {
+        matchingTableList.append(valueEnum);  // ValueEnum -> Dialog : Not Used
+        QVariant matchingTableData = QVariant();
+        for (const auto& vehicle : vehicleTypeList.toStringList()) {
+            int propertyType = 0;
+            if (vehicle.compare(VEHICLE_TYPE_ICV) == 0) {
+                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV;
+            } else if (vehicle.compare(VEHICLE_TYPE_EV) == 0) {
+                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == 0) {
+                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == 0) {
+                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV;
+            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == 0) {
+                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV;
+            } else {
+                continue;
+            }
+            subTitle.append(vehicle);
+            matchingTableData = isHandler()->getProperty(propertyType);
+            matchingTableList.append(matchingTableData.toStringList());  // ICV, EV, FCEV, PHEV, HEV
+        }
+        int appMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt();
+        dialogType = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? (Dialog::DialogTypeSelectMatchingTablePV)
+                                                                           : (Dialog::DialogTypeSelectMatchingTableCV);
+        subTitle.append("System");
+        matchingTableData = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem);
+        matchingTableList.append(matchingTableData.toStringList());  // System
+    } else if (outputState) {
+        dialogType = Dialog::DialogTypeSelectValueEnumOutput;
+    } else {
+        dialogType = Dialog::DialogTypeSelectValueEnumInput;
+    }
+    setSfcSignal(sfcSignal);
+    setOutputState(outputState);
+
+    QVariantList info = QVariantList({
+        QString("Select Data"),
+        subTitle,
+        valueEnum,
+        QStringList(),
+        matchingTableList,
+        0,
+    });
+    updateDrawDialog(dialogType, info);
+}
+
+void GuiExcel::updateDialogTCNameResult(const QStringList& data) {
+    QVariantList info = QVariantList({
+        QString("Select Data"),
+        QStringList({"Result"}),
+        data,
+        QStringList(),
+        QStringList(),
+        0,
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectValueResult, info);
+}
+
+void GuiExcel::updateDialogSelectGenType() {
+    QVariantList info = QVariantList({
+        QString("Select Type"),
+        QString(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList).toStringList(),
+    });
+    updateDrawDialog(Dialog::DialogTypeGenType, info);
+}
+
+bool GuiExcel::isSheetContentChanged(const int& sheetIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return false;
+    }
+
+    QVariantList readSheetData = isHandler()->getProperty(sheetIndex).toList();
+    if (readSheetData.size() > 0) {
+        readSheetData.remove(0);  // Delete : Title
+    }
+    QVariantList currentSheetData = QVariantList();
+    QAbstractItemModel* model = mExcelSheet[sheetIndex]->model();
+    for (int rowIndex = 0; rowIndex < model->rowCount(); ++rowIndex) {
+        QStringList rowData = QStringList();
+        for (int columnIndex = 0; columnIndex < model->columnCount(); ++columnIndex) {
+            QModelIndex index = model->index(rowIndex, columnIndex);
+            rowData.append(model->data(index).toString());
+        }
+        currentSheetData.append(rowData);
+    }
+    return (readSheetData != currentSheetData);
+}
+
+bool GuiExcel::isDrawCheckBox(const int& sheetIndex, const int& columnIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return false;
+    }
+    bool draw = ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
+                 (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
+                 (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)));
+    return draw;
+}
+
+QList<QStringList> GuiExcel::isSheetData(const int& sheetIndex, const bool& removeMerge, const bool& readProperty) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return QList<QStringList>();
+    }
+    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
+    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
+    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
+    const int rowMax = mExcelSheet[sheetIndex]->rowCount();
+    const int columnMax = mExcelSheet[sheetIndex]->columnCount();
+
+    QVariantList readSheetData;
+
+    if (readProperty) {
+        readSheetData = isHandler()->getProperty(sheetIndex).toList();
+    } else {
+        for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
+            QStringList rowData;
+            for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
+                rowData.append(isCurrentCellText(sheetIndex, rowIndex, columnIndex));
+            }
+            readSheetData.append(rowData);
+        }
+    }
+
+    QList<QStringList> sheetData;
+    for (const auto& rowDataList : readSheetData) {
+        QStringList rowData = rowDataList.toStringList();
+        if (removeMerge) {
+            for (auto& columnData : rowData) {
+                if (columnData.contains(mergeStart)) {
+                    columnData.remove(mergeStart);
+                } else if ((columnData.contains(mergeEnd)) || (columnData.contains(merge))) {
+                    columnData.clear();
+                } else {
+                }
+            }
+        }
+        sheetData.append(rowData);
+    }
+
+#if 0
+    qDebug() << "isSheetData :" << sheetIndex << removeMerge << readProperty;
+    for (const auto& rowDataList : sheetData) {
+        qDebug() << "\t RowData :" << rowDataList;
+    }
+    qDebug() << "------------------------------------------------------------------------------------------";
+#endif
+
+    return sheetData;
+}
+
+QString GuiExcel::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return QString();
+    }
+    if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+        mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(""));
+    }
+    return mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
+}
+
+QMap<int, QSet<QPair<int, int>>> GuiExcel::isPropertyMergeInfo(const int& sheetIndex) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return QMap<int, QSet<QPair<int, int>>>();
+    }
+
+    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
+    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
+    // const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
+    const QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
+
+    QMap<int, QSet<QPair<int, int>>> mergeInfo;
+    QMap<int, QPair<int, int>> foundRowInfo;
+    int rowIndex = 0;
+
+    for (const auto& rowDataList : sheetData) {
+        QStringList rowData = rowDataList.toStringList();
+        for (int columnIndex = 0; columnIndex < rowData.size(); ++columnIndex) {
+            QString readColumnText = rowData.at(columnIndex);
+            if (ivis::common::isContainsString(readColumnText, mergeStart)) {
+                foundRowInfo[columnIndex] = QPair<int, int>(rowIndex, rowIndex);
+                // qDebug() << "\t\t [" << columnIndex << "] Start :" << foundRowInfo[columnIndex] << readColumnText;
+            } else if (ivis::common::isContainsString(readColumnText, mergeEnd)) {
+                foundRowInfo[columnIndex] = QPair<int, int>(foundRowInfo[columnIndex].first, rowIndex);
+                bool insertState = ((foundRowInfo[columnIndex].second - foundRowInfo[columnIndex].first) > 0);
+                if (insertState)  {
+                    // qDebug() << "\t\t [" << columnIndex << "] End   :" << foundRowInfo[columnIndex] << readColumnText;
+                    mergeInfo[columnIndex].insert(foundRowInfo[columnIndex]);
+                }
+            } else {
+            }
+        }
+        rowIndex++;
+    }
+
+#if 0
+    qDebug() << "=========================================================================================";
+    qDebug() << "isPropertyMergeInfo :" << sheetIndex;
+    for (const auto& rowData : sheetData.toList()) {
+        qDebug() << "\t RowData :" << rowData.toStringList();
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+    for (const auto& key : mergeInfo.keys()) {
+        qDebug() << "\t MergeInfo[" << key << "]  :" << mergeInfo[key];
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+#endif
+
+    return mergeInfo;
+}
+
+QMap<int, QList<QPair<int, int>>> GuiExcel::isDisplayMergeInfo(const int& sheetIndex, const QVariantList& info) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return QMap<int, QList<QPair<int, int>>>();
+    }
+
+    int rowStart = 0;
+    int columnStart = 0;
+    int rowCount = mExcelSheet[sheetIndex]->rowCount();
+    int columnCount = mExcelSheet[sheetIndex]->columnCount();
+    bool adjustState = true;
+
+    if (info.size() == 5) {    // info({rowStart, columnStart, rowCount, columnCount, adjustState})
+        rowStart = info.at(0).toInt();
+        columnStart = info.at(1).toInt();
+        rowCount = info.at(2).toInt();
+        columnCount = info.at(3).toInt();
+        adjustState = info.at(4).toBool();
+    }
+
+    QMap<int, QSet<QPair<int, int>>> mergeInfoTemp;
+    for (int columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
+        for (int rowIndex = 0; rowIndex < rowCount; ) {
+            int mergeCount = mExcelSheet[sheetIndex]->rowSpan((rowStart + rowIndex), (columnStart + columnIndex));
+            if (mergeCount > 1) {
+                int mergeRowStart = (adjustState) ? (rowStart + rowIndex) : (rowIndex);
+                int mergeRowEnd = mergeRowStart + mergeCount - 1;
+                mergeInfoTemp[(columnIndex + columnStart)].insert(qMakePair(mergeRowStart, mergeRowEnd));
+                // qDebug() << "\t\t ReadInfo[" << columnIndex << "] :" << mergeRowStart << "~" << mergeRowEnd;
+            }
+            rowIndex += mergeCount;
+        }
+    }
+
+    // Sorting : MergeInfo first value
+    QMap<int, QList<QPair<int, int>>> mergeInfo;
+    for (const auto& key : mergeInfoTemp.keys()) {
+        QList<QPair<int, int>> sortDataList = mergeInfoTemp[key].values();
+        std::sort(sortDataList.begin(), sortDataList.end(), [] (const QPair<int, int>& value1, const QPair<int, int>& value2) {
+            return value1.first < value2.first;
+        });
+        mergeInfo[key].append(sortDataList);
+    }
+
+#if 0
+    qDebug() << "isDisplayMergeInfo :" << sheetIndex << info;
+    for (const auto& key : mergeInfo.keys()) {
+        qDebug() << "\t MergeInfo[" << key << "]  :" << mergeInfo[key];
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+#endif
+
+    return mergeInfo;
+}
+
 bool GuiExcel::chcekExcelSheet(const int& sheetIndex) {
     if (mExcelSheet.size() == 0) {
         qDebug() << "Fail to - excel sheet was not created";
@@ -190,98 +506,16 @@ bool GuiExcel::chcekExcelSheet(const int& sheetIndex) {
     return false;
 }
 
-QVariantList GuiExcel::readSheetProperty(const int& sheetIndex, const QVariantList& readIndexInfo, QString& allString) {
-    if (chcekExcelSheet(sheetIndex)) {
-        qDebug() << "Fail to excel sheet nullptr : " << sheetIndex << ", size :" << mExcelSheet.size();
-        return QVariantList();
-    }
-
-    QVariantList sheetData = QVariantList();
-    int rowStart = 0;
-    int columnStart = 0;
-    int rowMax = mExcelSheet[sheetIndex]->rowCount();
-    int columnMax = mExcelSheet[sheetIndex]->columnCount();
-    bool readShortcut = (readIndexInfo.size() > 0);
-
-    if (readShortcut) {
-        if (readIndexInfo.size() != 4) {
-            qDebug() << "Fail to read index info size :" << readIndexInfo.size();
-            return QVariantList();
-        }
-        rowStart = readIndexInfo.at(0).toInt();
-        columnStart = readIndexInfo.at(1).toInt();
-        rowMax = readIndexInfo.at(2).toInt();
-        columnMax = readIndexInfo.at(3).toInt();
-        // qDebug() << "Read Cell Info :" << rowStart << columnStart << rowMax << columnMax;
-    }
-
-    // Read Row Data
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-    const QMap<int, QSet<QPair<int, int>>> mergeInfo = isSheetMergeInfo(sheetIndex, false);
-
-    for (int rowIndex = rowStart; rowIndex < rowMax; rowIndex++) {
-        QStringList rowData = QStringList();
-        for (int columnIndex = columnStart; columnIndex < columnMax; columnIndex++) {
-            QString readText = ((mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)) == nullptr) ? (QString()) :
-                                (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text());
-            if (isDrawCheckBox(sheetIndex, columnIndex)) {
-                bool appendState = ((mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)) == nullptr) ? (false) :
-                                    (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->checkState() == Qt::Checked);
-                if (appendState) {
-                    readText = QString("O");
-                }
-            }
-            allString.append(QString("%1%2").arg((rowData.size() == 0) ? ("") : ("\t")).arg(readText));
-
-            for (const auto& info : mergeInfo[columnIndex]) {
-                if ((rowIndex < info.first) || (rowIndex > info.second)) {
-                    continue;
-                }
-                QString prefixMerge;
-                if (rowIndex == info.first) {
-                    prefixMerge = mergeStart;
-                } else if (rowIndex == info.second) {
-                    prefixMerge = mergeEnd;
-                } else {
-                    prefixMerge = merge;
-                }
-                readText.prepend(prefixMerge);
-                // qDebug() << "\t MergeText[" << columnIndex << rowIndex << "] :"<< info << readText;
-            }
-            rowData.append(readText);
-        }
-        sheetData.append(rowData);
-        allString.append("\n");
-    }
-
-#if 1
-    qDebug() << "==================================================================================================";
-    qDebug() << "readSheetProperty :"<< sheetIndex << rowMax << columnMax << sheetData.size();
-    for (const auto& rowDataList : sheetData.toList()) {
-        qDebug() << "\t RowData :" << rowDataList.toStringList();
-    }
-    qDebug() << "==================================================================================================\n";
-#endif
-
-    return sheetData;
-}
-
 QVariantList GuiExcel::readSheetDisplay(const int& sheetIndex) {
     if (chcekExcelSheet(sheetIndex)) {
         qDebug() << "Fail to display sheet nullptr : " << sheetIndex;
         return QVariantList();
     }
 
-    qDebug() << "********************************************************************************************";
-    qDebug() << "readSheetDisplay :"<< sheetIndex;
-
     const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
     const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
     const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-
-    QMap<int, QSet<QPair<int, int>>> mergeInfo = isSheetMergeInfo(sheetIndex, true);
+    const auto mergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList());
 
     // Construct : Current Display Sheet Data
     QList<QStringList> displaySheetData = isSheetData(sheetIndex, false, false);
@@ -340,286 +574,67 @@ void GuiExcel::syncSheetData(const int& sheetIndex, const bool& readProperty) {
 
     const int eventType = ivis::common::EventTypeEnum::EventTypeListDescription +
                           (sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    QVariantList sheetData;
-
-    if (readProperty) {
-        QString allString;
-        sheetData = readSheetProperty(sheetIndex, QVariantList(), allString);
-    } else {
-        sheetData = readSheetDisplay(sheetIndex);
-    }
+    QVariantList sheetData = readSheetDisplay(sheetIndex);
 
     qDebug() << "syncSheetData :" << sheetIndex << readProperty << eventType << sheetData.size();
     createSignal(eventType, QVariantList({sheetIndex, sheetData}));
 }
 
+void GuiExcel::syncAutoComplete(const int& sheetIndex, const int& columnIndex, const QVariant& data) {
+    int eventType = ivis::common::EventTypeEnum::EventTypeInvalid;
+    QVariantList eventValue = QVariantList();
+    bool support = false;
 
-bool GuiExcel::isSheetChanged(const int& sheetIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return false;
-    }
-
-    QVariantList readSheetData = isHandler()->getProperty(sheetIndex).toList();
-    if (readSheetData.size() > 0) {
-        readSheetData.remove(0);  // Delete : Title
-    }
-    QVariantList currentSheetData = QVariantList();
-    QAbstractItemModel* model = mExcelSheet[sheetIndex]->model();
-    for (int rowIndex = 0; rowIndex < model->rowCount(); ++rowIndex) {
-        QStringList rowData = QStringList();
-        for (int columnIndex = 0; columnIndex < model->columnCount(); ++columnIndex) {
-            QModelIndex index = model->index(rowIndex, columnIndex);
-            rowData.append(model->data(index).toString());
+    switch (sheetIndex) {
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription: {
+            eventType = ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo;
+            eventValue = QVariantList({data});
+            support = true;
+            break;
         }
-        currentSheetData.append(rowData);
-    }
-    return (readSheetData != currentSheetData);
-}
-
-int GuiExcel::isMergeCell(const int& sheetIndex, const int& columnIndex, const int& rowStart) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return 0;
-    }
-    return mMergeInfo[sheetIndex].isMergeCellCount(columnIndex, rowStart);
-}
-
-bool GuiExcel::isDrawCheckBox(const int& sheetIndex, const int& columnIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return false;
-    }
-    bool draw = ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
-                 (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
-                 (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)));
-    return draw;
-}
-
-bool GuiExcel::updateMergeInfo(const bool& erase, const int& sheetIndex, const int& columnIndex, const int& rowStart,
-                               const int& rowEnd) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return false;
-    }
-
-    // qDebug() << "updateMergeInfo :" << erase << "," << sheetIndex << columnIndex << rowStart << rowEnd;
-    if ((erase) || (mMergeInfo[sheetIndex].isContains(columnIndex, rowStart, rowEnd))) {
-        mMergeInfo[sheetIndex].erase(columnIndex, rowStart, rowEnd);
-        return (erase == false);
-    }
-
-    mMergeInfo[sheetIndex].insert(columnIndex, rowStart, rowEnd);
-    return false;
-}
-
-QMap<int, QList<QPair<int, int>>> GuiExcel::findMergeInfo(const QMap<int, QVariantList>& sheetData) {
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    // const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-
-    QMap<int, QList<QPair<int, int>>> mergeInfo = QMap<int, QList<QPair<int, int>>>();
-    QMapIterator<int, QVariantList> iter(sheetData);
-    while (iter.hasNext()) {
-        iter.next();
-        int rowIndex = 0;
-        int mergeColumnIndex = iter.key();
-        int mergeRowStart = (-1);
-        int mergeRowEnd = (-1);
-
-        for (const auto& v : iter.value()) {
-            QString readText = v.toString();
-            QStringList startText = readText.split(mergeStart);
-            QStringList endText = readText.split(mergeEnd);
-            // QStringList mergeText = readText.split(merge);
-
-            if (startText.size() == 2) {
-                mergeRowStart = rowIndex;
-                mergeRowEnd = (-1);
-            } else if (endText.size() == 2) {
-                mergeRowEnd = rowIndex - mergeRowStart + 1;
-            } else {
-            }
-            rowIndex++;
-
-            if ((mergeRowStart >= 0) && (mergeRowEnd >= 0)) {
-                mergeInfo[mergeColumnIndex].append(QPair<int, int>(mergeRowStart, mergeRowEnd));
-                mergeRowStart = (-1);
-                mergeRowEnd = (-1);
-            }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs: {
+            eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
+            eventValue = QVariantList({sheetIndex, columnIndex});
+            support = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetTelltales:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetEvents:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetSounds:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetInters:
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs: {
+            eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
+            eventValue = QVariantList({sheetIndex, columnIndex});
+            support = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+            break;
+        }
+        default: {
+            break;
         }
     }
-    return mergeInfo;
-}
 
-void GuiExcel::constructMergeInfo(const int& sheetIndex, const QMap<int, QVariantList>& sheetData) {
-    QMap<int, QList<QPair<int, int>>> mergeInfo = findMergeInfo(sheetData);
-    QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
-    while (iter.hasNext()) {
-        iter.next();
-        int columnIndex = iter.key();
-        for (const auto& v : iter.value()) {
-            updateMergeInfo(false, sheetIndex, columnIndex, v.first, v.second);
-        }
+    if (support) {
+        createSignal(eventType, eventValue);
     }
 }
 
-void GuiExcel::constructMergeSplitInfo(const QMap<int, QVariantList>& sheetData, const int& rowStart, const int& columnStart) {
-    QMapIterator<int, QList<QPair<int, int>>> iter(findMergeInfo(sheetData));
-    mClearMergeInfo.clear();
-    mCopyMergeInfo.clear();
-
-    while (iter.hasNext()) {
-        iter.next();
-        int mergeColumnIndex = iter.key();
-        for (const auto& v : iter.value()) {
-            int mergeRowStart = v.first;
-            int mergeRowEnd = v.second;
-            int splitColumnIndex = columnStart + mergeColumnIndex;
-            int splitRowStart = rowStart + mergeRowStart;
-            int splitRowEnd = mergeRowEnd;
-            mClearMergeInfo.insert(splitColumnIndex, splitRowStart, splitRowEnd);
-            mCopyMergeInfo.insert(mergeColumnIndex, mergeRowStart, mergeRowEnd);
-        }
-    }
-}
-
-void GuiExcel::updateDisplaySplitCell(const int& sheetIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
-    }
-
-    mExcelSheet[sheetIndex]->clearSpans();
-}
-
-void GuiExcel::updateDisplayMergeCell(const int& sheetIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
-    }
-
-    // qDebug() << "updateDisplayMergeCell :" << sheetIndex;
-
-    QMap<int, QList<QPair<int, int>>> mergeInfo = mMergeInfo[sheetIndex].isMergeInfo();
-    QMapIterator<int, QList<QPair<int, int>>> iter(mergeInfo);
-    int columnMax = mExcelSheet[sheetIndex]->columnCount();
-    while (iter.hasNext()) {
-        iter.next();
-        int mergeColumnIndex = iter.key();
-        for (const auto& v : iter.value()) {
-            if (mExcelSheet[sheetIndex]) {
-                int mergeRowStart = v.first;
-                int mergeRowEnd = v.second;
-
-                if (mergeColumnIndex >= columnMax) {
-                    // qDebug() << "\t SkipMergeCell   :" << sheetIndex << mergeColumnIndex << mergeRowStart << mergeRowEnd
-                    //          << ", ColumnMax :" << columnMax;
-                    continue;
-                }
-
-                for (int clearRowIndex = mergeRowStart + 1; clearRowIndex < (mergeRowStart + mergeRowEnd); clearRowIndex++) {
-                    mExcelSheet[sheetIndex]->setItem(clearRowIndex, mergeColumnIndex, new QTableWidgetItem(""));
-                }
-                // qDebug() << "\t UpdateMergeCell :" << sheetIndex << mergeColumnIndex << mergeRowStart << mergeRowEnd;
-                mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowEnd, 1);
-            }
-        }
-    }
-}
-
-QMap<int, QSet<QPair<int, int>>> GuiExcel::isSheetMergeInfo(const int& sheetIndex, const bool& refreshInfo) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return QMap<int, QSet<QPair<int, int>>>();
-    }
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-
-    QMap<int, QSet<QPair<int, int>>> mergeInfo;
-    QMap<int, QPair<int, int>> foundRowInfo;
-    int rowIndex = 0;
-    QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
-
-    // Construct MergeInfo : Property Data
-    for (const auto& rowDataList : sheetData) {
-        QStringList rowData = rowDataList.toStringList();
-        for (int columnIndex = 0; columnIndex < rowData.size(); ++columnIndex) {
-            QString readColumnText = rowData.at(columnIndex);
-            if (ivis::common::isContainsString(readColumnText, mergeStart)) {
-                foundRowInfo[columnIndex] = QPair<int, int>(rowIndex, rowIndex);
-                // qDebug() << "\t\t [" << columnIndex << "] Start :" << foundRowInfo[columnIndex] << readColumnText;
-            } else if (ivis::common::isContainsString(readColumnText, mergeEnd)) {
-                foundRowInfo[columnIndex] = QPair<int, int>(foundRowInfo[columnIndex].first, rowIndex);
-                bool insertState = ((foundRowInfo[columnIndex].second - foundRowInfo[columnIndex].first) > 0);
-                if (insertState)  {
-                    // qDebug() << "\t\t [" << columnIndex << "] End   :" << foundRowInfo[columnIndex] << readColumnText;
-                    mergeInfo[columnIndex].insert(foundRowInfo[columnIndex]);
-                }
-            } else {
-            }
-        }
-        rowIndex++;
-    }
-
-#if 0
-    qDebug() << "isSheetMergeInfo :" << sheetIndex << mergeInfo.size();
-    // for (const auto& rowData : sheetData.toList()) {
-    //     qDebug() << "\t RowData :" << rowData.toStringList();
-    // }
-    // qDebug() << "-----------------------------------------------------------------------------------------";
-    for (const auto& key : mergeInfo.keys()) {
-        qDebug() << "\t MergeInfo[" << key << "]  :" << mergeInfo[key];
-    }
-    qDebug() << "-----------------------------------------------------------------------------------------";
-#endif
-
-    if (refreshInfo) {    // Update MergeInfo : Current Display Gui Sheet Merge Info
-        const int rowMax = sheetData.toList().size();
-        const int columnMax = (rowMax > 0) ? (sheetData.toList().at(0).toStringList().size()) : (0);
-
-        mergeInfo.clear();
-
-        for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
-            QSet<QPair<int, int>> updateMergeInfo;
-            for (int rowIndex = 0; rowIndex < rowMax; ) {
-                int value = mExcelSheet[sheetIndex]->rowSpan(rowIndex, columnIndex);
-                int end = (rowIndex + value - 1);
-                if (value > 1) {
-                    updateMergeInfo.insert(qMakePair(rowIndex, end));
-                    // qDebug() << "\t\t ReadInfo[" << columnIndex << "] :" << rowIndex << "~" << end;
-                }
-                rowIndex = (rowIndex + value);
-            }
-
-            if (updateMergeInfo.size() > 0) {
-                mergeInfo[columnIndex] = updateMergeInfo;
-            }
-        }
-
-#if 0
-        qDebug() << "-----------------------------------------------------------------------------------------";
-        for (const auto& key : mergeInfo.keys()) {
-            qDebug() << "\t UpdateInfo[" << key << "] :" << mergeInfo[key];
-        }
-        qDebug() << "=========================================================================================\n\n";
-#endif
-    }
-
-    return mergeInfo;
-}
-
-int GuiExcel::updateDisplayInsertDelete(const int& sheetIndex, const bool& insert) {
+int GuiExcel::updateShortcutInsertDelete(const int& sheetIndex, const bool& insert) {
     if (chcekExcelSheet(sheetIndex)) {
         return (-1);
     }
-    const QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    if (modelIndexs.isEmpty()) {
-        qDebug() << "Selected Cell is empty";
+
+    const CellSelectedInfo cellSelectedInfo(mExcelSheet[sheetIndex]);
+    if ((insert == false) && (cellSelectedInfo.isEmpty())) {
         return (-1);
     }
 
-    const CellSelectedInfo cellSelectedInfo(modelIndexs);
     const int rowStart = cellSelectedInfo.getRowStart();
     const int rowEnd = cellSelectedInfo.getRowEnd();
-
     const int columnStart = cellSelectedInfo.getColumnStart();
 
-    qDebug() << "updateDisplayInsertDelete :" << sheetIndex << insert << rowStart << rowEnd;
+    qDebug() << "updateShortcutInsertDelete :" << sheetIndex << insert << rowStart << rowEnd;
 
     for (int index = rowStart; index <= rowEnd; ++index) {
         if (insert) {
@@ -643,21 +658,19 @@ int GuiExcel::updateDisplayInsertDelete(const int& sheetIndex, const bool& inser
     return columnStart;
 }
 
-int GuiExcel::updateDisplayMergeSplit(const int& sheetIndex) {
+int GuiExcel::updateShortcutMergeSplit(const int& sheetIndex) {
     if (chcekExcelSheet(sheetIndex)) {
         return (-1);
     }
-    const QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    if (modelIndexs.isEmpty()) {
-        qDebug() << "Selected Cell is empty";
+
+    const CellSelectedInfo cellSelectedInfo(mExcelSheet[sheetIndex]);
+    if (cellSelectedInfo.isEmpty()) {
         return (-1);
     }
 
-    const CellSelectedInfo cellSelectedInfo(modelIndexs);
     const int rowStart = cellSelectedInfo.getRowStart();
     const int rowEnd = cellSelectedInfo.getRowEnd();
     const int rowCount = cellSelectedInfo.getRowCount();
-
     const int columnStart = cellSelectedInfo.getColumnStart();
     // const int columnEnd = cellSelectedInfo.getColumnEnd();
     const int columnCount = cellSelectedInfo.getColumnCount();
@@ -672,7 +685,7 @@ int GuiExcel::updateDisplayMergeSplit(const int& sheetIndex) {
     const int columnSpan = mExcelSheet[sheetIndex]->columnSpan(rowStart, columnStart);
     const bool mergedState = (rowSpan > 1 || columnSpan > 1);
 
-    qDebug() << "updateDisplayMergeSplit :" << sheetIndex << columnStart << columnCount << rowStart << rowCount;
+    qDebug() << "updateShortcutMergeSplit :" << sheetIndex << columnStart << columnCount << rowStart << rowCount;
     qDebug() << "\t MergedState :" << mergedState << rowSpan << columnSpan;
 
     if (mergedState) {
@@ -686,85 +699,59 @@ int GuiExcel::updateDisplayMergeSplit(const int& sheetIndex) {
     return columnStart;
 }
 
-int GuiExcel::updateDisplayCopy(const int& sheetIndex, const bool& cutState) {
+int GuiExcel::updateShortcutCopy(const int& sheetIndex, const bool& cutState) {
     if (chcekExcelSheet(sheetIndex)) {
         return (-1);
     }
 
-    const QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    if (modelIndexs.isEmpty()) {
-        qDebug() << "Selected Cell is empty";
+    CellSelectedInfo cellSelectedInfo(mExcelSheet[sheetIndex]);
+    if (cellSelectedInfo.isEmpty()) {
         return (-1);
     }
 
-    const CellSelectedInfo cellSelectedInfo(modelIndexs);
+    if (cellSelectedInfo.isNotSupport()) {
+        createSignal(ivis::common::EventTypeEnum::EventTypeWarningCopyCut);
+        return (-1);
+    }
+
     const int rowStart = cellSelectedInfo.getRowStart();
     const int rowEnd = cellSelectedInfo.getRowEnd();
     const int rowCount = cellSelectedInfo.getRowCount();
     const int columnStart = cellSelectedInfo.getColumnStart();
     const int columnEnd = cellSelectedInfo.getColumnEnd();
     const int columnCount = cellSelectedInfo.getColumnCount();
-
-    qDebug() << "updateDisplayCopy :" << sheetIndex << cutState << cellSelectedInfo.getModelIndexs().size();
-    qDebug() << "\t Row            :" << rowStart << rowEnd << rowCount;
-    qDebug() << "\t Column         :" << columnStart << columnEnd << columnCount;
-
-    if (cellSelectedInfo.getNotSupport()) {
-        createSignal(ivis::common::EventTypeEnum::EventTypeWarningCopyCut);
-        return (-1);
-    }
-
-    // int rowStart = modelIndexs.first().row();
-    // int rowEnd = rowStart;
-    // int columnStart = modelIndexs.first().column();
-    // int columnEnd = columnStart;
-
-    // QMap<int, QPair<int, int>> rowRangeList;
-    // for (const auto& currCell : modelIndexs) {
-    //     int row = currCell.row();
-    //     int column = currCell.column();
-
-    //     rowStart = qMin(rowStart, row);
-    //     rowEnd = qMax(rowEnd, row);
-    //     columnStart = qMin(columnStart, column);
-    //     columnEnd = qMax(columnEnd, column);
-
-    //     auto& range = rowRangeList[column];
-    //     if (!rowRangeList.contains(column)) {
-    //         range = qMakePair(row, row);
-    //     } else {
-    //         range.first = qMin(range.first, row);
-    //         range.second = qMax(range.second, row);
-    //     }
-    // }
-
-    // bool notSupport = false;
-    // auto& rowRangeInfo = rowRangeList[columnStart];
-    // for (const auto& key : rowRangeList.keys()) {
-    //     if (rowRangeInfo != rowRangeList[key]) {
-    //         notSupport = true;
-    //         break;
-    //     }
-    //     // qDebug() << "\t RowInfo[" << key << "] :" << rowRangeList[key] << rowRangeInfo;
-    //     rowRangeInfo = rowRangeList[key];
-    // }
-    // if (notSupport) {
-    //     createSignal(ivis::common::EventTypeEnum::EventTypeWarningCopyCut);
-    //     return;
-    // }
-
-    // int rowCount = (rowEnd - rowStart + 1);
-    // int columnCount = (columnEnd - columnStart + 1);
+    const int rowMax = cellSelectedInfo.getRowMax();
+    const int columnMax = cellSelectedInfo.getColumnMax();
 
     const auto& sheetData = readSheetDisplay(sheetIndex);
-    QList<QStringList> copyDataList(rowCount, QStringList(columnCount, "[Empty]"));
 
+    qDebug() << "=====================================================================================================";
+    qDebug() << "updateShortcutCopy :" << sheetIndex << cutState;
+    qDebug() << "\t Row    :" << rowStart << rowEnd << rowCount;
+    qDebug() << "\t Column :" << columnStart << columnEnd << columnCount;
+    qDebug() << "\t Max    :" << rowMax << columnMax;
+    qDebug() << "\t -----------------------------------------------------------------------------------------";
+
+    // Construct : SheetIndex, ClearData
+    cellSelectedInfo.setSheetIndex(sheetIndex);
+    cellSelectedInfo.setClearData(cutState);
+
+    // Draw : Normal/Select Cell Background Info
+    updateClearClipboard(cellSelectedInfo, cutState);
+
+    // Construct : Selected Cell Read Text
+    QMap<int, QStringList> copyDataList;
+    int confirmCount = 0;
     for (const auto& currCell : cellSelectedInfo.getModelIndexs()) {
         int cellRowIndex = currCell.row();
         int cellColumnIndex = currCell.column();
         int rowIndex = cellRowIndex - rowStart;
-        int columnInex = cellColumnIndex - columnStart;
 
+        // qDebug() << "\t ReadData :" << cellRowIndex << cellColumnIndex << rowIndex << confirmCount;
+        if (rowIndex != confirmCount++) {
+            confirmCount = (-1);
+            break;
+        }
         QVariantList rowDataList = sheetData.toList();
         if (cellRowIndex >= rowDataList.size()) {
             continue;
@@ -773,87 +760,251 @@ int GuiExcel::updateDisplayCopy(const int& sheetIndex, const bool& cutState) {
         if (cellColumnIndex >= columnDataList.size()) {
             continue;
         }
-        // QString readText = currCell.data().toString();    // 선택 셀에서 텍스트 추출시 사용
-        QString readText = columnDataList.at(cellColumnIndex);
-        copyDataList[rowIndex][columnInex] = readText;
-        // qDebug() << "\t Read[" << rowIndex << columnInex << "] :" << readText;
+        QString readText = currCell.data().toString();    // 현재 화면에 표시 되는 시트에서 텍스트 추출
+        // QString readText = columnDataList.at(cellColumnIndex);    // 프로퍼티에 저장 되어있는 시트에서 텍스트 추출
+        copyDataList[rowIndex].append(readText);
     }
 
+    if (confirmCount < 0) {    // 여러개(Row 기준) 이어지지 않은 셀을 선택할 경우 예외 처리
+        createSignal(ivis::common::EventTypeEnum::EventTypeWarningCopyCut);
+        return (-1);
+    }
+
+    // Construct : Clipboard Data
     QString clipboardData;
-    for (const auto& rowData : copyDataList) {
+    for (const auto& key : copyDataList.keys()) {
+        QStringList rowData = copyDataList[key];
         clipboardData.append(QString("%1\n").arg(rowData.join("\t")));
         // qDebug() << "\t CopyData :" << rowData.join(", ");
     }
-
-    qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
+    clipboardData.resize(clipboardData.size() - 1);    // 마지막 개행문자 제거
     QGuiApplication::clipboard()->setText(clipboardData);
+
+    // Construct : Clear Meger Info
+    auto clearMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, true}));
+    cellSelectedInfo.writeClearMergeInfo(clearMergeInfo);
+
+#if 0   // 여러개(Row 기준) 이어지지 않은 셀을 선택할 경우 예외 처리 위한 코드 : 현재 미사용
+    // Construct : Span Meger Info
+    auto tempMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, false}));
+    QMap<int, QList<QPair<int, int>>> spanMergeInfo;
+    for (const auto& key : tempMergeInfo.keys()) {
+        QList<QPair<int, int>> tempInfo;
+        int spanRowStart = 0;
+        for (const auto& infoData : tempMergeInfo[key]) {
+            int spanRowCount = infoData.second - infoData.first;
+            int spanRowEnd = spanRowStart + spanRowCount;
+
+            QPair<int, int> infoTemp = qMakePair(spanRowStart, spanRowEnd);
+            spanMergeInfo[key].append(infoTemp);
+            spanRowStart = spanRowEnd + 1;
+
+            qDebug() << "\t SpanUpdate[" << key << "]  :" << infoData << "->" << infoTemp;
+        }
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+    for (const auto& key : clearMergeInfo.keys()) {
+        qDebug() << "\t SpanMergeInfo[" << key << "]  :" << clearMergeInfo[key];
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+#else
+    auto spanMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, false}));
+#endif
+    cellSelectedInfo.writeSpanMergeInfo(spanMergeInfo);
+
+    // Update : Copy Info
+    setCopyInfo(cellSelectedInfo);
 
     return columnStart;
 }
 
-int GuiExcel::updateDisplayPaste(const int& sheetIndex) {
+int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
     if (chcekExcelSheet(sheetIndex)) {
         return (-1);
     }
 
     if ((QApplication::clipboard()->mimeData() == nullptr) || (QApplication::clipboard()->mimeData()->hasText() == false)) {
-        qDebug() << "Clipboard data invalid";
+        qDebug() << "Clipboard data is invalid";
         return (-1);
     }
 
-    QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    int selectCellCount = modelIndexs.size();
-    if ((selectCellCount == 0)) {
-        qDebug() << "Fail to select cell - count :" << selectCellCount;
-        return (-1);
-    }
-
+    const CellSelectedInfo cellSelectedInfo(mExcelSheet[sheetIndex]);
+    // if (cellSelectedInfo.isEmpty()) {    // 셀이 하나도 없는 경우에도 붙여넣기 추가 가능
+    //     return (-1);
+    // }
 
     setCellEditSkip(true);
 
-    QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
-    int rowStart = (selectCellCount == 1) ? (modelIndexs.at(0).row()) : (0);
-    int columnStart = (selectCellCount == 1) ? (modelIndexs.at(0).column()) : (0);
-    int rowMax = mExcelSheet[sheetIndex]->rowCount();
-    int columnMax = mExcelSheet[sheetIndex]->columnCount();
-    int rowCount = clipboardData.size() + rowStart;  // Row : 0(Header), 1 ~ Count(Item)
+    // Construct Info : Current Selected Cell Info
+    const int rowStart = cellSelectedInfo.getRowStart();
+    const int rowEnd = cellSelectedInfo.getRowEnd();
+    const int rowCount = cellSelectedInfo.getRowCount();
+    const int columnStart = cellSelectedInfo.getColumnStart();
+    const int columnEnd = cellSelectedInfo.getColumnEnd();
+    const int columnCount = cellSelectedInfo.getColumnCount();
+    const int rowMax = cellSelectedInfo.getRowMax();
+    const int columnMax = cellSelectedInfo.getColumnMax();
+    const QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
+    const int clipboardDataMax = clipboardData.size() + rowStart;  // Row : 0(Header), 1 ~ Count(Item)
 
-    if (rowCount >= rowMax) {
-        mExcelSheet[sheetIndex]->setRowCount(rowCount);
+    // Construct Info : Copy/Cut Selected Cell Info
+    const CellSelectedInfo copyInfo = getCopyInfo();
+    const int copyRowStart = copyInfo.getRowStart();
+    const int copyRowEnd = copyInfo.getRowEnd();
+    const int copyRowCount = copyInfo.getRowCount();
+    const int copyColumnStart = copyInfo.getColumnStart();
+    const int copyColumnEnd = copyInfo.getColumnEnd();
+    const int copyColumnCount = copyInfo.getColumnCount();
+    const int copyRowMax = copyInfo.getRowMax();
+    const int copyColumnMax = copyInfo.getColumnMax();
+
+    const int copySheetIndex = copyInfo.getSheetIndex();
+    const bool clearData = copyInfo.getClearData();
+    const auto clearMergeInfo = copyInfo.readClearMergeInfo();
+    const auto spanMergeInfo = copyInfo.readSpanMergeInfo();
+
+    // Update : Row Count (붙여넣기시 Row 마지막을 넘는 경우 Row Count 증가)
+    if (clipboardDataMax >= rowMax) {
+        updateRowMax(sheetIndex, rowMax, clipboardDataMax);
     }
 
-
-    qDebug() << "\n\n";
     qDebug() << "=====================================================================================================";
-    qDebug() << "clipboardData :" << selectCellCount << clipboardData.size() << clipboardData;
+    qDebug() << "updateShortcutPaste :" << sheetIndex << copySheetIndex;
+    qDebug() << "\t Row           :" << rowStart << rowEnd << rowCount;
+    qDebug() << "\t Column        :" << columnStart << columnEnd << columnCount;
+    qDebug() << "\t Max           :" << rowMax << columnMax << clipboardDataMax;
+    qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
+    qDebug() << "\t CopyRow       :" << copyRowStart << copyRowEnd << copyRowCount;
+    qDebug() << "\t CopyColumn    :" << copyColumnStart << copyColumnEnd << copyColumnCount;
+    qDebug() << "\t -----------------------------------------------------------------------------------------";
 
+    // Clear : Cut Selected Cell Backgorund/Text/Merge Info
+    if (chcekExcelSheet(copySheetIndex) == false) {
+        if (clearData) {
+            for (int columnIndex = copyColumnStart; columnIndex <= copyColumnEnd; ++columnIndex) {
+                for (int rowIndex = copyRowStart; rowIndex <= copyRowEnd; ++rowIndex) {
+                    if (mExcelSheet[copySheetIndex]->item(rowIndex, columnIndex) == nullptr) {
+                        continue;
+                    }
+                    mExcelSheet[copySheetIndex]->item(rowIndex, columnIndex)->setBackground(QColor(255, 255, 255));
+                    mExcelSheet[copySheetIndex]->item(rowIndex, columnIndex)->setText("");
+                }
+            }
+        }
 
+        // Update : Merge Cell Info
+        const auto copyMergeInfo = isDisplayMergeInfo(copySheetIndex, QVariantList());
+        mExcelSheet[copySheetIndex]->clearSpans();
+        for (const auto& mergeColumnIndex : copyMergeInfo.keys()) {
+            for (const auto& merge : copyMergeInfo[mergeColumnIndex]) {
+                int mergeRowStart = merge.first;
+                int mergeRowCount = merge.second - mergeRowStart + 1;
+
+                if (clearData) {
+                    auto clearInfo = clearMergeInfo[mergeColumnIndex];
+                    // qDebug() << "\t ClearMergeInfo[" << mergeColumnIndex << "] :" << clearInfo.contains(merge) << merge;
+                    if (clearInfo.contains(merge)) {
+                        continue;
+                    }
+                }
+                mExcelSheet[copySheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowCount, 1);
+            }
+        }
+    }
+
+    // Update : Paste Text Info
+    QSet<int> columnIndexList;
     for (int rowIndex = 0; rowIndex < clipboardData.size(); rowIndex++) {
         QStringList rowDataList = clipboardData[rowIndex].split("\t");
         for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
-            int itemRowIndex = (rowStart + rowIndex);
-            int itemColumnIndex = (columnStart + columnIndex);
-            if (itemColumnIndex >= columnMax) {
+            int cellRowIndex = (rowStart + rowIndex);
+            int cellColumnIndex = (columnStart + columnIndex);
+            if (cellColumnIndex >= columnMax) {
                 continue;
             }
             QString setText = rowDataList[columnIndex];
-            if (setText.compare("[Empty]") == false) {
-                setText.clear();
-            }
-            mExcelSheet[sheetIndex]->setItem(itemRowIndex, itemColumnIndex, new QTableWidgetItem(setText));
+            // if (setText.compare(mEmptyString) == false) {    // 복사시 빈칸 정보([Empty])는 공백으로 복사
+            //     setText.clear();
+            // }
+            mExcelSheet[sheetIndex]->setItem(cellRowIndex, cellColumnIndex, new QTableWidgetItem(setText));
+            columnIndexList.insert(cellColumnIndex);
         }
     }
-    // for (const auto& updateIndex : updateSheetList) {
-    //     syncSheetData(updateIndex.toInt(), true);
-    //     createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, updateIndex}));
-    // }
+
+    // Update : Paste Span Merge Info
+    for (const auto& key : spanMergeInfo.keys()) {
+        int mergeColumnIndex = columnStart + key - copyColumnStart;
+        for (const auto& merge : spanMergeInfo[key]) {
+            int mergeRowStart = merge.first + rowStart;
+            int mergeRowCount = merge.second - merge.first + 1;
+            mExcelSheet[sheetIndex]->setSpan(mergeRowStart, mergeColumnIndex, mergeRowCount, 1);
+            // qDebug() << "\t SpanMerge[" << mergeColumnIndex << "] :" << mergeRowStart << mergeRowCount;
+        }
+    }
+
+    // Update : Sheet Data
+    syncSheetData(sheetIndex, false);
+    if (sheetIndex != copySheetIndex) {
+        syncSheetData(copySheetIndex, false);
+    }
+
+    // Update : AutoComplete Info
+    for (const auto& columnIndex : columnIndexList) {
+        syncAutoComplete(sheetIndex, columnIndex);
+    }
 
     setCellEditSkip(false);
 
     return columnStart;
 }
 
-void GuiExcel::updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn) {
+void GuiExcel::updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& hilight) {
+    int sheetIndex = clearInfo.getSheetIndex();
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    const int rowStart = clearInfo.getRowStart();
+    const int rowEnd = clearInfo.getRowEnd();
+    const int rowMax = clearInfo.getRowMax();
+    const int columnStart = clearInfo.getColumnStart();
+    const int columnEnd = clearInfo.getColumnEnd();
+    const int columnMax = clearInfo.getColumnMax();
+
+    for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
+            QColor setColor(255, 255, 255);
+            if ((rowIndex >= rowStart) && (rowIndex <= rowEnd) && (columnIndex >= columnStart) && (columnIndex <= columnEnd) &&
+                (hilight)) {
+                setColor = QColor(200, 200, 200);
+            }
+            mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->setBackground(setColor);
+        }
+    }
+
+    setCopyInfo(CellSelectedInfo());
+    QGuiApplication::clipboard()->clear();
+}
+
+void GuiExcel::updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    mExcelSheet[sheetIndex]->setRowCount(changeRowMax);
+
+    // qDebug() << "updateRowMax :" << sheetIndex << rowMax << changeRowMax << mExcelSheet[sheetIndex]->rowCount();
+    if (isDrawCheckBox(sheetIndex, 0)) {
+        for (int rowIndex = rowMax; rowIndex < changeRowMax; ++rowIndex) {
+            QTableWidgetItem* item = new QTableWidgetItem();
+            item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+            item->setCheckState(Qt::Unchecked);
+            mExcelSheet[sheetIndex]->setItem(rowIndex, 0, item);
+        }
+    }
+}
+
+void GuiExcel::updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
@@ -864,78 +1015,23 @@ void GuiExcel::updateDisplaySheetHeaderAdjust(const int& sheetIndex, const bool&
     mExcelSheet[sheetIndex]->resizeRowsToContents();
 }
 
-void GuiExcel::updateDisplaySheetText(const int& sheetIndex) {
+void GuiExcel::updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
-    QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-    QVariantList sheetData = isHandler()->getProperty(sheetIndex).toList();
-
-    // qDebug() << "====================================================================================================";
-    // qDebug() << "updateDisplaySheetText :" << sheetIndex;
-    // qDebug() << sheetIndex << ". SheetData :" << sheetData.size() <<sheetData;
-
-    for (int rowIndex = 0; rowIndex < sheetData.size(); rowIndex++) {
-        QStringList rowDataList = sheetData[rowIndex].toStringList();
-        for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
-            QString readText = rowDataList[columnIndex];
-            QStringList startText = readText.split(mergeStart);
-            QStringList endText = readText.split(mergeEnd);
-            QStringList mergeText = readText.split(merge);
-            QString setText = QString();
-
-            newSheetData[columnIndex].append(readText);
-            if (startText.size() == 2) {
-                setText = startText.at(1);
-            } else if (endText.size() == 2) {
-                setText = endText.at(1);
-            } else {
-                if (mergeText.size() == 2) {
-                    setText = mergeText.at(1);
-                } else {
-                    setText = readText;
-                }
-            }
-            // qDebug() << "Text[" << rowIndex << columnIndex <<"] :" << readText << "->" << setText;
-
-            if (isDrawCheckBox(sheetIndex, columnIndex)) {
-                QTableWidgetItem* item = new QTableWidgetItem();
-                item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-                item->setCheckState((setText.size() > 0) ? (Qt::Checked) : (Qt::Unchecked));
-                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, item);
-            } else {
-                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(setText));
-            }
-        }
-    }
-    constructMergeInfo(sheetIndex, newSheetData);
-    updateDisplayMergeCell(sheetIndex);  // Draw - Merge Cell
-}
-
-void GuiExcel::updateDisplaySheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
+    if (mExcelSheet[sheetIndex]->item(row, column) == nullptr) {
+        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
     }
 
-    // qDebug() << "updateDisplaySheetNew :" << sheetIndex << rowMax << columnMax;
-    for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
-        for (int columnIndex = 0; columnIndex < rowMax; columnIndex++) {
-            if (isDrawCheckBox(sheetIndex, columnIndex)) {
-                QTableWidgetItem* item = new QTableWidgetItem();
-                item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-                item->setCheckState(Qt::Unchecked);
-                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, item);
-                // qDebug() << "Item :" << rowIndex << columnIndex;
-            }
-        }
+    if (mExcelSheet[sheetIndex]->item(row, column)) {
+        mExcelSheet[sheetIndex]->item(row, column)->setSelected(true);
+        // mExcelSheet[sheetIndex]->setCurrentItem(mExcelSheet[sheetIndex]->item(row, column));
+        mExcelSheet[sheetIndex]->setFocus();
     }
 }
 
-void GuiExcel::updateCellInfoContent(const int& sheetIndex, const int& row, const int& column) {
+void GuiExcel::updateCellContent(const int& sheetIndex, const int& row, const int& column) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
@@ -955,29 +1051,68 @@ void GuiExcel::updateCellInfoContent(const int& sheetIndex, const int& row, cons
     }
 }
 
-void GuiExcel::updateDefaultSheetFocus(const int& sheetIndex, const int& row, const int& column) {
+void GuiExcel::updateSheetProperty(const int& sheetIndex) {
     if (chcekExcelSheet(sheetIndex)) {
         return;
     }
 
-    if (mExcelSheet[sheetIndex]->item(row, column) == nullptr) {
-        mExcelSheet[sheetIndex]->setItem(row, column, new QTableWidgetItem(""));
+    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
+    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
+    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
+    // const QVariantList sheetData = readSheetProperty(sheetIndex);
+    const QList<QStringList> sheetData = isSheetData(sheetIndex, true, true);
+
+    int rowIndex = 0;
+
+    for (const auto& rowDataList : sheetData) {
+        int columnIndex = 0;
+        for (const auto& columnData : rowDataList) {
+            if (isDrawCheckBox(sheetIndex, columnIndex)) {
+                QTableWidgetItem* item = new QTableWidgetItem();
+                item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+                item->setCheckState((columnData.size() > 0) ? (Qt::Checked) : (Qt::Unchecked));
+                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, item);
+            } else {
+                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(columnData));
+            }
+            columnIndex++;
+        }
+        rowIndex++;
     }
 
-    if (mExcelSheet[sheetIndex]->item(row, column)) {
-        mExcelSheet[sheetIndex]->item(row, column)->setSelected(true);
-        // mExcelSheet[sheetIndex]->setCurrentItem(mExcelSheet[sheetIndex]->item(row, column));
-        mExcelSheet[sheetIndex]->setFocus();
+    // Update : Merge Info
+    const auto& mergeInfo = isPropertyMergeInfo(sheetIndex);
+    for (const auto& columnIndex : mergeInfo.keys()) {
+        for (const auto& info : mergeInfo[columnIndex]) {
+            int mergeRowStart = info.first;
+            int mergeRowEnd = info.second - mergeRowStart + 1;
+            mExcelSheet[sheetIndex]->setSpan(mergeRowStart, columnIndex, mergeRowEnd, 1);
+        }
     }
 }
 
-void GuiExcel::updateInitialExcelSheet() {
+void GuiExcel::updateSheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    // qDebug() << "updateSheetNew :" << sheetIndex << rowMax << columnMax;
+    for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < rowMax; columnIndex++) {
+            if (isDrawCheckBox(sheetIndex, columnIndex)) {
+                QTableWidgetItem* item = new QTableWidgetItem();
+                item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+                item->setCheckState(Qt::Unchecked);
+                mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, item);
+                // qDebug() << "Item :" << rowIndex << columnIndex;
+            }
+        }
+    }
+}
+
+void GuiExcel::updateInitExcelSheet() {
     setCurrSheetIndex(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    mMergeInfo.clear();
     mModelIndex.clear();
-    mCopyMergeInfo.clear();
-    mClearMergeInfo.clear();
-    mClearCellInfo.clear();
 
     for (const auto& action : mMenuActionItem) {
         delete action;
@@ -1007,6 +1142,62 @@ void GuiExcel::updateInitialExcelSheet() {
     // qDebug() << "\t ExcelSheet : Init";
 }
 
+void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {
+    if (chcekExcelSheet(sheetIndex)) {
+        return;
+    }
+
+    QString moduleName = mExcelSheet[sheetIndex]->item(row, 0)->text();
+    QString version = (mExcelSheet[sheetIndex]->item(row, 1) == nullptr) ? ("") : (mExcelSheet[sheetIndex]->item(row, 1)->text());
+    QString description =
+        (mExcelSheet[sheetIndex]->item(row, 2) == nullptr) ? ("") : (mExcelSheet[sheetIndex]->item(row, 2)->text());
+    if ((moduleName.size() == 0) || (version.size() > 0) || (description.size() > 0)) {
+        qDebug() << "Fail to text :" << (moduleName.size() == 0) << (version.size() > 0) << (description.size() > 0);
+        return;
+    }
+
+    syncAutoComplete(sheetIndex, sheetIndex, moduleName);
+}
+
+void GuiExcel::updateAutoCompleteSignal(const bool& description, const int& columnIndex) {
+    QVariantList keywordTypeInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo).toList();
+    QStringList keywordList;
+    int keyworedIndex = columnIndex;
+
+#if defined(USE_SHEET_COLUMN_OLD)
+    if (description) {
+        if (keyworedIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal)) {
+            keyworedIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
+        } else if (keyworedIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data)) {
+            keyworedIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data);
+        } else {
+        }
+    }
+#endif
+
+    if (keyworedIndex < keywordTypeInfo.size()) {
+        keywordList = keywordTypeInfo.at(keyworedIndex).toStringList();
+    }
+
+    // qDebug() << "updateAutoCompleteSignal :" << description << columnIndex;
+    // qDebug() << "\t Keyword :" << keyworedIndex << keywordTypeInfo.size() << keywordList.size();
+
+    QString currentCellText = (mSelectItem) ? (mSelectItem->text()) : (QString());
+    for (const auto& keyword : keywordList) {
+        currentCellText.remove(keyword);
+    }
+
+    QVariantList info = QVariantList({
+        QString("Auto Complete"),
+        currentCellText,
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
+        keywordList,
+    });
+    updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
+}
+
 void GuiExcel::updateDisplayKey(const int& keyValue) {
     int sheetIndex = getCurrSheetIndex();
     if (chcekExcelSheet(sheetIndex)) {
@@ -1014,7 +1205,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
     }
 
     if (keyValue == Qt::Key_Escape) {
-        clearClipboardInfo(true);
+        updateClearClipboard(getCopyInfo(), false);
         return;
     }
 
@@ -1128,157 +1319,10 @@ void GuiExcel::updateDisplayArrowKey(const int& keyValue) {
     mModelIndex[sheetIndex] = QPair<int, int>(row, column);
     log.append(QString(" -> %1, %2").arg(row).arg(column));
     qDebug() << log;
-    updateCellInfoContent(sheetIndex, mModelIndex[sheetIndex].first, mModelIndex[sheetIndex].second);
+    updateCellContent(sheetIndex, mModelIndex[sheetIndex].first, mModelIndex[sheetIndex].second);
 #else
     mGui->CellInfoContent->clear();
 #endif
-}
-
-void GuiExcel::updateDisplayExcelSheet() {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    bool excelOpen = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
-    qDebug() << "Excel Update :" << ((excelOpen) ? ("Open") : ("New")) << ", Size :" << mExcelSheet.size();
-
-    // Clear - Table, TableWidget, CellInfo, Menu, Action
-    updateInitialExcelSheet();
-    // qDebug() << "\t Excel : init";
-
-    // Create : Action Item
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut] = mMenuRight->addAction("Cut");
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy] = mMenuRight->addAction("Copy");
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste] = mMenuRight->addAction("Paste");
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert] = mMenuRight->addAction("Insert");
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete] = mMenuRight->addAction("Delete");
-    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit] = mMenuRight->addAction("Merge/Split");
-    // qDebug() << "\t Excel : action item";
-
-    // Draw - Sheet
-    QStringList sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName).toStringList();
-    QStringList descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
-    QStringList configTitle =
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle).toStringList();
-    QStringList otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
-    QVariantList listRowCount = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount).toList();
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-    // qDebug() << "\t Excel : read data";
-
-    for (const auto& sheet : sheetName) {
-        QStringList contentTitle;
-        if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
-            contentTitle = descTitle;
-        } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
-            contentTitle = configTitle;
-        } else {
-            contentTitle = otherTitle;
-        }
-        int rowMax = listRowCount.at(sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription).toInt();
-        int columnMax = contentTitle.size();
-
-        // Draw Sheet
-        mExcelSheet[sheetIndex] = new QTableWidget(rowMax, columnMax);
-        mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
-        // mExcelSheet[sheetIndex]->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
-        mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        mGui->TabWidget->addTab(mExcelSheet[sheetIndex], sheet);
-        // qDebug() << "\t\t Sheet[" << sheetIndex << "] : draw sheet";
-
-        // Check State Init
-        setSheetCheckState(sheetIndex, false);
-
-        // Draw Sheet Data
-        if (excelOpen) {
-            updateDisplaySheetText(sheetIndex);
-        } else {
-            updateDisplaySheetNew(sheetIndex, rowMax, columnMax);
-        }
-        updateDefaultSheetFocus(sheetIndex, 0, 0);
-        updateCellInfoContent(sheetIndex, mModelIndex[sheetIndex].first, mModelIndex[sheetIndex].second);
-        // qDebug() << "\t\t Sheet[" << sheetIndex << "] : draw sheet data";
-
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
-            // qDebug() << "1 cellChanged :" << row << column;
-            updateDisplayCellDataInfo(sheetIndex, row, column);
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
-            // qDebug() << "2 cellDoubleClicked :" << row << column;
-            updateDisplayAutoComplete(sheetIndex, row, column);
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
-            // qDebug() << "3 cellClicked :" << row << column;
-            updateCellInfoContent(sheetIndex, row, column);
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
-            QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
-            int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
-
-            if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCut;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCopy;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypePaste;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
-            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
-                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
-            } else {
-                qDebug() << "Fail to menu right selection action item";
-                return;
-            }
-
-            updateDisplayShortcut(shortcutType);
-        });
-        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
-            updateDisplaySheetCheckState(sheetIndex, logicalIndex);
-        });
-#if 0
-        connect(mExcelSheet[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
-            qDebug() << "4 itemClicked[" << sheetIndex << "] :" << item;
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::itemActivated, [=](QTableWidgetItem *item) {
-            qDebug() << "5 itemActivated[" << sheetIndex << "] :" << item;
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::itemEntered, [=](QTableWidgetItem *item) {
-            qDebug() << "6 itemEntered[" << sheetIndex << "] :" << item;
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
-            qDebug() << "7 cellEntered[" << sheetIndex << "] :" << row << column;
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::cellActivated, [=](int row, int column) {
-            qDebug() << "8 cellActivated[" << sheetIndex << "] :" << row << column;
-        });
-        connect(mExcelSheet[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
-            qDebug() << "9 itemSelectionChanged[" << sheetIndex << "]";
-            QString text = QString();
-            if (mExcelSheet[sheetIndex]->currentItem()) {
-                text = mExcelSheet[sheetIndex]->currentItem()->text();
-            }
-            mGui->CellInfoContent->setText(text);
-        });
-#if 0
-        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
-            qDebug() << "2. sectionClicked_V[" << sheetIndex << "] :" << logicalIndex;
-        });
-        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
-                                                                [=](int logicalIndex, int oldSize, int newSize) {
-            qDebug() << "11. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
-        });
-        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized,
-                                                                [=](int logicalIndex, int oldSize, int newSize) {
-            qDebug() << "12. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
-        });
-#endif
-#endif
-
-        // Resize - Cell Width/Height
-        updateDisplaySheetHeaderAdjust(sheetIndex, true);
-        sheetIndex++;
-    }
-
-    // qDebug() << "\t Excel : complete";
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
 void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column) {
@@ -1286,7 +1330,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         return;
     }
 
-    if (isSheetChanged(sheetIndex) == false) {
+    if (isSheetContentChanged(sheetIndex) == false) {
         qDebug() << "The excel sheet has not been modified.";
         return;
     }
@@ -1338,7 +1382,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateCellDataInfo, cellDataInfo);
     }
 
-    updateDisplaySheetHeaderAdjust(sheetIndex, false);  // 편집시 화면 변경 되는 이슈
+    updateSheetHeaderAdjust(sheetIndex, false);  // 편집시 화면 변경 되는 이슈
     syncSheetData(sheetIndex, true);
     if (updateAutoCompleteData) {
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, column}));
@@ -1443,165 +1487,16 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
         QVariantList inputData = QVariantList({signalName, vehicleType, column, signalIndex});
         createSignal(ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions, inputData);
     } else if (supportGenType) {
-        updateDisplaySelectGenType();
+        updateDialogSelectGenType();
     } else if (supportVehicleType) {
-        updateDisplayAutoCompleteVehicle();
+        updateDialogAutoCompleteVehicle();
     } else if (supportConfigName) {
-        updateDisplayAutoCompleteConfigName();
+        updateDialogAutoCompleteConfigName();
     } else {
         bool description = (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-        updateDisplayAutoCompleteSignal(description, column);
+        updateAutoCompleteSignal(description, column);
     }
     mExcelSheet[sheetIndex]->clearFocus();
-}
-
-void GuiExcel::updateDisplayAutoCompleteSignal(const bool& description, const int& columnIndex) {
-    QVariantList keywordTypeInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo).toList();
-    QStringList keywordList;
-    int keyworedIndex = columnIndex;
-
-#if defined(USE_SHEET_COLUMN_OLD)
-    if (description) {
-        if (keyworedIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal)) {
-            keyworedIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::ConfigSignal);
-        } else if (keyworedIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Data)) {
-            keyworedIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data);
-        } else {
-        }
-    }
-#endif
-
-    if (keyworedIndex < keywordTypeInfo.size()) {
-        keywordList = keywordTypeInfo.at(keyworedIndex).toStringList();
-    }
-
-    // qDebug() << "updateDisplayAutoCompleteSignal :" << description << columnIndex;
-    // qDebug() << "\t Keyword :" << keyworedIndex << keywordTypeInfo.size() << keywordList.size();
-
-    QString currentCellText = (mSelectItem) ? (mSelectItem->text()) : (QString());
-    for (const auto& keyword : keywordList) {
-        currentCellText.remove(keyword);
-    }
-
-    QVariantList info = QVariantList({
-        QString("Auto Complete"),
-        currentCellText,
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
-        keywordList,
-    });
-    updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
-}
-
-void GuiExcel::updateDisplayAutoCompleteVehicle() {
-    QVariantList info = QVariantList({
-        QString("Select Vehicle"),
-        QString(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList(),
-    });
-    updateDrawDialog(Dialog::DialogTypeSelectVehicleType, info);
-}
-
-void GuiExcel::updateDisplayAutoCompleteConfigName() {
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-    const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
-
-    QString currentCellText = (mSelectItem) ? (mSelectItem->text()) : (QString());
-    ivis::common::getRemoved(currentCellText, mergeInfos);
-
-    QVariantList info = QVariantList({
-        QString("Select Config"),
-        currentCellText,
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName).toStringList(),
-    });
-    updateDrawDialog(Dialog::DialogTypeAutoCompleteNormal, info);
-}
-
-void GuiExcel::updateDisplayValueEnum(const QVariantList& data) {
-    if (data.size() != 2) {
-        qDebug() << "Fail to value enum data size :" << data.size();
-        return;
-    }
-
-    const QString VEHICLE_TYPE_ICV = QString("ICV");
-    const QString VEHICLE_TYPE_EV = QString("EV");
-    const QString VEHICLE_TYPE_FCEV = QString("FCEV");
-    const QString VEHICLE_TYPE_PHEV = QString("PHEV");
-    const QString VEHICLE_TYPE_HEV = QString("HEV");
-
-    QString signalName = data.at(0).toString();
-    int columnIndex = data.at(1).toInt();
-
-    bool sfcSignal = (signalName.trimmed().startsWith("SFC.") || signalName.trimmed().startsWith("SFCFuel."));
-    // bool vehicleSignal = signalName.trimmed().startsWith("Vehicle.");
-    bool outputState = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue));
-
-    int dialogType = Dialog::DialogTypeSelectValueEnumInput;
-    QStringList subTitle = QStringList({"Value Enum"});
-    QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
-    QStringList valueEnum =
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum).toStringList();
-    QVariantList matchingTableList = QVariantList();
-    if ((sfcSignal == false) && (outputState == false)) {
-        matchingTableList.append(valueEnum);  // ValueEnum -> Dialog : Not Used
-        QVariant matchingTableData = QVariant();
-        for (const auto& vehicle : vehicleTypeList.toStringList()) {
-            int propertyType = 0;
-            if (vehicle.compare(VEHICLE_TYPE_ICV) == 0) {
-                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableICV;
-            } else if (vehicle.compare(VEHICLE_TYPE_EV) == 0) {
-                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_FCEV) == 0) {
-                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableFCEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_PHEV) == 0) {
-                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTablePHEV;
-            } else if (vehicle.compare(VEHICLE_TYPE_HEV) == 0) {
-                propertyType = ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableHEV;
-            } else {
-                continue;
-            }
-            subTitle.append(vehicle);
-            matchingTableData = isHandler()->getProperty(propertyType);
-            matchingTableList.append(matchingTableData.toStringList());  // ICV, EV, FCEV, PHEV, HEV
-        }
-        int appMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAppMode).toInt();
-        dialogType = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? (Dialog::DialogTypeSelectMatchingTablePV)
-                                                                           : (Dialog::DialogTypeSelectMatchingTableCV);
-        subTitle.append("System");
-        matchingTableData = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataMatchingTableSystem);
-        matchingTableList.append(matchingTableData.toStringList());  // System
-    } else if (outputState) {
-        dialogType = Dialog::DialogTypeSelectValueEnumOutput;
-    } else {
-        dialogType = Dialog::DialogTypeSelectValueEnumInput;
-    }
-    setSfcSignal(sfcSignal);
-    setOutputState(outputState);
-
-    QVariantList info = QVariantList({
-        QString("Select Data"),
-        subTitle,
-        valueEnum,
-        QStringList(),
-        matchingTableList,
-        0,
-    });
-    updateDrawDialog(dialogType, info);
-}
-
-void GuiExcel::updateDisplayTCNameResult(const QStringList& data) {
-    QVariantList info = QVariantList({
-        QString("Select Data"),
-        QStringList({"Result"}),
-        data,
-        QStringList(),
-        QStringList(),
-        0,
-    });
-    updateDrawDialog(Dialog::DialogTypeSelectValueResult, info);
 }
 
 void GuiExcel::updateDisplayAutoInputDescrtion() {
@@ -1618,15 +1513,6 @@ void GuiExcel::updateDisplayAutoInputDescrtion() {
     for (const auto& info : descrtionInfo.toList()) {
         mExcelSheet[sheetIndex]->setItem(row, column + index++, new QTableWidgetItem(info.toString()));
     }
-}
-
-void GuiExcel::updateDisplaySelectGenType() {
-    QVariantList info = QVariantList({
-        QString("Select Type"),
-        QString(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList).toStringList(),
-    });
-    updateDrawDialog(Dialog::DialogTypeGenType, info);
 }
 
 void GuiExcel::updateDisplayGenType(const int& genType) {
@@ -1648,7 +1534,7 @@ void GuiExcel::updateDisplayGenType(const int& genType) {
             }
             mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->setText(currGenTypeName);
         }
-        // updateDisplaySheetHeaderAdjust(sheetIndex, true);  // 편집시 화면 변경 되는 이슈
+        // updateSheetHeaderAdjust(sheetIndex, true);  // 편집시 화면 변경 되는 이슈
         syncSheetData(sheetIndex, true);
     }
 }
@@ -1668,288 +1554,6 @@ void GuiExcel::updateDisplayTCCheck(const int& allCheck) {
     }
 }
 
-void GuiExcel::printMergeInfo(const QString& title, const bool& mergeSplit) {
-#if 0
-    qDebug() << "\t ****************************************************************************";
-    qDebug() << "\t [" << title << "]";
-    qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    QMap<int, ExcelSheet> mergeInfo = mMergeInfo;
-    QString type = QString("All");
-    if (mergeSplit) {
-        mergeInfo.clear();
-        mergeInfo[mergeInfo.size()] = mClearMergeInfo;
-        mergeInfo[mergeInfo.size()] = mCopyMergeInfo;
-        type = QString("Copy/Clear");
-    }
-    for (ExcelSheet merge : mergeInfo) {
-        QMapIterator<int, QList<QPair<int, int>>> iter(merge.isMergeInfo());
-        while (iter.hasNext()) {
-            iter.next();
-            for (const auto& info : iter.value()) {
-                qDebug() << "\t\t " << type << ":" << iter.key() << info.first << info.second;
-            }
-        }
-        qDebug() << "\t\t -------------------------------------------------";
-    }
-    qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
-#endif
-}
-
-void GuiExcel::copyClipboardInfo(const bool& cutState) {
-    int sheetIndex = getCurrSheetIndex();
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
-    }
-
-    QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    if (modelIndexs.size() == 0) {
-        qDebug() << "Select cell count : 0";
-        return;
-    }
-
-    int rowStart = modelIndexs.at(0).row();
-    int rowEnd = modelIndexs.last().row() - rowStart + 1;
-    int rowMax = (rowStart + rowEnd);
-    int columnStart = modelIndexs.at(0).column();
-    int columnEnd = modelIndexs.last().column() - columnStart + 1;
-    int columnMax = (columnStart + columnEnd);
-
-    if (rowEnd == 1) {  // 병합된 셀의 경우 다시 선택시 셀 선택한 카운트(rowEnd) 값이 1로 나오는 경우 발생함
-        int mergeCount = isMergeCell(sheetIndex, columnStart, rowStart);
-        if (mergeCount > 0) {
-            rowEnd = mergeCount;
-            rowMax = (rowStart + rowEnd);
-            // qDebug() << "isMergeCell :" << mergeCount << rowEnd << rowMax;
-        }
-    }
-
-    // qDebug() << "\t Copy/Cut Sheet[" << sheetIndex << "] - Index :" << rowStart << columnStart << rowEnd << columnEnd << ","
-    //          << rowMax << columnMax;
-
-    QMap<int, QVariantList> newSheetData = QMap<int, QVariantList>();
-    QString clipboardData = QString();
-    QVariantList readIndexInfo = QVariantList({rowStart, columnStart, rowMax, columnMax});
-    QVariantList sheetData = readSheetProperty(sheetIndex, readIndexInfo, clipboardData);
-
-    clipboardData.resize(clipboardData.size() - 1);
-    QGuiApplication::clipboard()->setText(clipboardData);
-
-    for (const auto& rowListData : sheetData) {
-        int columnIndex = 0;
-        for (const auto& data : rowListData.toList()) {
-            newSheetData[columnIndex++].append(data.toString());
-        }
-    }
-
-    // Copy, Paste : Cell, Merge Info
-    mCopyMergeInfo.clear();
-    mClearMergeInfo.clear();
-    mClearCellInfo.clear();
-
-    constructMergeSplitInfo(newSheetData, rowStart, columnStart);
-
-    if (cutState) {
-        mClearCellInfo.append(sheetIndex);
-        mClearCellInfo.append(rowStart);
-        mClearCellInfo.append(columnStart);
-        mClearCellInfo.append(rowMax);
-        mClearCellInfo.append(columnMax);
-
-        for (int clearRowIndex = rowStart; clearRowIndex < rowMax; clearRowIndex++) {
-            for (int clearColumnIndex = columnStart; clearColumnIndex < columnMax; clearColumnIndex++) {
-                if (mExcelSheet[sheetIndex]->item(clearRowIndex, clearColumnIndex) == nullptr) {
-                    mExcelSheet[sheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
-                }
-                mExcelSheet[sheetIndex]->item(clearRowIndex, clearColumnIndex)->setBackground(QColor(200, 200, 200));
-            }
-        }
-    }
-}
-
-int GuiExcel::clearClipboardInfo(const bool& escapeKeyClear) {
-    int clearSheetIndex = ((mClearCellInfo.size() == 5) ? (mClearCellInfo.at(0)) : (-1));
-
-    if (clearSheetIndex != (-1)) {
-        int clearRowStart = mClearCellInfo.at(1);
-        int clearColumnStart = mClearCellInfo.at(2);
-        int clearRowEnd = mClearCellInfo.at(3);
-        int clearColumnEnd = mClearCellInfo.at(4);
-
-        for (int clearRowIndex = clearRowStart; clearRowIndex < clearRowEnd; clearRowIndex++) {
-            for (int clearColumnIndex = clearColumnStart; clearColumnIndex < clearColumnEnd; clearColumnIndex++) {
-                mExcelSheet[clearSheetIndex]->setItem(clearRowIndex, clearColumnIndex, new QTableWidgetItem(""));
-                mExcelSheet[clearSheetIndex]->item(clearRowIndex, clearColumnIndex)->setBackground(QColor(255, 255, 255));
-            }
-        }
-        mClearCellInfo.clear();
-    }
-
-    if (escapeKeyClear) {
-        mClearMergeInfo.clear();
-        mCopyMergeInfo.clear();
-        QGuiApplication::clipboard()->clear();
-    }
-
-    return clearSheetIndex;
-}
-
-void GuiExcel::pasteClipboardInfo() {
-    int sheetIndex = getCurrSheetIndex();
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
-    }
-
-    if ((QApplication::clipboard()->mimeData() == nullptr) || (QApplication::clipboard()->mimeData()->hasText() == false)) {
-        qDebug() << "Clipboard data invalid";
-        return;
-    }
-
-    QModelIndexList modelIndexs = mExcelSheet[sheetIndex]->selectionModel()->selectedIndexes();
-    int selectCellCount = modelIndexs.size();
-    if ((selectCellCount != 1)) {
-        qDebug() << "Fail to select cell - count :" << selectCellCount;
-        return;
-    }
-
-    setCellEditSkip(true);
-
-    QStringList clipboardData = QApplication::clipboard()->mimeData()->text().split("\n");
-    int rowStart = (selectCellCount == 1) ? (modelIndexs.at(0).row()) : (0);
-    int columnStart = (selectCellCount == 1) ? (modelIndexs.at(0).column()) : (0);
-    int rowMax = mExcelSheet[sheetIndex]->rowCount();
-    int columnMax = mExcelSheet[sheetIndex]->columnCount();
-    int rowCount = clipboardData.size() + rowStart;  // Row : 0(Header), 1 ~ Count(Item)
-
-    if (rowCount >= rowMax) {
-        mExcelSheet[sheetIndex]->setRowCount(rowCount);
-    }
-
-    for (int rowIndex = 0; rowIndex < clipboardData.size(); rowIndex++) {
-        QStringList rowDataList = clipboardData[rowIndex].split("\t");
-        for (int columnIndex = 0; columnIndex < rowDataList.size(); columnIndex++) {
-            int itemRowIndex = (rowStart + rowIndex);
-            int itemColumnIndex = (columnStart + columnIndex);
-            if (itemColumnIndex >= columnMax) {
-                continue;
-            }
-            QString setText = rowDataList[columnIndex];
-            if (setText.compare("[Empty]") == false) {
-                setText.clear();
-            }
-            mExcelSheet[sheetIndex]->setItem(itemRowIndex, itemColumnIndex, new QTableWidgetItem(setText));
-        }
-    }
-
-    QVariantList updateSheetList = QVariantList({sheetIndex});
-    int clearSheetIndex = clearClipboardInfo(false);
-    if (clearSheetIndex >= 0) {
-        QMapIterator<int, QList<QPair<int, int>>> iterClear(mClearMergeInfo.isMergeInfo());
-        while (iterClear.hasNext()) {
-            iterClear.next();
-            for (const auto& info : iterClear.value()) {
-                updateMergeInfo(true, clearSheetIndex, iterClear.key(), info.first, info.second);
-            }
-        }
-        mClearMergeInfo.clear();
-
-        if (sheetIndex != clearSheetIndex) {
-            updateSheetList.append(clearSheetIndex);
-            updateDisplaySplitCell(clearSheetIndex);
-            updateDisplayMergeCell(clearSheetIndex);
-        }
-    }
-
-    QMapIterator<int, QList<QPair<int, int>>> iterCopy(mCopyMergeInfo.isMergeInfo());
-    while (iterCopy.hasNext()) {
-        iterCopy.next();
-        int mergeColumnIndex = columnStart + iterCopy.key();
-        for (const auto& info : iterCopy.value()) {
-            int mergeRowStart = rowStart + info.first;
-            int mergeRowEnd = info.second;
-            updateMergeInfo(false, sheetIndex, mergeColumnIndex, mergeRowStart, mergeRowEnd);
-        }
-    }
-    mCopyMergeInfo.clear();
-    QGuiApplication::clipboard()->clear();
-
-    updateDisplaySplitCell(sheetIndex);
-    updateDisplayMergeCell(sheetIndex);
-
-    updateDisplaySheetHeaderAdjust(sheetIndex, false);  // 편집시 화면 변경 되는 이슈
-    // chaged data sync : gui -> control
-    for (const auto& updateIndex : updateSheetList) {
-        syncSheetData(updateIndex.toInt(), true);
-        createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, updateIndex}));
-    }
-
-    setCellEditSkip(false);
-}
-
-QList<QStringList> GuiExcel::isSheetData(const int& sheetIndex, const bool& removeMerge, const bool& readProperty) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return QList<QStringList>();
-    }
-    const QString mergeStart = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart).toString();
-    const QString mergeEnd = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd).toString();
-    const QString merge = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge).toString();
-    const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
-    const int rowMax = mExcelSheet[sheetIndex]->rowCount();
-    const int columnMax = mExcelSheet[sheetIndex]->columnCount();
-
-    QVariantList readSheetData;
-
-    if (readProperty) {
-        readSheetData = isHandler()->getProperty(sheetIndex).toList();
-    } else {
-        for (int rowIndex = 0; rowIndex < rowMax; ++rowIndex) {
-            QStringList rowData;
-            for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
-                rowData.append(isCurrentCellText(sheetIndex, rowIndex, columnIndex));
-            }
-            readSheetData.append(rowData);
-        }
-    }
-
-    QList<QStringList> sheetData;
-    for (const auto& rowDataList : readSheetData) {
-        QStringList rowData = rowDataList.toStringList();
-        if (removeMerge) {
-            for (auto& readColumnText : rowData) {
-                if (ivis::common::isContainsString(readColumnText, mergeStart)) {
-                    ivis::common::getRemoved(readColumnText, mergeInfos);
-                } else if (ivis::common::isContainsString(readColumnText, merge)) {
-                    readColumnText.clear();
-                } else if (ivis::common::isContainsString(readColumnText, mergeEnd)) {
-                    readColumnText.clear();
-                } else {
-                }
-            }
-        }
-        sheetData.append(rowData);
-    }
-
-#if 0
-    qDebug() << "isSheetData :" << sheetIndex << removeMerge << readProperty;
-    for (const auto& rowDataList : sheetData) {
-        qDebug() << "\t RowData :" << rowDataList;
-    }
-    qDebug() << "------------------------------------------------------------------------------------------";
-#endif
-
-    return sheetData;
-}
-
-QString GuiExcel::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return QString();
-    }
-    if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
-        mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(""));
-    }
-    return mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
-}
-
-
 void GuiExcel::updateDisplayReceiveKeyFocus() {
     int sheetIndex = getCurrSheetIndex();
     if (chcekExcelSheet(sheetIndex)) {
@@ -1968,30 +1572,29 @@ void GuiExcel::updateDisplayShortcut(const int& shortcutType) {
     setCellEditSkip(true);
 
     int columIndex = (-1);
-
     switch (shortcutType) {
         case ivis::common::ShortcutTypeEnum::ShortcutTypeInsert: {
-            columIndex = updateDisplayInsertDelete(sheetIndex, true);
+            columIndex = updateShortcutInsertDelete(sheetIndex, true);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypeDelete: {
-            columIndex = updateDisplayInsertDelete(sheetIndex, false);
+            columIndex = updateShortcutInsertDelete(sheetIndex, false);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit: {
-            columIndex = updateDisplayMergeSplit(sheetIndex);
+            columIndex = updateShortcutMergeSplit(sheetIndex);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypeCopy: {
-            columIndex = updateDisplayCopy(sheetIndex, false);
+            updateShortcutCopy(sheetIndex, false);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypeCut: {
-            columIndex = updateDisplayCopy(sheetIndex, true);
+            updateShortcutCopy(sheetIndex, true);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypePaste: {
-            columIndex = updateDisplayPaste(sheetIndex);
+            columIndex = updateShortcutPaste(sheetIndex);
             break;
         }
         case ivis::common::ShortcutTypeEnum::ShortcutTypeUndo: {
@@ -2013,10 +1616,9 @@ void GuiExcel::updateDisplayShortcut(const int& shortcutType) {
         // 1. syncSheetData()
         // 2. createSignal(EventTypeUpdateAutoCompleteData)
         syncSheetData(sheetIndex, false);
-        updateDisplaySheetHeaderAdjust(sheetIndex, false);    // Resize Header Size : Row(O), Column(X)
+        updateSheetHeaderAdjust(sheetIndex, false);    // Resize Header Size : Row(O), Column(X)
         createSignal(ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData, QVariantList({sheetIndex, columIndex}));
     }
-
     setCellEditSkip(false);
 }
 
@@ -2046,21 +1648,151 @@ void GuiExcel::updateDisplaySheetCheckState(const int& sheetIndex, const int& co
     setSheetCheckState(sheetIndex, (!allCheck));
 }
 
-void GuiExcel::updateDescriptionInfo(const int& sheetIndex, const int& row) {
-    if (chcekExcelSheet(sheetIndex)) {
-        return;
+void GuiExcel::updateDisplayExcelSheet() {
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    bool excelOpen = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+    qDebug() << "Excel Update :" << ((excelOpen) ? ("Open") : ("New")) << ", Size :" << mExcelSheet.size();
+
+    // Clear - Table, TableWidget, CellInfo, Menu, Action
+    updateInitExcelSheet();
+    // qDebug() << "\t Excel : init";
+
+    // Create : Action Item
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut] = mMenuRight->addAction("Cut");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy] = mMenuRight->addAction("Copy");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste] = mMenuRight->addAction("Paste");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert] = mMenuRight->addAction("Insert");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete] = mMenuRight->addAction("Delete");
+    mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit] = mMenuRight->addAction("Merge/Split");
+    // qDebug() << "\t Excel : action item";
+
+    // Draw - Sheet
+    QStringList sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName).toStringList();
+    QStringList descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
+    QStringList configTitle =
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle).toStringList();
+    QStringList otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
+    QVariantList listRowCount = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount).toList();
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    // qDebug() << "\t Excel : read data";
+
+    for (const auto& sheet : sheetName) {
+        QStringList contentTitle;
+        if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+            contentTitle = descTitle;
+        } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+            contentTitle = configTitle;
+        } else {
+            contentTitle = otherTitle;
+        }
+        int rowMax = listRowCount.at(sheetIndex - ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription).toInt();
+        int columnMax = contentTitle.size();
+
+        // Draw Sheet
+        mExcelSheet[sheetIndex] = new QTableWidget(rowMax, columnMax);
+        mExcelSheet[sheetIndex]->setHorizontalHeaderLabels(contentTitle);
+        // mExcelSheet[sheetIndex]->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+        mExcelSheet[sheetIndex]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mGui->TabWidget->addTab(mExcelSheet[sheetIndex], sheet);
+        // qDebug() << "\t\t Sheet[" << sheetIndex << "] : draw sheet";
+
+        // Check State Init
+        setSheetCheckState(sheetIndex, false);
+
+        // Draw Sheet Data
+        if (excelOpen) {
+            updateSheetProperty(sheetIndex);
+        } else {
+            updateSheetNew(sheetIndex, rowMax, columnMax);
+        }
+        updateSheetDefaultFocus(sheetIndex, 0, 0);
+        updateCellContent(sheetIndex, mModelIndex[sheetIndex].first, mModelIndex[sheetIndex].second);
+        // qDebug() << "\t\t Sheet[" << sheetIndex << "] : draw sheet data";
+
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
+            // qDebug() << "1 cellChanged :" << row << column;
+            updateDisplayCellDataInfo(sheetIndex, row, column);
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
+            // qDebug() << "2 cellDoubleClicked :" << row << column;
+            updateDisplayAutoComplete(sheetIndex, row, column);
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
+            // qDebug() << "3 cellClicked :" << row << column;
+            updateCellContent(sheetIndex, row, column);
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {
+            QAction* selectAction = mMenuRight->exec(mExcelSheet[sheetIndex]->mapToGlobal(QPoint((pos.x() + 20), (pos.y() + 5))));
+            int shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInvalid;
+
+            if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCut]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCut;
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeCopy]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeCopy;
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypePaste]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypePaste;
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeInsert]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeInsert;
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeDelete]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeDelete;
+            } else if (selectAction == mMenuActionItem[ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit]) {
+                shortcutType = ivis::common::ShortcutTypeEnum::ShortcutTypeMergeSplit;
+            } else {
+                qDebug() << "Fail to menu right selection action item";
+                return;
+            }
+
+            updateDisplayShortcut(shortcutType);
+        });
+        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
+            updateDisplaySheetCheckState(sheetIndex, logicalIndex);
+        });
+#if 0
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemClicked, [=](QTableWidgetItem *item) {
+            qDebug() << "4 itemClicked[" << sheetIndex << "] :" << item;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemActivated, [=](QTableWidgetItem *item) {
+            qDebug() << "5 itemActivated[" << sheetIndex << "] :" << item;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemEntered, [=](QTableWidgetItem *item) {
+            qDebug() << "6 itemEntered[" << sheetIndex << "] :" << item;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellEntered, [=](int row, int column) {
+            qDebug() << "7 cellEntered[" << sheetIndex << "] :" << row << column;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::cellActivated, [=](int row, int column) {
+            qDebug() << "8 cellActivated[" << sheetIndex << "] :" << row << column;
+        });
+        connect(mExcelSheet[sheetIndex], &QTableWidget::itemSelectionChanged, [=]() {
+            qDebug() << "9 itemSelectionChanged[" << sheetIndex << "]";
+            QString text = QString();
+            if (mExcelSheet[sheetIndex]->currentItem()) {
+                text = mExcelSheet[sheetIndex]->currentItem()->text();
+            }
+            mGui->CellInfoContent->setText(text);
+        });
+#if 0
+        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionClicked, [=](int logicalIndex) {
+            qDebug() << "2. sectionClicked_V[" << sheetIndex << "] :" << logicalIndex;
+        });
+        connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
+                                                                [=](int logicalIndex, int oldSize, int newSize) {
+            qDebug() << "11. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
+        });
+        connect(mExcelSheet[sheetIndex]->verticalHeader(), &QHeaderView::sectionResized,
+                                                                [=](int logicalIndex, int oldSize, int newSize) {
+            qDebug() << "12. sectionResized_V[" << sheetIndex << "] :" << logicalIndex << oldSize << newSize;
+        });
+#endif
+#endif
+
+        // Resize - Cell Width/Height
+        updateSheetHeaderAdjust(sheetIndex, true);
+        sheetIndex++;
     }
 
-    QString moduleName = mExcelSheet[sheetIndex]->item(row, 0)->text();
-    QString version = (mExcelSheet[sheetIndex]->item(row, 1) == nullptr) ? ("") : (mExcelSheet[sheetIndex]->item(row, 1)->text());
-    QString description =
-        (mExcelSheet[sheetIndex]->item(row, 2) == nullptr) ? ("") : (mExcelSheet[sheetIndex]->item(row, 2)->text());
-    if ((moduleName.size() == 0) || (version.size() > 0) || (description.size() > 0)) {
-        qDebug() << "Fail to text :" << (moduleName.size() == 0) << (version.size() > 0) << (description.size() > 0);
-        return;
-    }
-    QVariantList autoInputInfo = QVariantList({sheetIndex, row, moduleName});
-    createSignal(ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo, autoInputInfo);
+    // qDebug() << "\t Excel : complete";
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
 void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -2101,11 +1833,11 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeValueEnum: {
-            updateDisplayValueEnum(value.toList());
+            updateDialogValueEnum(value.toList());
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult: {
-            updateDisplayTCNameResult(value.toStringList());
+            updateDialogTCNameResult(value.toStringList());
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo: {
