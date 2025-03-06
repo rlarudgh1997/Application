@@ -456,16 +456,6 @@ void Dialog::connectAutoCompleteNormal(const bool& state) {
     }
 }
 
-QVariant Dialog::getData(const int& type) {
-    return mData[type];
-}
-
-void Dialog::setData(const int& type, const QVariant& value) {
-    if (mData[type] != value) {
-        mData[type] = value;
-    }
-}
-
 QRect Dialog::updateMainRect() {
     QRect rect = QRect();
     int dialogType = getProperty(DataTypeDialogType).toInt();

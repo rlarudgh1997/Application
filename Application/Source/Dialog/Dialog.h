@@ -116,9 +116,6 @@ private:
     void connectAutoComplete(const bool& state);
     void connectAutoCompleteNormal(const bool& state);
 
-    QVariant getData(const int& type);
-    void setData(const int& type, const QVariant& value);
-
     QRect updateMainRect();
     void updateDisplay(const int& displayType, const QString& title);
 
@@ -151,7 +148,6 @@ signals:
 
 private:
     Ui::Dialog* mGui;
-    QMap<int, QVariant> mData = QMap<int, QVariant>();
     QStandardItemModel mModel = QStandardItemModel();
     QListWidget* mAutoCompleteListWidget = nullptr;
 };

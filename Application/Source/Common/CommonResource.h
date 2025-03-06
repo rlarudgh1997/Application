@@ -106,11 +106,9 @@
 #define STRING_POPUP_CONFIRM QString("OK")
 #define STRING_POPUP_LIB QString("Library")
 #define STRING_POPUP_LIB_INSTALL_TIP QString("Would you like to install Python-related libraries?")
-#define STRING_POPUP_CELL_COLUMN QString("Select merge/split cells")
 #define STRING_POPUP_NO_INSTALL_LIB_TIP QString("Python-related libraries are not installed.")
 #define STRING_POPUP_NOW_INSTALLING_TIP QString("Python-related libraries are being installed.")
 #define STRING_POPUP_INSTALL_COMPLETE_TIP QString("Python-related libraries have been installed.")
-#define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect. Please select again.")
 
 #define STRING_POPUP_CONFIG_RESET QString("Reset config value")
 #define STRING_POPUP_CONFIG_RESET_TIP QString("Do you want to reset the config value?")
@@ -138,8 +136,11 @@
 #define STRING_POPUP_DATA_VALIDATION QString("Data Validation")
 #define STRING_POPUP_DATA_VALIDATION_TIP QString("The input data contains %1.\nPlease enter the enumeration string.")
 
+#define STRING_POPUP_CELL_COLUMN QString("Merge/Split Cell selection error")
+#define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect.\nPlease select again.")
+
 #define STRING_POPUP_CELL_SELECTION_ERROR QString("Cell selection error")
-#define STRING_POPUP_CELL_SELECTION_ERROR_TIP QString("Multiple selection feature is not supported.")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP QString("Multiple selection feature is not supported.\nPlease select again.")
 
 // =============================================================================================================
 // Image Define

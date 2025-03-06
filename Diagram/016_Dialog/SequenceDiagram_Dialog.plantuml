@@ -12,7 +12,7 @@ User -> MenuGui: Menu : app mode
 
 
 activate MenuGui
-    MenuGui -> MenuGui : updateDisplayAppMode()
+    MenuGui -> MenuGui : updateDialogAppMode()
     activate MenuGui
         MenuGui -> MenuGui : updateDrawDialog()
         activate MenuGui

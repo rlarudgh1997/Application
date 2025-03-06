@@ -958,7 +958,7 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
     return columnStart;
 }
 
-void GuiExcel::updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& hilight) {
+void GuiExcel::updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& cellHighlight) {
     int sheetIndex = clearInfo.getSheetIndex();
     if (chcekExcelSheet(sheetIndex)) {
         return;
@@ -975,7 +975,7 @@ void GuiExcel::updateClearClipboard(const CellSelectedInfo& clearInfo, const boo
         for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
             QColor setColor(255, 255, 255);
             if ((rowIndex >= rowStart) && (rowIndex <= rowEnd) && (columnIndex >= columnStart) && (columnIndex <= columnEnd) &&
-                (hilight)) {
+                (cellHighlight)) {
                 setColor = QColor(200, 200, 200);
             }
             mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->setBackground(setColor);

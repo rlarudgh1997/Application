@@ -208,7 +208,7 @@ private:
     int updateShortcutMergeSplit(const int& sheetIndex);
     int updateShortcutCopy(const int& sheetIndex, const bool& cutState);
     int updateShortcutPaste(const int& sheetIndex);
-    void updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& hilight);
+    void updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& cellHighlight);
     void updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax);
     void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
     void updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column);

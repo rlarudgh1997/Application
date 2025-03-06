@@ -44,10 +44,11 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
+    void updateDialogAutoComplete(const bool& show);
+    void updateDialogSelectModule(const bool& show);
+
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress(const int& updateType);
-    void updateDisplayAutoComplete(const bool& show);
-    void updateDisplaySelectModule(const bool& show);
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

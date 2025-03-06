@@ -40,7 +40,7 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->NodeViewClose, &QPushButton::clicked, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeNode));
     });
-    connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDisplayAutoComplete(true); });
+    connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(true); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
 }
@@ -114,6 +114,48 @@ void GuiCenter::updateDrawDialog(const int& dialogType, const QVariantList& info
         });
     }
     mDialog.data()->drawDialog(dialogType, info);
+}
+
+void GuiCenter::updateDialogAutoComplete(const bool& show) {
+    QStringList nodeAddressName = QStringList();
+    QStringList nodeAddress = QStringList();
+
+    for (int rowIndex = 0; rowIndex < mGui->NodeView->rowCount(); rowIndex++) {
+        nodeAddress.append(mGui->NodeView->item(rowIndex, 0)->text());
+    }
+
+    if (nodeAddress.size() == 0) {
+        nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
+    }
+
+    for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
+        QStringList text = nodeAddress[rowIndex].split("\t");
+        nodeAddressName.append(text[0]);
+    }
+
+    setNodeAddress(nodeAddressName);
+    QVariantList info = QVariantList({
+        QString("Search Node"),
+        QString(),
+        nodeAddressName,
+    });
+    updateDrawDialog(Dialog::DialogTypeNodeView, info);
+}
+
+void GuiCenter::updateDialogSelectModule(const bool& show) {
+    if (show == false) {
+        return;
+    }
+
+    QVariantList info = QVariantList({
+        QString("Select Module"),
+        QStringList({"Module"}),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList(),
+        QVariantList(),
+        getScrolBarValue(),
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectMoudleInfo, info);
 }
 
 void GuiCenter::updateDisplayConfigInfo() {
@@ -220,48 +262,6 @@ void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     mGui->NodeView->horizontalHeader()->resizeSection(0, 800);
 }
 
-void GuiCenter::updateDisplayAutoComplete(const bool& show) {
-    QStringList nodeAddressName = QStringList();
-    QStringList nodeAddress = QStringList();
-
-    for (int rowIndex = 0; rowIndex < mGui->NodeView->rowCount(); rowIndex++) {
-        nodeAddress.append(mGui->NodeView->item(rowIndex, 0)->text());
-    }
-
-    if (nodeAddress.size() == 0) {
-        nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
-    }
-
-    for (int rowIndex = 0; rowIndex < nodeAddress.size(); rowIndex++) {
-        QStringList text = nodeAddress[rowIndex].split("\t");
-        nodeAddressName.append(text[0]);
-    }
-
-    setNodeAddress(nodeAddressName);
-    QVariantList info = QVariantList({
-        QString("Search Node"),
-        QString(),
-        nodeAddressName,
-    });
-    updateDrawDialog(Dialog::DialogTypeNodeView, info);
-}
-
-void GuiCenter::updateDisplaySelectModule(const bool& show) {
-    if (show == false) {
-        return;
-    }
-
-    QVariantList info = QVariantList({
-        QString("Select Module"),
-        QStringList({"Module"}),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList(),
-        QVariantList(),
-        getScrolBarValue(),
-    });
-    updateDrawDialog(Dialog::DialogTypeSelectMoudleInfo, info);
-}
-
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::PropertyTypeEnum::PropertyTypeDepth: {
@@ -285,7 +285,7 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule: {
-            updateDisplaySelectModule(value.toBool());
+            updateDialogSelectModule(value.toBool());
             break;
         }
         default: {

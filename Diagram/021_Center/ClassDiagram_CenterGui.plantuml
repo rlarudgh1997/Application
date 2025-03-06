@@ -29,7 +29,7 @@ class GuiCenter {
     -void updateDisplayConfigInfo()
     -void updateDisplayNodeAddress(const int& updateType)
     -void updateDisplayAutoComplete(const bool& show)
-    -void updateDisplaySelectModule(const bool& show)
+    -void updateDialogSelectModule(const bool& show)
 
     -int getScrolBarValue()
     -void setScrolBarValue(const int& scrolBarValue)

@@ -48,26 +48,27 @@ private:
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
 
-    void drawMenuFile();
-    void drawMenuEdit();
-    void drawMenuView();
-    void drawMenuSetting();
-    void drawMenuRun();
-    void drawMenuDocker();
-    void drawMenuHelp();
-    void drawMenuEtc();
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
-    void updateDisplaySelectModule();
-    void updateDisplaySelectOption();
+    void updateDialogAppMode();
+    void updateDialogSelectModule();
+    void updateDialogSelectOption();
+    void updateDialogTestResultInfo();
+    void updateDialogEnterScriptText();
+    void updateDialogTestReport();
+    void updateDialogViewLogFileList();
+    void updateDialogViewLogInfo(const bool& show);
+    void updateDialogViewLogFileInfo();
+
+    void updateMenuFile();
+    void updateMenuEdit();
+    void updateMenuView();
+    void updateMenuSetting();
+    void updateMenuRun();
+    void updateMenuHelp();
+    void updateMenuEtc();
+    void updateProgressBar(const bool& show, const QVariantList& progressInfo);
+
     void updateDisplayPath();
-    void updateDisplayProgressBar(const bool& show, const QVariantList& progressInfo);
-    void updateDisplayTestResultInfo();
-    void updateDisplayEnterScriptText();
-    void updateDisplayTestReport();
-    void updateDisplayViewLogFileList();
-    void updateDisplayViewLogInfo(const bool& show);
-    void updateDisplayViewLogFileInfo();
-    void updateDisplayAppMode();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
