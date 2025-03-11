@@ -40,7 +40,7 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->NodeViewClose, &QPushButton::clicked, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeNode));
     });
-    connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(true); });
+    connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
 }
@@ -94,9 +94,9 @@ void GuiCenter::updateDrawDialog(const int& dialogType, const QVariantList& info
             if (selectModule.size() == 0) {
                 createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleError, QVariant());
             } else {
-                // mDialog.data()->accept();
-                mDialog.data()->setVisible(false);
+                // mDialog.data()->setVisible(false);
                 createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, selectModule);
+                mDialog.data()->accept();
             }
         });
         connect(mDialog.data(), &Dialog::signalAutoCompleteSelected, [=](const QString& text) {
@@ -113,10 +113,13 @@ void GuiCenter::updateDrawDialog(const int& dialogType, const QVariantList& info
             // qDebug() << "signalAutoCompleteSelected :" << rowIndex << text;
         });
     }
-    mDialog.data()->drawDialog(dialogType, info);
+
+    if (dialogType != Dialog::DialogTypeInvalid) {
+        mDialog.data()->drawDialog(dialogType, info);
+    }
 }
 
-void GuiCenter::updateDialogAutoComplete(const bool& show) {
+void GuiCenter::updateDialogAutoComplete() {
     QStringList nodeAddressName = QStringList();
     QStringList nodeAddress = QStringList();
 
@@ -142,11 +145,7 @@ void GuiCenter::updateDialogAutoComplete(const bool& show) {
     updateDrawDialog(Dialog::DialogTypeNodeView, info);
 }
 
-void GuiCenter::updateDialogSelectModule(const bool& show) {
-    if (show == false) {
-        return;
-    }
-
+void GuiCenter::updateDialogSelectModule() {
     QVariantList info = QVariantList({
         QString("Select Module"),
         QStringList({"Module"}),
@@ -285,7 +284,7 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule: {
-            updateDialogSelectModule(value.toBool());
+            updateDialogSelectModule();
             break;
         }
         default: {

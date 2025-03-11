@@ -129,9 +129,10 @@ public:
         PropertyTypeArrowKey,
         PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
+        PropertyTypeViewTCFileList,
         PropertyTypeViewLogInfo,
         PropertyTypeViewLogFileList,
-        PropertyTypeViewLogFileInfo,
+        PropertyTypeViewFileInfo,
         PropertyTypeKeywordTypeInfo,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -202,6 +203,8 @@ public:
 
         EventTypeViewConfig = 1200,
         EventTypeViewNodeAddress,
+        EventTypeViewTCFile,
+        EventTypeViewLogFile,
         EventTypeViewPythonLib,
 
         EventTypeReportResult = 1300,
@@ -239,7 +242,7 @@ public:
         EventTypeTestReportResult,
         EventTypeTestReportCoverage,
         EventTypeEnterScriptText,
-        EventTypeViewLogFile,
+        EventTypeViewTCDisplay,
         EventTypeViewLogDisplay,
         EventTypeGenSSFS,
         EventTypeInitModule,

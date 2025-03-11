@@ -57,7 +57,7 @@ class ControlMenu {
     -void setSelectAppMode()
     -QStringList isModuleListFromJson()
     -void updateAllModuleList(const QString& filter)
-    -void updateSelectModueList(const int& eventType, const QVariantList& selectModule)
+    -void updateSelectModuleList(const int& eventType, const QVariantList& selectModule)
     -void updateTestReportInfo(const int& eventType)
     -bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData)
     -void updateViewLogFile()

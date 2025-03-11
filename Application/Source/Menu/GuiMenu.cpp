@@ -73,7 +73,7 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
             int prevDialogType = mDialog.data()->getProperty(Dialog::DataTypePrevDialogType).toInt();
             QVariantList prevDialogInfo = mDialog.data()->getProperty(Dialog::DataTypePrevDialogInfo).toList();
 
-            qDebug() << "\t Info :" << dialogType << prevDialogType << prevDialogInfo.size();
+            // qDebug() << "\t Info :" << dialogType << prevDialogType << prevDialogInfo.size();
 
             disconnect(mDialog.data(), nullptr, nullptr, nullptr);
             mDialog.reset();
@@ -91,7 +91,10 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
                 }
                 case Dialog::DialogTypeViewLogFileInfo: {
                     if (prevDialogType == Dialog::DialogTypeSelectLogFile) {
-                        updateDialogViewLogFileList();
+                        updateDialogViewFileList(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList);
+                    } else if (prevDialogType == Dialog::DialogTypeSelectTCFile) {
+                        updateDialogViewFileList(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList);
+                    } else {
                     }
                     break;
                 }
@@ -118,9 +121,14 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
                 }
             } else if (dialogType == Dialog::DialogTypeSelectLogFile) {
                 if (selectItem.size() == 1) {
-                    // mDialog.data()->accept();
                     // mDialog.data()->setVisible(false);
                     createSignal(ivis::common::EventTypeEnum::EventTypeViewLogDisplay, QVariant(selectItem.at(0).second));
+                    // mDialog.data()->accept();    // OK 클릭으로 화면전환 후 Close 클릭시 이전 화면 다시 표시 되어야 해서
+                }
+            } else if (dialogType == Dialog::DialogTypeSelectTCFile) {
+                if (selectItem.size() == 1) {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeViewTCDisplay, QVariant(selectItem.at(0).second));
+                    // mDialog.data()->accept();
                 }
             } else {
             }
@@ -155,9 +163,9 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
                 }
             });
         connect(mDialog.data(), &Dialog::signalEnterTextChanged, [=](const QString& text) {
-            // mDialog.data()->accept();
             // mDialog.data()->setVisible(false);
             createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted, text);
+            // mDialog.data()->accept();
         });
         connect(mDialog.data(), &Dialog::signalLogDisplayClicked, [=](const bool& hide, const bool& detail) {
             if ((hide == true) && (detail == false)) {  // Close
@@ -170,7 +178,10 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
             }
         });
     }
-    mDialog.data()->drawDialog(dialogType, info);
+
+    if (dialogType != Dialog::DialogTypeInvalid) {
+        mDialog.data()->drawDialog(dialogType, info);
+    }
 }
 
 void GuiMenu::updateDialogAppMode() {
@@ -312,37 +323,54 @@ void GuiMenu::updateDialogTestReport() {
     updateDrawDialog(dialogType, info);
 }
 
-void GuiMenu::updateDialogViewLogFileList() {
-    QVariantList info = QVariantList({
-        QString("Select Log File"),
-        QStringList({"Log File"}),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList).toStringList(),
-        QStringList(),
-        QVariantList(),
-        0,
-    });
-    updateDrawDialog(Dialog::DialogTypeSelectLogFile, info);
+void GuiMenu::updateDialogViewFileList(const int& type) {
+    int dialogType = Dialog::DialogTypeInvalid;
+    QVariantList info;
+    if (type == ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList) {
+        dialogType = Dialog::DialogTypeSelectLogFile;
+        info = QVariantList({
+            QString("Select Log File"),
+            QStringList({"Log File"}),
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList).toStringList(),
+            QStringList(),
+            QVariantList(),
+            0,
+        });
+    } else {
+        dialogType = Dialog::DialogTypeSelectTCFile;
+        info = QVariantList({
+            QString("Select TC File"),
+            QStringList({"TC File"}),
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList).toStringList(),
+            QStringList(),
+            QVariantList(),
+            0,
+        });
+    }
+    updateDrawDialog(dialogType, info);
 }
 
 void GuiMenu::updateDialogViewLogInfo(const bool& show) {
-    QVariant logInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo);
     if (show) {
         QVariantList info = QVariantList({
             QString("View Log : Real Time"),
-            logInfo.toStringList(),
+            isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo).toStringList(),
         });
         updateDrawDialog(Dialog::DialogTypeViewLogInfo, info);
     }
 }
 
-void GuiMenu::updateDialogViewLogFileInfo() {
-    QVariantList logInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileInfo).toList();
+void GuiMenu::updateDialogViewFileInfo() {
+    QVariantList logInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo).toList();
     if (logInfo.size() != 2) {
-        qDebug() << "Fail to view log file info size :" << logInfo.size();
+        qDebug() << "Fail to view file info size :" << logInfo.size();
         return;
     }
+
+    qDebug() << "\t updateDialogViewFileInfo :" << logInfo.at(0).toString().size() << logInfo.at(1).toStringList().size();
+
     QVariantList info = QVariantList({
-        QString("View Log : %1").arg(logInfo.at(0).toString()),
+        QString("View : %1").arg(logInfo.at(0).toString()),
         logInfo.at(1).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeViewLogFileInfo, info);
@@ -406,6 +434,10 @@ void GuiMenu::updateMenuView() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewConfig, QVariant()); });
     connect(mGui->actionNodeView, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewNodeAddress, QVariant()); });
+    connect(mGui->actionTCView, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewTCFile, QVariant()); });
+    connect(mGui->actionLogView, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewLogFile, QVariant()); });
 }
 
 void GuiMenu::updateMenuSetting() {
@@ -430,8 +462,6 @@ void GuiMenu::updateMenuRun() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptText, QVariant()); });
     connect(mGui->actionGenSSFS, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSSFS, QVariant()); });
-    connect(mGui->actionViewScriptLog, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeViewLogFile, QVariant()); });
 }
 
 void GuiMenu::updateMenuHelp() {
@@ -509,12 +539,13 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDialogTestReport();
             break;
         }
+        case ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList:
         case ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList: {
-            updateDialogViewLogFileList();
+            updateDialogViewFileList(type);
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileInfo: {
-            updateDialogViewLogFileInfo();
+        case ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo: {
+            updateDialogViewFileInfo();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo: {

@@ -169,7 +169,10 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
             }
         });
     }
-    mDialog.data()->drawDialog(dialogType, info);
+
+    if (dialogType != Dialog::DialogTypeInvalid) {
+        mDialog.data()->drawDialog(dialogType, info);
+    }
 }
 
 void GuiExcel::updateDialogAutoCompleteVehicle() {
@@ -381,7 +384,12 @@ QString GuiExcel::isCurrentCellText(const int& sheetIndex, const int& rowIndex, 
     if (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex) == nullptr) {
         mExcelSheet[sheetIndex]->setItem(rowIndex, columnIndex, new QTableWidgetItem(""));
     }
-    return mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
+    QString text = mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->text();
+    if (isDrawCheckBox(sheetIndex, columnIndex)) {
+        bool checked = (mExcelSheet[sheetIndex]->item(rowIndex, columnIndex)->checkState() == Qt::Checked);
+        text = (checked) ? (QString("O")) : (QString(""));
+    }
+    return text;
 }
 
 QMap<int, QSet<QPair<int, int>>> GuiExcel::isPropertyMergeInfo(const int& sheetIndex) {
@@ -476,6 +484,31 @@ QMap<int, QList<QPair<int, int>>> GuiExcel::isDisplayMergeInfo(const int& sheetI
         });
         mergeInfo[key].append(sortDataList);
     }
+
+#if 0   // 여러개(Row 기준) 이어지지 않은 셀을 선택할 경우 예외 처리 위한 코드 : 현재 미사용
+    // Construct : Span Meger Info
+    QMap<int, QList<QPair<int, int>>> spanMergeInfo;
+    auto tempMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, false}));
+    for (const auto& key : tempMergeInfo.keys()) {
+        QList<QPair<int, int>> tempInfo;
+        int spanRowStart = 0;
+        for (const auto& infoData : tempMergeInfo[key]) {
+            int spanRowCount = infoData.second - infoData.first;
+            int spanRowEnd = spanRowStart + spanRowCount;
+
+            QPair<int, int> infoTemp = qMakePair(spanRowStart, spanRowEnd);
+            spanMergeInfo[key].append(infoTemp);
+            spanRowStart = spanRowEnd + 1;
+
+            qDebug() << "\t SpanUpdate[" << key << "]  :" << infoData << "->" << infoTemp;
+        }
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+    for (const auto& key : clearMergeInfo.keys()) {
+        qDebug() << "\t SpanMergeInfo[" << key << "]  :" << clearMergeInfo[key];
+    }
+    qDebug() << "-----------------------------------------------------------------------------------------";
+#endif
 
 #if 0
     qDebug() << "isDisplayMergeInfo :" << sheetIndex << info;
@@ -736,22 +769,15 @@ int GuiExcel::updateShortcutCopy(const int& sheetIndex, const bool& cutState) {
     cellSelectedInfo.setSheetIndex(sheetIndex);
     cellSelectedInfo.setClearData(cutState);
 
-    // Draw : Normal/Select Cell Background Info
-    updateClearClipboard(cellSelectedInfo, cutState);
-
     // Construct : Selected Cell Read Text
     QMap<int, QStringList> copyDataList;
-    int confirmCount = 0;
+    QMap<int, QList<int>> indexList;
     for (const auto& currCell : cellSelectedInfo.getModelIndexs()) {
         int cellRowIndex = currCell.row();
         int cellColumnIndex = currCell.column();
         int rowIndex = cellRowIndex - rowStart;
+        int columnIndex = cellColumnIndex - columnStart;
 
-        // qDebug() << "\t ReadData :" << cellRowIndex << cellColumnIndex << rowIndex << confirmCount;
-        if (rowIndex != confirmCount++) {
-            confirmCount = (-1);
-            break;
-        }
         QVariantList rowDataList = sheetData.toList();
         if (cellRowIndex >= rowDataList.size()) {
             continue;
@@ -763,12 +789,35 @@ int GuiExcel::updateShortcutCopy(const int& sheetIndex, const bool& cutState) {
         QString readText = currCell.data().toString();    // 현재 화면에 표시 되는 시트에서 텍스트 추출
         // QString readText = columnDataList.at(cellColumnIndex);    // 프로퍼티에 저장 되어있는 시트에서 텍스트 추출
         copyDataList[rowIndex].append(readText);
+        indexList[columnIndex].append(rowIndex);
     }
 
-    if (confirmCount < 0) {    // 여러개(Row 기준) 이어지지 않은 셀을 선택할 경우 예외 처리
+    // Check : Cell Selected Warning
+    bool notSupport = false;
+    int confirmColumnCount = 0;
+    for (const auto& columnIndex : indexList.keys()) {
+        int confirmRowIndex = 0;
+        for (const auto& rowIndex : indexList[columnIndex]) {
+            if (confirmRowIndex != rowIndex) {
+                notSupport = true;
+                break;
+            }
+            confirmRowIndex++;
+        }
+        if (confirmColumnCount != columnIndex) {
+            notSupport = true;
+            break;
+        }
+        confirmColumnCount++;
+    }
+    if (notSupport) {
+        updateClearClipboard(cellSelectedInfo, false);
         createSignal(ivis::common::EventTypeEnum::EventTypeWarningCopyCut);
         return (-1);
     }
+
+    // Draw : Normal/Select Cell Background Info
+    updateClearClipboard(cellSelectedInfo, cutState);
 
     // Construct : Clipboard Data
     QString clipboardData;
@@ -783,33 +832,7 @@ int GuiExcel::updateShortcutCopy(const int& sheetIndex, const bool& cutState) {
     // Construct : Clear Meger Info
     auto clearMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, true}));
     cellSelectedInfo.writeClearMergeInfo(clearMergeInfo);
-
-#if 0   // 여러개(Row 기준) 이어지지 않은 셀을 선택할 경우 예외 처리 위한 코드 : 현재 미사용
-    // Construct : Span Meger Info
-    auto tempMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, false}));
-    QMap<int, QList<QPair<int, int>>> spanMergeInfo;
-    for (const auto& key : tempMergeInfo.keys()) {
-        QList<QPair<int, int>> tempInfo;
-        int spanRowStart = 0;
-        for (const auto& infoData : tempMergeInfo[key]) {
-            int spanRowCount = infoData.second - infoData.first;
-            int spanRowEnd = spanRowStart + spanRowCount;
-
-            QPair<int, int> infoTemp = qMakePair(spanRowStart, spanRowEnd);
-            spanMergeInfo[key].append(infoTemp);
-            spanRowStart = spanRowEnd + 1;
-
-            qDebug() << "\t SpanUpdate[" << key << "]  :" << infoData << "->" << infoTemp;
-        }
-    }
-    qDebug() << "-----------------------------------------------------------------------------------------";
-    for (const auto& key : clearMergeInfo.keys()) {
-        qDebug() << "\t SpanMergeInfo[" << key << "]  :" << clearMergeInfo[key];
-    }
-    qDebug() << "-----------------------------------------------------------------------------------------";
-#else
     auto spanMergeInfo = isDisplayMergeInfo(sheetIndex, QVariantList({rowStart, columnStart, rowCount, columnCount, false}));
-#endif
     cellSelectedInfo.writeSpanMergeInfo(spanMergeInfo);
 
     // Update : Copy Info
@@ -1374,7 +1397,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
         }
     }
 
-    if (columnIndex > (-1)) {
+    if (columnIndex >= 0) {
         QString signal = (mExcelSheet[sheetIndex]->item(row, columnIndex) == nullptr)
                              ? (QString())
                              : (mExcelSheet[sheetIndex]->item(row, columnIndex)->text());

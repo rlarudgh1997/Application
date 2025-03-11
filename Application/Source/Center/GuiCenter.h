@@ -44,8 +44,8 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
-    void updateDialogAutoComplete(const bool& show);
-    void updateDialogSelectModule(const bool& show);
+    void updateDialogAutoComplete();
+    void updateDialogSelectModule();
 
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress(const int& updateType);

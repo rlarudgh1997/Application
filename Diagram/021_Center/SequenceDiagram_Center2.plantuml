@@ -92,7 +92,7 @@ activate CenterGui
 
 
 
-    CenterControl -> CenterControl : updateSelectModueList()
+    CenterControl -> CenterControl : updateSelectModuleList()
     ' deactivate CenterControl
 ' deactivate CenterControl
 

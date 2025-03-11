@@ -28,12 +28,12 @@ ExcelUtil::ExcelUtil() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-QMap<QString, QString> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
+QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
     bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
     QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
-    QMap<QString, QString> moduleInfo;
+    QMap<QString, QPair<QString, QString>> moduleInfo;
 
     // Json Parsing
     QJsonParseError error;
@@ -49,6 +49,7 @@ QMap<QString, QString> ExcelUtil::isModuleListFromJson(const int& appMode, const
 
     // Read : Json Data
     QJsonObject jsonObj = jsonDoc.object();
+    QMap<QString, QString> modulePahtList;
     if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
         QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
         if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
@@ -56,40 +57,58 @@ QMap<QString, QString> ExcelUtil::isModuleListFromJson(const int& appMode, const
                 if (module.isString()) {
                     QString moduleName = (toUpper) ? (module.toString().toUpper()) : (module.toString());
                     QString modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
-                    moduleInfo[moduleName] = modulePath;
+                    modulePahtList[moduleName] = modulePath;
                 }
             }
         }
     }
 
+    // CV : Common Module
     if (appModeCV) {
         QDir commonModuleDir(QString("%1/SFC/CV/Common_Module").arg(sfcModelPath));
         for (const auto& commonModule : commonModuleDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
             QString moduleName = (toUpper) ? (commonModule.toUpper()) : (commonModule);
             QString modulePath = QString("%1/%2").arg(commonModuleDir.absolutePath()).arg(commonModule);
-            moduleInfo[moduleName] = modulePath;
+            modulePahtList[moduleName] = modulePath;
         }
+    }
 
-        QMap<QString, QString> tempModuleInfo = moduleInfo;
-        moduleInfo.clear();
-
-        for (const auto& moduleName : tempModuleInfo.keys()) {
-            QString modulePath = tempModuleInfo[moduleName];
+    // Consturct : Module Info
+    for (const auto& moduleName : modulePahtList.keys()) {
+        QString modulePath = modulePahtList[moduleName];
+        if (appModeCV) {
             QDir directory(modulePath);
-            QRegularExpression excelRegex("(?i)\\.(xlsx|xls)$");  // 정규식 : 대/소문자 무시
+            QString excelFileInfo;
+            QString tcFileInfo;
 
             for (const auto& file : directory.entryInfoList(QDir::Files)) {
-                if (file.fileName().contains(excelRegex)) {
-                    QString filePath = QString("%1/%2").arg(modulePath).arg(file.fileName());
-                    moduleInfo[moduleName] = filePath;
+                QString fileName = file.fileName();
+                if (fileName.contains(QRegularExpression("(?i)\\.(xlsx|xls)$"))) {
+                    excelFileInfo = file.absoluteFilePath();
+                } else if (fileName.contains(QRegularExpression("(?i)\\.(tc)$"))) {
+                    tcFileInfo = file.absoluteFilePath();
+                } else {
+                    continue;
+                }
+
+                if ((excelFileInfo.size() > 0) && (tcFileInfo.size() > 0)) {
                     break;
                 }
             }
+
+            if ((excelFileInfo.size() > 0) || (tcFileInfo.size() > 0)) {
+                moduleInfo[moduleName] = qMakePair(excelFileInfo, tcFileInfo);
+            }
+        } else {
+            moduleInfo[moduleName] = qMakePair(modulePath, QString());
         }
     }
-    // qDebug() << "ModuleInfo :" << moduleInfo.size() << jsonFile;
+
+    qDebug() << "ModuleInfo :" << moduleInfo.size() << jsonFile;
     // for (const auto& moduleName : moduleInfo.keys()) {
-    //     qDebug() << "Module :" << moduleInfo[moduleName];
+    //     qDebug() << "Module :" << moduleName;
+    //     qDebug() << "\t Excel :" << moduleInfo[moduleName].first;
+    //     qDebug() << "\t TC    :" << moduleInfo[moduleName].second;
     // }
 
     return moduleInfo;

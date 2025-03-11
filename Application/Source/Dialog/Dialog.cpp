@@ -1,7 +1,9 @@
 #include "Dialog.h"
 #include "ui_Dialog.h"
 
+#if !defined(USE_UPDATE_THREAD)
 #include <QScrollBar>
+#endif
 
 Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new Ui::Dialog) {
     mGui->setupUi(this);
@@ -13,9 +15,34 @@ Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new U
     this->hide();
 
     setProperty(DataTypeScreenRect, rect);
+
+#if defined(USE_UPDATE_THREAD)
+    mThread = QSharedPointer<QThread>::create();
+    mUpdateThread = QSharedPointer<DialogUpdateThread>::create(mGui->ViewLogContent);
+    mUpdateThread->moveToThread(mThread.data());
+    connect(mThread.data(), &QThread::finished, mUpdateThread.data(), &QObject::deleteLater);
+    connect(this, &Dialog::signalUpdateThread, mUpdateThread.data(), &DialogUpdateThread::slotUpdateThread);
+    mThread->start();
+#endif
 }
 
 Dialog::~Dialog() {
+#if defined(USE_UPDATE_THREAD)
+    if (mUpdateThread) {
+        // QMetaObject::invokeMethod(mUpdateThread.data(), "deleteLater", Qt::QueuedConnection);
+        mUpdateThread.clear();
+    }
+
+    if (mThread) {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
+        }
+        disconnect(mThread.data(), nullptr, nullptr, nullptr);
+        mThread.clear();
+    }
+#endif
+
     controlConnet(DisplayTypeMax);
     delete mGui;
     qDebug() << "[Dialog] destructor";
@@ -42,6 +69,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
         case DialogTypeSelectMoudleInfo:
+        case DialogTypeSelectTCFile:
         case DialogTypeSelectLogFile:
         case DialogTypeSelectValueEnumOutput:
         case DialogTypeSelectValueEnumInput:
@@ -142,6 +170,7 @@ void Dialog::controlConnet(const int& displayType) {
             break;
         }
         default: {
+            disconnect(this, nullptr, nullptr, nullptr);
             connectAppMode(false);
             connectAppModeRadio(false);
             connectSelectList(false);
@@ -243,6 +272,14 @@ void Dialog::connectSelectList(const bool& state) {
             // emit signalScrollBarValueChanged(mGui->SelectListItemList->verticalScrollBar()->value());
             emit signalScrollBarValueChanged(value);
         });
+        connect(mGui->SelectListItemList, &QAbstractItemView::clicked, [=](const QModelIndex &index) {
+            int rowIndex = index.row();
+            bool checkState = (mModel.item(rowIndex, 0)->checkState() == Qt::Checked);
+            mModel.item(rowIndex, 0)->setCheckState((checkState) ? (Qt::Unchecked) : (Qt::Checked));
+        });
+        connect(mGui->SelectListItemList, &QAbstractItemView::doubleClicked, [=](const QModelIndex &index) {
+            emit mGui->SelectListOK->clicked();
+        });
         connect(&mModel, &QStandardItemModel::dataChanged,
                 [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
                     if (getProperty(DataTypeMultiCheck).toBool() == false) {
@@ -259,6 +296,7 @@ void Dialog::connectSelectList(const bool& state) {
         disconnect(mGui->SelectListAll, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListOK, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListItemList->verticalScrollBar(), nullptr, nullptr, nullptr);
+        disconnect(mGui->SelectListItemList, nullptr, nullptr, nullptr);
         disconnect(&mModel, nullptr, nullptr, nullptr);
     }
 }
@@ -471,6 +509,11 @@ QRect Dialog::updateMainRect() {
         }
         case DialogTypeSelectMoudleInfo: {
             mGui->SelectListWidget->setGeometry(QRect(0, 0, 600, 800));
+            rect = mGui->SelectListWidget->geometry();
+            break;
+        }
+        case DialogTypeSelectTCFile: {
+            mGui->SelectListWidget->setGeometry(QRect(0, 0, 500, 800));
             rect = mGui->SelectListWidget->geometry();
             break;
         }
@@ -786,8 +829,8 @@ bool Dialog::updateSelectList(const QVariantList& info) {
     bool headerFixed = true;
     int rowIndex = 0;
     int columnIndex = 0;
-    bool multiCheck = ((dialogType != DialogTypeSelectLogFile) && (dialogType != DialogTypeSelectValueEnumOutput) &&
-                       (dialogType != DialogTypeSelectValueResult));
+    bool multiCheck = ((dialogType != DialogTypeSelectTCFile) && (dialogType != DialogTypeSelectLogFile) &&
+                       (dialogType != DialogTypeSelectValueEnumOutput) && (dialogType != DialogTypeSelectValueResult));
 
     setProperty(DataTypeMultiCheck, multiCheck);
 
@@ -968,8 +1011,13 @@ bool Dialog::updateViewLog(const QVariantList& info) {
     }
 
     refreshViewLog(RefreshTypeFindHide);
+
+#if defined(USE_UPDATE_THREAD)
+    emit signalUpdateThread(detailLog);
+#else
     mGui->ViewLogContent->insertPlainText(content);
     mGui->ViewLogContent->verticalScrollBar()->setValue(mGui->ViewLogContent->verticalScrollBar()->maximum());
+#endif
 
     return true;
 }

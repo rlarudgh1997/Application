@@ -20,9 +20,11 @@ private:
 
     void updateSelectAppMode();
     void updateAllModuleList(const QString& filter);
-    void updateSelectModueList(const int& eventType, const QVariantList& selectModule = QVariantList());
+    void updateSelectModuleList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);
     bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());
+    void updateViewTCFile();
+    void updateViewTCDisplay(const QString& moduleName);
     void updateViewLogFile();
     void updateViewLogDisplay(const QString& titleName);
     void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount);

@@ -79,7 +79,7 @@ private:
     const int mNumManualInput = 900;
 
 #if defined (USE_TEST_CASE_THREAD)
-    QScopedPointer<QThread> mThread;
+    QSharedPointer<QThread> mThread;
     QWaitCondition mWaitCondition;
     QMutex mMutex;
 #endif

@@ -442,11 +442,11 @@ public:
         mElapsedTimer.restart();
         // qDebug() << "ReStartTime :" << mElapsedTimer.elapsed() << "ms";
     }
-    void check(const QString& info = QString()) {
-        if (info.size()) {
-            qDebug() << "[CheckTime]" << info.toLatin1().data() << ":" << mElapsedTimer.elapsed() << "ms\n";
-        } else {
-            qDebug() << "[CheckTime] :" << mElapsedTimer.elapsed() << "ms\n";
+    void check(const QString& log, const bool& resetState = true) {
+        qDebug() << "[CheckTime]" << ((log.isEmpty()) ? ("") : (log.toLatin1().data())) << ":" << mElapsedTimer.elapsed()
+                 << "ms\n";
+        if (resetState) {
+            reset();
         }
     }
     qint64 getTime() {
@@ -459,6 +459,14 @@ private:
 
 class FileInfo {
 public:
+    enum class ReadType {
+        Normal = 0,
+        All,
+        Stream,
+        Split,
+    };
+
+public:
     static QStringList isFileListInfo(const QString& path, const QString& fileExtesion, QFileInfoList& fileList) {
         QString currentPath = path;
         if (currentPath.size() == 0) {
@@ -467,9 +475,31 @@ public:
         }
         return readFileListInfo(currentPath, fileExtesion, fileList);
     }
-    static QStringList readFile(const QString& filePath) {
+    static QStringList readFile(const QString& filePath, const ReadType& readType = ReadType::Normal) {
         bool openError = false;
-        return readFileDataInfo(filePath, openError);
+        QStringList data;
+        switch (readType) {
+            case ReadType::Normal: {
+                data = readFileDataInfo(filePath, openError);
+                break;
+            }
+            case ReadType::All: {
+                data = readFileAllInfo(filePath);
+                break;
+            }
+            case ReadType::Stream: {
+                data = readFileStreamInfo(filePath);
+                break;
+            }
+            case ReadType::Split: {
+                // data = readFileDataInfo(filePath, openError);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        return data;
     }
     static QPair<bool, QStringList> readFileData(const QString& filePath) {
         bool openError = false;
@@ -541,6 +571,33 @@ private:
         QByteArray readData = file.readAll();
         file.close();
         return readData;
+    }
+    static QStringList readFileAllInfo(const QString& filePath) {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text) == false) {
+            qDebug() << "Fail to open file: " << filePath;
+            return QStringList();
+        }
+        QByteArray fileData = file.readAll();
+        QStringList fileContent = QString(fileData).split('\n', Qt::SkipEmptyParts);
+        file.close();
+        return fileContent;
+    }
+    static QStringList readFileStreamInfo(const QString& filePath) {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text) == false) {
+            qDebug() << "Fail to open file: " << filePath;
+            return QStringList();
+        }
+
+        QStringList fileContent;
+        QTextStream readData(&file);
+        // readData.setCodec("UTF-8");
+        while (readData.atEnd() == false) {
+            fileContent.append(readData.readLine());
+        }
+        file.close();
+        return fileContent;
     }
     static int writeFileData(const QString& filePath, const QString& str, const bool& append) {
         // qDebug() << "writeFileData :" << filePath;

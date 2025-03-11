@@ -22,7 +22,7 @@ private:
     QStringList isNodeAddressAll(const QString& vsmPath, const QVariantList& vsmFile);
     QStringList isNodeAddressMatchingModule(const QStringList& vsmList);
     void updateNodeAddress(const bool& check);
-    void updateSelectModueList(const bool& show);
+    void updateSelectModuleList(const bool& show);
     void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
 
 protected:

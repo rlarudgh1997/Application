@@ -124,6 +124,8 @@
     </property>
     <addaction name="actionConfig"/>
     <addaction name="actionNodeView"/>
+    <addaction name="actionTCView"/>
+    <addaction name="actionLogView"/>
    </widget>
    <widget class="QMenu" name="menuSetting">
     <property name="title">
@@ -143,9 +145,7 @@
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
     <addaction name="actionEnterScriptText"/>
-    <addaction name="actionGenSSFS"/>
     <addaction name="separator"/>
-    <addaction name="actionViewScriptLog"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -359,14 +359,6 @@
     <string>Alt+E</string>
    </property>
   </action>
-  <action name="actionViewScriptLog">
-   <property name="text">
-    <string>View Script Log</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+L</string>
-   </property>
-  </action>
   <action name="actionGenSSFS">
    <property name="text">
     <string>Gen SSFS</string>
@@ -499,6 +491,22 @@
   <action name="actionPositive">
    <property name="text">
     <string>All Positive</string>
+   </property>
+  </action>
+  <action name="actionTCView">
+   <property name="text">
+    <string>TC View</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+F</string>
+   </property>
+  </action>
+  <action name="actionLogView">
+   <property name="text">
+    <string>Log View</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+L</string>
    </property>
   </action>
  </widget>

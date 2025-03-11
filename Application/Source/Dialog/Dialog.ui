@@ -959,7 +959,7 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="ViewLogContent">
+       <widget class="QPlainTextEdit" name="ViewLogContent">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -971,9 +971,6 @@ p, li { white-space: pre-wrap; }
           <width>16777215</width>
           <height>520</height>
          </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
         </property>
        </widget>
       </item>

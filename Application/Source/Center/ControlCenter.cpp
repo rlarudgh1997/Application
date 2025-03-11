@@ -6,6 +6,7 @@
 #include "ConfigSetting.h"
 #include "CommonResource.h"
 #include "CommonPopup.h"
+#include "ExcelUtil.h"
 
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
@@ -133,8 +134,12 @@ void ControlCenter::updateConfigInfo() {
 }
 
 void ControlCenter::updateAllModuleList() {
-    QStringList allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(allModule));
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QStringList moduleList = moduleInfo.keys();
+
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, moduleList);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(moduleList));
 }
 
 bool ControlCenter::checkNodeAddress(const QString& vsmPath, const QVariantList& vsmFile) {
@@ -301,15 +306,17 @@ void ControlCenter::updateNodeAddress(const bool& check) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
 
-    updateSelectModueList(false);
+    updateSelectModuleList(false);
 }
 
-void ControlCenter::updateSelectModueList(const bool& show) {
+void ControlCenter::updateSelectModuleList(const bool& show) {
     QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSelectModule).toStringList();
 
     // qDebug() << "\t moduleList :" << moduleList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(moduleList));
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, show, true);
+    if (show) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, true, true);
+    }
 }
 
 void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule) {
@@ -317,10 +324,11 @@ void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVari
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, selectModule);
     }
 
+    qDebug() << "updateSelectModueNodeAddress :" << update << selectModule;
     if (update) {
         updateNodeAddress(false);
     } else {
-        updateSelectModueList(false);
+        updateSelectModuleList(false);
     }
 }
 
@@ -385,7 +393,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeShowModule: {
-            updateSelectModueList(true);
+            updateSelectModuleList(true);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModule: {

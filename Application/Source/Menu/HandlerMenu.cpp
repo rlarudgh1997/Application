@@ -40,9 +40,10 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, QVariant(0));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileInfo, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariant(""));
 }
 
 void HandlerMenu::controlConnect(const bool& state) {

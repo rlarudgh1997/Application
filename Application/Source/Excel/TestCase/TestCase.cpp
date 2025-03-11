@@ -24,17 +24,25 @@ TestCase::TestCase() {
     }
 
 #if defined (USE_TEST_CASE_THREAD)
-    mThread.reset(new QThread());
-    moveToThread(mThread.get());
-    connect(mThread.get(), &QThread::finished, this, &QObject::deleteLater);
-    connect(mThread.get(), &QThread::started, this, &TestCase::runThread);
-    // controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Start));
+    mThread = QSharedPointer<QThread>::create();
+    moveToThread(mThread.data());
+    connect(mThread.data(), &QThread::finished, this, &QObject::deleteLater);
+    connect(mThread.data(), &QThread::started, this, &TestCase::runThread);
+    // controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Start));
 #endif
 }
 
 TestCase::~TestCase() {
 #if defined (USE_TEST_CASE_THREAD)
-    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate));
+    if (mThread) {
+        if (mThread->isRunning()) {
+            mThread->quit();
+            mThread->wait();
+        }
+        controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate));
+        mThread.clear();
+    }
+
     qDebug() << "TestCase::terminateThread";
 #endif
 }
@@ -47,7 +55,7 @@ bool TestCase::start(const QStringList& arguments) {
     }
 
 #if defined (USE_TEST_CASE_THREAD)
-    controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
+    controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
 #else
     int excuteType = ExcuteTypeStart;
 
@@ -75,7 +83,7 @@ void TestCase::runThread() {
     while (true) {
         if (excuteType == ExcuteTypeInvalid) {
             qDebug() << "TestCase thread is waiting :" << excuteType;
-            controlThread(mThread.get(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait));
+            controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait));
             excuteType = ExcuteTypeStart;
         }
 
@@ -462,13 +470,15 @@ void TestCase::terminateApplicaton() {
 }
 
 QStringList TestCase::isModuleList() {
-    QMap<QString, QString> moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(getSelectAppMode(), false);
-    QStringList moduleList = moduleInfo.keys();
-    writeModuleList(moduleInfo);
+    auto moduleInfoList = ExcelUtil::instance().data()->isModuleListFromJson(getSelectAppMode(), false);
+    QStringList moduleList = moduleInfoList.keys();
+    QMap<QString, QString> moduleInfo;
 
-    // for (const auto& key : moduleInfo.keys()) {
-    //     qDebug() << "ModuleList :" << getModuleList(key);
-    // }
+    for (const auto& key : moduleInfoList.keys()) {
+        // qDebug() << "ModuleList :" << getModuleList(key);
+        moduleInfo[key] = moduleInfoList[key].first;    // Excel File
+    }
+    writeModuleList(moduleInfo);
 
     return moduleList;
 }

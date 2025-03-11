@@ -55,9 +55,9 @@ private:
     void updateDialogTestResultInfo();
     void updateDialogEnterScriptText();
     void updateDialogTestReport();
-    void updateDialogViewLogFileList();
+    void updateDialogViewFileList(const int& type);
     void updateDialogViewLogInfo(const bool& show);
-    void updateDialogViewLogFileInfo();
+    void updateDialogViewFileInfo();
 
     void updateMenuFile();
     void updateMenuEdit();

@@ -73,7 +73,7 @@ class ExcelUtil : public QObject {
 public:
     static QSharedPointer<ExcelUtil>& instance();
 
-    QMap<QString, QString> isModuleListFromJson(const int& appMode, const bool& toUpper);
+    QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& toUpper);
     QStringList isDescriptionDataInfo();
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);

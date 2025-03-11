@@ -9,6 +9,53 @@
 
 #include "CommonUtil.h"
 
+#define USE_UPDATE_THREAD
+#if defined(USE_UPDATE_THREAD)
+#include <QWidget>
+#include <QThread>
+// #include <QWaitCondition>
+#include <QPlainTextEdit>
+#include <QTextCursor>
+#include <QScrollBar>
+
+class DialogUpdateThread : public QObject {
+    Q_OBJECT
+
+public:
+    DialogUpdateThread(QPlainTextEdit* widget) : mWidget(widget) {
+    }
+
+public slots:
+    void slotUpdateThread(const QStringList& detailLog) {
+        ivis::common::CheckTimer checkTimer;
+        // ivis::common::CheckTimer checkTimer2;
+        if ((mWidget) && (mWidget->isVisible())) {
+            int count = 0;
+            for (int index = 0; index < detailLog.size(); index += mDataSize) {
+                QString data = detailLog.mid(index, mDataSize).join("\n") + "\n";
+                QMetaObject::invokeMethod(
+                    mWidget,
+                    [this, data]() {
+                        QTextCursor cursor = mWidget->textCursor();
+                        cursor.movePosition(QTextCursor::End);
+                        cursor.insertText(data);
+                        mWidget->verticalScrollBar()->setValue(mWidget->verticalScrollBar()->maximum());
+                    },
+                    Qt::QueuedConnection);
+                // checkTimer2.check(QString("update[%1] : %2 -> %3").arg(count++).arg(index).arg(index + mDataSize));
+                QThread::msleep(50);
+            }
+            mWidget->verticalScrollBar()->setValue(mWidget->verticalScrollBar()->maximum());
+        }
+        checkTimer.check(QString("slotUpdateThread : %1").arg(detailLog.size()));
+    }
+
+private:
+    const int mDataSize = 40000;
+    QPlainTextEdit* mWidget = nullptr;
+};
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Dialog;
@@ -19,6 +66,7 @@ class Dialog : public QDialog {
     Q_OBJECT
 
     REGISTER_WRITABLE_CONTAINER(QHash, int, QVariant, Property)
+    REGISTER_WRITABLE_VALUE(QStringList, LogData, QStringList())
 
 public:
     enum {
@@ -49,6 +97,7 @@ public:
         DialogTypeAppModeCheck,
         DialogTypeAppModeRadio,
         DialogTypeSelectMoudleInfo,
+        DialogTypeSelectTCFile,
         DialogTypeSelectLogFile,
         DialogTypeSelectValueEnumInput,
         DialogTypeSelectValueEnumOutput,
@@ -146,10 +195,17 @@ signals:
     void signalViewLogClicked(const bool& close);
     void signalAutoCompleteSelected(const QString& text);
 
+    void signalUpdateThread(const QStringList& detailLog);
+
 private:
     Ui::Dialog* mGui;
     QStandardItemModel mModel = QStandardItemModel();
     QListWidget* mAutoCompleteListWidget = nullptr;
+
+#if defined(USE_UPDATE_THREAD)
+    QSharedPointer<QThread> mThread;
+    QSharedPointer<DialogUpdateThread> mUpdateThread;
+#endif
 };
 
 #endif  // DIALOG_H

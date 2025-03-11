@@ -700,7 +700,6 @@ void ControlExcel::loadExcelFile(const int& eventType) {
         }
         case ivis::common::EventTypeEnum::EventTypeLastFolder: {
             QVariant filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
-            // QVariant filePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile);
             QFileInfo fileInfo(filePath.toString());
             QString directory = fileInfo.absolutePath();
             QString fileName = fileInfo.fileName();
@@ -709,32 +708,34 @@ void ControlExcel::loadExcelFile(const int& eventType) {
             }
 
             filePath.clear();
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                               QVariantList({STRING_FILE_OPEN, directory})) == ivis::common::PopupButton::OK) {
+            ivis::common::PopupButton button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(),
+                                               filePath, QVariantList({STRING_FILE_OPEN, directory}));
+            if (button == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             }
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath.toString());
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeLastFile: {
             QVariant filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
-            // QVariant filePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile);
+            ivis::common::PopupButton button = ivis::common::PopupButton::OK;
             if (filePath.toString().size() == 0) {
                 QVariant defaultFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeDefaultFilePath);
                 filePath.clear();
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
-                                                   QVariantList({STRING_FILE_OPEN, defaultFilePath})) ==
-                    ivis::common::PopupButton::OK) {
-                    openExcelFile(filePath);
-                }
+                button = ivis::common::Popup::drawPopup(ivis::common::PopupType::Open, isHandler(), filePath,
+                         QVariantList({STRING_FILE_OPEN, defaultFilePath}));
             } else {
-                openExcelFile(filePath);
+                // openExcelFile(filePath);
             }
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
-            ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+
+            if (button == ivis::common::PopupButton::OK) {
+                openExcelFile(filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+            }
             break;
         }
         default: {

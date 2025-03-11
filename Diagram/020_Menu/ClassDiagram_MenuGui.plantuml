@@ -40,7 +40,7 @@ class GuiMenu {
     -void updateDialogTestResultInfo()
     -void updateDialogEnterScriptText()
     -void updateDialogTestReport()
-    -void updateDialogViewLogFileList()
+    -void updateDialogViewFileList(const bool& tcFile)
     -void updateDialogViewLogInfo(const bool& show)
     -void updateDisplayViewLogFileInfo()
     -void updateDialogAppMode()

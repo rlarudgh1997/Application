@@ -154,9 +154,6 @@ void ControlMenu::sendEventInfo(const int& destination, const int& eventType, co
 void ControlMenu::updateSelectAppMode() {
     QVariant appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode);
     QVariantList appModeList = QVariantList({"Vehicle CV", "Vehicle PV"});
-#if defined(USE_APP_MODE_TAV)
-    appModeList.append("TAV");
-#endif
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppModeList, QVariant(appModeList));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, QVariant(appMode), true);
@@ -165,65 +162,15 @@ void ControlMenu::updateSelectAppMode() {
 void ControlMenu::updateAllModuleList(const QString& filter) {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
-    QStringList moduleList;
-
-#if defined(USE_DEFAULT_MODULE_INFO_FILE)
-    QStringList findPath = QStringList();
-    QString path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    if (appModePV) {
-        QVariant sfcSpecList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV);
-        path.append("/model/SFC");
-        for (const auto& spec : sfcSpecList.toStringList()) {
-            findPath.append(QString("%1/%2").arg(path).arg(spec));
-        }
-    } else {
-        path.append("/model/SFC/CV");
-        findPath.append(path);
-    }
-
-    // Find SFC Path List
-    for (const auto& sfcPath : findPath) {
-        QDir directory(sfcPath);
-        QStringList sfcDirectory = directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        // qDebug() << "Path :" << sfcPath << ", Filter :" << filter;
-        for (const auto& sfc : sfcDirectory) {
-            if (filter.size() == 0) {
-                // qDebug() << "\t Module :" << sfc;
-                moduleList.append(sfc);
-                continue;
-            }
-            QDir subDirectory(QString("%1/%2").arg(sfcPath).arg(sfc));
-            for (const auto& file : subDirectory.entryList(QDir::Files)) {
-                if (file.contains(filter)) {
-                    // qDebug() << "\t Module[" << filter << "] :" << sfc << file;
-                    moduleList.append(sfc);
-                    break;
-                }
-            }
-        }
-    }
-
-    // Not Found : Default Module List
-    if ((filter.size() == 0) && (moduleList.size() == 0)) {
-        path = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
-        if (appModePV) {
-            path.append("/PV");
-        } else {
-            path.append("/CV");
-        }
-        moduleList = ivis::common::FileInfo::readFile(QString("%1/DefaultModule.info").arg(path));
-    }
-#else
-    QMap<QString, QString> moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-    moduleList = moduleInfo.keys();
-#endif
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QStringList moduleList = moduleInfo.keys();
 
     qDebug() << ((appModePV) ? ("[PV]") : ("[CV]")) << "SFC Module :" << moduleList.size() << ", Filter :" << filter;
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, moduleList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(moduleList));
 }
 
-void ControlMenu::updateSelectModueList(const int& eventType, const QVariantList& selectModule) {
+void ControlMenu::updateSelectModuleList(const int& eventType, const QVariantList& selectModule) {
     QString filter = QString();
     int runType = 0;
 
@@ -381,6 +328,38 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
     return complete;
 }
 
+void ControlMenu::updateViewTCFile() {
+    QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
+    // QStringList moduleList = getData(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList, moduleList, true);
+}
+
+void ControlMenu::updateViewTCDisplay(const QString& moduleName) {
+    ivis::common::CheckTimer checkTimer;
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+
+    QString tcFile = moduleInfo[moduleName].second;
+
+
+    // QStringList readDataStream = ivis::common::FileInfo::readFile(tcFile, ivis::common::FileInfo::ReadType::Stream);
+    // checkTimer.check("ReadType::Stream");
+
+    // QStringList readDataAll = ivis::common::FileInfo::readFile(tcFile, ivis::common::FileInfo::ReadType::All);
+    // checkTimer.check("ReadType::All");
+
+    QStringList readData = ivis::common::FileInfo::readFile(tcFile, ivis::common::FileInfo::ReadType::Normal);
+    checkTimer.check("ReadType::Normal");
+
+
+
+    qDebug() << "updateViewTCDisplay :" << moduleName << tcFile;
+    qDebug() << "\t readData :" << readData.size();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariantList({tcFile, readData}), true);
+
+    checkTimer.check("updateViewTCDisplay");
+}
+
 void ControlMenu::updateViewLogFile() {
     QFileInfoList fileList = QFileInfoList();
     QStringList fileInfo = ivis::common::FileInfo::isFileListInfo(ivis::common::APP_PWD(), QString(".log"), fileList);
@@ -430,7 +409,7 @@ void ControlMenu::updateViewLogDisplay(const QString& titleName) {
         QStringList detailLog = ivis::common::FileInfo::readFile(readFilePath);
         QVariantList logInfo = QVariantList({titleName, detailLog});
         // qDebug() << "\t View Log Info :" << fileName << titleName << detailLog.size();
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileInfo, QVariant(logInfo), true);
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariant(logInfo), true);
     }
 }
 
@@ -932,7 +911,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeGenTC:
         case ivis::common::EventTypeEnum::EventTypeRunTC: {
-            updateSelectModueList(type, QVariantList());
+            updateSelectModuleList(type, QVariantList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
@@ -975,6 +954,14 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, runScriptState);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeViewTCFile: {
+            updateViewTCFile();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeViewTCDisplay: {
+            updateViewTCDisplay(value.toString());
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeViewLogFile: {
             updateViewLogFile();
             break;
@@ -993,7 +980,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
                 int runType = value.toList().at(0).toInt();
                 bool state = value.toList().at(1).toBool();
                 QVariantList selectInfoList = QVariantList({value.toList().at(2), value.toList().at(3)});
-                updateSelectModueList(0, selectInfoList);
+                updateSelectModuleList(0, selectInfoList);
                 bool runScriptState = excuteScript(runType, state, selectInfoList);
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, runScriptState);
             }
