@@ -7,8 +7,6 @@
 #include "CommonDefine.h"
 #include "CommonUtil.h"
 
-// #define USE_EXCEL_DATA_MANAGER_OLD
-
 using QPairStrList = QPair<QStringList, QStringList>;
 using QMapIntStrList = QMap<int, QStringList>;
 
@@ -71,16 +69,8 @@ class ExcelDataManager : public QObject {
     REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
     REGISTER_WRITABLE_VALUE(bool, ReadStateNewData, true)
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    REGISTER_WRITABLE_LIST(QList, InsertData, NewSheetData)
-    REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataOther)
-    REGISTER_WRITABLE_CONTAINER(QMap, int, QStringList, ExcelDataConfig)
-#else
     REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetData)
-    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetDataOrigin)
-    REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetDataConvert)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QList<InsertData>, InsertSheetData)
-#endif
 
 public:
     static QSharedPointer<ExcelDataManager>& instance();
@@ -101,11 +91,7 @@ public:
     QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
 
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    void updateExcelData(const int& sheetIndex, const QVariantList& sheetData);
-#else
-    void resetExcelData(const bool& convertState);
-#endif
+    void resetExcelData(const bool& convertState, const int& reloadIndex = 0);
     void updateInputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName,
                              const QPair<QStringList, QStringList>& inputList, const QString& baseCaseName = QString(),
                              const bool& insertBefore = false);
@@ -116,17 +102,10 @@ public:
 private:
     explicit ExcelDataManager();
 
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    void updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
-    void updateParsingExcelDataConfig(const int& sheetIndex, const QVariantList& sheetData);
-    QStringList isExcelDataOther(const int& sheetIndex, const int& columnIndex);
-    QStringList isExcelDataConfig(const int& sheetIndex, const int& columnIndex);
-#else
     QMapIntStrList updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
     QStringList isOriginSheetData(const int& sheetIndex, const int& columnIndex);
     QStringList isInsertSheetData(const int& sheetIndex, const int& columnIndex);
     QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex, const bool& origin, const bool& log = false);
-#endif
     QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex);
     QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr);
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);

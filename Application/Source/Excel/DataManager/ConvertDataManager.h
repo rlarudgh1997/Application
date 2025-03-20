@@ -12,8 +12,41 @@ class KeywordInfo;
 
 struct ConvertKeywordInfo {
     ivis::common::KeywordTypeEnum::KeywordType keywordType = ivis::common::KeywordTypeEnum::KeywordType::Invalid;
-    QString inputSignal = QString();
-    QString inputValue = QString();
+    QString inputSignal;
+    QString inputValue;
+    QString validInputData;
+};
+
+struct CaseDataInfo {
+    QString caseName;
+    QList<ConvertKeywordInfo> convertInputDataInfo;
+
+    bool operator==(const CaseDataInfo& other) const {
+        if (caseName != other.caseName || convertInputDataInfo.size() != other.convertInputDataInfo.size()) {
+            return false;
+        }
+        for (int i = 0; i < convertInputDataInfo.size(); ++i) {
+            const auto& a = convertInputDataInfo[i];
+            const auto& b = other.convertInputDataInfo[i];
+            if (a.keywordType != b.keywordType || a.inputSignal != b.inputSignal || a.inputValue != b.inputValue ||
+                a.validInputData != b.validInputData) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+struct OutputDataInfo {
+    QString outputSignal;
+    QString initialize;
+    QString outputValue;
+};
+
+struct ResultInfo {
+    QString resultName;
+    QList<CaseDataInfo> caseDataInfoList;
+    QList<OutputDataInfo> outputDataInfoList;
 };
 
 class ConvertDataManager : public QObject {
@@ -33,7 +66,7 @@ private:
     explicit ConvertDataManager();
 
     bool convertKeywordData();
-    bool replaceGenDataInfo();  // To be deleted (replaced to convertKeywordData())
+    bool replaceGenDataInfo();  // will be deleted (replaced with convertKeywordData())
     bool appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
 
@@ -43,6 +76,9 @@ private:
     bool convertNonInputSignalKeyword();
 
 private:
+    QList<OutputDataInfo> convertOutputStructData(const QList<QStringList>& outputList);
+    void updateResultDataInfo(const int& sheetIndex, const QString& tcName, const QList<ResultInfo>& resultDataList);
+    void displayResultDataInfo(const ResultInfo& result);
     ConvertKeywordInfo interpretInputValueKeyword(const QString& signal, const QString& value);
     QString findVehicleSignalElseTimeoutCrcValue(const QString& vehicleSignal, const QString& elseTimeoutCrc);
     QList<QPair<QString, QPair<QStringList, QStringList>>> convertSheetKeyword(
@@ -62,8 +98,16 @@ private:
                                             const bool& convert, const bool& mergeInfoErase, QList<QStringList>& convertData);
     QPair<int, int> isContainsRowInfo(const int& sheetIndex, const QString& input1, const QString& input2, const QString& input3,
                                       const bool& normal = true);
+    QPair<QStringList, QList<CaseDataInfo>> generateCombinations(const QString& templateExpr,
+                                                                 const QMap<QString, QStringList>& valueMap,
+                                                                 const QStringList& keys, const QList<int>& keywords,
+                                                                 const QStringList& inputValues, const QString& caseName,
+                                                                 int index = 0, QMap<QString, QString> current = {});
+    QList<ResultInfo> interpretCalKeywordAndRedefineResultInfo(const ResultInfo& resultInfo);
+    bool decideSameCaseList(const QList<CaseDataInfo>& list1, const QList<CaseDataInfo>& list2);
+    QList<ResultInfo> mergeAndCleanResultList(const QList<ResultInfo>& resultList);
 
-    /***** will be deleted *****/
+    /******************************** will be deleted ********************************/
     void duplicatedConstructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
     QString constructConvertKeywordDataInfoBackup(const int& keywordType, const QString& inputData);
     void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);

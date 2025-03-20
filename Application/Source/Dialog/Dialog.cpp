@@ -5,6 +5,11 @@
 #include <QScrollBar>
 #endif
 
+#if defined(USE_DIALOG_KEY_EVENT)
+#include "ControlManager.h"
+#include "CommonEnum.h"
+#endif
+
 Dialog::Dialog(const QRect& rect, QWidget* parent) : QDialog(parent), mGui(new Ui::Dialog) {
     mGui->setupUi(this);
     // this->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
@@ -47,6 +52,16 @@ Dialog::~Dialog() {
     delete mGui;
     qDebug() << "[Dialog] destructor";
 }
+
+#if defined(USE_DIALOG_KEY_EVENT)
+void Dialog::keyPressEvent(QKeyEvent* keyEvent) {
+    ControlManager::instance().data()->keyEvent(ivis::common::KeyTypeEnum::KeyInputTypePress, keyEvent);
+}
+
+void Dialog::keyReleaseEvent(QKeyEvent* keyEvent) {
+    ControlManager::instance().data()->keyEvent(ivis::common::KeyTypeEnum::KeyInputTypeRelease, keyEvent);
+}
+#endif
 
 void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
     if (getProperty(DataTypeKeepDialog).toBool()) {
@@ -251,7 +266,6 @@ void Dialog::connectSelectList(const bool& state) {
     if (state) {
         connect(mGui->SelectListInput, &QLineEdit::textChanged, [=](const QString& text) {
             setProperty(DataTypeSelectInputData, text);
-            // qDebug() << "SelectListInput :" << text;
         });
         connect(mGui->SelectListAll, &QPushButton::clicked,
                 [=]() { updateSelectListCheckState((getProperty(DataTypeSelectAll).toBool() == false), QStringList()); });
@@ -273,31 +287,44 @@ void Dialog::connectSelectList(const bool& state) {
             emit signalScrollBarValueChanged(value);
         });
         connect(mGui->SelectListItemList, &QAbstractItemView::clicked, [=](const QModelIndex &index) {
-            int rowIndex = index.row();
-            bool checkState = (mModel.item(rowIndex, 0)->checkState() == Qt::Checked);
-            mModel.item(rowIndex, 0)->setCheckState((checkState) ? (Qt::Unchecked) : (Qt::Checked));
+            int currentIndex = index.row();
+            bool currentCheck = (mModel.item(currentIndex, 0)->checkState() == Qt::Checked);
+            // qDebug() << "SelectListItemList :" << previuousIndex << "->" << currentIndex << ", Check :" << currentCheck;
+            if (getProperty(DataTypeMultiCheck).toBool()) {
+                if (currentCheck) {
+                    mModel.item(currentIndex, 0)->setCheckState(Qt::Unchecked);
+                } else {
+                    mModel.item(currentIndex, 0)->setCheckState(Qt::Checked);
+                }
+            } else {
+                int previuousIndex = getProperty(DataTypeSelectListCheckIndex).toInt();
+                mModel.item(previuousIndex, 0)->setCheckState(Qt::Unchecked);
+                if ((currentIndex != previuousIndex) || (currentCheck == false)) {
+                    mModel.item(currentIndex, 0)->setCheckState(Qt::Checked);
+                }
+                setProperty(DataTypeSelectListCheckIndex, currentIndex);
+            }
         });
         connect(mGui->SelectListItemList, &QAbstractItemView::doubleClicked, [=](const QModelIndex &index) {
-            emit mGui->SelectListOK->clicked();
+            if (getProperty(DataTypeMultiCheck).toBool() == false) {
+                emit mGui->SelectListOK->clicked();
+            }
         });
-        connect(&mModel, &QStandardItemModel::dataChanged,
-                [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
-                    if (getProperty(DataTypeMultiCheck).toBool() == false) {
-                        int checkModelIndex = topLeft.row();  // bottomRight.row()
-                        int preCheckModelIndex = getProperty(DataTypeCheckModelIndex).toInt();
-                        if ((preCheckModelIndex != checkModelIndex) && (preCheckModelIndex >= 0)) {
-                            mModel.item(preCheckModelIndex, 0)->setCheckState(Qt::Unchecked);
-                        }
-                        setProperty(DataTypeCheckModelIndex, checkModelIndex);
-                    }
-                });
+        // connect(&mModel, &QStandardItemModel::dataChanged,
+        //     [=](const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles) {
+        //         if (roles.contains(Qt::CheckStateRole)) {
+        //             int currentIndex = topLeft.row();
+        //             qDebug() << "dataChanged :" << currentIndex;
+        //             // updateSelectList() 에서 체크, 편집 불가 : (Qt::ItemIsEditable | Qt::ItemIsUserCheckable)
+        //         }
+        //     });
     } else {
         disconnect(mGui->SelectListInput, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListAll, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListOK, nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListItemList->verticalScrollBar(), nullptr, nullptr, nullptr);
         disconnect(mGui->SelectListItemList, nullptr, nullptr, nullptr);
-        disconnect(&mModel, nullptr, nullptr, nullptr);
+        // disconnect(&mModel, nullptr, nullptr, nullptr);
     }
 }
 
@@ -845,7 +872,8 @@ bool Dialog::updateSelectList(const QVariantList& info) {
         delete mModel.item(rowIndex, columnIndex);
         mModel.setItem(rowIndex, columnIndex, new QStandardItem(rowValue));
         mModel.item(rowIndex, columnIndex)->setCheckable(true);
-        mModel.item(rowIndex, columnIndex)->setFlags(mModel.item(rowIndex, columnIndex)->flags() & ~Qt::ItemFlag::ItemIsEditable);
+        mModel.item(rowIndex, columnIndex)->setFlags(
+            mModel.item(rowIndex, columnIndex)->flags() & ~(Qt::ItemIsEditable | Qt::ItemIsUserCheckable));
         rowIndex++;
     }
     if (headerFixed) {
@@ -1000,7 +1028,7 @@ bool Dialog::updateViewLog(const QVariantList& info) {
     bool viewLogStop = getProperty(DataTypeViewLogStop).toBool();
 
     setProperty(DataTypeKeepDialog, dialogType == DialogTypeViewLogInfo);
-
+    setProperty(DataTypeSelectListCheckIndex, (-1));
     if (viewLogStop) {
         return true;
     }

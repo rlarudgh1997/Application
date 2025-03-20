@@ -11,6 +11,7 @@
 #include "ExcelDataManager.h"
 #include "SignalDataManager.h"
 #include <QRegularExpression>
+#include "JSEngineManager.h"
 
 // #define ENABLE_CONFIG_DEBUG_LOG
 // #define ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG
@@ -47,12 +48,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (convertKeywordData() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
-            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
-                if (dirPath.size() > 0) {
-                    qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
-                }
-            }
+            ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_001");
     }
@@ -60,12 +56,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (appendConvertConfigSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
-            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
-                if (dirPath.size() > 0) {
-                    qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
-                }
-            }
+            ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_Config");
     }
@@ -74,12 +65,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
-            if (ExcelUtil::instance().data()->writeExcelSheet(filePath, true)) {
-                QString dirPath = ExcelUtil::instance().data()->systemCall(false, filePath);
-                if (dirPath.size() > 0) {
-                    qDebug() << "\t [GenTC] Convert Excel Save :" << dirPath;
-                }
-            }
+            ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_002");
     }
@@ -128,20 +114,24 @@ bool ConvertDataManager::replaceGenDataInfo() {
 bool ConvertDataManager::convertKeywordData() {
     bool result = false;
 
-    // InputSignal Keyword
-    // [Sheet], [Preset], [Not_Trigger]
-    if (convertInputSignalKeyword() == true) {
-        result = true;
-    } else {
-        qDebug() << "[convertInputSignalKeyword] Failed";
-    }
-
     // InputData, OutputSignal, OutputValue Keyword
     if (convertNonInputSignalKeyword() == true) {
         result = true;
     } else {
         qDebug() << "[convertNonInputSignalKeyword] Failed";
     }
+
+    // [Preset], [Not_Trigger] process
+
+    // InputSignal Keyword ([Sheet])
+    // TODO(csh): preset, not_trigger, dependent_on 키워드를 별도로 처리하는 경우 하기 함수명을 sheet 처리 함수로 변경 필요
+    if (convertInputSignalKeyword() == true) {
+        result = true;
+    } else {
+        qDebug() << "[convertInputSignalKeyword] Failed";
+    }
+
+    // TODO(csh): 삭제 예정
     // const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     // const int originEnd = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
     // const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
@@ -704,10 +694,8 @@ QString ConvertDataManager::constructConvertKeywordDataInfo(const int& keywordTy
         QStringList inputValueList;
         for (int index = 0; index < splitInputDataList.size(); index++) {
             if (index % 2 == 0) {
-                qDebug() << "@@@@ index : " << index;
                 preconditionValueList.append(splitInputDataList.at(index));
             } else {
-                qDebug() << "@@@@ index : " << index;
                 inputValueList.append(splitInputDataList.at(index));
             }
         }
@@ -1148,14 +1136,6 @@ QList<QList<QStringList>> ConvertDataManager::constructConvertConfigSignalSet(co
      *  )
      ******************************************************************/
 
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs;
-    auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-    ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#else
-    ExcelDataManager::instance().data()->resetExcelData(true);
-#endif
-
     QList<QList<QStringList>> retConfigList;
     QList<QStringList> convertConfigDataList;
     QList<QStringList> tmpConfifDataList = ExcelDataManager::instance().data()->isConfigDataList(configName);
@@ -1229,16 +1209,9 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(true);
-#endif
-
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#endif
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
@@ -1414,15 +1387,9 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(true);
-#endif
 
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#endif
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
@@ -1582,9 +1549,7 @@ bool ConvertDataManager::convertOutputDataKeyword() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(false);
-#endif
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
@@ -1632,31 +1597,18 @@ bool ConvertDataManager::convertOutputDataKeyword() {
 bool ConvertDataManager::convertInputSignalKeyword() {
     bool result = false;
 
-    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(false);
-#endif
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        int convertSheetIndex = sheetIndex -
-                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) +
-                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
-        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
+        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "[convertInputSignalKeyword] Not support sheet :" << sheetIndex;
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-            auto originSheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
-            ExcelData::instance().data()->setSheetData(convertSheetIndex, originSheetData);
-#endif
             continue;
         }
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#endif
 
         // List => TCName, ResultName, CaseName, <InputSignalList, InputDataList>
         QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>> backupCurSheetIndexData;
@@ -1767,12 +1719,12 @@ bool ConvertDataManager::convertInputSignalKeyword() {
                 for (auto& data : currentSheetData) {
                     tmpSheetData.append(data);
                 }
-                ExcelData::instance().data()->setSheetData(convertSheetIndex, tmpSheetData);
+                ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
             } else {
                 // no data changed.
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                 qDebug("[convertInputSignalKeyword] No Data Changed (sheet index : %d) -> No need to create excel file",
-                       convertSheetIndex);
+                       sheetIndex);
 #endif
             }
         }
@@ -1884,9 +1836,11 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
         } else if (part.contains('(')) {
             tempString.remove(QRegularExpression("[()]"));
             if (tempString.contains("timeout", Qt::CaseInsensitive)) {
-                tempString = findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT");
+                tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                    signal, findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT"));
             } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
-                tempString = findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR");
+                tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                    signal, findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR"));
             }
             tempResult += tempString;
         } else if (part.contains('!')) {
@@ -1924,6 +1878,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                         if (!(leftValue == rightValue || (leftIsNumber && rightIsNumber && leftNum == rightNum))) {
                             resultString += leftValue + ", " + rightValue + ", ";
                             resultString += rightValue + ", " + leftValue + ", ";
+                            convertKeywordInfo.validInputData += rightValue + ", " + leftValue + ", ";
                         }
                     }
                 }
@@ -1947,6 +1902,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                     double rightNum = rightValue.toDouble(&rightIsNumber);
                     if (!(leftValue == rightValue || (leftIsNumber && rightIsNumber && leftNum == rightNum))) {
                         resultString += leftValue + ", " + rightValue + ", ";
+                        convertKeywordInfo.validInputData += rightValue + ", ";
                     }
                 }
             }
@@ -1960,7 +1916,9 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::ValueChanged;
                 if (inputSignalEnumList.isEmpty()) {
                     resultString += QString("0, 4294967296");
+                    convertKeywordInfo.validInputData += resultString;
                 } else {
+                    convertKeywordInfo.validInputData += inputSignalEnumList.join(", ");
                     for (const QString& leftValue : inputSignalEnumList) {
                         for (const QString& rightValue : inputSignalEnumList) {
                             if (!leftValue.isEmpty() && !rightValue.isEmpty()) {
@@ -1997,30 +1955,39 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                                         .arg(QString::number(enumString[0].toInt() + 1))
                                         .arg(QString::number(enumString[1].toInt() - 1))
                                         .arg(enumString[1]);
+                    convertKeywordInfo.validInputData += QString("%1,%2,%3,%4")
+                                                             .arg(enumString[0])
+                                                             .arg(QString::number(enumString[0].toInt() + 1))
+                                                             .arg(QString::number(enumString[1].toInt() - 1))
+                                                             .arg(enumString[1]);
                 }
             } else if (tempString.contains("<=")) {
                 tempString.remove("<=");
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual;
                     resultString += QString("%1,%2").arg(QString::number(tempString.toInt() + 1)).arg(tempString);
+                    convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains(">=")) {
                 tempString.remove(">=");
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual;
                     resultString += QString("%1,%2").arg(QString::number(tempString.toInt() - 1)).arg(tempString);
+                    convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains('<')) {
                 tempString.remove('<');
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Under;
                     resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toInt() - 1));
+                    convertKeywordInfo.validInputData += QString::number(tempString.toInt() - 1);
                 }
             } else if (tempString.contains('>')) {
                 tempString.remove('>');
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Over;
                     resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toInt() + 1));
+                    convertKeywordInfo.validInputData += QString::number(tempString.toInt() + 1);
                 }
             } else if (tempString.contains('!') && tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[!()]"));
@@ -2038,9 +2005,11 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[()]"));
                 if (tempString.contains("timeout", Qt::CaseInsensitive)) {
-                    tempString = findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT");
+                    tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                        signal, findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT"));
                 } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
-                    tempString = findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR");
+                    tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                        signal, findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR"));
                 }
                 resultString += tempString + ", ";
             } else if (tempString.contains('!')) {
@@ -2056,9 +2025,11 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 }
             } else {
                 if (tempString.contains("timeout", Qt::CaseInsensitive)) {
-                    tempString = findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT");
+                    tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                        signal, findVehicleSignalElseTimeoutCrcValue(signal, "TIMEOUT"));
                 } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
-                    tempString = findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR");
+                    tempString = SignalDataManager::instance().data()->isSignalValueEnum(
+                        signal, findVehicleSignalElseTimeoutCrcValue(signal, "CRCERROR"));
                 }
                 resultString += tempString + ", ";
             }
@@ -2068,37 +2039,196 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
     if (resultString.endsWith(", ")) {
         resultString.chop(2);
     }
+    if (convertKeywordInfo.validInputData.endsWith(", ")) {
+        convertKeywordInfo.validInputData.chop(2);
+    }
     convertKeywordInfo.inputValue = resultString;
+    if (convertKeywordInfo.validInputData.isEmpty()) {
+        convertKeywordInfo.validInputData = resultString;
+    }
     // qInfo() << "@@@@ keywordType: " << static_cast<int>(convertKeywordInfo.keywordType) << " / "
     //         << "result: " << convertKeywordInfo.inputValue;
+    // qInfo() << "@@@@ validInputData: " << convertKeywordInfo.validInputData;
     return convertKeywordInfo;
+}
+
+QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations(
+    const QString& templateExpr, const QMap<QString, QStringList>& valueMap, const QStringList& keys, const QList<int>& keywords,
+    const QStringList& inputValues, const QString& caseName, int index, QMap<QString, QString> current) {
+    QPair<QStringList, QList<CaseDataInfo>> results;
+    if (index == keys.size()) {
+        QString expr = templateExpr;
+        CaseDataInfo caseDataInfo;
+        int count = 0;
+        for (const auto& key : keys) {
+            ConvertKeywordInfo info;
+            info.inputSignal = key;
+            info.inputValue = constructConvertKeywordDataInfo(keywords[count], inputValues[count]);
+            info.validInputData = current[key].remove(' ');
+            QString tempKey = key;
+            if (key.contains("[sheet]", Qt::CaseInsensitive)) {
+                tempKey = tempKey.remove(QRegularExpression("\\[sheet\\]", QRegularExpression::CaseInsensitiveOption));
+                expr.replace(tempKey, current[key]);
+            } else {
+                expr.replace(key, current[key]);
+            }
+            caseDataInfo.convertInputDataInfo.append(info);
+            count++;
+        }
+        QJSValue result = JSEngineManager::instance().getEngine().evaluate(
+            expr.remove(QRegularExpression("\\[cal\\]", QRegularExpression::CaseInsensitiveOption)).replace("math", "Math"));
+        if (caseName.contains("others", Qt::CaseInsensitive)) {
+            caseDataInfo.caseName = "others";
+        } else {
+            caseDataInfo.caseName = caseName + " == " + result.toString();
+        }
+        results.first << result.toString();
+        results.second << caseDataInfo;
+        return results;
+    }
+    const QString& key = keys[index];
+    for (const QString& value : valueMap[key]) {
+        QMap<QString, QString> next = current;
+        next[key] = value;
+        auto subResult = generateCombinations(templateExpr, valueMap, keys, keywords, inputValues, caseName, index + 1, next);
+        results.first += subResult.first;
+        results.second += subResult.second;
+    }
+    return results;
+}
+
+QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(const ResultInfo& resultInfo) {
+    QList<ResultInfo> resultList;
+    ResultInfo tempResult;
+    OutputDataInfo tempOutputDataInfo;
+    for (auto& outputDataInfo : resultInfo.outputDataInfoList) {
+        if (outputDataInfo.outputValue.contains("[cal]", Qt::CaseInsensitive)) {
+            for (auto& caseDataInfo : resultInfo.caseDataInfoList) {
+                QString exprTemplate = outputDataInfo.outputValue;
+                QMap<QString, QStringList> valueMap;
+                QStringList keys;
+                QList<int> keywords;
+                QStringList inputValues;
+                for (const auto& keyword : caseDataInfo.convertInputDataInfo) {
+                    QString key = keyword.inputSignal;
+                    QString inputValue = keyword.inputValue;
+                    QStringList values = keyword.validInputData.split(',');
+                    valueMap[key] = values;
+                    keys << key;
+                    keywords << static_cast<int>(keyword.keywordType);
+                    inputValues << inputValue;
+                }
+                QPair<QStringList, QList<CaseDataInfo>> results =
+                    generateCombinations(exprTemplate, valueMap, keys, keywords, inputValues, caseDataInfo.caseName);
+                for (int i = 0; i < results.first.size(); i++) {
+                    ResultInfo tempResult;
+                    if (caseDataInfo.caseName.contains("others", Qt::CaseInsensitive)) {
+                        tempResult.resultName = resultInfo.resultName;
+                    } else {
+                        tempResult.resultName = resultInfo.resultName + " == " + results.first[i];
+                    }
+                    tempOutputDataInfo.outputSignal = outputDataInfo.outputSignal;
+                    tempOutputDataInfo.initialize = outputDataInfo.initialize;
+                    tempOutputDataInfo.outputValue = results.first[i];
+                    tempResult.caseDataInfoList.clear();
+                    tempResult.outputDataInfoList.clear();
+                    tempResult.caseDataInfoList << results.second[i];
+                    tempResult.outputDataInfoList << tempOutputDataInfo;
+                    resultList << tempResult;
+                }
+            }
+        } else {
+            ResultInfo tempResultInfo = resultInfo;
+            for (auto& caseDataInfo : tempResultInfo.caseDataInfoList) {
+                for (auto& convertKeywordInfo : caseDataInfo.convertInputDataInfo) {
+                    if (convertKeywordInfo.keywordType != ivis::common::KeywordTypeEnum::KeywordType::Invalid) {
+                        convertKeywordInfo.inputValue = constructConvertKeywordDataInfo(
+                            static_cast<int>(convertKeywordInfo.keywordType), convertKeywordInfo.inputValue);
+                    }
+                }
+            }
+            resultList << tempResultInfo;
+        }
+    }
+    return resultList;
+}
+
+bool ConvertDataManager::decideSameCaseList(const QList<CaseDataInfo>& list1, const QList<CaseDataInfo>& list2) {
+    if (list1.size() != list2.size()) {
+        return false;
+    }
+    for (const CaseDataInfo& item : list1) {
+        if (!list2.contains(item)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+QList<ResultInfo> ConvertDataManager::mergeAndCleanResultList(const QList<ResultInfo>& resultList) {
+    QMap<QString, QList<ResultInfo>> groupedMap;
+    for (const ResultInfo& result : resultList) {
+        groupedMap[result.resultName].append(result);
+    }
+    QList<ResultInfo> mergedResultList;
+    for (auto it = groupedMap.begin(); it != groupedMap.end(); ++it) {
+        const QString& resultName = it.key();
+        const QList<ResultInfo>& groupList = it.value();
+        QList<QList<CaseDataInfo>> uniqueCaseLists;
+        QList<OutputDataInfo> sharedOutputList;
+        bool isFirst = true;
+        for (const ResultInfo& r : groupList) {
+            bool found = false;
+            for (const QList<CaseDataInfo>& existing : uniqueCaseLists) {
+                if (decideSameCaseList(existing, r.caseDataInfoList)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                uniqueCaseLists.append(r.caseDataInfoList);
+                if (isFirst) {
+                    sharedOutputList = r.outputDataInfoList;
+                    isFirst = false;
+                }
+            }
+        }
+        QList<CaseDataInfo> mergedCases;
+        for (const QList<CaseDataInfo>& caseList : uniqueCaseLists) {
+            for (const CaseDataInfo& c : caseList) {
+                if (!mergedCases.contains(c)) {
+                    mergedCases.append(c);
+                }
+            }
+        }
+        ResultInfo merged;
+        merged.resultName = resultName;
+        merged.outputDataInfoList = sharedOutputList;
+        merged.caseDataInfoList = mergedCases;
+        mergedResultList.append(merged);
+    }
+    return mergedResultList;
 }
 
 bool ConvertDataManager::convertNonInputSignalKeyword() {
     bool result = false;
 
-    const int convertStart = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
-    const int convertEnd = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(false);
-#endif
 
     // Private ~ Output Sheet Loop
-    for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
-        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-            auto convertSheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
-            ExcelData::instance().data()->setSheetData(sheetIndex, convertSheetData);
-#endif
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        int convertSheetIndex = sheetIndex -
+                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) +
+                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
+        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
+            qDebug() << "[convertNonInputSignalKeyword] Not support sheet :" << sheetIndex;
             continue;
         }
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        auto curSheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, curSheetData);
-#endif
+
         QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
 #if defined(ENABLE_NON_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
         qDebug() << "============================[convertNonInputSignalKeyword]=====================================";
@@ -2118,6 +2248,11 @@ bool ConvertDataManager::convertNonInputSignalKeyword() {
             for (int resultIdx = 0; resultIdx < resultStrList.size(); ++resultIdx) {
                 QString resultStr = resultStrList.at(resultIdx);
                 QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcNameStr, resultStr);
+                QList<QStringList> curOutputDataInfoList =
+                    ExcelDataManager::instance().data()->isOutputDataList(sheetIndex, tcNameStr, resultStr);
+
+                ResultInfo resultDataInfo;
+                resultDataInfo.resultName = resultStr;
 
 #if defined(ENABLE_NON_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                 qDebug() << "tcNameStr       : " << tcNameStr;
@@ -2128,6 +2263,9 @@ bool ConvertDataManager::convertNonInputSignalKeyword() {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
                         ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
+
+                    CaseDataInfo caseDataInfo;
+                    caseDataInfo.caseName = caseStr;
 
 #if defined(ENABLE_NON_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                     qDebug() << "------------------------------------------------------------------------------------------";
@@ -2140,66 +2278,161 @@ bool ConvertDataManager::convertNonInputSignalKeyword() {
 
                     if ((inputSignalList.isEmpty() == false && inputDataList.isEmpty() == false) &&
                         (inputSignalList.size() == inputDataList.size())) {
-                        QPair<QStringList, QStringList> tmpCaseInputDataList;
+                        QList<ConvertKeywordInfo> inputDataInfoForOutput;
+
                         for (int idx = 0; idx < inputSignalList.size(); ++idx) {
                             QString inputSignal = inputSignalList.at(idx);
                             QString inputData = inputDataList.at(idx);
+
 #if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
                             qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [Info] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
                             qDebug() << "- Input signal string : " << inputSignal;
                             qDebug() << "- Input data   string : " << inputData;
 #endif
-                            // process keyword in input signal/data
-                            ConvertKeywordInfo convertKeywordInfo = interpretInputValueKeyword(inputSignal, inputData);
-
-                            // TODO(csh): convert to Convert.Excel_002.xlsx
-                            QString returnInputData = constructConvertKeywordDataInfo(
-                                static_cast<int>(convertKeywordInfo.keywordType), convertKeywordInfo.inputValue);
+                            if (idx == 0 && inputSignal.isEmpty() == true && inputData.isEmpty() == true) {
+                                // other case check
+                                //   - Other other Others others oTher oTHers 만 others로 인식
+                                //   - another mother brother This is no others. 와 같은 문구의 other는 description word로 인식
+                                caseStr.replace(QRegularExpression("(?i)^\\s*other[s]?\\s*$"),
+                                                ExcelUtil::instance().data()->isKeywordString(
+                                                    static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Other)));
+                                caseDataInfo.caseName = caseStr;
+                            } else {
+                                // process inputData keyword in InputSignal & InputData Column
+                                ConvertKeywordInfo convertKeywordInfo = interpretInputValueKeyword(inputSignal, inputData);
+                                inputDataInfoForOutput.append(convertKeywordInfo);
 #if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
-                            qDebug() << " - Convert Keyword Type : " << static_cast<int>(convertKeywordInfo.keywordType);
-                            qDebug() << " - Convert Input Signal : " << returnInputData;
+                                qDebug() << " - Convert Keyword Type : " << static_cast<int>(convertKeywordInfo.keywordType);
 #endif
-                            if (inputSignal != convertKeywordInfo.inputSignal) {
-                                inputSignal = convertKeywordInfo.inputSignal;
                             }
-                            tmpCaseInputDataList.first.append(inputSignal);
-                            tmpCaseInputDataList.second.append(returnInputData);
+
                             result = true;
                         }
-                        ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
-                                                                                 tmpCaseInputDataList);
+                        caseDataInfo.convertInputDataInfo = inputDataInfoForOutput;
+                    }
+                    resultDataInfo.caseDataInfoList.append(caseDataInfo);
+                }
+                QList<OutputDataInfo> tmpOutputDataInfoList = convertOutputStructData(curOutputDataInfoList);
+                resultDataInfo.outputDataInfoList.append(tmpOutputDataInfoList);
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+                displayResultDataInfo(resultDataInfo);
+#endif
+                // process [Cal] keyword in OutputValue Column
+                QList<ResultInfo> resultList = mergeAndCleanResultList(interpretCalKeywordAndRedefineResultInfo(resultDataInfo));
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+                qInfo() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+                for (const auto& resultInfo : resultList) {
+                    qInfo() << "Result Name: " << resultInfo.resultName;
+                    for (const auto& caseDataInfo : resultInfo.caseDataInfoList) {
+                        qInfo() << "  Case Name: " << caseDataInfo.caseName;
+                        for (const auto& keywordInfo : caseDataInfo.convertInputDataInfo) {
+                            if (keywordInfo.inputSignal.isEmpty() || keywordInfo.inputValue.isEmpty()) {
+                                qInfo() << "    WARNING: Input Signal or Input Value is empty!";
+                            }
+                            qInfo() << "    Input Signal: " << keywordInfo.inputSignal;
+                            qInfo() << "    Input Value: " << keywordInfo.inputValue;
+                            qInfo() << "    Valid Input Data: " << keywordInfo.validInputData;
+                        }
+                    }
+                    for (const auto& outputDataInfo : resultInfo.outputDataInfoList) {
+                        qInfo() << "  Output Signal: " << outputDataInfo.outputSignal;
+                        qInfo() << "  Initialize: " << outputDataInfo.initialize;
+                        qInfo() << "  Output Value: " << outputDataInfo.outputValue;
                     }
                 }
+                qInfo() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+#endif
+                // InputSignal/InputData + [Cal] Keyword 해석 Data를 최종 Convert Data로 update
+                updateResultDataInfo(sheetIndex, tcNameStr, resultList);
             }
         }
+
         if (result == true) {
             QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
             QVariantList tmpSheetData;
             for (auto& data : currentSheetData) {
                 tmpSheetData.append(data);
             }
-            ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+            ExcelData::instance().data()->setSheetData(convertSheetIndex, tmpSheetData);
         }
-        //         if (result == true) {
-        //             QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo();
-        //             if (currentSheetData.size() > 0) {
-        //                 QVariantList tmpSheetData;
-        //                 for (auto& data : currentSheetData) {
-        //                     tmpSheetData.append(data);
-        //                 }
-        //                 ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
-        //             } else {
-        //                 // no data changed.
-        // #if defined(ENABLE_NON_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
-        //                 qDebug("[convertNonInputSignalKeyword] No Config Data (sheet index : %d) -> No need to create excel
-        //                 file",
-        //                        sheetIndex);
-        // #endif
-        //             }
-        //         }
     }
 
     return result;
+}
+
+void ConvertDataManager::updateResultDataInfo(const int& sheetIndex, const QString& tcName,
+                                              const QList<ResultInfo>& resultDataList) {
+    // update result data
+    for (int resultIdx = 0; resultIdx < resultDataList.size(); ++resultIdx) {
+        QString resultStr;
+        QList<QStringList> convertedOutputDataList;
+        const ResultInfo& resultData = resultDataList.at(resultIdx);
+        resultStr = resultData.resultName;
+        const QList<CaseDataInfo>& caseDataInfoList = resultData.caseDataInfoList;
+        const QList<OutputDataInfo>& outputDataInfoList = resultData.outputDataInfoList;
+        // 1. update Case Data Info first
+        for (int caseIdx = 0; caseIdx < caseDataInfoList.size(); ++caseIdx) {
+            const QString& caseStr = caseDataInfoList.at(caseIdx).caseName;
+            QPair<QStringList, QStringList> inputDataInfo;
+            QList<ConvertKeywordInfo> convertInputDataInfoList = caseDataInfoList.at(caseIdx).convertInputDataInfo;
+            // QList<ConvertKeywordInfo> convertInputDataInfo -> QPair<QStringList, QStringList>로 convert 필요
+            for (const ConvertKeywordInfo& convertKeywordInfo : convertInputDataInfoList) {
+                inputDataInfo.first.append(convertKeywordInfo.inputSignal);
+                inputDataInfo.second.append(convertKeywordInfo.inputValue);
+            }
+            ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcName, resultStr, caseStr, inputDataInfo);
+        }
+        // 2. processing output data after case data update is completed
+        QList<OutputDataInfo> outputDataList = resultDataList.at(resultIdx).outputDataInfoList;
+        for (int outputIdx = 0; outputIdx < outputDataList.size(); ++outputIdx) {
+            OutputDataInfo outputDataInfo = outputDataList.at(outputIdx);
+            QStringList convertedOutputDataInfo = {outputDataInfo.outputSignal, outputDataInfo.initialize,
+                                                   outputDataInfo.outputValue};
+            convertedOutputDataList.append(convertedOutputDataInfo);
+        }
+        ExcelDataManager::instance().data()->updateOutputDataInfo(sheetIndex, tcName, resultStr, convertedOutputDataList);
+    }
+}
+
+void ConvertDataManager::displayResultDataInfo(const ResultInfo& result) {
+    qDebug() << "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-";
+    qDebug() << "1. resultName   : " << result.resultName;
+    for (int i = 0; i < result.caseDataInfoList.size(); ++i) {
+        qDebug() << "2. caseName     : " << result.caseDataInfoList.at(i).caseName;
+        QStringList signalList;
+        QStringList valueList;
+
+        for (const auto& info : result.caseDataInfoList.at(i).convertInputDataInfo) {
+            signalList.append(info.inputSignal);
+            valueList.append(info.inputValue);
+        }
+        qDebug() << "3. inputSignal  : " << signalList.join(", ");
+        qDebug() << "4. inputValue   : " << valueList.join(", ");
+    }
+    for (int i = 0; i < result.outputDataInfoList.size(); ++i) {
+        qDebug() << "5. outputSignal : " << result.outputDataInfoList.at(i).outputSignal;
+        qDebug() << "6. initialize   : " << result.outputDataInfoList.at(i).initialize;
+        qDebug() << "7. outputValue  : " << result.outputDataInfoList.at(i).outputValue;
+    }
+}
+
+#define OUTPUT_DATA_INFO_SIZE 3
+QList<OutputDataInfo> ConvertDataManager::convertOutputStructData(const QList<QStringList>& outputList) {
+    QList<OutputDataInfo> retInfoList;
+    for (int i = 0; i < outputList.size(); ++i) {
+        OutputDataInfo info;
+        QStringList outputDataList = outputList.at(i);
+        if (outputDataList.size() == OUTPUT_DATA_INFO_SIZE) {
+            info.outputSignal = outputDataList.at(0);
+            info.initialize = outputDataList.at(1);
+            info.outputValue = outputDataList.at(2);
+            retInfoList.append(info);
+        } else {
+            qDebug() << "[Error] Invalid of Output Data Info(Signal, Initialize, Value)";
+        }
+    }
+
+    return retInfoList;
 }
 
 void ConvertDataManager::appendCurSheetData(
@@ -2306,12 +2539,7 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
         }
     }
 
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-    auto sheetData = ExcelData::instance().data()->getSheetData(currentSheetIndex).toList();
-    ExcelDataManager::instance().data()->updateExcelData(currentSheetIndex, sheetData);
-#else
     ExcelDataManager::instance().data()->resetExcelData(false);
-#endif
 
     return sheetDataInfo;
 }
@@ -2319,24 +2547,18 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
 // List = [CaseName1, (InputSignalList, InputDataList)] + [CaseName2, (InputSignalList, InputDataList)] + ...
 QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSheetSignalDataInfo(const QString& name,
                                                                                                   const QString& data) {
-    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) + 1;
-    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
     QList<QPair<QString, QPair<QStringList, QStringList>>> sheetKeywordSignalDataInfo;
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(false);
-#endif
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        if (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs)) {
+        if (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
             qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#endif
 
         QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, name, data);
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)

@@ -4,7 +4,10 @@
 BASE_DIR="$(dirname $(realpath $0))"
 APP_PATH="$BASE_DIR/.."
 BIN_NAME="Application"
-SDK_HOST=${CCOS_LIB_DIR:-/opt/sfc/PV}/environment-setup-sfc
+# SDK_HOST=${CCOS_LIB_DIR:-/opt/sfc/CV}/environment-setup-sfc
+# ALTON_PATH=${CCOS_LIB_DIR:-/opt/sfc/CV}/services
+SDK_HOST=${CCOS_LIB_DIR}/environment-setup-sfc
+ALTON_PATH=${CCOS_LIB_DIR}/services
 ARGUMENTS=()
 
 clear
@@ -24,7 +27,6 @@ setPermissions() {
 # Set environment variables based on platform
 setEnvironments() {
     local env=$1
-    local ip_address=$2
 
     case "$env" in
         target|t)
@@ -32,6 +34,7 @@ setEnvironments() {
             APP_PATH="/home/root/App"
             ;;
         xserver|xs)
+            local ip_address=$2
             echo "[Environment : Host XServer]"
             if [ -z "$ip_address" ]; then
                 export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0.0
@@ -41,13 +44,16 @@ setEnvironments() {
             APP_PATH="$APP_PATH/deploy_x86"
             ;;
         host|h)
-            echo "[Environment : Host]"
-            if [ "$BIN_NAME" == "altonservice" ]; then
+            local app_name=$2
+            echo "[Environment : Host] - $app_name"
+            if [ "$app_name" == "altonservice" ]; then
                 source "$SDK_HOST" CV
-                APP_PATH="$CCOS_LIB_DIR/bin"
-            elif [ "$BIN_NAME" == "Cluster" ]; then
+                APP_PATH="$ALTON_PATH/$app_name"
+                BIN_NAME="$app_name"
+            elif [ "$app_name" == "Cluster" ]; then
                 source "$SDK_HOST" PV
                 APP_PATH="$APP_PATH/deploy_x86"
+                BIN_NAME="$app_name"
             else
                 APP_PATH="$APP_PATH/deploy_x86"
             fi
@@ -60,6 +66,7 @@ setEnvironments() {
 
     echo "    SDK_HOST  = $SDK_HOST"
     echo "    APP_PATH  = $APP_PATH"
+    echo "    BIN_NAME  = $BIN_NAME"
     separator
 }
 
@@ -137,7 +144,7 @@ shift # Remove the first argument
 
 case "$PLATFORM" in
     target|t)
-        setEnvironments target
+        setEnvironments target "$1"
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
         runProcess "$BIN_NAME" "$APP_PATH"
@@ -149,7 +156,7 @@ case "$PLATFORM" in
         runProcess "$BIN_NAME" "$APP_PATH"
         ;;
     host|h)
-        setEnvironments host
+        setEnvironments host "$1"
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
         runProcess "$BIN_NAME" "$APP_PATH"

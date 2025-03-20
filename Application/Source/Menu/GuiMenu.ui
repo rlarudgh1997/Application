@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>GuiMenu</class>
  <widget class="QMainWindow" name="GuiMenu">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -110,6 +113,8 @@
     <addaction name="actionCopy"/>
     <addaction name="actionCut"/>
     <addaction name="actionPaste"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionInsert"/>
     <addaction name="actionDelete"/>
@@ -181,8 +186,6 @@
    <addaction name="actionRunTCMulti"/>
    <addaction name="separator"/>
    <addaction name="actionPath"/>
-   <addaction name="actionRedo"/>
-   <addaction name="actionUndo"/>
   </widget>
   <action name="actionExit">
    <property name="text">
@@ -377,28 +380,6 @@
     <string>AboutQT</string>
    </property>
   </action>
-  <action name="actionUndo">
-   <property name="text">
-    <string/>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Z</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionRedo">
-   <property name="text">
-    <string/>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Y</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
-  </action>
   <action name="actionPath">
    <property name="text">
     <string>Path :</string>
@@ -507,6 +488,22 @@
    </property>
    <property name="shortcut">
     <string>Alt+L</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

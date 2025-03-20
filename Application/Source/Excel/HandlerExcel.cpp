@@ -59,7 +59,6 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenType, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeArrowKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, QVariant());
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription, QVariant(""));
@@ -71,8 +70,6 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetInters, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs, QVariant(""));
-
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeReceiveKeyFocus, QVariant(false));
 }
 
 void HandlerExcel::controlConnect(const bool& state) {

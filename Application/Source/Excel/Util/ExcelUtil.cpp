@@ -782,7 +782,7 @@ QString ExcelUtil::systemCall(const bool& readFile, const QVariant& filePath) {
     return dirPath;
 }
 
-bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
+void ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
     // Set Path : file, directory
     QStringList fileInfo = filePath.toString().split("/");
     QString writePath = QString();
@@ -825,11 +825,7 @@ bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
         sheetData.append(contentTitle);
 
         // Data - Append
-        if (propertyType >= ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) {
-            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
-        } else {
-            sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
-        }
+        sheetData.append(ExcelData::instance().data()->getSheetData(propertyType).toList());
         propertyType++;
 
         for (const auto& dataInfo : sheetData) {
@@ -855,7 +851,17 @@ bool ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
             }
         }
     }
-    return (writeSize > 0);
+
+    QString dirPath = (writeSize > 0) ? (systemCall(false, filePath)) : ("");
+    if (dirPath.size() > 0) {
+        // Delete : Folder(TC)
+        if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
+            QStringList log;
+            ivis::common::ExcuteProgram process(false);
+            process.start(QString("rm -rf %1").arg(dirPath), log);  // Delete : /TC/*.toExcel
+        }
+        qDebug() << "\t File save success :" << filePath;
+    }
 }
 
 QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
@@ -865,7 +871,7 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
 
     QString dirPath = systemCall(true, filePath);
     if (dirPath.size() == 0) {
-        qDebug() << "Fail to dir path :" << filePath;
+        qDebug() << "File open fail :" << filePath;
         return QList<QVariantList>();
     }
 
@@ -968,6 +974,8 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
         // qDebug() << currSheetName << ":" << sheetData;
         // qDebug() << "==================================================================================================\n";
     }
+
+    qDebug() << "\t File open success :" << filePath;
 
     // Delete : Folder(TC)
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {

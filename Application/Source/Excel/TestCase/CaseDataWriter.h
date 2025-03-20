@@ -132,8 +132,8 @@ public:
                                         signalValueList = parts[0].split(",", Qt::SkipEmptyParts);
                                         inputDataInfo = parts[1].split(":");
                                         signalOrder = 0;
-                                        testCase += "  - name: " + tcName + ", " + resultName + ", " + caseName + " " +
-                                                    QString::number(testCaseCount++) + "\n";
+                                        testCase += "  - name: " + tcName + ", " + resultName + ", " + caseName + " " + "(" +
+                                                    QString::number(testCaseCount++) + ")" + "\n";
                                         if (vehicleType.isEmpty() == false) {
                                             testCase += "    tag: " + vehicleType + "\n";
                                         }

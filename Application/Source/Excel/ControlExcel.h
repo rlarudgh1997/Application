@@ -18,11 +18,9 @@ private:
 
     void updateNodeAddress(const bool& all, const QStringList& tcNameList, const QStringList& cofigNameList);
     void updateSheetData(const int& propertyType, const QVariantList& sheetData);
-    void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath);
+    void updateExcelSheet(const QString& filePath);
     bool writeExcelFile(const QVariant& filePath);
-    bool writeSheetInfo(const QVariant& filePath);
     bool openExcelFile(const QVariant& filePath);
-    bool updateExcelDataInfo(const QString& filePath);
     void loadExcelFile(const int& eventType);
     void saveExcelFile(const bool& saveAs);
     void updateShortcutInfo(const int& eventType);
@@ -33,7 +31,7 @@ private:
     void updateAutoCompleteSuggestions(const QVariantList& inputData);
     void updateAutoInputDescriptionInfo(const QString& moduleName);
     void updateAutoCompleteData(const QVariantList& inputData);
-    void updateInputDataValidation(const QVariantList& cellDataInfo);
+    void updateDataValidation(const QVariantList& cellDataInfo);
     void updateGenDataInfo(const int& eventType);
 
 protected:

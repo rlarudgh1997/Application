@@ -224,12 +224,14 @@ public:
         mElapsedTimer.restart();
         // qDebug() << "ReStartTime :" << mElapsedTimer.elapsed() << "ms";
     }
-    void check(const QString& info = QString()) {
+    int check(const QString& info = QString()) {
+        int elapsed = mElapsedTimer.elapsed();
         if (info.size()) {
-            qDebug() << "CheckTimer[" << info.toLatin1().data() << "] :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "CheckTimer[" << info.toLatin1().data() << "] :" << elapsed << "ms\n";
         } else {
-            qDebug() << "CheckTimer :" << mElapsedTimer.elapsed() << "ms\n";
+            qDebug() << "CheckTimer :" << elapsed << "ms\n";
         }
+        return elapsed
     }
 
 private:

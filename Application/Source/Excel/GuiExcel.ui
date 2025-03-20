@@ -32,59 +32,6 @@
    <addaction name="actionDelete"/>
    <addaction name="actionMergeSplit"/>
   </widget>
-  <widget class="QTabWidget" name="TabWidgetTC">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>20</y>
-     <width>1400</width>
-     <height>900</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QTableWidget" name="Description">
-    <attribute name="title">
-     <string>Description</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Privates">
-    <attribute name="title">
-     <string>Privates</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Telltales">
-    <attribute name="title">
-     <string>Telltales</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Constants">
-    <attribute name="title">
-     <string>Constants</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Events">
-    <attribute name="title">
-     <string>Events</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Sounds">
-    <attribute name="title">
-     <string>Sounds</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Inters">
-    <attribute name="title">
-     <string>Inters</string>
-    </attribute>
-   </widget>
-   <widget class="QTableWidget" name="Outputs">
-    <attribute name="title">
-     <string>Outputs</string>
-    </attribute>
-   </widget>
-  </widget>
   <widget class="QWidget" name="CellInfo" native="true">
    <property name="geometry">
     <rect>
@@ -179,10 +126,6 @@
     <string>Merge/Split</string>
    </property>
   </action>
-  <zorder>Menu</zorder>
-  <zorder>CellInfo</zorder>
-  <zorder>TabWidgetTC</zorder>
-  <zorder>TabWidget</zorder>
  </widget>
  <resources/>
  <connections/>

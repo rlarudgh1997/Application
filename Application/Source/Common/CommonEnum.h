@@ -51,7 +51,9 @@ public:
         KeyInputValueRight = Qt::Key::Key_Right,
         KeyInputValueOK = Qt::Key::Key_Enter,
         KeyInputValueCancel = Qt::Key::Key_Escape,
+        KeyInputValueDelete = Qt::Key::Key_Delete,
         KeyInputValueCapture = Qt::Key::Key_F12,
+        KeyInputValueCtrl = Qt::Key::Key_Control,
 #if defined(PLATFORM_X86)
         KeyInputValueNumUp = Qt::Key::Key_8,       // Numlock Key_8      - KeyInputValueUp
         KeyInputValueNumDown = Qt::Key::Key_2,     // Numlock Key_2      - KeyInputValueDown
@@ -126,8 +128,6 @@ public:
 
         PropertyTypeTestReport,
         PropertyTypeKey,
-        PropertyTypeArrowKey,
-        PropertyTypeReceiveKeyFocus,
         PropertyTypeRunScriptState,
         PropertyTypeViewTCFileList,
         PropertyTypeViewLogInfo,
@@ -223,7 +223,7 @@ public:
         EventTypeSaveExcel,
         EventTypeUpdateExcelSheet,
         EventTypeUpdateAutoCompleteData,
-        EventTypeUpdateCellDataInfo,
+        EventTypeCellDataValidation,
         EventTypeAutoInputDescriptionInfo,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,

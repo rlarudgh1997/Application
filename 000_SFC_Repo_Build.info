@@ -40,7 +40,7 @@
 		g++ --version
 		cmake --version
 		protoc --version
-		clang-format-13 --version
+		clang-format --version
 
 
 
@@ -335,11 +335,15 @@ sudo ./sfc_sdk_20241218.sh
 	sudo apt-get install clang-format-13 clang-format-14
 	clang-format --version
 
-	clang-format-14 사용 설정
+	clang-format-14 사용 설정 : 우선순위 지정
 		sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-14 100
-		sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 50
+		sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 200
 
+		sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-14 100
+		sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-13 200
 
+	우선순위중 선택 사용
+		sudo update-alternatives --config clang-format
 
 
 

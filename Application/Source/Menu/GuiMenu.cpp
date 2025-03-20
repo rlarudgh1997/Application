@@ -339,8 +339,8 @@ void GuiMenu::updateDialogViewFileList(const int& type) {
     } else {
         dialogType = Dialog::DialogTypeSelectTCFile;
         info = QVariantList({
-            QString("Select TC File"),
-            QStringList({"TC File"}),
+            QString("Select Module"),
+            QStringList({"Module"}),
             isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList).toStringList(),
             QStringList(),
             QVariantList(),
@@ -410,13 +410,19 @@ void GuiMenu::updateMenuEdit() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditUndo, QVariant()); });
     connect(mGui->actionRedo, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditRedo, QVariant()); });
+#if 0
+    mGui->actionUndo->setVisible(false);
+    mGui->actionUndo->setEnabled(true);
+    QApplication::instance()->installEventFilter(mGui->actionUndo);
+    mGui->actionRedo->setVisible(false);
+    mGui->actionRedo->setEnabled(true);
+    QApplication::instance()->installEventFilter(mGui->actionRedo);
+#endif
     // TC Check
-    connect(mGui->actionAllCheck, &QAction::triggered, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, true);
-    });
-    connect(mGui->actionAllUncheck, &QAction::triggered, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, false);
-    });
+    connect(mGui->actionAllCheck, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, true); });
+    connect(mGui->actionAllUncheck, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEditTCCheck, false); });
     // Gen Type
     connect(mGui->actionDefault, &QAction::triggered, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeEditGenType, ivis::common::GenTypeEnum::GenTypeDefault);

@@ -83,7 +83,7 @@ public:
         DataTypeSelectAll,
         DataTypeMultiCheck,
         DataTypeSelectInputData,
-        DataTypeCheckModelIndex,
+        DataTypeSelectListCheckIndex,
         DataTypeViewLogStop,
         DataTypeAutoCompleteListInput,
         DataTypeAutoCompleteListKeyword,
@@ -184,6 +184,12 @@ private:
     bool updateViewLog(const QVariantList& info);
     bool updateAutoComplete(const QVariantList& info);
     bool updateAutoCompleteNormal(const QVariantList& info);
+
+#if defined(USE_DIALOG_KEY_EVENT)
+protected:
+    void keyPressEvent(QKeyEvent* keyEvent) override;
+    void keyReleaseEvent(QKeyEvent* keyEvent) override;
+#endif
 
 signals:
     void signalSelectAppMode(const int& appMode);

@@ -20,11 +20,45 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QUndoStack>
 
 #include "Dialog.h"
 #include "ui_GuiExcel.h"
 
 using QPairInt = QPair<int, int>;
+
+class SheetData : public QObject, public QUndoCommand {
+    Q_OBJECT
+
+public:
+    SheetData(const int& index, const int& row, const int& column, const QList<QStringList>& previousData,
+              const QList<QStringList>& currentData)
+        : mSheetIndex(index), mRowIndex(row), mColumnIndex(column), mPreviousData(previousData), mCurrentData(currentData) {}
+    void undo() override {
+        emit signalSheetDataUndo(mSheetIndex, mRowIndex, mColumnIndex, mPreviousData);
+    }
+    void redo() override {
+        if (mFirstRedoSkip) {    // 데이터 추가시 redo 함수 호출 예외처리
+            // for (const auto& rowData : mCurrentData) {
+            //     qDebug() << "\t Data :" << rowData;
+            // }
+            mFirstRedoSkip = false;
+            return;
+        }
+        emit signalSheetDataUndo(mSheetIndex, mRowIndex, mColumnIndex, mCurrentData);
+    }
+
+signals:
+    void signalSheetDataUndo(const int& sheetIndex, const int& row, const int& column, const QList<QStringList>& data);
+
+private:
+    bool mFirstRedoSkip = true;
+    int mSheetIndex;
+    int mRowIndex;
+    int mColumnIndex;
+    QList<QStringList> mPreviousData;
+    QList<QStringList> mCurrentData;
+};
 
 class CellSelectedInfo {
     REGISTER_WRITABLE_VALUE(int, RowStart, 0)
@@ -70,6 +104,11 @@ public:
             columnStart = qMin(columnStart, column);
             columnEnd = qMax(columnEnd, column);
         }
+
+        // qDebug() << "CellSelectedInfo :" << modelIndexs.size();
+        // qDebug() << "\t Row    :" << rowStart << rowEnd << rowMax;
+        // qDebug() << "\t Column :" << columnStart << columnEnd << columnMax;
+        // qDebug() << "\t Max    :" << rowMax << columnMax;
 
         setRowStart(rowStart);
         setRowEnd(rowEnd);
@@ -169,12 +208,6 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(CellSelectedInfo, CopyInfo, CellSelectedInfo())
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
 
-private:
-    enum CellMergeType {
-        ClearMerge,
-        CopyMerge,
-    };
-
 public:
     static QSharedPointer<GuiExcel>& instance(AbstractHandler* handler = nullptr);
 
@@ -196,42 +229,43 @@ private:
 
     bool isSheetContentChanged(const int& sheetIndex);
     bool isDrawCheckBox(const int& sheetIndex, const int& columnIndex);
-    QList<QStringList> isSheetData(const int& sheetIndex, const bool& removeMerge, const bool& readProperty);
+    QList<QStringList> isSheetData(const int& sheetIndex, const bool& readProperty, const bool& removeMerge);
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QMap<int, QSet<QPair<int, int>>> isPropertyMergeInfo(const int& sheetIndex);
-    QMap<int, QList<QPair<int, int>>> isDisplayMergeInfo(const int& sheetIndex, const QVariantList& info);
-    bool chcekExcelSheet(const int& sheetIndex);
+    QMap<int, QList<QPair<int, int>>> isDisplayMergeInfo(const int& sheetIndex, const QVariantList& info = QVariantList());
+    bool checkExcelSheet(const int& sheetIndex);
     QVariantList readSheetDisplay(const int& sheetIndex);
-    void syncSheetData(const int& sheetIndex, const bool& readProperty);
+    void syncSheetData(const int& sheetIndex, const QVariantList& undoRedoData = QVariantList());
     void syncAutoComplete(const int& sheetIndex, const int& columnIndex, const QVariant& data = QVariant());
-    int updateShortcutInsertDelete(const int& sheetIndex, const bool& insert);
+    void screenUpdateBlock(const int& sheetIndex, const bool& block);
+    void updateEditSheetData(const int& sheetIndex, const QList<QStringList>& previousData, const QVariantList& data);
+    int updateShortcutInsertDelete(const int& sheetIndex, const bool& insertState);
     int updateShortcutMergeSplit(const int& sheetIndex);
     int updateShortcutCopy(const int& sheetIndex, const bool& cutState);
     int updateShortcutPaste(const int& sheetIndex);
+    void updateShortcutUndoRedo(const int& sheetIndex, const bool& undoState);
     void updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& cellHighlight);
     void updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax);
-    void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn);
+    void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn, const int& columnIndex = (-1));
     void updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column);
     void updateCellContent(const int& sheetIndex, const int& row, const int& column);
-    void updateSheetProperty(const int& sheetIndex);
-    void updateSheetNew(const int& sheetIndex, const int& rowMax, const int& columnMax);
+    void updateCheckState(const int& sheetIndex, const int& columnIndex);
+    void updateSheetProperty(const int& sheetIndex, const int& viewSheetIndex);
     void updateInitExcelSheet();
     void updateDescriptionInfo(const int& sheetIndex, const int& row);
     void updateAutoCompleteSignal(const bool& description, const int& columnIndex);
 
     void updateDisplayKey(const int& keyValue);
-    void updateDisplayArrowKey(const int& keyValue);
     void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);
     void updateDisplayAutoComplete(const int& sheetIndex, const int& row, const int& column);
     void updateDisplayAutoInputDescrtion();
     void updateDisplayGenType(const int& genType);
     void updateDisplayTCCheck(const int& allCheck);
-    void updateDisplayReceiveKeyFocus();
     void updateDisplayShortcut(const int& shortcutType);
-    void updateDisplaySheetCheckState(const int& sheetIndex, const int& columnIndex);
     void updateDisplayExcelSheet();
 
 public slots:
+    void slotSheetDataUndo(const int& sheetIndex, const int& row, const int& column, const QList<QStringList>& data);
     virtual void slotPropertyChanged(const int& type, const QVariant& value);
 
 private:
@@ -243,8 +277,7 @@ private:
     QMap<int, QAction*> mMenuActionItem = QMap<int, QAction*>();
     QMap<int, QPair<int, int>> mModelIndex = QMap<int, QPair<int, int>>();
     QTableWidgetItem* mSelectItem = nullptr;
-
-    // const QString mEmptyString = QString("[Empty]");
+    QUndoStack* mUndoStack = nullptr;
 };
 
 #endif  // GUI_EXCEL_H

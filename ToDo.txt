@@ -4,7 +4,6 @@
 	: 마지막 행이 병합인 경우 delete 동작시 마지막 행에서 delete 시 crash 수정
 		- 병합 정보 구성 오류 : 1개만 선택한 경우에도 병합 정보로 구성 하여 마지막 행에서 병합 동작 하여 발생함
 
-
 - Merge 정보 관리 방식 보완
 	: TC_Gen 기능 추가시 발생하는 이슈 보완
 		- Insert, Delete, Merge, Split 기능 연동 Merge 정보 관리 방안 보완

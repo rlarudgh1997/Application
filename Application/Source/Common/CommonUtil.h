@@ -442,12 +442,14 @@ public:
         mElapsedTimer.restart();
         // qDebug() << "ReStartTime :" << mElapsedTimer.elapsed() << "ms";
     }
-    void check(const QString& log, const bool& resetState = true) {
-        qDebug() << "[CheckTime]" << ((log.isEmpty()) ? ("") : (log.toLatin1().data())) << ":" << mElapsedTimer.elapsed()
+    int check(const QString& log, const bool& resetState = true) {
+        int elapsed = mElapsedTimer.elapsed();
+        qDebug() << "[CheckTime]" << ((log.isEmpty()) ? ("") : (log.toLatin1().data())) << ":" << elapsed
                  << "ms\n";
         if (resetState) {
             reset();
         }
+        return elapsed;
     }
     qint64 getTime() {
         return mElapsedTimer.elapsed();

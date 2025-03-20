@@ -30,8 +30,7 @@ enum class PopupType {
     GcovReportError,
     RunPathError,
     ModuleSelectError,
-    SelectCellColumnError,
-    MultipleSelectedCellError,
+    CellSelectionError,
 
     Exit,
     New,
@@ -86,8 +85,7 @@ public:
             case PopupType::GcovReportError:
             case PopupType::RunPathError:
             case PopupType::ModuleSelectError:
-            case PopupType::SelectCellColumnError:
-            case PopupType::MultipleSelectedCellError: {
+            case PopupType::CellSelectionError: {
                 QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     bool warning = ((popupType != PopupType::About) && (popupType != PopupType::ScriptRunnigCompleted));

@@ -88,7 +88,7 @@ public:
                                    const QStringList& inputData, const QStringList& valueEnum);
     bool isCheckPythonLibrary();
     QString systemCall(const bool& readFile, const QVariant& filePath);
-    bool writeExcelSheet(const QVariant& filePath, const bool& convert);
+    void writeExcelSheet(const QVariant& filePath, const bool& convert);
     QList<QVariantList> openExcelFile(const QString& filePath);
 
 private:

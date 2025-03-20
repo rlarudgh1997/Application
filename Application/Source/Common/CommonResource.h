@@ -136,11 +136,13 @@
 #define STRING_POPUP_DATA_VALIDATION QString("Data Validation")
 #define STRING_POPUP_DATA_VALIDATION_TIP QString("The input data contains %1.\nPlease enter the enumeration string.")
 
-#define STRING_POPUP_CELL_COLUMN QString("Merge/Split Cell selection error")
-#define STRING_POPUP_CELL_COLUMN_TIP QString("Cell selection for merge/split is incorrect.\nPlease select again.")
-
 #define STRING_POPUP_CELL_SELECTION_ERROR QString("Cell selection error")
-#define STRING_POPUP_CELL_SELECTION_ERROR_TIP QString("Multiple selection feature is not supported.\nPlease select again.")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP_0 QString("Multiple selection feature is not supported.\nPlease select again.")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP_1 QString("The cell selection for merging is incorrect.\nPlease select again.")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP_2 \
+    QString("The cell selection for merging is incorrect.\nPlease select again based on the TCName for merging.")
+#define STRING_POPUP_CELL_SELECTION_ERROR_TIP_3 \
+    QString("The cell selection for merging is incorrect.\nPlease select again based on the Result for merging.")
 
 // =============================================================================================================
 // Image Define

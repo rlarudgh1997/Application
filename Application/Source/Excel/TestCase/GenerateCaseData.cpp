@@ -67,9 +67,7 @@ QString GenerateCaseData::genCase() {
     const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     const int convertEnd = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
 
-#if !defined(USE_EXCEL_DATA_MANAGER_OLD)
     ExcelDataManager::instance().data()->resetExcelData(true);
-#endif
 
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) ||
@@ -80,12 +78,6 @@ QString GenerateCaseData::genCase() {
             // qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
-
-        // Manager 내부의 data 컨테이너를 해당 sheetIndex 에 해당하는 데이터로 업데이트
-#if defined(USE_EXCEL_DATA_MANAGER_OLD)
-        QVariantList sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-        ExcelDataManager::instance().data()->updateExcelData(sheetIndex, sheetData);
-#endif
 
         // Json 파일 내부에서 순서 보장을 위한 Index 할당
         int caseCnt = 0;
