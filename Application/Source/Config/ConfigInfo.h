@@ -38,6 +38,7 @@ public:
         ConfigTypeExcelMerge,
         ConfigTypeExcelMergeEnd,
         ConfigTypeTCFileSplitSize,
+        ConfigTypeGenTCParsingCycle,
 
         // Vehicle
         ConfigTypeVsmFileNameBaseCV,
@@ -143,6 +144,7 @@ private:
         mConfigInfoData[ConfigTypeExcelMerge] = QPair<QString, QVariant>("ConfigTypeExcelMerge", QVariant("[Merge]"));
         mConfigInfoData[ConfigTypeExcelMergeEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeEnd", QVariant("[MergeEnd]"));
         mConfigInfoData[ConfigTypeTCFileSplitSize] = QPair<QString, QVariant>("ConfigTypeTCFileSplitSize", QVariant(100));
+        mConfigInfoData[ConfigTypeGenTCParsingCycle] = QPair<QString, QVariant>("ConfigTypeGenTCParsingCycle", QVariant(3));
 
         // Vehicle
         mConfigInfoData[ConfigTypeVsmFileNameBaseCV] =

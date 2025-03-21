@@ -631,7 +631,7 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
         int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
         int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
 
-        ExcelDataManager::instance().data()->resetExcelData(false);
+        ExcelDataManager::instance().data()->reloadExcelData();
         for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
             for (const auto& tcName : ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true)) {
                 for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {

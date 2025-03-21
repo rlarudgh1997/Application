@@ -53,6 +53,14 @@ bool ConvertDataManager::excuteConvertDataManager() {
         checkTimer.check("excuteConvertDataManager : Convert.excel_001");
     }
 
+    // if (convertKeywordData() == true) {
+    //     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
+    //         QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_003";
+    //         ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
+    //     }
+    //     checkTimer.check("excuteConvertDataManager : Convert.excel_003");
+    // }
+
     if (appendConvertConfigSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
@@ -125,11 +133,17 @@ bool ConvertDataManager::convertKeywordData() {
 
     // InputSignal Keyword ([Sheet])
     // TODO(csh): preset, not_trigger, dependent_on 키워드를 별도로 처리하는 경우 하기 함수명을 sheet 처리 함수로 변경 필요
-    if (convertInputSignalKeyword() == true) {
-        result = true;
-    } else {
-        qDebug() << "[convertInputSignalKeyword] Failed";
-    }
+
+    const int parsingCycle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenTCParsingCycle).toInt();
+    int cycle = 0;
+    do {
+        if (convertInputSignalKeyword() == true) {
+            result = true;
+        } else {
+            qDebug() << "[convertInputSignalKeyword] Failed- Cycle :" << cycle << "/" << parsingCycle;
+        }
+        cycle++;
+    } while (cycle < parsingCycle);
 
     // TODO(csh): 삭제 예정
     // const int originStart = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
@@ -1209,10 +1223,10 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-    ExcelDataManager::instance().data()->resetExcelData(true);
+    ExcelDataManager::instance().data()->reloadExcelData();
+
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet :" << sheetIndex;
@@ -1361,20 +1375,7 @@ bool ConvertDataManager::appendConvertConfigSignalSet() {
             }
         }
         if (result == true) {
-            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
-            if (currentSheetData.size() > 0) {
-                QVariantList tmpSheetData;
-                for (auto& data : currentSheetData) {
-                    tmpSheetData.append(data);
-                }
-                ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
-            } else {
-                // no data changed.
-#if defined(ENABLE_CONFIG_DEBUG_LOG)
-                qDebug("[appendConvertConfigSignalSet] No Config Data (sheet index : %d) -> No need to create excel file",
-                       sheetIndex);
-#endif
-            }
+            ExcelDataManager::instance().data()->writeExcelSheetData(sheetIndex);
         }
     }
 
@@ -1387,10 +1388,9 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-    ExcelDataManager::instance().data()->resetExcelData(true);
+    ExcelDataManager::instance().data()->reloadExcelData();
 
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
             (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "Not support sheet :" << sheetIndex;
@@ -1532,12 +1532,7 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
 #endif
             }
         }
-        QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
-        QVariantList tmpSheetData;
-        for (auto& data : currentSheetData) {
-            tmpSheetData.append(data);
-        }
-        ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
+        ExcelDataManager::instance().data()->writeExcelSheetData(sheetIndex);
     }
 
     return result;
@@ -1548,8 +1543,6 @@ bool ConvertDataManager::convertOutputDataKeyword() {
 
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
-
-    ExcelDataManager::instance().data()->resetExcelData(false);
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
@@ -1600,7 +1593,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-    ExcelDataManager::instance().data()->resetExcelData(false);
+    ExcelDataManager::instance().data()->reloadExcelData();
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
@@ -1710,23 +1703,7 @@ bool ConvertDataManager::convertInputSignalKeyword() {
 
         if (result == true) {
             // updateCurSheetData(sheetIndex, backupCurSheetIndexData);
-            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
-            qDebug() << "[[Set Sheet Data] currentSheetData : " << currentSheetData;
-#endif
-            if (currentSheetData.size() > 0) {
-                QVariantList tmpSheetData;
-                for (auto& data : currentSheetData) {
-                    tmpSheetData.append(data);
-                }
-                ExcelData::instance().data()->setSheetData(sheetIndex, tmpSheetData);
-            } else {
-                // no data changed.
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
-                qDebug("[convertInputSignalKeyword] No Data Changed (sheet index : %d) -> No need to create excel file",
-                       sheetIndex);
-#endif
-            }
+            ExcelDataManager::instance().data()->writeExcelSheetData(sheetIndex);
         }
     }
 
@@ -2213,18 +2190,15 @@ QList<ResultInfo> ConvertDataManager::mergeAndCleanResultList(const QList<Result
 bool ConvertDataManager::convertNonInputSignalKeyword() {
     bool result = false;
 
-    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription);
-    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax);
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
 
-    ExcelDataManager::instance().data()->resetExcelData(false);
+    ExcelDataManager::instance().data()->reloadExcelData();
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        int convertSheetIndex = sheetIndex -
-                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) +
-                                static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
-        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs))) {
+        if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
             qDebug() << "[convertNonInputSignalKeyword] Not support sheet :" << sheetIndex;
             continue;
         }
@@ -2348,12 +2322,7 @@ bool ConvertDataManager::convertNonInputSignalKeyword() {
         }
 
         if (result == true) {
-            QList<QStringList> currentSheetData = ExcelDataManager::instance().data()->isSheetDataInfo(sheetIndex);
-            QVariantList tmpSheetData;
-            for (auto& data : currentSheetData) {
-                tmpSheetData.append(data);
-            }
-            ExcelData::instance().data()->setSheetData(convertSheetIndex, tmpSheetData);
+            ExcelDataManager::instance().data()->writeExcelSheetData(sheetIndex);
         }
     }
 
@@ -2538,9 +2507,6 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
             }
         }
     }
-
-    ExcelDataManager::instance().data()->resetExcelData(false);
-
     return sheetDataInfo;
 }
 
@@ -2550,8 +2516,6 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSh
     const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
     const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
     QList<QPair<QString, QPair<QStringList, QStringList>>> sheetKeywordSignalDataInfo;
-
-    ExcelDataManager::instance().data()->resetExcelData(false);
 
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {

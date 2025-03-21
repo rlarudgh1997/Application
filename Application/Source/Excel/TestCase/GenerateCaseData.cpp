@@ -67,7 +67,7 @@ QString GenerateCaseData::genCase() {
     const int convertStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     const int convertEnd = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
 
-    ExcelDataManager::instance().data()->resetExcelData(true);
+    ExcelDataManager::instance().data()->reloadExcelData();
 
     for (int sheetIndex = convertStart; sheetIndex < convertEnd; ++sheetIndex) {
         if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) ||

@@ -25,17 +25,19 @@ ExcelDataManager::ExcelDataManager() {
     setMerge(merge);
     setMergeEnd(mergeEnd);
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+
+    reloadExcelData();
 }
 
-QList<QStringList> ExcelDataManager::isSheetDataInfo(const int& sheetIndex) {
-    QMap<int, QStringList> excelSheetData = isConvertedExcelData(sheetIndex);
+QVariantList ExcelDataManager::isSheetDataInfo(const int& sheetIndex, const bool& appendMergeInfo) {
+    QMap<int, QStringList> excelSheetData = isConvertedExcelData(sheetIndex, appendMergeInfo);
     int rowMax = 0;
     for (auto iter = excelSheetData.cbegin(); iter != excelSheetData.cend(); ++iter) {
         rowMax = (rowMax > iter.value().size()) ? (rowMax) : (iter.value().size());
     }
 
-    QList<QStringList> sheetData;
-    sheetData.reserve(rowMax);
+    QList<QStringList> tmpSheetData;
+    tmpSheetData.reserve(rowMax);
     for (int index = 0; index < rowMax; ++index) {
         QStringList rowData;
         for (const auto& columnData : excelSheetData) {
@@ -43,16 +45,20 @@ QList<QStringList> ExcelDataManager::isSheetDataInfo(const int& sheetIndex) {
                 rowData.append(columnData.at(index));
             }
         }
-        sheetData.append(rowData);
+        tmpSheetData.append(rowData);
         // qDebug() << index << ". RowData :" << rowData;
     }
 
-    qDebug() << "isSheetDataInfo :" << sheetIndex << excelSheetData.size() << rowMax << sheetData.size();
+    QVariantList sheetData;
+    for (auto& data : tmpSheetData) {
+        sheetData.append(data);
+    }
 
+    // qDebug() << "isSheetDataInfo :" << sheetIndex << excelSheetData.size() << rowMax << tmpSheetData.size();
     return sheetData;
 }
 
-QMap<int, QStringList> ExcelDataManager::isConvertedExcelData(const int& sheetIndex) {
+QMap<int, QStringList> ExcelDataManager::isConvertedExcelData(const int& sheetIndex, const bool& appendMergeInfo) {
     // Read Type
     setReadStateNewData(true);
     // InsertData to ExcelData
@@ -128,27 +134,32 @@ QMap<int, QStringList> ExcelDataManager::isConvertedExcelData(const int& sheetIn
         }
     }
 
-    for (auto iter = mergeIndex.cbegin(); iter != mergeIndex.cend(); ++iter) {
-        int columnIndex = iter.key();
-        QStringList& columnData = excelSheetData[columnIndex];
-        for (const auto& merge : iter.value()) {
-            int start = merge.first;
-            int end = merge.second;
-            int cout = end - start + 1;
+    if (appendMergeInfo) {
+        for (auto iter = mergeIndex.cbegin(); iter != mergeIndex.cend(); ++iter) {
+            int columnIndex = iter.key();
+            QStringList& columnData = excelSheetData[columnIndex];
+            for (const auto& merge : iter.value()) {
+                int start = merge.first;
+                int end = merge.second;
+                int count = end - start + 1;
 
-            if (cout == 1) {
-                continue;
-            }
-            for (int index = start; index <= end; ++index) {
-                if (index >= columnData.size()) {
+                if (count == 1) {
                     continue;
                 }
-                if (index == start) {
-                    columnData[index].prepend(getMergeStart());
-                } else if (index == end) {
-                    columnData[index].prepend(getMergeEnd());
-                } else {
-                    columnData[index].prepend(getMerge());
+                for (int index = start; index <= end; ++index) {
+                    if (index >= columnData.size()) {
+                        continue;
+                    }
+                    // for (const auto& merge : getMergeInfos()) {
+                    //     columnData[index].remove(merge);
+                    // }
+                    if (index == start) {
+                        columnData[index].prepend(getMergeStart());
+                    } else if (index == end) {
+                        columnData[index].prepend(getMergeEnd());
+                    } else {
+                        columnData[index].prepend(getMerge());
+                    }
                 }
             }
         }
@@ -760,33 +771,94 @@ int ExcelDataManager::isCaseIndex(const int& sheetIndex, const QString& tcName, 
     return caseIndex;
 }
 
-void ExcelDataManager::resetExcelData(const bool& convertState, const int& reloadIndex) {
-    int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-    int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+void ExcelDataManager::reloadExcelData(const int& sheetIndex) {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;  // Origin
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;   // Convert
+    const bool allState = ((sheetIndex < startIndex) || (sheetIndex >= endIndex));
 
-    if (convertState) {
-        startIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
-        endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
-    }
-
-    if (reloadIndex == 0) {
-        // 이전 저장 데이터 삭제
+    QList<int> sheetIndexList;
+    if (allState) {
         clearInsertSheetData();
         clearExcelSheetData();
-
-        for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-            auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
-            QMapIntStrList excelSheetData = updateParsingExcelData(sheetIndex, sheetData);
-            setExcelSheetData(sheetIndex, excelSheetData);
+        for (int index = startIndex; index < endIndex; ++index) {
+            if (index == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax) {
+                continue;
+            }
+            sheetIndexList.append(index);
         }
     } else {
-        QList<QStringList> sheetData = isSheetDataInfo(reloadIndex);
-        QVariantList tmpSheetData;
-        for (auto& data : sheetData) {
-            tmpSheetData.append(data);
+        setInsertSheetData(sheetIndex, QList<InsertData>());
+        setExcelSheetData(sheetIndex, QMap<int, QStringList>());
+        sheetIndexList.append(sheetIndex);
+    }
+
+    QMap<int, QMap<int, QStringList>> excelData;
+    for (const auto& index : sheetIndexList) {
+        auto sheetData = ExcelData::instance().data()->getSheetData(index).toList();
+        auto excelSheetData = updateParsingExcelData(index, sheetData);
+        setExcelSheetData(index, excelSheetData);
+
+        if (index <= ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax) {
+            continue;
         }
-        QMapIntStrList excelSheetData = updateParsingExcelData(reloadIndex, tmpSheetData);
-        setExcelSheetData(reloadIndex, excelSheetData);
+        excelData[index] = excelSheetData;
+    }
+
+#if 0
+    qDebug() << (QString(100, '*').toLatin1().data());
+    qDebug() << "reloadExcelData :" << sheetIndex << allState;
+    qDebug() << "\t" << (QString(100, '=').toLatin1().data()) << "\n";
+
+    for (const auto& sheetKey : excelData.keys()) {
+        auto sheetData = excelData[sheetKey];
+        if (sheetData.size() == 0) {
+            continue;
+        }
+
+        int rowMax = 0;
+        for (auto iter = sheetData.cbegin(); iter != sheetData.cend(); ++iter) {
+            rowMax = (rowMax > iter.value().size()) ? (rowMax) : (iter.value().size());
+        }
+
+        qDebug() << "\t" << (QString(100, '>').toLatin1().data());
+        qDebug() << "\t [[SheetIndex]] :" << sheetKey << rowMax << "\n";
+
+        for (int index = 0; index < rowMax; ++index) {
+            QStringList rowData;
+            for (const auto& columnData : sheetData) {
+                if (index < columnData.size()) {
+                    rowData.append(columnData.at(index));
+                }
+            }
+            qDebug() << "\t Data[" << index << "] :" << rowData;
+            qDebug() << "\t" << (QString(100, '<').toLatin1().data());
+        }
+        qDebug() << "\n";
+    }
+#endif
+}
+
+void ExcelDataManager::writeExcelSheetData(const int& sheetIndex) {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;  // Origin
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;   // Convert
+    const bool allState = ((sheetIndex < startIndex) || (sheetIndex >= endIndex));
+
+    QList<int> sheetIndexList;
+
+    if (allState) {
+        for (int index = startIndex; index < endIndex; ++index) {
+            if (index == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax) {
+                continue;
+            }
+            sheetIndexList.append(index);
+        }
+    } else {
+        sheetIndexList.append(sheetIndex);
+    }
+
+    for (const auto& index : sheetIndexList) {
+        auto sheetData = isSheetDataInfo(index);
+        ExcelData::instance().data()->setSheetData(index, sheetData);
     }
 }
 
