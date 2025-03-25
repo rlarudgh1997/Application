@@ -28,7 +28,7 @@ ExcelUtil::ExcelUtil() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
-QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& toUpper) {
+QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& yml, const bool& toUpper) {
     bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
@@ -80,6 +80,7 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
             QDir directory(modulePath);
             QString excelFileInfo;
             QString tcFileInfo;
+            QString ymlFileInfo;
 
             for (const auto& file : directory.entryInfoList(QDir::Files)) {
                 QString fileName = file.fileName();
@@ -87,6 +88,8 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
                     excelFileInfo = file.absoluteFilePath();
                 } else if (fileName.contains(QRegularExpression("(?i)\\.(tc)$"))) {
                     tcFileInfo = file.absoluteFilePath();
+                } else if (fileName.contains(QRegularExpression("(?i)\\.(yml)$"))) {
+                    ymlFileInfo = file.absoluteFilePath();
                 } else {
                     continue;
                 }
@@ -97,7 +100,11 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
             }
 
             if ((excelFileInfo.size() > 0) || (tcFileInfo.size() > 0)) {
-                moduleInfo[moduleName] = qMakePair(excelFileInfo, tcFileInfo);
+                if (yml) {
+                    moduleInfo[moduleName] = qMakePair(excelFileInfo, ymlFileInfo);
+                } else {
+                    moduleInfo[moduleName] = qMakePair(excelFileInfo, tcFileInfo);
+                }
             }
         } else {
             moduleInfo[moduleName] = qMakePair(modulePath, QString());
@@ -108,7 +115,7 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
     // for (const auto& moduleName : moduleInfo.keys()) {
     //     qDebug() << "Module :" << moduleName;
     //     qDebug() << "\t Excel :" << moduleInfo[moduleName].first;
-    //     qDebug() << "\t TC    :" << moduleInfo[moduleName].second;
+    //     qDebug() << "\t Sub   :" << moduleInfo[moduleName].second;
     // }
 
     return moduleInfo;
@@ -134,6 +141,22 @@ QStringList ExcelUtil::isDescriptionDataInfo() {
         rowIndex++;
     }
     return dataInfo;
+}
+
+QString ExcelUtil::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
+    auto rowDataList = ExcelData::instance()->getSheetData(sheetIndex).toList();
+    if (rowIndex >= rowDataList.size()) {
+        return QString();
+    }
+    auto columnDataList = rowDataList.at(rowIndex).toStringList();
+    if (columnIndex >= columnDataList.size()) {
+        return QString();
+    }
+
+    QString currentCellText = columnDataList.at(columnIndex);
+
+    // qDebug() << "isCurrentCellText :" << sheetIndex << rowIndex << columnIndex << currentCellText;
+    return currentCellText;
 }
 
 QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnIndex) {
@@ -736,11 +759,12 @@ bool ExcelUtil::isCheckPythonLibrary() {
 #endif
 }
 
-QString ExcelUtil::systemCall(const bool& readFile, const QVariant& filePath) {
+QString ExcelUtil::pythonCall(const bool& readFile, const QString& filePath) {
+    ivis::common::CheckTimer checkTimer;
     QString cmdType = ((readFile) ? ("read") : ("write"));
-    QStringList fileInfo = filePath.toString().split("/");
+    QStringList fileInfo = filePath.split("/");
 
-    qDebug() << "systemCall() ->" << cmdType << "," << filePath;
+    // qDebug() << "pythonCall :" << cmdType << filePath;
 
     if (fileInfo.size() == 0) {
         qDebug() << "Fail to input file path (size : 0)";
@@ -757,8 +781,8 @@ QString ExcelUtil::systemCall(const bool& readFile, const QVariant& filePath) {
         fileName.append(".xlsx");
     }
 
-    QString cmd =
-        QString("python3 %1/ExcelParser.py %2 %3 %4").arg(ivis::common::APP_PWD()).arg(dirPath).arg(fileName).arg(cmdType);
+    QString cmd = QString("'python3' '%1/ExcelParser.py' '%2' '%3' '%4'").arg(ivis::common::APP_PWD()).arg(dirPath)
+                                                                         .arg(fileName).arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
@@ -770,21 +794,22 @@ QString ExcelUtil::systemCall(const bool& readFile, const QVariant& filePath) {
     }
 
     qDebug() << "*************************************************************************************************";
-    qDebug() << "PWD      :" << ivis::common::APP_PWD();
-    qDebug() << "System   :" << ((result) ? ("<Success>") : ("<fail>")) << cmd;
-    qDebug() << "FilePath :" << filePath;
-    qDebug() << "DirPath  :" << dirPath;
+    // checkTimer.check("pythonCall");
+    qDebug() << "PWD    :" << ivis::common::APP_PWD();
+    qDebug() << "Python :" << ((result) ? ("<Success>") : ("<Fail>")) << cmd;
+    qDebug() << "File   :" << filePath;
+    qDebug() << "Dir    :" << dirPath;
     for (const auto& d : log) {
-        qDebug() << "LogData  :" << d;
+        qDebug() << "Log  :" << d;
     }
     qDebug() << "*************************************************************************************************\n";
 
     return dirPath;
 }
 
-void ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
+void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
     // Set Path : file, directory
-    QStringList fileInfo = filePath.toString().split("/");
+    QStringList fileInfo = filePath.split("/");
     QString writePath = QString();
     for (int index = 0; index < (fileInfo.size() - 1); index++) {
         writePath.append(fileInfo[index]);
@@ -852,7 +877,7 @@ void ExcelUtil::writeExcelSheet(const QVariant& filePath, const bool& convert) {
         }
     }
 
-    QString dirPath = (writeSize > 0) ? (systemCall(false, filePath)) : ("");
+    QString dirPath = (writeSize > 0) ? (pythonCall(false, filePath)) : ("");
     if (dirPath.size() > 0) {
         // Delete : Folder(TC)
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDeleteFileTC).toBool()) {
@@ -869,7 +894,7 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
         return QList<QVariantList>();
     }
 
-    QString dirPath = systemCall(true, filePath);
+    QString dirPath = pythonCall(true, filePath);
     if (dirPath.size() == 0) {
         qDebug() << "File open fail :" << filePath;
         return QList<QVariantList>();

@@ -366,8 +366,7 @@ void GuiMenu::updateDialogViewFileInfo() {
         qDebug() << "Fail to view file info size :" << logInfo.size();
         return;
     }
-
-    qDebug() << "\t updateDialogViewFileInfo :" << logInfo.at(0).toString().size() << logInfo.at(1).toStringList().size();
+    // qDebug() << "\t updateDialogViewFileInfo :" << logInfo.at(0).toString().size() << logInfo.at(1).toStringList().size();
 
     QVariantList info = QVariantList({
         QString("View : %1").arg(logInfo.at(0).toString()),

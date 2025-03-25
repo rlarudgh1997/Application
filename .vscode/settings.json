@@ -93,9 +93,27 @@
         "qstringlistmodel": "cpp",
         "qsharedpointer": "cpp",
         "qguiapplication": "cpp",
-        "qapplication": "cpp"
+        "qapplication": "cpp",
+        "source_location": "cpp"
     },
-    "editor.stickyScroll.enabled": false
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggest.localityBonus": false,
+    "editor.suggest.shareSuggestSelections": false,
+    "editor.suggestSelection": "first",
+    "editor.inlineSuggest.enabled": false,
+    "editor.wordBasedSuggestions": "off",
+    "editor.parameterHints.enabled": false,
+    "editor.acceptSuggestionOnCommitCharacter": false
+
+    // "editor.autoIndent": "keep",
+    // "editor.formatOnPaste": false,
+    // "editor.autoIndent": "none"
+    // "editor.stickyScroll.enabled": false
     // "C_Cpp.clang_format_path": "/usr/bin/clang-format-14",
     // "C_Cpp.clang_format_path": "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
     // "C_Cpp.clang_format_fallbackStyle": "Google",

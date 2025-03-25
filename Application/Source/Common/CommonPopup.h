@@ -34,6 +34,7 @@ enum class PopupType {
 
     Exit,
     New,
+    OpeningFile,
     AnotherFileOpen,
     NoInstallLib,
     FileNotExist,
@@ -75,6 +76,7 @@ public:
         switch (popupType) {
             case PopupType::About:
             case PopupType::OpenFail:
+            case PopupType::OpeningFile:
             case PopupType::DataValidation:
             case PopupType::NowInstalling:
             case PopupType::InstallComplete:

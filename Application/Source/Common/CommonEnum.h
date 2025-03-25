@@ -118,7 +118,6 @@ public:
         PropertyTypeExcelDescTitle,
         PropertyTypeExcelConfigTitle,
         PropertyTypeExcelOtherTitle,
-        PropertyTypeExcelSheetCount,
         PropertyTypeExcelOpen,
         PropertyTypeExcelMergeStart,
         PropertyTypeExcelMerge,
@@ -222,8 +221,9 @@ public:
         EventTypeOpenExcel = 1700,
         EventTypeSaveExcel,
         EventTypeUpdateExcelSheet,
+        EventTypeUpdateAutoCompleteName,
         EventTypeUpdateAutoCompleteData,
-        EventTypeCellDataValidation,
+        EventTypeCheckValidation,
         EventTypeAutoInputDescriptionInfo,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,
@@ -298,6 +298,18 @@ public:
         Start,
         Resume,
         Wait,
+    };
+};
+
+class AutoCompleteEnum {
+public:
+    enum class AutoComplete {
+        Invalid = 0,
+        GenType,
+        VehicleType,
+        ConfigName,
+        Signal,
+        Data,
     };
 };
 

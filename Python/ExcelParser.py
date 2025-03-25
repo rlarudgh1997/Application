@@ -40,7 +40,7 @@ class ExcelParser:
         excel_merge = self.config_info["ConfigTypeExcelMerge"]
 
         # start_time = time.time()
-        wb = load_workbook(file_path, data_only=True)
+        wb = load_workbook(os.path.abspath(file_path), data_only=True)
         # check_time = time.time() - start_time
         # print(f"\t [CheckTime] load_workbook : {check_time:.5f} seconds")
 
@@ -200,10 +200,13 @@ class ExcelParser:
 
         wb.save(file_path)
 
-
 def main(argv):
+    # print("[ExcelParser.py]")
+
     if len(argv) != 4:
-        print("Usage : python3 Excelparser.py <directory> <file_name> <read/write>")
+        print("\t Usage     : [python3 Excelparser.py <directory> <file_name> <read/write>]\n\n")
+        for index in range(0, len(argv)):
+            print("\t Argv[", index, "] :", argv[index])
         sys.exit(1)
 
     start_time = time.time()

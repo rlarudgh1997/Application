@@ -73,8 +73,10 @@ class ExcelUtil : public QObject {
 public:
     static QSharedPointer<ExcelUtil>& instance();
 
-    QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& toUpper);
+    QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& yml = false,
+                                                                const bool& toUpper = false);
     QStringList isDescriptionDataInfo();
+    QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
     int isKeywordType(const int& columnIndex, QString& inputData);
@@ -87,8 +89,8 @@ public:
     QString isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
                                    const QStringList& inputData, const QStringList& valueEnum);
     bool isCheckPythonLibrary();
-    QString systemCall(const bool& readFile, const QVariant& filePath);
-    void writeExcelSheet(const QVariant& filePath, const bool& convert);
+    QString pythonCall(const bool& readFile, const QString& filePath);
+    void writeExcelSheet(const QString& filePath, const bool& convert);
     QList<QVariantList> openExcelFile(const QString& filePath);
 
 private:

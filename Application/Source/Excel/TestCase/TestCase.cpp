@@ -470,7 +470,7 @@ void TestCase::terminateApplicaton() {
 }
 
 QStringList TestCase::isModuleList() {
-    auto moduleInfoList = ExcelUtil::instance().data()->isModuleListFromJson(getSelectAppMode(), false);
+    auto moduleInfoList = ExcelUtil::instance().data()->isModuleListFromJson(getSelectAppMode());
     QStringList moduleList = moduleInfoList.keys();
     QMap<QString, QString> moduleInfo;
 
@@ -499,12 +499,23 @@ QList<QVariantList> TestCase::isSheetData() {
 }
 
 void TestCase::updateSheetData(const QList<QVariantList>& sheetDataList) {
-    qDebug() << "updateSheetData :" << sheetDataList.size();
+    // qDebug() << "updateSheetData :" << sheetDataList.size();
 
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     for (const auto& sheetData : sheetDataList) {
         ExcelData::instance().data()->setSheetData(sheetIndex++, sheetData);
     }
+}
+
+QList<QVariantList> TestCase::readSheetData() {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+    QList<QVariantList> sheetDataList;
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        sheetDataList.append(ExcelData::instance().data()->getSheetData(sheetIndex).toList());
+    }
+    return sheetDataList;
 }
 
 bool TestCase::openExcelFile() {
@@ -523,8 +534,16 @@ bool TestCase::openExcelFile() {
     QList<QVariantList> sheetDataList;
 
     if ((graphicsMode) || (sheetEditState)) {   // 임시코드 : 경로 이상 문제 수정
-        filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
-        sheetDataList = isSheetData();
+        qDebug() << "Info :" << ivis::common::APP_PWD() << currModule << getNewModule();
+        if (currModule == getNewModule()) {
+            sheetDataList = readSheetData();
+            // 1. 이경우 저장 하라는 팝업을 표시 할건지?
+            // 2. 특정 모듈, 경로 등을 지정 하여 동작 하도로 할건지?
+            filePath = ivis::common::APP_PWD() + "/" + currModule;
+        } else {
+            filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+            sheetDataList = isSheetData();
+        }
     } else {
         filePath = getModuleList(currModule);
         sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);

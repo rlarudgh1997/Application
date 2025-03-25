@@ -15,6 +15,7 @@ class TestCase : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_VALUE(int, ExcuteType, 0)
+    REGISTER_WRITABLE_VALUE(QString, NewModule, QString("NewModule"))
     REGISTER_WRITABLE_VALUE(QStringList, Arguments, QStringList())
     REGISTER_WRITABLE_VALUE(int, SelectAppMode, 0)
     REGISTER_WRITABLE_VALUE(QStringList, SelectModules, QStringList())
@@ -67,6 +68,7 @@ private:
     QStringList isModuleList();
     QList<QVariantList> isSheetData();
     void updateSheetData(const QList<QVariantList>& sheetDataList);
+    QList<QVariantList> readSheetData();
     bool openExcelFile();
 
 signals:

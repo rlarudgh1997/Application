@@ -135,7 +135,7 @@ void ControlCenter::updateConfigInfo() {
 
 void ControlCenter::updateAllModuleList() {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode);
     QStringList moduleList = moduleInfo.keys();
 
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAllModule, moduleList);

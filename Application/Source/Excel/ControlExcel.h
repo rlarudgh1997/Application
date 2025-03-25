@@ -16,9 +16,8 @@ public:
 private:
     explicit ControlExcel();
 
-    void updateNodeAddress(const bool& all, const QStringList& tcNameList, const QStringList& cofigNameList);
     void updateSheetData(const int& propertyType, const QVariantList& sheetData);
-    void updateExcelSheet(const QString& filePath);
+    void updateExcelSheet(const QList<QVariantList>& openSheetData = QList<QVariantList>());
     bool writeExcelFile(const QVariant& filePath);
     bool openExcelFile(const QVariant& filePath);
     void loadExcelFile(const int& eventType);
@@ -26,12 +25,14 @@ private:
     void updateShortcutInfo(const int& eventType);
     void updateGenType(const int& genType);
     void updateTCCheck(const int& allCheck);
+    void updateNodeAddress();
+    void updateAutoCompleteName();
     void updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex);
     void updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType);
     void updateAutoCompleteSuggestions(const QVariantList& inputData);
-    void updateAutoInputDescriptionInfo(const QString& moduleName);
+    void updateAutoInputDescriptionInfo(const QVariantList& inputData);
     void updateAutoCompleteData(const QVariantList& inputData);
-    void updateDataValidation(const QVariantList& cellDataInfo);
+    void updateDataValidation(const QVariantList& cellInfo);
     void updateGenDataInfo(const int& eventType);
 
 protected:

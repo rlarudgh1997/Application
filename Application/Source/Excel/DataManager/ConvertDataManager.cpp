@@ -47,7 +47,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     // NOTE(csh): [Sheet] Keyword 기능 수행(row data append) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
     if (convertKeywordData() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
+            QString filePath = ivis::common::APP_PWD() + "/Convert.excel_001";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_001");
@@ -55,7 +55,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
 
     // if (convertKeywordData() == true) {
     //     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-    //         QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_003";
+    //         QString filePath = ivis::common::APP_PWD() + "/Convert.excel_003";
     //         ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
     //     }
     //     checkTimer.check("excuteConvertDataManager : Convert.excel_003");
@@ -63,7 +63,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
 
     if (appendConvertConfigSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
+            QString filePath = ivis::common::APP_PWD() + "/Convert.excel_Config";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_Config");
@@ -72,7 +72,7 @@ bool ConvertDataManager::excuteConvertDataManager() {
     // NOTE(csh): 최종 signal 조합 set 구성(row data append) + 002 excel 파일 생성
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QVariant filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
+            QString filePath = ivis::common::APP_PWD() + "/Convert.excel_002";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
         checkTimer.check("excuteConvertDataManager : Convert.excel_002");

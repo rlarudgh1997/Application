@@ -61,7 +61,6 @@ void ControlExcel::initNormalData() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QStringList());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QStringList());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QStringList());
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, QVariantList());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, QVariant(false));
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart,
@@ -83,7 +82,7 @@ void ControlExcel::initNormalData() {
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType, vehicleTypeList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAppMode, appMode);
-    updateNodeAddress(true, QStringList(), QStringList());
+    updateNodeAddress();
 
     QVariantList keywordTypeInfo;
     for (int index = 0; index < static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max); ++index) {
@@ -159,6 +158,10 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
         if (getData(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip).toBool()) {
             return;
         }
+        // if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeExcelEditPossible).toBool() == false) {
+        //     qDebug() << "Fail - excel edit impossible state.";
+        //     return;
+        // }
 
         if (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCtrl) {
             updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, false);
@@ -196,58 +199,6 @@ void ControlExcel::updateDataHandler(const int& type, const QVariant& value, con
 void ControlExcel::sendEventInfo(const int& destination, const int& eventType, const QVariant& eventValue) {
     ControlManager::instance().data()->sendEventInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeDisplay).toInt(),
                                                      destination, eventType, eventValue);
-}
-
-void ControlExcel::updateNodeAddress(const bool& all, const QStringList& tcNameList, const QStringList& cofigNameList) {
-    const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
-    const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
-    const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
-    const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
-
-    // Update : SFC, Vehicle
-    if (all) {
-        QString nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
-        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-        if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-            nodeAddressPath.append("/PV");
-        } else {
-            nodeAddressPath.append("/CV");
-        }
-        auto nodeAddressInfo = QList<QPair<int, QString>>({
-            qMakePair(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QString("NodeAddressSFC.info")),
-            qMakePair(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QString("NodeAddressVSM.info")),
-        });
-        for (auto nodeAddress : nodeAddressInfo) {
-            QStringList list = ivis::common::FileInfo::readFile(QString("%1/%2").arg(nodeAddressPath).arg(nodeAddress.second));
-            list.sort();
-            list.removeDuplicates();
-            updateDataHandler(nodeAddress.first, list, true);
-        }
-    }
-
-    // Update : TCName
-    QStringList tcNameInfo;
-    for (auto tcName : tcNameList) {
-        ivis::common::getRemoved(tcName, mergeInfos);
-        if (tcName.size() > 0) {
-            tcNameInfo.append(tcName);
-        }
-    }
-    tcNameInfo.sort();
-    tcNameInfo.removeDuplicates();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, tcNameInfo, true);
-
-    // Update : ConfigName
-    QStringList configNameInfo;
-    for (auto cofigName : cofigNameList) {
-        ivis::common::getRemoved(cofigName, mergeInfos);
-        if (cofigName.size() > 0) {
-            configNameInfo.append(cofigName);
-        }
-    }
-    configNameInfo.sort();
-    configNameInfo.removeDuplicates();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, configNameInfo, true);
 }
 
 void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& sheetData) {
@@ -324,22 +275,22 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     qDebug() << "\033[0m";
 }
 
-void ControlExcel::updateExcelSheet(const QString& filePath) {
+void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     const QVariant sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName);
     const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
     const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
     const QVariant otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle);
 
-    bool excelOpen = filePath.size();
-    QList<QVariantList> sheetDataList;
     ivis::common::CheckTimer checkTimer;
+    bool excelOpen = (openSheetData.size() > 0);
+    QList<QVariantList> sheetDataList = openSheetData;
+    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
 
-    if (excelOpen) {
-        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
-        checkTimer.check("updateExcelSheet : openExcelFile");
-    } else {
-        int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-        int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
+    QStringList tcNameList;
+    QStringList configNameList;
+
+    if (excelOpen == false) {
+        const int rowMax = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewSheetRowCount).toInt();
         for (const auto& sheet : sheetName.toStringList()) {
             int columnMax;
             if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
@@ -356,19 +307,31 @@ void ControlExcel::updateExcelSheet(const QString& filePath) {
             sheetDataList.append(rowDataList);
             sheetIndex++;
         }
+    } else {
+        for (const auto& sheetData : sheetDataList) {
+            for (const auto& rowDataList : sheetData) {
+                if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                    continue;
+                }
+                auto columnDataList = rowDataList.toStringList();
+                if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+                    configNameList.append(columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)));
+                } else {
+                    tcNameList.append(columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
+                }
+            }
+            sheetIndex++;
+        }
     }
 
-    QStringList tcNameList;
-    QStringList configNameList;
-    updateNodeAddress(false, tcNameList, configNameList);
-
-    QVariantList rowMaxList;
-    int properytType = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     for (const auto& sheetData : sheetDataList) {
-        rowMaxList.append(sheetData.size());
-        updateSheetData(properytType++, sheetData);
+        updateSheetData(sheetIndex++, sheetData);
     }
-    checkTimer.check("updateExcelSheet : sheetData");
+    checkTimer.check("updateExcelSheet : sheet data");
+
+    updateAutoCompleteName();
+    checkTimer.check("updateExcelSheet : auto complete data");
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, sheetName);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, descTitle);
@@ -376,20 +339,21 @@ void ControlExcel::updateExcelSheet(const QString& filePath) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, otherTitle);
     checkTimer.check("updateExcelSheet : info");
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetCount, rowMaxList);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
     checkTimer.check("updateExcelSheet : visible");
+
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeExcelEditPossible, true);
 }
 
 bool ControlExcel::writeExcelFile(const QVariant& filePath) {
     if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
         return false;
     }
-
-    ExcelUtil::instance().data()->writeExcelSheet(filePath, false);
-    // qDebug() << "writeExcelFile :" << result << filePath;
-
+    // ivis::common::CheckTimer checkTimer;
+    ExcelUtil::instance().data()->writeExcelSheet(filePath.toString(), false);
+    // qDebug() << "writeExcelFile :" << filePath;
+    // checkTimer.check("openExcelFile");
     return true;
 }
 
@@ -397,19 +361,19 @@ bool ControlExcel::openExcelFile(const QVariant& filePath) {
     if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
         return false;
     }
+    // ivis::common::CheckTimer checkTimer;
+    QList<QVariantList> sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath.toString());
+    // qDebug() << "openExcelFile :" << filePath;
+    // checkTimer.check("openExcelFile");
 
-    bool exists = QFile(filePath.toString()).exists();
-    // qDebug() << "openExcelFile :" << exists << filePath;
-
-    if (exists) {
-        updateExcelSheet(filePath.toString());
-    } else {
-        qDebug() << "Fail - not exists file :" << filePath;
+    if (sheetDataList.size() > 0) {
+        // QVariantList text = QVariantList({STRING_POPUP_OPENING_FILE, STRING_POPUP_OPENING_FILE_TIP});
         // QVariant popupData = QVariant();
-        // ivis::common::Popup::drawPopup(ivis::common::PopupType::OpenFail, isHandler(), popupData,
-        //                                QVariantList({STRING_FILE_OPEN, STRING_FILE_OPEN_FAIL}));
+        // ivis::common::Popup::drawPopup(ivis::common::PopupType::OpeningFile, isHandler(), popupData, QVariant(text));
+        updateExcelSheet(sheetDataList);
+        return true;
     }
-    return exists;
+    return false;
 }
 
 void ControlExcel::loadExcelFile(const int& eventType) {
@@ -425,7 +389,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                     return;
                 }
             }
-            updateExcelSheet(QString());
+            updateExcelSheet();
             // Open, Edit 시 사용된 정보 초기화
             QVariant allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, allModule);
@@ -612,6 +576,73 @@ void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QSt
     }
 }
 
+void ControlExcel::updateNodeAddress() {
+    // Update : SFC, Vehicle
+    QString nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        nodeAddressPath.append("/PV");
+    } else {
+        nodeAddressPath.append("/CV");
+    }
+    auto nodeAddressInfo = QList<QPair<int, QString>>({
+        qMakePair(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC, QString("NodeAddressSFC.info")),
+        qMakePair(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QString("NodeAddressVSM.info")),
+    });
+    for (auto nodeAddress : nodeAddressInfo) {
+        QStringList list = ivis::common::FileInfo::readFile(QString("%1/%2").arg(nodeAddressPath).arg(nodeAddress.second));
+        list.sort();
+        list.removeDuplicates();
+        updateDataHandler(nodeAddress.first, list, true);
+    }
+}
+
+void ControlExcel::updateAutoCompleteName() {
+    const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
+    const QString merge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
+    const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
+    const QStringList mergeInfos = QStringList({mergeStart, merge, mergeEnd});
+
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+    QStringList tcNameList;
+    QStringList cofigNameList;
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        for (const auto& rowDataList : getData(sheetIndex).toList()) {
+            if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                continue;
+            }
+            auto columnDataList = rowDataList.toStringList();
+            QString text;
+            if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+                text = columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
+                ivis::common::getRemoved(text, mergeInfos);
+                cofigNameList.append(text);
+            } else {
+                text = columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+                ivis::common::getRemoved(text, mergeInfos);
+                tcNameList.append(text);
+            }
+        }
+    }
+
+    // Update : TCName
+    tcNameList.sort();
+    tcNameList.removeDuplicates();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, tcNameList, true);
+
+    // Update : ConfigName
+    cofigNameList.sort();
+    cofigNameList.removeDuplicates();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, cofigNameList, true);
+
+    // qDebug() << "updateAutoCompleteName";
+    // qDebug() << "\t TCName     :" << tcNameList;
+    // qDebug() << "\t ConfigName :" << cofigNameList;
+}
+
+
 void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType) {
     if ((keywordType & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)) == false) {
         return;  // Sheet 키워드가 아닌 경우 -> 자동완성 리스트 구성 하지 않음
@@ -648,18 +679,51 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
 }
 
 void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) {
-    if (inputData.size() != 4) {
+    if (inputData.size() != 3) {
         qDebug() << "Fail to auto complete input data size :" << inputData.size();
         return;
     }
-
-    QString signalName = inputData.at(0).toString();
-    QString vehicleType = inputData.at(1).toString();
+    int sheetIndex = inputData.at(0).toInt();
+    int rowIndex = inputData.at(1).toInt();
     int columnIndex = inputData.at(2).toInt();
-    int signalIndex = inputData.at(3).toInt();
+
+    int signalIndex = 0;
+    QString signalName;
+    QString vehicleType;
+
+    switch (sheetIndex) {
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription: {
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData)) {
+                signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal);
+                signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalIndex);
+            }
+            break;
+        }
+        default: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
+                signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
+                signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalIndex);
+            } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
+                signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
+                signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalIndex);
+            } else {
+            }
+            int vehicleIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
+            vehicleType = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, vehicleIndex);
+            break;
+        }
+    }
 
     if (signalName.size() == 0) {
         return;
+    }
+
+    if (vehicleType.isEmpty()) {
+        QVariant vehicleTypeList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType);
+        vehicleType = vehicleTypeList.toStringList().join(", ");
     }
 
     int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
@@ -673,17 +737,27 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
     }
 }
 
-void ControlExcel::updateAutoInputDescriptionInfo(const QString& moduleName) {
-    if (moduleName.size() == 0) {
-        // qDebug() << "Fail to auto input module name size : 0";
+void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& inputData) {
+    if (inputData.size() != 3) {
+        qDebug() << "Fail to auto desc input data size :" << inputData.size();
+        return;
+    }
+    int sheetIndex = inputData.at(0).toInt();
+    int rowIndex = inputData.at(1).toInt();
+    int columnIndex = inputData.at(2).toInt();
+
+    if (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
         return;
     }
 
-    QString fileName = SignalDataManager::instance().data()->isSfcFileInfo(moduleName);
-    // qDebug() << "updateAutoInputDescriptionInfo :" << moduleName << fileName;
+    QString moduleName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, columnIndex);
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true, false);
+    auto fileName = moduleInfo[moduleName.toUpper()].second;
 
+    // qDebug() << "updateAutoInputDescriptionInfo :" << moduleName << fileName;
     if (fileName.size() == 0) {
-        qDebug() << "Not found matching module name :" << moduleName;
+        qDebug() << "Not found matching module name :" << moduleName << fileName;
         return;
     }
 
@@ -711,62 +785,40 @@ void ControlExcel::updateAutoInputDescriptionInfo(const QString& moduleName) {
     }
 }
 
-void ControlExcel::updateAutoCompleteData(const QVariantList& inputData) {
-    if (inputData.size() != 2) {
+void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
+    if (cellInfo.size() != 3) {
+        qDebug() << "Fail to cell data info size :" << cellInfo.size();
         return;
     }
-    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+    int sheetIndex = cellInfo.at(0).toInt();
+    int rowIndex = cellInfo.at(1).toInt();
+    int columnIndex = cellInfo.at(2).toInt();
+    int signalColumnIndex = 0;
 
-    int sheetIndex = inputData.at(0).toBool();
-    bool columnIndex = inputData.at(1).toBool();
-
-    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
-        return;
-    }
-
-    bool tcNameEdit = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
-    bool configNameEdit = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
-                           (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)));
-
-    QStringList tcNameList = QStringList();
-    if (tcNameEdit) {
-        for (int updateSheetIndex = startIndex; updateSheetIndex < endIndex; ++updateSheetIndex) {
-            for (const auto& sheetDataList : getData(updateSheetIndex).toList()) {
-                QVariantList sheetData = sheetDataList.toList();
-                QString tcName = sheetData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)).toString();
-                if (tcName.size() > 0) {
-                    tcNameList.append(tcName);
-                }
+    switch (sheetIndex) {
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription: {
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData)) {
+                signalColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal);
             }
+            break;
+        }
+        default: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
+                signalColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
+            } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
+                signalColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal);
+            } else {
+            }
+            break;
         }
     }
-
-    QStringList configNameList = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName).toStringList();
-    if (configNameEdit) {
-        QVariantList sheetData = getData(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs).toList();
-        QString configName = sheetData.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)).toString();
-        if (configName.size() > 0) {
-            configNameList.append(configName);
-        }
-    }
-
-    // qDebug() << "updateAutoCompleteData :" << tcNameList << configNameList;
-    updateNodeAddress(false, tcNameList, configNameList);
-}
-
-void ControlExcel::updateDataValidation(const QVariantList& cellDataInfo) {
-    if (cellDataInfo.size() != 5) {
-        qDebug() << "Fail to cell data info size :" << cellDataInfo.size();
-        return;
-    }
-
-    QString signalName = cellDataInfo.at(0).toString();
-    QString inputData = cellDataInfo.at(1).toString();
-    int sheetIndex = cellDataInfo.at(2).toInt();
-    int rowIndex = cellDataInfo.at(3).toInt();
-    int columnIndex = cellDataInfo.at(4).toInt();
+    QString signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalColumnIndex);
+    QString inputData = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, columnIndex);
     int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
+
     qDebug() << "updateDataValidation :" << signalName << inputData;
 
     if (inputData.size() == 0) {
@@ -848,8 +900,12 @@ void ControlExcel::updateDataValidation(const QVariantList& cellDataInfo) {
 }
 
 void ControlExcel::updateGenDataInfo(const int& eventType) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeExcelEditPossible).toBool() == false) {
+        qDebug() << "Fail - excel edit impossible state.";
+        return;
+    }
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
-        qDebug() << "Fail to excel data validation.";
+        qDebug() << "Fail - excel data validation.";
         return;
     }
 
@@ -865,9 +921,11 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
-    QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+    // QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+    QString filePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString();
     QFileInfo fileInfo(filePath);
-    QString moduleName = QDir(fileInfo.path()).dirName();
+    QString moduleName =
+        (filePath.size() > 0) ? (QDir(fileInfo.path()).dirName()) : (TestCase::instance().data()->getNewModule());
 
     TestCase::instance().data()->start(QStringList({appModeInfo, moduleName}));
 }
@@ -908,12 +966,21 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeOpenExcel: {
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData: {
-            updateAutoCompleteData(value.toList());
+        case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {
+            updateAutoInputDescriptionInfo(value.toList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {
-            updateAutoInputDescriptionInfo(value.toString());
+        case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteName: {
+            updateAutoCompleteName();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions:
+        case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData: {
+            updateAutoCompleteSuggestions(value.toList());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeCheckValidation: {
+            updateDataValidation(value.toList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeWarningMergeSplit:
@@ -932,14 +999,6 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             QVariant popupData = QVariant();
             ivis::common::Popup::drawPopup(popupType, isHandler(), popupData, QVariantList({title, tips}));
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions: {
-            updateAutoCompleteSuggestions(value.toList());
-            break;
-        }
-        case ivis::common::EventTypeEnum::EventTypeCellDataValidation: {
-            updateDataValidation(value.toList());
             break;
         }
         default: {

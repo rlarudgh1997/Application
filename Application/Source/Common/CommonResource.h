@@ -144,6 +144,9 @@
 #define STRING_POPUP_CELL_SELECTION_ERROR_TIP_3 \
     QString("The cell selection for merging is incorrect.\nPlease select again based on the Result for merging.")
 
+#define STRING_POPUP_OPENING_FILE QString("Open file")
+#define STRING_POPUP_OPENING_FILE_TIP QString("Opening an Excel file.")
+
 // =============================================================================================================
 // Image Define
 // =============================================================================================================

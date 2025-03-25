@@ -207,6 +207,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(int, CurrSheetIndex, 0)
     REGISTER_WRITABLE_VALUE(CellSelectedInfo, CopyInfo, CellSelectedInfo())
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QString, ShortcutInfo)
 
 public:
     static QSharedPointer<GuiExcel>& instance(AbstractHandler* handler = nullptr);
@@ -223,6 +224,7 @@ private:
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     void updateDialogAutoCompleteVehicle();
     void updateDialogAutoCompleteConfigName();
+    void updateDialogAutoCompleteSignal(const int& columnIndex);
     void updateDialogValueEnum(const QVariantList& data);
     void updateDialogTCNameResult(const QStringList& data);
     void updateDialogSelectGenType();
@@ -236,7 +238,8 @@ private:
     bool checkExcelSheet(const int& sheetIndex);
     QVariantList readSheetDisplay(const int& sheetIndex);
     void syncSheetData(const int& sheetIndex, const QVariantList& undoRedoData = QVariantList());
-    void syncAutoComplete(const int& sheetIndex, const int& columnIndex, const QVariant& data = QVariant());
+    void syncAutoComplete(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    void parsingShortcutType(const int& sheetIndex, const QPoint& position);
     void screenUpdateBlock(const int& sheetIndex, const bool& block);
     void updateEditSheetData(const int& sheetIndex, const QList<QStringList>& previousData, const QVariantList& data);
     int updateShortcutInsertDelete(const int& sheetIndex, const bool& insertState);
@@ -248,12 +251,13 @@ private:
     void updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax);
     void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn, const int& columnIndex = (-1));
     void updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column);
-    void updateCellContent(const int& sheetIndex, const int& row, const int& column);
+    void updateSelectedCellItem(const QString& text);
+    void updateCellContent(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    QTableWidgetItem* updateCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex,
+                                            const QString& text);
     void updateCheckState(const int& sheetIndex, const int& columnIndex);
     void updateSheetProperty(const int& sheetIndex, const int& viewSheetIndex);
     void updateInitExcelSheet();
-    void updateDescriptionInfo(const int& sheetIndex, const int& row);
-    void updateAutoCompleteSignal(const bool& description, const int& columnIndex);
 
     void updateDisplayKey(const int& keyValue);
     void updateDisplayCellDataInfo(const int& sheetIndex, const int& row, const int& column);

@@ -55,11 +55,11 @@ class ControlExcel {
     -virtual void slotHandlerEvent(const int& type, const QVariant& value)
 
     -void updateNodeAddress(const bool& all, const QStringList& privateList, const QStringList& interList)
-    -void updateExcelSheet(const bool& excelOpen, const QVariant& dirPath)
+    -void updateExcelSheet(const QList<QVariantList>& openSheetData)
     -bool writeExcelSheet(const QVariant& filePath)
     -bool writeExcelFile(const QVariant& filePath)
     -bool writeSheetInfo(const QVariant& filePath)
-    -QString systemCall(const bool& readFile, const QVariant& filePath)
+    -QString pythonCall(const bool& readFile, const QVariant& filePath)
     -bool isCheckPythonLibrary()
     -bool openExcelFile(const QVariant& filePath)
     -void loadExcelFile(const int& eventType)
