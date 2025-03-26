@@ -204,6 +204,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(bool, SfcSignal, false)
     REGISTER_WRITABLE_VALUE(bool, OutputState, false)
     REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
+    REGISTER_WRITABLE_VALUE(bool, ColumnHeaderResize, false)
     REGISTER_WRITABLE_VALUE(int, CurrSheetIndex, 0)
     REGISTER_WRITABLE_VALUE(CellSelectedInfo, CopyInfo, CellSelectedInfo())
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
@@ -230,7 +231,7 @@ private:
     void updateDialogSelectGenType();
 
     bool isSheetContentChanged(const int& sheetIndex);
-    bool isDrawCheckBox(const int& sheetIndex, const int& columnIndex);
+    int isCheckState(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QList<QStringList> isSheetData(const int& sheetIndex, const bool& readProperty, const bool& removeMerge);
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QMap<int, QSet<QPair<int, int>>> isPropertyMergeInfo(const int& sheetIndex);
@@ -250,12 +251,13 @@ private:
     void updateClearClipboard(const CellSelectedInfo& clearInfo, const bool& cellHighlight);
     void updateRowMax(const int& sheetIndex, const int& rowMax, const int& changeRowMax);
     void updateSheetHeaderAdjust(const int& sheetIndex, const bool& resizeColumn, const int& columnIndex = (-1));
+    void updateSheetHorizontalHeaderFixed(const int& sheetIndex, const int& columnIndex, const int& width);
     void updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column);
     void updateSelectedCellItem(const QString& text);
     void updateCellContent(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QTableWidgetItem* updateCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex,
                                             const QString& text);
-    void updateCheckState(const int& sheetIndex, const int& columnIndex);
+    void updateCheckState(const int& sheetIndex, const int& columnIndex, const bool& sync = true);
     void updateSheetProperty(const int& sheetIndex, const int& viewSheetIndex);
     void updateInitExcelSheet();
 

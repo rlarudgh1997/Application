@@ -629,11 +629,13 @@ void ControlExcel::updateAutoCompleteName() {
 
     // Update : TCName
     tcNameList.sort();
+    tcNameList.removeAll("");
     tcNameList.removeDuplicates();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, tcNameList, true);
 
     // Update : ConfigName
     cofigNameList.sort();
+    cofigNameList.removeAll("");
     cofigNameList.removeDuplicates();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, cofigNameList, true);
 
@@ -974,7 +976,6 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             updateAutoCompleteName();
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeAutoCompleteSuggestions:
         case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData: {
             updateAutoCompleteSuggestions(value.toList());
             break;

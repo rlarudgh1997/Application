@@ -230,7 +230,6 @@ public:
         EventTypeUpdateSheetInfo,
         EventTypeSheetRowInsert,
         EventTypeSheetRowDelete,
-        EventTypeAutoCompleteSuggestions,
         EventTypeCellMergeSplit,
         EventTypeViewInfoClose,
         EventTypeUpdateConfig,
@@ -339,16 +338,6 @@ public:
     };
 };
 
-class CellInfoEnum {
-public:
-    enum ListInfoExcel {
-        Sheet = 0,
-        Count,  // row, column
-        Title,
-        Data,  // Data 1 ~ Data n-1
-    };
-};
-
 class ExcelSheetTitle {
 public:
     enum class Description {
@@ -390,22 +379,10 @@ public:
     };
 };
 
-class EditCellEnum {
-public:
-    enum EditCellInfo {
-        Invalid = 0,
-        Insert,
-        Delete,
-        Merge,
-        Split,
-    };
-    enum AutoComplete {
-        Draw = 0,
-        Update,
-        Show,
-        Hide,
-        Cancel,
-    };
+enum class CheckState {
+    Invalid = 0,
+    Unchecked,
+    Checked,
 };
 
 class GenTypeEnum {
@@ -636,19 +613,6 @@ public:
         ReservedEnum8 = 0x40000000,
         ReservedEnum9 = 0x80000000,
 #endif
-        Max,
-    };
-};
-
-class DataInfoTypeEnum {
-public:
-    enum class DataInfoType {
-        Invalid = 0,
-        NormalCaseRemove,  // TCName 기준 시그널 에서 Case 기준 시그널을 삭제 하고 중복 제거
-        NormalConfig,
-        TCDefault,
-        TCCase,
-        TCOuput,
         Max,
     };
 };

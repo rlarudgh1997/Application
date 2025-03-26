@@ -528,18 +528,15 @@ bool TestCase::openExcelFile() {
     }
 
     const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+    // const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
 
-    QString filePath;
     QList<QVariantList> sheetDataList;
+    QString filePath;
 
-    if ((graphicsMode) || (sheetEditState)) {   // 임시코드 : 경로 이상 문제 수정
-        qDebug() << "Info :" << ivis::common::APP_PWD() << currModule << getNewModule();
+    if (graphicsMode) {
         if (currModule == getNewModule()) {
+            filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
             sheetDataList = readSheetData();
-            // 1. 이경우 저장 하라는 팝업을 표시 할건지?
-            // 2. 특정 모듈, 경로 등을 지정 하여 동작 하도로 할건지?
-            filePath = ivis::common::APP_PWD() + "/" + currModule;
         } else {
             filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
             sheetDataList = isSheetData();
