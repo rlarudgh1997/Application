@@ -16,9 +16,9 @@ class ExcelParser:
         self.sheet_info = []
         self.config_info = {}
         self.config_path = config_path
-        self._read_config_setting()
+        self.read_config_setting()
 
-    def _read_config_setting(self):
+    def read_config_setting(self):
         current_path = os.path.dirname(os.path.realpath(__file__))
         config_file = os.path.join(current_path, self.config_path)
 
@@ -176,15 +176,15 @@ class ExcelParser:
 
             read_data.append(read)
 
-        self._write_to_excel(read_data, save_file_path)
-        self._write_to_merge_cell(merge_info_list, save_file_path)
+        self.write_to_excel(read_data, save_file_path)
+        self.write_to_merge_cell(merge_info_list, save_file_path)
 
-    def _write_to_excel(self, data, file_path):
+    def write_to_excel(self, data, file_path):
         with pd.ExcelWriter(file_path) as writer:
             for count, sheet in enumerate(self.sheet_names):
                 data[count].to_excel(writer, sheet_name=sheet, index=False)
 
-    def _write_to_merge_cell(self, merge_info_list, file_path):
+    def write_to_merge_cell(self, merge_info_list, file_path):
         wb = load_workbook(file_path)
 
         for sheet_key, sheet_value in merge_info_list.items():
@@ -200,6 +200,13 @@ class ExcelParser:
 
         wb.save(file_path)
 
+    @staticmethod    # self 변수를 포함 하지 않는 함수에 선언
+    def find_file_name(directory, fileName):
+        for file in os.listdir(directory):
+            if file.lower() == fileName.lower():
+                return os.path.join(directory, file)
+        return ""
+
 def main(argv):
     # print("[ExcelParser.py]")
 
@@ -212,10 +219,17 @@ def main(argv):
     start_time = time.time()
     path_dir = os.path.join(argv[1], "TC")
     os.makedirs(path_dir, exist_ok=True)
-    path_file = os.path.join(argv[1], argv[2])
+    parser = ExcelParser()
+
+     # 파일명 확인 - True : 대소문자 구분 X, False : 대소문 구분 O
+    case_insensitive = True
+    if case_insensitive:
+        path_file = parser.find_file_name(argv[1], argv[2])
+    else:
+        path_file = os.path.join(argv[1], argv[2])
+
     open_state = argv[3] == "read"
 
-    parser = ExcelParser()
 
     if open_state:
         if os.path.isfile(path_file):

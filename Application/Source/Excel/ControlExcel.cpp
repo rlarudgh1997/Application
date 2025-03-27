@@ -133,7 +133,8 @@ void ControlExcel::controlConnect(const bool& state) {
         });
 #endif
         connect(TestCase::instance().data(), &TestCase::signalTestCaseCompleted, [=](const int& type, const bool& result) {
-            slotTestCaseCompleted(type, result);
+            // TestCase 가 별도 쓰레드로 분리되어 동작함.
+            QMetaObject::invokeMethod(this, "slotTestCaseCompleted", Q_ARG(int, type), Q_ARG(bool, result));
         });
     } else {
         disconnect(isHandler());
@@ -158,10 +159,6 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
         if (getData(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip).toBool()) {
             return;
         }
-        // if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeExcelEditPossible).toBool() == false) {
-        //     qDebug() << "Fail - excel edit impossible state.";
-        //     return;
-        // }
 
         if (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCtrl) {
             updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, false);
@@ -342,8 +339,6 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, excelOpen, true);
     checkTimer.check("updateExcelSheet : visible");
-
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeExcelEditPossible, true);
 }
 
 bool ControlExcel::writeExcelFile(const QVariant& filePath) {
@@ -556,26 +551,6 @@ void ControlExcel::updateTCCheck(const int& allCheck) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, allCheck, true);
 }
 
-void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex) {
-    QStringList signalData = QStringList();
-    int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
-    QMap<int, QStringList> dataInfo =
-        SignalDataManager::instance().data()->isSignalDataList(signalName, signalData, vehicleType, dataType);
-    bool update = false;
-
-    for (int index = 0; index < ivis::common::InputDataTypeEnum::InputDataTypeMax; ++index) {
-        QStringList suggestionsDataInfo = dataInfo[index];
-        if (index == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
-            update = (suggestionsDataInfo.size() > 0);
-        }
-        updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum + index), suggestionsDataInfo);
-    }
-
-    if (update) {
-        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariantList({signalName, columnIndex}), true);
-    }
-}
-
 void ControlExcel::updateNodeAddress() {
     // Update : SFC, Vehicle
     QString nodeAddressPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNodeAddressPath).toString();
@@ -644,6 +619,25 @@ void ControlExcel::updateAutoCompleteName() {
     // qDebug() << "\t ConfigName :" << cofigNameList;
 }
 
+void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex) {
+    QStringList signalData = QStringList();
+    int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
+    QMap<int, QStringList> dataInfo =
+        SignalDataManager::instance().data()->isSignalDataList(signalName, signalData, vehicleType, dataType);
+    bool update = false;
+
+    for (int index = 0; index < ivis::common::InputDataTypeEnum::InputDataTypeMax; ++index) {
+        QStringList suggestionsDataInfo = dataInfo[index];
+        if (index == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
+            update = (suggestionsDataInfo.size() > 0);
+        }
+        updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum + index), suggestionsDataInfo);
+    }
+
+    if (update) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariantList({signalName, columnIndex}), true);
+    }
+}
 
 void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QString& vehicleType, const int& keywordType) {
     if ((keywordType & static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)) == false) {
@@ -739,7 +733,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
     }
 }
 
-void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& inputData) {
+void ControlExcel::updateAutoCompleteDescription(const QVariantList& inputData) {
     if (inputData.size() != 3) {
         qDebug() << "Fail to auto desc input data size :" << inputData.size();
         return;
@@ -754,25 +748,22 @@ void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& inputData)
 
     QString moduleName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, columnIndex);
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true, false);
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true, true);
     auto fileName = moduleInfo[moduleName.toUpper()].second;
 
-    // qDebug() << "updateAutoInputDescriptionInfo :" << moduleName << fileName;
+    qDebug() << "updateAutoCompleteDescription :" << moduleName << moduleName.toUpper() << fileName;
     if (fileName.size() == 0) {
         qDebug() << "Not found matching module name :" << moduleName << fileName;
         return;
     }
 
     QStringList readData = ivis::common::FileInfo::readFile(fileName);
-    QStringList foundStr = QStringList({"  sfcVersion: ", "  description: "});
-    QVariantList descInfo = QVariantList();
+    QSet<QString> foundStr({"  sfcVersion: ", "  description: "});
+    QStringList descInfo;
     for (const auto& data : readData) {
         for (const auto& str : foundStr) {
-            if (data.contains(str)) {
-                QString temp = data;
-                temp.remove(str);
-                temp.remove("\"");
-                descInfo.append(temp);
+            if (data.startsWith(str)) {  // contains() 대신 startsWith() 사용 (더 정확한 비교)
+                descInfo.append(data.mid(str.length()).remove('\"'));  // 불필요한 변수 제거 및 최적화
             }
         }
         if (descInfo.size() == foundStr.size()) {
@@ -781,8 +772,6 @@ void ControlExcel::updateAutoInputDescriptionInfo(const QVariantList& inputData)
     }
 
     if (descInfo.size() > 0) {
-        // descInfo.prepend(sheetIndex);
-        // descInfo.prepend(row);
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAutoInputDescriptionInfo, descInfo, true);
     }
 }
@@ -902,10 +891,6 @@ void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
 }
 
 void ControlExcel::updateGenDataInfo(const int& eventType) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeExcelEditPossible).toBool() == false) {
-        qDebug() << "Fail - excel edit impossible state.";
-        return;
-    }
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
         qDebug() << "Fail - excel data validation.";
         return;
@@ -934,6 +919,32 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
 void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
     qDebug() << "\n\t slotTestCaseCompleted :" << type << result;
+
+    switch (type) {
+        case TestCase::ExcuteTypeCompleted: {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
+                QVariantList info({
+                    STRING_POPUP_TEST_CASE_COMPLETE,
+                    STRING_POPUP_TEST_CASE_COMPLETE_TIP,
+                    STRING_POPUP_CONFIRM,
+                    STRING_POPUP_CANCEL
+                });
+                QVariant popupData;
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseComplete, isHandler(), popupData, info) ==
+                    ivis::common::PopupButton::Confirm) {
+                    qDebug() << "Test Case New Module Save :" << popupData;
+                    saveExcelFile(true);
+                }
+            }
+            break;
+        }
+        case TestCase::ExcuteTypeFailed: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {
@@ -968,8 +979,8 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
         case ivis::common::EventTypeEnum::EventTypeOpenExcel: {
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo: {
-            updateAutoInputDescriptionInfo(value.toList());
+        case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteNameDescription: {
+            updateAutoCompleteDescription(value.toList());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteName: {

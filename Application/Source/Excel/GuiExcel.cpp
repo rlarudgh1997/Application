@@ -63,7 +63,6 @@ void GuiExcel::drawDisplayDepth0() {
             currentSheet->currentItem()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
             currentSheet->currentItem()->setCheckState((text.isEmpty()) ? (Qt::Unchecked) : (Qt::Checked));
         }
-
         updateSheetDefaultFocus(sheetIndex, rowIndex, columnIndex);
     });
     connect(mGui->TabWidget, &QTabWidget::tabBarClicked, [=](int index) {
@@ -359,7 +358,9 @@ int GuiExcel::isCheckState(const int& sheetIndex, const int& rowIndex, const int
         return static_cast<int>(ivis::common::CheckState::Invalid);
     }
 
-    if (currentItem->checkState() == Qt::Checked) {
+    // qDebug() << sheetIndex <<".isCheckState[" << rowIndex << columnIndex << "] :" << currentItem->checkState()
+    //          << currentItem->text();
+    if ((currentItem->checkState() == Qt::Checked) || (currentItem->text().size() > 0)) {
         return static_cast<int>(ivis::common::CheckState::Checked);
     } else {
         return static_cast<int>(ivis::common::CheckState::Unchecked);
@@ -707,12 +708,12 @@ void GuiExcel::syncSheetData(const int& sheetIndex, const QVariantList& undoRedo
     createSignal(eventType, QVariantList({sheetIndex, sheetData}));
 }
 
-void GuiExcel::syncAutoComplete(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
+void GuiExcel::refreshAutoCompleteData(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
     int eventType = ivis::common::EventTypeEnum::EventTypeInvalid;
     switch (sheetIndex) {
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription: {
             if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
-                eventType = ivis::common::EventTypeEnum::EventTypeAutoInputDescriptionInfo;
+                eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteNameDescription;
             }
             break;
         }
@@ -738,7 +739,7 @@ void GuiExcel::syncAutoComplete(const int& sheetIndex, const int& rowIndex, cons
     }
 
     if (eventType != ivis::common::EventTypeEnum::EventTypeInvalid) {
-        // qDebug() << "syncAutoComplete :" << sheetIndex << rowIndex << columnIndex << eventType;
+        // qDebug() << "refreshAutoCompleteData :" << sheetIndex << rowIndex << columnIndex << eventType;
         createSignal(eventType, QVariantList({sheetIndex, rowIndex, columnIndex}));
     }
 }
@@ -817,6 +818,7 @@ int GuiExcel::updateShortcutInsertDelete(const int& sheetIndex, const bool& inse
     const int rowEnd = cellSelectedInfo.getRowEnd();
     const int rowMax = cellSelectedInfo.getRowMax();
     const int columnStart = cellSelectedInfo.getColumnStart();
+    const int columnMax = cellSelectedInfo.getColumnMax();
 
     // qDebug() << "updateShortcutInsertDelete :" << sheetIndex << insertState << rowStart << rowEnd << rowMax;
 
@@ -837,6 +839,9 @@ int GuiExcel::updateShortcutInsertDelete(const int& sheetIndex, const bool& inse
                 updateSheetDefaultFocus(sheetIndex, (rowStart - 1), columnStart);
             }
         }
+    }
+    for (int columnIndex = columnStart; columnIndex < columnMax; ++columnIndex) {
+        updateSheetHorizontalHeaderFixed(sheetIndex, columnIndex, 0);
     }
 
     return columnStart;
@@ -1086,15 +1091,15 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
         updateRowMax(sheetIndex, rowMax, clipboardDataMax);
     }
 
-    // qDebug() << "===============================================================================================";
-    // qDebug() << "updateShortcutPaste :" << sheetIndex << copySheetIndex;
-    // qDebug() << "\t Row           :" << rowStart << rowEnd << rowCount;
-    // qDebug() << "\t Column        :" << columnStart << columnEnd << columnCount;
-    // qDebug() << "\t Max           :" << rowMax << columnMax << clipboardDataMax;
-    // qDebug() << "\t CopyRow       :" << copyRowStart << copyRowEnd << copyRowCount;
-    // qDebug() << "\t CopyColumn    :" << copyColumnStart << copyColumnEnd << copyColumnCount;
-    // qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
-    // qDebug() << "\t -----------------------------------------------------------------------------------------";
+    qDebug() << "===============================================================================================";
+    qDebug() << "updateShortcutPaste :" << sheetIndex << copySheetIndex;
+    qDebug() << "\t Row           :" << rowStart << rowEnd << rowCount;
+    qDebug() << "\t Column        :" << columnStart << columnEnd << columnCount;
+    qDebug() << "\t Max           :" << rowMax << columnMax << clipboardDataMax;
+    qDebug() << "\t CopyRow       :" << copyRowStart << copyRowEnd << copyRowCount;
+    qDebug() << "\t CopyColumn    :" << copyColumnStart << copyColumnEnd << copyColumnCount;
+    qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
+    qDebug() << "\t -----------------------------------------------------------------------------------------";
 
     // Clear : Cut Selected Cell Backgorund/Text/Merge Info
     if (checkExcelSheet(copySheetIndex) == false) {
@@ -1134,7 +1139,6 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
 
     // Update : Paste Text Info
     QMap<int, int> updateAutoCompleteInfo;
-    QMap<int, int> updateCheckInfo;
     for (int cellRowIndex = 0; cellRowIndex < clipboardData.size(); ++cellRowIndex) {
         QStringList rowDataList = clipboardData[cellRowIndex].split("\t");
         for (int cellColumnIndex = 0; cellColumnIndex < rowDataList.size(); ++cellColumnIndex) {
@@ -1144,32 +1148,16 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
             updateCurrentCellText(sheetIndex, rowIndex, columnIndex, text);
             updateSheetHeaderAdjust(sheetIndex, false, columnIndex);
 
-            // 붙여넣기 후 자동완성 정보 갱신이 필요한 컬럼을 구성
-            switch (sheetIndex) {
-                case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription: {
-                    if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test)) {
-                        updateAutoCompleteInfo[sheetIndex] = columnIndex;
-                    }
-                    break;
-                }
-                case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs: {
-                    if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) {
-                        updateAutoCompleteInfo[sheetIndex] = columnIndex;
-                    }
-                    break;
-                }
-                default: {
-                    // InputData, OutputValue 가 있는 경우 자동완성 팝업이 표시됨 -> 이경우는 업데이트 하지 않음
-                    if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)) {
-                        updateAutoCompleteInfo[sheetIndex] = columnIndex;
-                    } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
-                        // int checkState = isCheckState(sheetIndex, rowIndex, columnIndex);
-                        // if (checkState != static_cast<int>(ivis::common::CheckState::Invalid)) {
-                        // }
-                        updateCheckInfo[sheetIndex] = columnIndex;
-                    }
-                    break;
-                }
+            bool update = false;    // 붙여넣기 후 자동완성 정보 갱신이 필요한 컬럼을 구성
+            if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                update = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Description::Test));
+            } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
+                update = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
+            } else {
+                update = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+            }
+            if (update) {
+                updateAutoCompleteInfo[sheetIndex] = columnIndex;
             }
         }
     }
@@ -1193,15 +1181,8 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
 
     // Update : AutoComplete Info
     for (const auto& key : updateAutoCompleteInfo.keys()) {
-        qDebug() << "Autocomplete after pasting :" << key << rowStart << updateAutoCompleteInfo[key];
-        syncAutoComplete(key, rowStart, updateAutoCompleteInfo[key]);
-    }
-
-    // Update : Check State
-    // updateCheckState(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check), false);
-    for (const auto& key : updateCheckInfo.keys()) {
-        qDebug() << "Check after pasting :" << key << rowStart << updateCheckInfo[key];
-        updateCellContent(key, rowStart, updateCheckInfo[key]);
+        qDebug() << "Refresh Autocomplete data after pasting :" << key << rowStart << updateAutoCompleteInfo[key];
+        refreshAutoCompleteData(key, rowStart, updateAutoCompleteInfo[key]);
     }
 
     return columnStart;
@@ -1348,7 +1329,6 @@ void GuiExcel::updateSheetDefaultFocus(const int& sheetIndex, const int& row, co
     currentSheet->setFocus();
 
     // Clear Focus : Current Cell Content
-    mGui->CellInfoContent->clear();
     mGui->CellInfoContent->clearFocus();
 }
 
@@ -1398,20 +1378,17 @@ QTableWidgetItem* GuiExcel::updateCurrentCellText(const int& sheetIndex, const i
         currentItem = new QTableWidgetItem();
         currentSheet->setItem(rowIndex, columnIndex, currentItem);
     }
+    currentItem->setText(text);
 
     int checkState = isCheckState(sheetIndex, rowIndex, columnIndex);
-    if (checkState == static_cast<int>(ivis::common::CheckState::Invalid)) {
-        currentItem->setText(text);
-    } else {
+    if (checkState != static_cast<int>(ivis::common::CheckState::Invalid)) {
         currentItem->setText("");
         currentItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
         currentItem->setCheckState((checkState == static_cast<int>(ivis::common::CheckState::Checked) ?
                                    (Qt::Checked) : (Qt::Unchecked)));
     }
-    // updateSheetHeaderAdjust(sheetIndex, false, columnIndex);
 
-    // qDebug() << "updateCurrentCellText :" << sheetIndex << rowIndex << columnIndex << text;
-
+    // qDebug() << "updateCurrentCellText :" << sheetIndex << rowIndex << columnIndex << text << currentItem->text();
     return currentItem;
 }
 
@@ -1547,13 +1524,16 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         return;
     }
     QTableWidget* currentSheet = mExcelSheet[sheetIndex];
-
     int rowIndex = currentSheet->currentRow();
     int columnIndex = currentSheet->currentColumn();
     int rowMax = currentSheet->rowCount();
     int columnMax = currentSheet->columnCount();
+    QTableWidgetItem* currentItem = currentSheet->item(rowIndex, columnIndex);
+    if (currentItem == nullptr) {
+        return;
+    }
 
-    // qDebug() << "updateDisplayKey :" << keyValue << columnIndex << rowIndex << rowMax << columnMax;
+    qDebug() << "updateDisplayKey :" << keyValue << columnIndex << rowIndex << rowMax << columnMax;
 
     switch (keyValue) {
         case ivis::common::KeyTypeEnum::KeyInputValueCancel: {
@@ -1573,7 +1553,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
             break;
         }
         case ivis::common::KeyTypeEnum::KeyInputValueOK: {
-            currentSheet->closePersistentEditor(currentSheet->item(rowIndex, columnIndex));
+            // currentSheet->closePersistentEditor(currentItem);
             auto mergeInfo = isDisplayMergeInfo(sheetIndex);
             for (const auto& merge : mergeInfo[columnIndex]) {
                 if ((rowIndex >= merge.first) && (rowIndex <= merge.second)) {
@@ -1583,8 +1563,8 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
             }
             rowIndex++;
             if (rowIndex < rowMax) {
-                updateSheetDefaultFocus(sheetIndex, rowIndex, columnIndex);
                 updateCellContent(sheetIndex, rowIndex, columnIndex);
+                updateSheetDefaultFocus(sheetIndex, rowIndex, columnIndex);
             }
             break;
         }
@@ -1592,7 +1572,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         case ivis::common::KeyTypeEnum::KeyInputValueDown:
         case ivis::common::KeyTypeEnum::KeyInputValueLeft:
         case ivis::common::KeyTypeEnum::KeyInputValueRight: {
-            currentSheet->closePersistentEditor(currentSheet->item(rowIndex, columnIndex));
+            // currentSheet->closePersistentEditor(currentItem);
             updateCellContent(sheetIndex, rowIndex, columnIndex);
             break;
         }
@@ -1644,7 +1624,7 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
     // qDebug() << "updateDisplayCellDataInfo :" << sheetIndex << row << column;
 
     if (supportAutoComplete) {
-        syncAutoComplete(sheetIndex, row, column);
+        refreshAutoCompleteData(sheetIndex, row, column);
     }
     if (checkValidation) {
         QVariantList currentCellInfo = QVariantList({sheetIndex, row, column});
@@ -1714,7 +1694,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             break;
         }
         case ivis::common::AutoCompleteEnum::AutoComplete::Data: {
-            syncAutoComplete(sheetIndex, row, column);
+            refreshAutoCompleteData(sheetIndex, row, column);
             break;
         }
         default: {
@@ -1745,6 +1725,7 @@ void GuiExcel::updateDisplayAutoInputDescrtion() {
     for (const auto& info : descrtionInfo.toList()) {
         int columnIndex = (column + index);
         updateCurrentCellText(sheetIndex, rowIndex, columnIndex, info.toString());
+        updateSheetHorizontalHeaderFixed(sheetIndex, columnIndex, 0);
         // currentSheet->setItem(rowIndex, columnIndex, new QTableWidgetItem(info.toString()));
         index++;
     }
@@ -1914,34 +1895,19 @@ void GuiExcel::updateDisplayExcelSheet() {
         sheetIndex++;
     }
 
-    QList<int> columList({0, 2, 3, 4});
     // Connect : Signal/Slot
     for (const auto& sheetIndex : sheetIndexList) {
         if (checkExcelSheet(sheetIndex) == false) {
             return;
         }
-
-        if (sheetIndex == 3003) {
-            for (const auto& column : columList) {
-                qDebug() << "columnWidth[" << column << "] :" << mExcelSheet[sheetIndex]->columnWidth(column);
-            }
-        }
-
-
-        // mExcelSheet[sheetIndex]->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-        // qDebug() << "horizontalHeader :" << mExcelSheet[sheetIndex]->horizontalHeader()->sectionResizeMode(0);
-
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellChanged, [=](int row, int column) {
-            // qDebug() << "1 cellChanged :" << row << column;
             updateDisplayCellDataInfo(sheetIndex, row, column);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellClicked, [=](int row, int column) {
-            // qDebug() << "2 cellClicked :" << row << column;
             updateCellContent(sheetIndex, row, column);
             updateSheetDefaultFocus(sheetIndex, row, column);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::cellDoubleClicked, [=](int row, int column) {
-            // qDebug() << "3 cellDoubleClicked :" << row << column;
             updateDisplayAutoComplete(sheetIndex, row, column);
         });
         connect(mExcelSheet[sheetIndex], &QTableWidget::customContextMenuRequested, [=](const QPoint& pos) {

@@ -239,7 +239,7 @@ private:
     bool checkExcelSheet(const int& sheetIndex);
     QVariantList readSheetDisplay(const int& sheetIndex);
     void syncSheetData(const int& sheetIndex, const QVariantList& undoRedoData = QVariantList());
-    void syncAutoComplete(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
+    void refreshAutoCompleteData(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     void parsingShortcutType(const int& sheetIndex, const QPoint& position);
     void screenUpdateBlock(const int& sheetIndex, const bool& block);
     void updateEditSheetData(const int& sheetIndex, const QList<QStringList>& previousData, const QVariantList& data);

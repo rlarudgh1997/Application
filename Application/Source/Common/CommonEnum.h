@@ -224,7 +224,7 @@ public:
         EventTypeUpdateAutoCompleteName,
         EventTypeUpdateAutoCompleteData,
         EventTypeCheckValidation,
-        EventTypeAutoInputDescriptionInfo,
+        EventTypeUpdateAutoCompleteNameDescription,
         EventTypeUpdateSheetTextInfo,
         EventTypeUpdateSheetCellInfo,
         EventTypeUpdateSheetInfo,

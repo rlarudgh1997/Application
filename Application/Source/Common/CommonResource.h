@@ -147,6 +147,9 @@
 #define STRING_POPUP_OPENING_FILE QString("Open file")
 #define STRING_POPUP_OPENING_FILE_TIP QString("Opening an Excel file.")
 
+#define STRING_POPUP_TEST_CASE_COMPLETE QString("Test Case Complete")
+#define STRING_POPUP_TEST_CASE_COMPLETE_TIP QString("TC file creation is complete. \nWould you like to save the Excel file?")
+
 // =============================================================================================================
 // Image Define
 // =============================================================================================================

@@ -31,6 +31,7 @@ enum class PopupType {
     RunPathError,
     ModuleSelectError,
     CellSelectionError,
+    TestCaseComplete,
 
     Exit,
     New,
@@ -100,6 +101,7 @@ public:
             case PopupType::AnotherFileOpen:
             case PopupType::NoInstallLib:
             case PopupType::FileNotExist:
+            case PopupType::TestCaseComplete:
             case PopupType::RestConfigValue: {
                 button = drawPopupSelect(popupType, handler, popupInfo);
                 break;
@@ -171,39 +173,63 @@ private:
         QVariantList list = textList.toList();
         QMap<PopupButton, QPushButton*> button = QMap<PopupButton, QPushButton*>();
 
-        if ((popupType == PopupType::Exit) && (list.size() == 5)) {
-            selectBox.setWindowTitle(list[0].toString());
-            selectBox.setText(list[1].toString());
-            button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
-            button[PopupButton::Discard] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
-            button[PopupButton::Cancel] = selectBox.addButton(list[4].toString(), QMessageBox::ActionRole);
-            connect(button[PopupButton::OK], &QPushButton::clicked, [&]() { buttonType = PopupButton::OK; });
-            connect(button[PopupButton::Discard], &QPushButton::clicked, [&]() { buttonType = PopupButton::Discard; });
-            connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() { buttonType = PopupButton::Cancel; });
-        } else if ((popupType == PopupType::NoInstallLib) && (list.size() == 4)) {
-            selectBox.setWindowTitle(list[0].toString());
-            selectBox.setText(list[1].toString());
-            button[PopupButton::Install] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
-            button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
-            connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
-            connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-        } else if ((((popupType == PopupType::New)) || (popupType == PopupType::FileNotExist) ||
-                    (popupType == PopupType::RestConfigValue) || (popupType == PopupType::AnotherFileOpen)) &&
-                   (list.size() == 4)) {
-            selectBox.setWindowTitle(list[0].toString());
-            selectBox.setText(list[1].toString());
-            button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
-            button[PopupButton::Cancel] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
-            connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-            connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() { buttonType = PopupButton::Cancel; });
-        } else if (((popupType == PopupType::DefaultPathError) || (popupType == PopupType::InputTextError) ||
-                    (popupType == PopupType::TCReportError) || (popupType == PopupType::GcovReportError)) &&
-                   (list.size() == 3)) {
-            selectBox.setWindowTitle(list[0].toString());
-            selectBox.setText(list[1].toString());
-            button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
-            connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-        } else {
+        switch (popupType) {
+            case PopupType::Exit: {
+                if (list.size() == 5) {
+                    selectBox.setWindowTitle(list[0].toString());
+                    selectBox.setText(list[1].toString());
+                    button[PopupButton::OK] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+                    button[PopupButton::Discard] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+                    button[PopupButton::Cancel] = selectBox.addButton(list[4].toString(), QMessageBox::ActionRole);
+                    connect(button[PopupButton::OK], &QPushButton::clicked, [&]() { buttonType = PopupButton::OK; });
+                    connect(button[PopupButton::Discard], &QPushButton::clicked, [&]() { buttonType = PopupButton::Discard; });
+                    connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() { buttonType = PopupButton::Cancel; });
+                }
+                break;
+            }
+            case PopupType::NoInstallLib: {
+                if (list.size() == 4) {
+                    selectBox.setWindowTitle(list[0].toString());
+                    selectBox.setText(list[1].toString());
+                    button[PopupButton::Install] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+                    button[PopupButton::Confirm] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+                    connect(button[PopupButton::Install], &QPushButton::clicked, [&]() { buttonType = PopupButton::Install; });
+                    connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
+                }
+                break;
+            }
+            case PopupType::New:
+            case PopupType::FileNotExist:
+            case PopupType::RestConfigValue:
+            case PopupType::TestCaseComplete:
+            case PopupType::AnotherFileOpen: {
+                if (list.size() == 4) {
+                    selectBox.setWindowTitle(list[0].toString());
+                    selectBox.setText(list[1].toString());
+                    button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+                    button[PopupButton::Cancel] = selectBox.addButton(list[3].toString(), QMessageBox::ActionRole);
+                    connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
+                    connect(button[PopupButton::Cancel], &QPushButton::clicked, [&]() { buttonType = PopupButton::Cancel; });
+                }
+                break;
+            }
+#if 0
+            case PopupType::DefaultPathError:
+            case PopupType::InputTextError:
+            case PopupType::TCReportError:
+            case PopupType::GcovReportError: {
+                if (list.size() == 3) {
+                    selectBox.setWindowTitle(list[0].toString());
+                    selectBox.setText(list[1].toString());
+                    button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
+                    connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
+                }
+                break;
+            }
+#endif
+            default: {
+                break;
+            }
         }
 
         connect(&selectBox, &QMessageBox::finished, [&](int result) {

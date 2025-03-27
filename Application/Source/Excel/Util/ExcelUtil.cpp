@@ -111,7 +111,7 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
         }
     }
 
-    qDebug() << "ModuleInfo :" << moduleInfo.size() << jsonFile;
+    // qDebug() << "ModuleInfo :" << moduleInfo.size() << jsonFile;
     // for (const auto& moduleName : moduleInfo.keys()) {
     //     qDebug() << "Module :" << moduleName;
     //     qDebug() << "\t Excel :" << moduleInfo[moduleName].first;

@@ -91,7 +91,7 @@ void TestCase::runThread() {
         excuteType = nextType;
         if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
             excuteType = ExcuteTypeInvalid;
-            emit signalTestCaseCompleted(getExcuteType(), (nextType != ExcuteTypeFailed));
+            emit signalTestCaseCompleted(nextType, (nextType != ExcuteTypeFailed));
         } else if (nextType == ExcuteTypeExit) {
             emit ControlManager::instance().data()->signalExitProgram();
             break;
