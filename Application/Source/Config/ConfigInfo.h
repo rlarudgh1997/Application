@@ -79,7 +79,7 @@ public:
         ConfigTypeAllModule,
         ConfigTypeSelectModule,
         ConfigTypeWindowTitle,
-        ConfitTypeGenTCNew,
+        ConfitTypeGenTCPython,
 
         ConfigTypeMax,
     } ConfigType;
@@ -197,7 +197,7 @@ private:
         mConfigInfoData[ConfigTypeAllModule] = QPair<QString, QVariant>("ConfigTypeAllModule", QVariant(""));
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
-        mConfigInfoData[ConfitTypeGenTCNew] = QPair<QString, QVariant>("ConfitTypeGenTCNew", QVariant(true));
+        mConfigInfoData[ConfitTypeGenTCPython] = QPair<QString, QVariant>("ConfitTypeGenTCPython", QVariant(false));
     }
 
 private:

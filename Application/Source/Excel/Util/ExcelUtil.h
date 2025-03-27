@@ -88,6 +88,7 @@ public:
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
     QString isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
                                    const QStringList& inputData, const QStringList& valueEnum);
+    bool isExistsExcelSheet();
     bool isCheckPythonLibrary();
     QString pythonCall(const bool& readFile, const QString& filePath);
     void writeExcelSheet(const QString& filePath, const bool& convert);

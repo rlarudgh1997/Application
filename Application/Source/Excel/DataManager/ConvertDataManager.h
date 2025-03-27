@@ -66,14 +66,12 @@ private:
     explicit ConvertDataManager();
 
     bool convertKeywordData();
-    bool replaceGenDataInfo();  // will be deleted (replaced with convertKeywordData())
     bool appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
 
-    bool convertOutputDataKeyword();
-    bool convertInputSignalKeyword();
-    bool convertInputDataKeyword();
+    bool convertInputSignalSheetKeyword();
     bool convertNonInputSignalKeyword();
+    bool convertOutputDataKeyword();
 
 private:
     QList<OutputDataInfo> convertOutputStructData(const QList<QStringList>& outputList);
@@ -102,26 +100,13 @@ private:
                                                                  const QMap<QString, QStringList>& valueMap,
                                                                  const QStringList& keys, const QList<int>& keywords,
                                                                  const QStringList& inputValues, const QString& caseName,
+                                                                 const QString& notTriggerStr, const QString& customNotTrigger,
                                                                  int index = 0, QMap<QString, QString> current = {});
     QList<ResultInfo> interpretCalKeywordAndRedefineResultInfo(const ResultInfo& resultInfo);
     bool decideSameCaseList(const QList<CaseDataInfo>& list1, const QList<CaseDataInfo>& list2);
     QList<ResultInfo> mergeAndCleanResultList(const QList<ResultInfo>& resultList);
-
-    /******************************** will be deleted ********************************/
-    void duplicatedConstructConvertKeywordDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
-    QString constructConvertKeywordDataInfoBackup(const int& keywordType, const QString& inputData);
-    void constructConvertSheetDataInfo(QMap<int, QList<KeywordInfo>>& keywordTypeInfoList);
-    QMap<int, QList<KeywordInfo>> constructKeywordTypeInfoList(const int& startSheetIndex, const int& endSheetIndex,
-                                                               const QList<int>& columnList);
-    bool isDataAlreadyExistInKeywordInfoList(const QStringList& rowDataList, const KeywordInfo& keywordInfo,
-                                             const int& originSheetIndex, const bool& isEqualData);
-
-    QStringList deleteColumnRowData(const QStringList& rowData, const QList<int>& deleteColumnIndex);
     int getMergeKeywordType(const QString& data);
-    QString constructKeywordCaseName(const QString& originCaseName, const QString& convertCaseName);
-
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
-
     QPair<QStringList, QStringList> getMergedInputDataInfo(const QPair<QStringList, QStringList>& origin,
                                                            const QPair<QStringList, QStringList>& sheet);
     QString mergeCaseName(const QString& prefix, const QString& suffix);

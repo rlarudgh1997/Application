@@ -453,6 +453,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                                                filePath, QVariantList({STRING_FILE_OPEN, directory}));
             if (button == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
+                updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, filePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
@@ -473,6 +474,7 @@ void ControlExcel::loadExcelFile(const int& eventType) {
 
             if (button == ivis::common::PopupButton::OK) {
                 openExcelFile(filePath);
+                updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, filePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, false);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, filePath);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
@@ -725,7 +727,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
     int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
     int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
-    qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
+    // qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
     if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
         updateAutoCompleteTCName(signalName, vehicleType, keywordType);
     } else {
@@ -751,7 +753,7 @@ void ControlExcel::updateAutoCompleteDescription(const QVariantList& inputData) 
     auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true, true);
     auto fileName = moduleInfo[moduleName.toUpper()].second;
 
-    qDebug() << "updateAutoCompleteDescription :" << moduleName << moduleName.toUpper() << fileName;
+    // qDebug() << "updateAutoCompleteDescription :" << moduleName << moduleName.toUpper() << fileName;
     if (fileName.size() == 0) {
         qDebug() << "Not found matching module name :" << moduleName << fileName;
         return;
@@ -890,9 +892,11 @@ void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
     }
 }
 
-void ControlExcel::updateGenDataInfo(const int& eventType) {
+void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
+    if (ExcelUtil::instance().data()->isExistsExcelSheet() == false) {
+        return;
+    }
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
-        qDebug() << "Fail - excel data validation.";
         return;
     }
 
@@ -908,18 +912,56 @@ void ControlExcel::updateGenDataInfo(const int& eventType) {
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
-    // QString filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
+
+#if 0
     QString filePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString();
     QFileInfo fileInfo(filePath);
     QString moduleName =
         (filePath.size() > 0) ? (QDir(fileInfo.path()).dirName()) : (TestCase::instance().data()->getNewModule());
-
     TestCase::instance().data()->start(QStringList({appModeInfo, moduleName}));
+#else
+    QStringList option = selectModule;
+    option.prepend(appModeInfo);
+    TestCase::instance().data()->start(option);
+#endif
+}
+
+void ControlExcel::updateSelectModuleList() {
+    if (ExcelUtil::instance().data()->isExistsExcelSheet() == false) {
+        return;
+    }
+
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QStringList moduleList = moduleInfo.keys();
+    QStringList selectModuleList;
+    QString savedFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString();
+    // ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
+
+    bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+
+    if (excelOpen) {
+    // if (savedFilePath.size() > 0) {
+        QFileInfo fileInfo(savedFilePath);
+        QString moduleName = QFileInfo(fileInfo.path()).fileName();
+
+        qDebug() << "ModuleInfo :" << moduleName << savedFilePath;
+        if (moduleList.contains(moduleName)) {
+            selectModuleList.append(moduleName);
+        }
+    } else {
+        QString newModule = TestCase::instance().data()->getNewModule();
+        moduleList.prepend(newModule);
+        selectModuleList.append(newModule);
+    }
+
+    qDebug() << "updateShowSelectModule :" << selectModuleList << moduleList.size();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, moduleList);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, selectModuleList);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, true, true);
 }
 
 void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
-    qDebug() << "\n\t slotTestCaseCompleted :" << type << result;
-
     switch (type) {
         case TestCase::ExcuteTypeCompleted: {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
@@ -932,7 +974,6 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
                 QVariant popupData;
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseComplete, isHandler(), popupData, info) ==
                     ivis::common::PopupButton::Confirm) {
-                    qDebug() << "Test Case New Module Save :" << popupData;
                     saveExcelFile(true);
                 }
             }
@@ -1013,6 +1054,17 @@ void ControlExcel::slotHandlerEvent(const int& type, const QVariant& value) {
             ivis::common::Popup::drawPopup(popupType, isHandler(), popupData, QVariantList({title, tips}));
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeSelectModule: {
+            updateStartTestCase(value.toStringList());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeSelectModuleError: {
+            QVariant popupData = QVariant();
+            ivis::common::Popup::drawPopup(
+                ivis::common::PopupType::ModuleSelectError, isHandler(), popupData,
+                QVariantList({STRING_POPUP_MODULE_SELECT_ERROR, STRING_POPUP_MODULE_SELECT_ERROR_TIP}));
+            break;
+        }
         default: {
             if ((type > ivis::common::EventTypeEnum::EventTypeList) && (type < ivis::common::EventTypeEnum::EventTypeListMax)) {
                 QVariantList data = value.toList();
@@ -1069,8 +1121,12 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             updateTCCheck(eventValue.toInt());
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeGenTC: {
+            updateSelectModuleList();
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
-            updateGenDataInfo(eventType);
+            updateStartTestCase();
             break;
         }
         default: {

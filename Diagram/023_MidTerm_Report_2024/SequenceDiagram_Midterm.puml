@@ -37,7 +37,7 @@ end note
 
 User --> ControlExcel: GenTC
 activate ControlExcel
-ControlExcel -> ControlExcel: updateGenDataInfo()
+ControlExcel -> ControlExcel: updateStartTestCase()
 ControlExcel -> ControlExcel: isExcelDataValidation()
 activate ControlExcel
 ControlExcel -> ControlExcel: replaceGenDataInfo()

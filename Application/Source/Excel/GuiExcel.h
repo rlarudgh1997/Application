@@ -206,6 +206,7 @@ class GuiExcel : public AbstractGui {
     REGISTER_WRITABLE_VALUE(bool, CellEditSkip, false)
     REGISTER_WRITABLE_VALUE(bool, ColumnHeaderResize, false)
     REGISTER_WRITABLE_VALUE(int, CurrSheetIndex, 0)
+    REGISTER_WRITABLE_VALUE(int, ScrolBarValue, 0)
     REGISTER_WRITABLE_VALUE(CellSelectedInfo, CopyInfo, CellSelectedInfo())
     REGISTER_WRITABLE_CONTAINER(QMap, int, bool, SheetCheckState)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QString, ShortcutInfo)
@@ -229,6 +230,7 @@ private:
     void updateDialogValueEnum(const QVariantList& data);
     void updateDialogTCNameResult(const QStringList& data);
     void updateDialogSelectGenType();
+    void updateDialogSelectModule();
 
     bool isSheetContentChanged(const int& sheetIndex);
     int isCheckState(const int& sheetIndex, const int& rowIndex, const int& columnIndex);

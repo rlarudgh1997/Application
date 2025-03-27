@@ -49,22 +49,27 @@ private:
     void removeMatchingKeys(QJsonObject& otherJson, const QJsonObject& validArray);
     QJsonObject getCaseInfoJson(const QString& genType, const QString& tcName, const QString& config,
                                 const QJsonObject& caseJsonObject, const bool& isOther);
-    QStringList getPreconditionList(const QJsonObject& inputSignalList, const QJsonArray& caseValues);
     QMap<QString, int> getFlowKeywordIdxMap(const QJsonObject& inputSignalList);
     QMap<QString, int> getConfigIdxMap(const QJsonObject& inputSignalList);
     QMap<QString, QMap<QString, QString>> getCongigSigHexEnumMap(const QJsonObject& inputSignalList);
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QString& config,
                             const QMap<QString, int>& configIdxMap, const QMap<QString, QMap<QString, QString>>& configHexEnumMap,
                             const QStringList& preconditionList, const int& triggerSigIndex, const QString& triggerSigValue);
+    QStringList jsonArrayToQStringList(const QJsonArray& jsonArray);
+    QStringList getReplaceValueAtList(const QStringList& originList, const int& idx, const QString& value);
     QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex = -1,
-                               const QJsonValue& preconditionValue = "");
-    // QString getPreconditionStr(const QStringList& preconditionList);
+                               const QString& preconditionValue = "");
+    QString getFinalStateStr(const QStringList& preconditionList, const int& triggerSigIndex = -1,
+                             const QString& inputValue = "");
     QString getInputStr(const QString& triggerSigName, const QString& caseValue);
     QString getTcLine(const QString& tag, const QString& precondition, const QString& input);
+    QString getFinalStateLine(const long long unsigned int& cnt, const QString& finalStateValues);
     QString getInitStr(const QJsonObject& inputSignalList);
     void checkNegativeAndPositive(const QString& genType, const QString& caseName, const int& caseNumber,
                                   const QString& resultName, const int& resultNumber, const QString& tcName,
                                   const int& tcNameNumber, const int& sheetNumber);
+    void removeMatchingKeysNegative(QJsonObject& caseJson, const QJsonObject& positiveFinalStateCases,
+                                    const QJsonArray& inputEmptyList);
     void printCaseSize(const QString& genType);
 
 private:

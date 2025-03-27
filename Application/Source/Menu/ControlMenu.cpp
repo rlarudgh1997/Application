@@ -903,20 +903,22 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             int appModePrevious = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
             int appMode = value.toInt();
             if (appModePrevious != appMode) {
-                qDebug() << "EventTypeSelectAppMode :" << appMode;
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeAppMode, appMode);
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeInit, true);
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTC:
         case ivis::common::EventTypeEnum::EventTypeRunTC: {
             updateSelectModuleList(type, QVariantList());
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeGenTC:
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
-            qDebug() << "EventTypeRunMultiDocker";
-            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type);
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenTCPython).toBool()) {
+                updateSelectModuleList(type, QVariantList());
+            } else {
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type);
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTestReportResult:

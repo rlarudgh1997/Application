@@ -66,6 +66,7 @@ class TextWriter:
     def get_signal_info(self):
         sig_list = dict()
         user_input_order_list = []
+        input_empty_list = []
         for idx, key in enumerate(self.instance.signals):
             formatted_index = str(idx).zfill(3)
             sig = self.instance.signals[key]
@@ -78,7 +79,11 @@ class TextWriter:
                 "ValueEnum": sig.InputValueEnumDict,
             }
             user_input_order_list.append(sig.PreconditionIdx)
-        return sig_list, user_input_order_list
+            if sig.InputDataHex == ['[Empty]']:
+                input_empty_list.append("EmptyInputSignal")
+            else:
+                input_empty_list.append("")
+        return sig_list, user_input_order_list, input_empty_list
 
     def get_all_case_str(self):
         # 전체 경우의 수
@@ -113,7 +118,7 @@ class TextWriter:
 
     def make_Json_buffer(self):
         if self.check_instance_type():
-            signal_name_list, user_input_order_list = self.get_signal_info()
+            signal_name_list, user_input_order_list, input_empty_list = self.get_signal_info()
             # self.json_data["cases"] = [list(item) for item in self.instance.satisfy_case]
             self.json_data["cases"] = {
                 ", ".join(item): list(item) for item in self.instance.satisfy_case
@@ -121,6 +126,7 @@ class TextWriter:
             self.json_data["CaseSize"] = self.instance.satisfy_case_size
             self.json_data["InputSignalList"] = signal_name_list
             self.json_data["PreconditionOrder"] = user_input_order_list
+            self.json_data["InputEmptyList"] = input_empty_list
             return True
         else:
             print("The instance is NOT of type SignalCollection.")

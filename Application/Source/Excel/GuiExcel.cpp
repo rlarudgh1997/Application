@@ -116,29 +116,44 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
             disconnect(mDialog.data(), nullptr, nullptr, nullptr);
             mDialog.reset();
         });
+        connect(mDialog.data(), &Dialog::signalScrollBarValueChanged, [=](const int& value) {
+            setScrolBarValue(value);
+        });
         connect(mDialog.data(), &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
-            QStringList selectValues;
-            for (const auto& select : selectItem) {
-                if (dialogType == Dialog::DialogTypeSelectValueResult) {
-                    selectValues.append(select.second);
-                } else {
-                    QStringList lineStr = select.second.split(":");
-                    if (lineStr.size() != 2) {
-                        continue;
-                    }
-
-                    QString temp = getSfcSignal() ? lineStr.at(0) : lineStr.at(1);
-                    if (getOutputState()) {
-                        temp = getSfcSignal() ? lineStr.at(1) : lineStr.at(0);
-                    }
-                    temp.remove("\"");
-
-                    selectValues.append(temp);
+            if (dialogType == Dialog::DialogTypeSelectMoudleInfo) {
+                QStringList selectModule;
+                for (const auto& select : selectItem) {
+                    selectModule.append(select.second);
                 }
+                if (selectModule.size() == 0) {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSelectModuleError);
+                } else {
+                    createSignal(ivis::common::EventTypeEnum::EventTypeSelectModule, selectModule);
+                }
+            } else {
+                QStringList selectValues;
+                for (const auto& select : selectItem) {
+                    if (dialogType == Dialog::DialogTypeSelectValueResult) {
+                        selectValues.append(select.second);
+                    } else {
+                        QStringList lineStr = select.second.split(":");
+                        if (lineStr.size() != 2) {
+                            continue;
+                        }
+
+                        QString temp = getSfcSignal() ? lineStr.at(0) : lineStr.at(1);
+                        if (getOutputState()) {
+                            temp = getSfcSignal() ? lineStr.at(1) : lineStr.at(0);
+                        }
+                        temp.remove("\"");
+
+                        selectValues.append(temp);
+                    }
+                }
+                QString selectValueEnum = selectValues.join(", ");
+                updateSelectedCellItem(selectValueEnum);
             }
-            QString selectValueEnum = selectValues.join(", ");
-            updateSelectedCellItem(selectValueEnum);
             mDialog.data()->accept();
         });
         connect(mDialog.data(), &Dialog::signalSelectOption,
@@ -324,6 +339,18 @@ void GuiExcel::updateDialogSelectGenType() {
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeGenTypeList).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeGenType, info);
+}
+
+void GuiExcel::updateDialogSelectModule() {
+    QVariantList info = QVariantList({
+        QString("Select Module"),
+        QStringList({"Module"}),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule).toStringList(),
+        QVariantList(),
+        getScrolBarValue(),
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectMoudleInfo, info);
 }
 
 bool GuiExcel::isSheetContentChanged(const int& sheetIndex) {
@@ -605,7 +632,7 @@ QMap<int, QList<QPair<int, int>>> GuiExcel::isDisplayMergeInfo(const int& sheetI
 bool GuiExcel::checkExcelSheet(const int& sheetIndex) {
     if ((sheetIndex < ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
         (sheetIndex >= ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax)) {
-        qDebug() << "Fail to - sheet index invalid :" << sheetIndex;
+        // qDebug() << "Fail to - sheet index invalid :" << sheetIndex;
         return false;
     }
 
@@ -1340,7 +1367,7 @@ void GuiExcel::updateSelectedCellItem(const QString& text) {
         return;
     }
 
-    qDebug() << "updateSelectedCellItem :" << text;
+    // qDebug() << "updateSelectedCellItem :" << text;
     mSelectItem->setText(text);
 }
 
@@ -1533,7 +1560,7 @@ void GuiExcel::updateDisplayKey(const int& keyValue) {
         return;
     }
 
-    qDebug() << "updateDisplayKey :" << keyValue << columnIndex << rowIndex << rowMax << columnMax;
+    // qDebug() << "updateDisplayKey :" << keyValue << columnIndex << rowIndex << rowMax << columnMax;
 
     switch (keyValue) {
         case ivis::common::KeyTypeEnum::KeyInputValueCancel: {
@@ -1986,6 +2013,10 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTCCheck: {
             updateDisplayTCCheck(value.toInt());
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule: {
+            updateDialogSelectModule();
             break;
         }
         default: {

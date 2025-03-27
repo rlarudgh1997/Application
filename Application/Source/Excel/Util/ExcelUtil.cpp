@@ -727,6 +727,20 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
     return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);
 }
 
+bool ExcelUtil::isExistsExcelSheet() {
+    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        if (ExcelData::instance()->getSheetData(sheetIndex).toList().size() > 0) {
+            return true;
+        }
+    }
+
+    qDebug() << "Excel sheet data does not exist.";
+    return false;
+}
+
 bool ExcelUtil::isCheckPythonLibrary() {
 #if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
     bool openpyxl = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl).toBool();

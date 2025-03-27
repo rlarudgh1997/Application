@@ -59,6 +59,9 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCCheck, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKey, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, QVariant());
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates, QVariant(""));

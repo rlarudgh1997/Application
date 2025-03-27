@@ -33,7 +33,8 @@ private:
     void updateAutoCompleteDescription(const QVariantList& inputData);
     void updateAutoCompleteData(const QVariantList& inputData);
     void updateDataValidation(const QVariantList& cellInfo);
-    void updateGenDataInfo(const int& eventType);
+    void updateStartTestCase(const QStringList& selectModule = QStringList());
+    void updateSelectModuleList();
 
 protected:
     virtual AbstractHandler* isHandler();

@@ -469,7 +469,7 @@ QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const Q
 }
 
 void SignalDataManager::isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
-                                            QStringList& checkDataList) {
+                                                 QStringList& checkDataList) {
     const auto checkInfo = QMap<ivis::common::KeywordTypeEnum::KeywordType, QPair<QString, QString>>({
         {ivis::common::KeywordTypeEnum::KeywordType::Timeout, qMakePair("TIMEOUT", "timeout")},
         {ivis::common::KeywordTypeEnum::KeywordType::Crc, qMakePair("CRCERROR", "crc")},
@@ -534,7 +534,7 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
             if (data.contains(checkStrMain)) {
                 valueEnumHex = data;
                 valueEnumHex.remove(checkStrMain);
-                valueEnumHex.remove(QRegularExpression(R"([":\s])"));    // Delete - ":", "\"", " "
+                valueEnumHex.remove(QRegularExpression(R"([":\s])"));  // Delete - ":", "\"", " "
                 break;
             }
         }
@@ -566,7 +566,7 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
     } else {
         // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 변환 [timeout, crc]
         checkDataList[foundIndex] = changeStr;
-        qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
+        // qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
     }
 }
 
@@ -808,7 +808,6 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
         signalDataInfo[key].setAllConvertData(data);
     }
 
-
     return signalDataInfo;
 }
 
@@ -981,7 +980,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                     QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
                         static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
 
-            // qMakePair(QString("CRC_ERROR"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
+                    // qMakePair(QString("CRC_ERROR"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
 
                     QString checkTimeOut = QString("TIMEOUT");
                     auto currDataInfo = dataInfo[signalName];
@@ -1336,5 +1335,8 @@ bool SignalDataManager::isExcelDataValidation() {
         // }
     }
 
+    if (validCheck == false) {
+        qDebug() << "Fail to excel data validation.";
+    }
     return validCheck;
 }
