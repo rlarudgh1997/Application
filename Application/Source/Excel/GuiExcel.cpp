@@ -1118,15 +1118,15 @@ int GuiExcel::updateShortcutPaste(const int& sheetIndex) {
         updateRowMax(sheetIndex, rowMax, clipboardDataMax);
     }
 
-    qDebug() << "===============================================================================================";
-    qDebug() << "updateShortcutPaste :" << sheetIndex << copySheetIndex;
-    qDebug() << "\t Row           :" << rowStart << rowEnd << rowCount;
-    qDebug() << "\t Column        :" << columnStart << columnEnd << columnCount;
-    qDebug() << "\t Max           :" << rowMax << columnMax << clipboardDataMax;
-    qDebug() << "\t CopyRow       :" << copyRowStart << copyRowEnd << copyRowCount;
-    qDebug() << "\t CopyColumn    :" << copyColumnStart << copyColumnEnd << copyColumnCount;
-    qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
-    qDebug() << "\t -----------------------------------------------------------------------------------------";
+    // qDebug() << "===============================================================================================";
+    // qDebug() << "updateShortcutPaste :" << sheetIndex << copySheetIndex;
+    // qDebug() << "\t Row           :" << rowStart << rowEnd << rowCount;
+    // qDebug() << "\t Column        :" << columnStart << columnEnd << columnCount;
+    // qDebug() << "\t Max           :" << rowMax << columnMax << clipboardDataMax;
+    // qDebug() << "\t CopyRow       :" << copyRowStart << copyRowEnd << copyRowCount;
+    // qDebug() << "\t CopyColumn    :" << copyColumnStart << copyColumnEnd << copyColumnCount;
+    // qDebug() << "\t ClipboardData :" << clipboardData.size() << clipboardData;
+    // qDebug() << "\t -----------------------------------------------------------------------------------------";
 
     // Clear : Cut Selected Cell Backgorund/Text/Merge Info
     if (checkExcelSheet(copySheetIndex) == false) {
@@ -1731,6 +1731,8 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
 
     QTableWidget* currentSheet = mExcelSheet[sheetIndex];
     currentSheet->clearFocus();
+
+    updateClearClipboard(getCopyInfo(), false);
 }
 
 void GuiExcel::updateDisplayAutoInputDescrtion() {
@@ -1791,15 +1793,7 @@ void GuiExcel::updateDisplayTCCheck(const int& allCheck) {
 
     for (int sheetIndex = startIndex; sheetIndex <= endIndex; ++sheetIndex) {
         setSheetCheckState(sheetIndex, (!allCheck));
-#if 1
         updateCheckState(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
-#else
-        if (checkExcelSheet(sheetIndex) == false) {
-            continue;
-        }
-        emit currentSheet->horizontalHeader()->sectionClicked(
-            static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
-#endif
     }
 }
 
@@ -1808,7 +1802,7 @@ void GuiExcel::updateDisplayShortcut(const int& shortcutType) {
     if (checkExcelSheet(sheetIndex) == false) {
         return;
     }
-    qDebug() << "updateDisplayShortcut :" << shortcutType;
+    // qDebug() << "updateDisplayShortcut :" << shortcutType;
 
     int columIndex = (-1);
     setCellEditSkip(true);
@@ -1846,11 +1840,8 @@ void GuiExcel::updateDisplayShortcut(const int& shortcutType) {
     }
 
     if (columIndex >= 0) {
-        // Data Sync : Gui -> Control (아래 순서 보장 되어야함. 병합 정보 바탕으로 자동완성 재구성)
-        // 1. syncSheetData()
-        // 2. createSignal(EventTypeUpdateAutoCompleteName)
         syncSheetData(sheetIndex);
-        updateSheetHeaderAdjust(sheetIndex, false);    // Resize Header Size : Row(O), Column(X)
+        updateSheetHeaderAdjust(sheetIndex, false);
     }
     setCellEditSkip(false);
 }

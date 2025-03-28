@@ -41,8 +41,12 @@ int SignalDataManager::isDataType(const QString& dataTypeStr) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
     } else if (dataTypeStr.compare("HInt64") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
+    } else if (dataTypeStr.compare("HDouble") == 0) {
+        dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
     } else if (dataTypeStr.compare("HString") == 0) {
         dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HString);
+    } else if (dataTypeStr.compare("HBool") == 0) {
+        dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HBool);
     } else {
         // qDebug() << "isDataType -> DataType is incorrect :" << dataTypeStr;
     }
@@ -934,8 +938,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                        precondition = convertData;
-                        convertData.clear();
+                        // convertData = convertData;
+                        precondition.clear();
                         notUsedEnum.clear();
                         break;
                     }

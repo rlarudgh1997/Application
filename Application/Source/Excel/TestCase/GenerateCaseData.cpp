@@ -1143,7 +1143,7 @@ void GenerateCaseData::removeMatchingKeysNegative(QJsonObject& caseJson, const Q
                 QString value = finalStateArray[caseKey].toString();
                 if (casesArray.contains(value)) {
                     casesArray.remove(value);
-                    continue;
+                    break;
                 }
             }
         }

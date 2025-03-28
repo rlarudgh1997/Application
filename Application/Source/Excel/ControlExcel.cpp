@@ -900,30 +900,27 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         return;
     }
 
-    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
-    int convertSheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
-    // Update : Convert Data
-    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        auto sheetData = ExcelData::instance().data()->getSheetData(sheetIndex);
-        ExcelData::instance().data()->setSheetData(convertSheetIndex, sheetData);
-        convertSheetIndex++;
-    }
-
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
+    QStringList optionInfo(QStringList({appModeInfo}));
 
-#if 0
-    QString filePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString();
-    QFileInfo fileInfo(filePath);
-    QString moduleName =
-        (filePath.size() > 0) ? (QDir(fileInfo.path()).dirName()) : (TestCase::instance().data()->getNewModule());
-    TestCase::instance().data()->start(QStringList({appModeInfo, moduleName}));
-#else
-    QStringList option = selectModule;
-    option.prepend(appModeInfo);
-    TestCase::instance().data()->start(option);
-#endif
+    if (selectModule.size() == 0) {
+        bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+        QString moduleName;
+
+        if (excelOpen) {
+            QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
+            moduleName = QFileInfo(fileInfo.path()).fileName();
+        } else {
+            moduleName = TestCase::instance().data()->getNewModule();
+        }
+        optionInfo.append(moduleName);
+    } else {
+        optionInfo.append(selectModule);
+    }
+
+    qDebug() << "updateStartTestCase :" << optionInfo;
+    TestCase::instance().data()->start(optionInfo);
 }
 
 void ControlExcel::updateSelectModuleList() {
@@ -935,20 +932,12 @@ void ControlExcel::updateSelectModuleList() {
     auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
     QStringList moduleList = moduleInfo.keys();
     QStringList selectModuleList;
-    QString savedFilePath = getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString();
-    // ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath, filePath);
 
     bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
-
     if (excelOpen) {
-    // if (savedFilePath.size() > 0) {
-        QFileInfo fileInfo(savedFilePath);
+        QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
         QString moduleName = QFileInfo(fileInfo.path()).fileName();
-
-        qDebug() << "ModuleInfo :" << moduleName << savedFilePath;
-        if (moduleList.contains(moduleName)) {
-            selectModuleList.append(moduleName);
-        }
+        selectModuleList.append(moduleName);
     } else {
         QString newModule = TestCase::instance().data()->getNewModule();
         moduleList.prepend(newModule);

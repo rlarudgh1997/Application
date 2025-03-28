@@ -498,11 +498,16 @@ QList<QVariantList> TestCase::isSheetData() {
 }
 
 void TestCase::updateSheetData(const QList<QVariantList>& sheetDataList) {
-    // qDebug() << "updateSheetData :" << sheetDataList.size();
-    int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int startOriginIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+    const int startConvertIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
+    int originIndex = startOriginIndex;
+
     for (const auto& sheetData : sheetDataList) {
-        // qDebug() << "TestCase::updateSheetData :" << sheetIndex << sheetData.size();
-        ExcelData::instance().data()->setSheetData(sheetIndex++, sheetData);
+        int convertIndex = originIndex - startOriginIndex + startConvertIndex;
+        // qDebug() << "updateSheetData :" << originIndex << convertIndex << sheetData.size();
+        ExcelData::instance().data()->setSheetData(originIndex, sheetData);
+        ExcelData::instance().data()->setSheetData(convertIndex, sheetData);
+        originIndex++;
     }
 }
 
@@ -528,23 +533,6 @@ bool TestCase::openExcelFile() {
 
     QList<QVariantList> sheetDataList;
     QString filePath;
-
-#if 1
-    const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    // const bool sheetEditState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
-    if (graphicsMode) {
-        if (currModule == getNewModule()) {
-            filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
-            sheetDataList = readSheetData();
-        } else {
-            filePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath).toString();
-            sheetDataList = isSheetData();
-        }
-    } else {
-        filePath = getModuleList(currModule);
-        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
-    }
-#else
     if (currModule == getNewModule()) {
         filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
         sheetDataList = readSheetData();
@@ -552,7 +540,6 @@ bool TestCase::openExcelFile() {
         filePath = getModuleList(currModule);
         sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
     }
-#endif
 
     bool result = (sheetDataList.size() > 0);
 

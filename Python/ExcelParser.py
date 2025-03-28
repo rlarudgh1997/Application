@@ -118,6 +118,8 @@ class ExcelParser:
         excel_merge_end = self.config_info["ConfigTypeExcelMergeEnd"]
         excel_merge = self.config_info["ConfigTypeExcelMerge"]
 
+        print("\n\n\t read_from_text :", save_file_path)
+
         read_data = []
         merge_info_list = {}
 
@@ -219,19 +221,11 @@ def main(argv):
     start_time = time.time()
     path_dir = os.path.join(argv[1], "TC")
     os.makedirs(path_dir, exist_ok=True)
+    open_state = (argv[3] == "read")
     parser = ExcelParser()
 
-     # 파일명 확인 - True : 대소문자 구분 X, False : 대소문 구분 O
-    case_insensitive = True
-    if case_insensitive:
-        path_file = parser.find_file_name(argv[1], argv[2])
-    else:
-        path_file = os.path.join(argv[1], argv[2])
-
-    open_state = argv[3] == "read"
-
-
     if open_state:
+        path_file = parser.find_file_name(argv[1], argv[2])    # Read 인 경우만 대소문 구분 없이 파일명 인식 하도록
         if os.path.isfile(path_file):
             parser.read_from_excel(path_file)
             parser.write_to_text(path_dir)
@@ -239,6 +233,7 @@ def main(argv):
             print(f"Excel file not found: {path_file}")
             sys.exit(1)
     else:
+        path_file = os.path.join(argv[1], argv[2])
         parser.read_from_text(path_dir, path_file)
 
     execution_time = time.time() - start_time
