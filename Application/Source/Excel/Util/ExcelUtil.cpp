@@ -780,8 +780,8 @@ QString ExcelUtil::pythonCall(const bool& readFile, const QString& filePath) {
 
     // qDebug() << "pythonCall :" << cmdType << filePath;
 
-    if (fileInfo.size() == 0) {
-        qDebug() << "Fail to input file path (size : 0)";
+    if ((filePath.size() == 0) ||(fileInfo.size() == 0)) {
+        qDebug() << "Fail to input file path :" << filePath.size() << fileInfo.size();
     }
 
     QString dirPath = QString();

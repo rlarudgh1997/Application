@@ -669,7 +669,28 @@ bool ConvertDataManager::convertNonInputSignalKeyword() {
 #if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
                 displayResultDataInfo(resultDataInfo);
 #endif
-                // process [Cal] keyword in OutputValue Column
+// process [Cal] keyword in OutputValue Column
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+                qInfo() << "----------------------------------------------------------------------------------";
+                qInfo() << "Result Name: " << resultDataInfo.resultName;
+                for (const auto& caseDataInfo : resultDataInfo.caseDataInfoList) {
+                    qInfo() << "  Case Name: " << caseDataInfo.caseName;
+                    for (const auto& keywordInfo : caseDataInfo.convertInputDataInfo) {
+                        if (keywordInfo.inputSignal.isEmpty() || keywordInfo.inputValue.isEmpty()) {
+                            qInfo() << "    WARNING: Input Signal or Input Value is empty!";
+                        }
+                        qInfo() << "    Input Signal: " << keywordInfo.inputSignal;
+                        qInfo() << "    Input Value: " << keywordInfo.inputValue;
+                        qInfo() << "    Valid Input Data: " << keywordInfo.validInputData;
+                    }
+                }
+                for (const auto& outputDataInfo : resultDataInfo.outputDataInfoList) {
+                    qInfo() << "  Output Signal: " << outputDataInfo.outputSignal;
+                    qInfo() << "  Initialize: " << outputDataInfo.initialize;
+                    qInfo() << "  Output Value: " << outputDataInfo.outputValue;
+                }
+                qInfo() << "----------------------------------------------------------------------------------";
+#endif
                 QList<ResultInfo> resultList = mergeAndCleanResultList(interpretCalKeywordAndRedefineResultInfo(resultDataInfo));
 #if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
                 qInfo() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
@@ -1114,13 +1135,13 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 tempResult.chop(3);
             }
             QStringList aaaa = tempResult.split("<->");
-            for (const QString& leftValue : aaaa[0].split(", ")) {
-                for (const QString& rightValue : aaaa[1].split(", ")) {
+            for (const QString& leftValue : aaaa[0].split(",")) {
+                for (const QString& rightValue : aaaa[1].split(",")) {
                     if (!leftValue.isEmpty() && !rightValue.isEmpty()) {
                         bool leftIsNumber, rightIsNumber;
                         double leftNum = leftValue.toDouble(&leftIsNumber);
                         double rightNum = rightValue.toDouble(&rightIsNumber);
-                        if (!(leftValue == rightValue || (leftIsNumber && rightIsNumber && leftNum == rightNum))) {
+                        if ((leftValue != rightValue) || (leftIsNumber && rightIsNumber && leftNum != rightNum)) {
                             resultString += leftValue + ", " + rightValue + ", ";
                             resultString += rightValue + ", " + leftValue + ", ";
                             convertKeywordInfo.validInputData += rightValue + ", " + leftValue + ", ";
@@ -1140,12 +1161,12 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 tempResult.chop(2);
             }
             QStringList aaaa = tempResult.split("->");
-            for (const QString& leftValue : aaaa[0].split(", ")) {
-                for (const QString& rightValue : aaaa[1].split(", ")) {
+            for (const QString& leftValue : aaaa[0].split(",")) {
+                for (const QString& rightValue : aaaa[1].split(",")) {
                     bool leftIsNumber, rightIsNumber;
                     double leftNum = leftValue.toDouble(&leftIsNumber);
                     double rightNum = rightValue.toDouble(&rightIsNumber);
-                    if (!(leftValue == rightValue || (leftIsNumber && rightIsNumber && leftNum == rightNum))) {
+                    if ((leftValue != rightValue) || (leftIsNumber && rightIsNumber && leftNum != rightNum)) {
                         resultString += leftValue + ", " + rightValue + ", ";
                         convertKeywordInfo.validInputData += rightValue + ", ";
                     }
@@ -1160,7 +1181,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                        !removeNotTriggerSignal.contains("SFC.Private.IGNElapsed.")) {
                 convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::ValueChanged;
                 if (inputSignalEnumList.isEmpty()) {
-                    resultString += QString("0, %1").arg(maxValue);
+                    resultString += QString("1, 2");
                     convertKeywordInfo.validInputData += resultString;
                 } else {
                     convertKeywordInfo.validInputData += inputSignalEnumList.join(", ");
@@ -1298,10 +1319,21 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
     return convertKeywordInfo;
 }
 
+QStringList parseArray(const QString& input) {
+    QStringList result;
+    QRegularExpression re("(\\d+)");
+    QRegularExpressionMatchIterator it = re.globalMatch(input);
+    while (it.hasNext()) {
+        QRegularExpressionMatch match = it.next();
+        result.append(match.captured(1));
+    }
+    return result;
+}
+
 QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations(
     const QString& templateExpr, const QMap<QString, QStringList>& valueMap, const QStringList& keys, const QList<int>& keywords,
-    const QStringList& inputValues, const QString& caseName, const QString& notTriggerStr, const QString& customNotTrigger,
-    int index, QMap<QString, QString> current) {
+    const QStringList& inputValues, const QStringList& validInputData, const QString& caseName, const QString& notTriggerStr,
+    const QString& customNotTrigger, int& calValArrCnt, int index, QMap<QString, QString> current, const QString& maxValue) {
     QPair<QStringList, QList<CaseDataInfo>> results;
     if (index == keys.size()) {
         QString expr = templateExpr;
@@ -1310,21 +1342,53 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
         for (const auto& key : keys) {
             ConvertKeywordInfo info;
             info.inputSignal = key;
-            if (info.inputSignal.contains(notTriggerStr, Qt::CaseInsensitive)) {
-                QString tempInputValues = inputValues[count];
-                info.inputValue = tempInputValues.prepend(customNotTrigger);
-                info.inputSignal.replace(
-                    QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption), "");
-            } else if (inputValues[count].contains('[')) {
-                info.inputValue = inputValues[count];
-            } else {
-                if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
-                    info.inputValue = current[key].remove(' ');
+            info.validInputData = current[key].remove(' ');
+            if (expr.contains(key)) {
+                if (info.inputSignal.contains(notTriggerStr, Qt::CaseInsensitive)) {
+                    QString tempInputValues = inputValues[count];
+                    info.inputValue = tempInputValues.prepend(customNotTrigger);
+                    info.inputSignal.replace(
+                        QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption),
+                        "");
+                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
+                    info.inputValue = constructConvertKeywordDataInfo(keywords[count], maxValue + ", " + info.validInputData);
+                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {
+                    QString tempInputValues = inputValues[count];
+                    QStringList array = parseArray(tempInputValues.remove("[CustomFlow]"));
+                    int midpoint = array.size() / 2;
+                    QStringList array1 = array.mid(0, midpoint);
+                    QStringList array2 = array.mid(midpoint);
+                    QString tempString = QString(array1[calValArrCnt] + ", " + array2[calValArrCnt]);
+                    info.inputValue = constructConvertKeywordDataInfo(keywords[count], tempString);
+                    calValArrCnt++;
+                } else if (inputValues[count].contains('[')) {
+                    info.inputValue = inputValues[count];
                 } else {
-                    info.inputValue = constructConvertKeywordDataInfo(keywords[count], inputValues[count]);
+                    if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+                        info.inputValue = current[key].remove(' ');
+                    } else {
+                        info.inputValue = constructConvertKeywordDataInfo(keywords[count], inputValues[count]);
+                    }
+                }
+            } else {
+                if (info.inputSignal.contains(notTriggerStr, Qt::CaseInsensitive)) {
+                    QString tempInputValues = inputValues[count];
+                    info.inputValue = tempInputValues.prepend(customNotTrigger);
+                    info.inputSignal.replace(
+                        QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption),
+                        "");
+                } else if (inputValues[count].contains('[')) {
+                    info.inputValue = inputValues[count];
+                } else {
+                    if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+                        info.inputValue = current[key].remove(' ');
+                    } else {
+                        info.inputValue = constructConvertKeywordDataInfo(keywords[count], inputValues[count]);
+                    }
                 }
             }
-            info.validInputData = current[key].remove(' ');
             QString tempKey = key;
             if (key.contains("[sheet]", Qt::CaseInsensitive)) {
                 tempKey = tempKey.remove(QRegularExpression("\\[sheet\\]", QRegularExpression::CaseInsensitiveOption));
@@ -1350,12 +1414,31 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
     for (const QString& value : valueMap[key]) {
         QMap<QString, QString> next = current;
         next[key] = value;
-        auto subResult = generateCombinations(templateExpr, valueMap, keys, keywords, inputValues, caseName, notTriggerStr,
-                                              customNotTrigger, index + 1, next);
+        auto subResult = generateCombinations(templateExpr, valueMap, keys, keywords, inputValues, validInputData, caseName,
+                                              notTriggerStr, customNotTrigger, calValArrCnt, index + 1, next, maxValue);
         results.first += subResult.first;
         results.second += subResult.second;
     }
     return results;
+}
+
+bool isAnyInputSignalInOutputValues(const ResultInfo& resultInfo) {
+    QSet<QString> inputSignals;
+    for (const auto& caseDataInfo : resultInfo.caseDataInfoList) {
+        for (const auto& convertInfo : caseDataInfo.convertInputDataInfo) {
+            inputSignals.insert(convertInfo.inputSignal);
+        }
+    }
+    for (const auto& outputDataInfo : resultInfo.outputDataInfoList) {
+        const QString& outputValue = outputDataInfo.outputValue;
+
+        for (const auto& inputSignal : inputSignals) {
+            if (outputValue.contains(inputSignal)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(const ResultInfo& resultInfo) {
@@ -1377,43 +1460,60 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
             }
         }
     };
+    // if (isAnyInputSignalInOutputValues(resultInfo)) {
+    //     qDebug() << "있다. : " << resultInfo.resultName;
+    // }
     if (!resultInfo.outputDataInfoList.isEmpty()) {
         bool isIncludeCalKeyword =
             std::any_of(resultInfo.outputDataInfoList.begin(), resultInfo.outputDataInfoList.end(),
                         [](const OutputDataInfo& info) { return info.outputValue.contains("[cal]", Qt::CaseInsensitive); });
-        for (const auto& caseDataInfo : resultInfo.caseDataInfoList) {
-            CaseDataInfo caseCopy = caseDataInfo;
-            convertInputValues(caseCopy);
-            if (isIncludeCalKeyword) {
-                const QString& exprTemplate = resultInfo.outputDataInfoList[0].outputValue;
-                QMap<QString, QStringList> valueMap;
-                QStringList keys, inputValues;
-                QList<int> keywords;
-                for (const auto& keyword : caseCopy.convertInputDataInfo) {
-                    valueMap[keyword.inputSignal] = keyword.validInputData.split(',');
-                    keys << keyword.inputSignal;
-                    keywords << static_cast<int>(keyword.keywordType);
-                    inputValues << keyword.inputValue;
+        if (isIncludeCalKeyword) {
+            for (const auto& outputDataInfo : resultInfo.outputDataInfoList) {
+                if (outputDataInfo.outputValue.contains("[cal]", Qt::CaseInsensitive)) {
+                    for (const auto& caseDataInfo : resultInfo.caseDataInfoList) {
+                        CaseDataInfo caseCopy = caseDataInfo;
+                        int calArrCount = 0;
+                        convertInputValues(caseCopy);
+                        const QString& exprTemplate = outputDataInfo.outputValue;
+
+                        QMap<QString, QStringList> valueMap;
+                        QStringList keys, inputValues, validInputData;
+                        QList<int> keywords;
+                        for (const auto& keyword : caseCopy.convertInputDataInfo) {
+                            if (exprTemplate.contains(keyword.inputSignal)) {
+                                valueMap[keyword.inputSignal] = keyword.validInputData.split(',');
+                                keys << keyword.inputSignal;
+                                keywords << static_cast<int>(keyword.keywordType);
+                                inputValues << keyword.inputValue;
+                                validInputData << keyword.validInputData;
+                            }
+                        }
+                        auto results = generateCombinations(exprTemplate, valueMap, keys, keywords, inputValues, validInputData,
+                                                            caseCopy.caseName, notTriggerStr, customNotTrigger, calArrCount);
+                        for (int i = 0; i < results.first.size(); ++i) {
+                            ResultInfo newResult;
+                            newResult.resultName = caseCopy.caseName.contains("others", Qt::CaseInsensitive)
+                                                       ? resultInfo.resultName
+                                                       : resultInfo.resultName + " == " + results.first[i];
+                            QList<OutputDataInfo> tempOutputList = resultInfo.outputDataInfoList;
+                            for (auto& outputDataInfo : tempOutputList) {
+                                if (outputDataInfo.outputValue.contains("[cal]", Qt::CaseInsensitive)) {
+                                    outputDataInfo.outputValue = results.first[i];
+                                }
+                                newResult.outputDataInfoList << outputDataInfo;
+                            }
+                            newResult.caseDataInfoList << results.second[i];
+                            resultList << newResult;
+                        }
+                    }
                 }
-                auto results = generateCombinations(exprTemplate, valueMap, keys, keywords, inputValues, caseCopy.caseName,
-                                                    notTriggerStr, customNotTrigger);
-                for (int i = 0; i < results.first.size(); ++i) {
-                    ResultInfo newResult;
-                    newResult.resultName = caseCopy.caseName.contains("others", Qt::CaseInsensitive)
-                                               ? resultInfo.resultName
-                                               : resultInfo.resultName + " == " + results.first[i];
-                    OutputDataInfo newOutput = resultInfo.outputDataInfoList[0];
-                    newOutput.outputValue = results.first[i];
-                    newResult.caseDataInfoList << results.second[i];
-                    newResult.outputDataInfoList << newOutput;
-                    resultList << newResult;
-                }
-            } else {
-                ResultInfo tempResult = resultInfo;
-                tempResult.caseDataInfoList.clear();
-                tempResult.caseDataInfoList << caseCopy;
-                resultList << tempResult;
             }
+        } else {
+            ResultInfo tempResultInfo = resultInfo;
+            for (auto& caseDataInfo : tempResultInfo.caseDataInfoList) {
+                convertInputValues(caseDataInfo);
+            }
+            resultList << tempResultInfo;
         }
     } else {
         ResultInfo tempResultInfo = resultInfo;

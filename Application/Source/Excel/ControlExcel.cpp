@@ -103,6 +103,10 @@ void ControlExcel::initControlData() {
 
     QVariant lastSavedFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, lastSavedFile);
+
+    // Construct : SFC, Vehicle SignalName
+    auto sfcSignal = SignalDataManager::instance().data()->isSignalListInfo(true);
+    auto vehiclSignal = SignalDataManager::instance().data()->isSignalListInfo(false);
 }
 
 void ControlExcel::resetControl(const bool& reset) {
@@ -909,17 +913,29 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         QString moduleName;
 
         if (excelOpen) {
+            auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
             QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
-            moduleName = QFileInfo(fileInfo.path()).fileName();
+            QString directory = QFileInfo(fileInfo.path()).fileName();
+
+            for (const auto& module : moduleInfo.keys()) {
+                if (directory == module) {
+                    moduleName = directory;
+                    break;
+                }
+            }
+            if (moduleName.size() == 0) {
+                // moduleName = QString("/%1/%2").arg(directory).arg(fileInfo.baseName());
+                moduleName = fileInfo.filePath();
+            }
         } else {
-            moduleName = TestCase::instance().data()->getNewModule();
+            moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
         }
         optionInfo.append(moduleName);
     } else {
         optionInfo.append(selectModule);
     }
 
-    qDebug() << "updateStartTestCase :" << optionInfo;
+    // qDebug() << "updateStartTestCase :" << optionInfo;
     TestCase::instance().data()->start(optionInfo);
 }
 
@@ -939,12 +955,12 @@ void ControlExcel::updateSelectModuleList() {
         QString moduleName = QFileInfo(fileInfo.path()).fileName();
         selectModuleList.append(moduleName);
     } else {
-        QString newModule = TestCase::instance().data()->getNewModule();
+        QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
         moduleList.prepend(newModule);
         selectModuleList.append(newModule);
     }
 
-    qDebug() << "updateShowSelectModule :" << selectModuleList << moduleList.size();
+    // qDebug() << "updateShowSelectModule :" << selectModuleList << moduleList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, moduleList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, selectModuleList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, true, true);
@@ -963,7 +979,8 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
                 QVariant popupData;
                 if (ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseComplete, isHandler(), popupData, info) ==
                     ivis::common::PopupButton::Confirm) {
-                    saveExcelFile(true);
+                    bool saveAs = (getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool() == false);
+                    saveExcelFile(saveAs);
                 }
             }
             break;
@@ -1110,11 +1127,11 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             updateTCCheck(eventValue.toInt());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTC: {
+        case ivis::common::EventTypeEnum::EventTypeGenTCModule: {
             updateSelectModuleList();
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
+        case ivis::common::EventTypeEnum::EventTypeGenTC: {
             updateStartTestCase();
             break;
         }

@@ -123,21 +123,26 @@ QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
         }
     }
 
-    QString foundYml;
+    // qDebug() << "========================================================================================================";
+    // qDebug() << "isSfcFileInfo";
+    // qDebug() << "\t Info :" << signalName << signalType << moduleName;
+
+    QString ymlFile;
     for (const auto& file : fileList) {
-        if (QFile::exists(file)) {
-            foundYml = file;
+        if (QFile::exists(file) == false) {
+            continue;
+        }
+        // PV : list.at(0) 파일을 YML 로 사용
+        // CV : list.at(0 ~ max) 파일중 "_CV" 가 있는 첫번째 파일 사용, 아닌 경우 마지막 파일을 사용
+        ymlFile = file;
+        // qDebug() << "\t Yml :" << ymlFile;
+        if ((appModePV) || (file.contains("_CV"))) {
             break;
         }
     }
+    // qDebug() << "\t Yml :" << (ymlFile.size() > 0) << ymlFile;
 
-    // if (foundYml.size() > 0) {
-    //     qDebug() << "Found yml :" << foundYml;
-    // } else {
-    //     qDebug() << "Not found yml :" << signalName;
-    // }
-
-    return foundYml;
+    return ymlFile;
 }
 
 QStringList SignalDataManager::isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
@@ -204,6 +209,31 @@ QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signal
 
     // qDebug() << "isSignalFileList :" << signalName << vehicleType << fileList;
     return fileList;
+}
+
+QString SignalDataManager::isSFCCommonEnum(const QString& info, const QString& prefix) {
+    QString commonEnum;
+
+    QStringList exceptionValueEnum = info.split(prefix);
+    QString exceptionSignal = (exceptionValueEnum.size() == 2) ? (exceptionValueEnum.at(1)) : ("");
+    if (exceptionSignal.size() > 0) {
+        // ./Model/SFC/CV/ABS_CV/ABS_CV.yml
+        // - SFC.ABS_CV.Telltale.ABS_CV.Stat:
+        //   valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+
+        // ./Model/SFC/CV/Settings_CV/Settings_CV.yml
+        // - SFC.Extension.Settings.Inter_WelcomeSoundSetStatus:
+        //   valueEnum: SFC_Common_Enum_CV.EnumValue0
+
+        // ./Model/SFC/CD/Settings/Settings.yml
+        // - SFC.Extension.Settings.Inter_WelcomeSoundSetStatus:
+        //   valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+
+        commonEnum = exceptionValueEnum[1].remove(" ");
+        qDebug() << "isSFCCommonEnum :" << commonEnum;
+    }
+
+    return commonEnum;
 }
 
 QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
@@ -334,16 +364,10 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
                         valueEunm.append(info);
                         // qDebug() << "\t ValueEnum     :" << info;
                     } else {
-                        QStringList exceptionValueEnum = info.split(PREFIX_VALUE_ENUM);
-                        QString exceptionSignal = (exceptionValueEnum.size() == 2) ? (exceptionValueEnum.at(1)) : ("");
-                        if (exceptionSignal.size() > 0) {
-                            // "valueEnum: SFC_Common_Enum_CV.Telltale.Stat"
-                            valueEunm.append(exceptionValueEnum[1].remove(" "));
+                        QString commonEnum = isSFCCommonEnum(info, PREFIX_VALUE_ENUM);
+                        if (commonEnum.size() > 0) {
+                            valueEunm.append(commonEnum);
                         } else {
-                            // valueEnum:
-                            //   NONE: 0x0
-                            //   OFF: 0x1
-                            //   ON: 0x2
                             foundValueEnum = info.contains(PREFIX_VALUE_ENUM);
                         }
                     }
@@ -386,10 +410,21 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
     QMap<int, QStringList> fileList = isSignalFileList(signalName, vehicleType);
     QMap<int, QStringList> sfcDataInfo = isParsingFileDataInfo(signalName, inputData, fileList, dataType);
     QStringList valueEnum = sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
-    QString sfcCommonSignal =
+    QString sfcCommonSignal;
+
+#if 0
+    sfcCommonSignal =
         ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Sfc)) && (valueEnum.size() == 1))
-            ? (valueEnum.at(0))
-            : ("");
+            ? (valueEnum.at(0)) : ("");
+#else
+    if (valueEnum.size() == 1) {
+        if ((valueEnum.at(0).trimmed().startsWith("SFC_Common_Enum.")) ||
+            (valueEnum.at(0).trimmed().startsWith("SFC_Common_Enum_CV."))) {
+            sfcCommonSignal = valueEnum.at(0);
+        }
+    }
+#endif
+
     if (sfcCommonSignal.size() > 0) {
         fileList = isSignalFileList(sfcCommonSignal, vehicleType);
         QMap<int, QStringList> sfcCommonDataInfo = isParsingFileDataInfo(sfcCommonSignal, inputData, fileList, dataType);
@@ -397,14 +432,16 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
         sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = sfcCommonValueEnum;
 #if 0
         qDebug() << "=================================================================================================";
-        qDebug() << "Signal :" << signalName << "->" << sfcCommonSignal;
-        qDebug() << "\t DataType   :" << dataType;
-        qDebug() << "\t FileList   :" << fileList;
+        qDebug() << "isSignalDataList";
+        qDebug() << "\t Signal      :" << signalName << "->" << sfcCommonSignal;
+        qDebug() << "\t DataTyp     :" << dataType;
+        qDebug() << "\t FileList    :" << fileList;
         qDebug() << "\t 1 ValueEnum :" << valueEnum;
         qDebug() << "\t 2 ValueEnum :" << sfcCommonValueEnum;
         qDebug() << "=================================================================================================\n\n";
 #endif
     }
+
     return sfcDataInfo;
 }
 
@@ -716,6 +753,44 @@ bool SignalDataManager::isExceptionSignal(const QString& signalName) {
     return false;
 }
 
+bool SignalDataManager::isMultiKeywordData(const QStringList& dataList) {
+    QRegularExpression regex(R"(\[([^\[\]]+)\])");    // 정규식 : 대괄호
+    QStringList keywordList;
+
+    // DataList : "[CustomMoreThanEqual][1279]", "[1280]", "[CustomUnder][1280]", "[1279]"
+    for (const QString& item : dataList) {
+        QRegularExpressionMatchIterator it = regex.globalMatch(item);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            QString captured = match.captured(1);
+            if (captured.contains(QRegularExpression("[A-Za-z]"))) {    // 정규식 : 문자
+                keywordList.append(QString("[%1]").arg(captured));    // [CustomMoreThanEqual], [CustomUnder]
+            }
+        }
+    }
+
+    int multiCount = 0;
+    if (keywordList.size() > 1) {
+        QList<QPair<QString, int>> customKeywordPatternList =
+            ExcelUtil::instance().data()->isKeywordPatternInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
+        for (const auto& keyword : keywordList) {
+            for (const auto& pattern : customKeywordPatternList) {
+                if (keyword == pattern.first) {
+                    multiCount++;
+                }
+            }
+
+            if (multiCount > 1) {
+                break;
+            }
+        }
+    }
+
+    // qDebug() << "isMultiKeywordData :" << KeywordList << "<-" << dataList;
+
+    return (multiCount > 1);
+}
+
 QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                               QMap<QString, QMap<int, QStringList>>& dataInfo) {
     QMap<QString, SignalData> signalDataInfo;
@@ -795,6 +870,13 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             if (temp.size() > 0) {
                 allConvertData[signalName].append(temp);
             }
+        }
+
+        if (isMultiKeywordData(originData)) {
+            qDebug() << "[Multi-keyword data deletes the origin data]";
+            qDebug() << "\t Signal     :" << signalName;
+            qDebug() << "\t OriginData :" << originData;
+            originData.clear();
         }
 
         if (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
@@ -1343,4 +1425,168 @@ bool SignalDataManager::isExcelDataValidation() {
         qDebug() << "Fail to excel data validation.";
     }
     return validCheck;
+}
+
+QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text) == false) {
+        qDebug() << "Fail to open file :" << filePath;
+        return QStringList();
+    }
+
+    QStringList signalList;
+    QRegularExpression signalRegex(R"(^\s*-\s*([^:]+):\s*(.*)$)");    // 시작 : "- "    끝 ":" 확인인
+    QRegularExpression signalNameRegex(R"(signalName:)");    // "signalName:" 포함 확인
+    QRegularExpression abstractionNameRegex(R"(abstractionName:)");    // " :" 포함 확인
+
+    QString foundSignal;
+    bool foundSignalName = false;
+    bool foundAbstractionName = false;
+
+    QTextStream in(&file);
+    while (in.atEnd() == false) {
+        QString line = in.readLine().trimmed();
+        QRegularExpressionMatch match = signalRegex.match(line);
+
+        if ((match.hasMatch()) || in.atEnd()) {
+            if (foundSignal.size() == 0) {
+                foundSignal = match.captured(1).trimmed() + " " + match.captured(2).trimmed();
+                // qDebug() << "\t\t FoundSignal :" << foundSignal;
+            }
+        }
+
+        if (foundSignal.size() > 0) {
+            if ((foundSignalName == false) && (signalNameRegex.match(line).hasMatch())) {
+                foundSignalName = true;
+            }
+            if ((foundAbstractionName == false) && (abstractionNameRegex.match(line).hasMatch())) {
+                foundAbstractionName = true;
+            }
+
+            if ((foundSignalName) && (foundAbstractionName)) {
+                signalList.append(foundSignal);
+                foundSignal.clear();
+                foundSignalName = false;
+                foundAbstractionName = false;
+            }
+        }
+    }
+    file.close();
+
+#if 0
+    qDebug() << "=======================================================================================================";
+    int index = 0;
+    for (const auto& signal : signalList) {
+        qDebug() << "\t SignalList[" << index++ << "] :" << signal;
+    }
+    qDebug() << "extractMatchingSignal :" << signalList.size() << file.fileName();
+    qDebug() << "=======================================================================================================\n\n";
+#endif
+
+    return signalList;
+}
+
+QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
+    ivis::common::CheckTimer checkTimer;
+
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QStringList typeList;
+    QStringList vehicleTypeList;
+    QString fileNameBase;
+
+#if 0
+    ConfigTypeVsmFileNameBasePV    CLU_VSM_%1.Vehicle.%2.vsm
+    ConfigTypeVsmFileNameBaseCV    CLU_VSM_CV_%1.Vehicle.%2.vsm
+
+    ConfigTypeVehicleTypePV        ICV, EV, FCEV, PHEV, HEV
+    ConfigTypeVehicleTypeCV        ICV, EV, FCEV
+
+    ConfigTypeSfcSpecTypePV        AD, AV, CD, CH, EC, HD, PT, ETC, extension
+    ConfigTypeSfcSpecTypeCV        AV, CD, CV, EC, PT, ETC, extension
+
+    ConfigTypeVsmSpecTypePV        AD, AV, CD, CH, EC, HD, PT, CS
+    ConfigTypeVsmSpecTypeCV        CV
+
+    ConfigTypeSystemTypePV         Config, Engineering, Extra, Gateway, HardWire, Micom, TP, Undefined
+
+    isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
+        QStringList fileName = QStringList();
+        QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+        vsmPath.append("/VSM");
+        QString fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
+        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+        if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+            fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBasePV).toString();
+        }
+
+        for (const auto& spec : specType) {
+            if (vehicleName.compare("System") == 0) {
+                fileName.append(QString("%1/%2.%3.vsm").arg(vsmPath).arg(vehicleName).arg(spec));
+            } else {
+                fileName.append(QString("%1/%2").arg(vsmPath).arg(fileNameBase.arg(vehicleName).arg(spec)));
+            }
+        }
+    }
+#endif
+
+    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
+        typeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV).toStringList();
+        fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBasePV).toString();
+    } else {
+        typeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
+        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toStringList();
+        fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
+    }
+
+
+    // isSignalFileList();
+
+    if (sfcSignal) {
+    } else {
+        for (const auto& vehicleType : vehicleTypeList) {
+        }
+    }
+
+
+    QStringList fileList;
+
+    if (sfcSignal) {
+        sfcModelPath.append("/SFC/CV");
+        fileList.append(sfcModelPath + "/ABS_CV/ABS_CV.yml");
+        fileList.append(sfcModelPath + "/ABS_NO_ABS_Trailer/ABS_NO_ABS_Trailer.yml");
+        fileList.append(sfcModelPath + "/ADAS_Driving_CV/ADAS_Driving_CV.yml");
+        fileList.append(sfcModelPath + "/ADAS_PARKING_CV/ADAS_PARKING_CV.yml");
+    } else {
+        sfcModelPath.append("/VSM");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_EV.Vehicle.CV.vsm");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_ICV.Vehicle.CV.vsm");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_SKEL.Vehicle.CV.vsm");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_System.Vehicle.CV.vsm");
+    }
+
+
+    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QStringList moduleList = moduleInfo.keys();
+
+
+
+
+
+
+    // QString vehicleType = vehicleTypeList.toStringList().join(", ");
+
+
+
+    QStringList signalList;
+#if 0
+    for (const auto& file : fileList) {
+        signalList.append(extractMatchingSignal(file));
+    }
+    checkTimer.check("isSignalListInfo");
+#endif
+
+    return signalList;
 }

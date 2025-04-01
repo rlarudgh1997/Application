@@ -17,7 +17,12 @@ public:
         if (mTCFileDirPath.size() == 0) {
             mOpenFilePath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTCFilePath).toString();
             int lastSlashIndex = mOpenFilePath.lastIndexOf("/");
-            mTCFileDirPath = mOpenFilePath.mid(0, lastSlashIndex);
+            mTCFileDirPath = ConfigSetting::instance()
+                                 .data()
+                                 ->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath)
+                                 .toString()
+                                 .section('/', 0, -2);
+            qDebug() << "TC file generation path: " << mTCFileDirPath;
             mAvailableSpace = QStorageInfo(mTCFileDirPath).bytesAvailable() * 9 / 10;
         }
         qDebug() << "CaseDataWriter::CaseDataWriter() complete.";

@@ -1419,7 +1419,7 @@ QTableWidgetItem* GuiExcel::updateCurrentCellText(const int& sheetIndex, const i
     return currentItem;
 }
 
-void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, const bool& sync) {
+void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, const bool& confirmSheetCheck) {
     if (checkExcelSheet(sheetIndex) == false) {
         return;
     }
@@ -1436,7 +1436,26 @@ void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, c
         return;
     }
 
-    bool allCheck = getSheetCheckState(sheetIndex);
+    bool allCheck = true;
+    if (confirmSheetCheck) {
+        const auto mergeInfo = isDisplayMergeInfo(sheetIndex);
+        for (int rowIndex = 0; rowIndex < currentSheet->rowCount(); ++rowIndex) {
+            int checkState = isCheckState(sheetIndex, rowIndex, columnIndex);
+            if (checkState != static_cast<int>(ivis::common::CheckState::Checked)) {
+                allCheck = false;
+                break;
+            }
+            for (const auto& merge : mergeInfo[columnIndex]) {
+                if ((rowIndex >= merge.first) && (rowIndex <= merge.second)) {
+                    rowIndex = merge.second;
+                    break;
+                }
+            }
+        }
+    } else {
+        allCheck = getSheetCheckState(sheetIndex);
+    }
+
     screenUpdateBlock(sheetIndex, true);
     for (int rowIndex = 0; rowIndex < currentSheet->rowCount(); ++rowIndex) {
         QTableWidgetItem* currentItem = currentSheet->item(rowIndex, columnIndex);
@@ -1449,9 +1468,7 @@ void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, c
     screenUpdateBlock(sheetIndex, false);
     setSheetCheckState(sheetIndex, (!allCheck));
 
-    if (sync) {
-        syncSheetData(sheetIndex);
-    }
+    syncSheetData(sheetIndex);
 }
 
 void GuiExcel::updateSheetProperty(const int& sheetIndex, const int& viewSheetIndex) {
@@ -1793,7 +1810,7 @@ void GuiExcel::updateDisplayTCCheck(const int& allCheck) {
 
     for (int sheetIndex = startIndex; sheetIndex <= endIndex; ++sheetIndex) {
         setSheetCheckState(sheetIndex, (!allCheck));
-        updateCheckState(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
+        updateCheckState(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check), false);
     }
 }
 
@@ -1932,7 +1949,7 @@ void GuiExcel::updateDisplayExcelSheet() {
             parsingShortcutType(sheetIndex, pos);
         });
         connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionDoubleClicked, [=](int logicalIndex) {
-            updateCheckState(sheetIndex, logicalIndex);
+            updateCheckState(sheetIndex, logicalIndex, true);
         });
         connect(mExcelSheet[sheetIndex]->horizontalHeader(), &QHeaderView::sectionResized,
                 [=](int logicalIndex, int oldSize, int newSize) {

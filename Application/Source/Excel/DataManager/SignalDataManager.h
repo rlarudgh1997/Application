@@ -62,19 +62,11 @@ public:
 
     int isDataType(const QString& dataTypeStr);
     int isSignalType(const QString& signalName);
-    QString isSfcFileInfo(const QString& signalName);
-    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
-    QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
-    QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
-                                                 const QMap<int, QStringList>& fileList, int& dataType);
     QMap<int, QStringList> isSignalDataList(const QString& signalName, const QStringList& inputData, const QString& vehicleType,
                                             int& dataType);
     QString isSignalValueEnum(const QString& signalName, const QString& value);
     QStringList isSignalValueEnum(const bool& toEnum, const QString& signalName);
-    QStringList isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
-                                      QString& matchingValue);
-    QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
-                                               QMap<QString, QMap<int, QStringList>>& dataInfo);
+
     QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
     QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
                                                                         QMap<QString, SignalData>& newSignalDataInfo);
@@ -83,11 +75,23 @@ public:
     QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const QList<QStringList>& list);
     QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const QList<QStringList>& list);
     bool isExcelDataValidation();
+    QStringList isSignalListInfo(const bool& sfcSignal);
 
 private:
     explicit SignalDataManager();
 
+    QString isSfcFileInfo(const QString& signalName);
+    QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType);
+    QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType);
+    QString isSFCCommonEnum(const QString& info, const QString& prefix);
+    QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
+                                                 const QMap<int, QStringList>& fileList, int& dataType);
+    QStringList isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
+                                      QString& matchingValue);
+    QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
+                                               QMap<QString, QMap<int, QStringList>>& dataInfo);
     bool isExceptionSignal(const QString& signalName);
+    bool isMultiKeywordData(const QStringList& dataList);
     void isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo, QStringList& checkDataList);
 #if 0
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,
@@ -97,6 +101,7 @@ private:
 #endif
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);
+    QStringList extractMatchingSignal(const QString& filePath);
 };
 
 #endif  // SIGNAL_DATA_MANAGER_H

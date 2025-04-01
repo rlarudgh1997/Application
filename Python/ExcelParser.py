@@ -49,6 +49,7 @@ class ExcelParser:
             sheet_data = []
 
 #if 1    // USE_SHEET_COLUMN_OLD
+            # if (sheet not in wb.sheetnames) and ((sheet == "Configs") or (sheet == "DependOn")):
             if (sheet not in wb.sheetnames) and (sheet == "Configs"):
                 print("Append Sheet :", sheet)
                 sheet_data.append(self.title_config)

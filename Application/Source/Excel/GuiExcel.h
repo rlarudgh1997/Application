@@ -259,7 +259,7 @@ private:
     void updateCellContent(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QTableWidgetItem* updateCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex,
                                             const QString& text);
-    void updateCheckState(const int& sheetIndex, const int& columnIndex, const bool& sync = true);
+    void updateCheckState(const int& sheetIndex, const int& columnIndex, const bool& confirmSheetCheck);
     void updateSheetProperty(const int& sheetIndex, const int& viewSheetIndex);
     void updateInitExcelSheet();
 

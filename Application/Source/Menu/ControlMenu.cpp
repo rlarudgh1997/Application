@@ -174,7 +174,7 @@ void ControlMenu::updateSelectModuleList(const int& eventType, const QVariantLis
     QString filter = QString();
     int runType = 0;
 
-    if (eventType == ivis::common::EventTypeEnum::EventTypeGenTC) {
+    if (eventType == ivis::common::EventTypeEnum::EventTypeGenTCModule) {
         filter = QString(".xlsx");
         runType = ivis::common::RunTypeEnum::RunTypeGenTC;
     } else if (eventType == ivis::common::EventTypeEnum::EventTypeRunTC) {
@@ -331,16 +331,27 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
 void ControlMenu::updateViewTCFile() {
     QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
     // QStringList moduleList = getData(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList();
+
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+    QString newModuleFile = QString("%1/%2.tc").arg(ivis::common::APP_PWD()).arg(newModule);
+    if (QFile::exists(newModuleFile)) {
+        moduleList.prepend(newModule);
+    }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewTCFileList, moduleList, true);
 }
 
 void ControlMenu::updateViewTCDisplay(const QString& moduleName) {
     ivis::common::CheckTimer checkTimer;
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+    QString tcFile;
 
-    QString tcFile = moduleInfo[moduleName].second;
-
+    if (moduleName == newModule) {
+        tcFile = QString("%1/%2.tc").arg(ivis::common::APP_PWD()).arg(newModule);
+    } else {
+        auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+        tcFile = moduleInfo[moduleName].second;
+    }
 
     // QStringList readDataStream = ivis::common::FileInfo::readFile(tcFile, ivis::common::FileInfo::ReadType::Stream);
     // checkTimer.check("ReadType::Stream");
@@ -351,10 +362,8 @@ void ControlMenu::updateViewTCDisplay(const QString& moduleName) {
     QStringList readData = ivis::common::FileInfo::readFile(tcFile, ivis::common::FileInfo::ReadType::Normal);
     checkTimer.check("ReadType::Normal");
 
-
-
-    qDebug() << "updateViewTCDisplay :" << moduleName << tcFile;
-    qDebug() << "\t readData :" << readData.size();
+    // qDebug() << "updateViewTCDisplay :" << moduleName << tcFile;
+    // qDebug() << "\t readData :" << readData.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariantList({tcFile, readData}), true);
 
     checkTimer.check("updateViewTCDisplay");
@@ -912,8 +921,8 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateSelectModuleList(type, QVariantList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTC:
-        case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
+        case ivis::common::EventTypeEnum::EventTypeGenTCModule:
+        case ivis::common::EventTypeEnum::EventTypeGenTC: {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenTCPython).toBool()) {
                 updateSelectModuleList(type, QVariantList());
             } else {

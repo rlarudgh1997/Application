@@ -802,69 +802,6 @@ private:
     QString mCommand = QString();
 };
 
-class ExcuteProgram_ : public QThread {
-    Q_OBJECT
-
-public:
-    explicit ExcuteProgram_(bool useProcess = true, QObject* parent = nullptr)
-        : QThread(parent), mUseProcess(useProcess) {}
-
-    void setCommand(const QString& cmd) {
-        mCommand = cmd;
-    }
-
-signals:
-    void finished(bool success);
-    void logOutput(const QString& log);
-
-protected:
-    void run() override {
-        QStringList log;
-        bool success = executeCommand(mCommand, log);
-
-        for (const QString& line : log) {
-            emit logOutput(line);
-        }
-        emit finished(success);
-    }
-
-private:
-    bool executeCommand(const QString& cmd, QStringList& log) {
-        int result = 0;
-        log.clear();
-
-        if (mUseProcess) {
-            QProcess process;
-            QStringList splitCmd = cmd.split(" ");
-
-            if (splitCmd.isEmpty()) {
-                process.start(cmd);
-            } else {
-                QString command = splitCmd.at(0);
-                QStringList arguments = splitCmd.mid(1);
-                process.start(command, arguments);
-            }
-
-            if (process.waitForStarted()) {
-                while (process.waitForReadyRead()) {
-                    QString readAllData = process.readAll();
-                    log.append(readAllData.trimmed());
-                }
-            } else {
-                result = -1;
-            }
-        } else {
-            result = system(cmd.toLatin1().data());
-        }
-
-        return (result == 0);
-    }
-
-private:
-    bool mUseProcess;
-    QString mCommand;
-};
-
 class CheckLib : public QObject {
     Q_OBJECT
 

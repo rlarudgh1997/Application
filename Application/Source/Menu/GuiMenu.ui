@@ -143,9 +143,9 @@
     <property name="title">
      <string>Run</string>
     </property>
+    <addaction name="actionGenTCModule"/>
     <addaction name="actionGenTC"/>
     <addaction name="actionRunTC"/>
-    <addaction name="actionRunTCMulti"/>
     <addaction name="actionTCReport"/>
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
@@ -183,7 +183,7 @@
    <addaction name="separator"/>
    <addaction name="actionLastFolder"/>
    <addaction name="actionLastFile"/>
-   <addaction name="actionRunTCMulti"/>
+   <addaction name="actionGenTC"/>
    <addaction name="separator"/>
    <addaction name="actionPath"/>
   </widget>
@@ -322,9 +322,9 @@
     <bool>true</bool>
    </property>
   </action>
-  <action name="actionGenTC">
+  <action name="actionGenTCModule">
    <property name="text">
-    <string>Gen TC</string>
+    <string>Gen TC - Module</string>
    </property>
    <property name="shortcut">
     <string>Alt+G</string>
@@ -428,9 +428,9 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionRunTCMulti">
+  <action name="actionGenTC">
    <property name="text">
-    <string>Gen TC New</string>
+    <string>Gen TC</string>
    </property>
    <property name="shortcut">
     <string>Alt+M</string>

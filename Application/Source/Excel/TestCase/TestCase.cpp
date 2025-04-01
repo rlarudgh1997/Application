@@ -531,14 +531,31 @@ bool TestCase::openExcelFile() {
         return false;
     }
 
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
     QList<QVariantList> sheetDataList;
     QString filePath;
-    if (currModule == getNewModule()) {
+    if (currModule == newModule) {
         filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
         sheetDataList = readSheetData();
     } else {
-        filePath = getModuleList(currModule);
-        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+        auto moduleList = readModuleList();
+        for (const auto& module : moduleList.keys()) {
+            if (currModule == module) {
+                filePath = getModuleList(module);
+                break;
+            }
+        }
+
+        if (filePath.size() == 0) {
+            filePath = currModule;    // ./NewModule01/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
+        }
+
+        bool editState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+        if (editState) {
+            sheetDataList = readSheetData();    // 엑셀 오픈 하여 편집 상태에서 GenTC 진행시
+        } else {
+           sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+        }
     }
 
     bool result = (sheetDataList.size() > 0);

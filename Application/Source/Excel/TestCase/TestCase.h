@@ -15,7 +15,6 @@ class TestCase : public QObject {
     Q_OBJECT
 
     REGISTER_WRITABLE_VALUE(int, ExcuteType, 0)
-    REGISTER_WRITABLE_VALUE(QString, NewModule, QString("New_Module"))
     REGISTER_WRITABLE_VALUE(QStringList, Arguments, QStringList())
     REGISTER_WRITABLE_VALUE(int, SelectAppMode, 0)
     REGISTER_WRITABLE_VALUE(QStringList, SelectModules, QStringList())

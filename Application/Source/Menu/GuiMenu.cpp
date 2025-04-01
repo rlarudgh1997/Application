@@ -453,12 +453,12 @@ void GuiMenu::updateMenuSetting() {
 }
 
 void GuiMenu::updateMenuRun() {
-    connect(mGui->actionGenTC, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTC, QVariant()); });
+    connect(mGui->actionGenTCModule, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTCModule, QVariant()); });
     connect(mGui->actionRunTC, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunTC, QVariant()); });
-    connect(mGui->actionRunTCMulti, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunMultiDocker, QVariant()); });
+    connect(mGui->actionGenTC, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTC, QVariant()); });
     connect(mGui->actionTCReport, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTestReportResult, QVariant()); });
     connect(mGui->actionGCOVReport, &QAction::triggered,
