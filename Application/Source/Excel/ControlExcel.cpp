@@ -908,17 +908,18 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
     QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
     QStringList optionInfo(QStringList({appModeInfo}));
 
+    bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+    QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
+    QString directory = QFileInfo(fileInfo.path()).fileName();
+    QString editingModule;
+
     if (selectModule.size() == 0) {
-        bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
         QString moduleName;
 
         if (excelOpen) {
             auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-            QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
-            QString directory = QFileInfo(fileInfo.path()).fileName();
-
             for (const auto& module : moduleInfo.keys()) {
-                if (directory == module) {
+                if (module == directory) {
                     moduleName = directory;
                     break;
                 }
@@ -927,15 +928,44 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
                 // moduleName = QString("/%1/%2").arg(directory).arg(fileInfo.baseName());
                 moduleName = fileInfo.filePath();
             }
+
+            // 현재 엑셀 파일이 편집중인 상태 전달
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
+                editingModule = moduleName;
+            }
         } else {
             moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
         }
         optionInfo.append(moduleName);
     } else {
+        if (excelOpen) {
+            for (const auto& module : selectModule) {
+                if (module == directory) {
+                    editingModule = directory;
+                    break;
+                }
+            }
+        }
         optionInfo.append(selectModule);
     }
 
-    // qDebug() << "updateStartTestCase :" << optionInfo;
+    qDebug() << "==========================================================================================";
+    qDebug() << "updateStartTestCase";
+    qDebug() << "\t Editing :" << editingModule;
+    qDebug() << "\t Option  :" << optionInfo;
+
+    if (editingModule.size() > 0) {
+        // 편집중인 엑셀과 다른 모듈을 선택하여 동작시 ExcelData::getSheetData() 의 데이터를
+        // 사용 불가(파일 오픈시 ExcelData::setSheetData() 으로 데이터 저장)로 인해
+        // 편집중인 데이터는 ExcelData::setEditingSheetData() 에 저장 후
+        // TestCase::readSheetData() 함수에서 예외 처리 하여 사용함.
+        const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+        const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+        for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+            ExcelData::instance().data()->setEditingSheetData(sheetIndex, getData(sheetIndex));
+        }
+        TestCase::instance().data()->setEditingModule(editingModule);
+    }
     TestCase::instance().data()->start(optionInfo);
 }
 
@@ -952,8 +982,21 @@ void ControlExcel::updateSelectModuleList() {
     bool excelOpen = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
     if (excelOpen) {
         QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
-        QString moduleName = QFileInfo(fileInfo.path()).fileName();
-        selectModuleList.append(moduleName);
+        QString directory = QFileInfo(fileInfo.path()).fileName();
+        bool existsModule = false;
+        for (const auto& module : moduleInfo.keys()) {
+            if (module == directory) {
+                existsModule = true;
+                break;
+            }
+        }
+        if (existsModule == false) {
+            // moduleList.prepend(directory);
+            QString filePath = fileInfo.filePath();
+            moduleList.prepend(filePath);
+            selectModuleList.append(filePath);
+        }
+        selectModuleList.append(directory);
     } else {
         QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
         moduleList.prepend(newModule);

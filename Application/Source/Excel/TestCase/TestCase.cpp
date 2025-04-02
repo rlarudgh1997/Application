@@ -338,12 +338,12 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 
     if (excuteType == ExcuteTypeHelpMode) {
         displayText.append(QString("\n") + QString(lineCount, '=') + QString("\n"));
-        displayText.append(QString("Usage: \033[32mApplication gen all [GenType] [AppMode] [Modules]\033[0m\n"));
+        displayText.append(QString("Usage: \033[32mApplication gen [AppMode] all [GenType] [Modules]\033[0m\n"));
         displayText.append(QString("Options:\n"));
         displayText.append(QString("    gen                CLI Mode Start\n"));
-        displayText.append(QString("    all                TC select all and create\n"));
-        displayText.append(QString("    [GenType]          TC gen type(default/negative/positive) Specify all and create\n"));
         displayText.append(QString("    [AppMode]          App mode(cv, pv) selection\n"));
+        displayText.append(QString("    all                Select all TC names\n"));
+        displayText.append(QString("    [GenType]          TC gen type(default/negative/positive) Specify all and create\n"));
         displayText.append(QString("    [Modules]          Enter multiple modules(abs_cv aem ...)\n"));
         displayText.append(QString("\n\n") + QString(lineCount, '=') + QString("\n\n\n"));
     } else if (excuteType == ExcuteTypeInvalidSelectItem) {
@@ -483,43 +483,38 @@ QStringList TestCase::isModuleList() {
     return moduleList;
 }
 
-QList<QVariantList> TestCase::isSheetData() {
+QList<QVariantList> TestCase::readSheetData(const bool& editingModule) {
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 
     QList<QVariantList> sheetDataList;
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        QVariantList sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
+        QVariantList sheetData;
+        if (editingModule) {
+            sheetData = ExcelData::instance().data()->getEditingSheetData(sheetIndex).toList();
+        } else {
+            sheetData = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
+        }
+        if ((sheetIndex == startIndex) && (sheetData.size() > 0)) {
+            qDebug() << "readSheetData :" << editingModule << sheetData.at(0).toList();
+        }
         sheetDataList.append(sheetData);
     }
-
-    // qDebug() << "isSheetData :" << sheetDataList.size();
     return sheetDataList;
 }
 
-void TestCase::updateSheetData(const QList<QVariantList>& sheetDataList) {
+void TestCase::writeSheetData(const QList<QVariantList>& sheetDataList) {
     const int startOriginIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int startConvertIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     int originIndex = startOriginIndex;
 
     for (const auto& sheetData : sheetDataList) {
         int convertIndex = originIndex - startOriginIndex + startConvertIndex;
-        // qDebug() << "updateSheetData :" << originIndex << convertIndex << sheetData.size();
+        // qDebug() << "writeSheetData :" << originIndex << convertIndex << sheetData.size();
         ExcelData::instance().data()->setSheetData(originIndex, sheetData);
         ExcelData::instance().data()->setSheetData(convertIndex, sheetData);
         originIndex++;
     }
-}
-
-QList<QVariantList> TestCase::readSheetData() {
-    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
-
-    QList<QVariantList> sheetDataList;
-    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        sheetDataList.append(ExcelData::instance().data()->getSheetData(sheetIndex).toList());
-    }
-    return sheetDataList;
 }
 
 bool TestCase::openExcelFile() {
@@ -534,6 +529,8 @@ bool TestCase::openExcelFile() {
     QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
     QList<QVariantList> sheetDataList;
     QString filePath;
+    bool openState = false;
+
     if (currModule == newModule) {
         filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
         sheetDataList = readSheetData();
@@ -545,16 +542,16 @@ bool TestCase::openExcelFile() {
                 break;
             }
         }
-
         if (filePath.size() == 0) {
-            filePath = currModule;    // ./NewModule01/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
+            filePath = currModule;    // ./Temp/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
         }
 
-        bool editState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
-        if (editState) {
-            sheetDataList = readSheetData();    // 엑셀 오픈 하여 편집 상태에서 GenTC 진행시
+        if (currModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시
+            setEditingModule("");
+            sheetDataList = readSheetData(true);
         } else {
-           sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+            openState = true;
+            sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
         }
     }
 
@@ -564,15 +561,20 @@ bool TestCase::openExcelFile() {
     int currStep = (getSelectModules().size() - getRemainingModules().size() + 1);
     qDebug() << (QString(120, '>').toLatin1().data());
     qDebug() << (QString("[Test Case - Excel Open] : %1/%2").arg(currStep).arg(getSelectModules().size()).toLatin1().data());
-    qDebug() << "\t Selected Modules    :" << getSelectModules();
-    qDebug() << "\t Remaining Modules   :" << getRemainingModules();
-    qDebug() << "\t Gen TC Module       :" << currModule.toLatin1().data();
-    qDebug() << "\t File Open           :" << result << filePath.toLatin1().data();
+    qDebug() << "\t Selected Modules   :" << getSelectModules();
+    qDebug() << "\t Remaining Modules  :" << getRemainingModules();
+    qDebug() << "\t Gen TC Module      :" << currModule.toLatin1().data();
+    qDebug() << "\t Result             :" << result;
+    if (openState) {
+        qDebug() << "\t File Open          :" << filePath.toLatin1().data();
+    } else {
+        qDebug() << "\t Read Sheet         :" << currModule;
+    }
     qDebug() << (QString(120, '<').toLatin1().data());
     qDebug() << "\n\033[0m";
 
     if (result) {
-        updateSheetData(sheetDataList);
+        writeSheetData(sheetDataList);
         remainingModules.removeAll(currModule);
         setRemainingModules(remainingModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);

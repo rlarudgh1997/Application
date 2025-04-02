@@ -19,6 +19,7 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_VALUE(int, SelectAppMode, 0)
     REGISTER_WRITABLE_VALUE(QStringList, SelectModules, QStringList())
     REGISTER_WRITABLE_VALUE(QStringList, RemainingModules, QStringList())
+    REGISTER_WRITABLE_VALUE(QString, EditingModule, QString())
     REGISTER_WRITABLE_CONTAINER(QMap, QString, QString, ModuleList)
 
 public:
@@ -65,9 +66,8 @@ private:
     void drawTerminalMenu(const int& excuteType, const QStringList& itemList);
     QStringList selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& options);
     QStringList isModuleList();
-    QList<QVariantList> isSheetData();
-    void updateSheetData(const QList<QVariantList>& sheetDataList);
-    QList<QVariantList> readSheetData();
+    QList<QVariantList> readSheetData(const bool& editingModule = false);
+    void writeSheetData(const QList<QVariantList>& sheetDataList);
     bool openExcelFile();
 
 signals:

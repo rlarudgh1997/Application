@@ -230,7 +230,7 @@ QString SignalDataManager::isSFCCommonEnum(const QString& info, const QString& p
         //   valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
 
         commonEnum = exceptionValueEnum[1].remove(" ");
-        qDebug() << "isSFCCommonEnum :" << commonEnum;
+        // qDebug() << "isSFCCommonEnum :" << commonEnum;
     }
 
     return commonEnum;

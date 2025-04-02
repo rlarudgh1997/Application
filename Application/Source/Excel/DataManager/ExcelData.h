@@ -16,6 +16,7 @@ class ExcelData : public QObject {
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
     REGISTER_WRITABLE_VALUE(bool, ReadStateNewData, true)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QVariant, SheetData)
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QVariant, EditingSheetData)    // 엑셀 편집중인 경우 데이터 저장 -> TestCase 에서 사용
 
 public:
     static QSharedPointer<ExcelData>& instance() {

@@ -62,6 +62,8 @@ bool GenerateCaseData::excuteGenerateCaseData() {
         result = (fileName.size() > 0);
         qDebug() << "GenerateCaseData TC File :" << fileName;
     }
+    qDebug() << "excuteGenerateCaseData : Complted";
+    qDebug() << (QString(120, '*')) << "\n\n\n\n\n\n";
     return result;
 }
 
