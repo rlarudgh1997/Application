@@ -50,7 +50,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen, QVariant(false));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelView, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMerge, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeEnd, QVariant(""));

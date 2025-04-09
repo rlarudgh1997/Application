@@ -207,7 +207,10 @@ QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signal
         fileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
     }
 
-    // qDebug() << "isSignalFileList :" << signalName << vehicleType << fileList;
+    // qDebug() << "isSignalFileList :" << signalName << vehicleType;
+    // for (const auto& key : fileList.keys()) {
+    //     qDebug() << "\t File[" << key << "] :" << fileList[key];
+    // }
     return fileList;
 }
 
@@ -465,32 +468,29 @@ QString SignalDataManager::isSignalValueEnum(const QString& signalName, const QS
 }
 
 QStringList SignalDataManager::isSignalValueEnum(const bool& toEnum, const QString& signalName) {
+    QStringList signalData = QStringList();
+    int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
+    QMap<int, QStringList> dataInfo = isSignalDataList(signalName, signalData, QString(), dataType);
+    QStringList valueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
+
     QString matchingValue;  // not used
-    QStringList valueEnum = isConvertedSignalData(toEnum, signalName, QStringList(), matchingValue);
-    // qDebug() << "isSignalValueEnum :" << toEnum << signalName << valueEnum;
-    return valueEnum;
+    QStringList convertValueEnum = isConvertedSignalData(toEnum, signalName, valueEnum, matchingValue);
+    // qDebug() << "isSignalValueEnum :" << toEnum << signalName << convertValueEnum;
+    return convertValueEnum;
 }
 
 QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
                                                      QString& matchingValue) {
-    int signalType = isSignalType(signalName);
-    bool vehicleState = ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
-                         (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)));
-    int enumIndex = (vehicleState) ? (1) : (0);
-    int valueIndex = (vehicleState) ? (0) : (1);
-
-    QStringList currentValueEnum = valueEnum;
-    if (currentValueEnum.size() == 0) {
-        QStringList signalData = QStringList();
-        int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
-        QMap<int, QStringList> dataInfo = isSignalDataList(signalName, signalData, QString(), dataType);
-        currentValueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
-    }
+    const int signalType = isSignalType(signalName);
+    const bool vehicleState = ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
+                               (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)));
+    const int enumIndex = (vehicleState) ? (1) : (0);
+    const int valueIndex = (vehicleState) ? (0) : (1);
 
     QStringList convertDataInfo;
     QString compareMatchingValue = matchingValue;
     matchingValue.clear();
-    for (const auto& v : currentValueEnum) {
+    for (const auto& v : valueEnum) {
         QString tempValueEnum = v;
         QStringList splitData = tempValueEnum.remove("\"").split(":");
         if (splitData.size() < 2) {
@@ -542,21 +542,23 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
             break;
         }
     }
+
+#if 0
+    if (signalName == "Vehicle.CV.ADAS_Driving_CV.Input_MvLeftLineOffsetValue") {
+        qDebug() << "========================================================================================";
+        qDebug() << "[isConvertedExceptionData] : " << signalName;
+        qDebug() << "\t FoundIndex    :" << foundIndex;
+        qDebug() << "\t CheckData     :" << checkDataList;
+        for (const auto& key : dataInfo.keys()) {
+            qDebug() << "\t DataInfo[" << key << "] :" << dataInfo[key];
+        }
+    }
+#endif
+
     if (foundIndex < 0) {
         // ConvertData 에 [MESSAGE_TIMEOUT, CRC_ERROR] 존재하지 않음
         return;
     }
-
-#if 0
-    qDebug() << "========================================================================================";
-    qDebug() << "[isConvertedExceptionData] : " << checkDataList;
-    for (const auto& key : dataInfo.keys()) {
-        if (key >= ivis::common::InputDataTypeEnum::InputDataTypeInputData) {
-            continue;
-        }
-        qDebug() << "\t DataInfo[" << key << "] :" << dataInfo[key];
-    }
-#endif
 
     const QStringList tempDataList = checkDataList;
     bool foundState = false;
@@ -607,7 +609,7 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
     } else {
         // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 변환 [timeout, crc]
         checkDataList[foundIndex] = changeStr;
-        // qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
+        qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
     }
 }
 
@@ -754,7 +756,7 @@ bool SignalDataManager::isExceptionSignal(const QString& signalName) {
 }
 
 bool SignalDataManager::isMultiKeywordData(const QStringList& dataList) {
-    QRegularExpression regex(R"(\[([^\[\]]+)\])");    // 정규식 : 대괄호
+    QRegularExpression regex(R"(\[([^\[\]]+)\])");  // 정규식 : 대괄호
     QStringList keywordList;
 
     // DataList : "[CustomMoreThanEqual][1279]", "[1280]", "[CustomUnder][1280]", "[1279]"
@@ -763,7 +765,7 @@ bool SignalDataManager::isMultiKeywordData(const QStringList& dataList) {
         while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
             QString captured = match.captured(1);
-            if (captured.contains(QRegularExpression("[A-Za-z]"))) {    // 정규식 : 문자
+            if (captured.contains(QRegularExpression("[A-Za-z]"))) {  // 정규식 : 문자
                 keywordList.append(QString("[%1]").arg(captured));    // [CustomMoreThanEqual], [CustomUnder]
             }
         }
@@ -853,7 +855,18 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             valueEnum = currDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
 
             QString matchingValue;
-            notUsedEnum = isConvertedSignalData(true, signalName, valueEnum, matchingValue);
+            if (valueEnum.size() == 0) {
+                if (isMultiKeywordData(originData)) {
+                    qDebug() << "[Multi-keyword data deletes the origin data]";
+                    qDebug() << "\t Signal     :" << signalName;
+                    qDebug() << "\t dataType   :" << dataType;
+                    qDebug() << "\t OriginData :" << originData;
+                    qDebug() << "\t valueEnum  :" << valueEnum;
+                    originData.clear();
+                }
+            } else {
+                notUsedEnum = isConvertedSignalData(true, signalName, valueEnum, matchingValue);
+            }
 
             QStringList temp;
             for (auto& data : convertData) {
@@ -870,13 +883,6 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             if (temp.size() > 0) {
                 allConvertData[signalName].append(temp);
             }
-        }
-
-        if (isMultiKeywordData(originData)) {
-            qDebug() << "[Multi-keyword data deletes the origin data]";
-            qDebug() << "\t Signal     :" << signalName;
-            qDebug() << "\t OriginData :" << originData;
-            originData.clear();
         }
 
         if (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid)) {
@@ -1020,7 +1026,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                        // convertData = convertData;
+                        // precondition = convertData;
                         precondition.clear();
                         notUsedEnum.clear();
                         break;
@@ -1050,40 +1056,9 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                     }
                 }
                 keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
-
-#if 1
-                isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-                isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
-#else
-                if (checkExceptionValueEnum) {
-                    // Data Check : MESSAGE_TIMEOUT, timeout
-                    QPair<QStringList, QStringList> exceptionData = isCheckExceptionValueEnum(signalName, dataInfo[signalName]);
-                    if (exceptionData.first != exceptionData.second) {
-                        convertData = exceptionData.first;
-                        precondition = exceptionData.second;
-                    }
-                } else {
-                    QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
-
-                    // qMakePair(QString("CRC_ERROR"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
-
-                    QString checkTimeOut = QString("TIMEOUT");
-                    auto currDataInfo = dataInfo[signalName];
-
-                    for (auto& data : convertData) {  // ConvertData Check : MESSAGE_TIMEOUT, CRC_ERROR 이 있는 경우 변경
-                        if (data.contains(originTimeOut)) {
-                            data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
-                        }
-                    }
-                    for (auto& data : precondition) {  // Precondition Check : MESSAGE_TIMEOUT, CRC_ERROR 이 있는 경우 변경
-                        if (data.contains(originTimeOut)) {
-                            data = isCheckBothExceptionValue(currDataInfo, originTimeOut, checkTimeOut);
-                        }
-                    }
-                }
-#endif
             }
+            isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
+            isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
         }
 
         convertData.removeDuplicates();
@@ -1164,19 +1139,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
                 } else {
                     QString tempMatchingValue;  // not used
                     convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
-#if 1
                     isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-#else
-                    QString originTimeOut = ExcelUtil::instance().data()->isKeywordString(
-                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
-                    QString checkTimeOut = QString("TIMEOUT");
-                    for (auto& data : convertData) {
-                        if (data.compare(originTimeOut) == 0) {
-                            data.replace(originTimeOut, checkTimeOut.toLower());
-                            break;
-                        }
-                    }
-#endif
                 }
                 keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);
 
@@ -1435,9 +1398,9 @@ QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
     }
 
     QStringList signalList;
-    QRegularExpression signalRegex(R"(^\s*-\s*([^:]+):\s*(.*)$)");    // 시작 : "- "    끝 ":" 확인인
-    QRegularExpression signalNameRegex(R"(signalName:)");    // "signalName:" 포함 확인
-    QRegularExpression abstractionNameRegex(R"(abstractionName:)");    // " :" 포함 확인
+    QRegularExpression signalRegex(R"(^\s*-\s*([^:]+):\s*(.*)$)");   // 시작 : "- "    끝 ":" 확인인
+    QRegularExpression signalNameRegex(R"(signalName:)");            // "signalName:" 포함 확인
+    QRegularExpression abstractionNameRegex(R"(abstractionName:)");  // " :" 포함 확인
 
     QString foundSignal;
     bool foundSignalName = false;
@@ -1540,7 +1503,6 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
         fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
     }
 
-
     // isSignalFileList();
 
     if (sfcSignal) {
@@ -1548,7 +1510,6 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
         for (const auto& vehicleType : vehicleTypeList) {
         }
     }
-
 
     QStringList fileList;
 
@@ -1567,18 +1528,10 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
         fileList.append(sfcModelPath + "/CLU_VSM_CV_System.Vehicle.CV.vsm");
     }
 
-
     auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
     QStringList moduleList = moduleInfo.keys();
 
-
-
-
-
-
     // QString vehicleType = vehicleTypeList.toStringList().join(", ");
-
-
 
     QStringList signalList;
 #if 0

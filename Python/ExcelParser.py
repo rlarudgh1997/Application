@@ -119,7 +119,7 @@ class ExcelParser:
         excel_merge_end = self.config_info["ConfigTypeExcelMergeEnd"]
         excel_merge = self.config_info["ConfigTypeExcelMerge"]
 
-        print("\n\n\t read_from_text :", save_file_path)
+        # print("\n\n\t read_from_text :", save_file_path)
 
         read_data = []
         merge_info_list = {}

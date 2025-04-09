@@ -422,6 +422,39 @@ void ControlMenu::updateViewLogDisplay(const QString& titleName) {
     }
 }
 
+void ControlMenu::updateGenTCInfo(const QVariantList& info) {
+    if (info.size() != 4) {
+        return;
+    }
+
+    bool result = info.at(0).toBool();
+    int currentCount = info.at(1).toInt();
+    int totalCount = info.at(2).toInt();
+    QString text = info.at(3).toString();
+
+    qDebug() << "updateGenTCInfo";
+    qDebug() << "\t Result :" << result;
+    qDebug() << "\t Count  :" << currentCount << "/" << totalCount;
+    qDebug() << "\t Text   :" << text;
+
+    int resultType = ivis::common::TestResultTypeEnum::TestResultTypeError;
+    QStringList infoData;
+
+    if (result) {
+        if (currentCount == 0) {
+            resultType = ivis::common::TestResultTypeEnum::TestResultTypeStart;
+        // } else if (currentCount == totalCount) {
+        //     resultType = ivis::common::TestResultTypeEnum::TestResultTypeCompleted;
+        } else {
+            resultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
+        }
+
+        infoData.append(QString("CURRENT : %1").arg(currentCount));
+        infoData.append(QString("TOTAL : %1").arg(totalCount));
+    }
+    updateTestResultInfo(resultType, totalCount, infoData);
+}
+
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
     if (QFile::exists(watcherFile)) {
         bool deleteResult = QFile::remove(watcherFile);
@@ -1038,6 +1071,10 @@ void ControlMenu::slotEventInfoChanged(const int& displayType, const int& eventT
         case ivis::common::EventTypeEnum::EventTypeExitProgram:
         case ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath: {
             slotHandlerEvent(eventType, eventValue);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeUpdateGenTCInfo: {
+            updateGenTCInfo(eventValue.toList());
             break;
         }
         default: {

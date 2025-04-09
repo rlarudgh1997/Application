@@ -154,6 +154,13 @@ int TestCase::excuteTestCase(const int& excuteType) {
         case ExcuteTypeParsingModule: {
             if (parsingInputArguments(excuteType)) {
                 nextType = (excuteType == ExcuteTypeParsingAppMode) ? (ExcuteTypeParsingModule) : (ExcuteTypeExcelOpen);
+                if (excuteType == ExcuteTypeParsingAppMode) {
+                    nextType = ExcuteTypeParsingModule;
+                } else {
+                    nextType = ExcuteTypeExcelOpen;
+                    int totalMoudules = getSelectModules().size();
+                    emit signalGenTCInfo(true, 0, totalMoudules, QString());
+                }
             } else {
                 nextType = ExcuteTypeExit;
             }
@@ -172,12 +179,16 @@ int TestCase::excuteTestCase(const int& excuteType) {
             break;
         }
         case ExcuteTypeGenTC: {
+            int totalMoudules = getSelectModules().size();
+            int remainingModules = getRemainingModules().size();
+            int currnetModules = totalMoudules - remainingModules;
             GenerateCaseData::instance().data()->excuteGenerateCaseData();
-            if (getRemainingModules().size() == 0) {
+            if (remainingModules == 0) {
                 nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
             } else {
                 nextType = ExcuteTypeExcelOpen;
             }
+            emit signalGenTCInfo(true, currnetModules, totalMoudules, QString());
             break;
         }
         case ExcuteTypeRunTC: {

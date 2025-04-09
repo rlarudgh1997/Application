@@ -31,14 +31,14 @@ void GuiCenter::drawDisplayDepth0() {
         }
     });
     connect(mGui->ConfigViewClose, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeConfig));
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::MenuTypeConfig));
     });
     connect(mGui->ConfigViewReset, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
 
     // Node View
     connect(mGui->NodeViewClose, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::ViewTypeNode));
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::MenuTypeNode));
     });
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
@@ -162,7 +162,7 @@ void GuiCenter::updateDisplayConfigInfo() {
     QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
     // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
 
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeConfig);
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::MenuTypeConfig);
     setConfigUpdating(true);
 
     QStringList title = QStringList({"Config Name", "Config Value"});
@@ -236,7 +236,7 @@ void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
     // qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
 
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::ViewTypeNode);
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::MenuTypeNode);
 
     QStringList title = QStringList({"Node Name", "Vehicle Type"});
     mGui->NodeView->setRowCount(nodeAddress.size());

@@ -72,6 +72,7 @@ private:
 
 signals:
     void signalTestCaseCompleted(const int& type, const bool& result);
+    void signalGenTCInfo(const bool& result, const int& current, const int& total, const QString& text);
 
 private:
     const QString mStrExit = QString("Exit");

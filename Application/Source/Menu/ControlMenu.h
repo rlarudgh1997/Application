@@ -27,6 +27,7 @@ private:
     void updateViewTCDisplay(const QString& moduleName);
     void updateViewLogFile();
     void updateViewLogDisplay(const QString& titleName);
+    void updateGenTCInfo(const QVariantList& info);
     void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount);
     void startProcess(const QString& command, const QString& arg, const int& totalCount);
     bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList);

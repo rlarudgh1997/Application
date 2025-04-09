@@ -76,6 +76,7 @@ public:
     QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& yml = false,
                                                                 const bool& toUpper = false);
     QStringList isDescriptionDataInfo();
+    int isDescriptionValueCount();
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);

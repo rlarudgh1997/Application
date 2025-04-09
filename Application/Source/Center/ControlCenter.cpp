@@ -45,7 +45,7 @@ void ControlCenter::initCommonData(const int& currentMode, const int& displayTyp
 }
 
 void ControlCenter::initNormalData() {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeInvalid);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::MeneTypeInvalid);
     updateAllModuleList();
 }
 
@@ -128,7 +128,7 @@ void ControlCenter::updateConfigInfo() {
     }
     QVariantList previousConfig = getData(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeConfig);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::MenuTypeConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious, previousConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
 }
@@ -303,7 +303,7 @@ void ControlCenter::updateNodeAddress(const bool& check) {
 
     // qDebug() << "VSM List Count :" << vsmListAll.size() << vsmList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::ViewTypeNode);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::MenuTypeNode);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
 
     updateSelectModuleList(false);
@@ -346,7 +346,7 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
         case ConfigInfo::ConfigTypeInit:
         case ConfigInfo::ConfigTypeSfcModelPath:
         case ConfigInfo::ConfigTypeScreenInfo: {
-            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+            if (viewType == ivis::common::ViewTypeEnum::MenuTypeConfig) {
                 updateConfigInfo();
             }
             if (type == ConfigInfo::ConfigTypeScreenInfo) {
@@ -380,7 +380,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeConfigReset: {
             int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-            if (viewType == ivis::common::ViewTypeEnum::ViewTypeConfig) {
+            if (viewType == ivis::common::ViewTypeEnum::MenuTypeConfig) {
                 ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
                 QVariantList text = QVariantList(
                     {STRING_POPUP_CONFIG_RESET, STRING_POPUP_CONFIG_RESET_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});

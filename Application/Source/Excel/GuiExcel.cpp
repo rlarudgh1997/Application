@@ -1865,12 +1865,12 @@ void GuiExcel::updateDisplayShortcut(const int& shortcutType) {
 
 void GuiExcel::updateDisplayExcelSheet() {
     qDebug() << (QString(100, '>').toLatin1().data());
-    const bool excelOpen = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen).toBool();
+    const int excelView = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelView).toInt();
     const int startSheet = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     const int endSheet = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
     const int sheetMax = (endSheet - startSheet);
 
-    qDebug() << "Update Gui Excel :" << ((excelOpen) ? ("Open") : ("New")) << ", SheetSize :" << sheetMax << mExcelSheet.size();
+    qDebug() << "Update Gui Excel :" << excelView << sheetMax << mExcelSheet.size();
     if (mExcelSheet.size() > sheetMax) {
         qDebug() << "\t Exceeded the standard sheet size :" << sheetMax << "->" << mExcelSheet.size();
     }
@@ -1991,7 +1991,7 @@ void GuiExcel::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayVisible();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeExcelOpen: {
+        case ivis::common::PropertyTypeEnum::PropertyTypeExcelView: {
             updateDisplayExcelSheet();
             break;
         }

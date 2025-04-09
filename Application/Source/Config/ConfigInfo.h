@@ -29,6 +29,7 @@ public:
         ConfigTypeDescTitle,
         ConfigTypeOtherTitle,
         ConfigTypeConfigTitle,
+        ConfigTypeDescConfigVisible,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -39,6 +40,12 @@ public:
         ConfigTypeExcelMergeEnd,
         ConfigTypeTCFileSplitSize,
         ConfigTypeGenTCParsingCycle,
+        ConfigTypeWindowTitle,
+
+        // Preset
+        ConfigTypePreset001,
+        ConfigTypePreset002,
+        ConfigTypePreset003,
 
         // Vehicle
         ConfigTypeVsmFileNameBaseCV,
@@ -78,7 +85,6 @@ public:
         ConfigTypeDoFileSave,
         ConfigTypeAllModule,
         ConfigTypeSelectModule,
-        ConfigTypeWindowTitle,
         ConfitTypeGenTCPython,
         ConfitTypeNewModule,
 
@@ -120,14 +126,14 @@ private:
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
-            "ConfigTypeOtherTitle",
-            QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
-                                   "Input_Data", "Output_Signal", "isInitialize", "Output_Value", "Config_Signal", "Data",
-                                   "Negative Test"})));
+            "ConfigTypeOtherTitle", QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result",
+                                                           "Case", "Input_Signal", "Input_Data", "Output_Signal", "isInitialize",
+                                                           "Output_Value", "Config_Signal", "Data", "Negative Test"})));
 #else
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             // "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description"})));
-            "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
+            "ConfigTypeDescTitle",
+            QVariant(QVariantList({"test", "version", "description", "Value_Count", "Config_Signal", "Data"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
             QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
@@ -135,6 +141,8 @@ private:
 #endif
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
+        mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
+        mConfigInfoData[ConfitTypeGenTCPython] = QPair<QString, QVariant>("ConfitTypeGenTCPython", QVariant(false));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
@@ -146,7 +154,7 @@ private:
         mConfigInfoData[ConfigTypeExcelMerge] = QPair<QString, QVariant>("ConfigTypeExcelMerge", QVariant("[Merge]"));
         mConfigInfoData[ConfigTypeExcelMergeEnd] = QPair<QString, QVariant>("ConfigTypeExcelMergeEnd", QVariant("[MergeEnd]"));
         mConfigInfoData[ConfigTypeTCFileSplitSize] = QPair<QString, QVariant>("ConfigTypeTCFileSplitSize", QVariant(100));
-        mConfigInfoData[ConfigTypeGenTCParsingCycle] = QPair<QString, QVariant>("ConfigTypeGenTCParsingCycle", QVariant(3));
+        mConfigInfoData[ConfigTypeGenTCParsingCycle] = QPair<QString, QVariant>("ConfigTypeGenTCParsingCycle", QVariant(10));
 
         // Vehicle
         mConfigInfoData[ConfigTypeVsmFileNameBaseCV] =
@@ -167,6 +175,11 @@ private:
         mConfigInfoData[ConfigTypeSystemTypePV] = QPair<QString, QVariant>(
             "ConfigTypeSystemTypePV",
             QVariant(QVariantList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"})));
+
+        // Preset
+        mConfigInfoData[ConfigTypePreset001] = QPair<QString, QVariant>("ConfigTypePreset001", QVariant("d@'"));
+        mConfigInfoData[ConfigTypePreset002] = QPair<QString, QVariant>("ConfigTypePreset002", QVariant("\0\n\0\0Z\0"));
+        mConfigInfoData[ConfigTypePreset003] = QPair<QString, QVariant>("ConfigTypePreset003", QVariant("\0\0(\0F\0"));
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
@@ -198,7 +211,6 @@ private:
         mConfigInfoData[ConfigTypeAllModule] = QPair<QString, QVariant>("ConfigTypeAllModule", QVariant(""));
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
-        mConfigInfoData[ConfitTypeGenTCPython] = QPair<QString, QVariant>("ConfitTypeGenTCPython", QVariant(false));
         mConfigInfoData[ConfitTypeNewModule] = QPair<QString, QVariant>("ConfitTypeNewModule", QVariant("New_Module"));
     }
 

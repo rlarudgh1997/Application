@@ -16,7 +16,7 @@ public:
 private:
     explicit ControlExcel();
 
-    void updateSheetData(const int& propertyType, const QVariantList& sheetData);
+    void updateSheetData(const int& propertyType, const QVariantList& sheetData, const bool& edit);
     void updateExcelSheet(const QList<QVariantList>& openSheetData = QList<QVariantList>());
     bool writeExcelFile(const QVariant& filePath);
     bool openExcelFile(const QVariant& filePath);
@@ -51,6 +51,7 @@ protected:
 
 public slots:
     void slotTestCaseCompleted(const int& type, const bool& result);
+    void slotGenTCInfo(const bool& result, const int& current, const int& total, const QString& text);
     virtual void slotControlUpdate(const int& type, const QVariant& value = QVariant());
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);

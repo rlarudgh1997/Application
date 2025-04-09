@@ -487,7 +487,7 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
                         ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if 1
                     qDebug() << "------------------------------------------------------------------------------------------";
                     qDebug() << "Case            : " << caseStr;
                     qDebug() << "InputData(sig)  : " << caseInputDataList.first;
@@ -1480,13 +1480,11 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
                         QStringList keys, inputValues, validInputData;
                         QList<int> keywords;
                         for (const auto& keyword : caseCopy.convertInputDataInfo) {
-                            if (exprTemplate.contains(keyword.inputSignal)) {
-                                valueMap[keyword.inputSignal] = keyword.validInputData.split(',');
-                                keys << keyword.inputSignal;
-                                keywords << static_cast<int>(keyword.keywordType);
-                                inputValues << keyword.inputValue;
-                                validInputData << keyword.validInputData;
-                            }
+                            valueMap[keyword.inputSignal] = keyword.validInputData.split(',');
+                            keys << keyword.inputSignal;
+                            keywords << static_cast<int>(keyword.keywordType);
+                            inputValues << keyword.inputValue;
+                            validInputData << keyword.validInputData;
                         }
                         auto results = generateCombinations(exprTemplate, valueMap, keys, keywords, inputValues, validInputData,
                                                             caseCopy.caseName, notTriggerStr, customNotTrigger, calArrCount);
@@ -1700,6 +1698,7 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
     QStringList inputSignalStrList = inputDataPairInfo.first;
     QStringList inputDataStrList = inputDataPairInfo.second;
 
+    bool isSheetKeywordAlreadyExsit = false;
     if ((inputSignalStrList.isEmpty() == false && inputDataStrList.isEmpty() == false) &&
         (inputSignalStrList.size() == inputDataStrList.size())) {
         for (int index = 0; index < inputSignalStrList.size(); ++index) {
@@ -1710,8 +1709,9 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
 #endif
             QString inputSignalStr = inputSignalStrList.at(index);
             QString inputDataStr = inputDataStrList.at(index);
-            if (inputSignalStrList.at(index).contains("[Sheet]") == true) {
+            if (inputSignalStrList.at(index).contains("[Sheet]") == true && isSheetKeywordAlreadyExsit == false) {
                 inputSignalStr.remove("[Sheet]");
+                isSheetKeywordAlreadyExsit = true;
 #if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
                 qDebug() << "----> [Sheet] keyword Exist!";
                 qDebug() << "----> remove [Sheet] : " << inputSignalStr;
@@ -1731,7 +1731,7 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
                             // [CaseName, <InputSignalList, InputDataList>]
                             QString sheetCaseName = sheetSignalDataInfo.at(i).first;
                             QPair<QStringList, QStringList> sheetInputDataInfo = sheetSignalDataInfo.at(i).second;
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if 1
                             qDebug() << "====================================================================================";
                             qDebug() << "1. caseName      : " << sheetCaseName;
                             qDebug() << "2. [Sheet] inputSignalStrList : " << sheetInputDataInfo.first;
@@ -1806,13 +1806,14 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
     const QStringList& sheetDataList = sheet.second;
 
     bool sheetInserted = false;
-
+    bool isSheetAlreadyExist = false;
     for (int i = 0; i < originSignalList.size(); ++i) {
         const QString& signal = originSignalList[i];
         const QString& data = originDataList[i];
 
         // [Sheet]가 포함된 항목을 만나면 삭제하고 sheet 리스트 삽입
-        if (signal.contains("[Sheet]")) {
+        if (signal.contains("[Sheet]") && isSheetAlreadyExist == false) {
+            isSheetAlreadyExist = true;
             if (!sheetInserted) {
                 // sheet 데이터를 현재 위치부터 삽입
                 for (int j = 0; j < sheetSignalList.size(); ++j) {

@@ -118,7 +118,7 @@ public:
         PropertyTypeExcelDescTitle,
         PropertyTypeExcelConfigTitle,
         PropertyTypeExcelOtherTitle,
-        PropertyTypeExcelOpen,
+        PropertyTypeExcelView,
         PropertyTypeExcelMergeStart,
         PropertyTypeExcelMerge,
         PropertyTypeExcelMergeEnd,
@@ -256,6 +256,7 @@ public:
         EventTypeSelectAppMode,
         EventTypeWarningMergeSplit,
         EventTypeWarningCopyCut,
+        EventTypeUpdateGenTCInfo,
 
         EventTypeTest = 3000,
 
@@ -322,10 +323,15 @@ public:
 
 class ViewTypeEnum {
 public:
-    enum ViewType {
-        ViewTypeInvalid = 0,
-        ViewTypeConfig,
-        ViewTypeNode,
+    enum MeneViewType {
+        MeneTypeInvalid = 0,
+        MenuTypeConfig,
+        MenuTypeNode,
+    };
+    enum ExcelType {
+        ExcelTypeInvalid = 0,
+        ExcelTypeNew,
+        ExcelTypeOpen,
     };
 };
 
@@ -344,10 +350,9 @@ public:
         Test = 0,
         Version,
         Description,
-#if 1   // defined(USE_SHEET_COLUMN_OLD)
+        ValueCount,
         ConfigSignal,
         Data,
-#endif
         Max,
     };
     enum class Config {
@@ -370,11 +375,6 @@ public:
         OutputSignal,
         IsInitialize,
         OutputValue,
-#if defined(USE_SHEET_COLUMN_OLD)
-        ConfigSignal,
-        Data,
-        NegativeTest,
-#endif
         Max,
     };
 };

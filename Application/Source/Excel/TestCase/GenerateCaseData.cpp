@@ -32,6 +32,7 @@ const QString TEXT_INPUT_SIGNAL_NAME = QString("SignalName");
 const QString TEXT_INPUT_DATA = QString("InputData");
 const QString TEXT_PRECONDITION = QString("Precondition");
 const QString TEXT_DATA_TYPE = QString("DataType");
+const QString TEXT_TRIGGER_DATA = QString("TriggerData");
 const QString TEXT_IGN = QString("SFC.Private.IGNElapsed.Elapsed");
 
 QSharedPointer<GenerateCaseData>& GenerateCaseData::instance() {
@@ -84,10 +85,9 @@ QString GenerateCaseData::genCase() {
         }
 
         // Json 파일 내부에서 순서 보장을 위한 Index 할당
-        int caseCnt = 0;
-        int resultCnt = 0;
         int tcNameCnt = 0;
-
+        int resultCnt = 0;
+        int caseCnt = 0;
         // TCName 순회
         for (const auto& tcName :
              ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, TCNAME_CHECK_OPTION_DEACTIVATE)) {
@@ -98,8 +98,10 @@ QString GenerateCaseData::genCase() {
             if (genType == GEN_TYPE_DEFAULT && sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetPrivates) {
                 continue;
             }
+            resultCnt = 0;
             // Result 순회
             for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {
+                caseCnt = 0;
                 // Case 순회
                 for (const auto& caseName : ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcName, resultName)) {
                     auto inputList =
@@ -132,21 +134,22 @@ QString GenerateCaseData::genCase() {
         }  // TCName 순회 종료
 
         // 동일 result 의 다른 case 에서 Result 단위로 Positive 와 negative 생성값이 동일한 TC 는 삭제하는 부분
-        caseCnt = 0;
-        resultCnt = 0;
         tcNameCnt = 0;
-
+        resultCnt = 0;
+        caseCnt = 0;
         // Negative에서 생성된 case 중 동일 result 의 다른 case 의 positive 를 만족하는 것을 제거하는 부분
         // TCName 순회
         for (const auto& tcName :
              ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, TCNAME_CHECK_OPTION_DEACTIVATE)) {
             QString genType;
             ExcelDataManager::instance().data()->isGenTypeData(sheetIndex, tcName, genType);
-            if (genType == GEN_TYPE_DEFAULT && sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetPrivates) {
+            if (genType == GEN_TYPE_DEFAULT) {
                 continue;
             }
+            resultCnt = 0;
             // Result 순회
             for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {
+                caseCnt = 0;
                 // Case 순회
                 for (const auto& caseName : ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcName, resultName)) {
                     auto inputList =
@@ -160,6 +163,54 @@ QString GenerateCaseData::genCase() {
                     }
                     checkTimer.check("checkNegativeAndPositive");
                     caseCnt++;
+                }  // Case 순회 종료
+                resultCnt++;
+            }  // Result 순회 종료
+            tcNameCnt++;
+        }  // TCName 순회 종료
+
+        // 만들어진 TC들 중에서 유효한 개수의 신호가 아닌 것들은 삭제하는 방식의 구현을 함.
+        // TCName 순회
+        // if (cnt != 0)
+        tcNameCnt = 0;
+        resultCnt = 0;
+        caseCnt = 0;
+        int maxTriggerCnt = 3;
+        for (const auto& tcName :
+             ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, TCNAME_CHECK_OPTION_DEACTIVATE)) {
+            QString genType;
+            ExcelDataManager::instance().data()->isGenTypeData(sheetIndex, tcName, genType);
+            if (genType == GEN_TYPE_DEFAULT) {
+                continue;
+            }
+            // Result 순회
+            resultCnt = 0;
+            for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {
+                caseCnt = 0;
+                // Case 순회
+                for (const auto& caseName : ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcName, resultName)) {
+                    auto inputList =
+                        ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcName, resultName, caseName, true);
+                    if (!inputList.first.isEmpty() && !inputList.second.isEmpty()) {
+                        if (genType == GEN_TYPE_NEGATIVE_AND_POSITIVE) {
+                            auto posiCaseName = caseName + " [Positive]";
+                            eraseNotUsefulTC(GEN_TYPE_POSITIVE, posiCaseName, caseCnt, resultName, resultCnt, tcName, tcNameCnt,
+                                             sheetIndex, maxTriggerCnt);
+                            caseCnt++;
+                            auto negCaseName = caseName + " [Negative]";
+                            eraseNotUsefulTC(GEN_TYPE_NEGATIVE, negCaseName, caseCnt, resultName, resultCnt, tcName, tcNameCnt,
+                                             sheetIndex, maxTriggerCnt);
+                            caseCnt++;
+                        } else if (genType == GEN_TYPE_POSITIVE) {
+                            auto posiCaseName = caseName + " [Positive]";
+                            eraseNotUsefulTC(GEN_TYPE_POSITIVE, posiCaseName, caseCnt, resultName, resultCnt, tcName, tcNameCnt,
+                                             sheetIndex, maxTriggerCnt);
+                            caseCnt++;
+                        } else {
+                            // no operation
+                        }
+                    }
+                    checkTimer.check("eraseNotUsefulTC");
                 }  // Case 순회 종료
                 resultCnt++;
             }  // Result 순회 종료
@@ -713,7 +764,7 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
         // 해당 case 를 참으로 만드는 값들의 조합이 caseValues 로 할당됨
         // Default 와 positive 는 caseValues 값들중 trigger 할 값을 1개 고르고 해당 값을 input 으로 보내고 해당 값의
         // precondition 값 1개를 가져와서 precondition 으로 만듬 -> (line or 함수 써주기)
-        QStringList caseValues = jsonArrayToQStringList(originCaseValues);
+        QStringList caseValues = qJsonArrayToQStringList(originCaseValues);
 
         // InputSignalList에서 특정 Idx 의 신호 정보를 가져옴
         int triggerSigIndexOrigin = 0;
@@ -745,8 +796,8 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
             // signalData: 시그널의 input value 와 precodition 등 상위단에서 제공된 정보를 모두 저장하고 있는 변수
             QJsonObject signalData = sigIt.value().toObject();
             QString signalName = signalData[TEXT_INPUT_SIGNAL_NAME].toString();
-            QStringList inputDataArray = jsonArrayToQStringList(signalData[TEXT_INPUT_DATA].toArray());
-            QStringList preconditionDataArray = jsonArrayToQStringList(signalData[TEXT_PRECONDITION].toArray());
+            QStringList inputDataArray = qJsonArrayToQStringList(signalData[TEXT_INPUT_DATA].toArray());
+            QStringList preconditionDataArray = qJsonArrayToQStringList(signalData[TEXT_PRECONDITION].toArray());
 
             // triggerSigIndex로 접근할 때, 에러방지
             if (triggerSigIndex >= caseValues.size()) {
@@ -832,7 +883,7 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
     }      // cases 순회 End
 
     // 해당 case에서 사용했던 모든 신호를 precondition 값으로 초기화해줌
-    if (genType == GEN_TYPE_NEGATIVE) {
+    if (genType == GEN_TYPE_NEGATIVE || genType == GEN_TYPE_POSITIVE) {
         QString initStr = getInitStr(inputSignalList);
         QJsonObject initJson = newCaseJsonObject[JSON_INIT_CASE_NAME].toObject();
         initJson[initStr] = "0";
@@ -846,7 +897,7 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
     return newCaseJsonObject;
 }
 
-QStringList GenerateCaseData::jsonArrayToQStringList(const QJsonArray& jsonArray) {
+QStringList GenerateCaseData::qJsonArrayToQStringList(const QJsonArray& jsonArray) {
     QStringList stringList;
     stringList.reserve(jsonArray.size());
     for (const QJsonValue& value : jsonArray) {
@@ -1091,7 +1142,7 @@ void GenerateCaseData::removeMatchingKeysNegative(QJsonObject& caseJson, const Q
     // Cases 객체 가져오기
     QJsonObject casesArray = caseJson[JSON_CASES_NAME].toObject();
     QJsonObject finalStateArray = caseJson[JSON_FINAL_STATE_CASES_NAME].toObject();
-    QStringList inputEmptyListStr = jsonArrayToQStringList(inputEmptyList);
+    QStringList inputEmptyListStr = qJsonArrayToQStringList(inputEmptyList);
     inputEmptyListStr.prepend("");
 
     for (const QString& caseKey : finalStateArray.keys()) {
@@ -1153,6 +1204,160 @@ void GenerateCaseData::removeMatchingKeysNegative(QJsonObject& caseJson, const Q
 
     // 수정된 casesArray를 caseJson에 다시 설정
     caseJson[JSON_CASES_NAME] = casesArray;
+}
+
+void GenerateCaseData::eraseNotUsefulTC(const QString& genType, const QString& caseName, const int& caseNumber,
+                                        const QString& resultName, const int& resultNumber, const QString& tcName,
+                                        const int& tcNameNumber, const int& sheetNumber, const int& maxTriggerCnt) {
+    const int sheetIdxStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
+    QStringList sheetList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
+    QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
+    QString titleTcName = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
+    QString titleGenType = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType));
+    QString titleResult = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result));
+    QString titleCase = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case));
+    QString titleSheet = TEXT_SHEET;
+
+    QString sheetKey = QString("_%1[%2]").arg(titleSheet).arg(sheetNumber - sheetIdxStart, 3, 10, QChar('0'));
+    QString sheetName = sheetList[sheetNumber - sheetIdxStart];
+    QString tcNameKey = QString("_%1[%2]").arg(titleTcName).arg(tcNameNumber, 3, 10, QChar('0'));
+    QString resultKey = QString("_%1[%2]").arg(titleResult).arg(resultNumber, 3, 10, QChar('0'));
+    QString caseKey = QString("_%1[%2]").arg(titleCase).arg(caseNumber, 3, 10, QChar('0'));
+
+    // 1. SheetName 확인
+    if (!mAllCaseJson.contains(sheetKey)) {
+        qDebug() << "No Sheet Error!";
+        return;
+    }
+    QJsonObject sheetJson = mAllCaseJson[sheetKey].toObject();
+
+    // 2. TCName 확인
+    if (!sheetJson.contains(tcNameKey)) {
+        qDebug() << "No TCName Error! " << tcNameKey;
+        return;
+    }
+    QJsonObject tcNameJson = sheetJson[tcNameKey].toObject();
+
+    // 3. Result 확인
+    if (!tcNameJson.contains(resultKey)) {
+        qDebug() << "No Result Error!";
+        return;
+    }
+    QJsonObject resultJson = tcNameJson[resultKey].toObject();
+
+    // 4. Case 확인
+    if (!resultJson.contains(caseKey)) {
+        qDebug() << "No Case Error!";
+        return;
+    }
+
+    QJsonObject caseJson = resultJson[caseKey].toObject();
+
+    if (caseJson.contains(titleGenType) && caseJson.contains(JSON_CASES_NAME)) {
+        removeTcByCnt(caseJson, titleGenType, maxTriggerCnt);
+        // 개수 변경 반영
+        if (caseJson[titleGenType] == GEN_TYPE_POSITIVE || caseJson[titleGenType] == GEN_TYPE_NEGATIVE) {
+            if (caseJson.contains(JSON_CASE_SIZE_NAME) &&
+                caseJson[JSON_CASE_SIZE_NAME].toInt() != caseJson[JSON_CASES_NAME].toObject().size()) {
+                caseJson[JSON_CASE_SIZE_NAME] = caseJson[JSON_CASES_NAME].toObject().size();
+                QStringList nameIdentifierList;
+                nameIdentifierList << sheetName << tcName << genType << resultName << caseName;
+                QString nameIdentifier = nameIdentifierList.join("@");
+                mCaseSizeMap[nameIdentifier] = caseJson[JSON_CASE_SIZE_NAME].toInt();
+            }
+        }
+    }
+
+    if (caseJson.contains(JSON_FINAL_STATE_CASES_NAME)) {
+        caseJson.remove(JSON_FINAL_STATE_CASES_NAME);
+    }
+
+    // 변경된 JsonObject를 원래 object로 재할당
+    resultJson[caseKey] = caseJson;
+
+    // Update the JSON objects back into the hierarchy
+    tcNameJson[resultKey] = resultJson;
+    sheetJson[tcNameKey] = tcNameJson;
+    mAllCaseJson[sheetKey] = sheetJson;
+}
+
+void GenerateCaseData::removeTcByCnt(QJsonObject& caseJson, const QString& titleGenType, const int& maxTriggerCnt) {
+    // Cases 객체 가져오기
+    QJsonObject casesArray = caseJson[JSON_CASES_NAME].toObject();
+    QJsonObject inputSignalList = caseJson[TEXT_INPUT_SIGNAL_LIST].toObject();
+    QString combinationListName = "";
+    if (caseJson[titleGenType] == GEN_TYPE_POSITIVE) {
+        combinationListName = TEXT_INPUT_DATA;
+    } else if (caseJson[titleGenType] == GEN_TYPE_NEGATIVE) {
+        combinationListName = TEXT_PRECONDITION;
+    } else {
+        qDebug() << "Not valid genType: " << caseJson[titleGenType].toString();
+        return;
+    }
+
+    for (auto sigItr = inputSignalList.begin(); sigItr != inputSignalList.end(); ++sigItr) {
+        QString sigIdx = sigItr.key();
+        QJsonObject sigInfo = inputSignalList[sigIdx].toObject();
+        sigInfo[TEXT_TRIGGER_DATA] = copyQJsonArrayUpToIndex(sigInfo[combinationListName].toArray(), maxTriggerCnt);
+        inputSignalList[sigIdx] = sigInfo;
+    }
+    caseJson[TEXT_INPUT_SIGNAL_LIST] = inputSignalList;
+
+    // cases 를 돈다
+    for (const QString& caseKey : casesArray.keys()) {
+        // 어 해당 케이스에서 trigger 하는 신호가 몇번째 신호인지 파악
+        int triggerSigIdx = casesArray[caseKey].toString().toInt();
+        // 신호 리스트를 돔
+        for (const QString& sigIdx2 : inputSignalList.keys()) {
+            // 신호 index 가 trigger 하는 신호의 index 와 다르면 걍 continue
+            if (triggerSigIdx != sigIdx2.toInt()) {
+                continue;
+            }
+            // 신호 index 가 trigger 하는 신호의 index 와 같으면 확인
+            QJsonObject sigInfo2 = inputSignalList[sigIdx2].toObject();
+            if (sigInfo2.contains(combinationListName) && sigInfo2.contains(TEXT_TRIGGER_DATA) &&
+                sigInfo2[combinationListName].toArray().size() <= sigInfo2[TEXT_TRIGGER_DATA].toArray().size()) {
+                // 조합을 생성한 list 의 크기가 내가 원하는 maxTriggerCnt 보다 작으면 다음 key 로 넘어감
+                break;
+            } else {
+                // key 에서 trigger 한 값을 찾음
+                QStringList parts = caseKey.split("=>");
+                QString triggerValue = "";
+                if (parts.size() > 1) {
+                    QString valuePart = parts.at(1).trimmed();
+                    QStringList parts2 = valuePart.split(":");
+                    if (parts2.size() > 1) {
+                        triggerValue = parts2.at(1).trimmed();
+                    } else {
+                        qDebug() << "Size error1: removeTcByCnt";
+                        break;
+                    }
+                } else {
+                    qDebug() << "Size error2: removeTcByCnt";
+                    break;
+                }
+
+                if (triggerValue != "" && sigInfo2[TEXT_TRIGGER_DATA].toArray().contains(QJsonValue(triggerValue)) == false) {
+                    casesArray.remove(caseKey);
+                }
+            }
+        }
+    }
+
+    // 수정된 casesArray를 caseJson에 다시 설정
+    caseJson[JSON_CASES_NAME] = casesArray;
+}
+
+QJsonArray GenerateCaseData::copyQJsonArrayUpToIndex(const QJsonArray& array, const int& maxCnt) {
+    QJsonArray jsonArray;
+    for (int i = 0; i < array.size(); ++i) {
+        if (i < maxCnt) {
+            jsonArray.append(array.at(i));
+        } else {
+            break;
+        }
+    }
+    return jsonArray;
 }
 
 void GenerateCaseData::printCaseSize(const QString& genType) {

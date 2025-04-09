@@ -84,16 +84,15 @@ void ConfigSetting::writeConfig(const int& configType, const QVariant& configVal
             mThreadDataSave = true;
         }
 #endif
-        if (configType == ConfigInfo::ConfigTypeWindowTitle) {
-            emit signalUpdateWindowTitle(configValue.toString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
-        } else {
-            emit signalConfigChanged(configType, configValue);
-        }
+        emit signalConfigChanged(configType, configValue);
     }
 
     if (configType == ConfigInfo::ConfigTypeInit) {
-        emit signalUpdateWindowTitle(QString(), mConfigData[ConfigInfo::ConfigTypeAppMode].toInt());
+        emit signalUpdateWindowTitle(QString(), readConfig(ConfigInfo::ConfigTypeAppMode).toInt());
         emit signalConfigReset(true);
+    } else if (configType == ConfigInfo::ConfigTypeWindowTitle) {
+        emit signalUpdateWindowTitle(configValue.toString(), readConfig(ConfigInfo::ConfigTypeAppMode).toInt());
+    } else {
     }
 }
 

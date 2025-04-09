@@ -143,6 +143,21 @@ QStringList ExcelUtil::isDescriptionDataInfo() {
     return dataInfo;
 }
 
+int ExcelUtil::isDescriptionValueCount() {
+    const auto descDataInfo = isDescriptionDataInfo();
+    int valueCount = 0;
+
+    if (descDataInfo.size() >= static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
+        valueCount = descDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)).toInt();
+    }
+    if (valueCount == 0) {
+        valueCount = 1;
+    }
+    // qDebug() << "isDescriptionValueCount :" << descDataInfo.size() << valueCount;
+
+    return valueCount;
+}
+
 QString ExcelUtil::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
     auto rowDataList = ExcelData::instance()->getSheetData(sheetIndex).toList();
     if (rowIndex >= rowDataList.size()) {
@@ -704,7 +719,8 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
     }
 
     if ((dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) &&
-        (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64))) {
+        (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64)) &&
+        (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble))) {
         // qDebug() << "\t Skip : 2";
         return QString();
     }
@@ -724,7 +740,11 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
         return QString();
     }
 
-    return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);
+    if (dataType != static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble)) {
+        return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);
+    } else {
+        return QString("%1.0").arg(static_cast<quint64>(UINT32_MAX) + 1);
+    }
 }
 
 bool ExcelUtil::isExistsExcelSheet() {
@@ -780,7 +800,7 @@ QString ExcelUtil::pythonCall(const bool& readFile, const QString& filePath) {
 
     // qDebug() << "pythonCall :" << cmdType << filePath;
 
-    if ((filePath.size() == 0) ||(fileInfo.size() == 0)) {
+    if ((filePath.size() == 0) || (fileInfo.size() == 0)) {
         qDebug() << "Fail to input file path :" << filePath.size() << fileInfo.size();
     }
 
@@ -795,8 +815,11 @@ QString ExcelUtil::pythonCall(const bool& readFile, const QString& filePath) {
         fileName.append(".xlsx");
     }
 
-    QString cmd = QString("'python3' '%1/ExcelParser.py' '%2' '%3' '%4'").arg(ivis::common::APP_PWD()).arg(dirPath)
-                                                                         .arg(fileName).arg(cmdType);
+    QString cmd = QString("'python3' '%1/ExcelParser.py' '%2' '%3' '%4'")
+                      .arg(ivis::common::APP_PWD())
+                      .arg(dirPath)
+                      .arg(fileName)
+                      .arg(cmdType);
     ivis::common::ExcuteProgram process(false);
     QStringList log;
     bool result = process.start(cmd, log);
@@ -929,16 +952,16 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
         QString filePath = QString("%1/%2_%3.fromExcel").arg(dirPath).arg(sheetIndex).arg(currSheetName);
         QStringList readData = ivis::common::FileInfo::readFile(filePath);
         QStringList titleList;
-        bool checkTitle = false;
+        bool checkTitle = true;
 
         int properytType = sheetIndex + ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
         if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
             titleList = descTitle.toStringList();
         } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
             titleList = configTitle.toStringList();
+            checkTitle = false;
         } else {
             titleList = otherTitle.toStringList();
-            checkTitle = true;
         }
 
         QVariantList sheetData;
@@ -972,27 +995,36 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                 for (const auto& index : notSameTitleIndex) {
                     QString appendText;
                     int insertIndex = 0;
-                    if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
-                        insertIndex = 0;             // Befor index : TCName
-                        appendText = rowData.at(0);  // Read index : TCName
-                    } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
-                        insertIndex = 1;             // After index : TCName
-                        appendText = rowData.at(0);  // Read index : TCName
-                    } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
-                        insertIndex = 2;             // Befor index : Result
-                        appendText = rowData.at(0);  // Read index : Result
+                    if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                        if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
+                            insertIndex = 3;             // Befor Index   : ConfigSignal
+                            appendText = "1";            // Default Value : 1
+                        } else {
+                            continue;
+                        }
                     } else {
-                        continue;
-                    }
+                        if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+                            insertIndex = 0;             // Befor Index   : TCName
+                            appendText = rowData.at(0);  // Default Value : TCName
+                        } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
+                            insertIndex = 1;             // After Index   : TCName
+                            appendText = rowData.at(0);  // Default Value : TCName
+                        } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Config)) {
+                            insertIndex = 2;             // Befor Index   : Result
+                            appendText = rowData.at(0);  // Default Value : Result
+                        } else {
+                            continue;
+                        }
 
-                    if (appendText.contains(mergeStart)) {
-                        appendText = mergeStart;
-                    } else if (appendText.contains(mergeEnd)) {
-                        appendText = mergeEnd;
-                    } else if (appendText.contains(merge)) {
-                        appendText = merge;
-                    } else {
-                        appendText.clear();
+                        if (appendText.contains(mergeStart)) {
+                            appendText = mergeStart;
+                        } else if (appendText.contains(mergeEnd)) {
+                            appendText = mergeEnd;
+                        } else if (appendText.contains(merge)) {
+                            appendText = merge;
+                        } else {
+                            appendText.clear();
+                        }
                     }
                     temp.insert(insertIndex, appendText);
                 }

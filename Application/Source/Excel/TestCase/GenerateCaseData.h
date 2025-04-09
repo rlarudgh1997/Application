@@ -55,7 +55,7 @@ private:
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QString& config,
                             const QMap<QString, int>& configIdxMap, const QMap<QString, QMap<QString, QString>>& configHexEnumMap,
                             const QStringList& preconditionList, const int& triggerSigIndex, const QString& triggerSigValue);
-    QStringList jsonArrayToQStringList(const QJsonArray& jsonArray);
+    QStringList qJsonArrayToQStringList(const QJsonArray& jsonArray);
     QStringList getReplaceValueAtList(const QStringList& originList, const int& idx, const QString& value);
     QString getPreconditionStr(const QStringList& preconditionList, const int& triggerSigIndex = -1,
                                const QString& preconditionValue = "");
@@ -70,6 +70,11 @@ private:
                                   const int& tcNameNumber, const int& sheetNumber);
     void removeMatchingKeysNegative(QJsonObject& caseJson, const QJsonObject& positiveFinalStateCases,
                                     const QJsonArray& inputEmptyList);
+    void eraseNotUsefulTC(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
+                          const int& resultNumber, const QString& tcName, const int& tcNameNumber, const int& sheetNumber,
+                          const int& maxTriggerCnt);
+    void removeTcByCnt(QJsonObject& caseJson, const QString& titleGenType, const int& maxTriggerCnt);
+    QJsonArray copyQJsonArrayUpToIndex(const QJsonArray& array, const int& maxCnt);
     void printCaseSize(const QString& genType);
 
 private:
