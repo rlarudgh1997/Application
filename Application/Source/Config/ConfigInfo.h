@@ -30,6 +30,7 @@ public:
         ConfigTypeOtherTitle,
         ConfigTypeConfigTitle,
         ConfigTypeDescConfigVisible,
+        ConfitTypeGeneratePython,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -85,8 +86,8 @@ public:
         ConfigTypeDoFileSave,
         ConfigTypeAllModule,
         ConfigTypeSelectModule,
-        ConfitTypeGenTCPython,
         ConfitTypeNewModule,
+        ConfitTypeGenerateStart,
 
         ConfigTypeMax,
     } ConfigType;
@@ -142,7 +143,7 @@ private:
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
-        mConfigInfoData[ConfitTypeGenTCPython] = QPair<QString, QVariant>("ConfitTypeGenTCPython", QVariant(false));
+        mConfigInfoData[ConfitTypeGeneratePython] = QPair<QString, QVariant>("ConfitTypeGeneratePython", QVariant(false));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
@@ -212,6 +213,7 @@ private:
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
         mConfigInfoData[ConfitTypeNewModule] = QPair<QString, QVariant>("ConfitTypeNewModule", QVariant("New_Module"));
+        mConfigInfoData[ConfitTypeGenerateStart] = QPair<QString, QVariant>("ConfitTypeGenerateStart", QVariant(false));
     }
 
 private:

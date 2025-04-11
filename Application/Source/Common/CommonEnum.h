@@ -257,6 +257,7 @@ public:
         EventTypeWarningMergeSplit,
         EventTypeWarningCopyCut,
         EventTypeUpdateGenTCInfo,
+        EventTypeGenerateCancel,
 
         EventTypeTest = 3000,
 
@@ -507,6 +508,11 @@ public:
 
 class KeywordTypeEnum {
 public:
+    enum class KeywordGroup {
+        Invalid = 0,
+        Single,
+        Multi,
+    };
     enum class KeywordType : uint64_t {
         Invalid = 0,
         Sheet,

@@ -41,6 +41,7 @@ def case_gen(str = ""):
 
     # Generate combinations if needed
     signal_collection.generate_combinations()
+    signal_collection.generate_not_trigger_combinations()
 
     end_time = time.time()
     duration_time = end_time - start_time

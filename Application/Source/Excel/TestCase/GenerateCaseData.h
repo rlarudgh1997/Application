@@ -23,7 +23,8 @@ public:
 private:
     explicit GenerateCaseData();
 
-    QString genCase();
+    bool genCase();
+    bool isGenerateStop(const QString& info = QString());
     void saveHistory();
     void eraseMergeTag(QString& str);
     void appendCase(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
@@ -75,6 +76,9 @@ private:
                           const int& maxTriggerCnt);
     void removeTcByCnt(QJsonObject& caseJson, const QString& titleGenType, const int& maxTriggerCnt);
     QJsonArray copyQJsonArrayUpToIndex(const QJsonArray& array, const int& maxCnt);
+    void setPreconditionValues(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
+                               const int& resultNumber, const QString& tcName, const int& tcNameNumber, const int& sheetNumber);
+    void applyPrecondition(QJsonObject& caseJson);
     void printCaseSize(const QString& genType);
 
 private:

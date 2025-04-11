@@ -40,6 +40,7 @@ public:
         ExcuteTypeManualInput,
 
         ExcuteTypeCompleted = 100,
+        ExcuteTypeStop = 100,
         ExcuteTypeFailed = 200,
         ExcuteTypeExit,
     };
@@ -49,6 +50,7 @@ public:
     ~TestCase();
 
     bool start(const QStringList& arguments = QStringList());
+    void stop();
 
 private:
     explicit TestCase();

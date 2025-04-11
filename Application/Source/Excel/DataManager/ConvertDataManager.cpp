@@ -14,11 +14,15 @@
 #include "JSEngineManager.h"
 
 // #define ENABLE_CONFIG_DEBUG_LOG
-// #define ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG
+// #define ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG
+// #define ENABLE_MULTI_RESULT_SHEET_DEBUG_LOG
 // #define ENABLE_NON_INPUT_SIGNAL_KEYWORD_DEBUG_LOG
 // #define ENABLE_CONVERTING_KEYWORD_DATA_INFO
 // #define ENABLE_OUTPUT_DATA_KEYWORD_DEBUG_LOG
 
+const QString kEasterEggTrigger = "$EASTEREGG$";
+const QString GEN_TYPE_NEGATIVE_AND_POSITIVE = QString("Negative/Positive");
+const QString GEN_TYPE_POSITIVE = QString("Positive");
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
 QSharedPointer<ConvertDataManager>& ConvertDataManager::instance() {
@@ -101,7 +105,7 @@ bool ConvertDataManager::convertKeywordData() {
         if (testResult == -1) {
             result = false;
         }
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
         qDebug() << " >> process count/max  (" << sheetKeywordProcessingCount << "/" << maxSheetProccessingCount << ")";
         qDebug() << " >> result (-1: fail / 0 : pass / 1 : sheet keyword processing)";
         qDebug() << " >> result : " << testResult;
@@ -374,6 +378,9 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                         } else if ((tmpInfo.getValueEnum().isEmpty() == false) && (tmpInfo.getNotUsedEnum().isEmpty() == false)) {
                             // Enum Value
                             inputDataStr += tmpInfo.getNotUsedEnum().join(", ");
+                        } else if ((tmpInfo.getValueEnum().isEmpty() == true) && (tmpInfo.getNotUsedEnum().isEmpty() == false)) {
+                            // Not Enum Value
+                            inputDataStr += tmpInfo.getNotUsedEnum().join(", ");
                         } else if (tmpInfo.getValueEnum().isEmpty() == true &&
                                    tmpInfo.getDataType() == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64)) {
                             if (tmpInfo.getKeywordType() !=
@@ -455,7 +462,7 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
         // List => TCName, ResultName, CaseName, <InputSignalList, InputDataList>
         QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>> backupCurSheetIndexData;
         QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
         qDebug() << "============================[convertInputSignalKeyword]=====================================";
         qDebug() << "Sheet Index     : " << sheetIndex;
         qDebug() << "TCName List     : " << tcNameList;
@@ -464,7 +471,9 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
         for (int tcIdx = 0; tcIdx < tcNameList.size(); ++tcIdx) {
             QString tcNameStr = tcNameList.at(tcIdx);
             QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcNameStr);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+            QString genType;
+            ExcelDataManager::instance().data()->isGenTypeData(sheetIndex, tcNameStr, genType);
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
             qDebug() << "TCName          : " << tcNameStr;
             qDebug() << "Result List     : " << resultStrList;
             qDebug() << "############################################################################################";
@@ -475,7 +484,7 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                 QList<QStringList> curOutputDataInfoList =
                     ExcelDataManager::instance().data()->isOutputDataList(sheetIndex, tcNameStr, resultStr);
                 QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, tcNameStr, resultStr);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG) || defined(ENABLE_OUTPUT_DATA_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG) || defined(ENABLE_OUTPUT_DATA_KEYWORD_DEBUG_LOG)
                 qDebug() << "tcNameStr       : " << tcNameStr;
                 qDebug() << "Result          : " << resultStr;
                 qDebug() << "Case List       : " << caseStrList;
@@ -487,7 +496,7 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                     QString caseStr = caseStrList.at(caseIdx);
                     QPair<QStringList, QStringList> caseInputDataList =
                         ExcelDataManager::instance().data()->isInputDataList(sheetIndex, tcNameStr, resultStr, caseStr, false);
-#if 1
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
                     qDebug() << "------------------------------------------------------------------------------------------";
                     qDebug() << "Case            : " << caseStr;
                     qDebug() << "InputData(sig)  : " << caseInputDataList.first;
@@ -505,8 +514,8 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                     // Case 하위의 input signal list 중에 [Sheet] 키워드가 있는지 확인하는 방법
                     bool hasSheetKeyword = !inputSignalStringList.filter(sheetKeywordStr).isEmpty();
                     if (hasSheetKeyword == true) {
-                        auto sheetKeywordResultInfo = convertSheetKeyword(caseInputDataList, sheetIndex);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+                        auto sheetKeywordResultInfo = convertSheetKeyword(caseInputDataList, genType);
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
                         qDebug() << "[[[Result]]] sheetKeywordResultInfo : " << sheetKeywordResultInfo;
 #endif
                         QString tmpCaseName = caseStr;
@@ -518,7 +527,7 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                             bool hasSheetKeywordInInterpretList = !sheetInputPairData.first.filter(sheetKeywordStr).isEmpty();
                             if (hasSheetKeywordInInterpretList == true) {
                                 result = 1;
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
                                 qDebug() << ":::: tcNameStr : " << tcNameStr;
                                 qDebug() << ":::: resultStr : " << resultStr;
                                 qDebug() << ":::: caseNameStr : " << caseNameStr;
@@ -527,8 +536,8 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                             }
 
                             // appendCurSheetData(tcNameStr, resultStr, caseNameStr, sheetInputPairData, backupCurSheetIndexData);
-                            ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr,
-                                                                                     caseNameStr, sheetInputPairData);
+                            ExcelDataManager::instance().data()->updateInputDataInfo(
+                                sheetIndex, tcNameStr, deleteEasterEggKeyword(resultStr), caseNameStr, sheetInputPairData);
                         }
                     }
                     bool hasNotTriggerKeyword = !inputSignalStringList.filter(notTriggerKeywordStr).isEmpty();
@@ -538,8 +547,8 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
 
                     if (hasSheetKeyword == false && hasNotTriggerKeyword == false && hasPresetKeyword == false) {
                         // appendCurSheetData(tcNameStr, resultStr, caseStr, caseInputDataList, backupCurSheetIndexData);
-                        ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, tcNameStr, resultStr, caseStr,
-                                                                                 caseInputDataList);
+                        ExcelDataManager::instance().data()->updateInputDataInfo(
+                            sheetIndex, tcNameStr, deleteEasterEggKeyword(resultStr), caseStr, caseInputDataList);
                     }
                     if (result == -1) {
                         result = 0;
@@ -1213,23 +1222,48 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                     resultString += inputSignalEnumList.isEmpty() ? maxValue : inputSignalEnumList.join(", ");
                 }
             } else if (tempString.contains('~')) {
-                QStringList enumString = tempString.split('~');
-                convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Range;
-                if (enumString[0].toDouble() || enumString[0] == "0") {
-                    resultString += QString("%1,%2,%3,%4,%5,%6,%7,%8")
-                                        .arg(maxValue)
-                                        .arg(enumString[0])
-                                        .arg(maxValue)
-                                        .arg(QString::number(enumString[0].toInt() + 1))
-                                        .arg(maxValue)
-                                        .arg(QString::number(enumString[1].toInt() - 1))
-                                        .arg(maxValue)
-                                        .arg(enumString[1]);
-                    convertKeywordInfo.validInputData += QString("%1,%2,%3,%4")
-                                                             .arg(enumString[0])
-                                                             .arg(QString::number(enumString[0].toInt() + 1))
-                                                             .arg(QString::number(enumString[1].toInt() - 1))
-                                                             .arg(enumString[1]);
+                QStringList enumString;
+                if (tempString.contains('!') && tempString.contains('(')) {
+                    tempString.remove(QRegularExpression("[!()]"));
+                    enumString = tempString.split('~');
+                    convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Flow;
+                    if (enumString[0].toDouble() || enumString[0] == "0") {
+                        QString tempLeftValue =
+                            ((enumString[0].toInt() - 1) < 0) ? "negative" : QString::number(enumString[0].toInt() - 1);
+                        QString tempRightValue = QString::number(enumString[1].toInt() + 1);
+                        if (enumString[0].toDouble() || enumString[0] == "0") {
+                            if (tempLeftValue == "negative") {
+                                resultString = QString("%1,%2").arg(enumString[1]).arg(tempRightValue);
+                                convertKeywordInfo.validInputData += tempRightValue;
+                            } else {
+                                resultString = QString("%1,%2,%3,%4")
+                                                   .arg(enumString[0])
+                                                   .arg(tempLeftValue)
+                                                   .arg(enumString[1])
+                                                   .arg(tempRightValue);
+                                convertKeywordInfo.validInputData += QString("%1,%2").arg(tempLeftValue).arg(tempRightValue);
+                            }
+                        }
+                    }
+                } else {
+                    enumString = tempString.split('~');
+                    convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Range;
+                    if (enumString[0].toDouble() || enumString[0] == "0") {
+                        resultString += QString("%1,%2,%3,%4,%5,%6,%7,%8")
+                                            .arg(maxValue)
+                                            .arg(enumString[0])
+                                            .arg(maxValue)
+                                            .arg(QString::number(enumString[0].toInt() + 1))
+                                            .arg(maxValue)
+                                            .arg(QString::number(enumString[1].toInt() - 1))
+                                            .arg(maxValue)
+                                            .arg(enumString[1]);
+                        convertKeywordInfo.validInputData += QString("%1,%2,%3,%4")
+                                                                 .arg(enumString[0])
+                                                                 .arg(QString::number(enumString[0].toInt() + 1))
+                                                                 .arg(QString::number(enumString[1].toInt() - 1))
+                                                                 .arg(enumString[1]);
+                    }
                 }
             } else if (tempString.contains("<=")) {
                 tempString.remove("<=");
@@ -1350,9 +1384,8 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
                     info.inputSignal.replace(
                         QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption),
                         "");
-                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
-                    info.inputValue = constructConvertKeywordDataInfo(keywords[count], maxValue + ", " + info.validInputData);
-                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged) ||
+                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged) ||
                            keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow) ||
                            keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {
                     QString tempInputValues = inputValues[count];
@@ -1400,7 +1433,8 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
             count++;
         }
         QJSValue result = JSEngineManager::instance().getEngine().evaluate(
-            expr.remove(QRegularExpression("\\[cal\\]", QRegularExpression::CaseInsensitiveOption)).replace("math", "Math"));
+            expr.remove(QRegularExpression("\\[(cal|sheet)\\]", QRegularExpression::CaseInsensitiveOption))
+                .replace("math", "Math"));
         if (caseName.contains("others", Qt::CaseInsensitive)) {
             caseDataInfo.caseName = "others";
         } else {
@@ -1492,7 +1526,7 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
                             ResultInfo newResult;
                             newResult.resultName = caseCopy.caseName.contains("others", Qt::CaseInsensitive)
                                                        ? resultInfo.resultName
-                                                       : resultInfo.resultName + " == " + results.first[i];
+                                                       : resultInfo.resultName + kEasterEggTrigger + " == " + results.first[i];
                             QList<OutputDataInfo> tempOutputList = resultInfo.outputDataInfoList;
                             for (auto& outputDataInfo : tempOutputList) {
                                 if (outputDataInfo.outputValue.contains("[cal]", Qt::CaseInsensitive)) {
@@ -1659,7 +1693,7 @@ void ConvertDataManager::appendCurSheetData(
     const QString& tcName, const QString& resultName, const QString& caseName,
     const QPair<QStringList, QStringList>& inputDataInfo,
     QList<std::tuple<QString, QString, QString, QPair<QStringList, QStringList>>>& retCurSheetData) {
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
     qDebug() << "======================= [appendCurSheetData] ==========================================";
     qDebug() << "insert Cur Sheet Data : ";
     qDebug() << "1) tcName        : " << tcName;
@@ -1680,7 +1714,7 @@ void ConvertDataManager::updateCurSheetData(
         // std::get<3> : inputDataInfo
         ExcelDataManager::instance().data()->updateInputDataInfo(sheetIndex, std::get<0>(tmpSheetData), std::get<1>(tmpSheetData),
                                                                  std::get<2>(tmpSheetData), std::get<3>(tmpSheetData));
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
         qDebug() << "======================= [updateCurSheetData] ==========================================";
         qDebug() << "0. sheetIndex    : " << sheetIndex;
         qDebug() << "1. tcName        : " << std::get<0>(tmpSheetData);
@@ -1693,7 +1727,7 @@ void ConvertDataManager::updateCurSheetData(
 
 // [Sheet] 키워드 해석 기능
 QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::convertSheetKeyword(
-    const QPair<QStringList, QStringList>& inputDataPairInfo, const int& currentSheetIndex) {
+    const QPair<QStringList, QStringList>& inputDataPairInfo, const QString& genTypeStr) {
     QList<QPair<QString, QPair<QStringList, QStringList>>> sheetDataInfo;
     QStringList inputSignalStrList = inputDataPairInfo.first;
     QStringList inputDataStrList = inputDataPairInfo.second;
@@ -1702,7 +1736,7 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
     if ((inputSignalStrList.isEmpty() == false && inputDataStrList.isEmpty() == false) &&
         (inputSignalStrList.size() == inputDataStrList.size())) {
         for (int index = 0; index < inputSignalStrList.size(); ++index) {
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
             qDebug() << "-------------------------------------------------------------------------------";
             qDebug() << "---> signal : " << inputSignalStrList.at(index);
             qDebug() << "--->   data : " << inputDataStrList.at(index);
@@ -1712,7 +1746,7 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
             if (inputSignalStrList.at(index).contains("[Sheet]") == true && isSheetKeywordAlreadyExsit == false) {
                 inputSignalStr.remove("[Sheet]");
                 isSheetKeywordAlreadyExsit = true;
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
                 qDebug() << "----> [Sheet] keyword Exist!";
                 qDebug() << "----> remove [Sheet] : " << inputSignalStr;
 #endif
@@ -1720,30 +1754,43 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
                 // input data   : ON, OFF... (2개 이상의 data 지원하기 위함)
                 QStringList inputDataSplitStr = inputDataStr.remove(" ").split(",");
                 for (int i = 0; i < inputDataSplitStr.size(); ++i) {
-                    // QList<QPair<QString, QPair<QStringList, QStringList>>>
-                    auto sheetSignalDataInfo = getSheetSignalDataInfo(inputSignalStr, inputDataSplitStr.at(i));
+                    QString tcNameInSheetKeyword = inputSignalStr;
+                    QString resultNameInSheetKeyword = inputDataSplitStr.at(i);
+                    // [Cal]이나 [Sheet]에 의해서 Result 가 추가되면서 Result 명칭이 바뀌기 때문에
+                    // 바뀐 명칭의 origin(원래)의 이름으로 찾을 수 있도록 하는 함수
+                    QStringList multiResultList = getSheetHasMultiResult(tcNameInSheetKeyword, resultNameInSheetKeyword);
 
-                    if (sheetSignalDataInfo.isEmpty() == false) {
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
-                        qDebug() << "-----> [Sheet] Info : " << sheetSignalDataInfo;
+                    QStringList resultParamList =
+                        (multiResultList.isEmpty()) ? QStringList() << resultNameInSheetKeyword : multiResultList;
+
+                    for (const QString& resultKeyword : resultParamList) {
+                        // QList<QPair<QString, QPair<QStringList, QStringList>>>
+                        // QList<CaseName, pair<input signal list, input data list>>
+                        auto sheetSignalDataInfo = getSheetSignalDataInfo(tcNameInSheetKeyword, resultKeyword);
+
+                        if (sheetSignalDataInfo.isEmpty() == false) {
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
+                            qDebug() << "-----> [Sheet] Info : " << sheetSignalDataInfo;
 #endif
-                        for (int i = 0; i < sheetSignalDataInfo.size(); ++i) {
-                            // [CaseName, <InputSignalList, InputDataList>]
-                            QString sheetCaseName = sheetSignalDataInfo.at(i).first;
-                            QPair<QStringList, QStringList> sheetInputDataInfo = sheetSignalDataInfo.at(i).second;
-#if 1
-                            qDebug() << "====================================================================================";
-                            qDebug() << "1. caseName      : " << sheetCaseName;
-                            qDebug() << "2. [Sheet] inputSignalStrList : " << sheetInputDataInfo.first;
-                            qDebug() << "3. [Sheet] inputDataInfo      : " << sheetInputDataInfo.second;
-                            qDebug() << "4. [Excel] inputSignalStrList : " << inputSignalStrList;
-                            qDebug() << "5. [Excel] inputDataInfo      : " << inputDataStrList;
+                            for (int i = 0; i < sheetSignalDataInfo.size(); ++i) {
+                                // [CaseName, <InputSignalList, InputDataList>]
+                                QString sheetCaseName = sheetSignalDataInfo.at(i).first;
+                                QPair<QStringList, QStringList> sheetInputDataInfo = sheetSignalDataInfo.at(i).second;
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
+                                qDebug()
+                                    << "====================================================================================";
+                                qDebug() << "1. caseName      : " << sheetCaseName;
+                                qDebug() << "2. [Sheet] inputSignalStrList : " << sheetInputDataInfo.first;
+                                qDebug() << "3. [Sheet] inputDataInfo      : " << sheetInputDataInfo.second;
+                                qDebug() << "4. [Excel] inputSignalStrList : " << inputSignalStrList;
+                                qDebug() << "5. [Excel] inputDataInfo      : " << inputDataStrList;
 #endif
-                            auto tmpInputDataInfo = getMergedInputDataInfo(inputDataPairInfo, sheetInputDataInfo);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
-                            qDebug() << "[[[Result]]] tmpInputDataInfo : " << tmpInputDataInfo;
+                                auto tmpInputDataInfo = getMergedInputDataInfo(genTypeStr, inputDataPairInfo, sheetInputDataInfo);
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
+                                qDebug() << "[[[Result]]] tmpInputDataInfo : " << tmpInputDataInfo;
 #endif
-                            sheetDataInfo.append(qMakePair(sheetCaseName, tmpInputDataInfo));
+                                sheetDataInfo.append(qMakePair(sheetCaseName, tmpInputDataInfo));
+                            }
                         }
                     }
                 }
@@ -1755,6 +1802,51 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::conve
         }
     }
     return sheetDataInfo;
+}
+
+QString ConvertDataManager::deleteEasterEggKeyword(const QString& keyword) {
+    return QString(keyword).remove(kEasterEggTrigger);
+}
+
+QStringList ConvertDataManager::getSheetHasMultiResult(const QString& tcName, const QString& result) {
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) + 1;
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+
+    QStringList resultList;
+
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        if (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
+            qDebug() << "Not support sheet :" << sheetIndex;
+            continue;
+        }
+        QStringList resultStrList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName);
+
+        for (QString easterEggResultStr : resultStrList) {
+#if defined(ENABLE_MULTI_RESULT_SHEET_DEBUG_LOG)
+            qDebug() << "=========================================================";
+            qDebug() << " easterEggResultStr : " << easterEggResultStr;
+            qDebug() << " origin result String  : " << result;
+#endif
+            QStringList splitResultStrUsingEastEgg = easterEggResultStr.split(kEasterEggTrigger);
+            if (splitResultStrUsingEastEgg.size() > 1) {
+                // $EASTEREGG$ 존재
+                if (result == splitResultStrUsingEastEgg.at(0)) {
+                    // EasterEgg Flag 뒤 문자열을 제거하면, 원본의 Result 와의 동일 여부 판단
+                    // [Cal] 또는 [Sheet] 해석 시 result가 추가되지만, 원본 result 결과는 동일하기 때문
+#if defined(ENABLE_MULTI_RESULT_SHEET_DEBUG_LOG)
+                    qDebug() << "Appended Multi-Result String : " << easterEggResultStr;
+#endif
+                    resultList.append(easterEggResultStr);
+                }
+            }
+        }
+    }
+#if defined(ENABLE_MULTI_RESULT_SHEET_DEBUG_LOG)
+    qDebug() << "-------------------------------------------------------------";
+    qDebug() << "[Last] Multi-Result List : " << resultList;
+#endif
+
+    return resultList;
 }
 
 // List = [CaseName1, (InputSignalList, InputDataList)] + [CaseName2, (InputSignalList, InputDataList)] + ...
@@ -1772,11 +1864,13 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSh
         }
 
         QStringList caseStrList = ExcelDataManager::instance().data()->isCaseDataList(sheetIndex, name, data);
-#if defined(ENABLE_INPUT_SIGNAL_KEYWORD_DEBUG_LOG)
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
         qDebug() << "-----> Find Sheet Case List : " << caseStrList;
 #endif
         for (int caseIndex = 0; caseIndex < caseStrList.size(); ++caseIndex) {
             QString caseNameStr = caseStrList.at(caseIndex);
+            // name = tcName
+            // data = resultName
             QPair<QStringList, QStringList> caseInputDataList =
                 ExcelDataManager::instance().data()->isInputDataList(sheetIndex, name, data, caseNameStr, false);
 
@@ -1788,15 +1882,31 @@ QList<QPair<QString, QPair<QStringList, QStringList>>> ConvertDataManager::getSh
             break;
         }
     }
-
+#if defined(ENABLE_INPUT_SIGNAL_SHEET_KEYWORD_DEBUG_LOG)
+    qDebug() << "[result] sheetKeywordSignalDataInfo : " << sheetKeywordSignalDataInfo;
+#endif
     return sheetKeywordSignalDataInfo;
 }
 
-QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const QPair<QStringList, QStringList>& origin,
+QString ConvertDataManager::getIgnPrefixString(const QString& signal) {
+    QString retStr;
+    if (signal.startsWith(SFC_IGN_ELAPSED + "On")) {
+        retStr = SFC_IGN_ELAPSED + "On";
+    } else if (signal.startsWith(SFC_IGN_ELAPSED + "Off")) {
+        retStr = SFC_IGN_ELAPSED + "Off";
+    } else {
+        // no operation
+    }
+
+    return retStr;
+}
+
+QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const QString& genTypeStr,
+                                                                           const QPair<QStringList, QStringList>& origin,
                                                                            const QPair<QStringList, QStringList>& sheet) {
     QPair<QStringList, QStringList> retVal;
 
-    QSet<QString> seen;  // 중복 확인용 Set
+    QSet<QString> duplicatedSignalCheckList;  // 중복 확인용 Set
     QStringList mergedSignalList;
     QStringList mergedDataList;
 
@@ -1805,32 +1915,66 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
     const QStringList& sheetSignalList = sheet.first;
     const QStringList& sheetDataList = sheet.second;
 
-    bool sheetInserted = false;
+    bool isSheetAlreadyInserted = false;
     bool isSheetAlreadyExist = false;
     for (int i = 0; i < originSignalList.size(); ++i) {
         const QString& signal = originSignalList[i];
         const QString& data = originDataList[i];
 
-        // [Sheet]가 포함된 항목을 만나면 삭제하고 sheet 리스트 삽입
+        // [Sheet]를 사용하는 origin signal/data가 사용되는 [Sheet] 내부 signal/data와 같으면 origin 데이터를 우선적으로 사용
+        // 원본 excel에서 [Sheet] Keyword를 만나면 삭제하고 [Sheet] 내부 input signal/data 리스트 삽입
         if (signal.contains("[Sheet]") && isSheetAlreadyExist == false) {
             isSheetAlreadyExist = true;
-            if (!sheetInserted) {
-                // sheet 데이터를 현재 위치부터 삽입
+            QString customNotTriggerStr = ExcelUtil::instance().data()->isKeywordString(
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
+            if (!isSheetAlreadyInserted) {
+                // 현재 위치부터 [Sheet] 데이터를 삽입하는 로직
                 for (int j = 0; j < sheetSignalList.size(); ++j) {
-                    if (!seen.contains(sheetSignalList[j])) {
-                        seen.insert(sheetSignalList[j]);
-                        mergedSignalList.append(sheetSignalList[j]);
-                        mergedDataList.append(sheetDataList[j]);
+                    if (!duplicatedSignalCheckList.contains(sheetSignalList[j])) {
+                        bool isIGNSignalDuplicated = false;
+                        // IGN의 경우 SFC.Private.IGNElapsed.ElapsedOn500ms 와 ElapedOn3500ms 과 같이 full string data는 다르지만
+                        // IGN ON 이라는 값의 의미는 같기 때문에 같은 노드로 인식하게 하기 위한 조건
+                        QString ignPrefixSignalInSheet = getIgnPrefixString(sheetSignalList[j]);
+                        if (ignPrefixSignalInSheet.isEmpty() == false) {
+                            for (const QString& str : duplicatedSignalCheckList) {
+                                if (str.contains(ignPrefixSignalInSheet)) {
+                                    isIGNSignalDuplicated = true;
+                                    break;
+                                }
+                            }
+                        }
+                        // [Sheet] 내부 input signal/data 추가하는 로직
+                        if (isIGNSignalDuplicated == false) {
+                            QString appendMergedSignalStr = sheetSignalList[j];
+                            QString appendMergedDataStr = sheetDataList[j];
+
+                            duplicatedSignalCheckList.insert(appendMergedSignalStr);
+                            mergedSignalList.append(appendMergedSignalStr);
+                            // Negative or Positive 인 경우에만 [Sheet] Data 참조 시 [Not_Trigger] keyword 추가
+                            if (genTypeStr == GEN_TYPE_NEGATIVE_AND_POSITIVE || genTypeStr == GEN_TYPE_POSITIVE) {
+                                // [Sheet]의 내부 input signal에 또 [Sheet]가 있는 경우는 data에 [Not_Trigger] 추가하지 않음
+                                // e.g) [Sheet]Private_A - [Not_Trigger]OFF 가 되면 다음 [Sheet] 해석 시 OFF 찾지 못함
+                                if (!appendMergedSignalStr.contains("[Sheet]") &&
+                                    !appendMergedSignalStr.startsWith(SFC_IGN_ELAPSED)) {
+                                    appendMergedDataStr = customNotTriggerStr + appendMergedDataStr;
+                                }
+                            }
+                            mergedDataList.append(appendMergedDataStr);
+                        }
                     }
                 }
-                sheetInserted = true;  // 한 번만 삽입
+                // 한 Case에 [Sheet]가 2개 이상있는 경우, 한 번만 삽입하도록 하기 위한 조건
+                // 구조상 원본 Data와 실시간 Update Data를 독립적으로 관리하여,
+                // 2개의 Case를 동시에 Sheet 데이터를 해석하지 않고,
+                // 2 depth [Sheet] 키워드 해석 방식과 동일한 로직 수행하도록 구현
+                isSheetAlreadyInserted = true;
             }
-            continue;  // 기존의 [Sheet] 포함된 원본 signal/data는 삭제
+            continue;  // 기존의 [Sheet] 포함된 내부 signal/data는 무시
         }
 
-        // 중복 방지 후 추가
-        if (!seen.contains(signal)) {
-            seen.insert(signal);
+        // [Sheet] 사용하는 case에 존재하는 input signal/data 추가하는 로직 (중복 아닌 경우 추가)
+        if (!duplicatedSignalCheckList.contains(signal)) {
+            duplicatedSignalCheckList.insert(signal);
             mergedSignalList.append(signal);
             mergedDataList.append(data);
         }

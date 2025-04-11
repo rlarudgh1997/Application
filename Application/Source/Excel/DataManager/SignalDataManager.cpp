@@ -5,6 +5,7 @@
 #include "ExcelUtil.h"
 
 #include <QRegularExpression>
+#include <QRandomGenerator>
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -474,13 +475,13 @@ QStringList SignalDataManager::isSignalValueEnum(const bool& toEnum, const QStri
     QStringList valueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
 
     QString matchingValue;  // not used
-    QStringList convertValueEnum = isConvertedSignalData(toEnum, signalName, valueEnum, matchingValue);
+    QStringList convertValueEnum = isConvertedSignalDataValueEnum(toEnum, signalName, valueEnum, matchingValue);
     // qDebug() << "isSignalValueEnum :" << toEnum << signalName << convertValueEnum;
     return convertValueEnum;
 }
 
-QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
-                                                     QString& matchingValue) {
+QStringList SignalDataManager::isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName,
+                                                              const QStringList& valueEnum, QString& matchingValue) {
     const int signalType = isSignalType(signalName);
     const bool vehicleState = ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle)) ||
                                (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)));
@@ -507,6 +508,564 @@ QStringList SignalDataManager::isConvertedSignalData(const bool& toEnum, const Q
         }
     }
     return convertDataInfo;
+}
+
+QList<QStringList> SignalDataManager::parsingKeywordBlocks(const QStringList& originData) {
+    QRegularExpression keywordStartRegex(R"(\[Custom\w+\]\[?)");
+    QList<QStringList> keywordBlocks;
+    QStringList currentBlock;
+
+    for (const QString& d : originData) {
+        QString trimmed = d.trimmed();
+
+        if (trimmed.contains(keywordStartRegex)) {
+            if (currentBlock.size() > 0) {
+                keywordBlocks.append(currentBlock);
+                currentBlock.clear();
+            }
+        }
+        currentBlock.append(trimmed);
+    }
+
+    if (currentBlock.size() > 0) {
+        keywordBlocks.append(currentBlock);
+    }
+
+    // for (const auto& block : keywordBlocks) {
+    //     qDebug() << "Keyword :" << block;
+    // }
+    return keywordBlocks;
+}
+
+QMap<QString, QStringList> SignalDataManager::parsingKeywordData(const QStringList& originData) {
+    QRegularExpression regex(R"(\[([^\[\]]+)\])");  // 정규식 : 대괄호
+    QStringList keywordList;
+
+    // originData : "[CustomMoreThanEqual][1279]", "[1280]", "[CustomUnder][1280]", "[1279]"
+    for (const QString& d : originData) {
+        QRegularExpressionMatchIterator it = regex.globalMatch(d);
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            QString captured = match.captured(1);
+            if (captured.contains(QRegularExpression("[A-Za-z]"))) {  // 정규식 : 문자
+                keywordList.append(QString("[%1]").arg(captured));    // [CustomMoreThanEqual], [CustomUnder] ....
+            }
+        }
+    }
+
+    QMap<QString, QStringList> keywordDataMap;
+    for (const QStringList& keywordBlocks : parsingKeywordBlocks(originData)) {
+        for (const QString& keyword : keywordList) {
+            if ((keywordBlocks.size() > 0) && (keywordBlocks.first().startsWith(keyword))) {
+                QStringList values = keywordBlocks;
+                values[0] = values[0].mid(keyword.length());  // 키워드 부분 제거
+                keywordDataMap[keyword] = values;
+                break;
+            }
+        }
+    }
+
+    // for (const auto& key : keywordDataMap.keys()) {
+    //     qDebug() << "KeywordDataMap[" << key << "] :" << keywordDataMap[key];
+    // }
+    return keywordDataMap;
+}
+
+QMap<int, QStringList> SignalDataManager::isCustomKeywordInfo(const QStringList& originData) {
+    QMap<QString, QStringList> keywordDataMap = parsingKeywordData(originData);
+    QMap<QString, QPair<QString, QString>> customKeywordInfo;
+
+    for (const auto& key : keywordDataMap.keys()) {
+        QStringList values = keywordDataMap[key];
+        QString joined = values.join(", ");
+
+        QStringList parts = joined.split("], [");
+        if (parts.size() >= 2) {
+            QString first = parts[0].remove('[');
+            QString second = parts[1].remove(']');
+            customKeywordInfo[key] = qMakePair(first.trimmed(), second.trimmed());
+        // } else {
+        //     qDebug() << "[Warning] Cannot split correctly for key:" << key << "joined:" << joined;
+        }
+    }
+
+    QMap<int, QStringList> dataInfo;
+    if (customKeywordInfo.size() == 0) {
+        qDebug() << "Keyword Group - Invalid";
+        dataInfo[static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)] = originData;
+        return dataInfo;
+    }
+
+    QList<QPair<QString, int>> keywordPattern =
+        ExcelUtil::instance().data()->isKeywordPatternInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
+
+    for (const auto& key : customKeywordInfo.keys()) {
+        int keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
+
+        for (const auto& pattern : keywordPattern) {
+            if (key == pattern.first) {
+                keywordType = static_cast<int>(pattern.second);
+                break;
+            }
+        }
+
+        QStringList keywordData;
+        auto data = customKeywordInfo[key];
+        QStringList splitDataFirst = data.first.remove(" ").split(",");
+        QStringList splitDataSecond = data.second.remove(" ").split(",");
+
+        switch (keywordType) {
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder): {
+                keywordData.append(data.first);
+                break;
+            }
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
+                keywordData.append(data.second);
+                break;
+            }
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
+                for (const auto& d : splitDataFirst) {
+                    keywordData.append(d);
+                }
+                for (const auto& d : splitDataSecond) {
+                    keywordData.append(d);
+                }
+                keywordData.removeDuplicates();
+                break;
+            }
+            case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
+                if (splitDataSecond.size() > 0) {
+                    keywordData.append(splitDataSecond.at(0));
+                    keywordData.append(splitDataSecond.at(splitDataSecond.size() - 1));
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        if (keywordData.size() > 0) {
+            dataInfo[keywordType] = keywordData;
+        }
+    }
+
+#if 0
+    qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    for (const auto& key : customKeywordInfo.keys()) {
+        auto data = customKeywordInfo[key];
+        qDebug() << "\t Keyword    : " << key;
+        qDebug() << "\t\t First  : " << data.first;
+        qDebug() << "\t\t Second : " << data.second;
+    }
+    qDebug() << "\n";
+    for (const auto& key : dataInfo.keys()) {
+        auto data = dataInfo[key];
+        qDebug() << "\t KeywordInfo[" << key << "] :" << dataInfo[key];
+    }
+    qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+#endif
+
+    return dataInfo;
+}
+
+QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo) {
+    if (dataInfo.size() != 1) {
+        return QStringList();
+    }
+
+    const int maxCount = 1000;
+
+    int keywordType = dataInfo.firstKey();
+    QStringList inputList = dataInfo[keywordType];
+    QSet<QString> existing(inputList.begin(), inputList.end());
+    QStringList validData;
+
+    switch (dataType) {
+        case static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64):
+        case static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64): {
+#if 0
+            qint64 minVal = std::numeric_limits<qint64>::max();
+            qint64 maxVal = std::numeric_limits<qint64>::lowest();
+
+            for (const QString& d : inputList) {
+                bool ok;
+                qint64 val = d.toLongLong(&ok);
+                if (ok) {
+                    minVal = std::min(minVal, val);
+                    maxVal = std::max(maxVal, val);
+                }
+            }
+
+            minVal = std::max(minVal - 10, 0LL);
+            maxVal = maxVal + 10;
+
+            for (int index = 0; index < maxCount; ++index) {
+                qint64 candidate = QRandomGenerator::global()->bounded(minVal, maxVal + 1);
+                QString strCandidate = QString::number(candidate);
+                if (!existing.contains(strCandidate)) {
+                    validData.append(strCandidate);
+                    break;
+                }
+            }
+#else
+            qint64 minVal = std::numeric_limits<qint64>::max();
+            qint64 maxVal = std::numeric_limits<qint64>::lowest();
+            QList<qint64> values;
+
+            for (const QString& d : inputList) {
+                bool ok;
+                qint64 val = d.toLongLong(&ok);
+                if (ok) {
+                    values.append(val);
+                    minVal = std::min(minVal, val);
+                    maxVal = std::max(maxVal, val);
+                }
+            }
+
+            minVal = std::max(minVal - 10, 0LL);
+            maxVal = maxVal + 10;
+
+            auto isDuplicate = [&](qint64 val) {
+                return existing.contains(QString::number(val));
+            };
+
+            bool found = false;
+
+            if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver) ||
+                keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual)) {
+#if 1   // 음수 지원
+                qint64 reference = *std::min_element(values.begin(), values.end());
+                qint64 minRange = reference - 1000;
+                qint64 maxRange = reference - 1;
+
+                if (maxRange <= minRange) {
+                    minRange = reference - 1000;
+                    maxRange = reference - 1;
+                }
+
+                for (int i = 0; i < maxCount; ++i) {
+                    qint64 candidate = QRandomGenerator::global()->bounded(minRange, maxRange + 1);
+                    if (!isDuplicate(candidate)) {
+                        validData.append(QString::number(candidate));
+                        found = true;
+                        break;
+                    }
+                }
+#else
+               // 입력값보다 작은 랜덤 값
+                qint64 reference = *std::min_element(values.begin(), values.end());
+                qint64 minRange = 0;
+                qint64 maxRange = std::max(reference - 1, 0LL);
+
+                for (int i = 0; i < maxCount; ++i) {
+                    qint64 candidate = QRandomGenerator::global()->bounded(minRange, maxRange + 1);
+                    if (!isDuplicate(candidate)) {
+                        validData.append(QString::number(candidate));
+                        found = true;
+                        break;
+                    }
+                }
+#endif
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder) ||
+                    keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)) {
+                // 입력값보다 큰 랜덤 값
+                qint64 reference = *std::max_element(values.begin(), values.end());
+                qint64 minRange = reference + 1;
+                qint64 maxRange = reference + 1000;
+
+                for (int i = 0; i < maxCount; ++i) {
+                    qint64 candidate = QRandomGenerator::global()->bounded(minRange, maxRange + 1);
+                    if (!isDuplicate(candidate)) {
+                        validData.append(QString::number(candidate));
+                        found = true;
+                        break;
+                    }
+                }
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow) ||
+                    keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
+                // 중복되지 않는 랜덤 값 생성
+                for (int i = 0; i < maxCount; ++i) {
+                    qint64 candidate = QRandomGenerator::global()->bounded(minVal, maxVal + 100);
+                    if (!isDuplicate(candidate)) {
+                        validData.append(QString::number(candidate));
+                        found = true;
+                        break;
+                    }
+                }
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)) {
+                // 범위 밖의 랜덤 값 생성
+                qint64 rangeMin = *std::min_element(values.begin(), values.end());
+                qint64 rangeMax = *std::max_element(values.begin(), values.end());
+
+                qint64 lowerBound = std::min(std::max(rangeMin - 1000, static_cast<qint64>(-100000)), rangeMin - 1);
+                qint64 upperBound = rangeMax + 100;
+
+                for (int i = 0; i < maxCount; ++i) {
+                    // 하한/상한 둘 중 랜덤으로 선택하여 범위 바깥 값 생성
+                    bool chooseLower = QRandomGenerator::global()->bounded(2) == 0;
+                    qint64 candidate = 0;
+
+                    if (chooseLower) {
+                        candidate = QRandomGenerator::global()->bounded(lowerBound, rangeMin);
+                    } else {
+                        candidate = QRandomGenerator::global()->bounded(rangeMax + 1, upperBound + 1);
+                    }
+
+                    if (!isDuplicate(candidate)) {
+                        validData.append(QString::number(candidate));
+                        found = true;
+                        break;
+                    }
+                }
+            } else {
+            }
+
+            if (!found) {
+                // 기본 fallback: 중복 안 되는 값 하나 생성
+                for (int i = 0; i < maxCount; ++i) {
+                    qint64 candidate = QRandomGenerator::global()->bounded(minVal, maxVal + 1);
+                    QString strCandidate = QString::number(candidate);
+                    if (!existing.contains(strCandidate)) {
+                        validData.append(strCandidate);
+                        break;
+                    }
+                }
+            }
+#endif
+            break;
+        }
+        case static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble): {
+            double minVal = std::numeric_limits<double>::max();
+            double maxVal = std::numeric_limits<double>::lowest();
+            int precision = 2;
+
+            for (const QString& d : inputList) {
+                bool ok;
+                double val = d.toDouble(&ok);
+                if (ok) {
+                    minVal = std::min(minVal, val);
+                    maxVal = std::max(maxVal, val);
+                }
+            }
+
+            minVal = std::max(minVal - 5.0, 0.0);
+            maxVal = maxVal + 5.0;
+
+            for (int index = 0; index < maxCount; ++index) {
+                double candidate = QRandomGenerator::global()->generateDouble() * (maxVal - minVal) + minVal;
+                candidate = std::round(candidate * std::pow(10, precision)) / std::pow(10, precision);
+                QString strCandidate = QString::number(candidate, 'f', precision);
+                if (!existing.contains(strCandidate)) {
+                    validData.append(strCandidate);
+                    break;
+                }
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::DataTypeEnum::DataType::HString): {
+            validData.append("[NotUsedString]");
+            break;
+        }
+        // case static_cast<int>(ivis::common::DataTypeEnum::DataType::HBool): {
+        //     if ((existing.contains("0") == false) || (existing.contains("false") == false)) {
+        //         validData.append("0");  // false
+        //     } else if ((existing.contains("1") == false) || (existing.contains("true") == false)) {
+        //         validData.append("1");  // true
+        //     }
+        //     break;
+        // }
+        default: {
+            break;
+        }
+    }
+
+#if 0
+    qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    qDebug() << "\t isValidUniqueValue :" << dataType;
+    qDebug() << "\t\t KeywordType : " << keywordType;
+    qDebug() << "\t\t InputData   : " << inputList;
+    qDebug() << "\t\t ValidData   : " << validData;
+    qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+#endif
+
+    return validData;
+}
+
+QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo) {
+    const int maxTryCount = 1000;
+    QStringList validData;
+
+    if (dataInfo.isEmpty()) return validData;
+
+    bool isUnsigned = (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64));
+    bool isSigned = (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64));
+
+    if (!isUnsigned && !isSigned) {
+        return validData;
+    }
+
+    // 모든 값 모으기
+    QSet<QString> allExisting;
+    QList<qint64> allIntValues;
+    bool hasNegativeInput = false;
+
+    for (const auto& list : dataInfo.values()) {
+        allExisting.unite(QSet<QString>(list.begin(), list.end()));
+
+        for (const QString& s : list) {
+            bool ok = false;
+            qint64 val = s.toLongLong(&ok);
+            if (ok) {
+                allIntValues.append(val);
+                if (val < 0) hasNegativeInput = true;
+            }
+        }
+    }
+
+    if (allIntValues.isEmpty()) return validData;
+
+    qint64 minVal = *std::min_element(allIntValues.begin(), allIntValues.end());
+    qint64 maxVal = *std::max_element(allIntValues.begin(), allIntValues.end());
+
+    // 생성 범위 계산
+    qint64 minRange = minVal - 1000;
+    qint64 maxRange = maxVal + 1000;
+
+    // unsigned 타입이면 반드시 양수만
+    if (isUnsigned || (isSigned && !hasNegativeInput)) {
+        minRange = std::max(minRange, static_cast<qint64>(0));
+    }
+
+    for (int i = 0; i < maxTryCount; ++i) {
+        qint64 candidateInt = QRandomGenerator::global()->bounded(minRange, maxRange + 1);
+        QString candidateStr = QString::number(candidateInt);
+        if (allExisting.contains(candidateStr)) continue;
+
+        bool isValid = true;
+
+        for (auto it = dataInfo.constBegin(); it != dataInfo.constEnd(); ++it) {
+            int keywordType = it.key();
+            QStringList refList = it.value();
+
+            QList<qint64> refVals;
+            for (const QString& s : refList) {
+                bool ok;
+                qint64 val = s.toLongLong(&ok);
+                if (ok) refVals.append(val);
+            }
+
+            if (refVals.isEmpty()) {
+                isValid = false;
+                break;
+            }
+
+            qint64 refMin = *std::min_element(refVals.begin(), refVals.end());
+            qint64 refMax = *std::max_element(refVals.begin(), refVals.end());
+
+            if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver) ||
+                keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual)) {
+                if (!(candidateInt < refMin)) {
+                    isValid = false;
+                    break;
+                }
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder) ||
+                       keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)) {
+                if (!(candidateInt > refMax)) {
+                    isValid = false;
+                    break;
+                }
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow) ||
+                       keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
+                if (refVals.contains(candidateInt)) {
+                    isValid = false;
+                    break;
+                }
+            } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)) {
+                if (candidateInt >= refMin && candidateInt <= refMax) {
+                    isValid = false;
+                    break;
+                }
+            }
+        }
+
+        if (isValid) {
+            validData.append(candidateStr);
+            break;
+        }
+    }
+
+#if 0
+    qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    qDebug() << "\t [isMultiValidUniqueValue]";
+    qDebug() << "\t\t DataType          :" << dataType;
+    qDebug() << "\t\t HasNegativeInput  :" << hasNegativeInput;
+    qDebug() << "\t\t Min/MaxRange      :" << minRange << " ~ " << maxRange;
+    qDebug() << "\t\t InputData         :" << dataInfo;
+    qDebug() << "\t\t OutputData        :" << validData;
+    qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+#endif
+
+    return validData;
+}
+
+QStringList SignalDataManager::isConvertedSignalDataNormal(const QString& signalName, const int& dataType,
+                                                           const QStringList& originData) {
+    if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
+        // qDebug() << "\t isConvertedSignalDataNormal - Skip Signal :" << signalName;
+        return QStringList();
+    }
+
+#if 0
+    // int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
+    int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
+    // int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
+    QStringList originDataTemp({
+        // "2.1", "3.245", "500.123",                                                           // 1.23     중복되지 않는 값
+        // "-200", "300", "500",                                                                // 111      중복되지 않는 값
+        // "200", "300", "500",                                                                 // 111      중복되지 않는 값
+        // "[CustomOver][-150]", "[-151]",                                                      // 149      이하
+        // "[CustomOver][150]", "[151]",                                                        // 149      이하
+        // "[CustomMoreThanEqual][149]", "[150]",                                               // 149      이하
+        // "[CustomUnder][150]", "[149]",                                                       // 151      이상
+        // "[CustomLessThanEqual][151]", "[150]",                                               // 151      이상
+        // "[CustomFlow][1, 2, 3, 4]", "[2, 4, 8, 10]",                                         // 111      중복되지 않는 값
+        // "[CustomTwoWay][1, 1, 1, 1, 2, 4, 8, 10]", "[2, 4, 8, 10, 1, 1, 1, 1]",              // 111      중복되지 않는 값
+        "[CustomRange][4294967296", "4294967296", "4294967296]", "[5", "6", "149", "150]",   // 4, 151   이하, 이상
+        // "[CustomRange][4294967296", "4294967296", "4294967296]", "[-10", "-9", "9", "10]",   // -11, 11  이하, 이상
+    });
+#else
+    int dataTypeTemp = dataType;
+    QStringList originDataTemp = originData;
+#endif
+
+
+#if 0
+    qDebug() << "*************************************************************************************************";
+    qDebug() << "[" << signalName << "] :" << dataTypeTemp;
+    qDebug() << "\t OriginData  :" << originDataTemp;
+    qDebug() << "\n";
+#endif
+
+    QMap<int, QStringList> dataInfo = isCustomKeywordInfo(originDataTemp);
+    bool multiKeyword = (dataInfo.size() > 1);
+    QStringList notUsedData;
+
+    if (multiKeyword) {
+        notUsedData = isMultiValidUniqueValue(dataTypeTemp, dataInfo);
+    } else {
+        notUsedData = isValidUniqueValue(dataTypeTemp, dataInfo);
+    }
+
+#if 0
+    qDebug() << "\t notUsedData :" << notUsedData;
+    qDebug() << "*************************************************************************************************";
+#endif
+
+    return notUsedData;
 }
 
 void SignalDataManager::isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
@@ -609,7 +1168,7 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
     } else {
         // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 변환 [timeout, crc]
         checkDataList[foundIndex] = changeStr;
-        qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
+        // qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
     }
 }
 
@@ -709,7 +1268,7 @@ QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(con
     }
 
     QString matchingEnum = matchingValue;
-    isConvertedSignalData(true, signalName, valueEnum, matchingEnum);
+    isConvertedSignalDataValueEnum(true, signalName, valueEnum, matchingEnum);
     if (matchingEnum.size() > 0) {
         originData.removeAll(originTimeOut);
         originData.removeAll(checkTimeOut.toLower());
@@ -753,44 +1312,6 @@ bool SignalDataManager::isExceptionSignal(const QString& signalName) {
         return true;
     }
     return false;
-}
-
-bool SignalDataManager::isMultiKeywordData(const QStringList& dataList) {
-    QRegularExpression regex(R"(\[([^\[\]]+)\])");  // 정규식 : 대괄호
-    QStringList keywordList;
-
-    // DataList : "[CustomMoreThanEqual][1279]", "[1280]", "[CustomUnder][1280]", "[1279]"
-    for (const QString& item : dataList) {
-        QRegularExpressionMatchIterator it = regex.globalMatch(item);
-        while (it.hasNext()) {
-            QRegularExpressionMatch match = it.next();
-            QString captured = match.captured(1);
-            if (captured.contains(QRegularExpression("[A-Za-z]"))) {  // 정규식 : 문자
-                keywordList.append(QString("[%1]").arg(captured));    // [CustomMoreThanEqual], [CustomUnder]
-            }
-        }
-    }
-
-    int multiCount = 0;
-    if (keywordList.size() > 1) {
-        QList<QPair<QString, int>> customKeywordPatternList =
-            ExcelUtil::instance().data()->isKeywordPatternInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max));
-        for (const auto& keyword : keywordList) {
-            for (const auto& pattern : customKeywordPatternList) {
-                if (keyword == pattern.first) {
-                    multiCount++;
-                }
-            }
-
-            if (multiCount > 1) {
-                break;
-            }
-        }
-    }
-
-    // qDebug() << "isMultiKeywordData :" << KeywordList << "<-" << dataList;
-
-    return (multiCount > 1);
 }
 
 QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
@@ -855,18 +1376,7 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
             valueEnum = currDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
 
             QString matchingValue;
-            if (valueEnum.size() == 0) {
-                if (isMultiKeywordData(originData)) {
-                    qDebug() << "[Multi-keyword data deletes the origin data]";
-                    qDebug() << "\t Signal     :" << signalName;
-                    qDebug() << "\t dataType   :" << dataType;
-                    qDebug() << "\t OriginData :" << originData;
-                    qDebug() << "\t valueEnum  :" << valueEnum;
-                    originData.clear();
-                }
-            } else {
-                notUsedEnum = isConvertedSignalData(true, signalName, valueEnum, matchingValue);
-            }
+            notUsedEnum = isConvertedSignalDataValueEnum(true, signalName, valueEnum, matchingValue);
 
             QStringList temp;
             for (auto& data : convertData) {
@@ -942,12 +1452,32 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
     QMap<QString, SignalData> newSignalDataInfo;
 
     for (const auto& signalName : currentSignalDataInfo.keys()) {
-        if ((ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED)) &&
-            (ivis::common::isCompareString(signalName, SFC_IGN_ELAPSED) == false)) {
+        bool ignElaspedSingalContains = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
+
+        if ((ignElaspedSingalContains) && (ivis::common::isCompareString(signalName, SFC_IGN_ELAPSED) == false)) {
+            // SignalName : SFC_IGN_ELAPSED* 인 경우 예외 처리
             // qDebug() << "\t Skip IgnElapsed Signal :" << signalName;
             continue;
         }
+#if 0
         newSignalDataInfo[signalName] = currentSignalDataInfo[signalName];
+#else
+        SignalData signalData = currentSignalDataInfo[signalName];
+        int dataType = signalData.getDataType();
+        bool init = false;
+        int keywordType = signalData.getKeywordType();
+        QStringList originData = signalData.getOriginData();
+        QStringList convertData = signalData.getConvertData();
+        QStringList valueEnum = signalData.getValueEnum();
+        QStringList notUsedEnum = signalData.getNotUsedEnum();
+        QStringList precondition = signalData.getPrecondition();
+
+        if ((ignElaspedSingalContains == false) && (valueEnum.size() == 0) && (notUsedEnum.size() == 0)) {
+            notUsedEnum = isConvertedSignalDataNormal(signalName, dataType, originData);
+        }
+        newSignalDataInfo[signalName] =
+            SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
+#endif
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
@@ -1026,8 +1556,8 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                         break;
                     }
                     case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                        // precondition = convertData;
-                        precondition.clear();
+                        precondition = convertData;
+                        convertData.clear();
                         notUsedEnum.clear();
                         break;
                     }
@@ -1138,7 +1668,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
                     }
                 } else {
                     QString tempMatchingValue;  // not used
-                    convertData = isConvertedSignalData(true, signalName, valueEnum, tempMatchingValue);
+                    convertData = isConvertedSignalDataValueEnum(true, signalName, valueEnum, tempMatchingValue);
                     isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
                 }
                 keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(true, keywordType);

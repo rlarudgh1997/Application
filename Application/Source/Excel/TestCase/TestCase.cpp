@@ -33,6 +33,8 @@ TestCase::TestCase() {
 }
 
 TestCase::~TestCase() {
+    stop();
+
 #if defined (USE_TEST_CASE_THREAD)
     if (mThread) {
         if (mThread->isRunning()) {
@@ -53,6 +55,8 @@ bool TestCase::start(const QStringList& arguments) {
         drawTerminalMenu(ExcuteTypeHelpMode, QStringList());
         return false;
     }
+
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, true);
 
 #if defined (USE_TEST_CASE_THREAD)
     controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
@@ -75,6 +79,90 @@ bool TestCase::start(const QStringList& arguments) {
     return true;
 }
 
+void TestCase::stop() {
+    qDebug() << "TestCase::stop()";
+
+    QStringList processList = {
+        QString("%1/CaseGen/tests/run.py").arg(ivis::common::APP_PWD()),
+        // QString("python -O %1/CaseGen/tests/run.py").arg(ivis::common::APP_PWD()),
+        "run.py",
+        "python",
+        "python3",
+    };
+
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
+
+    QString scriptPath = processList.at(0);
+    QProcess process;
+    process.start("pgrep", QStringList() << "-f" << scriptPath);
+    process.waitForFinished();
+
+    QString output = process.readAllStandardOutput();
+    QStringList pidList = output.split("\n", Qt::SkipEmptyParts);
+
+
+    for (const QString& pid : pidList) {
+        qDebug() << "\t Running Process :" << pid;
+        QProcess::execute("kill", QStringList() << "-9" << pid);
+    }
+
+#if 0
+#if 1
+    QStringList allPids;
+
+    for (const QString& processName : processList) {
+        QProcess process;
+        process.start("pgrep", QStringList() << "-f" << processName);  // <-- 핵심 수정
+        process.waitForFinished();
+
+        QString output = process.readAllStandardOutput();
+        QStringList pidList = output.split("\n", Qt::SkipEmptyParts);
+
+        qDebug() << "Found for" << processName << ":" << pidList;
+
+        allPids.append(pidList);  // 여러 프로세스 합쳐서 한 번에 종료
+    }
+
+    // 중복 제거
+    allPids.removeDuplicates();
+
+    QString currentUser = qgetenv("USER");
+
+    for (const QString& pid : allPids) {
+        QProcess userCheck;
+        userCheck.start("ps", QStringList() << "-o" << "user=" << "-p" << pid);
+        userCheck.waitForFinished();
+        QString owner = userCheck.readAllStandardOutput().trimmed();
+
+        if (owner == currentUser) {
+            qDebug() << "\tTerminating PID:" << pid;
+            // QProcess::execute("kill", QStringList() << "-9" << pid);
+            QProcess::execute("sudo", QStringList() << "kill" << "-9" << pid);
+        } else {
+            qDebug() << "\tSkip (not owner): PID" << pid << "| Owner:" << owner;
+        }
+    }
+#else
+    QString pattern = "python -O /home/ivis/900_Code/610_Application/tc_creator/deploy_x86/CaseGen/tests/run.py";
+    QProcess findProc;
+    findProc.start("pgrep", QStringList() << "-f" << pattern);
+    findProc.waitForFinished();
+
+    QStringList pids = QString(findProc.readAllStandardOutput()).split("\n", Qt::SkipEmptyParts);
+    for (const QString& pid : pids) {
+        qDebug() << "Killing PID:" << pid;
+
+        QStringList log;
+        ivis::common::ExcuteProgram process(false);
+        bool result = process.start(QString("pkill -9 -ef %1").arg(pid), log);
+
+        // QProcess::execute("kill", QStringList() << "-9" << pid);
+        // QProcess::execute("sudo", QStringList() << "kill" << "-9" << pid);
+    }
+#endif
+#endif
+}
+
 #if defined (USE_TEST_CASE_THREAD)
 void TestCase::runThread() {
     // const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
@@ -90,8 +178,11 @@ void TestCase::runThread() {
         int nextType = excuteTestCase(excuteType);
         excuteType = nextType;
         if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
+            // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
             excuteType = ExcuteTypeInvalid;
             emit signalTestCaseCompleted(nextType, (nextType != ExcuteTypeFailed));
+        } else if (nextType == ExcuteTypeStop) {
+            emit signalTestCaseCompleted(nextType, true);
         } else if (nextType == ExcuteTypeExit) {
             emit ControlManager::instance().data()->signalExitProgram();
             break;
@@ -140,6 +231,11 @@ void TestCase::controlThread(QThread* thread, QWaitCondition& waitCondition, QMu
 #endif
 
 int TestCase::excuteTestCase(const int& excuteType) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool() == false) {
+        qDebug() << "TestCase : Stop";
+        return ExcuteTypeStop;
+    }
+
     bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     int nextType = ExcuteTypeFailed;
 
@@ -472,9 +568,9 @@ void TestCase::terminateApplicaton() {
     qDebug() << "Terminate Applicaton :" << appName << appFilePath;
     qDebug() << "\t PID :" << currentPid << pidList;
 
-    for (const QString &pid : pidList) {
+    for (const QString& pid : pidList) {
         if (pid.toLongLong() != currentPid) {
-            qDebug() << "\t Terminate PID:" << pid;
+            qDebug() << "\t Terminate PID :" << pid;
             QProcess::execute("kill", QStringList() << "-9" << pid);
         }
     }

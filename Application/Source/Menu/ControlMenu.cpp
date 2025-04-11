@@ -427,6 +427,8 @@ void ControlMenu::updateGenTCInfo(const QVariantList& info) {
         return;
     }
 
+    // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, true);
+
     bool result = info.at(0).toBool();
     int currentCount = info.at(1).toInt();
     int totalCount = info.at(2).toInt();
@@ -776,6 +778,8 @@ void ControlMenu::stopProcess() {
 }
 
 void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
+    qDebug() << "cancelScript :" << script << watcher;
+
     if (script) {
         const QStringList killProcess = QStringList({
             "python",
@@ -788,11 +792,12 @@ void ControlMenu::cancelScript(const bool& script, const bool& watcher) {
             "sfc_validator",
             "altonservice",
         });
+
         for (const auto& info : killProcess) {
             QStringList log;
             ivis::common::ExcuteProgram process(false);
             bool result = process.start(QString("pkill -9 -ef %1").arg(info), log);
-            qDebug() << "Terminate Process :" << info << ", Result :" << ((result) ? ("Success") : ("fail"));
+            qDebug() << "Terminate Process :" << info << "->" << ((result) ? ("Success") : ("fail"));
         }
     }
 
@@ -956,7 +961,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeGenTCModule:
         case ivis::common::EventTypeEnum::EventTypeGenTC: {
-            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenTCPython).toBool()) {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGeneratePython).toBool()) {
                 updateSelectModuleList(type, QVariantList());
             } else {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type);
@@ -1031,13 +1036,17 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel: {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGeneratePython).toBool() == false) {
+                sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeGenerateCancel);
+            }
+
             bool runScriptState = getData(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
             if (runScriptState) {
                 updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, false);
                 updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, true);
                 cancelScript(true, false);
-            } else {
-                qDebug() << "Skip Cancel : Script is not running !!!!!!";
+            // } else {
+            //     qDebug() << "Skip Cancel : Script is not running !!!!!!";
             }
             break;
         }

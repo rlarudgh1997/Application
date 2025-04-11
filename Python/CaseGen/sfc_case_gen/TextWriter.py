@@ -123,6 +123,10 @@ class TextWriter:
             self.json_data["cases"] = {
                 ", ".join(item): list(item) for item in self.instance.satisfy_case
             }
+            self.json_data["notTriggerPreconditionSet"] = {
+                ", ".join(item): list(item) for item in self.instance.not_trigger_case
+            }
+            self.json_data["NotTriggerPreconditionSetSize"] = self.instance.not_trigger_case_size
             self.json_data["CaseSize"] = self.instance.satisfy_case_size
             self.json_data["InputSignalList"] = signal_name_list
             self.json_data["PreconditionOrder"] = user_input_order_list

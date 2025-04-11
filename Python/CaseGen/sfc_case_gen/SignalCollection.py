@@ -14,8 +14,9 @@ class SignalCollection:
         self.signals = signal_objects
         self.all_case = []
         self.satisfy_case = []
-        self.others_case = []
+        self.not_trigger_case = []
         self.satisfy_case_size = 0
+        self.not_trigger_case_size = 0
 
     def parse_input_string(self, input_str):
         signal_objects = {}
@@ -87,6 +88,19 @@ class SignalCollection:
         else:
             print("[Error] Not a available input data set: ")
 
+    def generate_not_trigger_combinations(self):
+        data_hex_lists = [
+            (self.signals[key].InputPreconditionHex if self.signals[key].InputDataHex == ['[Empty]'] else ['[Empty]'])
+            for key in self.signals
+        ]
+        if data_hex_lists:
+            self.not_trigger_case = list(itertools.product(*data_hex_lists))
+            self.not_trigger_case_size = len(self.not_trigger_case)
+            if __debug__:
+                print(f"조건 만족 조합수: {self.not_trigger_case}")
+        else:
+            print("[Error] Not a available input data set: ")
+
     def get_signals(self):
         return self.signals
 
@@ -96,5 +110,5 @@ class SignalCollection:
     def get_satisfy_case(self):
         return self.satisfy_case
 
-    def get_others_case(self):
-        return self.others_case
+    def get_not_trigger_case(self):
+        return self.not_trigger_case

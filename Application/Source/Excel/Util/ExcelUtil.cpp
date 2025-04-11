@@ -150,9 +150,10 @@ int ExcelUtil::isDescriptionValueCount() {
     if (descDataInfo.size() >= static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
         valueCount = descDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)).toInt();
     }
-    if (valueCount == 0) {
-        valueCount = 1;
-    }
+    // Default : 0
+    // if (valueCount == 0) {
+    //     valueCount = 1;
+    // }
     // qDebug() << "isDescriptionValueCount :" << descDataInfo.size() << valueCount;
 
     return valueCount;
@@ -997,8 +998,8 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                     int insertIndex = 0;
                     if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
-                            insertIndex = 3;             // Befor Index   : ConfigSignal
-                            appendText = "1";            // Default Value : 1
+                            insertIndex = 3;   // Befor Index   : ConfigSignal
+                            appendText = "0";  // Default Value : 0
                         } else {
                             continue;
                         }

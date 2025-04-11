@@ -80,7 +80,7 @@ private:
     ConvertKeywordInfo interpretInputValueKeyword(const QString& signal, const QString& value);
     QString findVehicleSignalElseTimeoutCrcValue(const QString& vehicleSignal, const QString& elseTimeoutCrc);
     QList<QPair<QString, QPair<QStringList, QStringList>>> convertSheetKeyword(
-        const QPair<QStringList, QStringList>& inputDataPairInfo, const int& currentSheetIndex);
+        const QPair<QStringList, QStringList>& inputDataPairInfo, const QString& genTypeStr);
     QList<QPair<QString, QPair<QStringList, QStringList>>> getSheetSignalDataInfo(const QString& name, const QString& data);
     QString convertCustomKeywordType(const int& keywordType);
     void appendCurSheetData(const QString& tcName, const QString& resultName, const QString& caseName,
@@ -106,9 +106,13 @@ private:
     QList<ResultInfo> mergeAndCleanResultList(const QList<ResultInfo>& resultList);
     int getMergeKeywordType(const QString& data);
     inline QString constructMergeKeywords(const QString& additionalKeyword, const QString& baseKeyword) const;
-    QPair<QStringList, QStringList> getMergedInputDataInfo(const QPair<QStringList, QStringList>& origin,
+    QPair<QStringList, QStringList> getMergedInputDataInfo(const QString& genTypeStr,
+                                                           const QPair<QStringList, QStringList>& origin,
                                                            const QPair<QStringList, QStringList>& sheet);
     QString mergeCaseName(const QString& prefix, const QString& suffix);
+    QString getIgnPrefixString(const QString& signal);
+    QStringList getSheetHasMultiResult(const QString& tcName, const QString& result);
+    QString deleteEasterEggKeyword(const QString& keyword);
 };
 
 #endif  // CONVERT_DATA_MANAGER_H

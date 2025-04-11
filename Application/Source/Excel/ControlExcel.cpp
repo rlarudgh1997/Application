@@ -1137,8 +1137,8 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
 }
 
 void ControlExcel::slotGenTCInfo(const bool& result, const int& current, const int& total, const QString& text) {
-    // QVariantList info({result, current, total, text});
-    // sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeUpdateGenTCInfo, info);
+    QVariantList info({result, current, total, text});
+    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeUpdateGenTCInfo, info);
 }
 
 void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {
@@ -1280,6 +1280,10 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
         }
         case ivis::common::EventTypeEnum::EventTypeGenTC: {
             updateStartTestCase();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeGenerateCancel: {
+            TestCase::instance().data()->stop();
             break;
         }
         default: {

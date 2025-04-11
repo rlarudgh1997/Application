@@ -86,12 +86,17 @@ private:
     QString isSFCCommonEnum(const QString& info, const QString& prefix);
     QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
                                                  const QMap<int, QStringList>& fileList, int& dataType);
-    QStringList isConvertedSignalData(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
-                                      QString& matchingValue);
+    QStringList isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
+                                               QString& matchingValue);
+    QList<QStringList> parsingKeywordBlocks(const QStringList& originData);
+    QMap<QString, QStringList> parsingKeywordData(const QStringList& originData);
+    QMap<int, QStringList> isCustomKeywordInfo(const QStringList& originData);
+    QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
+    QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
+    QStringList isConvertedSignalDataNormal(const QString& signalName, const int& dataType, const QStringList& originData);
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
     bool isExceptionSignal(const QString& signalName);
-    bool isMultiKeywordData(const QStringList& dataList);
     void isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo, QStringList& checkDataList);
 #if 0
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,
