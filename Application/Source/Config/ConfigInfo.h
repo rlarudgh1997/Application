@@ -123,23 +123,14 @@ private:
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
                                                           "Inters", "Outputs", "Configs"})));
-#if defined(USE_SHEET_COLUMN_OLD)
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
-            "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description", "Config_Signal", "Data"})));
-        mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
-            "ConfigTypeOtherTitle", QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result",
-                                                           "Case", "Input_Signal", "Input_Data", "Output_Signal", "isInitialize",
-                                                           "Output_Value", "Config_Signal", "Data", "Negative Test"})));
-#else
-        mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
-            // "ConfigTypeDescTitle", QVariant(QVariantList({"test", "version", "description"})));
             "ConfigTypeDescTitle",
-            QVariant(QVariantList({"test", "version", "description", "Value_Count", "Config_Signal", "Data"})));
+            QVariant(QVariantList({"test", "version", "description", "Value_Count", "PreconditionCount", "Config_Signal",
+                                   "Data"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
             QVariant(QVariantList({"Check", "TCName", "GenType", "VehicleType", "Config", "Result", "Case", "Input_Signal",
                                    "Input_Data", "Output_Signal", "isInitialize", "Output_Value"})));
-#endif
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));

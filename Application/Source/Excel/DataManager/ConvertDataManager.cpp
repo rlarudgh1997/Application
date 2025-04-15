@@ -561,7 +561,8 @@ bool ConvertDataManager::convertInputSignalSheetKeyword() {
                 // else {
                 // 기존 output 저장
                 outputDataInfoList = curOutputDataInfoList;
-                ExcelDataManager::instance().data()->updateOutputDataInfo(sheetIndex, tcNameStr, resultStr, outputDataInfoList);
+                ExcelDataManager::instance().data()->updateOutputDataInfo(sheetIndex, tcNameStr,
+                                                                          deleteEasterEggKeyword(resultStr), outputDataInfoList);
             }
         }
 

@@ -93,7 +93,7 @@ private:
     QMap<int, QStringList> isCustomKeywordInfo(const QStringList& originData);
     QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
-    QStringList isConvertedSignalDataNormal(const QString& signalName, const int& dataType, const QStringList& originData);
+    QStringList isConvertedSignalDataNormal(const QString& signalName, int dataType, QStringList originData);
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
     bool isExceptionSignal(const QString& signalName);

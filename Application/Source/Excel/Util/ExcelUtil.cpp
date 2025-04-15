@@ -150,13 +150,22 @@ int ExcelUtil::isDescriptionValueCount() {
     if (descDataInfo.size() >= static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
         valueCount = descDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)).toInt();
     }
-    // Default : 0
-    // if (valueCount == 0) {
-    //     valueCount = 1;
-    // }
     // qDebug() << "isDescriptionValueCount :" << descDataInfo.size() << valueCount;
 
     return valueCount;
+}
+
+int ExcelUtil::isDescriptionPreconditionCount() {
+    const auto descDataInfo = isDescriptionDataInfo();
+    int preconditionCount = 0;
+
+    if (descDataInfo.size() >= static_cast<int>(ivis::common::ExcelSheetTitle::Description::PreconditionCount)) {
+        preconditionCount =
+            descDataInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Description::PreconditionCount)).toInt();
+    }
+    // qDebug() << "isDescriptionPreconditionCount :" << descDataInfo.size() << preconditionCount;
+
+    return preconditionCount;
 }
 
 QString ExcelUtil::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
@@ -999,7 +1008,10 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                     if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
                             insertIndex = 3;   // Befor Index   : ConfigSignal
-                            appendText = "0";  // Default Value : 0
+                            appendText = "";   // Default Value : 0
+                        } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::PreconditionCount)) {
+                            insertIndex = 3;   // Befor Index   : ConfigSignal
+                            appendText = "";   // Default Value : 0
                         } else {
                             continue;
                         }

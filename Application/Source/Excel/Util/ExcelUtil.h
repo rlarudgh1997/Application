@@ -77,6 +77,7 @@ public:
                                                                 const bool& toUpper = false);
     QStringList isDescriptionDataInfo();
     int isDescriptionValueCount();
+    int isDescriptionPreconditionCount();
     QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex);
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);

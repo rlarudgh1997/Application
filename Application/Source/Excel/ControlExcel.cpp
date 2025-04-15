@@ -366,7 +366,7 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     checkTimer.check("updateExcelSheet : auto complete data");
 
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescConfigVisible).toBool() == false) {
-        descTitle.resize(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount) + 1);
+        descTitle.resize(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal) - 1);
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, descTitle);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, configTitle);

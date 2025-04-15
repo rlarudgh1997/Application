@@ -72,8 +72,10 @@ int SignalDataManager::isSignalType(const QString& signalName) {
         }
     } else if (signalName.trimmed().startsWith("SFCFuel.Fuel_System.")) {
         signalType = static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcExternal);
-    } else if (signalName.trimmed().startsWith("SFC_Common_Enum")) {
+    } else if (signalName.trimmed().startsWith("SFC_Common_Enum.")) {
         signalType = static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommon);
+    } else if (signalName.trimmed().startsWith("SFC_Common_Enum_CV.")) {
+        signalType = static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommonCV);
     } else {
     }
     return signalType;
@@ -81,44 +83,61 @@ int SignalDataManager::isSignalType(const QString& signalName) {
 
 QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
+    bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     int signalType = isSignalType(signalName);
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QStringList signalSplit = signalName.split(".");
     QString moduleName;
     QStringList fileList;
 
-    if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcExternal)) {
-        fileList.append(QString("%1/SFC/extension/external.yml").arg(sfcModelPath));
-    } else if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcEvent)) {
-        fileList.append(QString("%1/SFC/extension/Event.yml").arg(sfcModelPath));
-    } else if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommon)) {
-        QString sfcCommonEnum = QString("SFC_Common_Enum%1").arg((appModePV) ? ("") : ("_CV"));
-        fileList.append(QString("%1/SFC/extension/%2.yml").arg(sfcModelPath).arg(sfcCommonEnum));
-    } else if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcException)) {
-        moduleName = signalSplit.at(2);  // signalName : SFC.Extension.{MODULE_NAME}.* | SFC.Private.{MODULE_NAME}.*
-    } else if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Sfc)) {
-        if (signalSplit.size() > 1) {
-            moduleName = signalSplit.at(1);  // signalName : SFC.{MODULE_NAME}.*
-        } else {
-            moduleName = signalSplit.at(0).toUpper();  // signalName : ABS_CV ->  Description 자동완성 참조 파일(대문자 변경)
+    switch (signalType) {
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcExternal): {
+            fileList.append(QString("%1/SFC/extension/external.yml").arg(sfcModelPath));
+            break;
         }
-    } else {
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcEvent): {
+            fileList.append(QString("%1/SFC/extension/Event.yml").arg(sfcModelPath));
+            break;
+        }
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommon): {
+            fileList.append(QString("%1/SFC/extension/SFC_Common_Enum.yml").arg(sfcModelPath));
+            break;
+        }
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommonCV): {
+            fileList.append(QString("%1/SFC/extension/SFC_Common_Enum_CV.yml").arg(sfcModelPath));
+            break;
+        }
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcException): {
+            // signalName : SFC.Extension.{MODULE_NAME}.* | SFC.Private.{MODULE_NAME}.*
+            moduleName = signalSplit.at(2);
+            break;
+        }
+        case static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Sfc): {
+            if (signalSplit.size() > 1) {
+                moduleName = signalSplit.at(1);  // signalName : SFC.{MODULE_NAME}.*
+            } else {
+                moduleName = signalSplit.at(0).toUpper();  // signalName : ABS_CV ->  Description 자동완성 참조 파일(대문자 변경)
+            }
+            break;
+        }
+        default: {
+            break;
+        }
     }
 
     if (moduleName.size() > 0) {
         QStringList sfcTypeList = QStringList();
 
-        if (appModePV) {
-            sfcTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
-        } else {
+        if (appModeCV) {
             sfcTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
             moduleName.replace("_New", "_CV");  // ModuleName : ADAS_Driving_New -> ADAS_Driving_CV
+        } else {
+            sfcTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
         }
 
         for (const auto& type : sfcTypeList) {
             fileList.append(QString("%1/SFC/%2/%3/%4.yml").arg(sfcModelPath).arg(type).arg(moduleName).arg(moduleName));
-            if (appModePV == false) {
+            if (appModeCV) {
                 fileList.append(QString("%1/SFC/%2/%3_CV/%4_CV.yml").arg(sfcModelPath).arg(type).arg(moduleName).arg(moduleName));
             }
         }
@@ -131,14 +150,16 @@ QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
     QString ymlFile;
     for (const auto& file : fileList) {
         if (QFile::exists(file) == false) {
-            continue;
+            continue;    // 파일이 존재하지 않으면 리스트 파일 사용 하지 않음
         }
-        // PV : list.at(0) 파일을 YML 로 사용
-        // CV : list.at(0 ~ max) 파일중 "_CV" 가 있는 첫번째 파일 사용, 아닌 경우 마지막 파일을 사용
         ymlFile = file;
         // qDebug() << "\t Yml :" << ymlFile;
-        if ((appModePV) || (file.contains("_CV"))) {
-            break;
+
+        if (appModeCV == false) {
+            break;    // PV : fileList.at(0) 파일 사용
+        }
+        if (file.contains("_CV")) {
+            break;    // CV : fileList.at(0 ~ max) 파일중 "_CV" 가 있는 파일 사용
         }
     }
     // qDebug() << "\t Yml :" << (ymlFile.size() > 0) << ymlFile;
@@ -208,10 +229,13 @@ QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signal
         fileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
     }
 
-    // qDebug() << "isSignalFileList :" << signalName << vehicleType;
-    // for (const auto& key : fileList.keys()) {
-    //     qDebug() << "\t File[" << key << "] :" << fileList[key];
-    // }
+#if 0
+    qDebug() << "isSignalFileList :" << signalName << vehicleType;
+    for (const auto& key : fileList.keys()) {
+        qDebug() << "\t File[" << key << "] :" << fileList[key];
+    }
+#endif
+
     return fileList;
 }
 
@@ -232,6 +256,12 @@ QString SignalDataManager::isSFCCommonEnum(const QString& info, const QString& p
         // ./Model/SFC/CD/Settings/Settings.yml
         // - SFC.Extension.Settings.Inter_WelcomeSoundSetStatus:
         //   valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+
+        // ./Model/SFC/AV/Navigation_TBT/Navigation_TBT.yml
+        // - SFC.Navigation_TBT.Constant.NaviDistToTurn1.Stat
+        //   valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+
+        // "valueEnum:" 지우고, 공백(" ")을 지우고 SFC_Common_Enum.Off_Value_EnumValue 사용
 
         commonEnum = exceptionValueEnum[1].remove(" ");
         // qDebug() << "isSFCCommonEnum :" << commonEnum;
@@ -268,7 +298,8 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
     int startAppendIndex = 2;
     if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)) {
         startAppendIndex = 3;
-    } else if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommon)) {
+    } else if ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommon)) ||
+               (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::SfcCommonCV))) {
         startAppendIndex = 1;
     } else {
     }
@@ -416,19 +447,12 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
     QStringList valueEnum = sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
     QString sfcCommonSignal;
 
-#if 0
-    sfcCommonSignal =
-        ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Sfc)) && (valueEnum.size() == 1))
-            ? (valueEnum.at(0)) : ("");
-#else
     if (valueEnum.size() == 1) {
         if ((valueEnum.at(0).trimmed().startsWith("SFC_Common_Enum.")) ||
             (valueEnum.at(0).trimmed().startsWith("SFC_Common_Enum_CV."))) {
             sfcCommonSignal = valueEnum.at(0);
         }
     }
-#endif
-
     if (sfcCommonSignal.size() > 0) {
         fileList = isSignalFileList(sfcCommonSignal, vehicleType);
         QMap<int, QStringList> sfcCommonDataInfo = isParsingFileDataInfo(sfcCommonSignal, inputData, fileList, dataType);
@@ -437,11 +461,11 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
 #if 0
         qDebug() << "=================================================================================================";
         qDebug() << "isSignalDataList";
-        qDebug() << "\t Signal      :" << signalName << "->" << sfcCommonSignal;
-        qDebug() << "\t DataTyp     :" << dataType;
-        qDebug() << "\t FileList    :" << fileList;
-        qDebug() << "\t 1 ValueEnum :" << valueEnum;
-        qDebug() << "\t 2 ValueEnum :" << sfcCommonValueEnum;
+        qDebug() << "\t Signal     :" << signalName << "->" << sfcCommonSignal;
+        qDebug() << "\t DataTyp    :" << dataType;
+        qDebug() << "\t FileList   :" << fileList;
+        qDebug() << "\t ValueEnum  :" << valueEnum;
+        qDebug() << "\t CommonEnum :" << sfcCommonValueEnum;
         qDebug() << "=================================================================================================\n\n";
 #endif
     }
@@ -566,7 +590,7 @@ QMap<QString, QStringList> SignalDataManager::parsingKeywordData(const QStringLi
     }
 
     // for (const auto& key : keywordDataMap.keys()) {
-    //     qDebug() << "KeywordDataMap[" << key << "] :" << keywordDataMap[key];
+    //     qDebug() << "\t KeywordDataMap[" << key << "] :" << keywordDataMap[key];
     // }
     return keywordDataMap;
 }
@@ -591,9 +615,13 @@ QMap<int, QStringList> SignalDataManager::isCustomKeywordInfo(const QStringList&
 
     QMap<int, QStringList> dataInfo;
     if (customKeywordInfo.size() == 0) {
-        qDebug() << "Keyword Group - Invalid";
+        // qDebug() << "\t Keyword Group - Invalid";
         dataInfo[static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)] = originData;
         return dataInfo;
+    } else if (customKeywordInfo.size() == 1) {
+        // qDebug() << "\t Keyword Group - Single";
+    } else {
+        // qDebug() << "\t Keyword Group - Multi";
     }
 
     QList<QPair<QString, int>> keywordPattern =
@@ -657,7 +685,7 @@ QMap<int, QStringList> SignalDataManager::isCustomKeywordInfo(const QStringList&
     qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     for (const auto& key : customKeywordInfo.keys()) {
         auto data = customKeywordInfo[key];
-        qDebug() << "\t Keyword    : " << key;
+        qDebug() << "\t " << key;
         qDebug() << "\t\t First  : " << data.first;
         qDebug() << "\t\t Second : " << data.second;
     }
@@ -899,12 +927,15 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     const int maxTryCount = 1000;
     QStringList validData;
 
-    if (dataInfo.isEmpty()) return validData;
+    if (dataInfo.isEmpty()) {
+        return validData;
+    }
 
     bool isUnsigned = (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64));
     bool isSigned = (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64));
 
-    if (!isUnsigned && !isSigned) {
+    if ((isUnsigned == false) && (isSigned == false)) {
+        // qDebug() << "Error - isMultiValidUniqueValue : 1";
         return validData;
     }
 
@@ -926,7 +957,10 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
         }
     }
 
-    if (allIntValues.isEmpty()) return validData;
+    if (allIntValues.isEmpty()) {
+        // qDebug() << "Error - isMultiValidUniqueValue : 2";
+        return validData;
+    }
 
     qint64 minVal = *std::min_element(allIntValues.begin(), allIntValues.end());
     qint64 maxVal = *std::max_element(allIntValues.begin(), allIntValues.end());
@@ -936,14 +970,16 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     qint64 maxRange = maxVal + 1000;
 
     // unsigned 타입이면 반드시 양수만
-    if (isUnsigned || (isSigned && !hasNegativeInput)) {
+    if ((isUnsigned) || (isSigned && (hasNegativeInput == false))) {
         minRange = std::max(minRange, static_cast<qint64>(0));
     }
 
     for (int i = 0; i < maxTryCount; ++i) {
         qint64 candidateInt = QRandomGenerator::global()->bounded(minRange, maxRange + 1);
         QString candidateStr = QString::number(candidateInt);
-        if (allExisting.contains(candidateStr)) continue;
+        if (allExisting.contains(candidateStr)) {
+            continue;
+        }
 
         bool isValid = true;
 
@@ -1012,18 +1048,12 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     return validData;
 }
 
-QStringList SignalDataManager::isConvertedSignalDataNormal(const QString& signalName, const int& dataType,
-                                                           const QStringList& originData) {
-    if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
-        // qDebug() << "\t isConvertedSignalDataNormal - Skip Signal :" << signalName;
-        return QStringList();
-    }
-
-#if 0
-    // int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
-    int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
-    // int dataTypeTemp = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
-    QStringList originDataTemp({
+QStringList SignalDataManager::isConvertedSignalDataNormal(const QString& signalName, int dataType, QStringList originData) {
+#if 0   // Test Code
+    // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
+    // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
+    dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
+    originData = QStringList({
         // "2.1", "3.245", "500.123",                                                           // 1.23     중복되지 않는 값
         // "-200", "300", "500",                                                                // 111      중복되지 않는 값
         // "200", "300", "500",                                                                 // 111      중복되지 않는 값
@@ -1037,32 +1067,67 @@ QStringList SignalDataManager::isConvertedSignalDataNormal(const QString& signal
         "[CustomRange][4294967296", "4294967296", "4294967296]", "[5", "6", "149", "150]",   // 4, 151   이하, 이상
         // "[CustomRange][4294967296", "4294967296", "4294967296]", "[-10", "-9", "9", "10]",   // -11, 11  이하, 이상
     });
-#else
-    int dataTypeTemp = dataType;
-    QStringList originDataTemp = originData;
 #endif
 
+    if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
+        // signalName = "SFC.Private.IGNElapsed.Elapsed"
+        // qDebug() << "\t isConvertedSignalDataNormal - Skip Signal :" << signalName;
+        return QStringList();
+    }
+
+    if (originData.size() == 1) {
+        // originData = "MESSAGE_TIMEOUT" or "CRC_ERROR"
+        const QList<int> checkExceptionData = {
+            static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout),
+            static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc),
+            // static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare),
+        };
+        for (const auto& keywordType : checkExceptionData) {
+            if (originData.contains(ExcelUtil::instance().data()->isKeywordString(keywordType))) {
+                return QStringList();
+            }
+        }
+    }
+
+    QStringList currentData;
+
+    const QList<int> removeExceptionString = {
+        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger),
+        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout),
+        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc),
+        // static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare),
+    };
+    for (auto d : originData) {
+        // originData = "[CustomNotTrigger][CustomUnder][65535]", "[65534]", "[CustomNotTrigger]MESSAGE_TIMEOUT" ....
+        for (const auto& keywordType : removeExceptionString) {
+            d.remove(ExcelUtil::instance().data()->isKeywordString(keywordType));
+        }
+        currentData.append(d);
+    }
+    currentData.removeAll("");
 
 #if 0
     qDebug() << "*************************************************************************************************";
-    qDebug() << "[" << signalName << "] :" << dataTypeTemp;
-    qDebug() << "\t OriginData  :" << originDataTemp;
+    qDebug() << "signalName :" << signalName;
+    qDebug() << "\t DataType    :" << dataType;
+    qDebug() << "\t OriginData  :" << originData;
+    qDebug() << "\t CurrentData :" << currentData;
     qDebug() << "\n";
 #endif
 
-    QMap<int, QStringList> dataInfo = isCustomKeywordInfo(originDataTemp);
+    QMap<int, QStringList> dataInfo = isCustomKeywordInfo(currentData);
     bool multiKeyword = (dataInfo.size() > 1);
     QStringList notUsedData;
 
     if (multiKeyword) {
-        notUsedData = isMultiValidUniqueValue(dataTypeTemp, dataInfo);
+        notUsedData = isMultiValidUniqueValue(dataType, dataInfo);
     } else {
-        notUsedData = isValidUniqueValue(dataTypeTemp, dataInfo);
+        notUsedData = isValidUniqueValue(dataType, dataInfo);
     }
 
 #if 0
-    qDebug() << "\t notUsedData :" << notUsedData;
-    qDebug() << "*************************************************************************************************";
+    qDebug() << "\t NotUsedData :" << notUsedData;
+    qDebug() << "*************************************************************************************************\n\n";
 #endif
 
     return notUsedData;
@@ -1447,6 +1512,15 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
     signalList.removeAll("");
     dataList.removeAll("");
 
+    // for (int index = 0; index < signalList.size(); ++index) {
+    //     for (const auto& d : dataList) {
+    //         if (d.contains("[CustomNotTrigger]")) {
+    //             qDebug() << index << ". " << signalList.at(index) << ":" << dataList.at(index);
+    //             break;
+    //         }
+    //     }
+    // }
+
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
     QMap<QString, SignalData> newSignalDataInfo;
@@ -1459,9 +1533,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
             // qDebug() << "\t Skip IgnElapsed Signal :" << signalName;
             continue;
         }
-#if 0
-        newSignalDataInfo[signalName] = currentSignalDataInfo[signalName];
-#else
+
         SignalData signalData = currentSignalDataInfo[signalName];
         int dataType = signalData.getDataType();
         bool init = false;
@@ -1477,7 +1549,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
         }
         newSignalDataInfo[signalName] =
             SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum, notUsedEnum, precondition);
-#endif
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
