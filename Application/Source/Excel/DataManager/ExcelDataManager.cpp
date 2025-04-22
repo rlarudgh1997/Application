@@ -1014,7 +1014,7 @@ QPair<QStringList, QStringList> ExcelDataManager::reconstructInputData(const QPa
 }
 
 bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
-    QList<QStringList> configList = isConfigDataList(configName, other, true);
+    QList<QStringList> configList = isConfigDataList(configName, other, false);
     QMap<int, QPair<QStringList, QStringList>> inputMap;
     QStringList signalList;
     QStringList dataList;

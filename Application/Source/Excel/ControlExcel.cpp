@@ -953,10 +953,9 @@ void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
 
 void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
-        qDebug() << "Fail to - Gen TC is running.";
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
-                                       QVariantList({"Gen TC",  "Gen TC is running."}));
+                                       QVariantList({STRING_POPUP_TEST_CASE_RUNNING,  STRING_POPUP_TEST_CASE_RUNNING_TIP}));
         return;
     }
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
@@ -969,8 +968,6 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
     QString directory = QFileInfo(fileInfo.path()).fileName();
     QString editingModule;
     QStringList optionInfo;
-
-#if 1
     QString moduleName;
 
     switch (excelView) {
@@ -1011,59 +1008,30 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
             } else {
                 optionInfo.append(selectModule);
             }
+            fileInfo = QFileInfo();
             break;
         }
         default: {
             optionInfo.append(selectModule);
+            fileInfo = QFileInfo();
             break;
         }
     }
-#else
-    bool excelOpen = (excelView == ivis::common::ViewTypeEnum::ExcelTypeOpen);
-    if (selectModule.size() == 0) {
-        QString moduleName;
 
-        if (excelOpen) {
-            auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-            for (const auto& module : moduleInfo.keys()) {
-                if (module == directory) {
-                    moduleName = directory;
-                    break;
-                }
-            }
-            if (moduleName.size() == 0) {
-                // moduleName = QString("/%1/%2").arg(directory).arg(fileInfo.baseName());
-                moduleName = fileInfo.filePath();
-            }
-
-            // 현재 엑셀 파일이 편집중인 상태 전달
-            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
-                editingModule = moduleName;
-            }
-        } else {
-            moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
-        }
-        optionInfo.append(moduleName);
-    } else {
-        if (excelOpen) {
-            for (const auto& module : selectModule) {
-                if (module == directory) {
-                    editingModule = directory;
-                    break;
-                }
-            }
-        }
-        optionInfo.append(selectModule);
-    }
+#if 0
+    qDebug() << (QString(120, '='));
+    qDebug() << "updateStartTestCase";
+    qDebug() << "\t Editing   :" << editingModule;
+    qDebug() << "\t Option    :" << optionInfo;
+    qDebug() << "\t FilePath  :" << fileInfo.filePath();
+    qDebug() << "\t           :" << fileInfo.path();
+    qDebug() << "\t           :" << fileInfo.fileName();
+    qDebug() << "\t           :" << directory;
+    qDebug() << "\n\n";
 #endif
 
-    // qDebug() << "==========================================================================================";
-    // qDebug() << "updateStartTestCase";
-    // qDebug() << "\t Editing :" << editingModule;
-    // qDebug() << "\t Option  :" << optionInfo;
-
     if (optionInfo.size() > 0) {
-            if (editingModule.size() > 0) {
+        if (editingModule.size() > 0) {
             // 편집중인 엑셀과 다른 모듈을 선택하여 동작시 ExcelData::getSheetData() 의 데이터를
             // 사용 불가(파일 오픈시 ExcelData::setSheetData() 으로 데이터 저장)로 인해
             // 편집중인 데이터는 ExcelData::setEditingSheetData() 에 저장 후
@@ -1078,13 +1046,12 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
 
         QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
         optionInfo.append(appModeInfo);
-        TestCase::instance().data()->start(optionInfo);
+        TestCase::instance().data()->start(optionInfo, fileInfo);
     }
 }
 
 void ControlExcel::updateSelectModuleList() {
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
-        qDebug() << "Fail to - Gen TC is running.";
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_TEST_CASE_RUNNING,  STRING_POPUP_TEST_CASE_RUNNING_TIP}));

@@ -70,6 +70,7 @@ public:
     QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const int& sheetIndex,
                                                                       const QPair<QStringList, QStringList>& list);
     QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const int& sheetIndex,
+                                                                        const QPair<QStringList, QStringList>& allList,
                                                                         const QPair<QStringList, QStringList>& list,
                                                                         QMap<QString, SignalData>& newSignalDataInfo);
     QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const int& sheetIndex,

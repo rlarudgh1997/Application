@@ -24,6 +24,7 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_VALUE(QStringList, GenTCInfo, QStringList())
     REGISTER_WRITABLE_VALUE(bool, GenTCResult, false)
     REGISTER_WRITABLE_VALUE(bool, ThreadRunState, true)
+    REGISTER_WRITABLE_VALUE(QFileInfo, OpenFile, QFileInfo())
 
 public:
     enum {
@@ -53,8 +54,8 @@ public:
     static QSharedPointer<TestCase>& instance();
     ~TestCase();
 
-    bool start(const QStringList& arguments = QStringList());
-    void stop(const bool& killProcess = true);
+    bool start(const QStringList& arguments = QStringList(), const QFileInfo& fileInfo = QFileInfo());
+    void stop(const bool& appExit = false);
 
 private:
     explicit TestCase();

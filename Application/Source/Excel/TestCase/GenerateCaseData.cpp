@@ -448,13 +448,14 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
     QMap<int, QPair<QString, SignalData>> signalDataList;
     QMap<QString, SignalData> sigDataInfoMap;
 
+    auto otherInputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true);
     if (isOther) {
-        auto otherInputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true);
-        signalDataList =
-            SignalDataManager::instance().data()->isOtherInputSignalDataInfo(sheetNum, otherInputList, sigDataInfoMap);
+        signalDataList = SignalDataManager::instance().data()->isOtherInputSignalDataInfo(sheetNum, otherInputList,
+                                                                                          sigDataInfoMap);
     } else {
         auto inputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, resultName, caseName, true);
-        signalDataList = SignalDataManager::instance().data()->isTestCaseInputSignalDataInfo(sheetNum, inputList, sigDataInfoMap);
+        signalDataList = SignalDataManager::instance().data()->isTestCaseInputSignalDataInfo(sheetNum, otherInputList, inputList,
+                                                                                             sigDataInfoMap);
     }
 
     // 입력 순서가 보장되는 Signal list

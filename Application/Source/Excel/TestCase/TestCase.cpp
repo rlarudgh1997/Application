@@ -33,7 +33,7 @@ TestCase::TestCase() {
 }
 
 TestCase::~TestCase() {
-    stop(false);
+    stop(true);
 
 #if defined (USE_TEST_CASE_THREAD)
     qDebug() << "TestCase::terminateThread 1";
@@ -50,13 +50,13 @@ TestCase::~TestCase() {
 #endif
 }
 
-bool TestCase::start(const QStringList& arguments) {
+bool TestCase::start(const QStringList& arguments, const QFileInfo& fileInfo) {
     if (parsingOptions(arguments)) {
         system("clear");
         drawTerminalMenu(ExcuteTypeHelpMode, QStringList());
         return false;
     }
-
+    setOpenFile(fileInfo);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, true);
 
 #if defined (USE_TEST_CASE_THREAD)
@@ -80,9 +80,7 @@ bool TestCase::start(const QStringList& arguments) {
     return true;
 }
 
-void TestCase::stop(const bool& killProcess) {
-    setThreadRunState(false);
-
+void TestCase::stop(const bool& appExit) {
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool() == false) {
         return;
     } else {
@@ -90,13 +88,10 @@ void TestCase::stop(const bool& killProcess) {
     }
     qDebug() << "TestCase::stop()";
 
-    if (killProcess == false) {
+    if (appExit) {
+        setThreadRunState(false);
         return;
     }
-    // bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    // if (graphicsMode == false) {
-    //     return;
-    // }
 
     excuteTestCase(ExcuteTypeStop);
 
@@ -694,6 +689,7 @@ bool TestCase::openExcelFile() {
     QList<QVariantList> sheetDataList;
     QString filePath;
     bool openState = false;
+    QFileInfo openFileInfo = getOpenFile();
 
     if (currentModule == newModule) {
         filePath = ivis::common::APP_PWD() + "/" + currentModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
@@ -708,6 +704,13 @@ bool TestCase::openExcelFile() {
         }
         if (filePath.size() == 0) {
             filePath = currentModule;    // ./Temp/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
+        }
+
+        QString openFilePath = openFileInfo.filePath();
+        if ((openFilePath.size() > 0) && (filePath != openFilePath)) {
+            // 엑셀 파일 오픈한 경로와 cv.json 파일에서 모듈정보, 파일경로 정보로 구성한 파일경로가 다른경우
+            // -> 해당 조건인 경우 파일 오픈한 경로를 사용하도록
+            filePath = openFilePath;
         }
 
         if (currentModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시
@@ -728,12 +731,16 @@ bool TestCase::openExcelFile() {
     qDebug() << "\t Selected Modules   :" << getSelectModules();
     qDebug() << "\t Remaining Modules  :" << getRemainingModules();
     qDebug() << "\t Gen TC Module      :" << currentModule.toLatin1().data();
-    qDebug() << "\t Result             :" << result;
     if (openState) {
         qDebug() << "\t File Open          :" << filePath.toLatin1().data();
+        qDebug() << "\t                    :" << openFileInfo.filePath().toLatin1().data();
+        qDebug() << "\t                    :" << openFileInfo.path().toLatin1().data();
+        qDebug() << "\t                    :" << openFileInfo.fileName().toLatin1().data();
     } else {
         qDebug() << "\t Read Sheet         :" << currentModule;
     }
+    qDebug() << "\t Result             :" << result;
+    qDebug() << "\t Save TC File       :" << filePath.toLatin1().data();
     qDebug() << (QString(120, '<').toLatin1().data());
     qDebug() << "\n\033[0m";
 
