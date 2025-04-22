@@ -179,6 +179,7 @@ QString ExcelUtil::isCurrentCellText(const int& sheetIndex, const int& rowIndex,
     }
 
     QString currentCellText = columnDataList.at(columnIndex);
+    ivis::common::getRemoved(currentCellText, getMergeInfos());
 
     // qDebug() << "isCurrentCellText :" << sheetIndex << rowIndex << columnIndex << currentCellText;
     return currentCellText;
@@ -201,6 +202,7 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
             qMakePair(QString("[Not_Trigger]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)),
             qMakePair(QString("[Preset]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Preset)),
+            qMakePair(QString("[DependentOn]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
         keywordPattern = {
@@ -364,6 +366,7 @@ int ExcelUtil::isKeywordType(const int& columnIndex, QString& inputData) {
     return keywordType;
 }
 
+#if 0
 QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList) {
     const QString mergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
     const QString mergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
@@ -474,6 +477,7 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 
     return keywordTypeInfo;
 }
+#endif
 
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
@@ -679,23 +683,6 @@ QPair<QStringList, QStringList> ExcelUtil::isConvertedIGNElapsedInfo(const QStri
 int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordType) {
     int convertKeywordType = keywordType;
     if (toCustom) {
-        if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
-        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)) {
-            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config);
-        } else {
-        }
-    } else {
         if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over)) {
@@ -710,6 +697,23 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
+        } else {
+        }
+    } else {
+        if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config);
         } else {
         }
     }
@@ -757,19 +761,19 @@ QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& 
     }
 }
 
-bool ExcelUtil::isExistsExcelSheet() {
-    const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+// bool ExcelUtil::isExistsExcelSheet() {
+//     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+//     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 
-    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        if (ExcelData::instance()->getSheetData(sheetIndex).toList().size() > 0) {
-            return true;
-        }
-    }
+//     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+//         if (ExcelData::instance()->getSheetData(sheetIndex).toList().size() > 0) {
+//             return true;
+//         }
+//     }
 
-    qDebug() << "Excel sheet data does not exist.";
-    return false;
-}
+//     qDebug() << "Excel sheet data does not exist.";
+//     return false;
+// }
 
 bool ExcelUtil::isCheckPythonLibrary() {
 #if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
@@ -869,10 +873,11 @@ void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
         dir.mkdir(writePath);
     }
 
-    QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
-    QStringList descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
-    QStringList configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
-    QStringList otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
+    auto sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
+    auto descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
+    auto configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
+    auto dependentOnTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDependentOnTitle).toStringList();
+    auto otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
 
     int writeSize = 0;
     int sheetIndex = 0;
@@ -885,14 +890,26 @@ void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
 
         // Title - Append
         QStringList contentTitle;
-        if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
-            (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) {
-            contentTitle = descTitle;
-        } else if ((propertyType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
-                   (propertyType == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
-            contentTitle = configTitle;
-        } else {
-            contentTitle = otherTitle;
+        switch (propertyType) {
+            case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription:
+            case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription: {
+                contentTitle = descTitle;
+                break;
+            }
+            case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs:
+            case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs: {
+                contentTitle = configTitle;
+                break;
+            }
+            case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
+            case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
+                contentTitle = dependentOnTitle;
+                break;
+            }
+            default: {
+                contentTitle = otherTitle;
+                break;
+            }
         }
         sheetData.append(contentTitle);
 
@@ -953,6 +970,7 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
     const QStringList sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
     const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
+    const QVariant dependentOnTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDependentOnTitle);
     const QVariant otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle);
 
     QList<QVariantList> sheetDataList;
@@ -969,6 +987,9 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
             titleList = descTitle.toStringList();
         } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
             titleList = configTitle.toStringList();
+            checkTitle = false;
+        } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) {
+            titleList = dependentOnTitle.toStringList();
             checkTitle = false;
         } else {
             titleList = otherTitle.toStringList();
@@ -1010,11 +1031,12 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                             insertIndex = 3;   // Befor Index   : ConfigSignal
                             appendText = "";   // Default Value : 0
                         } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::PreconditionCount)) {
-                            insertIndex = 3;   // Befor Index   : ConfigSignal
+                            insertIndex = (notSameTitleIndex.size() == 1) ? (4) : (3);   // Befor Index   : ConfigSignal
                             appendText = "";   // Default Value : 0
                         } else {
                             continue;
                         }
+                        temp.insert(insertIndex, appendText);
                     } else {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
                             insertIndex = 0;             // Befor Index   : TCName
@@ -1038,8 +1060,8 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                         } else {
                             appendText.clear();
                         }
+                        temp.insert(insertIndex, appendText);
                     }
-                    temp.insert(insertIndex, appendText);
                 }
                 rowData = temp;
             }

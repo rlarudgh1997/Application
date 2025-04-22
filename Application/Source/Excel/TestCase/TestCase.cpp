@@ -33,19 +33,20 @@ TestCase::TestCase() {
 }
 
 TestCase::~TestCase() {
-    stop();
+    stop(false);
 
 #if defined (USE_TEST_CASE_THREAD)
+    qDebug() << "TestCase::terminateThread 1";
     if (mThread) {
-        if (mThread->isRunning()) {
-            mThread->quit();
-            mThread->wait();
-        }
+        setThreadRunState(false);
         controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Terminate));
+        // if (mThread->isRunning()) {
+        //     mThread->quit();
+        //     mThread->wait();
+        // }
         mThread.clear();
     }
-
-    qDebug() << "TestCase::terminateThread";
+    qDebug() << "TestCase::terminateThread 2";
 #endif
 }
 
@@ -79,8 +80,25 @@ bool TestCase::start(const QStringList& arguments) {
     return true;
 }
 
-void TestCase::stop() {
+void TestCase::stop(const bool& killProcess) {
+    setThreadRunState(false);
+
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool() == false) {
+        return;
+    } else {
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
+    }
     qDebug() << "TestCase::stop()";
+
+    if (killProcess == false) {
+        return;
+    }
+    // bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    // if (graphicsMode == false) {
+    //     return;
+    // }
+
+    excuteTestCase(ExcuteTypeStop);
 
     QStringList processList = {
         QString("%1/CaseGen/tests/run.py").arg(ivis::common::APP_PWD()),
@@ -90,8 +108,6 @@ void TestCase::stop() {
         "python3",
     };
 
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
-
     QString scriptPath = processList.at(0);
     QProcess process;
     process.start("pgrep", QStringList() << "-f" << scriptPath);
@@ -100,67 +116,10 @@ void TestCase::stop() {
     QString output = process.readAllStandardOutput();
     QStringList pidList = output.split("\n", Qt::SkipEmptyParts);
 
-
     for (const QString& pid : pidList) {
         qDebug() << "\t Running Process :" << pid;
         QProcess::execute("kill", QStringList() << "-9" << pid);
     }
-
-#if 0
-#if 1
-    QStringList allPids;
-
-    for (const QString& processName : processList) {
-        QProcess process;
-        process.start("pgrep", QStringList() << "-f" << processName);  // <-- 핵심 수정
-        process.waitForFinished();
-
-        QString output = process.readAllStandardOutput();
-        QStringList pidList = output.split("\n", Qt::SkipEmptyParts);
-
-        qDebug() << "Found for" << processName << ":" << pidList;
-
-        allPids.append(pidList);  // 여러 프로세스 합쳐서 한 번에 종료
-    }
-
-    // 중복 제거
-    allPids.removeDuplicates();
-
-    QString currentUser = qgetenv("USER");
-
-    for (const QString& pid : allPids) {
-        QProcess userCheck;
-        userCheck.start("ps", QStringList() << "-o" << "user=" << "-p" << pid);
-        userCheck.waitForFinished();
-        QString owner = userCheck.readAllStandardOutput().trimmed();
-
-        if (owner == currentUser) {
-            qDebug() << "\tTerminating PID:" << pid;
-            // QProcess::execute("kill", QStringList() << "-9" << pid);
-            QProcess::execute("sudo", QStringList() << "kill" << "-9" << pid);
-        } else {
-            qDebug() << "\tSkip (not owner): PID" << pid << "| Owner:" << owner;
-        }
-    }
-#else
-    QString pattern = "python -O /home/ivis/900_Code/610_Application/tc_creator/deploy_x86/CaseGen/tests/run.py";
-    QProcess findProc;
-    findProc.start("pgrep", QStringList() << "-f" << pattern);
-    findProc.waitForFinished();
-
-    QStringList pids = QString(findProc.readAllStandardOutput()).split("\n", Qt::SkipEmptyParts);
-    for (const QString& pid : pids) {
-        qDebug() << "Killing PID:" << pid;
-
-        QStringList log;
-        ivis::common::ExcuteProgram process(false);
-        bool result = process.start(QString("pkill -9 -ef %1").arg(pid), log);
-
-        // QProcess::execute("kill", QStringList() << "-9" << pid);
-        // QProcess::execute("sudo", QStringList() << "kill" << "-9" << pid);
-    }
-#endif
-#endif
 }
 
 #if defined (USE_TEST_CASE_THREAD)
@@ -168,7 +127,7 @@ void TestCase::runThread() {
     // const bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     int excuteType = ExcuteTypeStart;
 
-    while (true) {
+    while (getThreadRunState()) {
         if (excuteType == ExcuteTypeInvalid) {
             qDebug() << "TestCase thread is waiting :" << excuteType;
             controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Wait));
@@ -176,16 +135,26 @@ void TestCase::runThread() {
         }
 
         int nextType = excuteTestCase(excuteType);
-        excuteType = nextType;
-        if ((nextType == ExcuteTypeCompleted) || (nextType == ExcuteTypeFailed)) {
-            // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
-            excuteType = ExcuteTypeInvalid;
-            emit signalTestCaseCompleted(nextType, (nextType != ExcuteTypeFailed));
-        } else if (nextType == ExcuteTypeStop) {
-            emit signalTestCaseCompleted(nextType, true);
-        } else if (nextType == ExcuteTypeExit) {
-            emit ControlManager::instance().data()->signalExitProgram();
-            break;
+
+        switch (nextType) {
+            case ExcuteTypeFailed:
+            case ExcuteTypeStop:
+            case ExcuteTypeCompleted: {
+                excuteType = ExcuteTypeInvalid;
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
+                emit signalTestCaseCompleted(nextType, (nextType == ExcuteTypeCompleted));
+                break;
+            }
+            case ExcuteTypeExit: {
+                excuteType = ExcuteTypeExit;
+                setThreadRunState(false);
+                emit ControlManager::instance().data()->signalExitProgram();
+                break;
+            }
+            default: {
+                excuteType = nextType;
+                break;
+            }
         }
     }
 }
@@ -231,13 +200,9 @@ void TestCase::controlThread(QThread* thread, QWaitCondition& waitCondition, QMu
 #endif
 
 int TestCase::excuteTestCase(const int& excuteType) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool() == false) {
-        qDebug() << "TestCase : Stop";
-        return ExcuteTypeStop;
-    }
-
     bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
     int nextType = ExcuteTypeFailed;
+    QString text;
 
     setExcuteType(excuteType);
 
@@ -254,8 +219,6 @@ int TestCase::excuteTestCase(const int& excuteType) {
                     nextType = ExcuteTypeParsingModule;
                 } else {
                     nextType = ExcuteTypeExcelOpen;
-                    int totalMoudules = getSelectModules().size();
-                    emit signalGenTCInfo(true, 0, totalMoudules, QString());
                 }
             } else {
                 nextType = ExcuteTypeExit;
@@ -269,25 +232,31 @@ int TestCase::excuteTestCase(const int& excuteType) {
             break;
         }
         case ExcuteTypeGenConvertData: {
-            if (ConvertDataManager::instance().data()->excuteConvertDataManager()) {
+            text = ConvertDataManager::instance().data()->excuteConvertDataManager();
+            if (text.size() == 0) {
                 nextType = ExcuteTypeGenTC;
             }
             break;
         }
         case ExcuteTypeGenTC: {
-            int totalMoudules = getSelectModules().size();
-            int remainingModules = getRemainingModules().size();
-            int currnetModules = totalMoudules - remainingModules;
-            GenerateCaseData::instance().data()->excuteGenerateCaseData();
-            if (remainingModules == 0) {
+            text = GenerateCaseData::instance().data()->excuteGenerateCaseData();
+            nextType = ExcuteTypeGenTCComplted;
+            break;
+        }
+        case ExcuteTypeGenTCComplted: {
+            if (getRemainingModules().size() == 0) {
                 nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
             } else {
                 nextType = ExcuteTypeExcelOpen;
             }
-            emit signalGenTCInfo(true, currnetModules, totalMoudules, QString());
             break;
         }
         case ExcuteTypeRunTC: {
+            break;
+        }
+        case ExcuteTypeStop: {
+            updateTestCaseExcuteInfo(ExcuteTypeStop, QString());
+            nextType = ExcuteTypeStop;
             break;
         }
         default: {
@@ -295,11 +264,99 @@ int TestCase::excuteTestCase(const int& excuteType) {
         }
     }
 
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+        updateTestCaseExcuteInfo(nextType, text);
+    }
+
     // qDebug() << (QString(120, '='));
     qDebug() << "ExcuteTestCase :" << excuteType << "->" << nextType;
     // qDebug() << (QString(120, '='));
 
     return nextType;
+}
+
+void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& text) {
+    bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
+    if (graphicsMode == false) {
+        return;
+    }
+
+    QStringList totalModules = getSelectModules();
+    QStringList remainingModules = getRemainingModules();
+    QString currentModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : ("");
+
+    int totalCount = totalModules.size();
+    int remainingCount = remainingModules.size();
+    int currentCount = totalCount - remainingCount;
+
+    QStringList genTCInfo = getGenTCInfo();
+    int testResultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
+
+    switch (excuteType) {
+        case ExcuteTypeParsingAppMode: {
+            testResultType = ivis::common::TestResultTypeEnum::TestResultTypeStart;
+            setGenTCResult(true);
+            break;
+        }
+        case ExcuteTypeExcelOpen: {
+            genTCInfo.append(QString("[%1]").arg(currentModule));
+            genTCInfo.append(QString("        - Opening Excel file."));
+            break;
+        }
+        case ExcuteTypeGenConvertData: {
+            currentCount--;
+            genTCInfo.append(QString("        - Converting Excel data."));
+            break;
+        }
+        case ExcuteTypeGenTC: {
+            currentCount--;
+            genTCInfo.append(QString("        - Generating TC file."));
+            break;
+        }
+        case ExcuteTypeGenTCComplted: {
+            if (text.size() == 0) {
+                setGenTCResult(false);
+            }
+            currentCount--;
+            genTCInfo.append(QString("        - File : %1").arg(text));
+            genTCInfo.append(QString("        - Result : %1").arg(((text.size() == 0)) ? ("FAIL") : ("PASS")));
+            genTCInfo.append(QString(170, '-'));
+            break;
+        }
+        case ExcuteTypeCompleted: {
+            genTCInfo.append(QString("TC generation complete."));
+            genTCInfo.append(QString("COMPLETE : %1").arg((getGenTCResult()) ? ("PASS") : ("FAIL")));
+            break;
+        }
+        case ExcuteTypeStop: {
+            currentCount--;
+            testResultType = ivis::common::TestResultTypeEnum::TestResultTypeCancel;
+            break;
+        }
+        case ExcuteTypeFailed: {
+            currentCount--;
+            genTCInfo.append(QString("ERROR_INFO : %1").arg(text));
+            genTCInfo.append(QString("COMPLETE : FAIL"));
+            break;
+        }
+        default: {
+            testResultType = ivis::common::TestResultTypeEnum::TestResultTypeInvalid;
+            break;
+        }
+    }
+
+    if (testResultType != ivis::common::TestResultTypeEnum::TestResultTypeInvalid) {
+        // qDebug() << "\n\n\n";
+        // qDebug() << (QString(120, '*'));
+        // qDebug() << "updateTestCaseExcuteInfo :" << excuteType << currentCount << "/" << totalCount;
+
+        emit signalGenTCInfo(testResultType, currentCount, totalCount, genTCInfo);
+
+        if ((excuteType == ExcuteTypeCompleted) || (excuteType == ExcuteTypeStop) || (excuteType == ExcuteTypeFailed)) {
+            genTCInfo.clear();
+        }
+        setGenTCInfo(genTCInfo);
+    }
 }
 
 bool TestCase::parsingOptions(const QStringList& arguments) {
@@ -626,9 +683,9 @@ void TestCase::writeSheetData(const QList<QVariantList>& sheetDataList) {
 
 bool TestCase::openExcelFile() {
     QStringList remainingModules = getRemainingModules();
-    QString currModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : ("");
+    QString currentModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : ("");
 
-    if (currModule.size() == 0) {
+    if (currentModule.size() == 0) {
         qDebug() << "Fail to select module size 0 :" << remainingModules;
         return false;
     }
@@ -638,22 +695,22 @@ bool TestCase::openExcelFile() {
     QString filePath;
     bool openState = false;
 
-    if (currModule == newModule) {
-        filePath = ivis::common::APP_PWD() + "/" + currModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
+    if (currentModule == newModule) {
+        filePath = ivis::common::APP_PWD() + "/" + currentModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
         sheetDataList = readSheetData();
     } else {
         auto moduleList = readModuleList();
         for (const auto& module : moduleList.keys()) {
-            if (currModule == module) {
+            if (currentModule == module) {
                 filePath = getModuleList(module);
                 break;
             }
         }
         if (filePath.size() == 0) {
-            filePath = currModule;    // ./Temp/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
+            filePath = currentModule;    // ./Temp/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
         }
 
-        if (currModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시
+        if (currentModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시
             setEditingModule("");
             sheetDataList = readSheetData(true);
         } else {
@@ -670,19 +727,19 @@ bool TestCase::openExcelFile() {
     qDebug() << (QString("[Test Case - Excel Open] : %1/%2").arg(currStep).arg(getSelectModules().size()).toLatin1().data());
     qDebug() << "\t Selected Modules   :" << getSelectModules();
     qDebug() << "\t Remaining Modules  :" << getRemainingModules();
-    qDebug() << "\t Gen TC Module      :" << currModule.toLatin1().data();
+    qDebug() << "\t Gen TC Module      :" << currentModule.toLatin1().data();
     qDebug() << "\t Result             :" << result;
     if (openState) {
         qDebug() << "\t File Open          :" << filePath.toLatin1().data();
     } else {
-        qDebug() << "\t Read Sheet         :" << currModule;
+        qDebug() << "\t Read Sheet         :" << currentModule;
     }
     qDebug() << (QString(120, '<').toLatin1().data());
     qDebug() << "\n\033[0m";
 
     if (result) {
         writeSheetData(sheetDataList);
-        remainingModules.removeAll(currModule);
+        remainingModules.removeAll(currentModule);
         setRemainingModules(remainingModules);
         ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeTCFilePath, filePath);
     }

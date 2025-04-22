@@ -185,7 +185,7 @@ QStringList ExcelDataManager::isOriginSheetData(const int& sheetIndex, const int
     QStringList columnData = excelSheetData[columnIndex];
 
     // totalElapsed += checkTimer.check("\t isOriginSheetData");
-    // qDebug() << "\t\t Total - tisOriginSheetData :" << totalElapsed << "\n";
+    // qDebug() << "\t\t Total - isOriginSheetData :" << totalElapsed << "\n";
 
     return columnData;
 }
@@ -697,7 +697,7 @@ QList<QStringList> ExcelDataManager::isOutputDataList(const int& sheetIndex, con
     return outputList;
 }
 
-QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName, const bool& allData) {
+QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName, const bool& allData, const bool& removeMerge) {
     const int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
     const QStringList configNameList =
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName), true);
@@ -730,10 +730,15 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
         }
         data.append((index < inputSignalList.size()) ? (inputSignalList.at(index)) : (QString()));
         data.append((index < inputDataList.size()) ? (inputDataList.at(index)) : (QString()));
+        if (removeMerge) {
+            for (auto& d : data) {
+                ivis::common::getRemoved(d, getMergeInfos());
+            }
+        }
         dataInfo.append(data);
     }
 
-    // qDebug() << "isConfigDataList :" << configName << foundIndex;
+    // qDebug() << "isConfigDataList :" << configName << allData << removeMerge << foundIndex;
     // for (const auto& info : dataInfo) {
     //     qDebug() << "\t Info :" << info;
     // }
@@ -858,6 +863,7 @@ void ExcelDataManager::writeExcelSheetData(const int& sheetIndex) {
 
 QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData) {
     int columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max);
+    bool removeMergeState = true;
     switch (sheetIndex) {
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription:
         case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription: {
@@ -867,6 +873,13 @@ QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, c
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs:
         case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs: {
             columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Config::Max);
+            removeMergeState = false;
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
+            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Max);
+            // removeMergeState = false;
             break;
         }
         default: {
@@ -884,7 +897,9 @@ QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, c
         for (int columnIndex = 0; columnIndex < columnMax; ++columnIndex) {
             QString readColumnText = rowData.at(columnIndex);
             // qDebug() << sheetIndex << ". Data :" << readColumnText;
-            ivis::common::getRemoved(readColumnText, getMergeInfos());
+            if (removeMergeState) {
+                ivis::common::getRemoved(readColumnText, getMergeInfos());
+            }
             // qDebug() << "\t " << readColumnText;
             excelSheetData[columnIndex].append(readColumnText);
         }
@@ -999,7 +1014,7 @@ QPair<QStringList, QStringList> ExcelDataManager::reconstructInputData(const QPa
 }
 
 bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
-    QList<QStringList> configList = isConfigDataList(configName, other);
+    QList<QStringList> configList = isConfigDataList(configName, other, true);
     QMap<int, QPair<QStringList, QStringList>> inputMap;
     QStringList signalList;
     QStringList dataList;

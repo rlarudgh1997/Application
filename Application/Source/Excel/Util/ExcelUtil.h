@@ -82,7 +82,7 @@ public:
     QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex);
     QString isKeywordString(const int keywordType);
     int isKeywordType(const int& columnIndex, QString& inputData);
-    QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
+    // QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
     int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
@@ -90,7 +90,7 @@ public:
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
     QString isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
                                    const QStringList& inputData, const QStringList& valueEnum);
-    bool isExistsExcelSheet();
+    // bool isExistsExcelSheet();
     bool isCheckPythonLibrary();
     QString pythonCall(const bool& readFile, const QString& filePath);
     void writeExcelSheet(const QString& filePath, const bool& convert);

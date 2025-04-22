@@ -141,10 +141,10 @@ void ControlExcel::controlConnect(const bool& state) {
             QMetaObject::invokeMethod(this, "slotTestCaseCompleted", Q_ARG(int, type), Q_ARG(bool, result));
         });
         connect(TestCase::instance().data(), &TestCase::signalGenTCInfo,
-            [=](const bool& result, const int& current, const int& total, const QString& text) {
+            [=](const int& resultType, const int& current, const int& total, const QStringList& info) {
             // TestCase 가 별도 쓰레드로 분리되어 동작함.
-            QMetaObject::invokeMethod(this, "slotGenTCInfo", Q_ARG(bool, result), Q_ARG(int, current), Q_ARG(int, total),
-                                     Q_ARG(QString, text));
+            QMetaObject::invokeMethod(this, "slotGenTCInfo", Q_ARG(int, resultType), Q_ARG(int, current), Q_ARG(int, total),
+                                     Q_ARG(QStringList, info));
         });
     } else {
         disconnect(isHandler());
@@ -308,6 +308,8 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
 void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     const auto sheetName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     const auto configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
+    const auto dependentOnTitle =
+        ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDependentOnTitle).toStringList();
     const auto otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
     auto descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
 
@@ -327,6 +329,8 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
                 columnMax = descTitle.size();
             } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
                 columnMax = configTitle.size();
+            } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) {
+                columnMax = dependentOnTitle.size();
             } else {
                 columnMax = otherTitle.size();
             }
@@ -341,7 +345,8 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     } else {    // Excel Open
         for (const auto& sheetData : sheetDataList) {
             for (const auto& rowDataList : sheetData) {
-                if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
+                if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+                    (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
                     continue;
                 }
                 auto columnDataList = rowDataList.toStringList();
@@ -366,10 +371,11 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
     checkTimer.check("updateExcelSheet : auto complete data");
 
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescConfigVisible).toBool() == false) {
-        descTitle.resize(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal) - 1);
+        descTitle.resize(static_cast<int>(ivis::common::ExcelSheetTitle::Description::ConfigSignal));
     }
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, descTitle);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, configTitle);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOn, dependentOnTitle);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, otherTitle);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, sheetName);
     checkTimer.check("updateExcelSheet : title, sheet name");
@@ -423,12 +429,16 @@ void ControlExcel::loadExcelFile(const int& eventType) {
                 }
             }
             updateExcelSheet();
-            // Open, Edit 시 사용된 정보 초기화
+
             QVariant allModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeSelectModule, allModule);
+
+            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, QVariant());
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
             ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeWindowTitle, QVariant());
-            updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, QVariant());
+
+            // last - folder, file 로딩시 정보 못 가져옴
+            // ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeFileOpen: {
@@ -529,6 +539,11 @@ void ControlExcel::saveExcelFile(const bool& saveAs) {
     if ((fileSave == false) && (saveAs == false)) {
         qDebug() << "The file is not saved because the contents of the excel have not changed :" << saveAs << fileSave;
         return;
+    }
+
+    // last - folder, file 로딩시 정보 못 가져옴
+    if (getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelView).toInt() == ivis::common::ViewTypeEnum::ExcelTypeNew) {
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeLastSavedFilePath, QVariant());
     }
 
     ivis::common::PopupButton button = ivis::common::PopupButton::OK;
@@ -737,6 +752,9 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
             }
             break;
         }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
+            break;
+        }
         default: {
             if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
                 signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
@@ -746,8 +764,10 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
                 signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalIndex);
             } else {
             }
-            int vehicleIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
-            vehicleType = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, vehicleIndex);
+
+            // // InputData, OutputValue 자동완성시 입력된 vehicleType 이 아닌 전체 vehicleType 을 사용해야함.
+            // int vehicleIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::VehicleType);
+            // vehicleType = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, vehicleIndex);
             break;
         }
     }
@@ -932,9 +952,13 @@ void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
 }
 
 void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
-    // if (ExcelUtil::instance().data()->isExistsExcelSheet() == false) {
-    //     return;
-    // }
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+        qDebug() << "Fail to - Gen TC is running.";
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
+                                       QVariantList({"Gen TC",  "Gen TC is running."}));
+        return;
+    }
     if (SignalDataManager::instance().data()->isExcelDataValidation() == false) {
         return;
     }
@@ -1033,10 +1057,10 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
     }
 #endif
 
-    qDebug() << "==========================================================================================";
-    qDebug() << "updateStartTestCase";
-    qDebug() << "\t Editing :" << editingModule;
-    qDebug() << "\t Option  :" << optionInfo;
+    // qDebug() << "==========================================================================================";
+    // qDebug() << "updateStartTestCase";
+    // qDebug() << "\t Editing :" << editingModule;
+    // qDebug() << "\t Option  :" << optionInfo;
 
     if (optionInfo.size() > 0) {
             if (editingModule.size() > 0) {
@@ -1059,9 +1083,13 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
 }
 
 void ControlExcel::updateSelectModuleList() {
-    // if (ExcelUtil::instance().data()->isExistsExcelSheet() == false) {
-    //     return;
-    // }
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+        qDebug() << "Fail to - Gen TC is running.";
+        QVariant popupData = QVariant();
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
+                                       QVariantList({STRING_POPUP_TEST_CASE_RUNNING,  STRING_POPUP_TEST_CASE_RUNNING_TIP}));
+        return;
+    }
 
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
@@ -1136,9 +1164,9 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
     }
 }
 
-void ControlExcel::slotGenTCInfo(const bool& result, const int& current, const int& total, const QString& text) {
-    QVariantList info({result, current, total, text});
-    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeUpdateGenTCInfo, info);
+void ControlExcel::slotGenTCInfo(const int& resultType, const int& current, const int& total, const QStringList& info) {
+    QVariantList eventInfo({resultType, current, total, info});
+    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeMenu, ivis::common::EventTypeEnum::EventTypeUpdateGenTCInfo, eventInfo);
 }
 
 void ControlExcel::slotControlUpdate(const int& type, const QVariant& value) {

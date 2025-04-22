@@ -51,7 +51,7 @@ protected:
 
 public slots:
     void slotTestCaseCompleted(const int& type, const bool& result);
-    void slotGenTCInfo(const bool& result, const int& current, const int& total, const QString& text);
+    void slotGenTCInfo(const int& resultType, const int& current, const int& total, const QStringList& info);
     virtual void slotControlUpdate(const int& type, const QVariant& value = QVariant());
     virtual void slotConfigChanged(const int& type, const QVariant& value);
     virtual void slotEventInfoChanged(const int& displayType, const int& eventType, const QVariant& eventValue);

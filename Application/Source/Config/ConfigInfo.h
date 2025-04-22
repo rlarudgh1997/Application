@@ -29,6 +29,7 @@ public:
         ConfigTypeDescTitle,
         ConfigTypeOtherTitle,
         ConfigTypeConfigTitle,
+        ConfigTypeDependentOnTitle,
         ConfigTypeDescConfigVisible,
         ConfitTypeGeneratePython,
 
@@ -122,10 +123,10 @@ private:
             "ConfigTypeGenTypeList", QVariant(QVariantList({"Default", "Negative/Positive", "Positive"})));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
-                                                          "Inters", "Outputs", "Configs"})));
+                                                          "Inters", "Outputs", "Configs", "DependentOn"})));
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle",
-            QVariant(QVariantList({"test", "version", "description", "Value_Count", "PreconditionCount", "Config_Signal",
+            QVariant(QVariantList({"test", "version", "description", "ValueCount", "PreconditionCount", "Config_Signal",
                                    "Data"})));
         mConfigInfoData[ConfigTypeOtherTitle] = QPair<QString, QVariant>(
             "ConfigTypeOtherTitle",
@@ -133,6 +134,8 @@ private:
                                    "Input_Data", "Output_Signal", "isInitialize", "Output_Value"})));
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
+        mConfigInfoData[ConfigTypeDependentOnTitle] = QPair<QString, QVariant>(
+            "ConfigTypeDependentOnTitle", QVariant(QVariantList({"DependentName", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
         mConfigInfoData[ConfitTypeGeneratePython] = QPair<QString, QVariant>("ConfitTypeGeneratePython", QVariant(false));
 

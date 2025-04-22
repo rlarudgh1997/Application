@@ -21,6 +21,9 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_VALUE(QStringList, RemainingModules, QStringList())
     REGISTER_WRITABLE_VALUE(QString, EditingModule, QString())
     REGISTER_WRITABLE_CONTAINER(QMap, QString, QString, ModuleList)
+    REGISTER_WRITABLE_VALUE(QStringList, GenTCInfo, QStringList())
+    REGISTER_WRITABLE_VALUE(bool, GenTCResult, false)
+    REGISTER_WRITABLE_VALUE(bool, ThreadRunState, true)
 
 public:
     enum {
@@ -34,13 +37,14 @@ public:
 
         ExcuteTypeGenTC = 20,
         ExcuteTypeRunTC,
+        ExcuteTypeGenTCComplted,
 
         ExcuteTypeHelpMode = 40,
         ExcuteTypeInvalidSelectItem,
         ExcuteTypeManualInput,
 
         ExcuteTypeCompleted = 100,
-        ExcuteTypeStop = 100,
+        ExcuteTypeStop,
         ExcuteTypeFailed = 200,
         ExcuteTypeExit,
     };
@@ -50,7 +54,7 @@ public:
     ~TestCase();
 
     bool start(const QStringList& arguments = QStringList());
-    void stop();
+    void stop(const bool& killProcess = true);
 
 private:
     explicit TestCase();
@@ -60,6 +64,7 @@ private:
     void controlThread(QThread* thread, QWaitCondition& waitCondition, QMutex& mutex, const int& type);
 #endif
     int excuteTestCase(const int& excuteType);
+    void updateTestCaseExcuteInfo(const int& excuteType, const QString& text);
     bool parsingOptions(const QStringList& arguments);
     QStringList parsingAppMode(const QStringList& arguments);
     QStringList parsingModules(const QStringList& arguments);
@@ -74,7 +79,7 @@ private:
 
 signals:
     void signalTestCaseCompleted(const int& type, const bool& result);
-    void signalGenTCInfo(const bool& result, const int& current, const int& total, const QString& text);
+    void signalGenTCInfo(const int& resultType, const int& current, const int& total, const QStringList& info);
 
 private:
     const QString mStrExit = QString("Exit");

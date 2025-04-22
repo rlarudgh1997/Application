@@ -67,13 +67,16 @@ public:
     QString isSignalValueEnum(const QString& signalName, const QString& value);
     QStringList isSignalValueEnum(const bool& toEnum, const QString& signalName);
 
-    QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const QPair<QStringList, QStringList>& list);
-    QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
+    QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const int& sheetIndex,
+                                                                      const QPair<QStringList, QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const int& sheetIndex,
+                                                                        const QPair<QStringList, QStringList>& list,
                                                                         QMap<QString, SignalData>& newSignalDataInfo);
-    QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const QPair<QStringList, QStringList>& list,
+    QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const int& sheetIndex,
+                                                                     const QPair<QStringList, QStringList>& list,
                                                                      QMap<QString, SignalData>& newSignalDataInfo);
-    QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const QList<QStringList>& list);
-    QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const QList<QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
+    QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
     bool isExcelDataValidation();
     QStringList isSignalListInfo(const bool& sfcSignal);
 
@@ -86,11 +89,14 @@ private:
     QString isSFCCommonEnum(const QString& info, const QString& prefix);
     QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
                                                  const QMap<int, QStringList>& fileList, int& dataType);
+    QStringList isValidValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
     QStringList isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
                                                QString& matchingValue);
+    QStringList isConvertedSignalDataMatchingTable(const bool& toHex, const QString& signalName,
+                                               const QMap<int, QStringList>& dataInfo);
     QList<QStringList> parsingKeywordBlocks(const QStringList& originData);
-    QMap<QString, QStringList> parsingKeywordData(const QStringList& originData);
-    QMap<int, QStringList> isCustomKeywordInfo(const QStringList& originData);
+    QMap<int, QStringList> parsingKeywordData(const QStringList& originData);
+    QMap<int, QStringList> isCustomKeywordInfo(const QStringList& originData, const bool& uniqueValue);
     QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isConvertedSignalDataNormal(const QString& signalName, int dataType, QStringList originData);

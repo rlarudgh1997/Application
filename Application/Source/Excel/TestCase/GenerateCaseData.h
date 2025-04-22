@@ -18,7 +18,7 @@ class GenerateCaseData : public QObject {
 public:
     static QSharedPointer<GenerateCaseData>& instance();
 
-    bool excuteGenerateCaseData();
+    QString excuteGenerateCaseData();
 
 private:
     explicit GenerateCaseData();
@@ -77,8 +77,12 @@ private:
     void removeTcByCnt(QJsonObject& caseJson, const QString& titleGenType, const int& maxTriggerCnt);
     QJsonArray copyQJsonArrayUpToIndex(const QJsonArray& array, const int& maxCnt);
     void setPreconditionValues(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
-                               const int& resultNumber, const QString& tcName, const int& tcNameNumber, const int& sheetNumber);
-    void applyPrecondition(QJsonObject& caseJson);
+                               const int& resultNumber, const QString& tcName, const int& tcNameNumber, const int& sheetNumber,
+                               const int& preconditionLimitCnt);
+    void applyPrecondition(QJsonObject& caseJson, const int& preconditionLimitCnt);
+    void cleanIntermediateDataFromJson(const QString& caseName, const int& caseNumber, const QString& resultName,
+                                       const int& resultNumber, const QString& tcName, const int& tcNameNumber,
+                                       const int& sheetNumber);
     void printCaseSize(const QString& genType);
 
 private:

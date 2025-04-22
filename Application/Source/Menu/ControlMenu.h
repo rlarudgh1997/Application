@@ -22,12 +22,13 @@ private:
     void updateAllModuleList(const QString& filter);
     void updateSelectModuleList(const int& eventType, const QVariantList& selectModule = QVariantList());
     void updateTestReportInfo(const int& eventType);
-    bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList());
+    bool updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData = QStringList(),
+                              const bool& detailVisible = true);
     void updateViewTCFile();
     void updateViewTCDisplay(const QString& moduleName);
     void updateViewLogFile();
     void updateViewLogDisplay(const QString& titleName);
-    void updateGenTCInfo(const QVariantList& info);
+    void updateGenTCInfo(const QVariantList& infoList);
     void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount);
     void startProcess(const QString& command, const QString& arg, const int& totalCount);
     bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList);

@@ -209,7 +209,8 @@ void ControlMenu::updateTestReportInfo(const int& eventType) {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestReport, reportInfo, true);
 }
 
-bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData) {
+bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& totalCount, const QStringList& infoData,
+                                       const bool& detailVisible) {
     QVariantList countInfo = QVariantList();
     QVariantList titleInfo = QVariantList();
     QVariantList moduleStateInfo = QVariantList();
@@ -228,6 +229,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
             for (const auto& data : infoData) {
                 QStringList info = data.split(" : ");
                 if (info.size() != 2) {
+                    moduleStateInfo.append(data);
                     continue;
                 }
                 QString id = info.at(0);
@@ -312,7 +314,7 @@ bool ControlMenu::updateTestResultInfo(const int& testReultType, const int& tota
         }
     }
 
-    QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo});
+    QVariantList testResultInfo = QVariantList({countInfo, titleInfo, moduleStateInfo, detailVisible});
     // qDebug() << "\t TestResultInfo :" << testResultInfo;
     // qDebug() << "\t   0 :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t   1 :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
@@ -422,39 +424,31 @@ void ControlMenu::updateViewLogDisplay(const QString& titleName) {
     }
 }
 
-void ControlMenu::updateGenTCInfo(const QVariantList& info) {
-    if (info.size() != 4) {
+void ControlMenu::updateGenTCInfo(const QVariantList& infoList) {
+    if (infoList.size() != 4) {
         return;
     }
 
-    // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, true);
+    int resultType = infoList.at(0).toInt();
+    int currentCount = infoList.at(1).toInt();
+    int totalCount = infoList.at(2).toInt();
+    QStringList info = infoList.at(3).toStringList();
 
-    bool result = info.at(0).toBool();
-    int currentCount = info.at(1).toInt();
-    int totalCount = info.at(2).toInt();
-    QString text = info.at(3).toString();
+    QStringList infoData = info;
+    infoData.append(QString("CURRENT : %1").arg(currentCount));
+    infoData.append(QString("TOTAL : %1").arg(totalCount));
 
-    qDebug() << "updateGenTCInfo";
-    qDebug() << "\t Result :" << result;
-    qDebug() << "\t Count  :" << currentCount << "/" << totalCount;
-    qDebug() << "\t Text   :" << text;
+#if 0
+    qDebug() << "\n\n";
+    qDebug() << "=========================================================================================================";
+    qDebug() << "updateGenTCInfo :" << currentCount << "/" << totalCount;
+    qDebug() << "\t InfoList :" << infoList;
+    qDebug() << "\t InfoData :" << resultType << infoData;
+    qDebug() << "\n\n";
+#endif
 
-    int resultType = ivis::common::TestResultTypeEnum::TestResultTypeError;
-    QStringList infoData;
-
-    if (result) {
-        if (currentCount == 0) {
-            resultType = ivis::common::TestResultTypeEnum::TestResultTypeStart;
-        // } else if (currentCount == totalCount) {
-        //     resultType = ivis::common::TestResultTypeEnum::TestResultTypeCompleted;
-        } else {
-            resultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
-        }
-
-        infoData.append(QString("CURRENT : %1").arg(currentCount));
-        infoData.append(QString("TOTAL : %1").arg(totalCount));
-    }
-    updateTestResultInfo(resultType, totalCount, infoData);
+    ivis::common::Popup::clearPopup();
+    updateTestResultInfo(resultType, totalCount, infoData, false);
 }
 
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
@@ -707,9 +701,18 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     if (runType == ivis::common::RunTypeEnum::RunTypeGenSSFS) {
         runScriptPath = QString("%1/..").arg(sfcModelPath);
     }
+
     QVariant popupData = QVariant();
-    if (QDir::setCurrent(runScriptPath) == false) {
-        qDebug() << "Fail to change folder :" << runScriptPath;
+    QString realRunScriptPath = QDir(runScriptPath).absolutePath();    // 심볼릭 링크, /../ 등의 폴더를 리얼 폴더로 변경
+    if ((realRunScriptPath.isEmpty()) || (QDir::setCurrent(realRunScriptPath) == false)) {
+        QString path = runScriptPath;
+        QDir dir(path);
+        qDebug() << "Raw path              :" << path;
+        qDebug() << "Exists                :" << dir.exists();
+        qDebug() << "Canonical Path        :" << dir.canonicalPath();
+        qDebug() << "Absolute Path         :" << dir.absolutePath();
+        qDebug() << "Path from QFileInfo   :" << QFileInfo(path).canonicalFilePath();
+        qDebug() << "Fail to change folder :" << runScriptPath << realRunScriptPath;
         ivis::common::Popup::drawPopup(ivis::common::PopupType::RunPathError, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_DEFAULT_PATH_ERROR, STRING_POPUP_BINARY_NOT_EXISTS_TIP}));
         return false;
@@ -718,7 +721,7 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
     if (checkBinary.size() > 0) {
         int index = 0;
         for (const auto& binary : checkBinary) {
-            QString checkFile = (index == 0) ? (binary) : (QString("%1%2").arg(runScriptPath).arg(binary));
+            QString checkFile = (index == 0) ? (binary) : (QString("%1%2").arg(realRunScriptPath).arg(binary));
             if (QFile::exists(checkFile) == false) {
                 updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeCheckError, totalCount,
                                      QStringList({STRING_BINARY_NOT_EXISTS_ERROR + binary}));
@@ -729,13 +732,15 @@ bool ControlMenu::excuteScript(const int& runType, const bool& state, const QVar
         }
     }
 
-    qDebug() << "PWD        :" << ivis::common::APP_PWD();
-    qDebug() << "SFC Model  :" << sfcModelPath;
-    qDebug() << "Run Script :" << runScriptPath;
-    qDebug() << "Command    :" << cmd;
-
     QString runScriptFile = QString("%1/%2_%3").arg(currentPWD).arg(runType).arg("RunScript.log");
-    QString testResultFile = QString("%1/%2").arg(runScriptPath).arg(fileName);
+    QString testResultFile = QString("%1/%2").arg(realRunScriptPath).arg(fileName);
+
+    qDebug() << "PWD         :" << ivis::common::APP_PWD();
+    qDebug() << "SFC Model   :" << sfcModelPath;
+    qDebug() << "Run Script  :" << runScriptPath;
+    qDebug() << "            :" << realRunScriptPath;
+    qDebug() << "Test Result :" << testResultFile;
+    qDebug() << "Command     :" << cmd;
 
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeTestResultCancel, false);
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeProcessStartPath, testResultFile);

@@ -60,17 +60,18 @@ class ConvertDataManager : public QObject {
 public:
     static QSharedPointer<ConvertDataManager>& instance();
 
-    bool excuteConvertDataManager();
+    QString excuteConvertDataManager();
 
 private:
     explicit ConvertDataManager();
 
-    bool convertKeywordData();
-    bool appendConvertConfigSignalSet();
+    bool isConvertStop(const QString& info = QString());
+    bool convertSheetKeywordData();
+    int appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
 
-    bool convertInputSignalSheetKeyword();
-    bool convertNonInputSignalKeyword();
+    int convertInputSignalSheetKeyword();
+    bool convertNonSheetInputSignalKeyword();
     bool convertOutputDataKeyword();
 
 private:
@@ -99,8 +100,9 @@ private:
     QPair<QStringList, QList<CaseDataInfo>> generateCombinations(
         const QString& templateExpr, const QMap<QString, QStringList>& valueMap, const QStringList& keys,
         const QList<int>& keywords, const QStringList& inputValues, const QStringList& validInputData, const QString& caseName,
-        const QString& notTriggerStr, const QString& customNotTrigger, int& calValArrCnt, int index = 0,
-        QMap<QString, QString> current = {}, const QString& maxValue = QString::number(static_cast<uint64_t>(UINT32_MAX) + 1));
+        const QString& notTriggerStr, const QString& customNotTrigger, int& calValArrCnt, QMap<QString, int>& caseList,
+        int index = 0, QMap<QString, QString> current = {},
+        const QString& maxValue = QString::number(static_cast<uint64_t>(UINT32_MAX) + 1));
     QList<ResultInfo> interpretCalKeywordAndRedefineResultInfo(const ResultInfo& resultInfo);
     bool decideSameCaseList(const QList<CaseDataInfo>& list1, const QList<CaseDataInfo>& list2);
     QList<ResultInfo> mergeAndCleanResultList(const QList<ResultInfo>& resultList);
@@ -112,6 +114,7 @@ private:
     QString mergeCaseName(const QString& prefix, const QString& suffix);
     QString getIgnPrefixString(const QString& signal);
     QStringList getSheetHasMultiResult(const QString& tcName, const QString& result);
+    QStringList getSheetResultListFromTCName(const QString& tcName);
     QString deleteEasterEggKeyword(const QString& keyword);
 };
 

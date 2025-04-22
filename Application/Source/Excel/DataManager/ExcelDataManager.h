@@ -88,7 +88,7 @@ public:
     QPair<QStringList, QStringList> isInputDataWithoutCaseList(const int& sheetIndex, const QString& tcName,
                                                                const QString& resultName, const QString& caseName);
     QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
-    QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true);
+    QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true, const bool& removeMerge = false);
 
     void reloadExcelData(const int& sheetIndex = 0);
     void writeExcelSheetData(const int& sheetIndex = 0);

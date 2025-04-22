@@ -236,7 +236,7 @@ void GuiMenu::updateDialogTestResultInfo() {
     QVariantList testResultInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo).toList();
     // bool runState = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState).toBool();
 
-    if (testResultInfo.size() != 3) {
+    if (testResultInfo.size() != 4) {
         qDebug() << "Fail to test result info size :" << testResultInfo.size();
         return;
     }
@@ -263,12 +263,19 @@ void GuiMenu::updateDialogTestResultInfo() {
     for (const auto& info : testResultInfo.at(2).toList()) {
         moduleStateInfo.append(info.toString() + "\n");
     }
+    bool detailVisible = testResultInfo.at(3).toBool();
     // qDebug() << "\t " << testResultInfo;
     // qDebug() << "\t [0] :" << testResultInfo.at(0).toList().size() << testResultInfo.at(0);
     // qDebug() << "\t [1] :" << testResultInfo.at(1).toList().size() << testResultInfo.at(1);
     // qDebug() << "\t [2] :" << testResultInfo.at(2).toList().size() << testResultInfo.at(2);
 
-    QVariantList info = QVariantList({QString("Test Result Info"), titleInfo, errorInfo, moduleStateInfo});
+    QVariantList info = QVariantList({
+        QString("Test Result Info"),
+        titleInfo,
+        errorInfo,
+        moduleStateInfo,
+        detailVisible,
+    });
     updateDrawDialog(Dialog::DialogTypeLogDisplay, info);
 
     // Test Result Info : ProgressBar

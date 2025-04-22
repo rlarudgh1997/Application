@@ -49,6 +49,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOn, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelView, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart, QVariant(""));
@@ -72,6 +73,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetInters, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn, QVariant(""));
 }
 
 void HandlerExcel::controlConnect(const bool& state) {

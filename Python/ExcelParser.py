@@ -12,6 +12,7 @@ class ExcelParser:
         self.sheet_names = []
         self.title_desc = []
         self.title_config = []
+        self.title_dependent = []
         self.title_other = []
         self.sheet_info = []
         self.config_info = {}
@@ -32,6 +33,7 @@ class ExcelParser:
         self.sheet_names = self.config_info["ConfigTypeSheetName"].split(", ")
         self.title_desc = self.config_info["ConfigTypeDescTitle"].split(", ")
         self.title_config = self.config_info["ConfigTypeConfigTitle"].split(", ")
+        self.title_dependent = self.config_info["ConfigTypeDependentOnTitle"].split(", ")
         self.title_other = self.config_info["ConfigTypeOtherTitle"].split(", ")
 
     def read_from_excel(self, file_path):
@@ -49,10 +51,15 @@ class ExcelParser:
             sheet_data = []
 
 #if 1    // USE_SHEET_COLUMN_OLD
-            # if (sheet not in wb.sheetnames) and ((sheet == "Configs") or (sheet == "DependOn")):
-            if (sheet not in wb.sheetnames) and (sheet == "Configs"):
-                print("Append Sheet :", sheet)
-                sheet_data.append(self.title_config)
+            if (sheet not in wb.sheetnames):
+                if (sheet == "Configs"):
+                    sheet_data.append(self.title_config)
+                elif (sheet == "DependentOn"):
+                    sheet_data.append(self.title_dependent)
+                else:
+                    continue
+
+                print("Append Sheet :", sheet, sheet_data)
                 self.sheet_info.append(sheet_data)
                 continue
 #endif
@@ -126,6 +133,8 @@ class ExcelParser:
 
         for sheet_index, sheet in enumerate(self.sheet_names):
             file_path = os.path.join(path, f"{sheet_index}_{sheet}.toExcel")
+            # print("\t read_from_text :", file_path)
+
             read = pd.read_csv(file_path, sep="\t")
 
             row_count, column_count = len(read.index), len(read.columns)

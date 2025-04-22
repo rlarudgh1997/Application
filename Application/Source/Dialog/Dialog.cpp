@@ -631,7 +631,9 @@ void Dialog::updateDisplay(const int& displayType, const QString& title) {
         setRect.setY(static_cast<int>(screenRect.y() + (screenRect.height() - mainRect.height()) * 0.5));
         setRect.setWidth(mainRect.width());
         setRect.setHeight(mainRect.height());
-        // this->setFixedSize(QSize(mainRect.width(), mainRect.height()));
+        // this->setMinimumSize(QSize(mainRect.width(), mainRect.height()));
+        // this->setMaximumSize(QSize(mainRect.width(), mainRect.height()));
+        this->setFixedSize(QSize(mainRect.width(), mainRect.height()));
         this->setGeometry(setRect);
         // qDebug() << "updateDisplay :" << screenRect << mainRect << setRect;
     }
@@ -985,7 +987,7 @@ bool Dialog::updateTestReport(const QVariantList& info) {
 }
 
 bool Dialog::updateLogDisplay(const QVariantList& info) {
-    if (info.size() != 4) {
+    if (info.size() != 5) {
         return false;
     }
     updateDisplay(DisplayTypeLogDisplay, info.at(0).toString());
@@ -993,8 +995,10 @@ bool Dialog::updateLogDisplay(const QVariantList& info) {
     QString titleInfo = info.at(1).toString();
     QString errorInfo = info.at(2).toString();
     QString moduleStateInfo = info.at(3).toString();
+    bool detailVisible = info.at(4).toBool();
 
     mGui->LogDisplayTitle->setText(titleInfo);
+    mGui->LogDisplayDetail->setVisible(detailVisible);
     int startIndex = mGui->LogDisplayTitle->toPlainText().indexOf(errorInfo);
     if (startIndex >= 0) {
         QTextCursor cursor = mGui->LogDisplayTitle->textCursor();

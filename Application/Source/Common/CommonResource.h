@@ -150,6 +150,10 @@
 #define STRING_POPUP_TEST_CASE_COMPLETE QString("Test Case Complete")
 #define STRING_POPUP_TEST_CASE_COMPLETE_TIP QString("TC file creation is complete. \nWould you like to save the Excel file?")
 
+#define STRING_POPUP_TEST_CASE_RUNNING QString("Gen TC")
+#define STRING_POPUP_TEST_CASE_RUNNING_TIP QString("Gen TC is running.")
+
+
 // =============================================================================================================
 // Image Define
 // =============================================================================================================

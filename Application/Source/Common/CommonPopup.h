@@ -8,9 +8,12 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPushButton>
+#include <QTimer>
 
 #include "AbstractHandler.h"
 #include "CommonEnum.h"
+
+#define USE_CLEAR_POPUP
 
 namespace ivis {
 namespace common {
@@ -32,6 +35,7 @@ enum class PopupType {
     ModuleSelectError,
     CellSelectionError,
     TestCaseComplete,
+    TestCaseRunning,
 
     Exit,
     New,
@@ -58,6 +62,10 @@ enum class PopupButton {
 
 static PopupType gPopupType = PopupType::Invalid;
 static QVariant gPopupData = QVariant();
+#if defined(USE_CLEAR_POPUP)
+static QMessageBox* gPopupBox = nullptr;
+static QTimer* gTimer = nullptr;
+#endif
 
 class Popup : public QObject {
     Q_OBJECT
@@ -72,6 +80,7 @@ public:
             qDebug() << "\t This is the same pop-up as the previous one.";
             return button;
         }
+
         setPopupType(popupType);
 
         switch (popupType) {
@@ -88,11 +97,17 @@ public:
             case PopupType::GcovReportError:
             case PopupType::RunPathError:
             case PopupType::ModuleSelectError:
+            case PopupType::TestCaseRunning:
             case PopupType::CellSelectionError: {
                 QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     bool warning = ((popupType != PopupType::About) && (popupType != PopupType::ScriptRunnigCompleted));
-                    button = drawPopupNoraml(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
+#if defined(USE_CLEAR_POPUP)
+                    int timer = 0;    // (popupType == PopupType::TestCaseRunning) ? (3) : (0);
+                    button = drawPopupNormal(handler, warning, infoData.at(0).toString(), infoData.at(1).toString(), timer);
+#else
+                    button = drawPopupNormal(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
+#endif
                 }
                 break;
             }
@@ -140,6 +155,17 @@ public:
         qDebug() << "Popup::drawPopup() -> Button :" << static_cast<int>(button) << ", Data :" << popupData;
         return button;
     }
+#if defined(USE_CLEAR_POPUP)
+    static void clearPopup() {
+        if (gPopupBox) {
+            qDebug() << "Popup::clearPopup() :" << static_cast<int>(isPopupType()) << isPopupData();
+            controlTimer(0);
+            controlConnect(false);
+            gPopupBox->close();
+            gPopupBox = nullptr;
+        }
+    }
+#endif
 
 private:
     static PopupType isPopupType() {
@@ -154,7 +180,52 @@ private:
     static void setPopupData(const QVariant& data) {
         gPopupData = data;
     }
-    static PopupButton drawPopupNoraml(AbstractHandler* handler, const bool& warning, const QString& title, const QString& tip) {
+#if defined(USE_CLEAR_POPUP)
+    static void controlTimer(const int& timer = 0) {
+        if (gTimer) {
+            gTimer->stop();
+            gTimer = nullptr;
+        }
+        if (timer > 0) {
+            gTimer = new QTimer();
+            connect(gTimer, &QTimer::timeout, &Popup::clearPopup);
+            gTimer->start(timer * 1000);
+        }
+    }
+    static void controlConnect(const bool& state) {
+        if (state) {
+            connect(gPopupBox, &QMessageBox::finished, []() { Popup::clearPopup(); });
+        } else {
+            disconnect(gPopupBox, &QMessageBox::finished, nullptr, nullptr);
+        }
+    }
+    static PopupButton drawPopupNormal(AbstractHandler* handler, const bool& warning, const QString& title, const QString& tip,
+                                       const int& timer = 0) {
+        PopupButton button = PopupButton::Invalid;
+        if (handler) {
+            clearPopup();
+
+            gPopupBox = new QMessageBox(handler->getScreen());
+            gPopupBox->setWindowTitle(title);
+            gPopupBox->setText(tip);
+            gPopupBox->setStandardButtons(QMessageBox::Ok);
+            gPopupBox->setIcon((warning) ? (QMessageBox::Warning) : (QMessageBox::Information));
+
+            if (timer > 0) {
+                gPopupBox->setAttribute(Qt::WA_DeleteOnClose);
+                controlTimer(timer);
+                controlConnect(true);
+                gPopupBox->show();    // 타이머 사용 : 비모달 + 타이머 자동 닫힘
+            } else {
+                gPopupBox->exec();    // 사용자 응답 대기
+                clearPopup();
+            }
+            button = PopupButton::OK;
+        }
+        return button;
+    }
+#else
+    static PopupButton drawPopupNormal(AbstractHandler* handler, const bool& warning, const QString& title, const QString& tip) {
         PopupButton button = PopupButton::Invalid;
         if (handler) {
             if (warning) {
@@ -167,6 +238,7 @@ private:
         }
         return button;
     }
+#endif
     static PopupButton drawPopupSelect(const PopupType& popupType, AbstractHandler* handler, const QVariant& textList) {
         PopupButton buttonType = PopupButton::Invalid;
         QMessageBox selectBox(handler->getScreen());
@@ -213,20 +285,6 @@ private:
                 }
                 break;
             }
-#if 0
-            case PopupType::DefaultPathError:
-            case PopupType::InputTextError:
-            case PopupType::TCReportError:
-            case PopupType::GcovReportError: {
-                if (list.size() == 3) {
-                    selectBox.setWindowTitle(list[0].toString());
-                    selectBox.setText(list[1].toString());
-                    button[PopupButton::Confirm] = selectBox.addButton(list[2].toString(), QMessageBox::ActionRole);
-                    connect(button[PopupButton::Confirm], &QPushButton::clicked, [&]() { buttonType = PopupButton::Confirm; });
-                }
-                break;
-            }
-#endif
             default: {
                 break;
             }

@@ -117,6 +117,7 @@ public:
         PropertyTypeExcelSheetName,
         PropertyTypeExcelDescTitle,
         PropertyTypeExcelConfigTitle,
+        PropertyTypeExcelDependentOn,
         PropertyTypeExcelOtherTitle,
         PropertyTypeExcelView,
         PropertyTypeExcelMergeStart,
@@ -144,6 +145,7 @@ public:
         PropertyTypeOriginSheetInters,
         PropertyTypeOriginSheetOutputs,
         PropertyTypeOriginSheetConfigs,
+        PropertyTypeOriginSheetDependentOn,
         PropertyTypeOriginSheetMax,
         PropertyTypeConvertSheetDescription,
         PropertyTypeConvertSheetPrivates,
@@ -154,6 +156,7 @@ public:
         PropertyTypeConvertSheetInters,
         PropertyTypeConvertSheetOutputs,
         PropertyTypeConvertSheetConfigs,
+        PropertyTypeConvertSheetDependentOn,
         PropertyTypeConvertSheetMax,
         PropertyTypeListMax,
 
@@ -364,6 +367,12 @@ public:
         InputData,
         Max,
     };
+    enum class DependentOn {
+        DependentName = 0,
+        InputSignal,
+        InputData,
+        Max,
+    };
     enum class Other {
         Check = 0,
         TCName,
@@ -395,6 +404,11 @@ public:
         GenTypeNegativePositive,
         GenTypePositive,
     };
+    // enum class TesCaseType {
+    //     Invalid = 0,
+    //     Parsing,
+    //     Generate,
+    // };
 };
 
 class VehicleTypeEnum {
