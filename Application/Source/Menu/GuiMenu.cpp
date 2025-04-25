@@ -483,17 +483,27 @@ void GuiMenu::updateMenuHelp() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeHelpAboutQt, QVariant()); });
 }
 
-void GuiMenu::updateMenuEtc() {
-    // Model Path
-    updateDisplayPath();
-    connect(mGui->actionPath, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant()); });
+void GuiMenu::updateMenuEtc(const bool& once) {
+    if (once) {
+        // Model Path
+        updateDisplayPath();
+        connect(mGui->actionPath, &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeSettingSfcModelPath, QVariant()); });
 
-    // Test Result Info
-    mGui->TestResult->setGeometry(QRect(1000, 23, 150, 30));
-    mGui->TestResult->setParent(mMainView);
-    updateProgressBar(false, QVariantList());
-    connect(mGui->TestResultView, &QPushButton::clicked, [=]() { updateDialogTestResultInfo(); });
+        // Test Result Info
+        mGui->TestResult->setGeometry(QRect(1000, 23, 150, 30));
+        mGui->TestResult->setParent(mMainView);
+        updateProgressBar(false, QVariantList());
+        connect(mGui->TestResultView, &QPushButton::clicked, [=]() { updateDialogTestResultInfo(); });
+
+        // Test Button
+        connect(mGui->actionTest, &QAction::triggered,
+                [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTest, QVariant()); });
+    }
+
+    // Test Button : Visible
+    bool testVisible = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible).toBool();
+    mGui->actionTest->setVisible(testVisible);
 }
 
 void GuiMenu::updateProgressBar(const bool& show, const QVariantList& progressInfo) {
@@ -566,6 +576,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeAppMode: {
             updateDialogAppMode();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible: {
+            updateMenuEtc(false);
             break;
         }
         default: {

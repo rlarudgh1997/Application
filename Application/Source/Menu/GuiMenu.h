@@ -65,7 +65,7 @@ private:
     void updateMenuSetting();
     void updateMenuRun();
     void updateMenuHelp();
-    void updateMenuEtc();
+    void updateMenuEtc(const bool& once = true);
     void updateProgressBar(const bool& show, const QVariantList& progressInfo);
 
     void updateDisplayPath();

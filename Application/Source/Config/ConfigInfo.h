@@ -32,6 +32,7 @@ public:
         ConfigTypeDependentOnTitle,
         ConfigTypeDescConfigVisible,
         ConfitTypeGeneratePython,
+        ConfitTypeTestButtonVisible,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -138,6 +139,7 @@ private:
             "ConfigTypeDependentOnTitle", QVariant(QVariantList({"DependentName", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
         mConfigInfoData[ConfitTypeGeneratePython] = QPair<QString, QVariant>("ConfitTypeGeneratePython", QVariant(false));
+        mConfigInfoData[ConfitTypeTestButtonVisible] = QPair<QString, QVariant>("ConfitTypeTestButtonVisible", QVariant(false));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));

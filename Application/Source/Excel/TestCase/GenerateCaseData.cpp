@@ -454,6 +454,14 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
                                                                                           sigDataInfoMap);
     } else {
         auto inputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, resultName, caseName, true);
+
+        qDebug() << "\n\n\n";
+        qDebug() << "==========================================================================================================";
+        qDebug() << "getSignalInfoString :" << sheetNum;
+        qDebug() << "\t TCName :" << tcName;
+        qDebug() << "\t Result :" << resultName;
+        qDebug() << "\t Case   :" << caseName;
+        qDebug() << "\t Size   :" << inputList.first.size() << otherInputList.first.size();
         signalDataList = SignalDataManager::instance().data()->isTestCaseInputSignalDataInfo(sheetNum, otherInputList, inputList,
                                                                                              sigDataInfoMap);
     }

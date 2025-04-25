@@ -1051,11 +1051,17 @@ QList<QList<QStringList>> ConvertDataManager::constructConvertConfigSignalSet(co
 QStringList extractValidEnumString(const QString& vehicleSignal) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
     QMap<int, QStringList> dataInfo =
-        SignalDataManager::instance().data()->isSignalDataList(vehicleSignal, QStringList(), QString("ICV"), dataType);
+        SignalDataManager::instance().data()->isSignalDataList(vehicleSignal, QStringList(), QString("ICV, EV, FCEV"), dataType);
     QStringList matchingTableList;
     QStringList validMatchValue;
     if (vehicleSignal.contains("Vehicle.CV")) {
         matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
+        if (matchingTableList.isEmpty()) {
+            matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
+            if (matchingTableList.isEmpty()) {
+                matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
+            }
+        }
     } else {
         matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem];
     }
@@ -1073,11 +1079,17 @@ QStringList extractValidEnumString(const QString& vehicleSignal) {
 QString ConvertDataManager::findVehicleSignalElseTimeoutCrcValue(const QString& vehicleSignal, const QString& elseTimeoutCrc) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
     QMap<int, QStringList> dataInfo =
-        SignalDataManager::instance().data()->isSignalDataList(vehicleSignal, QStringList(), QString("ICV"), dataType);
+        SignalDataManager::instance().data()->isSignalDataList(vehicleSignal, QStringList(), QString("ICV, EV, FCEV"), dataType);
     QString resultValue;
     QStringList matchingTableList;
     if (vehicleSignal.contains("Vehicle.CV")) {
         matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
+        if (matchingTableList.isEmpty()) {
+            matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
+            if (matchingTableList.isEmpty()) {
+                matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
+            }
+        }
     } else {
         matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem];
     }
@@ -1106,6 +1118,19 @@ QString ConvertDataManager::findVehicleSignalElseTimeoutCrcValue(const QString& 
 
     resultValue = findAndExtractValue(matchingTableList, "ELSE");
     return resultValue;
+}
+
+QString detectNumberFormat(const QString& input) {
+    QString convertedValue = input;
+    bool ok;
+    static QRegularExpression hexRegex("^0[xX][0-9a-fA-F]+$");
+    if (hexRegex.match(convertedValue).hasMatch()) {
+        qulonglong intValue = convertedValue.toULongLong(&ok, 16);
+        if (ok) {
+            convertedValue = QString::number(intValue);
+        }
+    }
+    return convertedValue;
 }
 
 ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString& signal, const QString& value) {
@@ -1212,7 +1237,9 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
         tempString = part;
         if (part.contains('!') && part.contains('(')) {
             tempString.remove(QRegularExpression("[!()]"));
-            if (tempString.toDouble() || tempString == "0") {
+            if ((detectNumberFormat(tempString).toDouble() || detectNumberFormat(tempString) == "0") ||
+                (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
+                 detectNumberFormat(tempString.split(",")[0]) == "0")) {
                 tempResult += maxValue;
             } else {
                 for (const QString& enumString : tempString.split(',')) {
@@ -1227,9 +1254,20 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                 processTimeoutOrCrc("CRCERROR", tempString);
             }
-            tempResult += tempString;
+            if ((tempString.split(",").size() > 1) && (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
+                                                       detectNumberFormat(tempString.split(",")[0]) == "0")) {
+                for (const QString& enumString : tempString.split(',')) {
+                    tempResult += detectNumberFormat(enumString) + ',';
+                }
+                if (tempResult.endsWith(',')) {
+                    tempResult.chop(1);
+                }
+            } else {
+                tempResult += tempString;
+            }
         } else if (part.contains('!')) {
             tempString.remove('!');
+            tempString = detectNumberFormat(tempString);
             if (tempString.toDouble() || tempString == "0") {
                 tempResult += maxValue;
             } else {
@@ -1242,7 +1280,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                 tempResult += "CRC_ERROR";
             } else {
-                tempResult += tempString;
+                tempResult += detectNumberFormat(tempString);
             }
         }
     };
@@ -1343,78 +1381,83 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                     tempString.remove(QRegularExpression("[!()]"));
                     enumString = tempString.split('~');
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Flow;
-                    if (enumString[0].toDouble() || enumString[0] == "0") {
-                        QString tempLeftValue =
-                            ((enumString[0].toInt() - 1) < 0) ? "negative" : QString::number(enumString[0].toInt() - 1);
-                        QString tempRightValue = QString::number(enumString[1].toInt() + 1);
-                        if (enumString[0].toDouble() || enumString[0] == "0") {
-                            if (tempLeftValue == "negative") {
-                                resultString = QString("%1,%2").arg(enumString[1]).arg(tempRightValue);
-                                convertKeywordInfo.validInputData += tempRightValue;
-                            } else {
-                                resultString = QString("%1,%2,%3,%4")
-                                                   .arg(enumString[0])
-                                                   .arg(tempLeftValue)
-                                                   .arg(enumString[1])
-                                                   .arg(tempRightValue);
-                                convertKeywordInfo.validInputData += QString("%1,%2").arg(tempLeftValue).arg(tempRightValue);
-                            }
+                    if (detectNumberFormat(enumString[0]).toDouble() || detectNumberFormat(enumString[0]) == "0") {
+                        QString tempLeftValue = ((detectNumberFormat(enumString[0]).toDouble() - 1.0) < 0.0)
+                                                    ? "negative"
+                                                    : QString::number(detectNumberFormat(enumString[0]).toDouble() - 1.0);
+                        QString tempRightValue = QString::number(detectNumberFormat(enumString[1]).toDouble() + 1.0);
+                        if (tempLeftValue == "negative") {
+                            resultString = QString("%1,%2").arg(detectNumberFormat(enumString[1])).arg(tempRightValue);
+                            convertKeywordInfo.validInputData += tempRightValue;
+                        } else {
+                            resultString = QString("%1,%2,%3,%4")
+                                               .arg(QString::number(detectNumberFormat(enumString[0]).toDouble()))
+                                               .arg(tempLeftValue)
+                                               .arg(QString::number(detectNumberFormat(enumString[1]).toDouble()))
+                                               .arg(tempRightValue);
+                            convertKeywordInfo.validInputData += QString("%1,%2").arg(tempLeftValue).arg(tempRightValue);
                         }
                     }
                 } else {
                     enumString = tempString.split('~');
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Range;
-                    if (enumString[0].toDouble() || enumString[0] == "0") {
+                    if (detectNumberFormat(enumString[0]).toDouble() || detectNumberFormat(enumString[0]) == "0") {
                         resultString += QString("%1,%2,%3,%4,%5,%6,%7,%8")
                                             .arg(maxValue)
-                                            .arg(enumString[0])
+                                            .arg(detectNumberFormat(enumString[0]))
                                             .arg(maxValue)
-                                            .arg(QString::number(enumString[0].toInt() + 1))
+                                            .arg(QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0))
                                             .arg(maxValue)
-                                            .arg(QString::number(enumString[1].toInt() - 1))
+                                            .arg(QString::number(detectNumberFormat(enumString[1]).toDouble() - 1.0))
                                             .arg(maxValue)
-                                            .arg(enumString[1]);
-                        convertKeywordInfo.validInputData += QString("%1,%2,%3,%4")
-                                                                 .arg(enumString[0])
-                                                                 .arg(QString::number(enumString[0].toInt() + 1))
-                                                                 .arg(QString::number(enumString[1].toInt() - 1))
-                                                                 .arg(enumString[1]);
+                                            .arg(detectNumberFormat(enumString[1]));
+                        convertKeywordInfo.validInputData +=
+                            QString("%1,%2,%3,%4")
+                                .arg(detectNumberFormat(enumString[0]))
+                                .arg(QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0))
+                                .arg(QString::number(detectNumberFormat(enumString[1]).toDouble() - 1.0))
+                                .arg(detectNumberFormat(enumString[1]));
                     }
                 }
             } else if (tempString.contains("<=")) {
                 tempString.remove("<=");
+                tempString = detectNumberFormat(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual;
-                    resultString += QString("%1,%2").arg(QString::number(tempString.toInt() + 1)).arg(tempString);
+                    resultString += QString("%1,%2").arg(QString::number(tempString.toDouble() + 1.0)).arg(tempString);
                     convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains(">=")) {
                 tempString.remove(">=");
+                tempString = detectNumberFormat(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual;
-                    resultString += QString("%1,%2").arg(QString::number(tempString.toInt() - 1)).arg(tempString);
+                    resultString += QString("%1,%2").arg(QString::number(tempString.toDouble() - 1.0)).arg(tempString);
                     convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains('<')) {
                 tempString.remove('<');
+                tempString = detectNumberFormat(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Under;
-                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toInt() - 1));
-                    convertKeywordInfo.validInputData += QString::number(tempString.toInt() - 1);
+                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toDouble() - 1.0));
+                    convertKeywordInfo.validInputData += QString::number(tempString.toDouble() - 1.0);
                 }
             } else if (tempString.contains('>')) {
                 tempString.remove('>');
+                tempString = detectNumberFormat(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Over;
-                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toInt() + 1));
-                    convertKeywordInfo.validInputData += QString::number(tempString.toInt() + 1);
+                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toDouble() + 1.0));
+                    convertKeywordInfo.validInputData += QString::number(tempString.toDouble() + 1.0);
                 }
             } else if (tempString.contains('!') && tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[!()]"));
-                if (tempString.toDouble() || tempString == "0") {
+                if ((tempString.split(",").size() > 1) && (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
+                                                           detectNumberFormat(tempString.split(",")[0]) == "0")) {
                     tempString = maxValue;
                 } else {
-                    for (const QString& enumString : tempString.split(", ")) {
+                    for (const QString& enumString : tempString.split(",")) {
                         processEnum(enumString, inputSignalEnumList);
                     }
                     tempString = inputSignalEnumList.join(", ");
@@ -1424,14 +1467,18 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 }
             } else if (tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[()]"));
-                if (tempString.contains("timeout", Qt::CaseInsensitive)) {
-                    processTimeoutOrCrc("TIMEOUT", tempString);
-                } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
-                    processTimeoutOrCrc("CRCERROR", tempString);
+                for (const QString& value : tempString.split(",")) {
+                    tempString = detectNumberFormat(value);
+                    if (tempString.contains("timeout", Qt::CaseInsensitive)) {
+                        processTimeoutOrCrc("TIMEOUT", tempString);
+                    } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
+                        processTimeoutOrCrc("CRCERROR", tempString);
+                    }
+                    resultString += tempString + ", ";
                 }
-                resultString += tempString + ", ";
             } else if (tempString.contains('!')) {
                 tempString.remove('!');
+                tempString = detectNumberFormat(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     tempString = maxValue;
                 } else {
@@ -1447,7 +1494,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                     processTimeoutOrCrc("CRCERROR", tempString);
                 }
-                resultString += tempString + ", ";
+                resultString += detectNumberFormat(tempString) + ", ";
             }
         }
         prevTempString = tempString;
@@ -2082,8 +2129,8 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
         // 원본 excel에서 [Sheet] Keyword를 만나면 삭제하고 [Sheet] 내부 input signal/data 리스트 삽입
         if (signal.contains("[Sheet]") && isSheetAlreadyExist == false) {
             isSheetAlreadyExist = true;
-            QString customNotTriggerStr = ExcelUtil::instance().data()->isKeywordString(
-                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
+            QString customNotTriggerSheet = ExcelUtil::instance().data()->isKeywordString(
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet));
             if (!isSheetAlreadyInserted) {
                 // 현재 위치부터 [Sheet] 데이터를 삽입하는 로직
                 for (int j = 0; j < sheetSignalList.size(); ++j) {
@@ -2113,7 +2160,7 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
                                 // e.g) [Sheet]Private_A - [Not_Trigger]OFF 가 되면 다음 [Sheet] 해석 시 OFF 찾지 못함
                                 if (!appendMergedSignalStr.contains("[Sheet]") &&
                                     !appendMergedSignalStr.startsWith(SFC_IGN_ELAPSED)) {
-                                    appendMergedDataStr = customNotTriggerStr + appendMergedDataStr;
+                                    appendMergedDataStr = customNotTriggerSheet + appendMergedDataStr;
                                 }
                             }
                             mergedDataList.append(appendMergedDataStr);

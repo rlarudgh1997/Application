@@ -39,9 +39,15 @@ public:
         int ignCount = 0;
         int testCaseCount = 1;
         auto quoteIfNotNumeric = [](const QString& value) {
-            return (!value.isEmpty() && !value[0].isDigit() && !value.contains("timeout") && !value.contains("crc"))
-                       ? "\"" + value + "\""
-                       : value;
+            QString convertedValue = value;
+            static QRegularExpression intRegex("^-?\\d+$");
+            if (intRegex.match(convertedValue).hasMatch()) {
+                convertedValue = convertedValue + " # 0x" + QString::number(convertedValue.toULongLong(), 16).toUpper();
+            }
+            return (!convertedValue.isEmpty() && !convertedValue[0].isDigit() && !convertedValue.contains("timeout") &&
+                    !convertedValue.contains("crc"))
+                       ? "\"" + convertedValue + "\""
+                       : convertedValue;
         };
         for (const QString& sheet : json.keys()) {
             QJsonObject sectionObj = json[sheet].toObject();

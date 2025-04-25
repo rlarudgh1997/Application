@@ -135,6 +135,8 @@ public:
         PropertyTypeViewFileInfo,
         PropertyTypeKeywordTypeInfo,
 
+        PropertyTypeTestButtonVisible,
+
         PropertyTypeList = PROPETRY_START_LIST,
         PropertyTypeOriginSheetDescription,
         PropertyTypeOriginSheetPrivates,
@@ -524,7 +526,7 @@ public:
 class KeywordTypeEnum {
 public:
     enum class KeywordGroup {
-        Invalid = 0,
+        Normal = 0,
         Single,
         Multi,
     };
@@ -534,27 +536,27 @@ public:
         Cal,
         Range,
         Collect,
-        Over,  // 5
+        Over,
         Under,
-        // Equal,
         Other,
-        // Or,
         NotTrigger,
-        Preset,  // 10
+        NotTriggerSheet,
+        Preset,
         ValueChanged,
-        Flow,  // 12
+        Flow,
         Not,
-        DontCare,  //  14
+        DontCare,
         Timeout,
         Crc,
-        TwoWay,  // 17
+        TwoWay,
         DependentOn,
-        MoreThanEqual,  // 19
-        LessThanEqual,  // 20
+        MoreThanEqual,
+        LessThanEqual,
         Config,
 
         CustomNotUsed,
         CustomNotTrigger,
+        CustomNotTriggerSheet,
         CustomOver,
         CustomUnder,
         CustomRange,
@@ -565,75 +567,6 @@ public:
         CustomLessThanEqual,
         CustomConfig,
         CustomNotDefined,
-
-        // Invalid = 0x00000000,
-        // Sheet = 0x00000001,          // InputSignal : [Sheet]
-        // Cal = 0x00000002,            // OutputValue : [Cal]
-        // Range = 0x00000004,          // InputData : ~
-        // Collect = 0x00000008,        // OutputSignal : collect
-        // Over = 0x00000010,           // InputData : >
-        // Under = 0x00000020,          // InputData : <
-        // // Equal = 0x00000040,          // InputData : =
-        // Other = 0x00000080,          // Case : others, other
-        // Or = 0x00000100,             // ConfigData : |
-        // NotTrigger = 0x00000200,     // InputSignal, InputData: [Not_Trigger]
-        // Preset = 0x00000400,         // InputSignal : [Preset]
-        // ValueChanged = 0x00000800,   // InputData : Value Changed, ValueChanged
-        // Flow = 0x00001000,           // InputData : =>
-        // Not = 0x00002000,            // InputData : !
-        // DontCare = 0x00004000,       // InputData : D`, D'
-        // Timeout = 0x00008000,        // InputData : timeout, MESSAGE_TIMEOUT
-        // Crc = 0x00010000,            // InputData : crc, CRC_ERROR
-        // TwoWay = 0x00020000,         // InputData : <=>
-        // DependentOn = 0x00040000,    // InputSignal : [Dependent_On]
-        // MoreThanEqual = 0x00080000,  // InputData : >=
-        // LessThanEqual = 0x00100000,  // InputData : <=
-
-        // CustomNotTrigger = 0x01000000,
-        // CustomOver = 0x02000000,
-        // CustomUnder = 0x04000000,
-        // CustomRange = 0x08000000,
-        // CustomTwoWay = 0x10000000,
-        // CustomFlow = 0x20000000,
-        // CustomIgn = 0x80000000,
-        // CustomMoreThanEqual = 0x100000000,
-        // CustomLessThanEqual = 0x200000000,
-
-#if 0  // 아래는 Keyword enum의 전체 List임, 값이 쓰였다면 주석처리 하였음
-       // Invalid = 0x00000000,
-       // Sheet = 0x00000001,
-       // Cal = 0x00000002,
-       // Range = 0x00000004,
-        Collect = 0x00000008,
-        // GreaterThan = 0x00000010,
-        // LessThan = 0x00000020,
-        // Equal = 0x00000040,
-        // Other = 0x00000080,
-        // Or = 0x00000100,
-        // NotTrigger = 0x00000200,
-        // Preset = 0x00000400,
-        DependentOn = 0x00000800,
-        // ValueChanged = 0x00001000,
-        Comma = 0x00002000,
-        // VehicleSignal = 0x00004000,
-        // SFCSignal = 0x00008000,
-        ReservedEnum1 = 0x00010000,
-        GreaterThanOrEqual = 0x00020000,
-        LessThanOrEqual = 0x00040000,
-        // Flow = 0x00080000,
-        // Not = 0x00100000,
-        // DontCare = 0x00200000,
-        // Timeout = 0x00400000,
-        // Crc = 0x00800000,
-        ReservedEnum2 = 0x01000000,
-        ReservedEnum3 = 0x02000000,
-        ReservedEnum4 = 0x04000000,
-        ReservedEnum5 = 0x08000000,
-        ReservedEnum6 = 0x10000000,
-        ReservedEnum7 = 0x20000000,
-        ReservedEnum8 = 0x40000000,
-        ReservedEnum9 = 0x80000000,
-#endif
         Max,
     };
 };

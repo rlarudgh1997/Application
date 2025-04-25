@@ -772,7 +772,7 @@ int ExcelDataManager::isCaseIndex(const int& sheetIndex, const QString& tcName, 
 
 void ExcelDataManager::reloadExcelData(const int& sheetIndex) {
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;  // Origin
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;   // Convert
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;           // Convert
     const bool allState = ((sheetIndex < startIndex) || (sheetIndex >= endIndex));
 
     QList<int> sheetIndexList;
@@ -839,7 +839,7 @@ void ExcelDataManager::reloadExcelData(const int& sheetIndex) {
 
 void ExcelDataManager::writeExcelSheetData(const int& sheetIndex) {
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;  // Origin
-    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;   // Convert
+    const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;           // Convert
     const bool allState = ((sheetIndex < startIndex) || (sheetIndex >= endIndex));
 
     QList<int> sheetIndexList;

@@ -240,6 +240,8 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
         keywordPattern = {
             qMakePair(QString("[CustomNotTrigger]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)),
+            qMakePair(QString("[CustomNotTriggerSheet]"),
+                      static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet)),
             qMakePair(QString("[CustomOver]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver)),
             qMakePair(QString("[CustomUnder]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder)),
             qMakePair(QString("[CustomRange]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange)),
@@ -685,6 +687,8 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
     if (toCustom) {
         if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTriggerSheet)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under)) {
@@ -702,6 +706,8 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
     } else {
         if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTriggerSheet);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder)) {
@@ -1028,11 +1034,11 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                     int insertIndex = 0;
                     if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::ValueCount)) {
-                            insertIndex = 3;   // Befor Index   : ConfigSignal
-                            appendText = "";   // Default Value : 0
+                            insertIndex = 3;  // Befor Index   : ConfigSignal
+                            appendText = "";  // Default Value : 0
                         } else if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Description::PreconditionCount)) {
-                            insertIndex = (notSameTitleIndex.size() == 1) ? (4) : (3);   // Befor Index   : ConfigSignal
-                            appendText = "";   // Default Value : 0
+                            insertIndex = (notSameTitleIndex.size() == 1) ? (4) : (3);  // Befor Index   : ConfigSignal
+                            appendText = "";                                            // Default Value : 0
                         } else {
                             continue;
                         }

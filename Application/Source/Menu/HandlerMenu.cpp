@@ -44,6 +44,8 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariant(""));
+
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, QVariant(false));
 }
 
 void HandlerMenu::controlConnect(const bool& state) {

@@ -1281,6 +1281,10 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             TestCase::instance().data()->stop();
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeTest: {
+            SignalDataManager::instance().data()->testCode();
+            break;
+        }
         default: {
             break;
         }

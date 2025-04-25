@@ -185,6 +185,7 @@
    <addaction name="actionLastFile"/>
    <addaction name="actionGenTC"/>
    <addaction name="separator"/>
+   <addaction name="actionTest"/>
    <addaction name="actionPath"/>
   </widget>
   <action name="actionExit">
@@ -504,6 +505,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>Test</string>
+   </property>
+   <property name="toolTip">
+    <string>Test</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

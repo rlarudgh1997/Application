@@ -69,6 +69,9 @@ void ControlMenu::initNormalData() {
     controlTimer(AbstractControl::AbstractTimerStart, true, 200);
     updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 30);
 #endif
+
+    bool testVisible = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeTestButtonVisible).toBool();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, testVisible);
 }
 
 void ControlMenu::initControlData() {
@@ -850,6 +853,10 @@ void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
                               ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
             break;
         }
+        case ConfigInfo::ConfitTypeTestButtonVisible: {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, value.toBool());
+            break;
+        }
         default: {
             break;
         }
@@ -1067,6 +1074,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             ivis::common::Popup::drawPopup(
                 ivis::common::PopupType::ModuleSelectError, isHandler(), popupData,
                 QVariantList({STRING_POPUP_MODULE_SELECT_ERROR, STRING_POPUP_MODULE_SELECT_ERROR_TIP}));
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeTest: {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeTest);
             break;
         }
         default: {
