@@ -100,7 +100,7 @@ private:
     QMap<int, QStringList> parsingKeywordData(const QStringList& originData);
     QMap<int, QStringList> isCustomValueInfo(const QStringList& originData, const bool& validValue);
     QPair<int, int> isMinMaxValue(const QStringList& inputList, const bool& maxSkip = false);
-    QPair<QStringList, QStringList> isValidValueList(const bool& notTrigger, const QStringList& allData,
+    QPair<QStringList, QStringList> isValidValueList(const bool& customNotTrigger, const QStringList& allData,
                                                      const QMap<int, QStringList>& dataInfo);
     QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
@@ -109,6 +109,8 @@ private:
     bool isExceptionSignal(const QString& signalName);
     QPair<QStringList, QStringList> isConvertedValue(const QString& signalName, const int& dataType,
                                                      const QStringList& originData, const QStringList& otherAllData);
+    QPair<QStringList, QStringList> isConvertedEnum(const int& keywordType, const QStringList& inputData,
+                                                    const QStringList& notUsedEnum);
     void isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo, QStringList& checkDataList);
 #if 0
     QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,

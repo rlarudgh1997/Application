@@ -545,6 +545,8 @@ public:
         ValueChanged,
         Flow,
         Not,
+        NotRange,
+        NotFlow,
         DontCare,
         Timeout,
         Crc,
@@ -556,7 +558,11 @@ public:
 
         CustomNotUsed,
         CustomNotTrigger,
-        CustomNotTriggerSheet,
+        CustomNotTriggerSheet,  // used interpreted Sheet keyword only in Negative & Positive
+        CustomNot,              // used int, uint, double type only (except enum type)
+        CustomDontCare,         // used int, uint, double type only (except enum type)
+        CustomNotFlow,          // used int, uint, double type only (except enum type) -> TODO: 케이스 존재 시 개발 예정
+        CustomNotRange,         // used int, uint, double type only (except enum type) -> TODO: 케이스 존재 시 개발 예정
         CustomOver,
         CustomUnder,
         CustomRange,

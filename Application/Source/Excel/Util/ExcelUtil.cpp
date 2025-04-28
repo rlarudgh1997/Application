@@ -253,6 +253,8 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString("[CustomLessThanEqual]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)),
             qMakePair(QString("[CustomConfig]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)),
+            qMakePair(QString("[CustomNot]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot)),
+            qMakePair(QString("[CustomDontCare]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare)),
             qMakePair(QString("[CustomNotDefined]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)),
         };
@@ -701,7 +703,16 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Not)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotRange)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotFlow)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow);
         } else {
+            // no operation
         }
     } else {
         if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
@@ -720,7 +731,16 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Config);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Not);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotRange);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotFlow);
         } else {
+            // no operation
         }
     }
     return convertKeywordType;
