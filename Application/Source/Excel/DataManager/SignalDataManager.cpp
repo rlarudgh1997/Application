@@ -735,6 +735,7 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
         return dataInfo;
     }
 
+    bool removeDuplicate = true;
     for (const auto& keywordType : keywordDataMap.keys()) {
         const QStringList values = keywordDataMap[keywordType];
         const QString joined = values.join(", ");
@@ -788,16 +789,22 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
                     if (append) {
-                        // >100  : [CustomOver][100][101]          -> Valid : 100
-                        // <100  : [CustomUnder][100][99]          -> Valid : 99
-                        // >=100 :[CustomMoreThanEqual][99][100]   -> Valid : 100
-                        // <=100 : [CustomLessThanEqual][101][100] -> Valid : 100
+                        // >100  : [CustomOver][100][101]
+                        //         -> Valid : 100
+                        // <100  : [CustomUnder][100][99]
+                        //         -> Valid : 99
+                        // >=100 : [CustomMoreThanEqual][99][100]
+                        //         -> Valid : 100
+                        // <=100 : [CustomLessThanEqual][101][100]
+                        //         -> Valid : 100
                         keywordData.append(rearValue);
                     }
                     break;
                 }
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot): {
                     if (append) {
                         // 1->(2)           : [CustomFlow][1][2]
                         //                    -> Valid : 2
@@ -805,28 +812,48 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                         //                    -> Valid : 2, 3, 4, 5
                         // 1<->(2, 3, 4, 5) : [CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5][2, 3, 4, 5, 1, 1, 1, 1]
                         //                    -> Valid : 2, 3, 4, 5, 1
-                        keywordData.append(frontValue);
+                        // !10->10          : [CustomNotFlow][MAX][10]
+                        //                    -> Valid : 10
+                        // 10->!10          : [CustomNotFlow][10][MAX]
+                        //                    -> Valid : MAX
                         keywordData.append(rearValue);
+                        keywordData.append(frontValue);
+                        removeDuplicate = false;
                     }
                     break;
                 }
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
                     if (append) {
-                        // 1~100 : [CustomRange][MAX, MAX, MAX, MAX][1, 2, 99, 100]      -> Valid : 1, 2, 99, 100
-                        // 1~MAX : [CustomRange][MAX, MAX, MAX, MAX-1][1, 2, MAX-1, MAX] -> Valid : 1, 2, MAX-1, MAX
+                        // 1~10  : [CustomRange][MAX, MAX, MAX, MAX][1, 2, 9, 10]
+                        //         -> Valid : 1, 2, 9, 10
+                        // 1~MAX : [CustomRange][MAX, MAX, MAX, MAX-1][1, 2, MAX-1, MAX]
+                        //         -> Valid : 1, 2, MAX-1, MAX
                         if ((rearValue.contains(maxValueNormal) == false) || (rearValue.contains(maxValueDouble) == false)) {
                             // RearValue 에 max 가 포함되지 않은 경우만 삭제
                             removeStr.append(maxValueNormal);
                             removeStr.append(maxValueDouble);
                         }
-                        // keywordData.append(frontValue);
                         keywordData.append(rearValue);
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange): {
+                    if (append) {
+                        // !(1~10) : [CustomNotRange][1, 2, 9, 10][MAX, MAX, MAX, MAX]
+                        //           -> Valid : 1, 2, 9, 10 이 아닌값
+                        if ((frontValue.contains(maxValueNormal) == false) || (frontValue.contains(maxValueDouble) == false)) {
+                            // RrontValue 에 max 가 포함되지 않은 경우만 삭제
+                            removeStr.append(maxValueNormal);
+                            removeStr.append(maxValueDouble);
+                        }
+                        keywordData.append(frontValue);
                     }
                     break;
                 }
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
                     if (append) {
-                        // !(2, 3, 4) : [CustomNot][2, 3, 4][MAX, MAX, MAX]      -> Valid : 2, 3, 4 가 아닌 값
+                        // !(2, 3, 4) : [CustomNot][2, 3, 4][MAX, MAX, MAX]
+                        //              -> Valid : 2, 3, 4 가 아닌 값
                         keywordData.append(frontValue);
                     }
                     break;
@@ -836,12 +863,6 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                         keywordData.append(QStringList());
                         keywordData.append(QStringList());
                     }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange): {
-                    // TODO : 추후 개발 필요시 개발 예정정
-                    append = false;
                     break;
                 }
                 default: {
@@ -868,22 +889,28 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
             }
         }
         dataInfo[keywordType].removeAll("");
-        dataInfo[keywordType].removeDuplicates();
-        // dataInfo[keywordType].sort();  // CustomFlow 는 sort 되면 안됨 -> 이후 다른 코드에서 숫자로 변경하여 sorting 함
+        if (removeDuplicate) {
+            dataInfo[keywordType].removeDuplicates();
+        }
 
 #if 0
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-        qDebug() << "isCustomValueInfo :" << validValue << values;
-        qDebug() << "\t Joined      :" << joined;
-        qDebug() << "\t SplitValue  :" << splitValue;
-        qDebug() << "\t KeywordType :" << ExcelUtil::instance().data()->isKeywordString(keywordType) << keywordType;
-        if (validValue) {
-            qDebug() << "\t FrontValue  :" << frontValue;
-            qDebug() << "\t RearValue   :" << rearValue;
+        bool log = false;
+        log = true;
+
+        if (log) {
+            qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+            qDebug() << "isCustomValueInfo :" << validValue << values;
+            qDebug() << "\t Joined      :" << joined;
+            qDebug() << "\t SplitValue  :" << splitValue;
+            qDebug() << "\t KeywordType :" << ExcelUtil::instance().data()->isKeywordString(keywordType) << keywordType;
+            if (validValue) {
+                qDebug() << "\t FrontValue  :" << frontValue;
+                qDebug() << "\t RearValue   :" << rearValue;
+            }
+            qDebug() << "\t KeywordData :" << keywordData.size() << keywordData;
+            qDebug() << "\t             :" << dataInfo[keywordType];
+            qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
         }
-        qDebug() << "\t KeywordData :" << keywordData.size() << keywordData;
-        qDebug() << "\t             :" << dataInfo[keywordType];
-        qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
     }
 
@@ -947,51 +974,44 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
     if (dataInfo.size() != 1) {
         return QPair<QStringList, QStringList>();
     }
+
     const int keywordType = dataInfo.firstKey();
     const QStringList inputData = dataInfo[keywordType];
     const QPair<int, int> minMaxValue = isMinMaxValue(inputData, true);
     const qint64 minValue = minMaxValue.first;
     const qint64 maxValue = minMaxValue.second;
+    const QMap<QString, qint64> exceptionInfo = {
+        {"CRC_ERROR", (static_cast<quint64>(INT64_MAX) - 100)},
+        {"MESSAGE_TIMEOUT", (static_cast<quint64>(INT64_MAX) - 200)},
+    };
 
-    auto toNumber = [](const QStringList& numberStrList) {
+    auto toNumber = [&](const QStringList& numberStrList) {
         QList<qint64> numberList;
         for (const auto& val : numberStrList) {
             bool ok = false;
             qint64 number = val.toLongLong(&ok);
             if (ok) {
                 numberList.append(number);
+            } else {
+                if (exceptionInfo.contains(val)) {
+                    number = exceptionInfo[val];
+                    numberList.append(number);
+                }
+                // qDebug() << "Fail to - change number :" << val << "->" << number;
             }
         }
         return numberList;
     };
-    auto sortNumber = [](QList<qint64> numberList) {
+    auto sortNumber = [&](QList<qint64> numberList) {
         std::sort(numberList.begin(), numberList.end());  // 오름차순
         // std::sort(numberList.begin(), numberList.end(), std::greater<qint64>());  // 내림차순 정렬
         QStringList sortList;
         sortList.reserve(numberList.size());
         for (const auto& number : numberList) {
-            sortList.append(QString::number(number));
+            QString key = exceptionInfo.key(number, QString());
+            sortList.append((key.isEmpty() == false) ? (key) : (QString::number(number)));
         }
         return sortList;
-    };
-    auto appendExceptionString = [&](const QStringList& allList, const QStringList& inputList, const QStringList& checkList) {
-        QMap<QString, QPair<bool, bool>> existInfo;
-        for (const auto& s : checkList) {
-            existInfo[s] = qMakePair(false, false);
-            for (const auto& d : inputList) {
-                if (s.compare(d) == 0) {
-                    existInfo[s].first = true;
-                    break;
-                }
-            }
-            for (const auto& d : allList) {
-                if (s.compare(d) == 0) {
-                    existInfo[s].second = true;
-                    break;
-                }
-            }
-        }
-        return existInfo;
     };
     auto isNormalValue = [&](const bool& toValid, const QStringList& allList, const QStringList& inputList) {
         QList<qint64> numberList = toNumber(inputList);
@@ -1041,9 +1061,6 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
     QStringList validData;
     bool notTrigger = customNotTrigger;
 
-    const QStringList checkData({"MESSAGE_TIMEOUT", "CRC_ERROR"});
-    QMap<QString, QPair<bool, bool>> existInfo = appendExceptionString(allData, inputData, checkData);
-
     // ConvertData  : case 리스트 유효한 값
     // Precondition : other case 리스트 전체 - ConvertData 가 빠진 리스트로 구성
     // -> CustomFlow, CustomDontCare 만 별도 처리
@@ -1074,11 +1091,13 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot): {
             if (inputData.size() != 0) {
                 int splitSize = inputData.size() * 0.5;
-                invalidData = inputData.mid(0, splitSize);
-                validData = inputData.mid(splitSize, inputData.size());
+                validData = inputData.mid(0, splitSize);
+                invalidData = inputData.mid(splitSize, inputData.size());
             }
             break;
         }
@@ -1087,9 +1106,14 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
             invalidData = isRangeValue(false, allData, minValue, maxValue);
             break;
         }
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange): {
+            validData = isRangeValue(false, allData, minValue, maxValue);
+            invalidData = isRangeValue(true, allData, minValue, maxValue);
+            break;
+        }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
-            invalidData = isNormalValue(true, allData, inputData);
             validData = isNormalValue(false, allData, inputData);
+            invalidData = isNormalValue(true, allData, inputData);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
@@ -1099,11 +1123,6 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
             validData.clear();
             invalidData = isNormalValue(false, QStringList(), allData);
             notTrigger = false;
-            break;
-        }
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange): {
-            // TODO : 추후 개발 필요시 개발 예정정
             break;
         }
         default: {
@@ -1116,20 +1135,25 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const bool& 
         valueInfo = qMakePair(valueInfo.second, QStringList());
     }
 
-#if 0
-    qDebug() << "\n";
-    qDebug() << "\t isValidValueList :" << customNotTrigger << "->" << notTrigger;
-    qDebug() << "\t\t Keyword   :" << keywordType << ExcelUtil::instance().data()->isKeywordString(keywordType);
-    qDebug() << "\t\t MinMax    :" << minMaxValue.first << minMaxValue.second;
-    qDebug() << "\t\t AllData   :" << allData;
-    qDebug() << "\t\t InputData :" << inputData;
-    qDebug() << "\t\t Value     :" << valueInfo.first;
-    qDebug() << "\t\t           :" << valueInfo.second;
-    for (const auto& key : existInfo.keys()) {
-        auto exist = existInfo[key];
-        qDebug() << "\t\t" << key.toLatin1().data() << ":" << exist.first << exist.second;
+    if (allData.size() == 0) {
+        qDebug() << "Fail to - all data size : 0";
     }
-    qDebug() << "\n";
+
+#if 0
+    bool log = false;
+    log = true;
+
+    if (log) {
+        qDebug() << "\n";
+        qDebug() << "\t isValidValueList :" << customNotTrigger << "->" << notTrigger;
+        qDebug() << "\t\t Keyword   :" << keywordType << ExcelUtil::instance().data()->isKeywordString(keywordType);
+        qDebug() << "\t\t MinMax    :" << minValue << maxValue;
+        qDebug() << "\t\t AllData   :" << allData;
+        qDebug() << "\t\t InputData :" << inputData;
+        qDebug() << "\t\t Value     :" << valueInfo.first;
+        qDebug() << "\t\t           :" << valueInfo.second;
+        qDebug() << "\n";
+    }
 #endif
 
     return valueInfo;
@@ -1360,7 +1384,7 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     return validData;
 }
 
-QPair<QStringList, QStringList> SignalDataManager::isConvertedValue(const QString& signalName, const int& dataType,
+QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QString& signalName, const int& dataType,
                                                                     const QStringList& originData,
                                                                     const QStringList& otherAllData) {
     if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
@@ -1406,13 +1430,14 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValue(const QStrin
 
     QMap<int, QStringList> dataInfo = isCustomValueInfo(currOriginData, (normal) ? (false) : (true));
     QPair<QStringList, QStringList> valueInfo;
-    bool log = false;
-    // bool log = (normal == false);
 
 #if 0
+    bool log = false;
+    log = (normal == false);
+
     if (log) {
         qDebug() << "*************************************************************************************************";
-        qDebug() << "isConvertedValue :" << signalName;
+        qDebug() << "isConvertedValueData :" << normal << signalName;
         qDebug() << "\t DataType     :" << dataType;
         qDebug() << "\t NotTrigger   :" << customNotTrigger;
         qDebug() << "\t OriginData   :" << originData.size() << originData;
@@ -1444,7 +1469,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValue(const QStrin
     return valueInfo;
 }
 
-QPair<QStringList, QStringList> SignalDataManager::isConvertedEnum(const int& keywordType, const QStringList& inputData,
+QPair<QStringList, QStringList> SignalDataManager::isConvertedEnumData(const int& keywordType, const QStringList& inputData,
                                                                    const QStringList& notUsedEnum) {
 #if defined(USE_VALUE_NOT_TRIGGER)
     int customNotTriggerIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet);
@@ -1575,11 +1600,11 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedEnum(const int& ke
     return qMakePair(convertData, precondition);
 }
 
-void SignalDataManager::isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
-                                                 QStringList& checkDataList) {
-    const auto checkInfo = QMap<ivis::common::KeywordTypeEnum::KeywordType, QPair<QString, QString>>({
-        {ivis::common::KeywordTypeEnum::KeywordType::Timeout, qMakePair("TIMEOUT", "timeout")},
-        {ivis::common::KeywordTypeEnum::KeywordType::Crc, qMakePair("CRCERROR", "crc")},
+QStringList SignalDataManager::isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
+                                                        const QStringList& inputData) {
+    const auto checkInfo = QMap<int, QPair<QString, QString>>({
+        {static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout), qMakePair("TIMEOUT", "timeout")},
+        {static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc), qMakePair("CRCERROR", "crc")},
     });
     const auto valueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
     const auto matchingTableList = QList<QStringList>({
@@ -1591,228 +1616,96 @@ void SignalDataManager::isConvertedExceptionData(const QString& signalName, cons
         dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem],
     });
 
-    QString checkStrMain;
-    QString checkStrSub;
-    QString changeStr;
-    int foundIndex = (-1);
+    // 1. inputData     : MESSAGE_TIMEOUT, CRC_ERROR 확인
+    // 2. MatchingTable : TIMEOUT, CRCERROR or ELSE 확인
+    // 3. 2번에서 존재하면 MESSAGE_TIMEOUT -> timeout, CRC_ERROR -> crc 로 변환
+    // 4. 아니면
+
+    QMap<int, int> foundInfo;
+
     // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 유무 확인 후 정보 구성 -> (checkStr, changeStr, foundIndex)
     for (const auto& key : checkInfo.keys()) {
         // MESSAGE_TIMEOUT or CRC_ERROR
-        checkStrMain = ExcelUtil::instance().data()->isKeywordString(static_cast<int>(key));
-        if (checkDataList.filter(checkStrMain).isEmpty() == false) {
-            QPair<QString, QString> info = checkInfo[key];
-            checkStrSub = info.first;
-            changeStr = info.second;
-            foundIndex = checkDataList.indexOf(checkStrMain);
-            foundIndex = (foundIndex < checkDataList.size()) ? (foundIndex) : (-1);
-            break;
+        QString checkOriginStr = ExcelUtil::instance().data()->isKeywordString(key);
+        if (inputData.filter(checkOriginStr).isEmpty() == false) {
+            int index = inputData.indexOf(checkOriginStr);
+            if (index < inputData.size()) {
+                foundInfo[key] = index;
+            }
         }
     }
 
-#if 0
-    if (signalName == "Vehicle.CV.ADAS_Driving_CV.Input_MvLeftLineOffsetValue") {
-        qDebug() << "========================================================================================";
-        qDebug() << "[isConvertedExceptionData] : " << signalName;
-        qDebug() << "\t FoundIndex    :" << foundIndex;
-        qDebug() << "\t CheckData     :" << checkDataList;
-        for (const auto& key : dataInfo.keys()) {
-            qDebug() << "\t DataInfo[" << key << "] :" << dataInfo[key];
-        }
-    }
-#endif
-
-    if (foundIndex < 0) {
+    if (foundInfo.size() == 0) {
         // ConvertData 에 [MESSAGE_TIMEOUT, CRC_ERROR] 스트링 존재하지 않음
-        return;
+        return inputData;
     }
 
-    const QStringList tempDataList = checkDataList;
-    bool existMatchingStr = false;  // MatchingTable : [TIMEOUT, CRCERROR], ELSE 스트링 존재 유무
-    for (const auto& dataList : matchingTableList) {
-        if ((dataList.filter(checkStrSub).isEmpty() == false) || (dataList.filter(QString("ELSE")).isEmpty() == false)) {
-            existMatchingStr = true;
-            break;
-        }
-    }
+    // qDebug() << "isConvertedExceptionData :" << inputData.size() << foundInfo;
 
-    if (existMatchingStr) {
-        // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 를 [timeout, crc] 로 변환
-        checkDataList[foundIndex] = changeStr;
-        // qDebug() << "3. Exception - Change :" << tempDataList << "->" << checkDataList;
-    } else {
-        // MatchingTable : [TIMEOUT, CRCERROR], ELSE 가 존재 하지 않음
-        QString valueEnumHex;
-        // ValueEnum : MatchingTable[MESSAGE_TIMEOUT, CRC_ERROR] 유무 확인
-        for (const auto& data : valueEnum) {
-            if (data.contains(checkStrMain)) {
-                valueEnumHex = data;
-                valueEnumHex.remove(checkStrMain);
-                valueEnumHex.remove(QRegularExpression(R"([":\s])"));  // Delete - ":", "\"", " "
+    QStringList convertData = inputData;
+    for (const auto& key : foundInfo.keys()) {
+        const QString checkOriginStr = ExcelUtil::instance().data()->isKeywordString(key);
+        const QPair<QString, QString> info = checkInfo[key];
+        const QString checkMatchingTable = info.first;
+        const QString changeStr = info.second;
+        const int foundIndex = foundInfo[key];
+
+        bool existMatchingStr = false;  // MatchingTable : [TIMEOUT, CRCERROR], ELSE 스트링 존재 유무
+        for (const auto& dataList : matchingTableList) {
+            if ((dataList.filter(checkMatchingTable).isEmpty() == false) ||
+                (dataList.filter(QString("ELSE")).isEmpty() == false)) {
+                existMatchingStr = true;
                 break;
             }
         }
 
-        bool existMatchingHexValue = false;  // ValueEnum : MatchingTable[MESSAGE_TIMEOUT, CRC_ERROR] 에 해당하는 HEX 값 존재 유무
-        if (valueEnumHex.size() > 0) {
-            for (const auto& matchingTable : matchingTableList) {
-                for (const auto& data : matchingTable) {
-                    if (data.contains(valueEnumHex)) {
-                        existMatchingHexValue = true;
+        if (existMatchingStr) {
+            // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 를 [timeout, crc] 로 변환
+            convertData[foundIndex] = changeStr;
+            // qDebug() << "\t 1. Exception - Change :" << checkOriginStr << "->" << changeStr;
+        } else {
+            // MatchingTable : [TIMEOUT, CRCERROR], ELSE 가 존재 하지 않음
+            QString valueEnumHex;
+            // ValueEnum : MatchingTable[MESSAGE_TIMEOUT, CRC_ERROR] 유무 확인
+            for (const auto& data : valueEnum) {
+                if (data.contains(checkOriginStr)) {
+                    valueEnumHex = data;
+                    valueEnumHex.remove(checkOriginStr);
+                    valueEnumHex.remove(QRegularExpression(R"([":\s])"));  // Delete - ":", "\"", " "
+                    break;
+                }
+            }
+
+            // ValueEnum : MatchingTable[MESSAGE_TIMEOUT, CRC_ERROR] 에 해당하는 HEX 값 존재 유무
+            bool existMatchingHexValue = false;
+            if (valueEnumHex.size() > 0) {
+                for (const auto& matchingTable : matchingTableList) {
+                    for (const auto& data : matchingTable) {
+                        if (data.contains(valueEnumHex)) {
+                            existMatchingHexValue = true;
+                            break;
+                        }
+                    }
+                    if (existMatchingHexValue) {
                         break;
                     }
                 }
-                if (existMatchingHexValue) {
-                    break;
-                }
+            }
+
+            if (existMatchingHexValue) {
+                // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 유지
+                convertData[foundIndex] = checkOriginStr;
+                // qDebug() << "\t 2. Exception - Keep  :" << checkOriginStr;
+            } else {
+                // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 삭제
+                convertData.removeAll(checkOriginStr);
+                // qDebug() << "\t 3. Exception - Remove :" << checkOriginStr;
             }
         }
-
-        if (existMatchingHexValue) {
-            // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 유지
-            checkDataList[foundIndex] = checkStrMain;
-            // qDebug() << "2. Exception - Keep   :" << tempDataList << "->" << checkDataList;
-        } else {
-            // ConvertData : [MESSAGE_TIMEOUT, CRC_ERROR] 삭제
-            checkDataList.removeAll(checkStrMain);
-            // qDebug() << "1. Exception - Remove :" << tempDataList << "->" << checkDataList;
-        }
     }
+
+    return convertData;
 }
-
-#if 0
-QString SignalDataManager::isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,
-                                                     const QString& checkStr) {
-    const auto valueEnumData = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
-
-    QString exceptionValue;
-
-    // 1. Check : (ValueEnum : MESSAGE_TIMEOUT) && (MatchingTable : TIMEOUT)  =>> timeout
-    // 2. Check : (ValueEnum : CRC_ERROR)       && (MatchingTable : CRCERROR) =>> crc
-    if (valueEnumData.filter(originStr).isEmpty() == false) {
-        for (const auto& key : dataInfo.keys()) {
-            if ((key <= ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) ||
-                (key >= ivis::common::InputDataTypeEnum::InputDataTypeInputData)) {
-                continue;
-            }
-
-            auto matchingTableData = dataInfo[key];
-            // qDebug() << "\t\t ContainString :" << matchingTableData << ">>" << checkStr;
-            if (matchingTableData.filter(checkStr).isEmpty() == false) {
-                exceptionValue = checkStr.toLower();
-                break;
-            }
-        }
-    }
-
-    // qDebug() << "isCheckBothExceptionValue :" << originStr << checkStr;
-    // qDebug() << "\t ValueEnum :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
-    // qDebug() << "\t MatchingTableICV  :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
-    // qDebug() << "\t MatchingTableEV   :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
-    // qDebug() << "\t MatchingTableFCEV :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
-    // qDebug() << "\t MatchingTablePHEV :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV];
-    // qDebug() << "\t MatchingTableHEV  :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV];
-    // qDebug() << "\t Found             :" << foundState << exceptionValue;
-
-    return exceptionValue;
-}
-
-QPair<QStringList, QStringList> SignalDataManager::isCheckExceptionValueEnum(const QString& signalName,
-                                                                             const QMap<int, QStringList>& dataInfo) {
-    const QString originTimeOut =
-        ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout));
-    const QString checkTimeOut = QString("TIMEOUT");
-    const QStringList valueEnum = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
-    QStringList originData = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
-    QPair<QStringList, QStringList> exceptionData(originData, originData);
-
-    int signalType = isSignalType(signalName);
-
-    // qDebug() << "isCheckExceptionValueEnum :" << signalName << signalType << originData;
-
-    if ((signalType > static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) &&
-        (signalType < static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Vehicle))) {
-        // qDebug() << "not support sfc signal :" << signalName;
-        return exceptionData;
-    }
-
-    for (const auto& data : originData) {
-        if (data.contains(originTimeOut) == false) {
-            // qDebug() << "origindata does not contain MESSAGE_TIMEOUT :" << signalName;
-            return exceptionData;
-        }
-    }
-
-    QString exceptionValue = isCheckBothExceptionValue(dataInfo, originTimeOut, checkTimeOut);
-    if (exceptionValue.size() > 0) {  // Chceck MatchingTable : TIMEOUT
-        // qDebug() << "both value contains is ValueEnum(MESSAGE_TIMEOUT), MatchingTable(TIMEOUT) :" << signalName;
-        exceptionData = QPair<QStringList, QStringList>(QStringList(), QStringList({exceptionValue}));
-        return exceptionData;
-    }
-
-    for (auto value : valueEnum) {
-        if (value.contains(originTimeOut)) {
-            originData.removeAll(originTimeOut);
-            exceptionData = QPair<QStringList, QStringList>(QStringList({originTimeOut}), originData);
-            // qDebug() << "other exception data :" << signalName;
-            return exceptionData;
-        }
-    }
-
-    // 예외처리
-    const int startIndex = ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV;
-    const QStringList keywordList = QStringList({"TIMEOUT:", "CRCERROR:", "ELSE:"});
-    QString matchingValue;
-
-    for (const auto& keyword : keywordList) {
-        for (int index = startIndex; index < ivis::common::InputDataTypeEnum::InputDataTypeMax; ++index) {
-            for (auto& matchingTable : dataInfo[index]) {
-                if (matchingTable.contains(keyword)) {
-                    matchingValue = matchingTable.remove(keyword);
-                    break;
-                }
-            }
-        }
-    }
-
-    QString matchingEnum = matchingValue;
-    isConvertedSignalDataValueEnum(true, signalName, valueEnum, matchingEnum);
-    if (matchingEnum.size() > 0) {
-        originData.removeAll(originTimeOut);
-        originData.removeAll(checkTimeOut.toLower());
-        originData.removeAll(matchingEnum);
-        matchingEnum = checkTimeOut.toLower();
-    } else {
-        for (auto& origin : originData) {
-            if (origin.contains(originTimeOut)) {
-                origin.replace(originTimeOut, checkTimeOut.toLower());
-                // qDebug() << signalName << ":" << originTimeOut << "->" << checkTimeOut.toLower();
-            }
-        }
-    }
-
-    exceptionData = QPair<QStringList, QStringList>(QStringList({matchingEnum}), originData);
-
-#if 0
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    qDebug() << "isCheckExceptionValueEnum :" << signalName;
-    qDebug() << "\t Matching        :" << matchingValue << matchingEnum;
-    qDebug() << "\t InputData       :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
-    qDebug() << "\t OriginData      :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeInputData];
-    qDebug() << "\t ExceptionFirst  :" << exceptionData.first;
-    qDebug() << "\t ExceptionSecond :" << exceptionData.second;
-    qDebug() << "\t ValueEnum       :" << valueEnum;
-    // qDebug() << "\t 1 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
-    // qDebug() << "\t 2 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
-    // qDebug() << "\t 3 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableFCEV];
-    // qDebug() << "\t 4 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTablePHEV];
-    // qDebug() << "\t 5 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableHEV];
-    // qDebug() << "\t 6 MatchingTable :" << dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableSystem];
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n";
-#endif
-
-    return exceptionData;
-}
-#endif
 
 bool SignalDataManager::isExceptionSignal(const QString& signalName) {
     if (ivis::common::isCompareString(signalName, QString("collect"))) {
@@ -1988,7 +1881,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
         QStringList allConvertData = signalData.getAllConvertData();
 
         if ((ignState == false) && (valueEnum.size() == 0) && (notUsedEnum.size() == 0)) {
-            auto valueInfo = isConvertedValue(signalName, dataType, originData, QStringList());
+            auto valueInfo = isConvertedValueData(signalName, dataType, originData, QStringList());
             notUsedEnum = valueInfo.first;
         }
 
@@ -2054,6 +1947,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         QString maxValueState = ExcelUtil::instance().data()->isPreconditionMaxValue(signalName, dataType, keywordType,
                                                                                      convertData, valueEnum);
         bool enumState = (valueEnum.size() > 0);
+        bool removeDuplicate = true;
 
         // Signal, Data 처리 순서 보장 필요 : ignState -> valueState -> maxValueState -> enumState
         if (ignState) {
@@ -2088,37 +1982,41 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
             if (otherSignalDataInfo.size() == 1) {
                 QString key = otherSignalDataInfo.firstKey();
                 QStringList otherAllConvertData = otherSignalDataInfo[key].getAllConvertData();
-                auto valueInfo = isConvertedValue(signalName, dataType, originData, otherAllConvertData);
+                auto valueInfo = isConvertedValueData(signalName, dataType, originData, otherAllConvertData);
                 convertData = valueInfo.first;
                 precondition = valueInfo.second;
+                if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) ||
+                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) ||
+                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow)) ||
+                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot))) {
+                    // 해당 조건이 경우 중복 삭제 하지 않고 데이터 저장
+                    removeDuplicate = false;
+                }
             } else {
-                qDebug() << "Fail to other all convert data size :" << otherSignalDataInfo.size();
+                // qDebug() << "Fail to other all convert data size :" << otherSignalDataInfo.size();
             }
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-            isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
-
-            // qDebug() << "\t KeywordType  :" << keywordType;
-            // qDebug() << "\t ConvertData  :" << convertData;
-            // qDebug() << "\t Rrecondition :" << precondition;
-            // qDebug() << "\n\n";
+            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
+            precondition = isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
         } else if (maxValueState.size() > 0) {
             precondition = QStringList({maxValueState});
         } else if (enumState) {
-            auto enumInfo = isConvertedEnum(keywordType, convertData, notUsedEnum);
+            auto enumInfo = isConvertedEnumData(keywordType, convertData, notUsedEnum);
             convertData = enumInfo.first;
             precondition = enumInfo.second;
             notUsedEnum.clear();
 
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-            isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
+            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
+            precondition = isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
         } else {
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
         }
 
-        convertData.removeDuplicates();
-        precondition.removeDuplicates();
+        if (removeDuplicate) {
+            convertData.removeDuplicates();
+            precondition.removeDuplicates();
+        }
 
         newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
                                                    notUsedEnum, precondition, allConvertData);
@@ -2220,7 +2118,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
 
             QString tempMatchingValue;  // not used
             convertData = isConvertedSignalDataValueEnum(true, signalName, valueEnum, tempMatchingValue);
-            isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
+            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
 
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
             notUsedEnum.clear();
@@ -2644,7 +2542,7 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 
 void SignalDataManager::testCode(const QVariantList& arg) {
     if (arg.size() == 0) {
-        const static QMap<int, QStringList> customData = {
+        const static QMap<int, QStringList> customData_0 = {
             {0, QStringList({"[CustomOver][0]", "[1]"})},                                       // >0    ->  0 이하(HInt64), 공백
             {1, QStringList({"[CustomMoreThanEqual][-1]", "[0]"})},                             // >=0   -> -1 이하(HInt64), 공백
             {2, QStringList({"[CustomOver][10]", "[11]"})},                                     // >10   ->  9 이하 (min 이하)
@@ -2679,12 +2577,72 @@ void SignalDataManager::testCode(const QVariantList& arg) {
             {21, QStringList({"[CustomNotTrigger][CustomOver][100]", "[101]"})},
             {22, QStringList({"[CustomNotTrigger][CustomOver][100][101]"})},
         };
+        const static QMap<int, QStringList> customData_1 = {
+            {0, QStringList({"[CustomOver][100]", "[101]"})},
+            {1, QStringList({"[CustomUnder][100]", "[99]"})},
+            {2, QStringList({"[CustomMoreThanEqual][99]", "[100]"})},
+            {3, QStringList({"[CustomLessThanEqual][101]", "[100]"})},
+            {4, QStringList({"[CustomFlow][1]", "[2]"})},
+            {5, QStringList({"[CustomFlow][1, 1, 1, 1]", "[2, 3, 4, 5]"})},
+            {6, QStringList({"[CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1, 1, 1, 1]"})},
+            {7, QStringList({"[CustomNotFlow][4294967296]", "[10]"})},
+            {8, QStringList({"[CustomFlowNot][10]", "[4294967296]"})},
+            {9, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                             "[1, 2, 9, 10]"})},
+            {10, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967295]",
+                             "[1, 2, 4294967295, 4294967296]"})},
+            {11, QStringList({"[CustomNotRange][1, 2, 9, 10]",
+                              "[4294967296, 4294967296, 4294967296, 4294967296]"})},
+            {12, QStringList({"[CustomNot][2, 3, 4]",
+                              "[4294967296, 4294967296, 4294967296]"})},
+        };
+        const static QMap<int, QStringList> customData_2 = {
+            {0, QStringList({"[CustomNotTrigger][CustomOver][100]", "[101]"})},
+            {1, QStringList({"[CustomNotTrigger][CustomUnder][100]", "[99]"})},
+            {2, QStringList({"[CustomNotTrigger][CustomMoreThanEqual][99]", "[100]"})},
+            {3, QStringList({"[CustomNotTrigger][CustomLessThanEqual][101]", "[100]"})},
+            {4, QStringList({"[CustomNotTrigger][CustomFlow][1]", "[2]"})},
+            {5, QStringList({"[CustomNotTrigger][CustomFlow][1, 1, 1, 1]", "[2, 3, 4, 5]"})},
+            {6, QStringList({"[CustomNotTrigger][CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1, 1, 1, 1]"})},
+            {7, QStringList({"[CustomNotTrigger][CustomNotFlow][4294967296]", "[10]"})},
+            {8, QStringList({"[CustomNotTrigger][CustomFlowNot][10]", "[4294967296]"})},
+            {9, QStringList({"[CustomNotTrigger][CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                             "[1, 2, 9, 10]"})},
+            {10, QStringList({"[CustomNotTrigger][CustomRange][4294967296, 4294967296, 4294967296, 4294967295]",
+                             "[1, 2, 4294967295, 4294967296]"})},
+            {11, QStringList({"[CustomNotTrigger][CustomNotRange][1, 2, 9, 10]",
+                              "[4294967296, 4294967296, 4294967296, 4294967296]"})},
+            {12, QStringList({"[CustomNotTrigger][CustomNot][2, 3, 4]",
+                              "[4294967296, 4294967296, 4294967296]"})},
+        };
+        static QMap<int, QStringList> customData = customData_1;
+
         static int size = customData.size();
         static int index = 0;
+
         int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
-        // int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
-        // int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
-        isConvertedValue(QString("Signal.Test"), dataType, customData[index], QStringList());
+        // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
+        // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
+
+        QStringList otherAllData;
+        otherAllData.append(QStringList({"1", "20", "100", "30", "500", "1000", "10", "9", "11", "5"}));
+        // otherAllData.append(QStringList({"MESSAGE_TIMEOUT", "CRC_ERROR"}));
+
+        qDebug() << "====================================================================================================";
+        qDebug() << "testCode";
+        qDebug() << "\t Step         :" << index << "/" << (size - 1);
+        qDebug() << "\t DataType     :" << dataType;
+        qDebug() << "\t OriginData   :" << customData[index];
+        qDebug() << "\t OtherAllData :" << otherAllData;
+        qDebug() << "\n";
+
+        auto valueInfo = isConvertedValueData(QString("Signal.Test"), dataType, customData[index], otherAllData);
+        QStringList convertData = valueInfo.first;
+        QStringList precondition = valueInfo.second;
         ivis::common::REVOLVE_P(index, 1, 0, size);
+
+        qDebug() << "\t ConvertData  :" << convertData;
+        qDebug() << "\t Precondition :" << precondition;
+        qDebug() << "\n";
     }
 }

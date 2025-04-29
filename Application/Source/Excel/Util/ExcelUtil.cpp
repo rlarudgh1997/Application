@@ -255,6 +255,9 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString("[CustomConfig]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig)),
             qMakePair(QString("[CustomNot]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot)),
             qMakePair(QString("[CustomDontCare]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare)),
+            qMakePair(QString("[CustomNotFlow]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow)),
+            qMakePair(QString("[CustomNotRange]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange)),
+            qMakePair(QString("[CustomFlowNot]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot)),
             qMakePair(QString("[CustomNotDefined]"),
                       static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined)),
         };

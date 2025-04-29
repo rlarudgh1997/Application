@@ -563,6 +563,7 @@ public:
         CustomDontCare,         // used int, uint, double type only (except enum type)
         CustomNotFlow,          // used int, uint, double type only (except enum type) -> TODO: 케이스 존재 시 개발 예정
         CustomNotRange,         // used int, uint, double type only (except enum type) -> TODO: 케이스 존재 시 개발 예정
+        CustomFlowNot,
         CustomOver,
         CustomUnder,
         CustomRange,

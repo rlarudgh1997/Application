@@ -107,17 +107,12 @@ private:
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
     bool isExceptionSignal(const QString& signalName);
-    QPair<QStringList, QStringList> isConvertedValue(const QString& signalName, const int& dataType,
+    QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType,
                                                      const QStringList& originData, const QStringList& otherAllData);
-    QPair<QStringList, QStringList> isConvertedEnum(const int& keywordType, const QStringList& inputData,
+    QPair<QStringList, QStringList> isConvertedEnumData(const int& keywordType, const QStringList& inputData,
                                                     const QStringList& notUsedEnum);
-    void isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo, QStringList& checkDataList);
-#if 0
-    QString isCheckBothExceptionValue(const QMap<int, QStringList>& dataInfo, const QString& originStr,
-                                      const QString& checkStr);
-    QPair<QStringList, QStringList> isCheckExceptionValueEnum(const QString& signalName,
-                                                              const QMap<int, QStringList>& dataInfo);
-#endif
+    QStringList isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
+                                         const QStringList& inputData);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);
     QStringList extractMatchingSignal(const QString& filePath);
