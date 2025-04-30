@@ -109,8 +109,9 @@ private:
     bool isExceptionSignal(const QString& signalName);
     QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType,
                                                      const QStringList& originData, const QStringList& otherAllData);
-    QPair<QStringList, QStringList> isConvertedEnumData(const int& keywordType, const QStringList& inputData,
-                                                    const QStringList& notUsedEnum);
+    QPair<QStringList, QStringList> isConvertedEnumData(const QString& signalName, const int& _keywordType,
+                                                        const QStringList& _convertData, const QStringList& _notUsedEnum,
+                                                        const QStringList& _originData = QStringList());
     QStringList isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
                                          const QStringList& inputData);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
