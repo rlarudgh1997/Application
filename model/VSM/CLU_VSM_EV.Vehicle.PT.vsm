@@ -1,0 +1,7046 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- AMT_IMT:
+  type: branch
+
+
+- Aux_Battery_Warning:
+  type: branch
+
+
+- AWD:
+  type: branch
+
+
+- Battery_Discharging_Warning:
+  type: branch
+
+
+- CC_MSLA:
+  type: branch
+
+
+- Coasting:
+  type: branch
+
+
+- DBC:
+  type: branch
+
+
+- DPF_GPF:
+  type: branch
+
+
+- Dyno_Certification_Mode:
+  type: branch
+
+
+- Eco_Power_Charge_Gauge:
+  type: branch
+
+
+- Emission_Test_Mode:
+  type: branch
+
+
+- Energy_Flow:
+  type: branch
+
+
+- Engine_Oil_Warning:
+  type: branch
+
+
+- Engine_Temperature:
+  type: branch
+
+
+- Engine_Warning:
+  type: branch
+
+
+- EV_Accel_Boost_Mode:
+  type: branch
+
+
+- EV_Battery_Warning:
+  type: branch
+
+
+- EV_Boost_Mode:
+  type: branch
+
+
+- EV_Charging_System:
+  type: branch
+
+
+- EV_Power_Down:
+  type: branch
+
+
+- FCEV_Warning:
+  type: branch
+
+
+- Fuel_System:
+  type: branch
+
+
+- GLOW:
+  type: branch
+
+
+- Green_Zone_Lamp:
+  type: branch
+
+
+- HEV_Charge_Warning:
+  type: branch
+
+
+- HEV_Engine_Warning:
+  type: branch
+
+
+- HEV_Mode:
+  type: branch
+
+
+- High_Performance_For_N_Brand:
+  type: branch
+
+
+- High_Performance_Gauge:
+  type: branch
+
+
+- Inverter_Coolant_Warning:
+  type: branch
+
+
+- ISG:
+  type: branch
+
+
+- LPI:
+  type: branch
+
+
+- Mild_HEV_System:
+  type: branch
+
+
+- PHEV_Mode:
+  type: branch
+
+
+- PMPD:
+  type: branch
+
+
+- Predictive_Shift:
+  type: branch
+
+
+- Regen_System:
+  type: branch
+
+
+- SBW:
+  type: branch
+
+
+- SCR:
+  type: branch
+
+
+- Self_Regenerative:
+  type: branch
+
+
+- SOC_Gauge:
+  type: branch
+
+
+- Solar_Roof:
+  type: branch
+
+
+- Tachometer:
+  type: branch
+
+
+- Trailer_Mode:
+  type: branch
+
+
+- Transmission_Indicator:
+  type: branch
+
+
+- Transmission_Warning:
+  type: branch
+
+
+- Utility_Mode:
+  type: branch
+
+
+- Vehicle_Auto_Shut_Off:
+  type: branch
+
+
+- xEV_Service_Lamp:
+  type: branch
+
+
+- xEV_System_Ready:
+  type: branch
+
+
+- Energy_Flow.Output_SocDisplayLevelStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "SEG0"
+    0x1: "SEG1"
+    0x2: "SEG2"
+    0x3: "SEG3"
+    0x4: "SEG4"
+    0x5: "SEG5"
+    0x6: "SEG6"
+    0x7: "SEG7"
+    0x8: "SEG8"
+    0x9: "INVALID"
+
+
+- EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "NOT_APPLIED"
+    0x1: "APPLIED"
+
+
+- Fuel_System.Output_FuelDisplayLevelStatus:
+  type: branch
+  dataType: HUInt64
+
+
+- Fuel_System.Output_LowFuelWarnStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "LOW_FUEL_WARN"
+    0x2: "ERROR"
+
+
+- Fuel_System.Output_RefuelWarnStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "ERROR"
+
+
+- High_Performance_For_N_Brand.Output_LapTimerHourValue:
+  type: branch
+  dataType: HUInt64
+
+
+- High_Performance_For_N_Brand.Output_LapTimerLapNumberValue:
+  type: branch
+  dataType: HUInt64
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMeasuringStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "STOP_LAP_TIMER"
+    0x1: "UNDER_LAP_TIMER_MEASUREMENT"
+    0x2: "RESET_LAP_TIMER"
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMilisecondValue:
+  type: branch
+  dataType: HUInt64
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMinuteValue:
+  type: branch
+  dataType: HUInt64
+
+
+- High_Performance_For_N_Brand.Output_LapTimerSecondValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Self_Regenerative.Output_SelfRgnOnOffSetReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "STOP"
+    0x2: "ONGOING"
+
+
+- AMT_IMT.Input_AmtGearShiftWarnStatus:
+  type: sensor
+  signalName: EMS_Gear_Warn
+  dataType: HUInt64
+  description: "This signal is given when a vehicle does not start.It indicates that gear is not in designated position."
+  abstractionName: Input_AmtGearShiftWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- AMT_IMT.Input_EngineOverRunWarnStatus:
+  type: sensor
+  signalName: Eng_OverRun
+  dataType: HUInt64
+  description: "normal operation RPM range.(ex. mis-handling of a MT gear lever)During normal status, this signal sends 0x0h (including initial value),If Engine RPM is over normal range such as 8,000rpm, this signal sends 0x01h."
+  abstractionName: Input_EngineOverRunWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- AMT_IMT.Input_ImtClutchOpenWarnStatus:
+  type: sensor
+  signalName: IMT_CltOpnWrn
+  dataType: HUInt64
+  description: "Warning of Clutch open control for preventing engine stallIMT will send 0x1 @ vehicle in stop.IMT will send 0x2 @ vehicle in running."
+  abstractionName: Input_ImtClutchOpenWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AMT_IMT.Input_ImtVehicleOnGuideReqStatus:
+  type: sensor
+  signalName: EMS_BrkClthPrs_Warn
+  dataType: HUInt64
+  description: "In order to start engine of iMT, both of brake pedal and clutch pedal is needed to be pressed. This signal is to indicate warning when driver does not satisfy these starting condisions."
+  abstractionName: Input_ImtVehicleOnGuideReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryRelayOffWarnStatus:
+  type: sensor
+  signalName: xEV_12VRlyOffAlrmReq
+  dataType: HUInt64
+  description: "12V Battery Relay Off Alarm Request"
+  abstractionName: Input_AuxBatteryRelayOffWarnStatus
+  valueEnum:
+    0x0: "WARN_ON"
+    0x1: "WARN_OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryRelayOnWarnStatus:
+  type: sensor
+  signalName: xEV_12VRlyOnAlrmReq
+  dataType: HUInt64
+  description: "12V Battery Relay On Alarm Request"
+  abstractionName: Input_AuxBatteryRelayOnWarnStatus
+  valueEnum:
+    0x0: "WARN_ON"
+    0x1: "WARN_OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryResetOnReqStatus:
+  type: sensor
+  signalName: xEV_12VRlyOnSwReq
+  dataType: HUInt64
+  description: "12V relay ON switch ON status. BMS sets this Flag when 12V Relay Switch is ON."
+  abstractionName: Input_AuxBatteryResetOnReqStatus
+  valueEnum:
+    0x0: "ON_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromALDC:
+  type: sensor
+  signalName: ALDC_AuxBattWrnLmpReq
+  dataType: HUInt64
+  description: "Aux Battery warning lamp request flag"
+  abstractionName: Input_AuxBatteryWarnReqFromALDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromEMS:
+  type: sensor
+  signalName: ENG_BattWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the 'Battery Warning Lamp'"
+  abstractionName: Input_AuxBatteryWarnReqFromEMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC:
+  type: sensor
+  signalName: LDC_AuxBattWrnLmpReq
+  dataType: HUInt64
+  description: "Aux Battery warning lamp request flag"
+  abstractionName: Input_AuxBatteryWarnReqFromLDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC48V:
+  type: sensor
+  signalName: LDC48V_AuxBattWrnLmpReq
+  dataType: HUInt64
+  description: "Aux Battery warning lamp request flag"
+  abstractionName: Input_AuxBatteryWarnReqFromLDC48V
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_AuxBatteryWarnStatus:
+  type: sensor
+  signalName: BmsFailWarning
+  dataType: HUInt64
+  description: "If a 12V lithium battery fails, it is a signal that is sent according to the type of fault"
+  abstractionName: Input_AuxBatteryWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_EvAuxBatteryWarnStatus:
+  type: sensor
+  signalName: LDC_AuxBattWrnAlrmReq
+  dataType: HUInt64
+  description: "Aux Battery warning alarm request flag"
+  abstractionName: Input_EvAuxBatteryWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_EvAuxBatteryWarnStatusFromALDC:
+  type: sensor
+  signalName: ALDC_AuxBattWrnAlrmReq
+  dataType: HUInt64
+  description: "Aux Battery warning alarm request flag"
+  abstractionName: Input_EvAuxBatteryWarnStatusFromALDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_MainLBMRelayOnStatus:
+  type: sensor
+  signalName: MainLBM_RlyOnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_MainLBMRelayOnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PRESS_BTN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Aux_Battery_Warning.Input_MainLithumBatteryWarnStatus:
+  type: sensor
+  signalName: MainLBM_BmsFailWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_MainLithumBatteryWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AWD.Input_ApsOperationValue:
+  type: sensor
+  signalName: ENG_AccelPdlVal
+  dataType: HUInt64
+  description: "The signal PV_AV_CAN is a measure of the Accelerator Pedal value.The accelerator pedal value is determined via 2 pedal sensors, which are connected mechanically to theaccelerator pedal. If the EMS-ECU recognizes that the accelerator pedal is not activated, then the value00 H is carried over on the CAN. If the EMS-ECU detects that the accelerator pedal is fully activated, then 3FEH is carried over on the CAN bus.If an error is detected on both pedal sensor channels, this is identified by the value 3FFH.Signal relationship between ACC_ACT and PV_AV_CAN :The phase relationship between auto cruise control and PV_AV_CAN is as following figure. If an auto cruise control system is not installed or if cruise control is not activated in auto cruise control system installed vehicle then PV_AV_CAN has actual pedal position value. But if the auto cruise control is activated (actually speed control is performed by EMS), PV_AV_CAN should have modeling value even if a driver does not press the acceleration pedal.If ACC_ACT is value(0), then PV_AV_CAN is APS Value.If ACC_ACT is value(1), then PV_AV_CAN is Modeling Value.* APS Value : Acceleration Pedal Sensor value.* Modeling Value : Estimated APS value which is calculated by ECU logic considering engine control during the auto-cruise control is activated period. (e.g. estimated throttle value ofgasoline engine system or TPS model value of diesel engine system)And also this value can be used as a driver intension for the shift control of an A/T during auto-cruise control.Signal relationship between PV_AV_CAN and TPS in DIESEL system :In a diesel engine vehicle which has an ETC system, basically TPS has APS value. And if auto cruise control is activated then both TPS and PV_AV_CAN should have modeling value which is estimated according to the actual fuel injection and other factors that affect engine torque."
+  abstractionName: Input_ApsOperationValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x3FF
+
+
+- AWD.Input_AwdErrorStatus:
+  type: sensor
+  signalName: VCU_AwdDiagDispSta
+  dataType: HUInt64
+  description: "e4WD Diagnosis Display Status"
+  abstractionName: Input_AwdErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- AWD.Input_AwdFrontTorqueDisplayValue:
+  type: sensor
+  signalName: VCU_FrntTqDispPcVal
+  dataType: HUInt64
+  description: "Front Torque Display Percent Value"
+  abstractionName: Input_AwdFrontTorqueDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- AWD.Input_AwdFrontTorqueValue:
+  type: sensor
+  signalName: AWD_FrTqDistRto
+  dataType: HUInt64
+  description: "Signal for display on cluster.(Torque Distribution ratio to Front Wheel)"
+  abstractionName: Input_AwdFrontTorqueValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0
+
+
+- AWD.Input_AwdLockActStatus:
+  type: sensor
+  signalName: VCU_AwdLockDispSta
+  dataType: HUInt64
+  description: "e4WD Lock Mode Display Status"
+  abstractionName: Input_AwdLockActStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LOCK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- AWD.Input_AwdMode2HStatus:
+  type: sensor
+  signalName: AWD_OpMod2HSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AwdMode2HStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AWD.Input_AwdMode4AStatus:
+  type: sensor
+  signalName: AWD_OpModAutoSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AwdMode4AStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AWD.Input_AwdMode4HStatus:
+  type: sensor
+  signalName: AWD_OpMod4HSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AwdMode4HStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AWD.Input_AwdMode4LStatus:
+  type: sensor
+  signalName: AWD_OpModLowSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AwdMode4LStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- AWD.Input_AwdModeWarnOnOffStatus:
+  type: sensor
+  signalName: AWD_CluDispDetail
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AwdModeWarnOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_STOP_N_RETRY"
+    0x2: "WARN_CANCEL"
+    0x3: "WARN_VEHICLE_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AWD.Input_AwdRearTorqueDisplayValue:
+  type: sensor
+  signalName: VCU_RearTqDispPcVal
+  dataType: HUInt64
+  description: "Rear Torque Display Percent Value"
+  abstractionName: Input_AwdRearTorqueDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- AWD.Input_AwdRearTorqueValue:
+  type: sensor
+  signalName: AWD_RrTqDistRto
+  dataType: HUInt64
+  description: "Signal for display on cluster (Torque Distribution ratio to Rear Wheel)"
+  abstractionName: Input_AwdRearTorqueValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0
+
+
+- AWD.Input_EldOperationStatus:
+  type: sensor
+  signalName: eLD_Lamp_Disp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EldOperationStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ELD_ON"
+    0x2: "ELD_BLINK"
+    0x3: "ELD_ERR"
+    0x4: "DISPLAY_OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0xF: 0x3
+    ELSE: 0x4
+
+
+- AWD.Input_EldWarningStatus:
+  type: sensor
+  signalName: eLD_CLU_Disp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EldWarningStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NOT_CONNECT"
+    0x2: "NOT_CONNECT_DETAIL"
+    0x3: "NOT_CANCEL"
+    0x4: "NOT_CANCEL_DETAIL"
+    0x5: "AUTO_CANCEL"
+    0x6: "AUTO_CONNECT"
+    0x7: "CHECK_TIRE_SIZE"
+    0x8: "CHECK_DRIVEMODE"
+    0x9: "NOT_MET_CONDITION"
+    0xA: "CANNOT_DISCONNECT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0xE: 0x9
+    0xF: 0xA
+    ELSE: 0x0
+
+
+- AWD.Input_OffRoadPitchValue:
+  type: sensor
+  signalName: CDCU_Rd_LongGrdntPerc
+  dataType: HUInt64
+  description: "This signal indicates longitudinal gradient in % unit.        Physical range : -100% ~ +100% = 0x1C ~ 0xE4         Conversion : (PH) = (HEX) – 80H"
+  abstractionName: Input_OffRoadPitchValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- AWD.Input_OffRoadRollValue:
+  type: sensor
+  signalName: CDCU_Rd_LatGrdntPerc
+  dataType: HUInt64
+  description: "This signal indicates lateral gradient in % unit.        Physical range : -100% ~ +100% = 0x1C ~ 0xE4         Conversion : (PH) = (HEX) – 80H"
+  abstractionName: Input_OffRoadRollValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- AWD.Input_OutTempUnitStatus:
+  type: sensor
+  signalName: DATC_TempDispUnitSta
+  dataType: HUInt64
+  description: "This signal indicates Temp unit of HTR Control (℃, ℉)."
+  abstractionName: Input_OutTempUnitStatus
+  valueEnum:
+    0x0: "CELSIUS"
+    0x1: "FAHRENHEIT"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- AWD.Input_SteerAngleValue:
+  type: sensor
+  signalName: SAS_AnglVal
+  dataType: HUInt64
+  description: "Information regarding the steering wheel angle.  (PH) = (HEX) * 0.1 (0 <  HEX < 7FFFH) or (PH) = (HEX - 65536) * 0.1 (HEX > 7FFFH)this signal has direction information.'+' Value means Counter clock wise rotation.'-' value means Clock wise rotation.this signal value is valid 1.5 sec later from IG-ON."
+  abstractionName: Input_SteerAngleValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0
+
+
+- AWD.Input_TireAngleBySteerVal:
+  type: sensor
+  signalName: TIRE_EstAvgTireAngl
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TireAngleBySteerVal
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x3F
+
+
+- AWD.Input_TransferLockOperationStatus:
+  type: sensor
+  signalName: dummy node
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_TransferLockOperationStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "DISPLAY_OFF"
+
+
+- AWD.Input_TransmissionOilTempValue:
+  type: sensor
+  signalName: TCU_AtTempCVal
+  dataType: HUInt64
+  description: "Transmission fluid temperature in TCU sensed via an A/D converter; converted into degrees centigrade (°C)."
+  abstractionName: Input_TransmissionOilTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Battery_Discharging_Warning.Input_BatteryDischargeWarnStatus:
+  type: sensor
+  signalName: Bat_dischrg
+  dataType: HUInt64
+  description: "Battery discharge notification flag"
+  abstractionName: Input_BatteryDischargeWarnStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Battery_Discharging_Warning.Input_LithiumBatteryDischargeWarnStatus:
+  type: sensor
+  signalName: xEV_12VDarkCurrAlarmForICU
+  dataType: HUInt64
+  description: "12V Battery Alarm request for ICU(CGW)"
+  abstractionName: Input_LithiumBatteryDischargeWarnStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- CC_MSLA.Input_CcOnlySetSpeedValue:
+  type: sensor
+  signalName: VCU_CrzSetSpdVal
+  dataType: HUInt64
+  description: "Cruise Control Set Speed"
+  abstractionName: Input_CcOnlySetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- CC_MSLA.Input_CcSldSetSpeedValue:
+  type: sensor
+  signalName: VCU_SpdLmtSetVal_HighSpd
+  dataType: HUInt64
+  description: "Speed Limiter Vehicle Speed"
+  abstractionName: Input_CcSldSetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- CC_MSLA.Input_CrawlActiveStatus:
+  type: sensor
+  signalName: CRWL_LmpDis
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_CrawlActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVE"
+    0x3: "OVERRIDE"
+    0x4: "PAUSE"
+    0x5: "TEMP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CrawlActiveStepStatus:
+  type: sensor
+  signalName: CRWL_SpdCtrl_Tar
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_CrawlActiveStepStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STEP1"
+    0x2: "STEP2"
+    0x3: "STEP3"
+    0x4: "STEP4"
+    0x5: "STEP5"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CrawlWarnStatus:
+  type: sensor
+  signalName: CRWL_CluDis
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_CrawlWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONDITION_NOT_MET_STOP"
+    0x2: "CONDITION_NOT_MET_DOOR"
+    0x3: "CONDITION_NOT_MET_BELT"
+    0x4: "CONDITION_NOT_MET_TRAILER"
+    0x5: "CONDITION_NOT_MET_AUTOHOLD"
+    0x6: "CONDITION_NOT_MET_BRAKE"
+    0x7: "CONDITION_NOT_MET_TOW"
+    0x8: "CONDITION_NOT_MET_OTHERS"
+    0x9: "READY_FOOT_OFF"
+    0xA: "DISABLE_TEMPORARY"
+    0xB: "DISABLE_TEMPORARY_OVERSPEED"
+    0xC: "UNSTUCK_CHANGE_STEP"
+    0xD: "DISABLE_WARN"
+    0xE: "DISABLE_WARN_OVERSPEED"
+    0xF: "DISABLE_WARN_TRANSMISSION"
+    0x10: "DISABLE_WARN_MANUAL"
+    0x11: "DISABLE_WARN_BRAKE"
+    0x12: "DISABLE_WARN_OVERTIME"
+    0x13: "ERROR"
+    0x14: "CONDITION_NOT_MET_GEAR"
+    0x15: "DISABLE_WARN_AUTOHOLD"
+    0x16: "CONDITION_NOT_MET_SCC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x14
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x16
+    0x9: 0x7
+    0xA: 0x8
+    0xB: 0x9
+    0xD: 0xA
+    0xE: 0xB
+    0xF: 0xC
+    0x10: 0xD
+    0x11: 0xE
+    0x12: 0x15
+    0x13: 0xF
+    0x14: 0x10
+    0x15: 0x11
+    0x16: 0x12
+    0x1B: 0x13
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CruiseInfoDisplayReqStatus:
+  type: sensor
+  signalName: VCU_CrzDrvAlertDisp
+  dataType: HUInt64
+  description: "CC must be disengaged by system or can't be engaged"
+  abstractionName: Input_CruiseInfoDisplayReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_CANCELED"
+    0x2: "NO_CONDITION"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CruiseMainIndReqStatus:
+  type: sensor
+  signalName: VCU_CrzOnLampSta
+  dataType: HUInt64
+  description: "Cruise Control On Lamp"
+  abstractionName: Input_CruiseMainIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CruiseOverrideReqStatus:
+  type: sensor
+  signalName: VCU_CrzOvrrideSta
+  dataType: HUInt64
+  description: "Over Drive by Driver's Request during SCC"
+  abstractionName: Input_CruiseOverrideReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERRIDE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_CruiseSetIndReqStatus:
+  type: sensor
+  signalName: VCU_CrzSetLampSta
+  dataType: HUInt64
+  description: "Cruise Control Set Lamp"
+  abstractionName: Input_CruiseSetIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_NccCameraOperStatus:
+  type: sensor
+  signalName: HCU_CcCameraOperSta
+  dataType: HUInt64
+  description: "This signal describes the operational status of CC with Navigation function.(speed camera control)"
+  abstractionName: Input_NccCameraOperStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_NccDisplayReqStatus:
+  type: sensor
+  signalName: HCU_NccAlrmInfoSta
+  dataType: HUInt64
+  description: "NCC Alarm for driver's Information"
+  abstractionName: Input_NccDisplayReqStatus
+  valueEnum:
+    0x0: "SWITCH_CONTROL_REQ"
+    0x1: "BRAKE_CONTROL_REQ"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x3: 0x1
+    ELSE: 0x2
+
+
+- CC_MSLA.Input_SmvSetSpeedStatus:
+  type: sensor
+  signalName: SMV_SetSpdSta
+  dataType: HUInt64
+  description: "This signal indicates the set speed state in summary view"
+  abstractionName: Input_SmvSetSpeedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x5
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_SpeedLimitActiveStatus:
+  type: sensor
+  signalName: VCU_SpdLmtActSta
+  dataType: HUInt64
+  description: "Speed Limiter Device in Activation"
+  abstractionName: Input_SpeedLimitActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_SpeedLimitInfoDisplayReqStatus:
+  type: sensor
+  signalName: VCU_SpdLmtDrvAlertDisp
+  dataType: HUInt64
+  description: "SLD must be disengaged by system or can't be engaged"
+  abstractionName: Input_SpeedLimitInfoDisplayReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_CANCELED"
+    0x2: "NO_CONDITION"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- CC_MSLA.Input_SpeedLimitReadyStatus:
+  type: sensor
+  signalName: VCU_SpdLimSetLampSta
+  dataType: HUInt64
+  description: " Speed Limiter Device in Operation"
+  abstractionName: Input_SpeedLimitReadyStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "READY"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Coasting.Input_CoastingIndiReqStatus:
+  type: sensor
+  signalName: HCU_CoastIndLmpDis
+  dataType: HUInt64
+  description: "Coasting Indication Lamp Status"
+  abstractionName: Input_CoastingIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "BLINK"
+    0x3: "SET"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Coasting.Input_NccControlStatus:
+  type: sensor
+  signalName: ENG_NCC_STATE
+  dataType: HUInt64
+  description: "Status of NCC"
+  abstractionName: Input_NccControlStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Coasting.Input_PreShiftCoastingDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_CoastingGuide
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftCoastingDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Coasting.Input_SscControlStatus:
+  type: sensor
+  signalName: CF_ECU_SSC_STAT
+  dataType: HUInt64
+  description: "Status of SSC"
+  abstractionName: Input_SscControlStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DBC.Input_DbcAutoCancelDisplayReqStatus:
+  type: sensor
+  signalName: DBC_ClusterDis
+  dataType: HUInt64
+  description: "DBC Pop-up Signal for Deactivation"
+  abstractionName: Input_DbcAutoCancelDisplayReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DBC.Input_DbcFunctionStatus:
+  type: sensor
+  signalName: DBC_FuncLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “DBC Function lamp”"
+  abstractionName: Input_DbcFunctionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DBC.Input_DbcWarnStatus:
+  type: sensor
+  signalName: DBC_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “DBC Warning lamp”"
+  abstractionName: Input_DbcWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DPF_GPF.Input_DpfWarnStatus:
+  type: sensor
+  signalName: HEV_GPF_WrnLamp
+  dataType: HUInt64
+  description: "GPF Warning State"
+  abstractionName: Input_DpfWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "WARN_LEVEL1"
+    0x2: "WARN_LEVEL2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Dyno_Certification_Mode.Input_EvServiceModeStatus:
+  type: sensor
+  signalName: VCU_ServiceModeSta
+  dataType: HUInt64
+  description: "Service Mode"
+  abstractionName: Input_EvServiceModeStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "TEST_MODE_F"
+    0x2: "TEST_MODE_R"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Dyno_Certification_Mode.Input_EvSocDisplayValue:
+  type: sensor
+  signalName: xEV_SocDis
+  dataType: HUInt64
+  description: "Cluster, AVN Display SOC(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvSocDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Eco_Power_Charge_Gauge.Input_EvBoostModeAvailableStatus:
+  type: sensor
+  signalName: VCU_BstAvailSta
+  dataType: HUInt64
+  description: "Boost function's available status"
+  abstractionName: Input_EvBoostModeAvailableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVATE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Eco_Power_Charge_Gauge.Input_EvBoostModeOperationStatus:
+  type: sensor
+  signalName: VCU_BstOpSta
+  dataType: HUInt64
+  description: "Boost function's operating status"
+  abstractionName: Input_EvBoostModeOperationStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVATE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Eco_Power_Charge_Gauge.Input_HevEcoPowerGaugeInputValue:
+  type: sensor
+  signalName: HCU_EcoLvlVal
+  dataType: HUInt64
+  description: "This message is used on the cluster which guides a driver to drive the car economically.Physical Value is linearly displayed as the number of segments in Cluster."
+  abstractionName: Input_HevEcoPowerGaugeInputValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Eco_Power_Charge_Gauge.Input_PowerGaugeDeactivateValue:
+  type: sensor
+  signalName: FCU_MotPwrGaugeLim
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PowerGaugeDeactivateValue
+  valueEnum:
+    0x0: "NO_DATA"
+    0x1: "DEACTIVATE_FROM40"
+    0x2: "DEACTIVATE_FROM45"
+    0x3: "DEACTIVATE_FROM50"
+    0x4: "DEACTIVATE_FROM55"
+    0x5: "DEACTIVATE_FROM60"
+    0x6: "DEACTIVATE_FROM65"
+    0x7: "DEACTIVATE_FROM70"
+    0x8: "DEACTIVATE_FROM75"
+    0x9: "DEACTIVATE_FROM80"
+    0xA: "DEACTIVATE_FROM85"
+    0xB: "DEACTIVATE_FROM90"
+    0xC: "DEACTIVATE_FROM95"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    0xA: 0xA
+    0xB: 0xB
+    0xC: 0xC
+    ELSE: 0x0
+
+
+- Eco_Power_Charge_Gauge.Input_PowerGaugeInputValue:
+  type: sensor
+  signalName: VCU_PwrGaugeVal
+  dataType: HUInt64
+  description: "Motor Torque Ratio To Cluster:VCU send this signal to cluster to show motor power status"
+  abstractionName: Input_PowerGaugeInputValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Emission_Test_Mode.Input_HevEmissionTestModeStatus:
+  type: sensor
+  signalName: HCU_EmissionTestModSta
+  dataType: HUInt64
+  description: "Emission Test Mode"
+  abstractionName: Input_HevEmissionTestModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Energy_Flow.Input_EvEnergyFlowStatus:
+  type: sensor
+  signalName: VCU_EnergyFlowSta
+  dataType: HUInt64
+  description: "Energy Flow Display Status"
+  abstractionName: Input_EvEnergyFlowStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "VEHICLE_STOP"
+    0x2: "EV_PROPULSION"
+    0x3: "POWER_ASSIST"
+    0x4: "ENGINE_ONLY_PROPULSION"
+    0x5: "ENGINE_GENERATION"
+    0x6: "REGENERATION"
+    0x7: "ENGINE_BRAKE"
+    0x8: "POWER_RESEARVE"
+    0x9: "ENGINE_GENERATION_MOTOR_DRIVE"
+    0xA: "ENGINE_GENERATION_REGENERATION"
+    0xB: "ENGINE_BRAKERE_GENERATION"
+    0xC: "EV_FRONT_MOTOR"
+    0xD: "EV_REAR_MOTOR"
+    0xE: "EV_DUAL_MOTOR"
+    0xF: "EV_FRONT_GENERATION"
+    0x10: "EV_REAR_GENERATION"
+    0x11: "EV_DUAL_GENERATION"
+    0x12: "FCEV_CHARGE_IDLE"
+    0x13: "FCEV_ASSIST_NORMAL"
+    0x14: "FCEV_CHARGE_NORMAL"
+    0x15: "FCEV_BATTERY"
+    0x16: "FCEV_REGENERATION"
+    0x17: "FCEV_FUELCELL"
+    0x18: "FCEV_IDLE"
+  matchingTable:
+    0x2: 0xC
+    0x3: 0xD
+    0x4: 0xE
+    0x6: 0xF
+    0x7: 0x10
+    0x8: 0x11
+    ELSE: 0x0
+
+
+- Energy_Flow.Input_EvSocDisplayValue:
+  type: sensor
+  signalName: xEV_SocDis
+  dataType: HUInt64
+  description: "Cluster, AVN Display SOC(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvSocDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Energy_Flow.Output_SocDisplayLevelStatus.Output_SocDisplayLevelStatus_MCAN:
+  type: actuator
+  signalName: CLU_SocSegmentVal_MM
+  dataType: HUInt64
+  description: "Information for Remained Battery Status(For AVN Display, Segment)State of Charge: Seg 0~8Unit: LevelTx Node: CLU- Reference Siganls can be different(Not be Seg 0~8) depends on kinds of vehicle characteristics"
+  abstractionName: Output_SocDisplayLevelStatus
+  valueEnum:
+    0x0: "SEG0"
+    0x1: "SEG1"
+    0x2: "SEG2"
+    0x3: "SEG3"
+    0x4: "SEG4"
+    0x5: "SEG5"
+    0x6: "SEG6"
+    0x7: "SEG7"
+    0x8: "SEG8"
+    0x9: "INVALID"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x1F: 0x9
+
+
+- Engine_Oil_Warning.Input_EngineOilLevelWarnStatus:
+  type: sensor
+  signalName: HEV_OilLvlSta
+  dataType: HUInt64
+  description: "This signal indicates the replace time of engine oil."
+  abstractionName: Input_EngineOilLevelWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning.Input_EngineOilLifeWarnStatus:
+  type: sensor
+  signalName: HEV_OilLifeWarn
+  dataType: HUInt64
+  description: "This signal indicates status of engine oil life warning."
+  abstractionName: Input_EngineOilLifeWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+    0x3: "CHECK_URGENT"
+    0x4: "CHECK_GUIDE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning.Input_EngineOilPressureWarnCANStatus:
+  type: sensor
+  signalName: HEV_OPSFail
+  dataType: HUInt64
+  description: "The signal indicates the status of the 'Oil Pressure Warning Lamp'"
+  abstractionName: Input_EngineOilPressureWarnCANStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Oil_Warning.Input_HevEngineOperStatus:
+  type: sensor
+  signalName: HEV_EngOpSta
+  dataType: HUInt64
+  description: "Engine Operating State"
+  abstractionName: Input_HevEngineOperStatus
+  valueEnum:
+    0x0: "ENGINE_STOP"
+    0x1: "START"
+    0x2: "IDLE_SPEED"
+    0x3: "PART_LOAD"
+    0x4: "PULL"
+    0x5: "FUEL_CUT_OFF"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- Engine_Temperature.Input_EhrsTempWarnStatus:
+  type: sensor
+  signalName: HEV_EhrsTempSta
+  dataType: HUInt64
+  description: "The  signal is condition about EHRS' temperature"
+  abstractionName: Input_EhrsTempWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Temperature.Input_EngineCoolantTempGaugeValue:
+  type: sensor
+  signalName: All_ClntTempGauge
+  dataType: HUInt64
+  description: "This signal is Coolant Temperature Gauge(%) for cluster display purpose.This signal is only used for cluster display."
+  abstractionName: Input_EngineCoolantTempGaugeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- Engine_Temperature.Input_EngineCoolantTempValue:
+  type: sensor
+  signalName: HEV_EngClntTempVal
+  dataType: HUInt64
+  description: "Engine coolant temperature"
+  abstractionName: Input_EngineCoolantTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Engine_Temperature.Input_EngineCoolanttTempWarnStatus:
+  type: sensor
+  signalName: All_ClntTempWLmp
+  dataType: HUInt64
+  description: "This signal is coolant temp warning lamp.This signal is only used for cluster display."
+  abstractionName: Input_EngineCoolanttTempWarnStatus
+  valueEnum:
+    0x0: "WARN_TEMPHIGH"
+    0x1: "WARN_OVERHEAT"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Engine_Temperature.Input_FcevCoolantTempGaugeValue:
+  type: sensor
+  signalName: FCU_StckClntTmpDp
+  dataType: HUInt64
+  description: "Fuel Cell Stack Coolant Temperature Display"
+  abstractionName: Input_FcevCoolantTempGaugeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Engine_Warning.Input_EU7WarnReqStatus:
+  type: sensor
+  signalName: ENG_TqLmtSta_CLU
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EU7WarnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HEATING_ONGOING"
+    0x2: "HEATING_COMPLETE"
+    0x3: "WARN_LOWTEMP"
+    0x4: "WARN_HIGHTEMP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x6: 0x4
+    ELSE: 0x0
+
+
+- Engine_Warning.Input_EmsSafetyFunctionStatus:
+  type: sensor
+  signalName: EMS_SafetyFunctSta
+  dataType: HUInt64
+  description: "This signal is Safety function operation bit."
+  abstractionName: Input_EmsSafetyFunctionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Warning.Input_EngineKNKWarnStatus:
+  type: sensor
+  signalName: ENG_KNK_Warning
+  dataType: HUInt64
+  description: "This signal indicates the result of KNK diagnosis. (KSDS)"
+  abstractionName: Input_EngineKNKWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Warning.Input_EngineOffWarnReqStatus:
+  type: sensor
+  signalName: ENG_Stall
+  dataType: HUInt64
+  description: "1st case : Warning indication to driver when engine is stalled unintentionally.(No warning when intentional engine stop like ISG Stop or SSC)2nd case : Warning indication when anti-stall funciton is activated for driver to check gear lever position."
+  abstractionName: Input_EngineOffWarnReqStatus
+  valueEnum:
+    0x0: "WARN1"
+    0x1: "WARN2"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Engine_Warning.Input_EngineWarnReqFromBMS:
+  type: sensor
+  signalName: Bms_48V_MILReq
+  dataType: HUInt64
+  description: "48V BMS MIL On request"
+  abstractionName: Input_EngineWarnReqFromBMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Warning.Input_EngineWarnReqFromEMS:
+  type: sensor
+  signalName: HEV_MilReq
+  dataType: HUInt64
+  description: "This signal indicates the status of MIL physical output."
+  abstractionName: Input_EngineWarnReqFromEMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: 0x1
+    ELSE: 0x0
+
+
+- Engine_Warning.Input_EngineWarnReqFromOBC:
+  type: sensor
+  signalName: OBC_MilReq
+  dataType: HUInt64
+  description: "OBC MIL On request"
+  abstractionName: Input_EngineWarnReqFromOBC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Accel_Boost_Mode.Input_AccelBoostOnOffStatus:
+  type: sensor
+  signalName: VCU_AccelBoostOnOffSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AccelBoostOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BOOST_OFF"
+    0x2: "BOOST_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- EV_Accel_Boost_Mode.Output_AccelBoostModeAppliedStatus.Output_AccelBoostModeAppliedStatus_CCAN:
+  type: actuator
+  signalName: CLU_AccelBstModApplySta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Output_AccelBoostModeAppliedStatus
+  valueEnum:
+    0x0: "NOT_APPLIED"
+    0x1: "APPLIED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- EV_Battery_Warning.Input_AuxBatteryLowWarnStatus:
+  type: sensor
+  signalName: EVSCU_FF_WrnMsg
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_AuxBatteryLowWarnStatus
+  valueEnum:
+    0x0: "WARN_LV1"
+    0x1: "WARN_LV2"
+    0x2: "OFF"
+  matchingTable:
+    0x2: 0x0
+    0x3: 0x1
+    ELSE: 0x2
+
+
+- EV_Battery_Warning.Input_EvBatteryConditioningOperStatus:
+  type: sensor
+  signalName: VCU_BattCondActStaDisp
+  dataType: HUInt64
+  description: "Battery heater operation information for display"
+  abstractionName: Input_EvBatteryConditioningOperStatus
+  valueEnum:
+    0x0: "ACT_WINTER_MODE"
+    0x1: "ACT_PRE"
+    0x2: "COMPLETE"
+    0x3: "FIN_LOWSOC"
+    0x4: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    ELSE: 0x4
+
+
+- EV_Battery_Warning.Input_EvBatteryConditioningSymbolstatus:
+  type: sensor
+  signalName: VCU_BattCondIndSta
+  dataType: HUInt64
+  description: "Flag for battery conditioning indicator"
+  abstractionName: Input_EvBatteryConditioningSymbolstatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "ON_COOLING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_EvBatteryHighTempWarnStatus:
+  type: sensor
+  signalName: EV_HiTempSta
+  dataType: HUInt64
+  description: "The Status Of High Temperature"
+  abstractionName: Input_EvBatteryHighTempWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_EvBatteryLowWarnStatus:
+  type: sensor
+  signalName: VCU_LowSocAlertSta
+  dataType: HUInt64
+  description: "Low SOC Alert of High-Voltage Battery"
+  abstractionName: Input_EvBatteryLowWarnStatus
+  valueEnum:
+    0x0: "WARN_LV1"
+    0x1: "WARN_LV2"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- EV_Battery_Warning.Input_EvBatteryPreHeatMaxTimeValue:
+  type: sensor
+  signalName: xEV_BattPreHeatMaxTime
+  dataType: HUInt64
+  description: "Battery Heating Max Time"
+  abstractionName: Input_EvBatteryPreHeatMaxTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Battery_Warning.Input_EvBatteryPreHeatStatus:
+  type: sensor
+  signalName: xEV_BattPreHeatFlg
+  dataType: HUInt64
+  description: "Preheating(before driving) operation flag"
+  abstractionName: Input_EvBatteryPreHeatStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HEATING_ON"
+    0x2: "HEATING_FINISH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_EvLowSocWarnStatus:
+  type: sensor
+  signalName: VCU_LowSocAlertSta
+  dataType: HUInt64
+  description: "Low SOC Alert of High-Voltage Battery"
+  abstractionName: Input_EvLowSocWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+    0x3: "WARN3"
+    0x4: "SOC_UNAVAILABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_EvPowerLimitByBatTempWarnStatus:
+  type: sensor
+  signalName: EV_LoTempSta
+  dataType: HUInt64
+  description: "BMS sets this Flag when temperature is low"
+  abstractionName: Input_EvPowerLimitByBatTempWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_EvPowerLimitByOutTempWarnStatus:
+  type: sensor
+  signalName: EV_LowOutTempStatus
+  dataType: HUInt64
+  description: "Alarm flag at low temperature (CF_Bms_LowOutTempStatus)"
+  abstractionName: Input_EvPowerLimitByOutTempWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Battery_Warning.Input_PreventOverheatModeStatus:
+  type: sensor
+  signalName: CBCR_CluDispMsgSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PreventOverheatModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MODE_ON"
+    0x2: "MODE_COMPLETE"
+    0x3: "CHANGE_GEAR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- EV_Boost_Mode.Input_EvBoostModeAvailableStatus:
+  type: sensor
+  signalName: VCU_BstAvailSta
+  dataType: HUInt64
+  description: "Boost function's available status"
+  abstractionName: Input_EvBoostModeAvailableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVATE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Boost_Mode.Input_EvBoostModeOperationStatus:
+  type: sensor
+  signalName: VCU_BstOpSta
+  dataType: HUInt64
+  description: "Boost function's operating status"
+  abstractionName: Input_EvBoostModeOperationStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVATE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Boost_Mode.Input_EvBoostModeTimerValue:
+  type: sensor
+  signalName: VCU_BstTimerVal
+  dataType: HUInt64
+  description: "Boost function's timer value"
+  abstractionName: Input_EvBoostModeTimerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Boost_Mode.Input_EvBoostModeWarnStatus:
+  type: sensor
+  signalName: VCU_BstWarnMsg
+  dataType: HUInt64
+  description: "Boost function's warning message"
+  abstractionName: Input_EvBoostModeWarnStatus
+  valueEnum:
+    0x0: "WARN"
+    0x1: "BATTERY_WARN"
+    0x2: "OFF"
+    0x3: "WARN_TIMER_ON"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x3
+    ELSE: 0x2
+
+
+- EV_Charging_System.Input_DoorOpenAssistSideStatus:
+  type: sensor
+  signalName: Warn_AsstDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenAssistSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_DoorOpenDriverSideStatus:
+  type: sensor
+  signalName: Warn_DrvDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenDriverSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_DoorOpenRearLeftSideStatus:
+  type: sensor
+  signalName: Warn_RrLftDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenRearLeftSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_DoorOpenRearRightSideStatus:
+  type: sensor
+  signalName: Warn_RrRtDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenRearRightSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvBulkChargeRemainTimeValue:
+  type: sensor
+  signalName: EV_BulkSocRmnTimeVal
+  dataType: HUInt64
+  description: "Bulk Charging Remained Time(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvBulkChargeRemainTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- EV_Charging_System.Input_EvChargeAlarmSubInfoFromVCMS:
+  type: sensor
+  signalName: VCMS_ChgAlarm_Subcode
+  dataType: HUInt64
+  description: "Charge State Subcode for Charge Alarm0x0~0xF:raw value"
+  abstractionName: Input_EvChargeAlarmSubInfoFromVCMS
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvChargeDoorFrontOpenStatus:
+  type: sensor
+  signalName: Warn_ChaDrSwFrtSta
+  dataType: HUInt64
+  description: "Front Charging Door Open Switch"
+  abstractionName: Input_EvChargeDoorFrontOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeDoorMalfunctionStatus:
+  type: sensor
+  signalName: CDM_WarnMsg_SBCM
+  dataType: HUInt64
+  description: "Command for CDM Warning on cluster"
+  abstractionName: Input_EvChargeDoorMalfunctionStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeDoorOpenStatus:
+  type: sensor
+  signalName: CDM_OpnClsState_SBCM
+  dataType: HUInt64
+  description: "This signal indicates CDM Open/Close Status"
+  abstractionName: Input_EvChargeDoorOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeDoorRearOpenStatus:
+  type: sensor
+  signalName: Warn_ChaDrSwRrSta
+  dataType: HUInt64
+  description: "Rear Charging Door Open Switch"
+  abstractionName: Input_EvChargeDoorRearOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeFailWarnStatusFromOBC:
+  type: sensor
+  signalName: OBC_ChrgStopAlrmDis
+  dataType: HUInt64
+  description: "(If there is no VCMS) Charge Stop Alram"
+  abstractionName: Input_EvChargeFailWarnStatusFromOBC
+  valueEnum:
+    0x0: "CHARGER_ERROR"
+    0x1: "CONNECTOR_ERROR"
+    0x2: "NORMAL"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- EV_Charging_System.Input_EvChargeFinishStatus:
+  type: sensor
+  signalName: CHRG_ChrgFnshSta
+  dataType: HUInt64
+  description: "Standard Charge finish flag (CF_BMS_ChgFinished)"
+  abstractionName: Input_EvChargeFinishStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FINISHED"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- EV_Charging_System.Input_EvChargeSchedDayStatus:
+  type: sensor
+  signalName: VCU_SchedChg_StDayDispSta
+  dataType: HUInt64
+  description: "Start Day of Scheduled time (0~6)"
+  abstractionName: Input_EvChargeSchedDayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SUN"
+    0x2: "MON"
+    0x3: "TUE"
+    0x4: "WED"
+    0x5: "THU"
+    0x6: "FRI"
+    0x7: "SAT"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    0x5: 0x6
+    0x6: 0x7
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeSchedHourValue:
+  type: sensor
+  signalName: VCU_SchedChg_StHrDispVal
+  dataType: HUInt64
+  description: "Start Hour of Scheduled time (0~23)"
+  abstractionName: Input_EvChargeSchedHourValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x1F
+
+
+- EV_Charging_System.Input_EvChargeSchedMinValue:
+  type: sensor
+  signalName: VCU_SchedChg_StMinDispVal
+  dataType: HUInt64
+  description: "Start Min of Scheduled time (0~59)"
+  abstractionName: Input_EvChargeSchedMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x3F
+
+
+- EV_Charging_System.Input_EvChargeSchedWaitIndiStatus:
+  type: sensor
+  signalName: VCU_SchedChg_WaitIndSta
+  dataType: HUInt64
+  description: "Reservation Charge Waiting mode for Charge Indicator"
+  abstractionName: Input_EvChargeSchedWaitIndiStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeStatus:
+  type: sensor
+  signalName: CHRG_ChrgSta
+  dataType: HUInt64
+  description: "0:None, 1:Charging"
+  abstractionName: Input_EvChargeStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChgCalculateErrorStatus:
+  type: sensor
+  signalName: VCMS_ChgPwrDerating
+  dataType: HUInt64
+  description: "Protection Flag of the AC Inlet OverTemperature"
+  abstractionName: Input_EvChgCalculateErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CANNOT_CALCULATE"
+    0x2: "CHARGER_OVERHEAT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvFastChargeEightyPercentDteValue:
+  type: sensor
+  signalName: VCU_DteQcChrgStsVal
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EvFastChargeEightyPercentDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvFastChargeFailWarnStatusFromVCMS:
+  type: sensor
+  signalName: VCMS_ChgAlarm_Stat
+  dataType: HUInt64
+  description: "Charge State for Alarm"
+  abstractionName: Input_EvFastChargeFailWarnStatusFromVCMS
+  valueEnum:
+    0x0: "V2L_START"
+    0x1: "CHARGING_FINISH"
+    0x2: "CHARGING_FAIL_AC"
+    0x3: "CHARGING_FAIL_DC"
+    0x4: "V2L_FAIL"
+    0x5: "OFF"
+    0x6: "CHARGING_WIRELESS"
+    0x7: "V2X_ON"
+    0x8: "CHARGING_SCHEDULE"
+    0x9: "CHARGING_NORMAL"
+  matchingTable:
+    0x7: 0x8
+    0x8: 0x9
+    0x9: 0x0
+    0xA: 0x6
+    0xB: 0x7
+    0xC: 0x1
+    0xD: 0x2
+    0xE: 0x3
+    0xF: 0x4
+    ELSE: 0x5
+
+
+- EV_Charging_System.Input_EvFastChargeStatus:
+  type: sensor
+  signalName: EV_FstChrgSta
+  dataType: HUInt64
+  description: "BMS sets this Flag when Battery is fast mode charging"
+  abstractionName: Input_EvFastChargeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvFastChargeTargetDteValue:
+  type: sensor
+  signalName: VCU_TgSocDteDcChgVal
+  dataType: HUInt64
+  description: "Estimated DTE for fast charger(QC/DC) target SOC"
+  abstractionName: Input_EvFastChargeTargetDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvFastChargeTargetSocValue:
+  type: sensor
+  signalName: EV_QuickTrgtSocVal
+  dataType: HUInt64
+  description: "EV Quick Target State Of Charge Value"
+  abstractionName: Input_EvFastChargeTargetSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System.Input_EvMergeChargeInputPowerValue:
+  type: sensor
+  signalName: VCMS_PwrDis
+  dataType: HUInt64
+  description: "VCMS_PwrDis - Charging/Discharging Power Value for AVN/CLU Display0x0~0xFFFF : Power Real Value"
+  abstractionName: Input_EvMergeChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvShiftPToChargeReqStatus:
+  type: sensor
+  signalName: CHRG_PShftChgSta
+  dataType: HUInt64
+  description: "The Flag To Change P Shift"
+  abstractionName: Input_EvShiftPToChargeReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvSocDisplayValue:
+  type: sensor
+  signalName: xEV_SocDis
+  dataType: HUInt64
+  description: "Cluster, AVN Display SOC(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvSocDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System.Input_EvStdChargeInputPowerValue:
+  type: sensor
+  signalName: OBC_AcPwrDis
+  dataType: HUInt64
+  description: "AC Input Power (t/CLU, BlueLink)(0x0~0xFF : Real values)"
+  abstractionName: Input_EvStdChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvStdChargeRemainTimeValue:
+  type: sensor
+  signalName: CHRG_StndChrgRmnTimeVal
+  dataType: HUInt64
+  description: "Standard Charging remained time (CR_Bms_ScChgRemainedTime_min)(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvStdChargeRemainTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- EV_Charging_System.Input_EvStdChargeStatus:
+  type: sensor
+  signalName: CHRG_StndChrgSta
+  dataType: HUInt64
+  description: "BMS sets this Flag when Battery is standard mode charging (CF_Bms_StdCha)"
+  abstractionName: Input_EvStdChargeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvStdChargeTargetDteValue:
+  type: sensor
+  signalName: VCU_TgSocDteAcChgVal
+  dataType: HUInt64
+  description: "Estimated DTE for slow charger(SC/AC) target SOC"
+  abstractionName: Input_EvStdChargeTargetDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_EvStdChargeTargetSocValue:
+  type: sensor
+  signalName: CHRG_ScChgTargetSOCSync
+  dataType: HUInt64
+  description: "Feedback SOC of Standard Charging for sync by BMS (CR_Bms_ScChgTargetSOC_SYNC)(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvStdChargeTargetSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System.Input_EvUnreliableSocWarn:
+  type: sensor
+  signalName: EV_Unreliable_SOC
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EvUnreliableSocWarn
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN30PER"
+    0x2: "WARN70PER"
+    0x3: "WARN100PER"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_PhevPlugConnectStatusFromOBC:
+  type: sensor
+  signalName: OBC_AcConnSta
+  dataType: HUInt64
+  description: "(If there is no VCMS) OBC AC Connector State"
+  abstractionName: Input_PhevPlugConnectStatusFromOBC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONNECTED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: EVSCU_FF_WrnMsg
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x1: 0xE
+    ELSE: 0xF
+
+
+- EV_Charging_System.Input_TimeDisplayInformationFromAvn:
+  type: sensor
+  signalName: HU_TimeFormat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TimeDisplayInformationFromAvn
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TWELVE"
+    0x2: "TWENTYFOUR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_V2LCAlarmSubInfo:
+  type: sensor
+  signalName: V2LC_ChgAlarm_Subcode
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCAlarmSubInfo
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LCChargeInputPowerValue:
+  type: sensor
+  signalName: V2LC_AcPwrDis
+  dataType: HUInt64
+  description: "AC Input Power (t/CLU, BlueLink)"
+  abstractionName: Input_V2LCChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LCDisplayOnOffStatus:
+  type: sensor
+  signalName: V2LC_CluDisMode
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCDisplayOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_V2LCUsingAvailableTimeMinValue:
+  type: sensor
+  signalName: V2LC_V2LEstDischgRmnTime
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCUsingAvailableTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LCWarnStatus:
+  type: sensor
+  signalName: V2LC_ChgAlarm_Stat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "V2LC_START"
+    0x2: "V2LC_FINISH_SOC"
+    0x3: "V2LC_STOP_CONNECTOR"
+    0x4: "V2LC_FAIL"
+  matchingTable:
+    0x9: 0x1
+    0xC: 0x2
+    0xD: 0x3
+    0xF: 0x4
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_V2LDisplayOnFromVCMS:
+  type: sensor
+  signalName: VCMS_CluDisMode
+  dataType: HUInt64
+  description: "Cluster Display Mode"
+  abstractionName: Input_V2LDisplayOnFromVCMS
+  valueEnum:
+    0x0: "V2L_DISPLAY_ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- EV_Charging_System.Input_V2LMinimumSocFromVcmsValue:
+  type: sensor
+  signalName: VCMS_V2XDischgLimSocVal_SYNC
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LMinimumSocFromVcmsValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LMinimumSocValue:
+  type: sensor
+  signalName: CHRG_V2XDischrgLimSocVal_SYNC
+  dataType: HUInt64
+  description: "Feedback SOC of  V2X discharge limitation for sync by BMS***New Signal***(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_V2LMinimumSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LMsgAppliedStatus:
+  type: sensor
+  signalName: VCMS_DisOpFlag
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LMsgAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_V2LOnlyDoorOpenStatus:
+  type: sensor
+  signalName: DischrgDr_OpnClsState_SBCM
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LOnlyDoorOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_V2LRemainDteAfterUseValue:
+  type: sensor
+  signalName: VCU_DteV2LVal
+  dataType: HUInt64
+  description: "This signal is the V2L DTE when V2L SOC value is limited"
+  abstractionName: Input_V2LRemainDteAfterUseValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_V2LUsingAvailableTimeMinValue:
+  type: sensor
+  signalName: VCMS_V2LEstDischgRmnTime
+  dataType: HUInt64
+  description: "Estimated Ramain Time of using V2L"
+  abstractionName: Input_V2LUsingAvailableTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System.Input_VcmsReadyStatus:
+  type: sensor
+  signalName: VCMS_Rdy
+  dataType: HUInt64
+  description: "(CF_Cms_Rdy) VCMS Controller Wake-up"
+  abstractionName: Input_VcmsReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_VehicleReadyStatus:
+  type: sensor
+  signalName: VCU_EvDrvRdySta
+  dataType: HUInt64
+  description: "EV Ready"
+  abstractionName: Input_VehicleReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Power_Down.Input_EvPowerDownModeStatus:
+  type: sensor
+  signalName: VCU_PwrDnModeSta
+  dataType: HUInt64
+  description: "Power Down Mode"
+  abstractionName: Input_EvPowerDownModeStatus
+  valueEnum:
+    0x0: "POWER_DOWN"
+    0x1: "NORMAL"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- EV_Power_Down.Input_FcevPowerLimitStatus:
+  type: sensor
+  signalName: FCU_PwrDnSteDp
+  dataType: HUInt64
+  description: "Power down state display signal"
+  abstractionName: Input_FcevPowerLimitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LIMIT_OVERHEAT"
+    0x2: "LIMIT_ERROR"
+    0x3: "EMERGENCY_WARN1"
+    0x4: "EMERGENCY_WARN2"
+    0x5: "EMERGENCY_WARN3"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_FcevAirFilterWarnStatus:
+  type: sensor
+  signalName: FCU_AirFiltChkDp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_FcevAirFilterWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHK_FILTER"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_FcevColdStartBarStatus:
+  type: sensor
+  signalName: FCU_FcCsuPrgsDp
+  dataType: HUInt64
+  description: "Fuel Cell Cold Start Up Progress Display"
+  abstractionName: Input_FcevColdStartBarStatus
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- FCEV_Warning.Input_FcevColdStartOnOffStatus:
+  type: sensor
+  signalName: FCU_FcCsuDp
+  dataType: HUInt64
+  description: "Fuel Cell Cold Start Up Display"
+  abstractionName: Input_FcevColdStartOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_FcevSystemOffStatus:
+  type: sensor
+  signalName: FCU_SysOffDp
+  dataType: HUInt64
+  description: "FCU System Off Display "
+  abstractionName: Input_FcevSystemOffStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "SYSTEM_OFF"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_FcevSystemWarnStatus:
+  type: sensor
+  signalName: FCU_WarnMsg
+  dataType: HUInt64
+  description: "Cluster Warning Message"
+  abstractionName: Input_FcevSystemWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NO_START_VOLTAGE"
+    0x2: "NO_START_REFUEL"
+    0x3: "CHK_POWER_OFF"
+    0x4: "CHK_AUX_LV1"
+    0x5: "CHK_AUX_LV2"
+    0x6: "CHK_FILTER"
+    0x7: "LIMIT_REGEN"
+    0x8: "RESTART"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x8: 0x7
+    0x9: 0x8
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_FcevWaterReleaseWarnStatus:
+  type: sensor
+  signalName: FCU_WtrRlsSts
+  dataType: HUInt64
+  description: "Water Release Status"
+  abstractionName: Input_FcevWaterReleaseWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ONGOING"
+    0x2: "COMPLETE"
+    0x3: "NO_CONDITION"
+    0x4: "ANTIFREEZE_ONGOING"
+    0x5: "ANTIFREEZE_COMPLETE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2LeakIndiReqStatusFromFCU:
+  type: sensor
+  signalName: FCU_H2LkLmp
+  dataType: HUInt64
+  description: "Hydrogen leak detection warning lamp on signal"
+  abstractionName: Input_H2LeakIndiReqStatusFromFCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2LeakIndiReqStatusFromHMU:
+  type: sensor
+  signalName: HMU1_SnsH2Leak
+  dataType: HUInt64
+  description: "Sensing Hydrogen LeakIf HMU1 is not connected with sensor, this signal is always transmitted SNA"
+  abstractionName: Input_H2LeakIndiReqStatusFromHMU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LEAK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2LeakWarnStatusFromFCU:
+  type: sensor
+  signalName: FCU_H2LkSte
+  dataType: HUInt64
+  description: "Hydrogen leak detection warning alarm signal"
+  abstractionName: Input_H2LeakWarnStatusFromFCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LEAK_DETECT"
+    0x2: "LEAK_EMERGENCY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2LeakWarnStatusFromHMU:
+  type: sensor
+  signalName: HMU1_FcSdReq
+  dataType: HUInt64
+  description: "FC Shutdown Request"
+  abstractionName: Input_H2LeakWarnStatusFromHMU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SD_REQ"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2SensorFaultStatusFromFCU:
+  type: sensor
+  signalName: FCU_H2FltLmp
+  dataType: HUInt64
+  description: "Hydrogen detection sensor fault warning lamp on signal"
+  abstractionName: Input_H2SensorFaultStatusFromFCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAULT"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- FCEV_Warning.Input_H2SensorFaultStatusFromHMU:
+  type: sensor
+  signalName: HMU1_H2SnsFlt
+  dataType: HUInt64
+  description: "Hydrogen safety sensor FaultIf HMU1 is not connected with sensor, this signal is always transmitted SNA"
+  abstractionName: Input_H2SensorFaultStatusFromHMU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAULT"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevFuelDoorSensorFaultWarnStatus:
+  type: sensor
+  signalName: HMU1_FuelDrSnsFlt
+  dataType: HUInt64
+  description: "Fuel Door Sensor Fault"
+  abstractionName: Input_FcevFuelDoorSensorFaultWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAULT"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevFuelDrSwStatus:
+  type: sensor
+  signalName: HMU1_FuelDrSwt
+  dataType: HUInt64
+  description: "Fuel Door SwitchIf HMU1 is not connected with switch, this signal is always transmitted SNA"
+  abstractionName: Input_FcevFuelDrSwStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevFuelDrUnableStatus:
+  type: sensor
+  signalName: FCU_FuelDrOpnUn
+  dataType: HUInt64
+  description: "FCU unable to open fuel door flag"
+  abstractionName: Input_FcevFuelDrUnableStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "UNABLE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevFuelDrWarnStatus:
+  type: sensor
+  signalName: HMU1_FuelDrStatus
+  dataType: HUInt64
+  description: "Fuel Door Status"
+  abstractionName: Input_FcevFuelDrWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OPEN"
+    0x2: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevLowFuelWarnStatus:
+  type: sensor
+  signalName: HMU1_LowFuel
+  dataType: HUInt64
+  description: "Low Fuel warningIf HMU1 is not connected with sensor, this signal is always transmitted SNA"
+  abstractionName: Input_FcevLowFuelWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_FcevSofDisplayValue:
+  type: sensor
+  signalName: HMU1_SofClu
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_FcevSofDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Fuel_System.Input_FcevSystemOffStatus:
+  type: sensor
+  signalName: FCU_SysOffDp
+  dataType: HUInt64
+  description: "FCU System Off Display "
+  abstractionName: Input_FcevSystemOffStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "SYSTEM_OFF"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_H2TankFillCountOverWarnStatus:
+  type: sensor
+  signalName: HMU1_OverFillCnt
+  dataType: HUInt64
+  description: "Over Fill Count"
+  abstractionName: Input_H2TankFillCountOverWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_System.Input_H2TankSystemWarnStatus:
+  type: sensor
+  signalName: HMU1_TankWarnStatus
+  dataType: HUInt64
+  description: "Tank Warning Status"
+  abstractionName: Input_H2TankSystemWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERFILL"
+    0x2: "H2_LEAK"
+    0x3: "OVERCOOL"
+    0x4: "TEMP_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Fuel_System.Output_FuelDisplayLevelStatus.Output_FuelDisplayLevelStatus_CCAN:
+  type: actuator
+  signalName: CLU_FuelLvlSta
+  dataType: HUInt64
+  description: "The signal is fuel level of the cluster that fuel gauge indicate (Unit: %)"
+  abstractionName: Output_FuelDisplayLevelStatus
+  matchingTable:
+    VALUE:
+
+
+- Fuel_System.Output_LowFuelWarnStatus.Output_LowFuelWarnStatus_CCAN:
+  type: actuator
+  signalName: CLU_LoFuelWrngSta
+  dataType: HUInt64
+  description: "This signal indicates that the Low fuel warning in the cluster is On or Off. When Low Fuel Warning is On, its value is 01H otherwise its value is 00H."
+  abstractionName: Output_LowFuelWarnStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "LOW_FUEL_WARN"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Fuel_System.Output_RefuelWarnStatus.Output_RefuelWarnStatus_CCAN:
+  type: actuator
+  signalName: CLU_RefuelWrnSta
+  dataType: HUInt64
+  description: "This signal indicates that the Refuel popup is the cluster is On or Off.When Refuel popup is on, its value is 0x1 otherwise its value is 0x0."
+  abstractionName: Output_RefuelWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- GLOW.Input_GlowIndiReqStatus:
+  type: sensor
+  signalName: ENG_GlowLmpSta
+  dataType: HUInt64
+  description: "This signal indicates that a status of glow lamp.This signal is used for a Diesel or LPI Engine alternatively."
+  abstractionName: Input_GlowIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Green_Zone_Lamp.Input_GreenZoneIndReqStatus:
+  type: sensor
+  signalName: HCU_GreenZoneLmpDis
+  dataType: HUInt64
+  description: "Indicate Green Zone Area"
+  abstractionName: Input_GreenZoneIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- HEV_Charge_Warning.Input_HevStopToChargeReqStatus:
+  type: sensor
+  signalName: HCU_ChrgReq
+  dataType: HUInt64
+  description: "Charge Request"
+  abstractionName: Input_HevStopToChargeReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- HEV_Engine_Warning.Input_HevEngineOffReqStatus:
+  type: sensor
+  signalName: HCU_LimpOffSta
+  dataType: HUInt64
+  description: "Limp off the road"
+  abstractionName: Input_HevEngineOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "OFF_REQ"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- HEV_Engine_Warning.Input_HevSysFailNoStartReqStatus:
+  type: sensor
+  signalName: HCU_StrtInhbt2Sta
+  dataType: HUInt64
+  description: "Start Inhibit"
+  abstractionName: Input_HevSysFailNoStartReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "NO_START_REQ"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- HEV_Mode.Input_EvEnergyFlowStatus:
+  type: sensor
+  signalName: VCU_EnergyFlowSta
+  dataType: HUInt64
+  description: "Energy Flow Display Status"
+  abstractionName: Input_EvEnergyFlowStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "VEHICLE_STOP"
+    0x2: "EV_PROPULSION"
+    0x3: "POWER_ASSIST"
+    0x4: "ENGINE_ONLY_PROPULSION"
+    0x5: "ENGINE_GENERATION"
+    0x6: "REGENERATION"
+    0x7: "ENGINE_BRAKE"
+    0x8: "POWER_RESEARVE"
+    0x9: "ENGINE_GENERATION_MOTOR_DRIVE"
+    0xA: "ENGINE_GENERATION_REGENERATION"
+    0xB: "ENGINE_BRAKERE_GENERATION"
+    0xC: "EV_FRONT_MOTOR"
+    0xD: "EV_REAR_MOTOR"
+    0xE: "EV_DUAL_MOTOR"
+    0xF: "EV_FRONT_GENERATION"
+    0x10: "EV_REAR_GENERATION"
+    0x11: "EV_DUAL_GENERATION"
+    0x12: "FCEV_CHARGE_IDLE"
+    0x13: "FCEV_ASSIST_NORMAL"
+    0x14: "FCEV_CHARGE_NORMAL"
+    0x15: "FCEV_BATTERY"
+    0x16: "FCEV_REGENERATION"
+    0x17: "FCEV_FUELCELL"
+    0x18: "FCEV_IDLE"
+  matchingTable:
+    0x2: 0xC
+    0x3: 0xD
+    0x4: 0xE
+    0x6: 0xF
+    0x7: 0x10
+    0x8: 0x11
+    ELSE: 0x0
+
+
+- HEV_Mode.Input_VehicleReadyStatus:
+  type: sensor
+  signalName: VCU_EvDrvRdySta
+  dataType: HUInt64
+  description: "EV Ready"
+  abstractionName: Input_VehicleReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_AccelerationLatStatus:
+  type: sensor
+  signalName: IMU_LatAccelSigSta
+  dataType: HUInt64
+  description: "This signal indicates failure status of lateral acceleration signal and sensing element.0000B : No failurexxx1B : IMU_Lateral acceleration failurexx1xB : Initialization is runningx1xxB : Reserved1xxxB : ReservedThis signal represents the physical error in MEMs sensor or microprocessor error in air bag control unit, but it does not contain the signal plausibility error check result. Signal plausibility error check has to be accomplished to each control unit using the own plausibility error check criterion.The initialization time is the time that takes for the sensor to operate normally after power on. The maximum initialization time does not exceed the ACU CAN valid message transmission time. In the initial startup condition, the time does not exceed 1500ms and In case of ACU Only Reset, it does not 600ms.The sensor status information is selected from one among 0000B, xxx1B, and xx1xB."
+  abstractionName: Input_AccelerationLatStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- High_Performance_For_N_Brand.Input_AccelerationLatValue:
+  type: sensor
+  signalName: IMU_LatAccelVal
+  dataType: HUInt64
+  description: "This signal indicates Information regarding lateral acceleration.physical range : -4.1768g..4.1765g = 0000H..FFFEhConversion : (PH) = ((HEX)-8000H)*0.000127465[g/digit]                            = (HEX)*0.000127465[g/digit] - 4.17677312[g]                    FFFFh = ErrorPhysical range and the resolution applied to the conversion rules may differ from the actual sensor specifications specified in the ES95920-75.If the digital output range of the actual sensor is over -4.1768g..4.1765g, CAN message will show minimum and the maximum values. However, if the digital output range of the actual sensor is smaller than physical range of CAN, CAN message will only output to the maximum and minimum values of the digital output."
+  abstractionName: Input_AccelerationLatValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x8000
+
+
+- High_Performance_For_N_Brand.Input_AccelerationLongStatus:
+  type: sensor
+  signalName: IMU_LongAccelSigSta
+  dataType: HUInt64
+  description: "This signal indicates failure status of longitudinal acceleration signal and sensing element.0000B : No failure xxx1B : IMU_Longitudial acceleration failurexx1xB : Initialization is runningx1xxB : Reserved1xxxB : ReservedThis signal represents the physical error in MEMs sensor or microprocessor error in air bag control unit, but it does not contain the signal plausibility error check result. Signal plausibility error check has to be accomplished to each control unit using the own plausibility error check criterion.The initialization time is the time that takes for the sensor to operate normally after power on. The maximum initialization time does not exceed the ACU CAN valid message transmission time. In the initial startup condition, the time does not exceed 1500ms and In case of ACU Only Reset, it does not 600ms.The sensor status information is selected from one among 0000B, xxx1B, and xx1xB."
+  abstractionName: Input_AccelerationLongStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- High_Performance_For_N_Brand.Input_AccelerationLongValue:
+  type: sensor
+  signalName: IMU_LongAccelVal
+  dataType: HUInt64
+  description: "This signal indicates information regarding longitudinal acceleration.physical range : -4.1768g..4.1765g = 0000H..FFFEhConversion : (PH) = ((HEX)-8000H)*0.000127465[g/digit]                            = (HEX)*0.000127465[g/digit] - 4.17677312[g]                     FFFFh = ErrorPhysical range and the resolution applied to the conversion rules may differ from the actual sensor specifications specified in the ES95920-75.If the digital output range of the actual sensor is over -4.1768g..4.1765g, CAN message will show minimum and the maximum values. However, if the digital output range of the actual sensor is smaller than physical range of CAN, CAN message will only output to the maximum and minimum values of the digital output."
+  abstractionName: Input_AccelerationLongValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x8000
+
+
+- High_Performance_For_N_Brand.Input_DmicEcsAppliedStatus:
+  type: sensor
+  signalName: DMIC_ECS_AppliedSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_DmicEcsAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_DmicEngAppliedStatus:
+  type: sensor
+  signalName: DMIC_ENG_AppliedSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_DmicEngAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_DmicMdpsAppliedStatus:
+  type: sensor
+  signalName: DMIC_MDPS_AppliedSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_DmicMdpsAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_DmicModeAppliedStatus:
+  type: sensor
+  signalName: DMIC_DrvModTypSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_DmicModeAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_DmicVcuAppliedStatus:
+  type: sensor
+  signalName: DMIC_VCU_AppliedSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_DmicVcuAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_EkdReadyStatus:
+  type: sensor
+  signalName: VCU_NCstmEKDUsmSta
+  dataType: HUInt64
+  description: "Elctro kick dift state(for High Performance vehicle USM)"
+  abstractionName: Input_EkdReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_EvEndurancePowerLimitStatus:
+  type: sensor
+  signalName: VCU_NCstmMaxRangeUsmSta
+  dataType: HUInt64
+  description: "Max Range State(for High Performance vehicle USM)"
+  abstractionName: Input_EvEndurancePowerLimitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LIMIT_DEACTIVATE"
+    0x2: "LIMIT_ACTIVATE"
+  matchingTable:
+    0x2: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoHourValue:
+  type: sensor
+  signalName: LapTimer_Hour_HU
+  dataType: HUInt64
+  description: "Hour of laptime measured by AVNT"
+  abstractionName: Input_LapTimerAutoHourValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoLapNumberValue:
+  type: sensor
+  signalName: LapTimer_LapNumber_HU
+  dataType: HUInt64
+  description: "Lap Number measured by AVNT"
+  abstractionName: Input_LapTimerAutoLapNumberValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoMilisecondValue:
+  type: sensor
+  signalName: LapTimer_milisecond_HU
+  dataType: HUInt64
+  description: "Milisecond of laptime measured by AVNT"
+  abstractionName: Input_LapTimerAutoMilisecondValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoMinuteValue:
+  type: sensor
+  signalName: LapTimer_Minute_HU
+  dataType: HUInt64
+  description: "Minute of laptime measured by AVNT"
+  abstractionName: Input_LapTimerAutoMinuteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoRunningStatus:
+  type: sensor
+  signalName: LapTimer_CountStart
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LapTimerAutoRunningStatus
+  valueEnum:
+    0x0: "RUN"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- High_Performance_For_N_Brand.Input_LapTimerAutoSecondValue:
+  type: sensor
+  signalName: LapTimer_Second_HU
+  dataType: HUInt64
+  description: "Second of laptime mesured by AVNT"
+  abstractionName: Input_LapTimerAutoSecondValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_For_N_Brand.Input_LapTimerOperationReqFromAvn:
+  type: sensor
+  signalName: LapTimer_MeasuringStatus_HU
+  dataType: HUInt64
+  description: "Lap Timer measuring status shared with Cluster."
+  abstractionName: Input_LapTimerOperationReqFromAvn
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "START_REQ"
+    0x2: "RESET_REQ"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_NCustom1EcsSetStatus:
+  type: sensor
+  signalName: DMIC_IndEcsModSta
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom1EcsSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom1EngineSetStatus:
+  type: sensor
+  signalName: DMIC_IndEngModSta
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom1EngineSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom1MdpsSetStatus:
+  type: sensor
+  signalName: DMIC_IndMdpsModSta
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom1MdpsSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom1MotorSetStatus:
+  type: sensor
+  signalName: DMIC_IndVcuModSta
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom1MotorSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP0"
+  matchingTable:
+    0x4: 0x0
+    0x2: 0x1
+    0x5: 0x2
+    0x6: 0x3
+    ELSE: 0x4
+
+
+- High_Performance_For_N_Brand.Input_NCustom2EcsSetStatus:
+  type: sensor
+  signalName: DMIC_IndEcsModSta2
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom2EcsSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom2EngineSetStatus:
+  type: sensor
+  signalName: DMIC_IndEngModSta2
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom2EngineSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom2MdpsSetStatus:
+  type: sensor
+  signalName: DMIC_IndMdpsModSta2
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom2MdpsSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP0"
+  matchingTable:
+    0x2: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    ELSE: 0x3
+
+
+- High_Performance_For_N_Brand.Input_NCustom2MotorSetStatus:
+  type: sensor
+  signalName: DMIC_IndVcuModSta2
+  dataType: HUInt64
+  description: "This signal is for feedback about individual mode setting on AVN."
+  abstractionName: Input_NCustom2MotorSetStatus
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP0"
+  matchingTable:
+    0x4: 0x0
+    0x2: 0x1
+    0x5: 0x2
+    0x6: 0x3
+    ELSE: 0x4
+
+
+- High_Performance_For_N_Brand.Input_NCustomMode2OptionStatus:
+  type: sensor
+  signalName: DMIC_DrvMod2Typ
+  dataType: HUInt64
+  description: "This signal indicates drive mode type."
+  abstractionName: Input_NCustomMode2OptionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MOTOR_MDPS_ECS"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_NCustomModeOptionStatus:
+  type: sensor
+  signalName: DMIC_DrvModTyp
+  dataType: HUInt64
+  description: "This signal indicates drive mode type."
+  abstractionName: Input_NCustomModeOptionStatus
+  valueEnum:
+    0x0: "ENGINE_MDPS_ECS"
+    0x1: "ENGINE_MDPS"
+    0x2: "OFF"
+    0x3: "ZERO"
+  matchingTable:
+    0x0: 0x3
+    0x5: 0x0
+    0xE: 0x1
+    ELSE: 0x2
+
+
+- High_Performance_For_N_Brand.Input_NTrackSenseDisplayReqStatus:
+  type: sensor
+  signalName: dummy node
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_NTrackSenseDisplayReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "N_TRACK_ON"
+
+
+- High_Performance_For_N_Brand.Input_NroadsenseActiveStatus:
+  type: sensor
+  signalName: ISLA_AutoNModReq
+  dataType: HUInt64
+  description: "ISLA_AutoNModSta = 0x2 (On) 인 상태에서 이중굽은도로 표지판 인식 시최대 3회 0x1 (Winding Road Sign) 송출 후 0x0 (Default) 송출"
+  abstractionName: Input_NroadsenseActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_OverBoostStatus:
+  type: sensor
+  signalName: VCU_NCstmBrkOvrSta
+  dataType: HUInt64
+  description: "The Brake override system could be deactivated by a driver"
+  abstractionName: Input_OverBoostStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_PwiWarnStatus:
+  type: sensor
+  signalName: PWI_STATE
+  dataType: HUInt64
+  description: "This signal indicates brake pad wear state. If the brake pad is worn to the designted amount, this signal is used to indicate the alarm on the cluster"
+  abstractionName: Input_PwiWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_ShiftLightIndReqStatus:
+  type: sensor
+  signalName: VCU_VgsShfIndledSta
+  dataType: HUInt64
+  description: "This signal indicates that an VCU requests cluster to turn on/off shift indicator LED."
+  abstractionName: Input_ShiftLightIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STEP1"
+    0x2: "STEP2"
+    0x3: "STEP3"
+    0x4: "STEP4"
+    0x5: "STEP5"
+    0x6: "STEP6"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_TrackOptimizerOnOffStatus:
+  type: sensor
+  signalName: VCU_NCstmNdurRaceSta
+  dataType: HUInt64
+  description: "Ndurance Race Status(for High Performance vehicle USM)"
+  abstractionName: Input_TrackOptimizerOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Output_LapTimerHourValue.Output_LapTimerHourValue_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_Hour_MM
+  dataType: HUInt64
+  description: "This signal means 'Hour' of each LapTime. Laptimer function is interoperated in Cluater and AVN. Cluster displays Lap Time in real time and AVN displays the history of Lap Time."
+  abstractionName: Output_LapTimerHourValue
+  matchingTable:
+    VALUE:
+
+
+- High_Performance_For_N_Brand.Output_LapTimerLapNumberValue.Output_LapTimerLapNumberValue_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_LapNumber_MM
+  dataType: HUInt64
+  description: "This signal means Lap Number. Laptimer function is interoperated in Cluater and AVN. Cluster displays Lap Time in real time and AVN displays the history of Lap Time."
+  abstractionName: Output_LapTimerLapNumberValue
+  matchingTable:
+    VALUE:
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMeasuringStatus.Output_LapTimerMeasuringStatus_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_MeasuringStatus_MM
+  dataType: HUInt64
+  description: "This signal means current measuring status of Lap Time in Cluster."
+  abstractionName: Output_LapTimerMeasuringStatus
+  valueEnum:
+    0x0: "STOP_LAP_TIMER"
+    0x1: "UNDER_LAP_TIMER_MEASUREMENT"
+    0x2: "RESET_LAP_TIMER"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMilisecondValue.Output_LapTimerMilisecondValue_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_milisecond_MM
+  dataType: HUInt64
+  description: "This signal means '1/100second' value of each LapTime. Laptimer function is interoperated in Cluater and AVN. Cluster displays Lap Time in real time and AVN displays the history of Lap Time."
+  abstractionName: Output_LapTimerMilisecondValue
+  matchingTable:
+    VALUE:
+
+
+- High_Performance_For_N_Brand.Output_LapTimerMinuteValue.Output_LapTimerMinuteValue_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_Minute_MM
+  dataType: HUInt64
+  description: "This signal means 'Minute' value of each LapTime. Laptimer function is interoperated in Cluater and AVN. Cluster displays Lap Time in real time and AVN displays the history of Lap Time."
+  abstractionName: Output_LapTimerMinuteValue
+  matchingTable:
+    VALUE:
+
+
+- High_Performance_For_N_Brand.Output_LapTimerSecondValue.Output_LapTimerSecondValue_MCAN:
+  type: actuator
+  signalName: CLU_LapTimer_Second_MM
+  dataType: HUInt64
+  description: "This signal means 'second' value of each LapTime. Laptimer function is interoperated in Cluater and AVN. Cluster displays Lap Time in real time and AVN displays the history of Lap Time."
+  abstractionName: Output_LapTimerSecondValue
+  matchingTable:
+    VALUE:
+
+
+- High_Performance_Gauge.Input_EngineCoolantTempValue:
+  type: sensor
+  signalName: HEV_EngClntTempVal
+  dataType: HUInt64
+  description: "Engine coolant temperature"
+  abstractionName: Input_EngineCoolantTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_Gauge.Input_EngineOilTempValue:
+  type: sensor
+  signalName: ENG_EngOilTempVal
+  dataType: HUInt64
+  description: "engine oil temperature"
+  abstractionName: Input_EngineOilTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- High_Performance_Gauge.Input_EngineTorqueAfterCorrectionValue:
+  type: sensor
+  signalName: ENG_CrctEngTqVal
+  dataType: HUInt64
+  description: "This signal comprises the actual indicated engine torque (determined by calculation within the engine management system) (lambda control, knock control, catalyst overheating prevention function, temperature influences, TCS, TCU torque intervention etc. being taken into account).If MSB is 1, this signal is - value.else, this signal is +value.0~10bit is used for absolute value."
+  abstractionName: Input_EngineTorqueAfterCorrectionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_Gauge.Input_EngineTorqueOfFrictionLossValue:
+  type: sensor
+  signalName: ENG_FrctTqVal
+  dataType: HUInt64
+  description: "This signal identifies the current engine friction loss torque. It is stored as a function of 'EngClntTempVal' and 'EngSpdVal' (FrctTqVal = f(EngClntTempVal, EngSpdVal)) in terms of an index table.The index table is corrected depending on the current load under idle conditions.The signal comprises the following influencing variables:- Engine friction = f(EngClntTempVal, EngSpdVal, m)- m= friction coefficient = f(oil,...)- Charge cycle work- Valve actuator- Air conditioner compressor - interference compensation (intermittent)- Accessories (e.g. water pump, generator, power-steering pump).The engine friction losses are dominant in conjunction with the following influencing variables.Peak loads are not included in the calculation.Consequently, the engine output torque (flywheel torque) is calculated as follows:TQ = CrctEngTqVal - FrctTqValIf MSB is 1, this signal is - value.else, this signal is +value.0~10bit is used for absolute value."
+  abstractionName: Input_EngineTorqueOfFrictionLossValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_Gauge.Input_EvBatteryTempValue:
+  type: sensor
+  signalName: xEV_MaxBattTempVal
+  dataType: HUInt64
+  description: "Maximum Battery Temperature(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvBatteryTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- High_Performance_Gauge.Input_EvMotorFrontTempValue:
+  type: sensor
+  signalName: MCU_Mg2TempVal
+  dataType: HUInt64
+  description: "HEV : MG2 - HSG, HSCAN -  CR_Gcu_HsgTemp_CEV : MG2 - Front Axle, HSCAN - X(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_EvMotorFrontTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- High_Performance_Gauge.Input_EvMotorRearTempValue:
+  type: sensor
+  signalName: MCU_Mg1TempVal
+  dataType: HUInt64
+  description: "HEV : MG1 - Motor, HSCAN -  CR_Mcu_MotTemp_CEV : MG1 - Rear Axle, HSCAN - CR_Mcu_Mg1Temp_C(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_EvMotorRearTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- High_Performance_Gauge.Input_EvMotorTorqueFrontValue:
+  type: sensor
+  signalName: MCU_Mg2EstTqVal
+  dataType: HUInt64
+  description: "HEV : MG2 - HSG, HSCAN -  XEV : MG2 - Front Axle, HSCAN - X(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_EvMotorTorqueFrontValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_Gauge.Input_EvMotorTorqueRearValue:
+  type: sensor
+  signalName: MCU_Mg1EstTqVal
+  dataType: HUInt64
+  description: "HEV : MG1 - Motor, HSCAN -  XEV : MG1 - Rear Axle, HSCAN - X(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_EvMotorTorqueRearValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- High_Performance_Gauge.Input_HighPerformanceWarnStatus:
+  type: sensor
+  signalName: VCU_NCstmHighPefMdWarnMsg
+  dataType: HUInt64
+  description: "High Performance mode Warning Message"
+  abstractionName: Input_HighPerformanceWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LC_CONDITION_NOT_MET"
+    0x2: "VGS_CONDITION_NOT_MET"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- High_Performance_Gauge.Input_LaunchControlType1Status:
+  type: sensor
+  signalName: TCU_StallLaunchStat
+  dataType: HUInt64
+  description: "This signal is for Stall Launch Control state of TCU"
+  abstractionName: Input_LaunchControlType1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACT"
+    0x3: "NOT_AVAILABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- High_Performance_Gauge.Input_LaunchControlType2Status:
+  type: sensor
+  signalName: ENG_LnchCntrlSta
+  dataType: HUInt64
+  description: "State of Launch Control"
+  abstractionName: Input_LaunchControlType2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACT"
+    0x3: "LC_CONDITION_NOT_MET"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- High_Performance_Gauge.Input_LaunchControlType3Status:
+  type: sensor
+  signalName: VCU_NCstmLaunchCtrlSta
+  dataType: HUInt64
+  description: "Launch Control State Information(for High Performance vehicle USM)"
+  abstractionName: Input_LaunchControlType3Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "UNAVAILABLE"
+    0x2: "READY"
+    0x3: "ACT"
+    0x4: "CONDITION_MET"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- High_Performance_Gauge.Input_OutTempUnitStatus:
+  type: sensor
+  signalName: DATC_TempDispUnitSta
+  dataType: HUInt64
+  description: "This signal indicates Temp unit of HTR Control (℃, ℉)."
+  abstractionName: Input_OutTempUnitStatus
+  valueEnum:
+    0x0: "CELSIUS"
+    0x1: "FAHRENHEIT"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- High_Performance_Gauge.Input_VgsOnOffStatus:
+  type: sensor
+  signalName: VCU_VgsSftMod
+  dataType: HUInt64
+  description: "VGS Shift Mode"
+  abstractionName: Input_VgsOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "VGS_ON"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantErrorStatus:
+  type: sensor
+  signalName: FCU_FcClntFiltChkDp
+  dataType: HUInt64
+  description: "FC stack coolant & Ion filter exchange notification"
+  abstractionName: Input_EwpCoolantErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1:
+  type: sensor
+  signalName: MCU_Mg1EwpClntSuffDisp
+  dataType: HUInt64
+  description: "HSCAN : CF_Mcu_EwpCoolantCluDisp"
+  abstractionName: Input_EwpCoolantRefillWarnStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1FromMCU2:
+  type: sensor
+  signalName: MCU_Mg2EwpClntSuffDisp
+  dataType: HUInt64
+  description: "HSCAN : CF_Mcu_EwpCoolantCluDisp"
+  abstractionName: Input_EwpCoolantRefillWarnStatus1FromMCU2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1FromVCU:
+  type: sensor
+  signalName: VCU_HtrEwpClntSuffDisp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EwpCoolantRefillWarnStatus1FromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus2:
+  type: sensor
+  signalName: xEV_EwpClntDetCluDisp
+  dataType: HUInt64
+  description: "Insufficient EWP Coolant Detect Signal for Cluster(-Battery EWP)"
+  abstractionName: Input_EwpCoolantRefillWarnStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus2FromVCU:
+  type: sensor
+  signalName: VCU_BatEwpClntDiagCluDisp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EwpCoolantRefillWarnStatus2FromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatusFromFCU:
+  type: sensor
+  signalName: FCU_FcClntSplChkDp
+  dataType: HUInt64
+  description: "FC stack coolant lower level check warning"
+  abstractionName: Input_EwpCoolantRefillWarnStatusFromFCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ISG.Input_EngineISGStatus1:
+  type: sensor
+  signalName: ENG_IsgSta
+  dataType: HUInt64
+  description: "1. ISG Status expressing CAN message divided by CF_EMS_IsgStat and CF_EMS_IsgStat2 2. In EMS , CF_EMS_IsgStat and CF_EMS_IsgStat2 do not duplicate the output condition(EX: If CF_EMS_IsgStat is 01h~07h, CF_EMS_IsgStat2 is 00h)0x0:ISG is not operating Normal engine operating without ISG/0x1:Idle stop is activated Idle is stopped by ECU during driving/0x2:Automatically started by ECU Engine is automatically started by ECU regardless driver’s volition during idle stop because the condition that ISG function to be prohibited is satisfied, for example SOC is too low./0x3:ISG is prohibited Driver prohibits to activate ISG in order to avoid start lag when he met traffic jam for example./0x4:Fault is existing in ISG There is fault, which is related with ISG. So, idle stop is prohibited and engine started automatically if it is idle stop condition. But for the vehicles that use CF_EMS_ISGStat2, the condition for not-activated battery sensor can be ignored./0x5:Idle stop is inhibited by system automatically for safety and  convenient condition related with battery SOC, brake vacuum pressure etc. ISG function check for EOL./0x6:Auto start is deactivated system automatically to keep safety, Such as door open, hood open and seat belt unlock./0x7:If driver shift gear N to D range without braking to make auto starting. (Economy ISG Only)"
+  abstractionName: Input_EngineISGStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_STOP"
+    0x2: "AUTO_RESTART"
+    0x3: "SYS_ERROR"
+    0x4: "ISG_PROHIBIT"
+    0x5: "ISG_DEACTIVATED"
+    0x6: "NOT_RESTARTABLE"
+    0x7: "ISG_OFF_SWITCH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x7
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    ELSE: 0x0
+
+
+- ISG.Input_EngineISGStatus2:
+  type: sensor
+  signalName: ENG_Isg2Sta
+  dataType: HUInt64
+  description: "1. ISG Status CAN message is divided by CF_EMS_IsgStat and CF_EMS_IsgStat2 2. CF_EMS_IsgStat and CF_EMS_IsgStat2 do not duplicate the output condition(EX: If CF_EMS_IsgStat2 is 01h~03h, CF_EMS_IsgStat is 00h)"
+  abstractionName: Input_EngineISGStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BAT_DISABLE"
+    0x2: "RAPID_ACCEL"
+    0x3: "TEST_MODE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ISG.Input_IsgOperStatDispReqStatus:
+  type: sensor
+  signalName: ENG_IsgDispDetail
+  dataType: HUInt64
+  description: "1. Detailed information display when Auto Stop conditions are not met.2. ADAS based Auto Start information display. "
+  abstractionName: Input_IsgOperStatDispReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NO_ISG_ENGINE_CONTROL"
+    0x2: "NO_ISG_BATTERY_CHARGE"
+    0x3: "NO_ISG_STEEP_ROADWAY"
+    0x4: "NO_ISG_TEMPERATURE"
+    0x5: "NO_ISG_DRIVEMODE"
+    0x6: "NO_ISG_HOOD_OPEN"
+    0x7: "NO_ISG_DOOR_OPEN"
+    0x8: "NO_ISG_SEATBELT"
+    0x9: "NO_ISG_WHEEL_ALIGN"
+    0xA: "NO_ISG_LOW_SPEED"
+    0xB: "NO_ISG_GEAR_POSITION_D_N"
+    0xC: "NO_ISG_GEAR_POSITION_N"
+    0xD: "NO_ISG_PRESS_BRAKE"
+    0xE: "NO_ISG_TCU_CONTROL"
+    0xF: "AUTO_START_VEHICLE_AHEAD"
+    0x10: "NO_ISG_STOP_SIGN"
+    0x11: "NO_ISG_YIELD_SIGN"
+    0x12: "NO_ISG_ROUNDABOUT_SIGN"
+    0x13: "NO_ISG_WAITING_TURN"
+    0x14: "NO_ISG_SPEEDSIGN"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    0x11: 0xF
+    0x12: 0x10
+    0x13: 0x11
+    0x14: 0x12
+    0x15: 0x13
+    0x16: 0x14
+    ELSE: 0x0
+
+
+- ISG.Input_IsgOperationTimeHourValue:
+  type: sensor
+  signalName: All_ISGOperTimeH
+  dataType: HUInt64
+  description: "This signal is the ISG operation time(Hour).This signal is only used for cluster display."
+  abstractionName: Input_IsgOperationTimeHourValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ISG.Input_IsgOperationTimeMinValue:
+  type: sensor
+  signalName: All_ISGOperTimeM
+  dataType: HUInt64
+  description: "This signal is the ISG operation time(Minute).This signal is only used for cluster display."
+  abstractionName: Input_IsgOperationTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ISG.Input_IsgOperationTimeSecValue:
+  type: sensor
+  signalName: All_ISGOperTimeS
+  dataType: HUInt64
+  description: "This signal is the ISG operation time(Second).This signal is only used for cluster display."
+  abstractionName: Input_IsgOperationTimeSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- ISG.Input_IsgWarnDispReqStatus:
+  type: sensor
+  signalName: EMS_IsgWarning
+  dataType: HUInt64
+  description: "This signal is for ISG warning pop-up disaply. Exclusive for cluster & Not allowed for other purpose."
+  abstractionName: Input_IsgWarnDispReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "START_ON_P"
+    0x2: "START_ON_CLUTCH"
+    0x3: "START_ON_BRAKE_CLUTCH"
+    0x4: "START_ON_BRAKE"
+    0x5: "PRESS_BRAKE"
+    0x6: "SHIFT_TO_NEUTRAL"
+    0x7: "RELEASE_BRAKE"
+    0x8: "PRESS_CLUTCH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- ISG.Input_IsgWarnSoundStatus:
+  type: sensor
+  signalName: ENG_IsgBzrReq
+  dataType: HUInt64
+  description: "This signal is for Economy Type ISG. This signal is reminding for preventing sudden starting immediately just after engine restarted or driver shift gear N to D range without braking to make auto starting. It transfer first 3 times why if valid one is missing.In the case of 0x1,Cluster Action : Buzzer on "
+  abstractionName: Input_IsgWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- LPI.Input_LpiStartAvailableStatus:
+  type: sensor
+  signalName: ENG_LV_FUP_ENA_THD
+  dataType: HUInt64
+  description: "The signal indicates that the status of the pressure on fuel rail is enough high to start engine.(LPI)"
+  abstractionName: Input_LpiStartAvailableStatus
+  valueEnum:
+    0x0: "UNAVAILABLE"
+    0x1: "AVAILABLE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Mild_HEV_System.Input_MildHevLdcWarnStatus:
+  type: sensor
+  signalName: CF_Ldc_AuxBatWarnAlarm_Req
+  dataType: HUInt64
+  description: "Auxiliary Battery Warning Alarm Request Flag (t/CLU)"
+  abstractionName: Input_MildHevLdcWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Mild_HEV_System.Input_MildHevSysWarnStatusFromBMS:
+  type: sensor
+  signalName: Bms_48V_ServiceLampReq
+  dataType: HUInt64
+  description: "48V BMS Service Lamp On request"
+  abstractionName: Input_MildHevSysWarnStatusFromBMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Mild_HEV_System.Input_MildHevSysWarnStatusFromEMS:
+  type: sensor
+  signalName: ENG_SysWarnLmpReq
+  dataType: HUInt64
+  description: "System Warning Lamp ON/OFF request- when 48V system  is malfunction"
+  abstractionName: Input_MildHevSysWarnStatusFromEMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Mild_HEV_System.Input_MildHevSysWarnStatusFromLDC:
+  type: sensor
+  signalName: LDC48V_SrvLmpReq
+  dataType: HUInt64
+  description: "Service lamp request"
+  abstractionName: Input_MildHevSysWarnStatusFromLDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- PHEV_Mode.Input_PhevDriveModeChangeInfoStatus:
+  type: sensor
+  signalName: HCU_PhevDrvModIndSta
+  dataType: HUInt64
+  description: "PHEV Dirve mode indication (mode trans./fail status for cluster)"
+  abstractionName: Input_PhevDriveModeChangeInfoStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "EV_MODE_ON"
+    0x2: "HEV_MODE_ON"
+    0x3: "MAINTAIN_HEV_MODE_DUE_TO_LOW_SOC"
+    0x4: "MAINTAIN_HEV_MODE_DUE_TO_LOW_TEMP"
+    0x5: "CHANGE_HEV_MODE_DUE_TO_LOW_TEMP"
+    0x6: "CHANGE_HEV_MODE_DUE_TO_HIGH_TEMP"
+    0x7: "MAINTAIN_HEV_MODE_DUE_TO_HIGH_TEMP"
+    0x8: "CHANGE_HEV_MODE_DUE_TO_AIR_CON"
+    0x9: "MAINTAIN_HEV_MODE_DUE_TO_AIR_CON"
+    0xA: "AUTO_MODE_ON"
+    0xB: "CHANGE_HEV_MODE_DUE_TO_ENGINE_PROTECTION"
+    0xC: "MAINTAIN_HEV_MODE_DUE_TO_ENGINE_PROTECTION"
+    0xD: "MAINTAIN_HEV_MODE_DUE_TO_SPORT_MODE"
+    0xE: "CHANGE_MANUAL_MODE_DUE_TO_LOW_SOC"
+    0xF: "CHANGE_HEV_MODE_DUE_TO_SELF_DIAGNOSIS"
+    0x10: "EV_PLUS_MODE_ON"
+    0x11: "EV_PLUS_NOT_AVAILABLE"
+    0x12: "CHANGE_EV_MODE_DUE_TO_AIR_CON"
+    0x13: "CHANGE_EV_MODE_DUE_TO_LOW_TEMP"
+    0x14: "CHANGE_EV_MODE_DUE_TO_HIGH_TEMP"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x05: 0x3
+    0x06: 0x4
+    0x08: 0x5
+    0x09: 0x6
+    0x0A: 0x7
+    0x0B: 0x8
+    0x0C: 0x9
+    0x0D: 0xA
+    0x0E: 0xB
+    0x0F: 0xC
+    0x10: 0xD
+    0x11: 0xE
+    0x12: 0xF
+    0x13: 0x10
+    0x14: 0x11
+    0x15: 0x12
+    0x16: 0x13
+    0x17: 0x14
+    ELSE: 0x0
+
+
+- PHEV_Mode.Input_PhevDriveModeIndiReqStatus:
+  type: sensor
+  signalName: HCU_PhevMod
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PhevDriveModeIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HEV"
+    0x2: "AUTO"
+    0x3: "EV_PLUS"
+  matchingTable:
+    0x0: 0x0
+    TIMEOUT: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- PMPD.Input_PmpdActStatus:
+  type: sensor
+  signalName: VCU_PMPDActSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PmpdActStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TORQUE_LIMIT"
+    0x2: "BRAKE_ACT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- PMPD.Input_PmpdActiveStatus:
+  type: sensor
+  signalName: VCU_PMPDWarnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PmpdActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DEACTIVATE"
+    0x2: "FAIL"
+    0x3: "ACTIVATE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- PMPD.Input_PmsaActivateWaitTimeVal:
+  type: sensor
+  signalName: VCU_SALAWarnCnt
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PmsaActivateWaitTimeVal
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- PMPD.Input_PmsaWarnStatus:
+  type: sensor
+  signalName: VCU_SALAWarnMsg
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PmsaWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVATE"
+    0x3: "RELEASE"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftCurveDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_CurveSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftCurveDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftDownhillDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_DownhillSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftDownhillDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftFrontCarDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_FrontCarSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftFrontCarDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftMergeDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_MergeSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftMergeDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftOtherDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_OthersSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftOtherDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftRoundaboutDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_RoundaboutSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftRoundaboutDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftSpeedLimitDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_SLimitSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftSpeedLimitDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftStopSignDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_StopsignSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftStopSignDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Predictive_Shift.Input_PreShiftSystemStatus:
+  type: sensor
+  signalName: TCU_PS_Sta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftSystemStatus
+  valueEnum:
+    0x0: "NOT_READY_MODE"
+    0x1: "NOT_READY_ETC"
+    0x2: "READY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- Predictive_Shift.Input_PreShiftTextDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_TestDisplay
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftTextDisplayStatus
+  valueEnum:
+    0x0: "CURVE"
+    0x1: "MERGE"
+    0x2: "SPEEDLIMIT"
+    0x3: "FRONTCAR"
+    0x4: "DOWNHILL"
+    0x5: "STOPSIGN"
+    0x6: "ROUNDABOUT"
+    0x7: "ETC"
+    0x8: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    ELSE: 0x8
+
+
+- Predictive_Shift.Input_PreShiftVariableDisplayStatus:
+  type: sensor
+  signalName: TCU_PS_VarIcon
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_PreShiftVariableDisplayStatus
+  valueEnum:
+    0x0: "SPEEDLIMIT"
+    0x1: "STOPSIGN"
+    0x2: "ROUNDABOUT"
+    0x3: "NONE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Regen_System.Input_EvRegenBrakeFunctionWarnStatus:
+  type: sensor
+  signalName: VCU_CluWarnMsgSta
+  dataType: HUInt64
+  description: "Cluster Warning Message"
+  abstractionName: Input_EvRegenBrakeFunctionWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+    0x2: "REGEN_RESTORED"
+    0x3: "WARN_LOWTEMP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x3
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- Regen_System.Input_EvRegenBrakePaddleNotActiveWarnStatus:
+  type: sensor
+  signalName: VCU_PdlWarnMsgSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EvRegenBrakePaddleNotActiveWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Regen_System.Input_EvSmartRegenFailWarnStatus:
+  type: sensor
+  signalName: VCU_SmartRegen_WarnMsgSta
+  dataType: HUInt64
+  description: "Smart Regen Warning Message"
+  abstractionName: Input_EvSmartRegenFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Regen_System.Input_IPedalIndiReqStatus:
+  type: sensor
+  signalName: VCU_iPedalIndiSta
+  dataType: HUInt64
+  description: "i-Pedal Indicator Status"
+  abstractionName: Input_IPedalIndiReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "INACTIVE"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Regen_System.Input_IPedalWarnStatus:
+  type: sensor
+  signalName: VCU_StopCtrlWarnMsgSta
+  dataType: HUInt64
+  description: "i-Pedal Warning Message Status"
+  abstractionName: Input_IPedalWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONDITION_NOT_MET"
+    0x2: "IPEDAL_ON_BYSPEED"
+    0x3: "SMARTREGEN_ON_BYSPEED"
+    0x4: "SMARTREGEN_OFF_BYSPEED"
+  matchingTable:
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x1
+    ELSE: 0x0
+
+
+- Regen_System.Input_PaddleStopAssistControlWarnStatus:
+  type: sensor
+  signalName: HCU_PaddleCstCtrlWrnMsgSta
+  dataType: HUInt64
+  description: "Paddle Coasting Control Warning Message Status"
+  abstractionName: Input_PaddleStopAssistControlWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONDITION_NOT_MET"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Regen_System.Input_RegenNpedalLvlStatus:
+  type: sensor
+  signalName: VCU_NCstmNpdlLvlVal
+  dataType: HUInt64
+  description: "N pedal Level(for High Performance vehicle USM)"
+  abstractionName: Input_RegenNpedalLvlStatus
+  valueEnum:
+    0x0: "DISPLAY_OFF"
+    0x1: "NPEDAL_LV1"
+    0x2: "NPEDAL_LV2"
+    0x3: "NPEDAL_LV3"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Regen_System.Input_RegenSmartLevelValue:
+  type: sensor
+  signalName: VCU_RegenLvlVal
+  dataType: HUInt64
+  description: "Regeneration Level"
+  abstractionName: Input_RegenSmartLevelValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Regen_System.Input_RegenSmartOnReqStatus:
+  type: sensor
+  signalName: VCU_SmartRegen_OnSta
+  dataType: HUInt64
+  description: "Smart Regen Status"
+  abstractionName: Input_RegenSmartOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+    0x3: "INACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x3
+    ELSE: 0x2
+
+
+- Regen_System.Input_RegenSmartVehicleStatus1:
+  type: sensor
+  signalName: VCU_SmartRegen_RdrCstActSta
+  dataType: HUInt64
+  description: "Smart Regen Radar Coasting Activation Status"
+  abstractionName: Input_RegenSmartVehicleStatus1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Regen_System.Input_RegenSmartVehicleStatus2:
+  type: sensor
+  signalName: VCU_SmartRegen_MapCstActSta
+  dataType: HUInt64
+  description: "Smart Regen Map based Coasting Activation Status"
+  abstractionName: Input_RegenSmartVehicleStatus2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ACTIVE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Regen_System.Input_RegenVehicleStopStatus:
+  type: sensor
+  signalName: VCU_VehHoldSta
+  dataType: HUInt64
+  description: "Vehicle Hold Status by Motor Torque(without Brake Assist)"
+  abstractionName: Input_RegenVehicleStopStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STOP"
+    0x2: "INVALID"
+    0x3: "APPLIED_STEP3"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- SBW.Input_DriverPositionTypeStatus:
+  type: sensor
+  signalName: DriveTypeOption
+  dataType: HUInt64
+  description: "Drive Type OptionThis signal is used to determine driver's seat position('Drive Type') about this vehicle."
+  abstractionName: Input_DriverPositionTypeStatus
+  valueEnum:
+    0x0: "LHD"
+    0x1: "RHD"
+  matchingTable:
+    0x1: 0x1
+    TIMEOUT: {OLDVALUE}
+    ELSE: 0x0
+
+
+- SBW.Input_NPositionStayModeStatusFromSCU:
+  type: sensor
+  signalName: SCU_FF_NPosWshModSta
+  dataType: HUInt64
+  description: "This signal indicates N wash Mode status."
+  abstractionName: Input_NPositionStayModeStatusFromSCU
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "STANDBY"
+    0x2: "N_STAY_MODE"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- SBW.Input_NPositionStayModeStatusFromTCU:
+  type: sensor
+  signalName: TCU_NPosWshModSta
+  dataType: HUInt64
+  description: "This signal indicates N wash Mode status."
+  abstractionName: Input_NPositionStayModeStatusFromTCU
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "STANDBY"
+    0x2: "N_STAY_MODE"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- SBW.Input_NPositionStayModeStatusFromVCU:
+  type: sensor
+  signalName: VCU_NPosWshModSta
+  dataType: HUInt64
+  description: "N Wash Mode Status"
+  abstractionName: Input_NPositionStayModeStatusFromVCU
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "STANDBY"
+    0x2: "N_STAY_MODE"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- SBW.Input_SbwLeverWarnStatusFromSBW:
+  type: sensor
+  signalName: SBW_ShftWrngSta
+  dataType: HUInt64
+  description: "This signal represents warning message of Shifter."
+  abstractionName: Input_SbwLeverWarnStatusFromSBW
+  valueEnum:
+    0x0: "SYS_FAIL"
+    0x1: "CHECK_ROTARY_SHIFTER"
+    0x2: "CHECK_P_BUTTON"
+    0x3: "CHECK_P_RELEASE"
+    0x4: "STUCK_ROTARY_SHIFTER"
+    0x5: "BRAKE_TO_CHANGE_GEAR"
+    0x6: "BRAKE_AND_P_RELEASE"
+    0x7: "GEAR_ALREADY_SELECTED"
+    0x8: "ROTARY_TURNED_WHILE_P_PRESSED"
+    0x9: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    ELSE: 0x9
+
+
+- SBW.Input_SbwLeverWarnStatusFromSbwShifter:
+  type: sensor
+  signalName: SBW_SHFTR_FF_LvrWrngMsg
+  dataType: HUInt64
+  description: "This signal displays in the cluster.This signal is classified by the type of Shift By Wire.0x00 : Common (Button / Lever / Dial / Column)0x01 : Button0x02 : P release(P→N park) Button (If equipped)0x03 : Button / Lever / Dial0x04 : Button0x06 : Common (Button / Lever / Dial / Column)0x09~0x0A : Dial / Column0x12~0x13 : Lever0x1D~0x1F : Sphere Rotation (If equipped)"
+  abstractionName: Input_SbwLeverWarnStatusFromSbwShifter
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHECK_SHIFT_CONTROL"
+    0x2: "CHECK_P_RELEASE"
+    0x3: "CHECK_P_BUTTON"
+    0x4: "CHECK_D_BUTTON"
+    0x5: "STUCK_BUTTON"
+    0x6: "STUCK_ROTARY_SHIFTER"
+    0x7: "CHECK_ROTARY_SHIFTER"
+    0x8: "STUCK_SHIFT_LEVER"
+    0x9: "CHECK_SHIFT_LEVER"
+    0xA: "CHECK_ROTARY_DIAL_SPHERE"
+    0xB: "CONTROL_MANUALLY_DIAL_SPHERE"
+    0xC: "CHECK_SURROUNDING_DIAL_SPHERE"
+    0xD: "CONTROL_MANUALLY_COLUMN_ROTARY"
+    0xE: "TRY_OPERATE_RESTART_COLUMN_ROTARY"
+    0xF: "TRY_OPERATE_RESTART_DIAL_SPHERE"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x0F: 0x3
+    0x04: 0x4
+    0x06: 0x5
+    0x09: 0x6
+    0x0A: 0x7
+    0x12: 0x8
+    0x13: 0x9
+    0x1B: 0xD
+    0x1C: 0xE
+    0x1D: 0xF
+    0x1E: 0xB
+    0x1F: 0xC
+    ELSE: 0x0
+
+
+- SBW.Input_SbwWarnStatusFromEVSCU:
+  type: sensor
+  signalName: EVSCU_FF_InhOH
+  dataType: HUInt64
+  description: "Reject for heat protection"
+  abstractionName: Input_SbwWarnStatusFromEVSCU
+  valueEnum:
+    0x0: "AVOID_SHIFTING"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- SBW.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: EVSCU_FF_WrnMsg
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x1: 0xE
+    ELSE: 0xF
+
+
+- SBW.Input_SbwWarnStatusFromTCU:
+  type: sensor
+  signalName: TCU_WrngMsgSta
+  dataType: HUInt64
+  description: "This signal indicates the status of “TCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "CONDUCT_MAINTENANCE"
+    0x3: "BRAKE_TO_CHANGE_GEAR"
+    0x4: "STOP_BEFORE_SHIFT_P"
+    0x5: "GEAR_ALREADY_SELECTED"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x07: 0x5
+    ELSE: 0x0
+
+
+- SBW.Input_SbwWarnStatusFromVCU:
+  type: sensor
+  signalName: VCU_SbwWarnMsgSta
+  dataType: HUInt64
+  description: "SBW Warning Message"
+  abstractionName: Input_SbwWarnStatusFromVCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "BRAKE_AND_P_RELEASE"
+    0x5: "GEAR_ALREADY_SELECTED"
+    0x6: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x6: 0x4
+    0x7: 0x5
+    ELSE: 0x6
+
+
+- SCR.Input_ScrIncorrectUreaWarnStatus1:
+  type: sensor
+  signalName: SCR_SysErrMsgDis
+  dataType: HUInt64
+  description: "The signal indicates warning message information which shall be displayed accroding to corresponding SCR error cases"
+  abstractionName: Input_ScrIncorrectUreaWarnStatus1
+  valueEnum:
+    0x0: "INCORRECT_UREA"
+    0x1: "CHECK_UREA"
+    0x2: "DEACTIVATED"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- SCR.Input_ScrIncorrectUreaWarnStatus2:
+  type: sensor
+  signalName: SCR_IndcmtExitStaDis
+  dataType: HUInt64
+  description: "Send information to CLU(or message center) about Inudcement exit condition"
+  abstractionName: Input_ScrIncorrectUreaWarnStatus2
+  valueEnum:
+    0x0: "INCORRECT_UREA"
+    0x1: "CHECK_SYS"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- SCR.Input_ScrLevelWarnDisplayReqStatus:
+  type: sensor
+  signalName: SCR_LvlWrngMsgDis
+  dataType: HUInt64
+  description: "The signal indicates the status of the Message"
+  abstractionName: Input_ScrLevelWarnDisplayReqStatus
+  valueEnum:
+    0x0: "WARN_LEVEL1"
+    0x1: "WARN_LEVEL2"
+    0x2: "WARN_LEVEL3"
+    0x3: "WARN_LEVEL4"
+    0x4: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    ELSE: 0x4
+
+
+- SCR.Input_ScrLevelWarnIndiReqStatus:
+  type: sensor
+  signalName: SCR_LvlWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the 'SCR level Warning lamp'This signal also indicates KSDS diagnosis results for VCRM monitoring in Gasoline engine"
+  abstractionName: Input_ScrLevelWarnIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- SCR.Input_ScrRemainDistanceValue:
+  type: sensor
+  signalName: SCR_RmnDstDis
+  dataType: HUInt64
+  description: "This signal indicates the remaining distance before engine can not be started"
+  abstractionName: Input_ScrRemainDistanceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- SCR.Input_ScrUreaLevelValue:
+  type: sensor
+  signalName: SCR_UreaLvlSta
+  dataType: HUInt64
+  description: "The signal indicates UREA Level"
+  abstractionName: Input_ScrUreaLevelValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Self_Regenerative.Input_SelfRgnNoConditionStatus:
+  type: sensor
+  signalName: ENG_SelfRgnNoCond
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SelfRgnNoConditionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NOT_CONDITION_MET"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Self_Regenerative.Input_SelfRgnOperationStatus:
+  type: sensor
+  signalName: ENG_SelfRgnRValueSet
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SelfRgnOperationStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STOP"
+    0x2: "ONGOING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Self_Regenerative.Input_SelfRgnProgressMinValue:
+  type: sensor
+  signalName: ENG_SelfRgnPrgLvl
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SelfRgnProgressMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Self_Regenerative.Input_SelfRgnWarnPageStatus:
+  type: sensor
+  signalName: ENG_SelfRgnStat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SelfRgnWarnPageStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NEED_SELF_RGN"
+    0x2: "STOP_SELF_RGN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Self_Regenerative.Input_SelfRgnWarnStatus:
+  type: sensor
+  signalName: ENG_SelfRgnWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SelfRgnWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NEED"
+    0x2: "COMPLETE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Self_Regenerative.Output_SelfRgnOnOffSetReq.Output_SelfRgnOnOffSetReq_CCAN:
+  type: actuator
+  signalName: CLU_SelfRgnSetReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Output_SelfRgnOnOffSetReq
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "STOP"
+    0x2: "ONGOING"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+
+- SOC_Gauge.Input_EvSocDisplayValue:
+  type: sensor
+  signalName: xEV_SocDis
+  dataType: HUInt64
+  description: "Cluster, AVN Display SOC(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvSocDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- SOC_Gauge.Input_LowSocDisplayReferenceValue:
+  type: sensor
+  signalName: VCU_LowSocDispPcVal
+  dataType: HUInt64
+  description: "Low SOC Display Percent Value"
+  abstractionName: Input_LowSocDisplayReferenceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- SOC_Gauge.Input_LowSocDisplayStep1ReferenceValue:
+  type: sensor
+  signalName: VCU_LowSocDispSt1PcVal
+  dataType: HUInt64
+  description: "VCU_LowSocDisplayPercentValue_Step1 (0~100%)"
+  abstractionName: Input_LowSocDisplayStep1ReferenceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- Solar_Roof.Input_SolarRoofFailWarnStatus:
+  type: sensor
+  signalName: Sdc_FltSta
+  dataType: HUInt64
+  description: "SDC Fault State(0 = Normal, 1 = Fault)"
+  abstractionName: Input_SolarRoofFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Tachometer.Input_EmsVirtualRpmEnableStatus:
+  type: sensor
+  signalName: SSC_CLUEngSpdFlag
+  dataType: HUInt64
+  description: "Flag for Engine RPM(SSC) Display on Cluster, Only when this flag is set to 1, Cluster shall display the Engine RPM from EMS SSC"
+  abstractionName: Input_EmsVirtualRpmEnableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Tachometer.Input_EmsVirtualRpmValue:
+  type: sensor
+  signalName: SSC_CLUEngSpd
+  dataType: HUInt64
+  description: "Cluster Engine Speed SSC - Cluster Engine RPM"
+  abstractionName: Input_EmsVirtualRpmValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x1FFF
+
+
+- Tachometer.Input_EngineOilTempValue:
+  type: sensor
+  signalName: ENG_EngOilTempVal
+  dataType: HUInt64
+  description: "engine oil temperature"
+  abstractionName: Input_EngineOilTempValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Tachometer.Input_EngineRpmDisplayReqValue:
+  type: sensor
+  signalName: VCU_VgsVirEngSpdRpmVal
+  dataType: HUInt64
+  description: "Virtual engine speed for VGS mode"
+  abstractionName: Input_EngineRpmDisplayReqValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Tachometer.Input_EngineRpmErrorStatus:
+  type: sensor
+  signalName: HEV_EngSpdErrSta
+  dataType: HUInt64
+  description: "Engine speed error"
+  abstractionName: Input_EngineRpmErrorStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- Tachometer.Input_EngineRpmNewErrorStatus:
+  type: sensor
+  signalName: All_EngSpdErrSta
+  dataType: HUInt64
+  description: "This signal identifies an error on searching for a long tooth or on engine speed sensing.Note : in some cases a limp-home function can be activated in the ECU (the engine speed signal is then based on the camshaft signal), and the engine may run even if an error is present on the crankshaft signal.There is a specific phase relationship between the signals EngSpdVal and EngSpdErrSta.This signal is only used for cluster diplay."
+  abstractionName: Input_EngineRpmNewErrorStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    ELSE: 0x1
+
+
+- Tachometer.Input_EngineRpmValue:
+  type: sensor
+  signalName: HEV_EngSpdVal
+  dataType: HUInt64
+  description: "Engine Speed"
+  abstractionName: Input_EngineRpmValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Tachometer.Input_RpmGaugeMaxReqStatus:
+  type: sensor
+  signalName: VCU_VgsVirEngSpdRpmMaxVal
+  dataType: HUInt64
+  description: "VGS Virtual Engine RPM Maximum (for Shift LED)"
+  abstractionName: Input_RpmGaugeMaxReqStatus
+  valueEnum:
+    0x0: "RPM6000"
+    0x1: "RPM8000"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Tachometer.Input_RpmGaugeRedStartPointReqStatus:
+  type: sensor
+  signalName: VCU_VgsVirEngSpdRpmRedStartVal
+  dataType: HUInt64
+  description: "VGS virtual engine RED RPM start value (for shift LED)"
+  abstractionName: Input_RpmGaugeRedStartPointReqStatus
+  valueEnum:
+    0x0: "STEP_FROM4000"
+    0x1: "STEP_FROM4250"
+    0x2: "STEP_FROM4500"
+    0x3: "STEP_FROM4750"
+    0x4: "STEP_FROM5000"
+    0x5: "STEP_FROM5250"
+    0x6: "STEP_FROM5500"
+    0x7: "STEP_FROM5750"
+    0x8: "STEP_FROM6000"
+    0x9: "STEP_FROM6250"
+    0xA: "STEP_FROM6500"
+    0xB: "STEP_FROM6750"
+    0xC: "STEP_FROM7000"
+    0xD: "NO_DATA"
+    0xE: "STEP_FROM7750"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    0xA: 0x9
+    0xB: 0xA
+    0xC: 0xB
+    0xD: 0xC
+    0xE: 0xE
+    ELSE: 0xD
+
+
+- Tachometer.Input_TcuRpmEnableStatus:
+  type: sensor
+  signalName: HDCT_CLUEngSpdFlag
+  dataType: HUInt64
+  description: "Flag for Engine RPM(from ECU) Display on Cluster, Only when this flag is set to 1, Cluster shall display the Engine RPM from TCU"
+  abstractionName: Input_TcuRpmEnableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Tachometer.Input_TcuRpmValueFromHDCT:
+  type: sensor
+  signalName: HDCT_CLUEngSpd
+  dataType: HUInt64
+  description: "Engine RPM from TCU(only for the display on Cluster)"
+  abstractionName: Input_TcuRpmValueFromHDCT
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Tachometer.Input_TcuRpmValueFromTCU:
+  type: sensor
+  signalName: TCU_EngRpmDis
+  dataType: HUInt64
+  description: "Engine RPM from TCU (Only for the display on Cluster)"
+  abstractionName: Input_TcuRpmValueFromTCU
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Trailer_Mode.Input_FlatTowModeOnOffStatus:
+  type: sensor
+  signalName: VCU_FlatTowModeUsmSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_FlatTowModeOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_NONCHARGE"
+    0x2: "ON_CHARGE"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcStopLampWarnStatus:
+  type: sensor
+  signalName: ITBC_StpLmpWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcStopLampWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTbcSwitchSqueezeValue:
+  type: sensor
+  signalName: CTM_Exra_EbrakSta
+  dataType: HUInt64
+  description: "Trailer Ebrake Controller ActiveStatus"
+  abstractionName: Input_ItbcTbcSwitchSqueezeValue
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SWITCH_ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerConnectStatus:
+  type: sensor
+  signalName: ITBC_Brk_DisconnWarnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ItbcTrailerConnectStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TBC_CONNECT_CHECK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerLampWarnStatus:
+  type: sensor
+  signalName: ITBC_LampWarnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ItbcTrailerLampWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHECK_TAILLAMP"
+    0x2: "CHECK_REARFOG"
+    0x3: "CHECK_BACKUPLAMP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeFailStatus:
+  type: sensor
+  signalName: ITBC_BrkWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcTrailerbrakeFailStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TBC_BRAKE_FAIL"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeFaultWarnStatus:
+  type: sensor
+  signalName: ITBC_Brk_FaultWarnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ItbcTrailerbrakeFaultWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHECK_WIRING"
+    0x2: "CHECK_BRAKE_MODULE"
+    0x3: "CHECK_BRAKE_SYS"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeGainValue:
+  type: sensor
+  signalName: ITBC_TrailerBrkGainVal
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcTrailerbrakeGainValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x1F
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeGaugeValue:
+  type: sensor
+  signalName: ITBC_TrailerBrkOut
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcTrailerbrakeGaugeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeOperationWarnStatus:
+  type: sensor
+  signalName: ITBC_Brk_FnctWarnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ItbcTrailerbrakeOperationWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "USE_BRAKE_SWITCH"
+    0x2: "CHECK_TRAILER_SWTICH"
+    0x3: "NOT_OPERATION_BRAKE"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTrailerbrakeWarnStatus:
+  type: sensor
+  signalName: ITBC_SysWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcTrailerbrakeWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TBC_FAIL"
+    0x2: "TBC_CONNECT_CHECK"
+    0x3: "TBC_LAMP_FAIL"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_ItbcTurnLampWarnStatus:
+  type: sensor
+  signalName: ITBC_TrnSigLmpWarn
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ItbcTurnLampWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_LEFT"
+    0x2: "WARN_RIGHT"
+    0x3: "WARN_ALL"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_TowModeOnOffStatus:
+  type: sensor
+  signalName: CF_RCS_TowMode
+  dataType: HUInt64
+  description: "Tow Mode On/off Switch signal"
+  abstractionName: Input_TowModeOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_TowModeOnOffStatusFromTcu:
+  type: sensor
+  signalName: TCU_TowModeSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TowModeOnOffStatusFromTcu
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_TowModeUnavailabeStatus:
+  type: sensor
+  signalName: TCU_Tow4LFail
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TowModeUnavailabeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAIL"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_TrailerModeActiveWarnReqStatus:
+  type: sensor
+  signalName: VCU_TrailerModWarnMsgSta
+  dataType: HUInt64
+  description: "Trailer Mode Warning Message Status"
+  abstractionName: Input_TrailerModeActiveWarnReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Trailer_Mode.Input_TrailerModeOnOffStatus:
+  type: sensor
+  signalName: CTM_TrailerAct
+  dataType: HUInt64
+  description: "This signal is used for control the Trailer Act function."
+  abstractionName: Input_TrailerModeOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "DISCONNECT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Trailer_Mode.Input_TrailerModeWarnStatus:
+  type: sensor
+  signalName: TCU_TrailWarn
+  dataType: HUInt64
+  description: "Temperature warning signal for Trailer mode"
+  abstractionName: Input_TrailerModeWarnStatus
+  valueEnum:
+    0x0: "WARN_OFF"
+    0x1: "WARN_ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_DoorPassiveLockReqStatus:
+  type: sensor
+  signalName: DoorLock_PsvDrLkReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorPassiveLockReqStatus
+  valueEnum:
+    0x0: "LOCK_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x0
+    ELSE: 0x1
+
+
+- Transmission_Indicator.Input_DoorRKELockUnlockReqStatus:
+  type: sensor
+  signalName: RKE_BtnReq
+  dataType: HUInt64
+  description: "Remote Key Button Request from Folding Key or Smart Key"
+  abstractionName: Input_DoorRKELockUnlockReqStatus
+  valueEnum:
+    0x0: "LOCK_REQ"
+    0x1: "UNLOCK_REQ"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Transmission_Indicator.Input_GearDisplayStatusFromVCU:
+  type: sensor
+  signalName: VCU_GearPosStaDisp
+  dataType: HUInt64
+  description: "Gear Position Status for CLU display"
+  abstractionName: Input_GearDisplayStatusFromVCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_D"
+    0x2: "STAGE_N"
+    0x3: "STAGE_R"
+    0x4: "INVALID"
+    0x5: "PADDLE_SHIFT"
+    0x6: "CRC_ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    0x7: 0x3
+    0xC: 0x5
+    CRCERROR: 0x6
+    ELSE: 0x4
+
+
+- Transmission_Indicator.Input_GearIndManualReqStatus1FromTCU:
+  type: sensor
+  signalName: HTCU_TrgtGearSta
+  dataType: HUInt64
+  description: "HTCU_TrgtGearSta informs about the speed, which is currently engaged in the gearbox, or, in case of a gear change (HTCU_GearChgSta), which speed is reached.Note: Gear changes covering more than one speed are also possible.In the P and N positions, the frictional connection is interrupted hydraulically.Depending on the type of error, the 3rd or 4th (forward) speed, and the R (reverse) speed are engaged in the limp home program."
+  abstractionName: Input_GearIndManualReqStatus1FromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndManualReqStatus2FromTCU:
+  type: sensor
+  signalName: TCU_CluTrgtGearSta
+  dataType: HUInt64
+  description: "TCH_CluTrgtGearSta informs about target gear of SS timing (For indicating Paddle shift or Manual mode on cluster)"
+  abstractionName: Input_GearIndManualReqStatus2FromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndManualReqStatusFromHDCT:
+  type: sensor
+  signalName: HDCT_CLUTrgtGear
+  dataType: HUInt64
+  description: "This target gear signal is only for Cluster.It is different with HTCU_TrgtGearSta."
+  abstractionName: Input_GearIndManualReqStatusFromHDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndManualReqStatusOnEV:
+  type: sensor
+  signalName: VCU_VgsVirGearStep
+  dataType: HUInt64
+  description: "Shift gear when entering VGS mode"
+  abstractionName: Input_GearIndManualReqStatusOnEV
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndManualReqStatusOnIMT:
+  type: sensor
+  signalName: TCU_CurrGearSta
+  dataType: HUInt64
+  description: "CUR_GR indicates the gear speed which is currently engaged in the gearbox."
+  abstractionName: Input_GearIndManualReqStatusOnIMT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STAGE_N"
+    0x2: "SPEED1"
+    0x3: "SPEED2"
+    0x4: "SPEED3"
+    0x5: "SPEED4"
+    0x6: "SPEED5"
+    0x7: "SPEED6"
+    0x8: "SPEED7"
+    0x9: "SPEED8"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    0x5: 0x6
+    0x6: 0x7
+    0x7: 0x8
+    0x8: 0x9
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndManualSignalConfig:
+  type: sensor
+  signalName: TCU_CluTrgtGearConfg
+  dataType: HUInt64
+  description: "This signal indicates the signal source configuration of target gear for CLU"
+  abstractionName: Input_GearIndManualSignalConfig
+  valueEnum:
+    0x0: "SIGNAL1"
+    0x1: "SIGNAL2"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndiBlinkReqStatusFromDCT:
+  type: sensor
+  signalName: HDCT_WrngSndSig
+  dataType: HUInt64
+  description: "It is a signal array for DCT system’s warning signal for driver.Bit 0 : Sound(1Hz, 3times)Bit 1 : Sound(1Hz, Continuous)Bit 2 : Blinking"
+  abstractionName: Input_GearIndiBlinkReqStatusFromDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK"
+  matchingTable:
+    0x4: 0x1
+    0x5: 0x1
+    0x6: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndiBlinkReqStatusFromTCU:
+  type: sensor
+  signalName: HTCU_GearSlctrDisBlinkReq
+  dataType: HUInt64
+  description: "Cluster controls blinking of gear lamp during the request signal from TCU."
+  abstractionName: Input_GearIndiBlinkReqStatusFromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearIndiDisplayReqStatusFromIMT:
+  type: sensor
+  signalName: IMT_DisCmd
+  dataType: HUInt64
+  description: "This signal is used for cluster to change gear display type. Always Display / Not Display / Blinking"
+  abstractionName: Input_GearIndiDisplayReqStatusFromIMT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearMaxStepInfoFromEmsHcu:
+  type: sensor
+  signalName: VCU_VgsGearStepType
+  dataType: HUInt64
+  description: "VGS shift mode highest speed"
+  abstractionName: Input_GearMaxStepInfoFromEmsHcu
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MAX_THREE"
+    0x2: "MAX_FOUR"
+    0x3: "MAX_FIVE"
+    0x4: "MAX_SIX"
+    0x5: "MAX_SEVEN"
+    0x6: "MAX_EIGHT"
+  matchingTable:
+    0x3: 0x1
+    0x4: 0x2
+    0x5: 0x3
+    0x6: 0x4
+    0x7: 0x5
+    0x8: 0x6
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearMaxStepInfoFromHDCT:
+  type: sensor
+  signalName: HDCT_GearStepTyp
+  dataType: HUInt64
+  description: "This signal indicates number of gear steps of step type automatic transmission(A/T). A vehicle can have A/T variant according to its option, for example 5-speed A/T or 6-speed A/T can be equipped in the same kind of vehicles and other control systems (e.g. ESC, TCS, …) can need this information to apply appropriate control logic."
+  abstractionName: Input_GearMaxStepInfoFromHDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MAX_THREE"
+    0x2: "MAX_FOUR"
+    0x3: "MAX_FIVE"
+    0x4: "MAX_SIX"
+  matchingTable:
+    0x3: 0x1
+    0x4: 0x2
+    0x5: 0x3
+    0x6: 0x4
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearPositionRStatusFromICU:
+  type: sensor
+  signalName: ICU_MtGearPosRSta
+  dataType: HUInt64
+  description: "Manual Shift Lever R Switch Status 0x0:Off/0x1:On"
+  abstractionName: Input_GearPositionRStatusFromICU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STAGE_R"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearSelectStatusFromHDCT:
+  type: sensor
+  signalName: HDCT_GearSelDis
+  dataType: HUInt64
+  description: "Position (P, R, N..), which was identified by the gear selector.In case the gear selector is in a intermediate position, the last clear recognized position is used.There is no specific phase relationship between the output and any other signal."
+  abstractionName: Input_GearSelectStatusFromHDCT
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_L"
+    0x2: "STAGE_2"
+    0x3: "STAGE_3"
+    0x4: "DS_MODE"
+    0x5: "STAGE_D"
+    0x6: "STAGE_N"
+    0x7: "STAGE_R"
+    0x8: "MANUAL"
+    0x9: "PADDLE_SHIFT"
+    0xA: "INTERMEDIATE"
+    0xB: "CRC_ERROR"
+    0xC: "INVALID"
+    0xD: "STAGE_M"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0xC: 0x9
+    0xD: 0xD
+    0xE: 0xA
+    CRCERROR: 0xB
+    ELSE: 0xC
+
+
+- Transmission_Indicator.Input_GearSelectStatusFromSCU:
+  type: sensor
+  signalName: SCU_FF_PosActSta
+  dataType: HUInt64
+  description: "This signal indicates where motor is located.SCU ECU provides information of the actual motor position."
+  abstractionName: Input_GearSelectStatusFromSCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_D"
+    0x2: "STAGE_N"
+    0x3: "STAGE_R"
+    0x4: "CRC_ERROR"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x5: 0x1
+    0x6: 0x2
+    0x7: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x5
+
+
+- Transmission_Indicator.Input_GearSelectStatusFromTCU:
+  type: sensor
+  signalName: HTCU_GearSlctrDis
+  dataType: HUInt64
+  description: "Position (P, R, N..), which was identified by the gear selector.In case the gear selector is in a intermediate position, the last clear recognized position is used.There is no specific phase relationship between the output and any other signal."
+  abstractionName: Input_GearSelectStatusFromTCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_L"
+    0x2: "STAGE_2"
+    0x3: "STAGE_3"
+    0x4: "DS_MODE"
+    0x5: "STAGE_D"
+    0x6: "STAGE_N"
+    0x7: "STAGE_R"
+    0x8: "MANUAL"
+    0x9: "PADDLE_SHIFT"
+    0xA: "INTERMEDIATE"
+    0xB: "INVALID"
+    0xC: "CRC_ERROR"
+    0xD: "STAGE_M"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0xC: 0x9
+    0xD: 0xD
+    0xE: 0xA
+    CRCERROR: 0xC
+    ELSE: 0xB
+
+
+- Transmission_Indicator.Input_GearShiftIndiDownStatusFromEmsHcu:
+  type: sensor
+  signalName: HCU_GearShftDnDis
+  dataType: HUInt64
+  description: "Gear Shift-down display status"
+  abstractionName: Input_GearShiftIndiDownStatusFromEmsHcu
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiDownStatusFromHTCU:
+  type: sensor
+  signalName: HTCU_GearShftDnDisGSI
+  dataType: HUInt64
+  description: "Gear Shift-down display status for Gear shift indicator (EU Regulations)"
+  abstractionName: Input_GearShiftIndiDownStatusFromHTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiStepNewStatus:
+  type: sensor
+  signalName: All_TrgGearVal
+  dataType: HUInt64
+  description: "This signal is transmitted by intergrating HCU target gear or TCU target gear for cluster display purpose.This signal is only used for cluster display."
+  abstractionName: Input_GearShiftIndiStepNewStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiStepStatusFromEmsHcu:
+  type: sensor
+  signalName: HCU_TrgtGearGsiSta
+  dataType: HUInt64
+  description: "Tartget Gear for GSI"
+  abstractionName: Input_GearShiftIndiStepStatusFromEmsHcu
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiStepStatusFromHTCU:
+  type: sensor
+  signalName: HTCU_TrgtGearStaGSI
+  dataType: HUInt64
+  description: "Target Gear for Gear shift indicator (EU Regulations)"
+  abstractionName: Input_GearShiftIndiStepStatusFromHTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiUpDownNewStatus:
+  type: sensor
+  signalName: All_TrgGearUpDnVal
+  dataType: HUInt64
+  description: "This signal is transmitted by integrating ECUHCU/TCU target gear(Up/Down) for cluster display purpose.This signal is only used for cluster display."
+  abstractionName: Input_GearShiftIndiUpDownNewStatus
+  valueEnum:
+    0x0: "UP"
+    0x1: "DOWN"
+    0x2: "DISPLAY_OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Transmission_Indicator.Input_GearShiftIndiUpStatusFromEmsHcu:
+  type: sensor
+  signalName: HCU_GearShftUpDis
+  dataType: HUInt64
+  description: "Gear Shift-up display status"
+  abstractionName: Input_GearShiftIndiUpStatusFromEmsHcu
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearShiftIndiUpStatusFromHTCU:
+  type: sensor
+  signalName: HTCU_GearShftUpDisGSI
+  dataType: HUInt64
+  description: "Gear Shift-up display status for Gear shift indicator (EU Regulations)"
+  abstractionName: Input_GearShiftIndiUpStatusFromHTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_GearStepType:
+  type: sensor
+  signalName: TCU_GearStepTyp
+  dataType: HUInt64
+  description: "This signal indicates number of gear steps of step type automatic transmission(A/T) or Dual Clutch Transmission(DCT). A vehicle can have A/T or DCT variant according to its option, for example 4-speed A/T or 5-speed A/T can be equipped in the same kind of vehicles and other control systems (e.g. ESC, TCS, …) can need this information to apply appropriate control logic.The CVT (Continuously Variable Transmission) should set this signal to 00H."
+  abstractionName: Input_GearStepType
+  valueEnum:
+    0x0: "GEAR8"
+    0x1: "NON_GEAR8"
+  matchingTable:
+    0x8: 0x0
+    ELSE: 0x1
+
+
+- Transmission_Indicator.Input_SbwParkNeutralStatus:
+  type: sensor
+  signalName: SBW_PNSta
+  dataType: HUInt64
+  description: "This signal represents status of Park or Not Park. The CLU receives this signal from E-Shifter so that CLU can synchronize between cluster & E-Shifter knob display."
+  abstractionName: Input_SbwParkNeutralStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PARK"
+    0x2: "NEUTRAL"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_SbwTypeStatus:
+  type: sensor
+  signalName: SBW_SHFTR_FF_LvrTyp
+  dataType: HUInt64
+  description: "This signal indicates the lever type of Shift By Wire.The SCU refers to the signal and executes an operation according to the lever type-specific shift pattern.The SCU must prevent erroneous operation, which causes changes in the lever type due to the erroneous signals intermittently during running."
+  abstractionName: Input_SbwTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "COLUMN"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_TransmissionAgiDownStatus:
+  type: sensor
+  signalName: VCU_VgsVirAGIDnGear
+  dataType: HUInt64
+  description: "AGI)Available Gear Indicator) Gear capable of downshifting"
+  abstractionName: Input_TransmissionAgiDownStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_TransmissionAgiUpStatus:
+  type: sensor
+  signalName: VCU_VgsVirAGIUpGear
+  dataType: HUInt64
+  description: "AGI)Available Gear Indicator) Gear capable of upshifting"
+  abstractionName: Input_TransmissionAgiUpStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SPEED1"
+    0x2: "SPEED2"
+    0x3: "SPEED3"
+    0x4: "SPEED4"
+    0x5: "SPEED5"
+    0x6: "SPEED6"
+    0x7: "SPEED7"
+    0x8: "SPEED8"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_TransmissionEolErrorWarnStatusFromIMT:
+  type: sensor
+  signalName: IMT_EOLstate
+  dataType: HUInt64
+  description: "If this signal is set, Cluster should display gear info using alphabet 'E' regardless the signal 'TCU_GearSlctDis'"
+  abstractionName: Input_TransmissionEolErrorWarnStatusFromIMT
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "DISPLAY_E_REQ"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator.Input_TransmissionEolErrorWarnStatusFromTCU:
+  type: sensor
+  signalName: TCU_WrngMsgSta
+  dataType: HUInt64
+  description: "This signal indicates the status of “TCU Warning message”"
+  abstractionName: Input_TransmissionEolErrorWarnStatusFromTCU
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "EOL_ERROR"
+  matchingTable:
+    0x0F: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionEolErrorWarnStatusFromTCU:
+  type: sensor
+  signalName: TCU_WrngMsgSta
+  dataType: HUInt64
+  description: "This signal indicates the status of “TCU Warning message”"
+  abstractionName: Input_TransmissionEolErrorWarnStatusFromTCU
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "EOL_ERROR"
+  matchingTable:
+    0x0F: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionHighTempWarnStatusInDCT1:
+  type: sensor
+  signalName: HDCT_WrngMsgSig
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TransmissionHighTempWarnStatusInDCT1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERHEAT_PARK"
+    0x2: "OVERHEAT_RESUME"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionHighTempWarnStatusInDCT2:
+  type: sensor
+  signalName: HDCT_WrngLtSig
+  dataType: HUInt64
+  description: "It is a signal array for DCT system’s warning signal for driver."
+  abstractionName: Input_TransmissionHighTempWarnStatusInDCT2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERHEAT"
+    0x2: "COOLING"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionHillHoldWarnStatusInAT:
+  type: sensor
+  signalName: DCT_HillHldWrng
+  dataType: HUInt64
+  description: "Warning Message when a driver maintain 'HILL HOLD' condition longer than the specified time."
+  abstractionName: Input_TransmissionHillHoldWarnStatusInAT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionHillHoldWarnStatusInDCT:
+  type: sensor
+  signalName: HDCT_HillHldWnrg
+  dataType: HUInt64
+  description: "Warning Message when a driver maintain 'HILL HOLD' condition longer than the specified time."
+  abstractionName: Input_TransmissionHillHoldWarnStatusInDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionLimphomeWarnStatusInDCT:
+  type: sensor
+  signalName: HDCT_CltchBrstWrng
+  dataType: HUInt64
+  description: "Warning Message for Clutch Burst"
+  abstractionName: Input_TransmissionLimphomeWarnStatusInDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionPowerLimitStatus:
+  type: sensor
+  signalName: TCU_ATTempWrng
+  dataType: HUInt64
+  description: "Transmission Oil temperature Warning message"
+  abstractionName: Input_TransmissionPowerLimitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionSysWarnStatus:
+  type: sensor
+  signalName: DCT_DriWrnMag
+  dataType: HUInt64
+  description: "DCT Driver Warning Message (Oil Pressure Low and so on.)Warning Msg1 : Oil Pressure Low"
+  abstractionName: Input_TransmissionSysWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionVehicleStopTimeValue:
+  type: sensor
+  signalName: HDCT_VehStpTime
+  dataType: HUInt64
+  description: "Vehicle Stop Time, during which the vehicle should be stopped when both clutches of DCT are overheated"
+  abstractionName: Input_TransmissionVehicleStopTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Transmission_Warning.Input_TransmissionWarnSoundStatusFromDCT:
+  type: sensor
+  signalName: HDCT_WrngSndSig
+  dataType: HUInt64
+  description: "It is a signal array for DCT system’s warning signal for driver.Bit 0 : Sound(1Hz, 3times)Bit 1 : Sound(1Hz, Continuous)Bit 2 : Blinking"
+  abstractionName: Input_TransmissionWarnSoundStatusFromDCT
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x5: 0x1
+    0x2: 0x2
+    0x6: 0x2
+    ELSE: 0x0
+
+
+- Transmission_Warning.Input_TransmissionWarnSoundStatusFromTCU:
+  type: sensor
+  signalName: HTCU_WarnSndSta
+  dataType: HUInt64
+  description: "This signal label informs about A/T Terrain Mode Warning Sound"
+  abstractionName: Input_TransmissionWarnSoundStatusFromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x5: 0x1
+    0x2: 0x2
+    0x6: 0x2
+    ELSE: 0x0
+
+
+- Utility_Mode.Input_EvUtilModeStatus:
+  type: sensor
+  signalName: VCU_UtilModeActSta
+  dataType: HUInt64
+  description: "Utility Mode Activation Status"
+  abstractionName: Input_EvUtilModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Utility_Mode.Input_IPedalWarnStatus:
+  type: sensor
+  signalName: VCU_StopCtrlWarnMsgSta
+  dataType: HUInt64
+  description: "i-Pedal Warning Message Status"
+  abstractionName: Input_IPedalWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONDITION_NOT_MET"
+    0x2: "IPEDAL_ON_BYSPEED"
+    0x3: "SMARTREGEN_ON_BYSPEED"
+    0x4: "SMARTREGEN_OFF_BYSPEED"
+  matchingTable:
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x1
+    ELSE: 0x0
+
+
+- Utility_Mode.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: EVSCU_FF_WrnMsg
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x1: 0xE
+    ELSE: 0xF
+
+
+- Utility_Mode.Input_SocRealValue:
+  type: sensor
+  signalName: xEV_SocVal
+  dataType: HUInt64
+  description: "State Of Charge-All the analog value indicate valid values except for Error ID"
+  abstractionName: Input_SocRealValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Utility_Mode.Input_StayModeChargeControlStatus:
+  type: sensor
+  signalName: HCU_STAYModBattMngmntSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeChargeControlStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Utility_Mode.Input_StayModePowerValue:
+  type: sensor
+  signalName: HCU_AcPwrDis
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModePowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Utility_Mode.Input_StayModeStatus:
+  type: sensor
+  signalName: HCU_STAYModSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_NORMAL"
+    0x2: "ON_HOLD"
+    0x3: "ON_ENGINE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Utility_Mode.Input_StayModeUsingTimeMinValue:
+  type: sensor
+  signalName: HCU_STAYEstDischgRmnTime
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeUsingTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2TimerMinValue:
+  type: sensor
+  signalName: VCU_AutoShutOffTimerMin
+  dataType: HUInt64
+  description: "0x0:Default(Timer Stop)/0x1~0xFA:250min ~ 1min/0xFB~0xFE:Reserved/0xFF:Invalid"
+  abstractionName: Input_VehicleAutoShutOffType2TimerMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2TimerSecValue:
+  type: sensor
+  signalName: VCU_AutoShutOffTimerSec
+  dataType: HUInt64
+  description: "0x0:Default(Timer Stop)/0x1~0x3C:60sec ~ 1sec/0x3D~0x3E:Reserved/0x3F:Invalid"
+  abstractionName: Input_VehicleAutoShutOffType2TimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2WarnStatus:
+  type: sensor
+  signalName: VCU_PwrAutoOffInfo
+  dataType: HUInt64
+  description: "Auto Power Off Activation bit"
+  abstractionName: Input_VehicleAutoShutOffType2WarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromALDC:
+  type: sensor
+  signalName: ALDC_SrvLmpReq
+  dataType: HUInt64
+  description: "Service lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromALDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromBHDC:
+  type: sensor
+  signalName: Bhdc_SrvLmpOnReq
+  dataType: HUInt64
+  description: "Service Lamp on request by BHDC"
+  abstractionName: Input_ServiceIndiReqStatusFromBHDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromBMS:
+  type: sensor
+  signalName: xEV_SrvLmpReq
+  dataType: HUInt64
+  description: "Service Lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromBMS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromDATC:
+  type: sensor
+  signalName: DATC_SrvLmpReq
+  dataType: HUInt64
+  description: "This signal indicates request of service Lamp"
+  abstractionName: Input_ServiceIndiReqStatusFromDATC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromEVSCU:
+  type: sensor
+  signalName: EVSCU_FF_SrvLampOnReq
+  dataType: HUInt64
+  description: "Service Lamp On Request for SBW system failure"
+  abstractionName: Input_ServiceIndiReqStatusFromEVSCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFACU:
+  type: sensor
+  signalName: FACU_SvcLmp
+  dataType: HUInt64
+  description: "Air Compressor Service Lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromFACU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFCU:
+  type: sensor
+  signalName: FCU_SvcLmpReq
+  dataType: HUInt64
+  description: "FCU Service Lamp On/Off Request"
+  abstractionName: Input_ServiceIndiReqStatusFromFCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFSVM:
+  type: sensor
+  signalName: FSVM_SvcLmpReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ServiceIndiReqStatusFromFSVM
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromHCU:
+  type: sensor
+  signalName: HCU_SrvLmpDis
+  dataType: HUInt64
+  description: "Sevice Lamp On Request"
+  abstractionName: Input_ServiceIndiReqStatusFromHCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromHMU:
+  type: sensor
+  signalName: HMU1_SvcLmpReq
+  dataType: HUInt64
+  description: "Service Lamp Request"
+  abstractionName: Input_ServiceIndiReqStatusFromHMU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromLDC:
+  type: sensor
+  signalName: LDC_SrvLmpReq
+  dataType: HUInt64
+  description: "Service lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromLDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromMCU:
+  type: sensor
+  signalName: MCU_Mg1SrvLmpOnReq
+  dataType: HUInt64
+  description: "HEV : MG1 - Motor, HSCAN -  CF_Mcu_ServiceLampEV : MG1 - Rear Axle, HSCAN - CF_Mcu_Mg1SvcLmp(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_ServiceIndiReqStatusFromMCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromMCU2:
+  type: sensor
+  signalName: MCU_Mg2SrvLmpOnReq
+  dataType: HUInt64
+  description: "HEV : MG2 - HSG, HSCAN -  CF_Gcu_ServiceLampEV : MG2 - Front Axle, HSCAN - X(exception : SG2 EV, OE EV, SX2 EV - MG1 적용)"
+  abstractionName: Input_ServiceIndiReqStatusFromMCU2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromOBC:
+  type: sensor
+  signalName: OBC_SvrLmpReq
+  dataType: HUInt64
+  description: "OBC Service Lamp Request"
+  abstractionName: Input_ServiceIndiReqStatusFromOBC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromTCU:
+  type: sensor
+  signalName: HTCU_SrvLmpReq
+  dataType: HUInt64
+  description: "Service lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromTCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromVCMS:
+  type: sensor
+  signalName: VCMS_SERVICE_LAMP_Req
+  dataType: HUInt64
+  description: "(CF_Cms_SERVICE_LAMP_Req) CLU Service lamp request"
+  abstractionName: Input_ServiceIndiReqStatusFromVCMS
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromVCU:
+  type: sensor
+  signalName: VCU_ServiceLampReq
+  dataType: HUInt64
+  description: "Sevice Lamp Request"
+  abstractionName: Input_ServiceIndiReqStatusFromVCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp.Input_ServiceIndiReqStatusFromWCCU:
+  type: sensor
+  signalName: WCCU_ServiceLampReq
+  dataType: HUInt64
+  description: "WCCU Service lamp request (t/CLU)"
+  abstractionName: Input_ServiceIndiReqStatusFromWCCU
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- xEV_System_Ready.Input_EvReadyIndReqStatus:
+  type: sensor
+  signalName: VCU_EvDrvRdyCluDispSta
+  dataType: HUInt64
+  description: "EV Drive Ready for Cluster Display Only"
+  abstractionName: Input_EvReadyIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+
+- xEV_System_Ready.Input_EvReadyIndReqStatusForEv:
+  type: sensor
+  signalName: VCU_EvDrvRdyCluDispSta
+  dataType: HUInt64
+  description: "EV Drive Ready for Cluster Display Only"
+  abstractionName: Input_EvReadyIndReqStatusForEv
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x3: 0x2
+    ELSE: 0x0
+
+

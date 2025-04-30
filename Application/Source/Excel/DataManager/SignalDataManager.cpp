@@ -2011,7 +2011,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
             precondition = QStringList({maxValueState});
         } else if (enumState) {
 #if 1
-            const int customNotTriggerIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet);
+            const int customNotTriggerIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger);
             const QString customNotTriggerKeyword = ExcelUtil::instance().data()->isKeywordString(customNotTriggerIndex);
             QStringList originDataTemp = originData;
 
@@ -2030,12 +2030,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                     precondition.clear();
                     break;
                 }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                    precondition = convertData;
-                    convertData.clear();
-                    notUsedEnum.clear();
-                    break;
-                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger):
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet): {
                     // Value 인 경우에 대한 처리만 동작함
                     // Enum 인 경우 처리 확인 필요
@@ -2137,7 +2132,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
     signalList.removeAll("");
     dataList.removeAll("");
 
-    bool log = true;
+    bool log = false;
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
 
@@ -2201,6 +2196,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
             notUsedEnum.clear();
             precondition.clear();
+            log = true;
         } else {
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
             notUsedEnum.clear();
@@ -2226,7 +2222,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
     }
     QMap<int, QPair<QString, SignalData>> signalDataInfo = isSortingInputSignalList(newSignalDataInfo, signalList);
 
-#if 0
+#if 1
     if (log) {
         qDebug() << "*************************************************************************************************";
         qDebug() << "3. isOtherInputSignalDataInfo :" << sheetIndex << signalList.size() << dataList.size()

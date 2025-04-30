@@ -1,0 +1,2199 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- BCM_Warning:
+  type: branch
+
+
+- Child_Lock:
+  type: branch
+
+
+- CMS:
+  type: branch
+
+
+- DVRS:
+  type: branch
+
+
+- Ergo_Motion:
+  type: branch
+
+
+- Fuel_Tank:
+  type: branch
+
+
+- Haptic_Steering_Wheel:
+  type: branch
+
+
+- IMS:
+  type: branch
+
+
+- Key_System:
+  type: branch
+
+
+- Key_System_2_0:
+  type: branch
+
+
+- Lamp_Fail_Warning:
+  type: branch
+
+
+- Lamp_Indicator:
+  type: branch
+
+
+- MFSW:
+  type: branch
+
+
+- PHEV_Fuel_Tank:
+  type: branch
+
+
+- Power_Autocut:
+  type: branch
+
+
+- ROA:
+  type: branch
+
+
+- Seatbelt_Warning:
+  type: branch
+
+
+- WPC:
+  type: branch
+
+
+- BCM_Warning.Input_BcmWarnStatus:
+  type: sensor
+  signalName: Warn_BCMWrngSta
+  dataType: HUInt64
+  description: "Warning command og BCM"
+  abstractionName: Input_BcmWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "VEHICLE_IS_ON_WARN"
+    0x2: "SHIFT_P_WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- BCM_Warning.Input_VehNotPWrngSta:
+  type: sensor
+  signalName: Warn_VehNotPWrngSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_VehNotPWrngSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NOT_P_PWROFF_E_SHIFT"
+    0x2: "NOT_P_PWROFF_D_SHIFT"
+    0x3: "NOT_P_PWRON_E_SHIFT"
+    0x4: "NOT_P_PWRON_D_SHIFT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Child_Lock.Input_ChildLockRearLeftLatchStatusFromPDC:
+  type: sensor
+  signalName: RLChldLkLatchSwState
+  dataType: HUInt64
+  description: "Rear Left Electric Child Lock Latch Lock Unlock State "
+  abstractionName: Input_ChildLockRearLeftLatchStatusFromPDC
+  valueEnum:
+    0x0: "UNLOCK"
+    0x1: "LOCK"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Child_Lock.Input_ChildLockRearLeftLatchStatusFromSBCM:
+  type: sensor
+  signalName: RL_ChildLock_Status
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ChildLockRearLeftLatchStatusFromSBCM
+  valueEnum:
+    0x0: "UNLOCK"
+    0x1: "LOCK"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+    ELSE: 0x2
+
+
+- Child_Lock.Input_ChildLockRearRightLatchStatusFromPDC:
+  type: sensor
+  signalName: RRChldLkLatchSwState
+  dataType: HUInt64
+  description: "Rear Right Electric Child Lock Latch Lock Unlock State "
+  abstractionName: Input_ChildLockRearRightLatchStatusFromPDC
+  valueEnum:
+    0x0: "UNLOCK"
+    0x1: "LOCK"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Child_Lock.Input_ChildLockRearRightLatchStatusFromSBCM:
+  type: sensor
+  signalName: RR_ChildLock_Status
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ChildLockRearRightLatchStatusFromSBCM
+  valueEnum:
+    0x0: "UNLOCK"
+    0x1: "LOCK"
+    0x2: "ERROR"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x0
+    ELSE: 0x2
+
+
+- Child_Lock.Input_SeaLockFailWarnStatus:
+  type: sensor
+  signalName: ChildLock_ActnFlSta
+  dataType: HUInt64
+  description: "Child Lock actuation failed"
+  abstractionName: Input_SeaLockFailWarnStatus
+  valueEnum:
+    0x0: "ABNORMAL"
+    0x1: "NORMAL"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- CMS.Input_CmsLhFailWarnStatus:
+  type: sensor
+  signalName: CMS_LHSta
+  dataType: HUInt64
+  description: "CMS_LH Status"
+  abstractionName: Input_CmsLhFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- CMS.Input_CmsRhFailWarnStatus:
+  type: sensor
+  signalName: CMS_RHSta
+  dataType: HUInt64
+  description: "CMS_RH Status"
+  abstractionName: Input_CmsRhFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- DVRS.Input_DvrsSysFailWarnStatus:
+  type: sensor
+  signalName: BLTN_CAM_State
+  dataType: HUInt64
+  description: "This Signal is for cluster warning popup."
+  abstractionName: Input_DvrsSysFailWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x1
+    0x3: 0x1
+    0x4: 0x1
+    0xF: 0x1
+    ELSE: 0x0
+
+
+- Ergo_Motion.Input_SeatBodySupportFuncDisplayReqStatus:
+  type: sensor
+  signalName: DLBCU_BodySpprtDis
+  dataType: HUInt64
+  description: "Seat Body Support Function Display Request"
+  abstractionName: Input_SeatBodySupportFuncDisplayReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Fuel_Tank.Input_FuelDrOpenSta:
+  type: sensor
+  signalName: PDC_FuelDrOpenSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_FuelDrOpenSta
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Fuel_Tank.Input_PhevFuelDoorDisplayReqStatus:
+  type: sensor
+  signalName: PHEV_FuelDrDis
+  dataType: HUInt64
+  description: "PHEV Fuel Door Control CLU Display Message from BCM"
+  abstractionName: Input_PhevFuelDoorDisplayReqStatus
+  valueEnum:
+    0x0: "WAIT_FOR_FUEL_DOOR_OPEN"
+    0x1: "REFUEL"
+    0x2: "FUEL_DOOR_OPEN_WARN"
+    0x3: "CHARGING"
+    0x4: "CHECK_FUEL_DOOR"
+    0x5: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    ELSE: 0x5
+
+
+- Haptic_Steering_Wheel.Input_HapticSteeringSysFailStatusFromICU:
+  type: sensor
+  signalName: HSWS_SysWrngSta_ICU
+  dataType: HUInt64
+  description: "0x0 : Normal0x1 : System Fail0x2 : Reserved0x3 : Invalid"
+  abstractionName: Input_HapticSteeringSysFailStatusFromICU
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAIL"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsErrorWarnStatus:
+  type: sensor
+  signalName: DrvIMS_ErrConWmgDis
+  dataType: HUInt64
+  description: "IMS 기억/재생 조건 에러 출력 시그널"
+  abstractionName: Input_ImsErrorWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsMemory1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP1Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP1CMD"
+  abstractionName: Input_ImsMemory1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsMemory2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP2Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP2CMD"
+  abstractionName: Input_ImsMemory2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsMemoryEnableStatus:
+  type: sensor
+  signalName: DrvIMS_MemorySetEnaSta
+  dataType: HUInt64
+  description: "-(Old)C_MEMENB"
+  abstractionName: Input_ImsMemoryEnableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsPlayStopReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckStpReq
+  dataType: HUInt64
+  description: "This signal is used to stop during playback"
+  abstractionName: Input_ImsPlayStopReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- IMS.Input_ImsSoundStatus:
+  type: sensor
+  signalName: DrvIMS_BzrReq
+  dataType: HUInt64
+  description: "IMS 부져음을 클러스터 스피커에서 출력하기 위한 시그널"
+  abstractionName: Input_ImsSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_AccessoryIndiReqStatus:
+  type: sensor
+  signalName: SMK_CLUAccIndOnReq
+  dataType: HUInt64
+  description: "Request to Cluster ACC Indicator On(This is only used for CLU)"
+  abstractionName: Input_AccessoryIndiReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Key_System.Input_BcmWarnSoundStatus:
+  type: sensor
+  signalName: Warn_BzrWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_WngBuzzer"
+  abstractionName: Input_BcmWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KEY_OPER_WARN"
+    0x2: "PARK_BRAKE_WARN"
+    0x3: "KEY_LEARN_WARN"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- Key_System.Input_EsclWarnSoundStatus:
+  type: sensor
+  signalName: Warn_EsclNotLkWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_ESCL_Notlocked_Warning"
+  abstractionName: Input_EsclWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_FingerPrintWarnReqStatus:
+  type: sensor
+  signalName: FPM_DISPWrng
+  dataType: HUInt64
+  description: "This signal is for CLU warning display popup. - FP is limited for a few min.- FP success/fail for Engine start. - FP fail (result) for Engine start and count - FP success during Tele Engine running"
+  abstractionName: Input_FingerPrintWarnReqStatus
+  valueEnum:
+    0x0: "LIMIT_1MIN"
+    0x1: "LIMIT_2MIN"
+    0x2: "LIMIT_3MIN"
+    0x3: "LIMIT_4MIN"
+    0x4: "LIMIT_5MIN"
+    0x5: "LIMIT_6MIN"
+    0x6: "LIMIT_7MIN"
+    0x7: "LIMIT_8MIN"
+    0x8: "LIMIT_9MIN"
+    0x9: "LIMIT_10MIN"
+    0xA: "RECOGNITION_SUCCESS"
+    0xB: "RECOGNITION_SUCCESS_TELE"
+    0xC: "OFF"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x12: 0xB
+    ELSE: 0xC
+
+
+- Key_System.Input_IauWarnReqStatus:
+  type: sensor
+  signalName: IAU_DISPWrng
+  dataType: HUInt64
+  description: "This siganl warning from IAU- 0x9 (WPCNFC_PreStartAuth_Success) : CLU display when workaround or LPCD Start Auth succeeded (before SSB pressed)."
+  abstractionName: Input_IauWarnReqStatus
+  valueEnum:
+    0x0: "RETRY_BY_KEY"
+    0x1: "RE_AUTH_WARN"
+    0x2: "SYS_ERROR"
+    0x3: "KEY_SAVED"
+    0x4: "RETRY_BY_FPS"
+    0x5: "RETRY_BY_NFC_OR_FPS"
+    0x6: "BIOMETRIC_KEY_SAVED"
+    0x7: "DIGITAL_OR_BIOMETRIC_KEY_SAVED"
+    0x8: "OFF"
+    0x9: "NFC_PRE_START_AUTH_SUCCESS"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x9
+    ELSE: 0x8
+
+
+- Key_System.Input_IdOutWarnStatus:
+  type: sensor
+  signalName: Warn_IdOutWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_IDOUT_WNG"
+  abstractionName: Input_IdOutWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Key_System.Input_ImmoIndiReqCANStatus:
+  type: sensor
+  signalName: Warn_ImmoLmpOnReq
+  dataType: HUInt64
+  description: "-(Old)C_ImmoLp"
+  abstractionName: Input_ImmoIndiReqCANStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_KeyBattLowWarnStatus:
+  type: sensor
+  signalName: Warn_KeyBattLoWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_KeyBATDischargeWarning"
+  abstractionName: Input_KeyBattLowWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_ServiceModeIndiReqStatus:
+  type: sensor
+  signalName: SMK_PwrOnModeSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ServiceModeIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_SmkDeactivationWarnStatus:
+  type: sensor
+  signalName: Warn_DeActvWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_Deactivation_Warning"
+  abstractionName: Input_SmkDeactivationWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System.Input_SmkWarnDisplayReq2Status:
+  type: sensor
+  signalName: Warn_DisWrngSta2
+  dataType: HUInt64
+  description: "This signal is used for a request to SMK Display Warning on CLU."
+  abstractionName: Input_SmkWarnDisplayReq2Status
+  valueEnum:
+    0x0: "VEHICLE_IS_ON_FPS"
+    0x1: "VEHICLE_IS_ON_NFC"
+    0x2: "POWER_AUTO_OFF_READY"
+    0x3: "VEHICLE_IS_ON_BLE"
+    0x4: "BRAKE_AND_START"
+    0x5: "CLUTCH_AND_START"
+    0x6: "BRAKE_CLUTCH_AND_START"
+    0x7: "SHIFT_P_N_AND_START"
+    0x8: "SHIFT_P_AND_START"
+    0x9: "REAUTH_AFTER_REMOTE_START"
+    0xA: "SERVICEMODE_FAIL"
+    0xB: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    0xB: 0x9
+    0xC: 0xA
+    ELSE: 0xB
+
+
+- Key_System.Input_SmkWarnDisplayReqStatus:
+  type: sensor
+  signalName: Warn_DisWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_PICWarningIND*Changed Value Table ('15 1/12): 0x4 : Not Locked Warning → AC_Plug_Connected_Warningfor EV/PHEV SMK Warning Logic(Cranking Trial with AC Plug Connected)*Changed Value Table('18.11/15): 0xF : Vehicle_is_On(FingerPrint) 0x10: Vehicle_is_On(DigitalKey)for IAU Warning Logic*Added Value Table('18 12/3) 0x11: Power Auto Off  Ready 0x12~0x1D :Reserved* Added Value Table ('19.9/23) for RG3-car 0x12 Auth_Fail_Warning2 (non-SSB immo coil)  0x13~0x1D :Reserved*Added Value Table(20.7/21) for JK1 FingerPrint Ignition Func.0x13:ReAuth_Warning(DigitalKey)0x14:ReAuth_Warning(FingerPrint)0x15:ReAuth_Warning(DigitalKey&FingerPrint)*Deleted duplicated Value(0x6~0xD,Reserved), 20.08.03"
+  abstractionName: Input_SmkWarnDisplayReqStatus
+  valueEnum:
+    0x0: "SHIFT_P"
+    0x1: "LOW_SMK_BATTERY"
+    0x2: "STEER_AND_START"
+    0x3: "UNPLUG_AND_START"
+    0x4: "CHECK_STEER_LOCK_SYSTEM"
+    0x5: "BRAKE_AND_START"
+    0x6: "KEY_NOT_DETECTED"
+    0x7: "KEY_NOT_IN_VEHICLE"
+    0x8: "START_BUTTON_AGAIN"
+    0x9: "KEY_AND_START_BUTTON"
+    0xA: "SHIFT_P_AND_START"
+    0xB: "CHECK_BRAKE_SWITCH"
+    0xC: "SHIFT_P_N_AND_START"
+    0xD: "VEHICLE_IS_ON_FPS"
+    0xE: "VEHICLE_IS_ON_NFC"
+    0xF: "REAUTH_WARN_NFC"
+    0x10: "REAUTH_WARN_FPS"
+    0x11: "REAUTH_WARN_NFC_FPS"
+    0x12: "REAUTH_WARN_FOB_DK"
+    0x13: "REAUTH_WARN_FOB_FP"
+    0x14: "REAUTH_WARN_FOB_DK_FP"
+    0x15: "KEY_NOT_IN_VEHICLE_FOB_DK"
+    0x16: "PLACE_KEY_AND_START_BUTTON"
+    0x17: "MESSAGE_TIMEOUT"
+    0x18: "CRC_ERROR"
+    0x19: "OFF"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x09: 0x7
+    0x0A: 0x8
+    0x0B: 0x9
+    0x0C: 0xA
+    0x0D: 0xB
+    0x0E: 0xC
+    0x0F: 0xD
+    0x10: 0xE
+    0x13: 0xF
+    0x14: 0x10
+    0x15: 0x11
+    0x16: 0x12
+    0x17: 0x13
+    0x18: 0x14
+    0x19: 0x15
+    0x1A: 0x16
+    TIMEOUT: 0x17
+    CRCERROR: 0x18
+    ELSE: 0x19
+
+
+- Key_System_2_0.Input_AccessoryIndiReqStatus:
+  type: sensor
+  signalName: SMK_CLUAccIndOnReq
+  dataType: HUInt64
+  description: "Request to Cluster ACC Indicator On(This is only used for CLU)"
+  abstractionName: Input_AccessoryIndiReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Key_System_2_0.Input_BcmWarnSoundStatus:
+  type: sensor
+  signalName: Warn_BzrWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_WngBuzzer"
+  abstractionName: Input_BcmWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KEY_OPER_WARN"
+    0x2: "PARK_BRAKE_WARN"
+    0x3: "KEY_LEARN_WARN"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x2
+    0x5: 0x3
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_EsclWarnSoundStatus:
+  type: sensor
+  signalName: Warn_EsclNotLkWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_ESCL_Notlocked_Warning"
+  abstractionName: Input_EsclWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_FingerPrintWarnReqStatus:
+  type: sensor
+  signalName: FPM_DISPWrng
+  dataType: HUInt64
+  description: "This signal is for CLU warning display popup. - FP is limited for a few min.- FP success/fail for Engine start. - FP fail (result) for Engine start and count - FP success during Tele Engine running"
+  abstractionName: Input_FingerPrintWarnReqStatus
+  valueEnum:
+    0x0: "LIMIT_1MIN"
+    0x1: "LIMIT_2MIN"
+    0x2: "LIMIT_3MIN"
+    0x3: "LIMIT_4MIN"
+    0x4: "LIMIT_5MIN"
+    0x5: "LIMIT_6MIN"
+    0x6: "LIMIT_7MIN"
+    0x7: "LIMIT_8MIN"
+    0x8: "LIMIT_9MIN"
+    0x9: "LIMIT_10MIN"
+    0xA: "RECOGNITION_SUCCESS"
+    0xB: "RECOGNITION_SUCCESS_TELE"
+    0xC: "OFF"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x12: 0xB
+    ELSE: 0xC
+
+
+- Key_System_2_0.Input_IauWarnReqStatus:
+  type: sensor
+  signalName: IAU_DISPWrng
+  dataType: HUInt64
+  description: "This siganl warning from IAU- 0x9 (WPCNFC_PreStartAuth_Success) : CLU display when workaround or LPCD Start Auth succeeded (before SSB pressed)."
+  abstractionName: Input_IauWarnReqStatus
+  valueEnum:
+    0x0: "RETRY_BY_KEY"
+    0x1: "RE_AUTH_WARN"
+    0x2: "SYS_ERROR"
+    0x3: "KEY_SAVED"
+    0x4: "RETRY_BY_FPS"
+    0x5: "RETRY_BY_NFC_OR_FPS"
+    0x6: "BIOMETRIC_KEY_SAVED"
+    0x7: "DIGITAL_OR_BIOMETRIC_KEY_SAVED"
+    0x8: "OFF"
+    0x9: "NFC_PRE_START_AUTH_SUCCESS"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x9
+    ELSE: 0x8
+
+
+- Key_System_2_0.Input_ImmoIndiReqCANStatus:
+  type: sensor
+  signalName: Warn_ImmoLmpOnReq
+  dataType: HUInt64
+  description: "-(Old)C_ImmoLp"
+  abstractionName: Input_ImmoIndiReqCANStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_KeyBattLowWarnStatus:
+  type: sensor
+  signalName: Warn_KeyBattLoWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_KeyBATDischargeWarning"
+  abstractionName: Input_KeyBattLowWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_ServiceModeIndiReqStatus:
+  type: sensor
+  signalName: SMK_PwrOnModeSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ServiceModeIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_SmkDeactivationWarnStatus:
+  type: sensor
+  signalName: Warn_DeActvWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_Deactivation_Warning"
+  abstractionName: Input_SmkDeactivationWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_SmkWarnDisplayReq2Status:
+  type: sensor
+  signalName: Warn_DisWrngSta2
+  dataType: HUInt64
+  description: "This signal is used for a request to SMK Display Warning on CLU."
+  abstractionName: Input_SmkWarnDisplayReq2Status
+  valueEnum:
+    0x0: "VEHICLE_IS_ON_FPS"
+    0x1: "VEHICLE_IS_ON_NFC"
+    0x2: "POWER_AUTO_OFF_READY"
+    0x3: "VEHICLE_IS_ON_BLE"
+    0x4: "BRAKE_AND_START"
+    0x5: "CLUTCH_AND_START"
+    0x6: "BRAKE_CLUTCH_AND_START"
+    0x7: "SHIFT_P_N_AND_START"
+    0x8: "SHIFT_P_AND_START"
+    0x9: "REAUTH_AFTER_REMOTE_START"
+    0xA: "SERVICEMODE_FAIL"
+    0xB: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    0xB: 0x9
+    0xC: 0xA
+    ELSE: 0xB
+
+
+- Key_System_2_0.Input_SmkWarnDisplayReqStatus:
+  type: sensor
+  signalName: Warn_DisWrngSta
+  dataType: HUInt64
+  description: "-(Old)C_PICWarningIND*Changed Value Table ('15 1/12): 0x4 : Not Locked Warning → AC_Plug_Connected_Warningfor EV/PHEV SMK Warning Logic(Cranking Trial with AC Plug Connected)*Changed Value Table('18.11/15): 0xF : Vehicle_is_On(FingerPrint) 0x10: Vehicle_is_On(DigitalKey)for IAU Warning Logic*Added Value Table('18 12/3) 0x11: Power Auto Off  Ready 0x12~0x1D :Reserved* Added Value Table ('19.9/23) for RG3-car 0x12 Auth_Fail_Warning2 (non-SSB immo coil)  0x13~0x1D :Reserved*Added Value Table(20.7/21) for JK1 FingerPrint Ignition Func.0x13:ReAuth_Warning(DigitalKey)0x14:ReAuth_Warning(FingerPrint)0x15:ReAuth_Warning(DigitalKey&FingerPrint)*Deleted duplicated Value(0x6~0xD,Reserved), 20.08.03"
+  abstractionName: Input_SmkWarnDisplayReqStatus
+  valueEnum:
+    0x0: "SHIFT_P"
+    0x1: "LOW_SMK_BATTERY"
+    0x2: "STEER_AND_START"
+    0x3: "UNPLUG_AND_START"
+    0x4: "CHECK_STEER_LOCK_SYSTEM"
+    0x5: "BRAKE_AND_START"
+    0x6: "KEY_NOT_DETECTED"
+    0x7: "KEY_NOT_IN_VEHICLE"
+    0x8: "START_BUTTON_AGAIN"
+    0x9: "KEY_AND_START_BUTTON"
+    0xA: "SHIFT_P_AND_START"
+    0xB: "CHECK_BRAKE_SWITCH"
+    0xC: "SHIFT_P_N_AND_START"
+    0xD: "VEHICLE_IS_ON_FPS"
+    0xE: "VEHICLE_IS_ON_NFC"
+    0xF: "REAUTH_WARN_NFC"
+    0x10: "REAUTH_WARN_FPS"
+    0x11: "REAUTH_WARN_NFC_FPS"
+    0x12: "REAUTH_WARN_FOB_DK"
+    0x13: "REAUTH_WARN_FOB_FP"
+    0x14: "REAUTH_WARN_FOB_DK_FP"
+    0x15: "KEY_NOT_IN_VEHICLE_FOB_DK"
+    0x16: "PLACE_KEY_AND_START_BUTTON"
+    0x17: "MESSAGE_TIMEOUT"
+    0x18: "CRC_ERROR"
+    0x19: "OFF"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x09: 0x7
+    0x0A: 0x8
+    0x0B: 0x9
+    0x0C: 0xA
+    0x0D: 0xB
+    0x0E: 0xC
+    0x0F: 0xD
+    0x10: 0xE
+    0x13: 0xF
+    0x14: 0x10
+    0x15: 0x11
+    0x16: 0x12
+    0x17: 0x13
+    0x18: 0x14
+    0x19: 0x15
+    0x1A: 0x16
+    TIMEOUT: 0x17
+    CRCERROR: 0x18
+    ELSE: 0x19
+
+
+- Lamp_Fail_Warning.Input_LampFailDrlLeftStatus:
+  type: sensor
+  signalName: Lamp_DrlLmpLftOpnSta
+  dataType: HUInt64
+  description: "DRL LampLeft OpenStatus"
+  abstractionName: Input_LampFailDrlLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailDrlRightStatus:
+  type: sensor
+  signalName: Lamp_DrlLmpRtOpnSta
+  dataType: HUInt64
+  description: "DRL LampRight OpenStatus"
+  abstractionName: Input_LampFailDrlRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailFrontFogLeftStatus:
+  type: sensor
+  signalName: Lamp_FrFgLmpLftOpnSta
+  dataType: HUInt64
+  description: "Front FOG LampLeft OpenStatus"
+  abstractionName: Input_LampFailFrontFogLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailFrontFogRightStatus:
+  type: sensor
+  signalName: Lamp_FrFgLmpRtOpnSta
+  dataType: HUInt64
+  description: "Front FOG LampRight OpenStatus"
+  abstractionName: Input_LampFailFrontFogRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailFrontTurnSignalLeftStatus:
+  type: sensor
+  signalName: Lamp_FrTrnSigLmpLftOpnSta
+  dataType: HUInt64
+  description: "Front T/SIG LampLeft OpenStatus"
+  abstractionName: Input_LampFailFrontTurnSignalLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailFrontTurnSignalRightStatus:
+  type: sensor
+  signalName: Lamp_FrTrnSigLmpRtOpnSta
+  dataType: HUInt64
+  description: "Front T/SIG LampRight OpenStatus"
+  abstractionName: Input_LampFailFrontTurnSignalRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadBiFuncLeftStatus:
+  type: sensor
+  signalName: Lamp_HdLmpBiFuncLftOpnSta
+  dataType: HUInt64
+  description: "Bi Function Head Lamp Left Open Status"
+  abstractionName: Input_LampFailHeadBiFuncLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadBiFuncRightStatus:
+  type: sensor
+  signalName: Lamp_HdLmpBiFuncRtOpnSta
+  dataType: HUInt64
+  description: "Bi Function Head Lamp Right Open Status"
+  abstractionName: Input_LampFailHeadBiFuncRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadHighLeftStatus:
+  type: sensor
+  signalName: Lamp_HdLmpHiLftOpnSta
+  dataType: HUInt64
+  description: "Head Lamp HighLeft OpenStatus"
+  abstractionName: Input_LampFailHeadHighLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadHighRightStatus:
+  type: sensor
+  signalName: Lamp_HdLmpHiRtOpnSta
+  dataType: HUInt64
+  description: "Head Lamp High Right OpenStatus"
+  abstractionName: Input_LampFailHeadHighRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadLowLeftStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoLftOpnSta
+  dataType: HUInt64
+  description: "Head Lamp LowLeft OpenStatus"
+  abstractionName: Input_LampFailHeadLowLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadLowRightStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoRtOpnSta
+  dataType: HUInt64
+  description: "Head Lamp Low Right OpenStatus"
+  abstractionName: Input_LampFailHeadLowRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailHeadMountStopLampStatus:
+  type: sensor
+  signalName: Lamp_HmslLmpOpnSta
+  dataType: HUInt64
+  description: "HMSL OpenStatus"
+  abstractionName: Input_LampFailHeadMountStopLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailRearTurnSignalLeftStatus:
+  type: sensor
+  signalName: Lamp_RrTrnSigLmpLftOpnSta
+  dataType: HUInt64
+  description: "Rear T/SIG LampLeft OpenStatus"
+  abstractionName: Input_LampFailRearTurnSignalLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailRearTurnSignalRightStatus:
+  type: sensor
+  signalName: Lamp_RrTrnSigLmpRtOpnSta
+  dataType: HUInt64
+  description: "Rear T/SIG LampRight OpenStatus"
+  abstractionName: Input_LampFailRearTurnSignalRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailStaticBendingLeftStatus:
+  type: sensor
+  signalName: Lamp_StcBendingLmpLftOpnSta
+  dataType: HUInt64
+  description: "Static Bending LampLeft OpenStatus"
+  abstractionName: Input_LampFailStaticBendingLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailStaticBendingRightStatus:
+  type: sensor
+  signalName: Lamp_StcBendingLmpRtOpnSta
+  dataType: HUInt64
+  description: "Static Bending LampRight OpenStatus"
+  abstractionName: Input_LampFailStaticBendingRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailStopLampLeftStatus:
+  type: sensor
+  signalName: Lamp_StpLmpLftOpnSta
+  dataType: HUInt64
+  description: "Stop LampLeft Open Status"
+  abstractionName: Input_LampFailStopLampLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailStopLampRightStatus:
+  type: sensor
+  signalName: Lamp_StpLmpRtOpnSta
+  dataType: HUInt64
+  description: "Stop LampRight Open Status"
+  abstractionName: Input_LampFailStopLampRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailTrailerStopLampStatus:
+  type: sensor
+  signalName: CTM_StpLmpOpnSta
+  dataType: HUInt64
+  description: "Trailer Stop Lamp OpenStatus"
+  abstractionName: Input_LampFailTrailerStopLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailTrailerTailLeftStatus:
+  type: sensor
+  signalName: CTM_ExtTailLmpLftOpnSta
+  dataType: HUInt64
+  description: "Trailer Exterior Tail Lamp Left OpenStatus"
+  abstractionName: Input_LampFailTrailerTailLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailTrailerTailRightStatus:
+  type: sensor
+  signalName: CTM_ExtTailLmpRtOpnSta
+  dataType: HUInt64
+  description: "Trailer Exterior Tail Lamp Right OpenStatus"
+  abstractionName: Input_LampFailTrailerTailRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailTrailerTurnSignalLeftStatus:
+  type: sensor
+  signalName: CTM_TrnSigLmpLftOpnSta
+  dataType: HUInt64
+  description: "Trailer T/SIG Lamp Left OpenStatus"
+  abstractionName: Input_LampFailTrailerTurnSignalLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LampFailTrailerTurnSignalRightStatus:
+  type: sensor
+  signalName: CTM_TrnSigLmpRtOpnSta
+  dataType: HUInt64
+  description: "Trailer T/SIG Lamp Right OpenStatus"
+  abstractionName: Input_LampFailTrailerTurnSignalRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LedLampFailStatusFromIcu:
+  type: sensor
+  signalName: Lamp_LedHdLmpSta
+  dataType: HUInt64
+  description: "This signal is LED headlamp status inform whether LED fail or not which is regulation of ECE, Domestic.If LED H/Lamp detects LED failure then a cluster shall be turn on to 'LED' indicator in the display panel and It should be to display the words 'Check LED Head Lamp!' on the LCD panel in the cluster module. If LED H/Lamp detects FAN failure then a cluster shall be turn on 'LED' indicator in the display panel and It should be to display the words 'Check LED Head Lamp’s FAN!' on the LCD panel in the cluster module.('LED' Indicator not blink)1) Priority is higher LED failure than FAN failure.2) 'LED' indicator off when Normal Conditions."
+  abstractionName: Input_LedLampFailStatusFromIcu
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAIL"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LedLampLhFailStatusFromIlcu:
+  type: sensor
+  signalName: ILCULH_LowBeamLED_Sta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LedLampLhFailStatusFromIlcu
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAIL"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Fail_Warning.Input_LedLampRhFailStatusFromIlcu:
+  type: sensor
+  signalName: ILCURH_LowBeamLED_Sta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LedLampRhFailStatusFromIlcu
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAIL"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtFrontFogLampStatus:
+  type: sensor
+  signalName: Lamp_FrFogLmpOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtFrontFogLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtHighBeamOnReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpHiOnReq
+  dataType: HUInt64
+  description: "-(Old)C_HLampHighON"
+  abstractionName: Input_ExtHighBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Lamp_Indicator.Input_ExtLowBeamOnReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoOnReq
+  dataType: HUInt64
+  description: "-(Old)C_HLampLowON"
+  abstractionName: Input_ExtLowBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Lamp_Indicator.Input_ExtRearFogLampStatus:
+  type: sensor
+  signalName: Lamp_RrFogLmpOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtRearFogLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtTailLampOnReqStatus:
+  type: sensor
+  signalName: Lamp_ExtrnlTailLmpOnReq
+  dataType: HUInt64
+  description: "-(Old)C_EXTTailOn"
+  abstractionName: Input_ExtTailLampOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Lamp_Indicator.Input_ExtTurnLeftLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpLftOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtTurnLeftLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtTurnLeftLampStatusFromBDC:
+  type: sensor
+  signalName: Lamp_LftTrnLmpCmd
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ExtTurnLeftLampStatusFromBDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtTurnRightLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpRtOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtTurnRightLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Lamp_Indicator.Input_ExtTurnRightLampStatusFromBDC:
+  type: sensor
+  signalName: Lamp_RtTrnLmpCmd
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_ExtTurnRightLampStatusFromBDC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- MFSW.Input_AutolightSensorNightStatus:
+  type: sensor
+  signalName: Lamp_AutoLtSnsrNightSta
+  dataType: HUInt64
+  description: "This signal indicates autolight sensor output "
+  abstractionName: Input_AutolightSensorNightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NIGHT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- MFSW.Input_ExtLowBeamOnReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoOnReq
+  dataType: HUInt64
+  description: "-(Old)C_HLampLowON"
+  abstractionName: Input_ExtLowBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- MFSW.Input_Lamp_HdLmpLoOffPopUpReq:
+  type: sensor
+  signalName: Lamp_HdLmpLoOffPopUpReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_Lamp_HdLmpLoOffPopUpReq
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "OLD"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- MFSW.Input_LightPopUpMsgType:
+  type: sensor
+  signalName: Lamp_LightPopUpMsgType
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LightPopUpMsgType
+  valueEnum:
+    0x0: "TYPE_IGNOFF_AND_P"
+    0x1: "TYPE_P_RELEASE"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- MFSW.Input_LightPopUpReq:
+  type: sensor
+  signalName: Lamp_LightPopUpReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LightPopUpReq
+  valueEnum:
+    0x0: "TAIL_ON"
+    0x1: "HEAD_LOW_ON"
+    0x2: "AUTO_ON"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- MFSW.Input_LightSwitchStatusFromIBU:
+  type: sensor
+  signalName: Lamp_LtSwSta_IBU
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LightSwitchStatusFromIBU
+  valueEnum:
+    0x0: "TAIL_ON"
+    0x1: "HEAD_LOW_ON"
+    0x2: "AUTO_ON"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- MFSW.Input_LightSwitchStatusFromMFSW:
+  type: sensor
+  signalName: Lamp_LtSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_LightSwitchStatusFromMFSW
+  valueEnum:
+    0x0: "TAIL_ON"
+    0x1: "HEAD_LOW_ON"
+    0x2: "AUTO_ON"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- MFSW.Input_MfswCANTypeAppliedStatus:
+  type: sensor
+  signalName: MFSW_Info
+  dataType: HUInt64
+  description: "Mulitfunction switch information This signal is used to determine 'CAN type Multifunction switch' is applied or not in this vehicle.0x0 : CAN type MFSW is Not Applied0x1 : CAN type MFSW AppliedG/WAY Signal from MFSW (C_MFSW_Info)- Follow to source signal discription for specific information"
+  abstractionName: Input_MfswCANTypeAppliedStatus
+  valueEnum:
+    0x0: "APPLIED"
+    0x1: "APPLIED_LIGHT_CPAD"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- MFSW.Input_WiperSwitchFrontStatusFromIBU:
+  type: sensor
+  signalName: Wiper_FrWiperSwSta_IBU
+  dataType: HUInt64
+  description: "Multifuction Front Wiper Switch StatusThe value '0x1' means 'Int Sw On' or 'Auto Sw on' and its status determined by 'C_RainSnsOption' signal0x1 : Wiper Int Sw on (C_RainSnsOption = 0x0)0x1 : Wiper Auto Sw on (C_RainSnsOption = 0x1)"
+  abstractionName: Input_WiperSwitchFrontStatusFromIBU
+  valueEnum:
+    0x0: "INT_OR_AUTO"
+    0x1: "LOW_ON"
+    0x2: "HIGH_ON"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- MFSW.Input_WiperSwitchFrontStatusFromMFSW:
+  type: sensor
+  signalName: Wiper_FrWiperSwSta
+  dataType: HUInt64
+  description: "Multifuction Front Wiper Switch StatusThe value '0x1' means 'Int Sw On' or 'Auto Sw on' and its status determined by 'C_RainSnsOption' signal0x1 : Wiper Int Sw on (C_RainSnsOption = 0x0)0x1 : Wiper Auto Sw on (C_RainSnsOption = 0x1)"
+  abstractionName: Input_WiperSwitchFrontStatusFromMFSW
+  valueEnum:
+    0x0: "INT_OR_AUTO"
+    0x1: "LOW_ON"
+    0x2: "HIGH_ON"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- MFSW.Input_WiperSwitchIntStepStatusFromIBU:
+  type: sensor
+  signalName: Wiper_IntStepSta_IBU
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_WiperSwitchIntStepStatusFromIBU
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP5"
+    0x5: "OFF"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- MFSW.Input_WiperSwitchIntStepStatusFromMFSW:
+  type: sensor
+  signalName: Wiper_IntStepSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_WiperSwitchIntStepStatusFromMFSW
+  valueEnum:
+    0x0: "STEP1"
+    0x1: "STEP2"
+    0x2: "STEP3"
+    0x3: "STEP4"
+    0x4: "STEP5"
+    0x5: "OFF"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- MFSW.Input_WiperSwitchRearStatusFromIBU:
+  type: sensor
+  signalName: Wiper_RrWiperSwSta_IBU
+  dataType: HUInt64
+  description: "Multifunction Rear Wiper Switch Status"
+  abstractionName: Input_WiperSwitchRearStatusFromIBU
+  valueEnum:
+    0x0: "LOW_ON"
+    0x1: "HIGH_ON"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- MFSW.Input_WiperSwitchRearStatusFromMFSW:
+  type: sensor
+  signalName: Wiper_RrWiperSwSta
+  dataType: HUInt64
+  description: "Multifunction Rear Wiper Switch Status"
+  abstractionName: Input_WiperSwitchRearStatusFromMFSW
+  valueEnum:
+    0x0: "LOW_ON"
+    0x1: "HIGH_ON"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- PHEV_Fuel_Tank.Input_FuelDrOpenSta:
+  type: sensor
+  signalName: PDC_FuelDrOpenSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_FuelDrOpenSta
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- PHEV_Fuel_Tank.Input_PhevFuelDoorDisplayReqStatus:
+  type: sensor
+  signalName: PHEV_FuelDrDis
+  dataType: HUInt64
+  description: "PHEV Fuel Door Control CLU Display Message from BCM"
+  abstractionName: Input_PhevFuelDoorDisplayReqStatus
+  valueEnum:
+    0x0: "WAIT_FOR_FUEL_DOOR_OPEN"
+    0x1: "REFUEL"
+    0x2: "FUEL_DOOR_OPEN_WARN"
+    0x3: "CHARGING"
+    0x4: "CHECK_FUEL_DOOR"
+    0x5: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    ELSE: 0x5
+
+
+- Power_Autocut.Input_BatterySocValueFromBMS:
+  type: sensor
+  signalName: BAT_SocVal
+  dataType: HUInt64
+  description: "[For 12V Lithium Battery vehicle model]This signal is battery State of Charge as calculated by battery sensor."
+  abstractionName: Input_BatterySocValueFromBMS
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Power_Autocut.Input_BatterySocValueFromPDC:
+  type: sensor
+  signalName: ICU_BS2SoC
+  dataType: HUInt64
+  description: "This signal is battery State of Charge as calculated by battery sensor."
+  abstractionName: Input_BatterySocValueFromPDC
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Power_Autocut.Input_IgnitionAutoOffWarnReqStatus:
+  type: sensor
+  signalName: IGN_AutoOff_WarnSta_CLU
+  dataType: HUInt64
+  description: "This signal is for battery discharge warning (engine not running && IGN/ACC on)To prevent battery discharge, ICU requests the Cluster to display warning and requests IBU to turn IGN/ACC off."
+  abstractionName: Input_IgnitionAutoOffWarnReqStatus
+  valueEnum:
+    0x0: "WARN"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Power_Autocut.Input_PowerAutoCutModeStatus:
+  type: sensor
+  signalName: ICU_PowerAutoCutModSta
+  dataType: HUInt64
+  description: "ICU Delivery Mode State"
+  abstractionName: Input_PowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DEALER_MODE"
+    0x2: "CUSTOMER_MODE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: {OLDVALUE}
+
+
+- ROA.Input_RearSeatRemindDelayOffWarnReqStatus:
+  type: sensor
+  signalName: Warn_RrStRmndSysAct
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_RearSeatRemindDelayOffWarnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ROA.Input_RearSeatRemindDelayWarnReqStatus:
+  type: sensor
+  signalName: Warn_RrStRmndDelay
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_RearSeatRemindDelayWarnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ROA.Input_RearSeatRemindFunctionStatusFromBCM:
+  type: sensor
+  signalName: Warn_RrStRmndSysSta
+  dataType: HUInt64
+  description: "Rear Seat Reminder Alarm System Enable(On)/Disable(Off) state"
+  abstractionName: Input_RearSeatRemindFunctionStatusFromBCM
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- ROA.Input_RearSeatRemindOffIndiReqStatus:
+  type: sensor
+  signalName: Warn_RrStRmndSysOffIND
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_RearSeatRemindOffIndiReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ROA.Input_RearSeatRemindSysFailStatusFromBCM:
+  type: sensor
+  signalName: Warn_RoaErr
+  dataType: HUInt64
+  description: "ROA SENSOR Error(Malfunction)  signal"
+  abstractionName: Input_RearSeatRemindSysFailStatusFromBCM
+  valueEnum:
+    0x0: "SYS_FAIL"
+    0x1: "NORMAL"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- ROA.Input_RearSeatRemindWarnStatusFromBCM:
+  type: sensor
+  signalName: Warn_RrStRmndAlrmInfo
+  dataType: HUInt64
+  description: "Rear Seat Reminder Warning request signal"
+  abstractionName: Input_RearSeatRemindWarnStatusFromBCM
+  valueEnum:
+    0x0: "WARN1"
+    0x1: "WARN2"
+    0x2: "WARN3"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- ROA.Input_RearSeatRemindWarnStatusFromBCM_New:
+  type: sensor
+  signalName: Warn_RrStRmndAlrmInfo_1
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_RearSeatRemindWarnStatusFromBCM_New
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+    0x3: "WARN3"
+    0x4: "OLD"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    ELSE: 0x4
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdCenterStatus:
+  type: sensor
+  signalName: SBR_3rdCtrStBltWrngIndSta
+  dataType: HUInt64
+  description: "This signal is used for control the 3th Row Center Seatbelt indicator function."
+  abstractionName: Input_SeatBeltIndi3rdCenterStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdLeftStatus:
+  type: sensor
+  signalName: SBR_3rdLftStBltWrngIndSta
+  dataType: HUInt64
+  description: "This signal is used for control the 3th Row Left Seatbelt indicator function."
+  abstractionName: Input_SeatBeltIndi3rdLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdRightStatus:
+  type: sensor
+  signalName: SBR_3rdRtStBltWrngIndSta
+  dataType: HUInt64
+  description: "This signal is used for control the 3th Row Right Seatbelt indicator function."
+  abstractionName: Input_SeatBeltIndi3rdRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiDriverStatus:
+  type: sensor
+  signalName: SBR_DrvStBltIndSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SeatBeltIndiDriverStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINKING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearCenterStatus:
+  type: sensor
+  signalName: SBR_RrCtrStBltIndSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SeatBeltIndiRearCenterStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearLeftStatus:
+  type: sensor
+  signalName: SBR_RrLftStBltWrngIndSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SeatBeltIndiRearLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearRightStatus:
+  type: sensor
+  signalName: SBR_RrRtStBltWrngIndSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SeatBeltIndiRearRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltWarnSoundStatus:
+  type: sensor
+  signalName: SBR_StBltWrngBzrSta
+  dataType: HUInt64
+  description: "-Seat belt Warning (Reminder) buzzer"
+  abstractionName: Input_SeatBeltWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HOLD"
+    0x2: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Seatbelt_Warning.Input_SeatBeltWarnStepSoundStatus:
+  type: sensor
+  signalName: SBR_StBltStpWrngBzrSta
+  dataType: HUInt64
+  description: "This signal is used for control the Seatbelt Step Warning Buzzer function with 3 bits.It provides pre-warning, 1st warning, 2nd warning and 3rd warning."
+  abstractionName: Input_SeatBeltWarnStepSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PRE_WARN"
+    0x2: "WARN1"
+    0x3: "WARN2"
+    0x4: "WARN3"
+  matchingTable:
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x1
+    ELSE: 0x0
+
+
+- WPC.Input_CellphoneDuelFrontReminderWarnStatus:
+  type: sensor
+  signalName: WPC2_PhnLftWrngSta
+  dataType: HUInt64
+  description: "Warning by WPC2 for User (Phone left in vehicle)"
+  abstractionName: Input_CellphoneDuelFrontReminderWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x4: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_CellphoneFrontReminderWarnStatus:
+  type: sensor
+  signalName: WPC_PhnLftWrngSta
+  dataType: HUInt64
+  description: "Warning by WPC for User (Phone left in vehicle)"
+  abstractionName: Input_CellphoneFrontReminderWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x4: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_CellphoneRearReminderWarnStatus:
+  type: sensor
+  signalName: WPC_PhnLftWrngRWPCSta
+  dataType: HUInt64
+  description: "Warning by RWPC for User (Phone left in vehicle)"
+  abstractionName: Input_CellphoneRearReminderWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x4: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_DoorOpenAssistSideStatus:
+  type: sensor
+  signalName: Warn_AsstDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenAssistSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_DoorOpenAssistSideStatusFromSBCM:
+  type: sensor
+  signalName: Warn_AsstDrSwSta_SBCM
+  dataType: HUInt64
+  description: "Warning Assist Door Switch Status"
+  abstractionName: Input_DoorOpenAssistSideStatusFromSBCM
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_DoorOpenDriverSideStatus:
+  type: sensor
+  signalName: Warn_DrvDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenDriverSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- WPC.Input_DoorOpenDriverSideStatusFromSBCM:
+  type: sensor
+  signalName: Warn_DrvDrSwSta_SBCM
+  dataType: HUInt64
+  description: "Warning Drive Door Switch State"
+  abstractionName: Input_DoorOpenDriverSideStatusFromSBCM
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+

@@ -1,0 +1,10 @@
+libdir=@CCOS_LIB_DIR@
+sharedlibdir=@CCOS_LIB_DIR@
+includedir=@CCOS_INC_DIR@
+
+Name: SSFS
+Description: Public headers for SSFS
+Version: @PROJECT_VERSION@
+Requires: hcommon hutil hvehicle
+Libs: -L${libdir} -L${sharedlibdir} -lssfs
+Cflags: -I${includedir}

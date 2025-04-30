@@ -1,0 +1,236 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- Blue_Light_Filter:
+  type: branch
+
+
+- Speed_Gauge:
+  type: branch
+
+
+- Speed_Gauge.Output_DisplaySpeedUnderDecimalValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Speed_Gauge.Output_DisplaySpeedKphValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Speed_Gauge.Output_DisplaySpeedValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Speed_Gauge.Output_DisplaySpeedUnit:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KPH"
+    0x1: "MPH"
+
+
+- Speed_Gauge.Output_DisplaySpeedDefaultUnit:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KPH"
+    0x1: "KMPH"
+    0x2: "MPH"
+
+
+- Blue_Light_Filter.Input_HeadUnitBlueLightLevelStatus:
+  type: sensor
+  signalName: HU_CLU_BlueLightLvl
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitBlueLightLevelStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "LEVEL1"
+    0x2: "LEVEL2"
+    0x3: "LEVEL3"
+    0x4: "LEVEL4"
+    0x5: "LEVEL5"
+    0x6: "LEVEL6"
+    0x7: "LEVEL7"
+    0x8: "LEVEL8"
+    0x9: "LEVEL9"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    ELSE: 0x0
+
+
+- Blue_Light_Filter.Input_HeadUnitBlueLightOnOffStatus:
+  type: sensor
+  signalName: HU_CLU_BlueLightSta
+  dataType: HUInt64
+  abstractionName: Input_HeadUnitBlueLightOnOffStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "OFF"
+    0x2: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Speed_Gauge.Input_NaviOverSpdUnit:
+  type: sensor
+  signalName: Navi_SpdLimit_Unit
+  dataType: HUInt64
+  abstractionName: Input_NaviOverSpdUnit
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Speed_Gauge.Input_NaviOverSpeedColor1:
+  type: sensor
+  signalName: Navi_OverSpd_Color1
+  dataType: HUInt64
+  abstractionName: Input_NaviOverSpeedColor1
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFF
+
+
+- Speed_Gauge.Input_NaviOverSpeedColor2:
+  type: sensor
+  signalName: Navi_OverSpd_Color2
+  dataType: HUInt64
+  abstractionName: Input_NaviOverSpeedColor2
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFF
+
+
+- Speed_Gauge.Input_NaviOverSpeedRange1:
+  type: sensor
+  signalName: Navi_OverSpd_Range1
+  dataType: HUInt64
+  abstractionName: Input_NaviOverSpeedRange1
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Speed_Gauge.Input_NaviOverSpeedRange2:
+  type: sensor
+  signalName: Navi_OverSpd_Range2
+  dataType: HUInt64
+  abstractionName: Input_NaviOverSpeedRange2
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Speed_Gauge.Output_DisplaySpeedUnderDecimalValue.Output_DisplaySpeedUnderDecimalValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DisSpdDcmlVal
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedUnderDecimalValue.Output_DisplaySpeedUnderDecimalValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Speed_Gauge.Output_DisplaySpeedKphValue.Output_DisplaySpeedKphValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DisSpdVal_KPH
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedKphValue.Output_DisplaySpeedKphValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Speed_Gauge.Output_DisplaySpeedValue.Output_DisplaySpeedValue_CCAN:
+  type: actuator
+  signalName: CV_CLU_DisSpdVal
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedValue.Output_DisplaySpeedValue_CCAN
+  matchingTable:
+    VALUE:
+
+
+- Speed_Gauge.Output_DisplaySpeedValue.Output_DisplaySpeedValue_MCAN:
+  type: actuator
+  signalName: CLU_DisSpdVal
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedValue.Output_DisplaySpeedValue_MCAN
+  matchingTable:
+    VALUE:
+
+
+- Speed_Gauge.Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_CCAN:
+  type: actuator
+  signalName: CV_CLU_SpdUnitTyp
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_CCAN
+  valueEnum:
+    0x0: "KPH"
+    0x1: "MPH"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Speed_Gauge.Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_MCAN:
+  type: actuator
+  signalName: CLU_SpdUnitTyp
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_MCAN
+  valueEnum:
+    0x0: "KPH"
+    0x1: "MPH"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Speed_Gauge.Output_DisplaySpeedDefaultUnit.Output_DisplaySpeedDefaultUnit_MCAN:
+  type: actuator
+  signalName: CLU_SpdUnitTyp_Def_MM
+  dataType: HUInt64
+  abstractionName: Output_DisplaySpeedDefaultUnit.Output_DisplaySpeedDefaultUnit_MCAN
+  valueEnum:
+    0x0: "KPH"
+    0x1: "KMPH"
+    0x2: "MPH"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+
+

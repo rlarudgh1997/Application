@@ -1,0 +1,174 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- Seatbelt_Warning:
+  type: branch
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiDriverStatus:
+  type: sensor
+  signalName: SBR_DrvStBltIndSta
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndiDriverStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINKING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Seatbelt_Warning.Input_SeatBeltWarnSoundStatus:
+  type: sensor
+  signalName: SBR_StbltWrngBzrSta
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "HOLD"
+    0x2: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Seatbelt_Warning.Input_SeatBeltWarnStepSoundStatus:
+  type: sensor
+  signalName: Input_SeatBeltWarnStepSoundStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltWarnStepSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PRE_WARN"
+    0x2: "WARN1"
+    0x3: "WARN2"
+    0x4: "WARN3"
+  matchingTable:
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x1
+    ELSE: 0x0
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdCenterStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndi3rdCenterStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndi3rdCenterStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdLeftStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndi3rdLeftStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndi3rdLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndi3rdRightStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndi3rdRightStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndi3rdRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearCenterStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndiRearCenterStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndiRearCenterStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearLeftStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndiRearLeftStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndiRearLeftStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Seatbelt_Warning.Input_SeatBeltIndiRearRightStatus:
+  type: sensor
+  signalName: Input_SeatBeltIndiRearRightStatus
+  dataType: HUInt64
+  abstractionName: Input_SeatBeltIndiRearRightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SEATED"
+    0x2: "BELTED"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
