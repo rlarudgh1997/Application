@@ -103,6 +103,10 @@ class ExcelParser:
                     # check_time_merge_info = time.time() - start_time_sheet_sub
                     # print("\t\t [CheckTime]", sheet, f" {check_time_any:.5f}, {check_time_merge_info:.5f} seconds")
 
+                    # 특정 문자열(따옴표(""), 줄바꿈(\n, \r))이 있으면 삭제
+                    if isinstance(read_cell_text, str):
+                        read_cell_text = read_cell_text.replace('"', '').replace('\n', '').replace('\r', '')
+
                     data.append(read_cell_text)
                 sheet_data.append(data)
             self.sheet_info.append(sheet_data)

@@ -148,7 +148,7 @@ public:
         PropertyTypeOriginSheetOutputs,
         PropertyTypeOriginSheetConfigs,
         PropertyTypeOriginSheetDependentOn,
-        PropertyTypeOriginSheetMax,
+        PropertyTypeOriginSheetMax,  // 3011
         PropertyTypeConvertSheetDescription,
         PropertyTypeConvertSheetPrivates,
         PropertyTypeConvertSheetTelltales,

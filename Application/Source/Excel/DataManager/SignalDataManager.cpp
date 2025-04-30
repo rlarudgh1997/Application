@@ -1208,7 +1208,8 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
-            validValue = minValue;
+            // validValue = minValue;
+            result = false;
             break;
         }
         default: {
@@ -1855,7 +1856,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
     signalList.removeAll("");
     dataList.removeAll("");
 
-    bool log = false;
+    bool log = true;
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
     QMap<QString, SignalData> newSignalDataInfo;
@@ -1935,7 +1936,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
     signalList.removeAll("");
     dataList.removeAll("");
 
-    bool log = false;
+    bool log = true;
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
     for (auto signalName : currentSignalDataInfo.keys()) {
@@ -2009,10 +2010,79 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         } else if (maxValueState.size() > 0) {
             precondition = QStringList({maxValueState});
         } else if (enumState) {
+#if 1
+            const int customNotTriggerIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet);
+            const QString customNotTriggerKeyword = ExcelUtil::instance().data()->isKeywordString(customNotTriggerIndex);
+            QStringList originDataTemp = originData;
+
+            for (auto& data : originDataTemp) {
+                if (data.contains(customNotTriggerKeyword)) {
+                    keywordType = customNotTriggerIndex;
+                    data.remove(customNotTriggerKeyword);
+                    break;
+                }
+            }
+
+            switch (keywordType) {
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotUsed): {
+                    convertData.clear();
+                    notUsedEnum.clear();
+                    precondition.clear();
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
+                    precondition = convertData;
+                    convertData.clear();
+                    notUsedEnum.clear();
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet): {
+                    // Value 인 경우에 대한 처리만 동작함
+                    // Enum 인 경우 처리 확인 필요
+                    int dataKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
+                    QMap<int, QStringList> dataInfo = isCustomValueInfo(originDataTemp, true);
+
+                    if (dataInfo.size() == 1) {
+                        dataKeywordType = dataInfo.firstKey();
+                    }
+                    if (dataKeywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
+                        precondition = convertData;
+                    } else {
+                        precondition = dataInfo[dataKeywordType];
+                    }
+                    convertData.clear();
+                    notUsedEnum.clear();
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined): {
+                    int splitSize = convertData.size() * 0.5;
+                    precondition = convertData.mid(0, splitSize);
+                    convertData = convertData.mid(splitSize, convertData.size());
+                    notUsedEnum.clear();
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
+                    break;
+                }
+                default: {
+                    precondition = notUsedEnum;
+                    notUsedEnum.clear();
+                    break;
+                }
+            }
+#else
             auto enumInfo = isConvertedEnumData(keywordType, convertData, notUsedEnum);
             convertData = enumInfo.first;
             precondition = enumInfo.second;
             notUsedEnum.clear();
+#endif
 
             keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
             convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
@@ -2067,7 +2137,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
     signalList.removeAll("");
     dataList.removeAll("");
 
-    bool log = false;
+    bool log = true;
     QMap<QString, QMap<int, QStringList>> dataInfo;
     QMap<QString, SignalData> currentSignalDataInfo = isSignalDataInfo(signalList, dataList, dataInfo);
 
@@ -2604,6 +2674,7 @@ void SignalDataManager::testCode(const QVariantList& arg) {
             {11, QStringList({"[CustomNotFlow][4294967296]", "[10]"})},
             {12, QStringList({"[CustomFlowNot][10]", "[4294967296]"})},
             {13, QStringList({"[CustomDontCare][]", "[4294967296]"})},
+            {14, QStringList({"[CustomUnder][125]", "[124]"})},
         };
         static bool normal = false;
         static int index = 0;
