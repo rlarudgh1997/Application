@@ -714,6 +714,12 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotFlow)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::FlowNot)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual);
         } else {
             // no operation
         }
@@ -742,6 +748,12 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotRange);
         } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow)) {
             convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotFlow);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::FlowNot);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual);
+        } else if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual)) {
+            convertKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual);
         } else {
             // no operation
         }

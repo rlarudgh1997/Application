@@ -371,6 +371,7 @@ public:
     };
     enum class DependentOn {
         DependentName = 0,
+        Result,
         InputSignal,
         InputData,
         Max,
@@ -544,9 +545,10 @@ public:
         Preset,
         ValueChanged,
         Flow,
+        FlowNot,
         Not,
-        NotRange,
         NotFlow,
+        NotRange,
         DontCare,
         Timeout,
         Crc,

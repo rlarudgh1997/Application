@@ -1178,7 +1178,10 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
     switch (keywordType) {
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid):
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
             validValue = (maxValue + gapValue);
             break;
         }
@@ -1194,13 +1197,18 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
             }
             break;
         }
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot):
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
+            validValue = maxValue;
+            break;
+        }
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow): {
             validValue = (maxValue + gapValue);
             break;
         }
-        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
-            validValue = (maxValue + gapValue);
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
+            validValue = minValue;
             break;
         }
         default: {
@@ -1235,7 +1243,6 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
     qDebug() << "\t\t DataType    : " << dataType;
     qDebug() << "\t\t KeywordType : " << keywordType;
     qDebug() << "\t\t InputData   : " << inputList.size() << inputList;
-    qDebug() << "\t\t ValueList   : " << valueList.size() << valueList;
     qDebug() << "\t\t Min         : " << minValue;
     qDebug() << "\t\t Max         : " << maxValue;
     qDebug() << "\t\t ValidData   : " << validData;
@@ -1361,6 +1368,7 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
                     isValid = false;
                     break;
                 }
+            } else {
             }
         }
 
@@ -1433,7 +1441,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
 
 #if 0
     bool log = false;
-    log = (normal == false);
+    // log = true;
 
     if (log) {
         qDebug() << "*************************************************************************************************";
@@ -2543,37 +2551,37 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 void SignalDataManager::testCode(const QVariantList& arg) {
     if (arg.size() == 0) {
         const static QMap<int, QStringList> customData_0 = {
-            {0, QStringList({"[CustomOver][0]", "[1]"})},                                       // >0    ->  0 이하(HInt64), 공백
-            {1, QStringList({"[CustomMoreThanEqual][-1]", "[0]"})},                             // >=0   -> -1 이하(HInt64), 공백
-            {2, QStringList({"[CustomOver][10]", "[11]"})},                                     // >10   ->  9 이하 (min 이하)
-            {3, QStringList({"[CustomMoreThanEqual][9]", "[10]"})},                             // >=10  ->  9 이하 (min 이하)
-            {4, QStringList({"[CustomUnder][0]", "[-1]"})},                                     // <0    ->  0 이상 (max 이상)
-            {5, QStringList({"[CustomLessThanEqual][1]", "[0]"})},                              // <=0   ->  0 이상 (max 이상)
-            {6, QStringList({"[CustomUnder][10]", "[9]"})},                                     // <10   -> 10 이상 (max 이상)
-            {7, QStringList({"[CustomLessThanEqual][11]", "[10]"})},                            // <=10  -> 10 이상 (max 이상)
-            {8, QStringList({"[CustomFlow][1]", "[2]"})},                                       // 1=>2  ->  3 이상 (max 이상)
-            {9, QStringList({"[CustomFlow][1, 2]", "[2, 1]"})},                                 // 1<=>2 ->  3 이상 (max 이상)
-            {10, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",  // 1~10  -> 11 이상 (max 이상)
-                            "[1, 2, 9, 10]"})},
+            {0, QStringList({"[CustomOver][0]", "[1]"})},
+            {1, QStringList({"[CustomMoreThanEqual][-1]", "[0]"})},
+            {2, QStringList({"[CustomOver][10]", "[11]"})},
+            {3, QStringList({"[CustomMoreThanEqual][9]", "[10]"})},
+            {4, QStringList({"[CustomUnder][0]", "[-1]"})},
+            {5, QStringList({"[CustomLessThanEqual][1]", "[0]"})},
+            {6, QStringList({"[CustomUnder][10]", "[9]"})},
+            {7, QStringList({"[CustomLessThanEqual][11]", "[10]"})},
+            {8, QStringList({"[CustomFlow][1]", "[2]"})},
+            {9, QStringList({"[CustomFlow][1, 2]", "[2, 1]"})},
+            {10, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                              "[1, 2, 9, 10]"})},
             {11, QStringList({"[CustomTwoWay][1, 1, 1, 1, 2, 4, 8, 10]",
-                            "[2, 4, 8, 10, 1, 1, 1, 1]"})},
+                              "[2, 4, 8, 10, 1, 1, 1, 1]"})},
             {12, QStringList({"0", "[CustomRange][4294967296]",
-                            "[1]", "[2]", "[44]", "[45]", "83"})},
+                              "[1]", "[2]", "[44]", "[45]", "83"})},
             {13, QStringList({"[CustomLessThanEqual][91]", "[90]", "91", "92", "100"})},
             {14, QStringList({"[CustomTwoWay][1, 1, 1, 1, 2, 4, 8, 10]",
-                            "[2, 4, 8, 10, 1, 1, 1, 1]"})},
+                              "[2, 4, 8, 10, 1, 1, 1, 1]"})},
             {15, QStringList({"[CustomMoreThanEqual][149]", "[150]",
-                            "[CustomLessThanEqual][151]", "[150]"})},
+                              "[CustomLessThanEqual][151]", "[150]"})},
             {16, QStringList({"-200", "300", "100"})},
             {17, QStringList({"200", "300", "100"})},
-            {18, QStringList({"[CustomOver][1]", "[2]"})},                                      // >1    -> 1 이하(HInt64), 공백
+            {18, QStringList({"[CustomOver][1]", "[2]"})},
             {19, QStringList({"[CustomMoreThanEqual][149]", "[150]",
-                            "[CustomLessThanEqual][151]", "[150]",
-                            "[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
-                            "[1, 2, 9, 10]"})},
+                              "[CustomLessThanEqual][151]", "[150]",
+                              "[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                              "[1, 2, 9, 10]"})},
             {20, QStringList({"[CustomLessThanEqual][151]", "[150]",
-                            "[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
-                            "[1, 2, 9, 10]"})},
+                              "[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                              "[1, 2, 9, 10]"})},
             {21, QStringList({"[CustomNotTrigger][CustomOver][100]", "[101]"})},
             {22, QStringList({"[CustomNotTrigger][CustomOver][100][101]"})},
         };
@@ -2585,64 +2593,57 @@ void SignalDataManager::testCode(const QVariantList& arg) {
             {4, QStringList({"[CustomFlow][1]", "[2]"})},
             {5, QStringList({"[CustomFlow][1, 1, 1, 1]", "[2, 3, 4, 5]"})},
             {6, QStringList({"[CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1, 1, 1, 1]"})},
-            {7, QStringList({"[CustomNotFlow][4294967296]", "[10]"})},
-            {8, QStringList({"[CustomFlowNot][10]", "[4294967296]"})},
-            {9, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+            {7, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
                              "[1, 2, 9, 10]"})},
-            {10, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967295]",
+            {8, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967295]",
                              "[1, 2, 4294967295, 4294967296]"})},
-            {11, QStringList({"[CustomNotRange][1, 2, 9, 10]",
-                              "[4294967296, 4294967296, 4294967296, 4294967296]"})},
-            {12, QStringList({"[CustomNot][2, 3, 4]",
+            {9, QStringList({"[CustomNotRange][1, 2, 9, 10]",
+                             "[4294967296, 4294967296, 4294967296, 4294967296]"})},
+            {10, QStringList({"[CustomNot][2, 3, 4]",
                               "[4294967296, 4294967296, 4294967296]"})},
+            {11, QStringList({"[CustomNotFlow][4294967296]", "[10]"})},
+            {12, QStringList({"[CustomFlowNot][10]", "[4294967296]"})},
+            {13, QStringList({"[CustomDontCare][]", "[4294967296]"})},
         };
-        const static QMap<int, QStringList> customData_2 = {
-            {0, QStringList({"[CustomNotTrigger][CustomOver][100]", "[101]"})},
-            {1, QStringList({"[CustomNotTrigger][CustomUnder][100]", "[99]"})},
-            {2, QStringList({"[CustomNotTrigger][CustomMoreThanEqual][99]", "[100]"})},
-            {3, QStringList({"[CustomNotTrigger][CustomLessThanEqual][101]", "[100]"})},
-            {4, QStringList({"[CustomNotTrigger][CustomFlow][1]", "[2]"})},
-            {5, QStringList({"[CustomNotTrigger][CustomFlow][1, 1, 1, 1]", "[2, 3, 4, 5]"})},
-            {6, QStringList({"[CustomNotTrigger][CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1, 1, 1, 1]"})},
-            {7, QStringList({"[CustomNotTrigger][CustomNotFlow][4294967296]", "[10]"})},
-            {8, QStringList({"[CustomNotTrigger][CustomFlowNot][10]", "[4294967296]"})},
-            {9, QStringList({"[CustomNotTrigger][CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
-                             "[1, 2, 9, 10]"})},
-            {10, QStringList({"[CustomNotTrigger][CustomRange][4294967296, 4294967296, 4294967296, 4294967295]",
-                             "[1, 2, 4294967295, 4294967296]"})},
-            {11, QStringList({"[CustomNotTrigger][CustomNotRange][1, 2, 9, 10]",
-                              "[4294967296, 4294967296, 4294967296, 4294967296]"})},
-            {12, QStringList({"[CustomNotTrigger][CustomNot][2, 3, 4]",
-                              "[4294967296, 4294967296, 4294967296]"})},
-        };
+        static bool normal = false;
+        static int index = 0;
         static QMap<int, QStringList> customData = customData_1;
 
         static int size = customData.size();
-        static int index = 0;
+        // customData[index][0].prepend("[CustomNotTrigger]");
 
         int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
         // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
         // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble);
 
         QStringList otherAllData;
-        otherAllData.append(QStringList({"1", "20", "100", "30", "500", "1000", "10", "9", "11", "5"}));
-        // otherAllData.append(QStringList({"MESSAGE_TIMEOUT", "CRC_ERROR"}));
+        if (normal == false) {
+            otherAllData.append(QStringList({"1", "20", "100", "30", "500", "1000", "10", "9", "11", "5"}));
+            // otherAllData.append(QStringList({"MESSAGE_TIMEOUT", "CRC_ERROR"}));
+        }
 
         qDebug() << "====================================================================================================";
-        qDebug() << "testCode";
-        qDebug() << "\t Step         :" << index << "/" << (size - 1);
-        qDebug() << "\t DataType     :" << dataType;
+        qDebug() << index << "/" << (size - 1) << ". testCode :" << normal << dataType;
         qDebug() << "\t OriginData   :" << customData[index];
         qDebug() << "\t OtherAllData :" << otherAllData;
         qDebug() << "\n";
 
         auto valueInfo = isConvertedValueData(QString("Signal.Test"), dataType, customData[index], otherAllData);
-        QStringList convertData = valueInfo.first;
-        QStringList precondition = valueInfo.second;
-        ivis::common::REVOLVE_P(index, 1, 0, size);
 
-        qDebug() << "\t ConvertData  :" << convertData;
-        qDebug() << "\t Precondition :" << precondition;
+        if (normal) {
+            QStringList notUsedEnum = valueInfo.first;
+            qDebug() << "\t NotUsedEnum  :" << notUsedEnum;
+        } else {
+            QStringList convertData = valueInfo.first;
+            QStringList precondition = valueInfo.second;
+            qDebug() << "\t ConvertData  :" << convertData;
+            qDebug() << "\t Precondition :" << precondition;
+        }
         qDebug() << "\n";
+
+        ivis::common::REVOLVE_P(index, 1, 0, size);
+        if (index == 0) {
+            ivis::common::BOOL_REVERSE(normal);
+        }
     }
 }

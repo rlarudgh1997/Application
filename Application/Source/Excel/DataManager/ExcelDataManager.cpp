@@ -708,14 +708,14 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
     const QStringList inputDataList =
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData), true);
 
-    QStringList tempConfigNameList;
+    QStringList tempConfigList;
     for (auto configInfo : configNameList) {
         ivis::common::getRemoved(configInfo, getMergeInfos());
-        tempConfigNameList.append(configInfo);
+        tempConfigList.append(configInfo);
     }
 
     QList<QStringList> dataInfo;
-    QPair<int, int> foundIndex = isIndexOf(tempConfigNameList, (configName.size() == 0) ? (QString("Default")) : (configName));
+    QPair<int, int> foundIndex = isIndexOf(tempConfigList, (configName.size() == 0) ? (QString("Default")) : (configName));
 
     if (foundIndex == qMakePair(1, 0)) {
         // qDebug() << "Not found configName :" << configName;
@@ -743,6 +743,70 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
     //     qDebug() << "\t Info :" << info;
     // }
     // qDebug() << "\n";
+
+    return dataInfo;
+}
+
+QList<QStringList> ExcelDataManager::isDependentDataList(const QString& dependentName, const QString& resultName,
+                                                         const bool& allData) {
+    const int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn;
+    const QStringList dependentNameList =
+        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName), true);
+    const QStringList resultList =
+        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Result), true);
+    const QStringList inputSignalList =
+        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputSignal), true);
+    const QStringList inputDataList =
+        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData), true);
+
+#if 0
+    QStringList tempDependentList;
+    for (auto info : dependentNameList) {
+        ivis::common::getRemoved(info, getMergeInfos());
+        tempDependentList.append(info);
+    }
+    QPair<int, int> foundDependentIndex = isIndexOf(tempDependentList, dependentName);
+
+    QStringList tempResultList;
+    for (auto info : resultList) {
+        ivis::common::getRemoved(info, getMergeInfos());
+        tempResultList.append(info);
+    }
+    QPair<int, int> foundResultIndex = isIndexOf(tempResultList, resultName);
+#else
+    QPair<int, int> foundDependentIndex = isIndexOf(dependentNameList, dependentName);
+    QPair<int, int> foundResultIndex = isIndexOf(resultList, resultName);
+#endif
+    QList<QStringList> dataInfo;
+
+    if ((foundResultIndex.first < foundDependentIndex.first) || (foundResultIndex.second > foundDependentIndex.second) ||
+        (foundResultIndex.first >= foundResultIndex.second)) {
+        qDebug() << "Fail to found index - Result :" << foundResultIndex << "Dependent :" << foundDependentIndex
+                 << "-> Check Dependent/Result name";
+        return dataInfo;
+    }
+
+    for (int index = foundResultIndex.first; index <= foundResultIndex.second; ++index) {
+        QStringList data;
+        if (allData) {
+            data.append((index < dependentNameList.size()) ? (dependentNameList.at(index)) : (QString()));
+            data.append((index < resultList.size()) ? (resultList.at(index)) : (QString()));
+        }
+        data.append((index < inputSignalList.size()) ? (inputSignalList.at(index)) : (QString()));
+        data.append((index < inputDataList.size()) ? (inputDataList.at(index)) : (QString()));
+        dataInfo.append(data);
+    }
+
+#if 0
+    qDebug() << "isDependentDataList :" << dependentName << resultName << allData;
+    // qDebug() << "\t Dependent :" << tempDependentList.size() << tempDependentList;
+    // qDebug() << "\t Result    :" << tempResultList.size() << tempResultList;
+    qDebug() << "\t Index :" << foundDependentIndex << foundResultIndex;
+    for (const auto& info : dataInfo) {
+        qDebug() << "\t Info  :" << info;
+    }
+    qDebug() << "\n";
+#endif
 
     return dataInfo;
 }

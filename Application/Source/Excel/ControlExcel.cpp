@@ -13,14 +13,6 @@
 #include "SignalDataManager.h"
 #include "TestCase.h"
 
-const QString VEHICLE_TYPE_ICV = QString("ICV");
-const QString VEHICLE_TYPE_EV = QString("EV");
-const QString VEHICLE_TYPE_FCEV = QString("FCEV");
-const QString VEHICLE_TYPE_PHEV = QString("PHEV");
-const QString VEHICLE_TYPE_HEV = QString("HEV");
-const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
-const QString SFC_DONT_CARE = QString("D'");
-
 QSharedPointer<ControlExcel>& ControlExcel::instance() {
     static QSharedPointer<ControlExcel> gControl;
     if (gControl.isNull()) {
@@ -1282,6 +1274,11 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTest: {
+            // ExcelDataManager::instance().data()->reloadExcelData();
+            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_001", "Test1");
+            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_002", "Test2");
+            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_002", "Test3");
+
             SignalDataManager::instance().data()->testCode();
             break;
         }
