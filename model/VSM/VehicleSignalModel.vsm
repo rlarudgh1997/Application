@@ -1,0 +1,104 @@
+# Copyright (c) 2020 IVIS, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable IVIS license agreement.
+
+- Vehicle:
+  type: branch
+  description: High-level vehicle data.
+
+- Vehicle.AD:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.AD.vsm Vehicle.AD SKEL
+#include CLU_VSM_EV.Vehicle.AD.vsm Vehicle.AD EV
+#include CLU_VSM_HEV.Vehicle.AD.vsm Vehicle.AD HEV
+#include CLU_VSM_PHEV.Vehicle.AD.vsm Vehicle.AD PHEV
+#include CLU_VSM_ICV.Vehicle.AD.vsm Vehicle.AD ICV
+#include CLU_VSM_FCEV.Vehicle.AD.vsm Vehicle.AD FCEV
+#include CLU_VSM_EREV.Vehicle.AD.vsm Vehicle.AD EREV
+
+- Vehicle.AV:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.AV.vsm Vehicle.AV SKEL
+#include CLU_VSM_EV.Vehicle.AV.vsm Vehicle.AV EV
+#include CLU_VSM_HEV.Vehicle.AV.vsm Vehicle.AV HEV
+#include CLU_VSM_PHEV.Vehicle.AV.vsm Vehicle.AV PHEV
+#include CLU_VSM_ICV.Vehicle.AV.vsm Vehicle.AV ICV
+#include CLU_VSM_FCEV.Vehicle.AV.vsm Vehicle.AV FCEV
+#include CLU_VSM_EREV.Vehicle.AV.vsm Vehicle.AV EREV
+
+- Vehicle.CD:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.CD.vsm Vehicle.CD SKEL
+#include CLU_VSM_EV.Vehicle.CD.vsm Vehicle.CD EV
+#include CLU_VSM_HEV.Vehicle.CD.vsm Vehicle.CD HEV
+#include CLU_VSM_PHEV.Vehicle.CD.vsm Vehicle.CD PHEV
+#include CLU_VSM_ICV.Vehicle.CD.vsm Vehicle.CD ICV
+#include CLU_VSM_FCEV.Vehicle.CD.vsm Vehicle.CD FCEV
+#include CLU_VSM_EREV.Vehicle.CD.vsm Vehicle.CD EREV
+
+- Vehicle.CS:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.CS.vsm Vehicle.CS SKEL
+#include CLU_VSM_EV.Vehicle.CS.vsm Vehicle.CS EV
+#include CLU_VSM_HEV.Vehicle.CS.vsm Vehicle.CS HEV
+#include CLU_VSM_PHEV.Vehicle.CS.vsm Vehicle.CS PHEV
+#include CLU_VSM_ICV.Vehicle.CS.vsm Vehicle.CS ICV
+#include CLU_VSM_FCEV.Vehicle.CS.vsm Vehicle.CS FCEV
+#include CLU_VSM_EREV.Vehicle.CS.vsm Vehicle.CS EREV
+
+- Vehicle.CH:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.CH.vsm Vehicle.CH SKEL
+#include CLU_VSM_EV.Vehicle.CH.vsm Vehicle.CH EV
+#include CLU_VSM_HEV.Vehicle.CH.vsm Vehicle.CH HEV
+#include CLU_VSM_PHEV.Vehicle.CH.vsm Vehicle.CH PHEV
+#include CLU_VSM_ICV.Vehicle.CH.vsm Vehicle.CH ICV
+#include CLU_VSM_FCEV.Vehicle.CH.vsm Vehicle.CH FCEV
+#include CLU_VSM_EREV.Vehicle.CH.vsm Vehicle.CH EREV
+
+- Vehicle.EC:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.EC.vsm Vehicle.EC SKEL
+#include CLU_VSM_EV.Vehicle.EC.vsm Vehicle.EC EV
+#include CLU_VSM_HEV.Vehicle.EC.vsm Vehicle.EC HEV
+#include CLU_VSM_PHEV.Vehicle.EC.vsm Vehicle.EC PHEV
+#include CLU_VSM_ICV.Vehicle.EC.vsm Vehicle.EC ICV
+#include CLU_VSM_FCEV.Vehicle.EC.vsm Vehicle.EC FCEV
+#include CLU_VSM_EREV.Vehicle.EC.vsm Vehicle.EC EREV
+
+- Vehicle.PT:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.PT.vsm Vehicle.PT SKEL
+#include CLU_VSM_EV.Vehicle.PT.vsm Vehicle.PT EV
+#include CLU_VSM_HEV.Vehicle.PT.vsm Vehicle.PT HEV
+#include CLU_VSM_PHEV.Vehicle.PT.vsm Vehicle.PT PHEV
+#include CLU_VSM_ICV.Vehicle.PT.vsm Vehicle.PT ICV
+#include CLU_VSM_FCEV.Vehicle.PT.vsm Vehicle.PT FCEV
+#include CLU_VSM_EREV.Vehicle.PT.vsm Vehicle.PT EREV
+
+- Vehicle.HD:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.HD.vsm Vehicle.HD SKEL
+#include CLU_VSM_EV.Vehicle.HD.vsm Vehicle.HD EV
+#include CLU_VSM_HEV.Vehicle.HD.vsm Vehicle.HD HEV
+#include CLU_VSM_PHEV.Vehicle.HD.vsm Vehicle.HD PHEV
+#include CLU_VSM_ICV.Vehicle.HD.vsm Vehicle.HD ICV
+#include CLU_VSM_FCEV.Vehicle.HD.vsm Vehicle.HD FCEV
+#include CLU_VSM_EREV.Vehicle.HD.vsm Vehicle.HD EREV
+
+- Vehicle.WYM:
+  type: branch
+#include CLU_VSM_SKEL.Vehicle.WYM.vsm Vehicle.WYM SKEL
+#include CLU_VSM_EV.Vehicle.WYM.vsm Vehicle.WYM EV
+#include CLU_VSM_HEV.Vehicle.WYM.vsm Vehicle.WYM HEV
+#include CLU_VSM_PHEV.Vehicle.WYM.vsm Vehicle.WYM PHEV
+#include CLU_VSM_ICV.Vehicle.WYM.vsm Vehicle.WYM ICV
+#include CLU_VSM_FCEV.Vehicle.WYM.vsm Vehicle.WYM FCEV
+#include CLU_VSM_EREV.Vehicle.WYM.vsm Vehicle.WYM EREV
+
+- Vehicle.System:
+  type: branch
+  description: EOL/Variant/HardWire Values
+#include System.vsm Vehicle.System

@@ -31,14 +31,14 @@ void GuiCenter::drawDisplayDepth0() {
         }
     });
     connect(mGui->ConfigViewClose, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::MenuTypeConfig));
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, ivis::common::ViewTypeEnum::CenterViewTypeConfig);
     });
     connect(mGui->ConfigViewReset, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeConfigReset, QVariant()); });
 
     // Node View
     connect(mGui->NodeViewClose, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant(ivis::common::ViewTypeEnum::MenuTypeNode));
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, ivis::common::ViewTypeEnum::CenterViewTypeNode);
     });
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
@@ -160,9 +160,9 @@ void GuiCenter::updateDialogSelectModule() {
 void GuiCenter::updateDisplayConfigInfo() {
     QVariantList prevConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious).toList();
     QVariantList currConfig = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    // qDebug() << "GuiCenter::updateDisplayConfigInfo() ->" << prevConfig.size() << "," << currConfig.size();
+    // qDebug() << "updateDisplayConfigInfo :" << prevConfig.size() << currConfig.size();
 
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::MenuTypeConfig);
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeConfig);
     setConfigUpdating(true);
 
     QStringList title = QStringList({"Config Name", "Config Value"});
@@ -234,9 +234,9 @@ void GuiCenter::updateDisplayConfigInfo() {
 
 void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
-    // qDebug() << "GuiCenter::updateDisplayNodeAddress() ->" << updateType << nodeAddress.size();
+    // qDebug() << "updateDisplayNodeAddress :" << updateType << nodeAddress.size();
 
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::MenuTypeNode);
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeNode);
 
     QStringList title = QStringList({"Node Name", "Vehicle Type"});
     mGui->NodeView->setRowCount(nodeAddress.size());
@@ -259,6 +259,16 @@ void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     mGui->NodeView->resizeRowsToContents();
     mGui->NodeView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     mGui->NodeView->horizontalHeader()->resizeSection(0, 800);
+}
+
+void GuiCenter::updateDisplayTerminal() {
+    QString terminalInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
+
+    qDebug() << "updateDisplayTerminal :" << terminalInfo;
+
+    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
+
+    mGui->TerminalDisplay->setText(terminalInfo);
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -285,6 +295,10 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule: {
             updateDialogSelectModule();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo: {
+            updateDisplayTerminal();
             break;
         }
         default: {

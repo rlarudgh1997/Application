@@ -1010,6 +1010,10 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText, true, true);
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeTerminalMode: {
+            sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, type);
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeEnterScriptTextCompleted: {
             bool runScriptState = excuteScript(ivis::common::RunTypeEnum::RunTypeEnterScriptText, false, QVariantList({value}));
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunScriptState, runScriptState);

@@ -1,0 +1,165 @@
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- ADM_Mode_Information:
+  type: branch
+
+
+- ADM_Mode_Information.Output_ClusterAdmModeFailStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "UNDEBOUNCE_ADM2_TO_ADM1"
+    0x2: "UNDEBOUNCE_ADM3_TO_ADM1"
+    0x3: "UNDEBOUNCE_ADM1_TO_ADM2"
+    0x4: "UNDEBOUNCE_ADM1_TO_ADM3"
+    0x5: "STALE"
+    0x6: "REQUEST_ADM2_TO_ADM3"
+    0x7: "REQUEST_ADM3_TO_ADM2"
+
+
+- ADM_Mode_Information.Output_ClusterAdmModeStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ADM1"
+    0x2: "ADM2"
+    0x3: "ADM3"
+
+
+- ADM_Mode_Information.Output_ClusterFaultStatus:
+  type: branch
+  dataType: HUInt64
+
+
+- ADM_Mode_Information.Input_Adm0PropulsionSystemStatus:
+  type: sensor
+  signalName: W_SDS_PropulsionSubSysSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Adm0PropulsionSystemStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ADM0"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADM_Mode_Information.Input_Adm3VisualSelectStatus:
+  type: sensor
+  signalName: W_SDS_WaymoCluVisualSelAdm3Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Adm3VisualSelectStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "THEME1"
+    0x2: "THEME2"
+    0x3: "THEME3"
+    0x4: "THEME4"
+    0x5: "THEME5"
+    0x6: "THEME6"
+    0x7: "THEME7"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    ELSE: 0x0
+
+
+- ADM_Mode_Information.Input_AdmModeStatus:
+  type: sensor
+  signalName: W_ADMCmd_INF
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_AdmModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ADM1"
+    0x2: "ADM2"
+    0x3: "ADM3"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADM_Mode_Information.Output_ClusterAdmModeFailStatus.Output_ClusterAdmModeFailStatus_CCAN:
+  type: actuator
+  signalName: dummynode
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_ClusterAdmModeFailStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "UNDEBOUNCE_ADM2_TO_ADM1"
+    0x2: "UNDEBOUNCE_ADM3_TO_ADM1"
+    0x3: "UNDEBOUNCE_ADM1_TO_ADM2"
+    0x4: "UNDEBOUNCE_ADM1_TO_ADM3"
+    0x5: "STALE"
+    0x6: "REQUEST_ADM2_TO_ADM3"
+    0x7: "REQUEST_ADM3_TO_ADM2"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+
+
+- ADM_Mode_Information.Output_ClusterAdmModeStatus.Output_ClusterAdmModeStatus_CCAN:
+  type: actuator
+  signalName: CLU_PriADMSta_W
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_ClusterAdmModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ADM1"
+    0x2: "ADM2"
+    0x3: "ADM3"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+
+
+- ADM_Mode_Information.Output_ClusterFaultStatus.Output_ClusterFaultStatus_CCAN:
+  type: actuator
+  signalName: CLU_WaymoCluFaultSta_W
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_ClusterFaultStatus
+  matchingTable:
+    VALUE:
+
+

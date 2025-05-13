@@ -1,0 +1,410 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- DIAGNOSIS:
+  type: branch
+
+
+- DIAGNOSIS_2_0:
+  type: branch
+
+
+- ENGINEERING_MODE:
+  type: branch
+
+
+- ENGINEERING_MODE_2_0:
+  type: branch
+
+
+- UPDATE:
+  type: branch
+
+
+- ENGINEERING_MODE.Output_DetentStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- ENGINEERING_MODE_2_0.Output_DetentStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- UPDATE.Output_CLUUpdateIGNInhibitStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CRANKING_INHIBIT"
+    0x2: "IGN_CRANKING_INHIBIT"
+    0x3: "INVALID"
+
+
+- DIAGNOSIS.Input_IebSysWarnStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Service lamp”"
+  abstractionName: Input_IebSysWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+
+
+- DIAGNOSIS_2_0.Input_IebSysWarnStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Service lamp”"
+  abstractionName: Input_IebSysWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+
+
+- ENGINEERING_MODE.Input_GpsDayNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsDayNewValue
+
+
+- ENGINEERING_MODE.Input_GpsHourNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsHourNewValue
+
+
+- ENGINEERING_MODE.Input_GpsMinuteNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsMinuteNewValue
+
+
+- ENGINEERING_MODE.Input_GpsMonthNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsMonthNewValue
+
+
+- ENGINEERING_MODE.Input_GpsSecondNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsSecondNewValue
+
+
+- ENGINEERING_MODE.Input_GpsYearNewValue:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_GpsYearNewValue
+
+
+- ENGINEERING_MODE.Input_PowerAutoCutModeStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "ICU Delivery Mode State"
+  abstractionName: Input_PowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DEALER_MODE"
+    0x2: "CUSTOMER_MODE"
+
+
+- ENGINEERING_MODE.Input_TelematicsWeatherTypeInfo:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Send weather informations in to 7 Types(clear, cloudy, rain, snow, fog, Thunder and Lightening, clear up)"
+  abstractionName: Input_TelematicsWeatherTypeInfo
+  valueEnum:
+    0x0: "CLEAR"
+    0x1: "CLOUDY"
+    0x2: "RAIN"
+    0x3: "SNOW"
+    0x4: "FOG"
+    0x5: "THUNDER"
+    0x6: "CLEAR_UP"
+    0x7: "INVALID"
+
+
+- ENGINEERING_MODE.Output_DetentStatus.Output_DetentStatus_CCAN:
+  type: actuator
+  signalName:
+  dataType: HUInt64
+  description: "This signal indicates the status of detent illumination. Cluster sends the detent information for a Unified Illumination system."
+  abstractionName: Output_DetentStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- ENGINEERING_MODE_2_0.Input_PowerAutoCutModeStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "ICU Delivery Mode State"
+  abstractionName: Input_PowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DEALER_MODE"
+    0x2: "CUSTOMER_MODE"
+
+
+- ENGINEERING_MODE_2_0.Output_DetentStatus.Output_DetentStatus_CCAN:
+  type: actuator
+  signalName:
+  dataType: HUInt64
+  description: "This signal indicates the status of detent illumination. Cluster sends the detent information for a Unified Illumination system."
+  abstractionName: Output_DetentStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- UPDATE.Input_EPBForceStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Information about the force status of the EPB"
+  abstractionName: Input_EPBForceStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PARKING_BRAKE_ENGAGED"
+
+
+- UPDATE.Input_ElecHoodOpenStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ElecHoodOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+
+
+- UPDATE.Input_ExtHighBeamOnReqStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "-(Old)C_HLampHighON"
+  abstractionName: Input_ExtHighBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+
+
+- UPDATE.Input_ExtLowBeamOnReqStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "-(Old)C_HLampLowON"
+  abstractionName: Input_ExtLowBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+
+
+- UPDATE.Input_ExtTailLampOnReqStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "-(Old)C_EXTTailOn"
+  abstractionName: Input_ExtTailLampOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+
+
+- UPDATE.Input_ExternalTailLampHazardSwitchStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExternalTailLampHazardSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+
+
+- UPDATE.Input_GearDisplayStatusFromVCU:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Gear Position Status for CLU display"
+  abstractionName: Input_GearDisplayStatusFromVCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_D"
+    0x2: "STAGE_N"
+    0x3: "STAGE_R"
+    0x4: "INVALID"
+    0x5: "PADDLE_SHIFT"
+    0x6: "CRC_ERROR"
+
+
+- UPDATE.Input_GearSelectStatusFromHDCT:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Position (P, R, N..), which was identified by the gear selector.In case the gear selector is in a intermediate position, the last clear recognized position is used.There is no specific phase relationship between the output and any other signal."
+  abstractionName: Input_GearSelectStatusFromHDCT
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_L"
+    0x2: "STAGE_2"
+    0x3: "STAGE_3"
+    0x4: "DS_MODE"
+    0x5: "STAGE_D"
+    0x6: "STAGE_N"
+    0x7: "STAGE_R"
+    0x8: "MANUAL"
+    0x9: "PADDLE_SHIFT"
+    0xA: "INTERMEDIATE"
+    0xB: "CRC_ERROR"
+    0xC: "INVALID"
+    0xD: "STAGE_M"
+
+
+- UPDATE.Input_GearSelectStatusFromSCU:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "This signal indicates where motor is located.SCU ECU provides information of the actual motor position."
+  abstractionName: Input_GearSelectStatusFromSCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_D"
+    0x2: "STAGE_N"
+    0x3: "STAGE_R"
+    0x4: "CRC_ERROR"
+    0x5: "INVALID"
+    0x6: "STAGE_M"
+
+
+- UPDATE.Input_GearSelectStatusFromTCU:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Position (P, R, N..), which was identified by the gear selector.In case the gear selector is in a intermediate position, the last clear recognized position is used.There is no specific phase relationship between the output and any other signal."
+  abstractionName: Input_GearSelectStatusFromTCU
+  valueEnum:
+    0x0: "STAGE_P"
+    0x1: "STAGE_L"
+    0x2: "STAGE_2"
+    0x3: "STAGE_3"
+    0x4: "DS_MODE"
+    0x5: "STAGE_D"
+    0x6: "STAGE_N"
+    0x7: "STAGE_R"
+    0x8: "MANUAL"
+    0x9: "PADDLE_SHIFT"
+    0xA: "INTERMEDIATE"
+    0xB: "INVALID"
+    0xC: "CRC_ERROR"
+    0xD: "STAGE_M"
+
+
+- UPDATE.Input_HoodOpenStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HoodOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+
+
+- UPDATE.Input_ParkBrakeSwitchStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ParkBrakeSwitchStatus
+  valueEnum:
+    0x0: "UNPARK"
+    0x1: "PARK"
+
+
+- UPDATE.Input_SMKOTACrankInhibitStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "Crank inhibit control state of OTA"
+  abstractionName: Input_SMKOTACrankInhibitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CRANKING_INHIBIT"
+    0x2: "IGN_CRANKING_INHIBIT"
+    0x3: "INVALID"
+
+
+- UPDATE.Input_SbwParkNeutralStatus:
+  type: sensor
+  signalName:
+  dataType: HUInt64
+  description: "This signal represents status of Park or Not Park. The CLU receives this signal from E-Shifter so that CLU can synchronize between cluster & E-Shifter knob display."
+  abstractionName: Input_SbwParkNeutralStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "PARK"
+    0x2: "NEUTRAL"
+
+
+- UPDATE.Output_CLUUpdateIGNInhibitStatus.Output_CLUUpdateIGNInhibitStatus_CCAN:
+  type: actuator
+  signalName:
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_CLUUpdateIGNInhibitStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CRANKING_INHIBIT"
+    0x2: "IGN_CRANKING_INHIBIT"
+    0x3: "INVALID"
+
+

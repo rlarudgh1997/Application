@@ -447,11 +447,10 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
     QPair<QString, QString> ret;
     QMap<int, QPair<QString, SignalData>> signalDataList;
     QMap<QString, SignalData> sigDataInfoMap;
-
     auto otherInputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true);
     if (isOther) {
-        signalDataList = SignalDataManager::instance().data()->isOtherInputSignalDataInfo(sheetNum, otherInputList,
-                                                                                          sigDataInfoMap);
+        signalDataList =
+            SignalDataManager::instance().data()->isOtherInputSignalDataInfo(sheetNum, otherInputList, sigDataInfoMap);
     } else {
         auto inputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, resultName, caseName, true);
         signalDataList = SignalDataManager::instance().data()->isTestCaseInputSignalDataInfo(sheetNum, otherInputList, inputList,
@@ -911,7 +910,7 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
 
     // config 키워드를 타입으로 가지는 신호가 있는 index 를 map 에 모두 저장
     QMap<QString, int> configIdxMap = getConfigIdxMap(inputSignalList);
-    QMap<QString, QMap<QString, QString>> configHexEnumMap = getCongigSigHexEnumMap(inputSignalList);
+    QMap<QString, QMap<QString, QString>> configHexEnumMap = getConfigSigHexEnumMap(inputSignalList);
 
     // 전체 생성된 TC 의 개수 : tcCnt
     long unsigned int tcCnt = 0;
@@ -1102,8 +1101,8 @@ QMap<QString, int> GenerateCaseData::getConfigIdxMap(const QJsonObject& inputSig
     return configIdxMap;
 }
 
-QMap<QString, QMap<QString, QString>> GenerateCaseData::getCongigSigHexEnumMap(const QJsonObject& inputSignalList) {
-    QMap<QString, QMap<QString, QString>> congigSigHexEnumMap;
+QMap<QString, QMap<QString, QString>> GenerateCaseData::getConfigSigHexEnumMap(const QJsonObject& inputSignalList) {
+    QMap<QString, QMap<QString, QString>> configSigHexEnumMap;
     int configIdx = 0;
     for (auto sigItr = inputSignalList.begin(); sigItr != inputSignalList.end(); ++sigItr, ++configIdx) {
         QString signalKey = sigItr.key();
@@ -1117,11 +1116,11 @@ QMap<QString, QMap<QString, QString>> GenerateCaseData::getCongigSigHexEnumMap(c
                 for (const QString& key : tmpJson.keys()) {
                     tmpMap.insert(key, tmpJson.value(key).toString());
                 }
-                congigSigHexEnumMap.insert(signalName, tmpMap);
+                configSigHexEnumMap.insert(signalName, tmpMap);
             }
         }
     }
-    return congigSigHexEnumMap;
+    return configSigHexEnumMap;
 }
 
 QString GenerateCaseData::getConfigTagStr(const bool& isOther, const QString& tcName, const QString& config,

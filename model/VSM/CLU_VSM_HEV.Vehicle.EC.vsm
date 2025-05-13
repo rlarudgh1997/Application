@@ -90,6 +90,22 @@
   type: branch
 
 
+- Key_System.Output_KeySystemDispLogicVersionStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OLD"
+    0x1: "NEW1"
+
+
+- Key_System_2_0.Output_KeySystemDispLogicVersionStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OLD"
+    0x1: "NEW1"
+
+
 - BCM_Warning.Input_BcmWarnStatus:
   type: sensor
   signalName: Warn_BCMWrngSta
@@ -677,6 +693,7 @@
     0x17: "MESSAGE_TIMEOUT"
     0x18: "CRC_ERROR"
     0x19: "OFF"
+    0x1A: "REAUTH_WARN_RSPA_KEY"
   matchingTable:
     0x01: 0x0
     0x02: 0x1
@@ -701,9 +718,24 @@
     0x18: 0x14
     0x19: 0x15
     0x1A: 0x16
+    0x1B: 0x1A
     TIMEOUT: 0x17
     CRCERROR: 0x18
     ELSE: 0x19
+
+
+- Key_System.Output_KeySystemDispLogicVersionStatus.Output_KeySystemDispLogicVersionStatus_CCAN:
+  type: actuator
+  signalName: CLU_KeySystemDispVer
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_KeySystemDispLogicVersionStatus
+  valueEnum:
+    0x0: "OLD"
+    0x1: "NEW1"
+  matchingTable:
+    0x1: 0x1
+    0x0: 0x0
 
 
 - Key_System_2_0.Input_AccessoryIndiReqStatus:
@@ -747,6 +779,20 @@
   valueEnum:
     0x0: "OFF"
     0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Key_System_2_0.Input_EvVehicleStartStatus:
+  type: sensor
+  signalName: SMK_TwoPressStrtSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvVehicleStartStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WAIT"
   matchingTable:
     0x1: 0x1
     ELSE: 0x0
@@ -908,6 +954,36 @@
     ELSE: 0xB
 
 
+- Key_System_2_0.Input_SmkWarnDisplayReq3Status:
+  type: sensor
+  signalName: Warn_DisWrngSta3
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmkWarnDisplayReq3Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STEER_AND_BRAKE"
+    0x2: "RETRY_AFTER_PLACE_SMARTKEY"
+    0x3: "PLACE_KEY_AND_BRAKE"
+    0x4: "RETRY_AFTER_PLACE_DKEY"
+    0x5: "PLACE_DKEY_AND_BRAKE"
+    0x6: "RETRY_AFTER_AUTH_FINGERPRINT"
+    0x7: "AUTH_FINGERPRINT_AND_BRAKE"
+    0x8: "RETRY_AFTER_PLACE_DKEY_OR_AUTH_FINGERPRINT"
+    0x9: "PLACE_DKEY_OR_AUTH_FINGERPRINT_AND_BRAKE"
+  matchingTable:
+    0xA: 0x1
+    0xB: 0x2
+    0xC: 0x3
+    0xD: 0x4
+    0xE: 0x5
+    0xF: 0x6
+    0x10: 0x7
+    0x11: 0x8
+    0x12: 0x9
+    ELSE: 0x0
+
+
 - Key_System_2_0.Input_SmkWarnDisplayReqStatus:
   type: sensor
   signalName: Warn_DisWrngSta
@@ -941,6 +1017,7 @@
     0x17: "MESSAGE_TIMEOUT"
     0x18: "CRC_ERROR"
     0x19: "OFF"
+    0x1A: "REAUTH_WARN_RSPA_KEY"
   matchingTable:
     0x01: 0x0
     0x02: 0x1
@@ -965,9 +1042,24 @@
     0x18: 0x14
     0x19: 0x15
     0x1A: 0x16
+    0x1B: 0x1A
     TIMEOUT: 0x17
     CRCERROR: 0x18
     ELSE: 0x19
+
+
+- Key_System_2_0.Output_KeySystemDispLogicVersionStatus.Output_KeySystemDispLogicVersionStatus_CCAN:
+  type: actuator
+  signalName: CLU_KeySystemDispVer
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_KeySystemDispLogicVersionStatus
+  valueEnum:
+    0x0: "OLD"
+    0x1: "NEW1"
+  matchingTable:
+    0x1: 0x1
+    0x0: 0x0
 
 
 - Lamp_Fail_Warning.Input_LampFailDrlLeftStatus:

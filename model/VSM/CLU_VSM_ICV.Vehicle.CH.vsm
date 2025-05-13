@@ -1,0 +1,1571 @@
+# @author Infotainment Platform Development Team 2
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this model and preparation of derivative works
+# based upon this model are permitted. Any copy of this model or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this model or
+# derivative works must comply with all applicable laws.
+#
+# This model is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE MODEL OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+
+- ABS_ESC:
+  type: branch
+
+
+- Active_Air_Flap:
+  type: branch
+
+
+- Active_Hood:
+  type: branch
+
+
+- AFS_DBL:
+  type: branch
+
+
+- AFS_DBL_2_0:
+  type: branch
+
+
+- Air_Bag:
+  type: branch
+
+
+- CDCU:
+  type: branch
+
+
+- Different_Tire_Warning:
+  type: branch
+
+
+- Drift_Mode:
+  type: branch
+
+
+- E_LSD:
+  type: branch
+
+
+- ECS:
+  type: branch
+
+
+- EPB_AUTOHOLD:
+  type: branch
+
+
+- IEB_EBB:
+  type: branch
+
+
+- LVA:
+  type: branch
+
+
+- MDPS:
+  type: branch
+
+
+- Parking_Brake:
+  type: branch
+
+
+- PSB:
+  type: branch
+
+
+- RBS:
+  type: branch
+
+
+- RWS:
+  type: branch
+
+
+- TCF:
+  type: branch
+
+
+- TPMS:
+  type: branch
+
+
+- Air_Bag.Output_AirBagIndictorStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "INDI_OFF"
+    0x1: "INDI_ON"
+    0x2: "INDI_FLASHING"
+    0x3: "MESSAGE_ERROR"
+    0x4: "CIRCUIT_FAILURE"
+
+
+- ABS_ESC.Input_AbsWarnStatus:
+  type: sensor
+  signalName: ABS_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “ABS Warning lamp”"
+  abstractionName: Input_AbsWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_BrakeFluidWarnStatus:
+  type: sensor
+  signalName: Warn_BrkFldSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_BrakeFluidWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_CrosswindWarnStatus:
+  type: sensor
+  signalName: CSC_WrngSta
+  dataType: HUInt64
+  description: "This signal is used to display warning message on cluster and hud about crosswind stability control(CSC) function."
+  abstractionName: Input_CrosswindWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "NO_SOUND"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_EbdWarnStatus:
+  type: sensor
+  signalName: EBD_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “EBD Warning lamp”"
+  abstractionName: Input_EbdWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_EscIndReqStatus:
+  type: sensor
+  signalName: TCS_LmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “TCS/ESC Function/Warning Lamp”"
+  abstractionName: Input_EscIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_EscIndReqStatusFromITC:
+  type: sensor
+  signalName: ITC_LmpSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EscIndReqStatusFromITC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_EscOffIndReqStatus:
+  type: sensor
+  signalName: TCS_OffLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “TCS/ESC OFF SW Lamp”"
+  abstractionName: Input_EscOffIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ABS_ESC.Input_EscOffStepStatus:
+  type: sensor
+  signalName: ESC_OffTempSta
+  dataType: HUInt64
+  description: "Information regarding the ESC OFF step by switch input of driver."
+  abstractionName: Input_EscOffStepStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "TCS_OFF"
+    0x2: "ESC_OFF"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- ABS_ESC.Input_EscSportIndReqStatus:
+  type: sensor
+  signalName: ESC_SprtLmpSta
+  dataType: HUInt64
+  description: "This signal indicates the status of the 'ESC SPORT Lamp'"
+  abstractionName: Input_EscSportIndReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Active_Air_Flap.Input_AafWarnStatus:
+  type: sensor
+  signalName: AAF_WrnLamp
+  dataType: HUInt64
+  description: "Air Flap Warning Lamp/Message Request Signal indicates whether Warning Lamp/Message should be displayed in the display screen in order to warn AAF System failure to customer. "
+  abstractionName: Input_AafWarnStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Active_Air_Flap.Input_AafWarnStatusFromMCU1:
+  type: sensor
+  signalName: MCU_Mg1AafWrnLampReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AafWarnStatusFromMCU1
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Active_Air_Flap.Input_AafWarnStatusFromMCU2:
+  type: sensor
+  signalName: MCU_Mg2AafWrnLampReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AafWarnStatusFromMCU2
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Active_Hood.Input_ActiveHoodWarnStatus:
+  type: sensor
+  signalName: AHLS_WrnMsgDis
+  dataType: HUInt64
+  description: "AHLS Malfunction & Fire Event Warning Message"
+  abstractionName: Input_ActiveHoodWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- AFS_DBL.Input_AfsStatus:
+  type: sensor
+  signalName: AFS_Sta
+  dataType: HUInt64
+  description: "This signal indicates AFLS state (whether AFLS is in active state or inactivated) and fault condition. A cluster shall turn on 'AFLS' indication lamp in its display panel when this signal is set to '03H'.A cluster shall blink on 'AFLS' indication lamp in its display panel when this signal is set to '02H'.The other conditions('00H' or '01H') will be turn off 'AFLS' indicator in the display panel. "
+  abstractionName: Input_AfsStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "AFS_OFF"
+    0x2: "NOT_CALIBRATED"
+    0x3: "DEFECTIVE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL.Input_IfsSysStatus:
+  type: sensor
+  signalName: CF_IFS_Lamp_NEW
+  dataType: HUInt64
+  description: "(NEW)IFS system indicator lamp status - with Standby On Indicator(White)"
+  abstractionName: Input_IfsSysStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLOCKAGE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- AFS_DBL.Input_IfsWarnStatus:
+  type: sensor
+  signalName: CF_IFS_Warning
+  dataType: HUInt64
+  description: "This signal is information of warning symbol of IFS system when IFS fail (CLU)"
+  abstractionName: Input_IfsWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL.Input_IlcuLhActWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuLhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL.Input_IlcuLhWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on.."
+  abstractionName: Input_IlcuLhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL.Input_IlcuRhActWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuRhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL.Input_IlcuRhWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on."
+  abstractionName: Input_IlcuRhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL_2_0.Input_IlcuLhActWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuLhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL_2_0.Input_IlcuLhWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on.."
+  abstractionName: Input_IlcuLhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL_2_0.Input_IlcuRhActWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuRhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL_2_0.Input_IlcuRhWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on."
+  abstractionName: Input_IlcuRhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Air_Bag.Input_AcuWarnStatus:
+  type: sensor
+  signalName: ACU_SysWrngLmpDis
+  dataType: HUInt64
+  description: "This signal means information regarding ACU diagnostic information result & discrimination.1) Default value : 0x12) Default value Transmit condition    - When the input condition is not determined.    - When the input condition is not supported."
+  abstractionName: Input_AcuWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "FLASH"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Air_Bag.Input_SwivelSeatWarnStatus:
+  type: sensor
+  signalName: ACU_2ndRowSwivelPopUpReq
+  dataType: HUInt64
+  description: "This signal request CLU to make pop-up txt message according to signal value"
+  abstractionName: Input_SwivelSeatWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SWIVEL_ON"
+    0x2: "L_ON_R_ON"
+    0x3: "L_OFF_R_OFF"
+    0x4: "L_OFF_R_ON"
+    0x5: "L_ON_R_OFF"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x5
+    0x5: 0x4
+    ELSE: 0x0
+
+
+- Air_Bag.Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN:
+  type: actuator
+  signalName: CLU_SRSWrngLmpSta
+  dataType: HUInt64
+  description: "This signal is generated by one of the following 5 self-diagnostic result of micro-controller of Cluster.1) “Lamp ON” status as a self-status diagnostic result of cluster2) “Lamp OFF” status as a self-status diagnostic result of cluster3) “Lamp flashing with 1hz frequency / 50% duty ratio” as a self-status result diagnostic result of cluster4) “Lamp Circuit Failure” as a self-diagnostic result of cluster circuit 5) “No Valid ACU message” as ACU4 message check result by clusterNote to be taken that CLU2 message does not include judgment on “SRS W/Lamp failure in terms of airbag system”. CLU2 message only contains “status and diagnostic result of Cluster itself”."
+  abstractionName: Output_AirBagIndictorStatus
+  valueEnum:
+    0x0: "INDI_OFF"
+    0x1: "INDI_ON"
+    0x2: "INDI_FLASHING"
+    0x3: "MESSAGE_ERROR"
+    0x4: "CIRCUIT_FAILURE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+
+
+- CDCU.Input_CDCUWarnStatus:
+  type: sensor
+  signalName: CDCU_WrngLmpSta
+  dataType: HUInt64
+  description: "CDCU Warning Lamp Status"
+  abstractionName: Input_CDCUWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Different_Tire_Warning.Input_ELsdWarnStatus:
+  type: sensor
+  signalName: LSD_ERR
+  dataType: HUInt64
+  description: "LSD ECU provides information of the detected error or overheat.Overheat doesn’t mean failure. When clutch is overheated, LSD ECU control “OPEN” state to protect.If clutch temperature  is under certain level, LSD resume normal operating."
+  abstractionName: Input_ELsdWarnStatus
+  valueEnum:
+    0x0: "FAIL"
+    0x1: "OVERHEAT"
+    0x2: "DIFF_TIRE"
+    0x3: "NO_WARN"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x0
+    0x4: 0x0
+    0x3: 0x1
+    0x5: 0x2
+    ELSE: 0x3
+
+
+- Different_Tire_Warning.Input_TireSizeDifferentWarnStatusFromAWD:
+  type: sensor
+  signalName: AWD_TireSizeWrng
+  dataType: HUInt64
+  description: "The signal AWD_TireSizeWrng is used to inform the difference of front and rear wheel's dynamic radius. 4WD ECU calculate front and rear tire's dynamic radius difference.When front and rear tire diameter difference 3 level detected, 4WD ECU control open state to protect. If tire difference is under 2 level , 4WD resume normal operating."
+  abstractionName: Input_TireSizeDifferentWarnStatusFromAWD
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Drift_Mode.Input_DriftModeDisplayReqStatus:
+  type: sensor
+  signalName: IEB_DriftModeSta
+  dataType: HUInt64
+  description: "This signal is for a pop-up display on drift mode."
+  abstractionName: Input_DriftModeDisplayReqStatus
+  valueEnum:
+    0x0: "ACTIVE"
+    0x1: "INACTIVE"
+    0x2: "CONDITION_NOT_MET"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- Drift_Mode.Input_DriftModeIndiReqStatus:
+  type: sensor
+  signalName: IEB_DriftModeActSta
+  dataType: HUInt64
+  description: "This signal is for drift mode ON/OFF status"
+  abstractionName: Input_DriftModeIndiReqStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- E_LSD.Input_ELsdWarnStatus:
+  type: sensor
+  signalName: LSD_ERR
+  dataType: HUInt64
+  description: "LSD ECU provides information of the detected error or overheat.Overheat doesn’t mean failure. When clutch is overheated, LSD ECU control “OPEN” state to protect.If clutch temperature  is under certain level, LSD resume normal operating."
+  abstractionName: Input_ELsdWarnStatus
+  valueEnum:
+    0x0: "FAIL"
+    0x1: "OVERHEAT"
+    0x2: "DIFF_TIRE"
+    0x3: "NO_WARN"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x0
+    0x4: 0x0
+    0x3: 0x1
+    0x5: 0x2
+    ELSE: 0x3
+
+
+- ECS.Input_EcsSysFailWarnStatus:
+  type: sensor
+  signalName: ECS_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “ECS warning lamp”"
+  abstractionName: Input_EcsSysFailWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EPB_AUTOHOLD.Input_AutoHoldDisplayReqStatus:
+  type: sensor
+  signalName: AVH_CluDis
+  dataType: HUInt64
+  description: "An ESC can show its information message to driver on a cluster or a display module with this signal."
+  abstractionName: Input_AutoHoldDisplayReqStatus
+  valueEnum:
+    0x0: "AVH_OFF"
+    0x1: "AVH_AUTO_CANCELED"
+    0x2: "BRAKE_TO_DEACTIVATE_AVH"
+    0x3: "AVH_NO_ACT_DUE_TO_DOOR_HOOD_TRUNK"
+    0x4: "AVH_NO_ACT_DUE_TO_DOOR_HOOD"
+    0x5: "AVH_NO_ACT_DUE_TO_DOOR"
+    0x6: "BRAKE_CLEANING_ON"
+    0x7: "BRAKE_CLEANING_OFF"
+    0x8: "NO_DISPLAY"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    ELSE: 0x8
+
+
+- EPB_AUTOHOLD.Input_AutoHoldStatus:
+  type: sensor
+  signalName: AVH_LmpDis
+  dataType: HUInt64
+  description: "Information about the status lamp request from ESC (AVH) to cluster."
+  abstractionName: Input_AutoHoldStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "ACTIVE"
+    0x3: "READY"
+  matchingTable:
+    0x0: 0x0
+    0x2: 0x2
+    0x3: 0x3
+    0x1: 0x1
+    ELSE: 0x1
+
+
+- EPB_AUTOHOLD.Input_AvhWarnSoundStatus:
+  type: sensor
+  signalName: AVH_AlrmReq
+  dataType: HUInt64
+  description: "This signal indicates that an ESC requests cluster or tone controller to ring the alarm according to the status of an ESC"
+  abstractionName: Input_AvhWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EPB_AUTOHOLD.Input_EpbDisplayReqStatus:
+  type: sensor
+  signalName: EPB_OutDataDis
+  dataType: HUInt64
+  description: "An EPB can show its information message to driver on a cluster or a display module with this signal. ※ 0x4 is for China"
+  abstractionName: Input_EpbDisplayReqStatus
+  valueEnum:
+    0x0: "MAINTENANCE_MODE"
+    0x1: "AUTO_CANCEL_IMPOSSIBLE"
+    0x2: "EPB_APPLIED"
+    0x3: "AUTO_CANCEL_IMPOSSIBLE_IN_CHINA"
+    0x4: "BRAKE_TO_RELEASE_EPB"
+    0x5: "NEUTAL_POSION_PARK"
+    0x6: "CHANGE_GEAR_TO_RELEASE_EPB"
+    0x7: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    ELSE: 0x7
+
+
+- EPB_AUTOHOLD.Input_EpbFailWarnStatus:
+  type: sensor
+  signalName: EPB_FlrLmpStaDis
+  dataType: HUInt64
+  description: "Information about the failure lamp request from EPB to lamp control unit.EPB_F_LAMP(0H) - Yellow failure lamp status(Off)EPB_F_LAMP(1H) - Yellow failure lamp status(On)EPB_F_LAMP(2H) - Yellow failure lamp status(Blinking at 1 Hz)"
+  abstractionName: Input_EpbFailWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+    0x2: "EOL_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EPB_AUTOHOLD.Input_EpbWarnSoundStatus:
+  type: sensor
+  signalName: EPB_AlrmReq
+  dataType: HUInt64
+  description: "This signal indicates that an EPB requests cluster or tone controller to ring the alarm according to the status of an EPB.Conversion [Condition]0H : Normal operation1H : EPB_CLU = 2 or 3(send signals three time in a row & 1st signal should be sent at the same time as corresponding EPB_CLU 1st Signal)2H : Dynamic braking[ECD, RWU] (send signal continuously)3H : Reserved"
+  abstractionName: Input_EpbWarnSoundStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EPB_AUTOHOLD.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: SCU_FF_WrnMsgClu
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x10: 0xE
+    0x12: 0x10
+    0x13: 0x11
+    0x14: 0x12
+    0x15: 0x13
+    ELSE: 0xF
+
+
+- IEB_EBB.Input_EbbSysWarnStatus:
+  type: sensor
+  signalName: EBB_SrvLmpDis
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Service lamp”"
+  abstractionName: Input_EbbSysWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- IEB_EBB.Input_IebSysWarnStatus:
+  type: sensor
+  signalName: IEB_SrvLmpDis
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Service lamp”"
+  abstractionName: Input_IebSysWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN1"
+    0x2: "WARN2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- LVA.Input_LowVacuumAssistFailStatus:
+  type: sensor
+  signalName: LVA_ClusterDis
+  dataType: HUInt64
+  description: "This signal is used to display the warning message on cluster about LVA function.Especially, the vehicle sold in china usually uses this signal."
+  abstractionName: Input_LowVacuumAssistFailStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- MDPS.Input_MdpsSysWarnStatus:
+  type: sensor
+  signalName: MDPS_LoamModSta
+  dataType: HUInt64
+  description: "The signal represent status of the LOAM(Loss Of Assist Mitigation) Mode"
+  abstractionName: Input_MdpsSysWarnStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- MDPS.Input_MdpsWarnStatus:
+  type: sensor
+  signalName: MDPS_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the ststus of the “MDPS Warning lamp” "
+  abstractionName: Input_MdpsWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINK1"
+    0x2: "ON"
+    0x3: "BLINK2"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- MDPS.Input_Sfa2AlignWarnStatus:
+  type: sensor
+  signalName: SFA_R2_AlignWarningLamp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_Sfa2AlignWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ALIGNING_HANDSOFF"
+    0x2: "ALIGN_COMPLETE"
+    0x3: "ALIGNING_NOTOUCH"
+    0x4: "ALIGN_RESTART"
+    0x5: "ALIGN_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- MDPS.Input_Sfa2LampStatus:
+  type: sensor
+  signalName: SFA_R2_CluWarningLamp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_Sfa2LampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_AMBER"
+    0x2: "WARN_RED"
+    0x3: "BLINK_RED"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- MDPS.Input_Sfa2LongTimerSecValue:
+  type: sensor
+  signalName: SFA_R2_VehicleSpeedCounterLong
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2LongTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- MDPS.Input_Sfa2ShortTimerSecValue:
+  type: sensor
+  signalName: SFA_R2_VehicleSpeedCounterShort
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2ShortTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- MDPS.Input_Sfa2SpeedLimitWarnStatus:
+  type: sensor
+  signalName: SFA_R2_CluVelLimitSentence
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2SpeedLimitWarnStatus
+  valueEnum:
+    0x0: "SPD_MID_SLOW"
+    0x1: "SPD_SLOW"
+    0x2: "STOP"
+    0x3: "MOVE"
+    0x4: "SPD_MID"
+    0x5: "SYS_CHECK"
+    0x6: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    ELSE: 0x6
+
+
+- MDPS.Input_Sfa2WarnStatus:
+  type: sensor
+  signalName: SFA_R2_CluWarningSentence
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_Sfa2WarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERHEAT"
+    0x2: "CHECK"
+    0x3: "ERROR_ALIGN"
+    0x4: "ERROR_WARN1_STOP"
+    0x5: "ERROR_WARN2_STOP"
+    0x6: "ERROR_URGENT_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- MDPS.Input_SfaAlignWarnStatus:
+  type: sensor
+  signalName: SFA_AlignWarningLamp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SfaAlignWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ALIGNING_HANDSOFF"
+    0x2: "ALIGN_COMPLETE"
+    0x3: "ALIGNING_NOTOUCH"
+    0x4: "ALIGN_RESTART"
+    0x5: "ALIGN_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- MDPS.Input_SfaLampStatus:
+  type: sensor
+  signalName: SFA_CluWarningLamp
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SfaLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN_AMBER"
+    0x2: "WARN_RED"
+    0x3: "BLINK_RED"
+    0x4: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    CRCERROR: 0x4
+    ELSE: 0x0
+
+
+- MDPS.Input_SfaLongTimerSecValue:
+  type: sensor
+  signalName: SFA_VehicleSpeedCounterLong
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaLongTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- MDPS.Input_SfaShortTimerSecValue:
+  type: sensor
+  signalName: SFA_VehicleSpeedCounterShort
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaShortTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- MDPS.Input_SfaSpeedLimitWarnStatus:
+  type: sensor
+  signalName: SFA_CluVelLimitSentence
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaSpeedLimitWarnStatus
+  valueEnum:
+    0x0: "SPD_MID_SLOW"
+    0x1: "SPD_SLOW"
+    0x2: "STOP"
+    0x3: "MOVE"
+    0x4: "SPD_MID"
+    0x5: "SYS_CHECK"
+    0x6: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    ELSE: 0x6
+
+
+- MDPS.Input_SfaWarnStatus:
+  type: sensor
+  signalName: SFA_CluWarningSentence
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_SfaWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "OVERHEAT"
+    0x2: "CHECK"
+    0x3: "ERROR_ALIGN"
+    0x4: "ERROR_WARN1_STOP"
+    0x5: "ERROR_WARN2_STOP"
+    0x6: "ERROR_URGENT_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_BrakeFluidWarnStatus:
+  type: sensor
+  signalName: Warn_BrkFldSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_BrakeFluidWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_EbbWarnStatus:
+  type: sensor
+  signalName: EBB_WrngLmpDis
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Warning lamp”"
+  abstractionName: Input_EbbWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_EbdWarnStatus:
+  type: sensor
+  signalName: EBD_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “EBD Warning lamp”"
+  abstractionName: Input_EbdWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_EpbFastenedStatus:
+  type: sensor
+  signalName: EPB_LmpStaDis
+  dataType: HUInt64
+  description: "This signal indicates status lamp request from EPB to lamp control unit.- If a lamp control unit can not get this signal via CAN due to any errors, the last lamp state before the error should be maintained.- When EPB apply switch is pressed in the IG-key off sate, the parking brake lamp should be on for 15 seconds and off. In this case, the cluster shall have CAN wake-up capability.EPB_LmpStaDis(0H) - Parking brake lamp status (Off)EPB_LmpStaDis(1H) - Parking brake lamp status (On)EPB_LmpStaDis(2H) - Parking brake lamp status (Blinking at 1Hz)"
+  abstractionName: Input_EpbFastenedStatus
+  valueEnum:
+    0x0: "RELEASE"
+    0x1: "APPLY"
+    0x2: "DYNAMIC_BRAKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_IebWarnStatus:
+  type: sensor
+  signalName: IEB_WrngLmpDis
+  dataType: HUInt64
+  description: "The signal indicates the status of the “AHB Warning lamp”"
+  abstractionName: Input_IebWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Parking_Brake.Input_ParkBrakeSwitchStatus:
+  type: sensor
+  signalName: Warn_PrkngBrkSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ParkBrakeSwitchStatus
+  valueEnum:
+    0x0: "UNPARK"
+    0x1: "PARK"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- PSB.Input_PsbLhFailStatus:
+  type: sensor
+  signalName: PSB_LHFlrSta
+  dataType: HUInt64
+  description: "Information about availability of PSB_LH (LH Pre-Safe S/Belt)."
+  abstractionName: Input_PsbLhFailStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- PSB.Input_PsbRhFailStatus:
+  type: sensor
+  signalName: PSB_RHFlrSta
+  dataType: HUInt64
+  description: "Information about availability of PSB_RH (LH Pre-Safe S/Belt)."
+  abstractionName: Input_PsbRhFailStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- RBS.Input_RbsWarnStatus:
+  type: sensor
+  signalName: IEB_RbsWrngLmpSta
+  dataType: HUInt64
+  description: "This signal indicates RBS warning lamp status."
+  abstractionName: Input_RbsWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- RBS.Input_RbsWarnStatusFromEbb:
+  type: sensor
+  signalName: EBB_RbsWrngLmpSta
+  dataType: HUInt64
+  description: "This signal indicates RBS warning lamp status."
+  abstractionName: Input_RbsWarnStatusFromEbb
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- RWS.Input_RwsSysFailWarnStatus:
+  type: sensor
+  signalName: RWS_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the ststus of the “RWS Warning lamp” "
+  abstractionName: Input_RwsSysFailWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- TCF.Input_TrafficChangeFunctionStatusFromAFS:
+  type: sensor
+  signalName: AFS_TrfChgUSMSta
+  dataType: HUInt64
+  description: "This signal indicates Traffic Change status what is changed drive mode with user setting.If this signal is set to ‘02H’, this means that Traffic change Mode is done. A cluster shall display at IGN ON in Traffic change Mode.AFLS Traffic change Mode will be changed after Lamp initialization by Engine running."
+  abstractionName: Input_TrafficChangeFunctionStatusFromAFS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- TCF.Input_TrafficChangeFunctionStatusFromIFS:
+  type: sensor
+  signalName: CF_IFS_TrfchgStat_USM
+  dataType: HUInt64
+  description: "This signal indicates traffic change status what is changed drive mode with user setting.If this signal is set to '02H', this means that traffic change mode is done.A cluster shall display at IGN ON in traffic change mode.AFS traffic change mode will be changed after lamp initialization by engine running."
+  abstractionName: Input_TrafficChangeFunctionStatusFromIFS
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- TCF.Input_TrafficChangeFunctionStatusFromILCULH:
+  type: sensor
+  signalName: ILCU_LH_TrfChgSta
+  dataType: HUInt64
+  description: "This signal indicates Traffic Change mode status what is changed by drive mode selection in user setting menu.If this signal is set to ‘02H’, this means that Traffic change Mode is done and cluster shall display the information message about activation of Traffic change Mode.'Reduces the headlight range to prevent glare for oncoming cars within countries with opposing driving directions.'ILCU Traffic change Mode will be changed after Lamp initialization by Engine running."
+  abstractionName: Input_TrafficChangeFunctionStatusFromILCULH
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- TCF.Input_TrafficChangeFunctionStatusFromILCURH:
+  type: sensor
+  signalName: ILCU_RH_TrfChgSta
+  dataType: HUInt64
+  description: "This signal indicates Traffic Change mode status what is changed by drive mode selection in user setting menu.If this signal is set to ‘02H’, this means that Traffic change Mode is done and cluster shall display the information message about activation of Traffic change Mode.'Reduces the headlight range to prevent glare for oncoming cars within countries with opposing driving directions.'ILCU Traffic change Mode will be changed after Lamp initialization by Engine running."
+  abstractionName: Input_TrafficChangeFunctionStatusFromILCURH
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- TPMS.Input_TpmsFrontLeftPosWarnStatus:
+  type: sensor
+  signalName: TPMS_FLPosWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “FL POSITION Warning lamp”"
+  abstractionName: Input_TpmsFrontLeftPosWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsFrontLeftTirePressureValue:
+  type: sensor
+  signalName: TPMS_FLTirePrsrVal
+  dataType: HUInt64
+  description: "The signal indicates the “FL tire pressure”. "
+  abstractionName: Input_TpmsFrontLeftTirePressureValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- TPMS.Input_TpmsFrontRightPosWarnStatus:
+  type: sensor
+  signalName: TPMS_FRPosWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “FR POSITION Warning lamp”"
+  abstractionName: Input_TpmsFrontRightPosWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsFrontRightTirePressureValue:
+  type: sensor
+  signalName: TPMS_FRTirePrsrVal
+  dataType: HUInt64
+  description: "The signal indicates the “FR tire pressure”. "
+  abstractionName: Input_TpmsFrontRightTirePressureValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- TPMS.Input_TpmsOverPressWarnStatus:
+  type: sensor
+  signalName: TPMS_OverPrsrWrng
+  dataType: HUInt64
+  description: "over pressure warning signal"
+  abstractionName: Input_TpmsOverPressWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsPressureSetDispReqStatus:
+  type: sensor
+  signalName: TPMS_ClusterDisReq
+  dataType: HUInt64
+  description: "This signal is used to request display in cluster.This signal is only used in indirect TPMS system."
+  abstractionName: Input_TpmsPressureSetDispReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SELECTION"
+    0x2: "COMPLETE"
+    0x3: "INCOMPLETE"
+    0x4: "NEED_TO_STOP"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsPressureUnitStatus:
+  type: sensor
+  signalName: TPMS_PrsrUnitSta
+  dataType: HUInt64
+  description: "The signal indicates the unit of pressure for display on cluster."
+  abstractionName: Input_TpmsPressureUnitStatus
+  valueEnum:
+    0x0: "PSI"
+    0x1: "KPA"
+    0x2: "BAR"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- TPMS.Input_TpmsRearLeftPosWarnStatus:
+  type: sensor
+  signalName: TPMS_RLPosWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “RL POSITION Warning lamp”"
+  abstractionName: Input_TpmsRearLeftPosWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsRearLeftTirePressureValue:
+  type: sensor
+  signalName: TPMS_RLTirePrsrVal
+  dataType: HUInt64
+  description: "The signal indicates the “RL tire pressure”. "
+  abstractionName: Input_TpmsRearLeftTirePressureValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- TPMS.Input_TpmsRearRightPosWarnStatus:
+  type: sensor
+  signalName: TPMS_RRPosWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “RR POSITION Warning lamp”"
+  abstractionName: Input_TpmsRearRightPosWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsRearRightTirePressureValue:
+  type: sensor
+  signalName: TPMS_RRTirePrsrVal
+  dataType: HUInt64
+  description: "The signal indicates the “RR tire pressure”. "
+  abstractionName: Input_TpmsRearRightTirePressureValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- TPMS.Input_TpmsSensorStatus:
+  type: sensor
+  signalName: TPMS_SnsrSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the TPMS"
+  abstractionName: Input_TpmsSensorStatus
+  valueEnum:
+    0x0: "INACTIVE"
+    0x1: "ACT_PRESSURE_ON"
+    0x2: "ACT_PRESSURE_OFF"
+    0x3: "ACT_INDIRECT_SWITCH_SET"
+    0x4: "ACT_INDIRECT_USM_SET"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- TPMS.Input_TpmsTreadWarnStatus:
+  type: sensor
+  signalName: TPMS_TreadWrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “TREAD Warning lamp”"
+  abstractionName: Input_TpmsTreadWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "LOW_PRESSURE"
+    0x2: "ERROR"
+    0x3: "RESET"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- TPMS.Input_TpmsWarnStatus:
+  type: sensor
+  signalName: TPMS_WrngLmpSta
+  dataType: HUInt64
+  description: "The signal indicates the status of the “TPMS Malfunction Warning lamp”"
+  abstractionName: Input_TpmsWarnStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+    0x2: "FAIL"
+    0x3: "VIRGIN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x3
+    0x3: 0x2
+    ELSE: 0x0
+
+

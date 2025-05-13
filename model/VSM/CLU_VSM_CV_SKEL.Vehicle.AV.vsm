@@ -83,7 +83,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_CustomDriveModeSetStatus.Output_CustomDriveModeSetStatus_CCAN
+  abstractionName: Output_CustomDriveModeSetStatus_CCAN
   valueEnum:
     0x0: "MY_DRIVE"
     0x1: "SMART"
@@ -99,7 +99,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DriveModeSwitchStatus.Output_DriveModeSwitchStatus_CCAN
+  abstractionName: Output_DriveModeSwitchStatus_CCAN
   valueEnum:
     0x0: "NORMAL"
     0x1: "ECO"
@@ -114,7 +114,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_TerrainModeMainSwitchStatus.Output_TerrainModeMainSwitchStatus_CCAN
+  abstractionName: Output_TerrainModeMainSwitchStatus_CCAN
   valueEnum:
     0x0: "ON_ROAD"
     0x1: "OFF_ROAD"
@@ -125,7 +125,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_TerrainModeSwitchStatus.Output_TerrainModeSwitchStatus_CCAN
+  abstractionName: Output_TerrainModeSwitchStatus_CCAN
   valueEnum:
     0x0: "OFF"
     0x1: "SNOW"

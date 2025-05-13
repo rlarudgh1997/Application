@@ -189,9 +189,13 @@ public:
                                                           "precondition orders are different.\nA review of the generated "
                                                           "TcGenHistory.json file is required.";
                                         } else {
-                                            for (int order = 0; order < preconditionOrder.size(); order++) {
-                                                if (preconditionString[preconditionOrder[order]].contains("[Empty]") == false) {
-                                                    testCase += preconditionString[preconditionOrder[order]];
+                                            QVector<QString> reordered(preconditionString.size());
+                                            for (int i = 0; i < preconditionString.size(); ++i) {
+                                                reordered[preconditionOrder[i]] = preconditionString[i];
+                                            }
+                                            for (const QString& str : reordered) {
+                                                if (str.contains("[Empty]") == false) {
+                                                    testCase += str;
                                                 }
                                             }
                                         }

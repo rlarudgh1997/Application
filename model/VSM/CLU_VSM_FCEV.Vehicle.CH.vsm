@@ -34,6 +34,10 @@
   type: branch
 
 
+- AFS_DBL_2_0:
+  type: branch
+
+
 - Air_Bag:
   type: branch
 
@@ -407,6 +411,78 @@
 
 
 - AFS_DBL.Input_IlcuRhWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on."
+  abstractionName: Input_IlcuRhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL_2_0.Input_IlcuLhActWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuLhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL_2_0.Input_IlcuLhWarnStatus:
+  type: sensor
+  signalName: ILCULH_IFSWarning_Sta
+  dataType: HUInt64
+  description: "This signal indicates Warning Indicator Lamp ON/OFF/Blinking information for AFS (IFS) tell-tale in cluster.If this signal is set to ‘0x1’, this means AFS tell-tale shall blink. (in case of initialization is not performed/parameter input missing)If this signal is set to ‘0x2’ or '0x3', this means AFS tell-tale shall be turned on.."
+  abstractionName: Input_IlcuLhWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "BLINKING"
+    0x2: "IFS_ON"
+    0x3: "AFS_ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AFS_DBL_2_0.Input_IlcuRhActWarnStatus:
+  type: sensor
+  signalName: ILCURH_IFSLamp_Act
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IlcuRhActWarnStatus
+  valueEnum:
+    0x0: "HBA_INDI_ON"
+    0x1: "BLOCKAGE"
+    0x2: "STANDBY"
+    0x3: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    ELSE: 0x3
+
+
+- AFS_DBL_2_0.Input_IlcuRhWarnStatus:
   type: sensor
   signalName: ILCURH_IFSWarning_Sta
   dataType: HUInt64
@@ -869,6 +945,52 @@
     ELSE: 0x0
 
 
+- MDPS.Input_Sfa2LongTimerSecValue:
+  type: sensor
+  signalName: SFA_R2_VehicleSpeedCounterLong
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2LongTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- MDPS.Input_Sfa2ShortTimerSecValue:
+  type: sensor
+  signalName: SFA_R2_VehicleSpeedCounterShort
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2ShortTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- MDPS.Input_Sfa2SpeedLimitWarnStatus:
+  type: sensor
+  signalName: SFA_R2_CluVelLimitSentence
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_Sfa2SpeedLimitWarnStatus
+  valueEnum:
+    0x0: "SPD_MID_SLOW"
+    0x1: "SPD_SLOW"
+    0x2: "STOP"
+    0x3: "MOVE"
+    0x4: "SPD_MID"
+    0x5: "SYS_CHECK"
+    0x6: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    ELSE: 0x6
+
+
 - MDPS.Input_Sfa2WarnStatus:
   type: sensor
   signalName: SFA_R2_CluWarningSentence
@@ -887,9 +1009,6 @@
     0x1: 0x1
     0x2: 0x2
     0x3: 0x3
-    0x4: 0x4
-    0x5: 0x5
-    0x6: 0x6
     ELSE: 0x0
 
 
@@ -935,6 +1054,52 @@
     ELSE: 0x0
 
 
+- MDPS.Input_SfaLongTimerSecValue:
+  type: sensor
+  signalName: SFA_VehicleSpeedCounterLong
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaLongTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- MDPS.Input_SfaShortTimerSecValue:
+  type: sensor
+  signalName: SFA_VehicleSpeedCounterShort
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaShortTimerSecValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- MDPS.Input_SfaSpeedLimitWarnStatus:
+  type: sensor
+  signalName: SFA_CluVelLimitSentence
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SfaSpeedLimitWarnStatus
+  valueEnum:
+    0x0: "SPD_MID_SLOW"
+    0x1: "SPD_SLOW"
+    0x2: "STOP"
+    0x3: "MOVE"
+    0x4: "SPD_MID"
+    0x5: "SYS_CHECK"
+    0x6: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    ELSE: 0x6
+
+
 - MDPS.Input_SfaWarnStatus:
   type: sensor
   signalName: SFA_CluWarningSentence
@@ -953,9 +1118,6 @@
     0x1: 0x1
     0x2: 0x2
     0x3: 0x3
-    0x4: 0x4
-    0x5: 0x5
-    0x6: 0x6
     ELSE: 0x0
 
 
@@ -1111,7 +1273,7 @@
     0x0: "OFF"
     0x1: "ON"
   matchingTable:
-    0x1: 0x1
+    0x2: 0x1
     ELSE: 0x0
 
 

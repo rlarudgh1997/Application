@@ -52,7 +52,7 @@ private:
                                 const QJsonObject& caseJsonObject, const bool& isOther);
     QMap<QString, int> getFlowKeywordIdxMap(const QJsonObject& inputSignalList);
     QMap<QString, int> getConfigIdxMap(const QJsonObject& inputSignalList);
-    QMap<QString, QMap<QString, QString>> getCongigSigHexEnumMap(const QJsonObject& inputSignalList);
+    QMap<QString, QMap<QString, QString>> getConfigSigHexEnumMap(const QJsonObject& inputSignalList);
     QString getConfigTagStr(const bool& isOther, const QString& tcName, const QString& config,
                             const QMap<QString, int>& configIdxMap, const QMap<QString, QMap<QString, QString>>& configHexEnumMap,
                             const QStringList& preconditionList, const int& triggerSigIndex, const QString& triggerSigValue);

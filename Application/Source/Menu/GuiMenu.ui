@@ -150,6 +150,7 @@
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
     <addaction name="actionEnterScriptText"/>
+    <addaction name="actionTerminalMode"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -513,6 +514,11 @@
    </property>
    <property name="toolTip">
     <string>Test</string>
+   </property>
+  </action>
+  <action name="actionTerminalMode">
+   <property name="text">
+    <string>Terminal Mode</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>

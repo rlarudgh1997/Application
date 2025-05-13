@@ -22,6 +22,10 @@
   type: branch
 
 
+- CLU_TIMEINFO:
+  type: branch
+
+
 - E_CALL:
   type: branch
 
@@ -293,6 +297,22 @@
     0x5: 0x5
     0x6: 0x6
     0x7: 0x7
+
+
+- CLU_TIMEINFO.Input_NaviEstTimeDisplayFormat:
+  type: sensor
+  signalName: NV_EstimTimeFormat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviEstTimeDisplayFormat
+  valueEnum:
+    0x0: "HOUR_12TYPE"
+    0x1: "HOUR_24TYPE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
 
 
 - E_CALL.Input_ECallWarnStatus:

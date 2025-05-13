@@ -417,11 +417,13 @@
     0x3: "STAGE_R"
     0x4: "CRC_ERROR"
     0x5: "INVALID"
+    0x6: "STAGE_M"
   matchingTable:
     0x0: 0x0
     0x5: 0x1
     0x6: 0x2
     0x7: 0x3
+    0xD: 0x6
     CRCERROR: 0x4
     ELSE: 0x5
 
@@ -477,6 +479,20 @@
   matchingTable:
     0x1: 0x1
     CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- UPDATE.Input_ParkBrakeSwitchStatus:
+  type: sensor
+  signalName: Warn_PrkngBrkSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ParkBrakeSwitchStatus
+  valueEnum:
+    0x0: "UNPARK"
+    0x1: "PARK"
+  matchingTable:
+    0x1: 0x1
     ELSE: 0x0
 
 

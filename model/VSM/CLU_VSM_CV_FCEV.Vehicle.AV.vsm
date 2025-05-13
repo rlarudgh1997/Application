@@ -81,9 +81,9 @@
 
 - CLU_INFOTAINMENT.Output_CustomDriveModeSetStatus.Output_CustomDriveModeSetStatus_CCAN:
   type: actuator
-  signalName: dummy
+  signalName: Output_CustomDriveModeSetStatus_CCAN
   dataType: HUInt64
-  abstractionName: Output_CustomDriveModeSetStatus.Output_CustomDriveModeSetStatus_CCAN
+  abstractionName: Output_CustomDriveModeSetStatus_CCAN
   valueEnum:
     0x0: "MY_DRIVE"
     0x1: "SMART"
@@ -104,9 +104,9 @@
 
 - CLU_INFOTAINMENT.Output_DriveModeSwitchStatus.Output_DriveModeSwitchStatus_CCAN:
   type: actuator
-  signalName: dummy
+  signalName: Output_DriveModeSwitchStatus_CCAN
   dataType: HUInt64
-  abstractionName: Output_DriveModeSwitchStatus.Output_DriveModeSwitchStatus_CCAN
+  abstractionName: Output_DriveModeSwitchStatus_CCAN
   valueEnum:
     0x0: "NORMAL"
     0x1: "ECO"
@@ -125,9 +125,9 @@
 
 - CLU_INFOTAINMENT.Output_TerrainModeMainSwitchStatus.Output_TerrainModeMainSwitchStatus_CCAN:
   type: actuator
-  signalName: dummy
+  signalName: Output_TerrainModeMainSwitchStatus_CCAN
   dataType: HUInt64
-  abstractionName: Output_TerrainModeMainSwitchStatus.Output_TerrainModeMainSwitchStatus_CCAN
+  abstractionName: Output_TerrainModeMainSwitchStatus_CCAN
   valueEnum:
     0x0: "ON_ROAD"
     0x1: "OFF_ROAD"
@@ -138,9 +138,9 @@
 
 - CLU_INFOTAINMENT.Output_TerrainModeSwitchStatus.Output_TerrainModeSwitchStatus_CCAN:
   type: actuator
-  signalName: dummy
+  signalName: Output_TerrainModeSwitchStatus_CCAN
   dataType: HUInt64
-  abstractionName: Output_TerrainModeSwitchStatus.Output_TerrainModeSwitchStatus_CCAN
+  abstractionName: Output_TerrainModeSwitchStatus_CCAN
   valueEnum:
     0x0: "OFF"
     0x1: "SNOW"
@@ -1186,7 +1186,8 @@
   dataType: HUInt64
   abstractionName: Input_TbtSideStreetStatus
   matchingTable:
-  bitMask:
+    VALUE:
+    TIMEOUT: 0x0
 
 
 - NAVIGATION_TBT.Input_NaviEstTimeDisplayFormat:
@@ -1276,7 +1277,7 @@
 
 - NAVIGATION_TBT.Input_NaviPointPinTypeStatus:
   type: sensor
-  signalName: NV_WayPointSymbol
+  signalName: Input_NaviPointPinTypeStatus
   dataType: HUInt64
   abstractionName: Input_NaviPointPinTypeStatus
   valueEnum:

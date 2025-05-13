@@ -48,7 +48,7 @@ ConvertDataManager::ConvertDataManager() {
 QString ConvertDataManager::excuteConvertDataManager() {
     ivis::common::CheckTimer checkTimer;
 
-    // NOTE(csh): [Sheet] Keyword 해석 기능 수행(Data 추가) -> 나머지 Keyword 기능 수행(cell data changed) + 001 excel 파일 생성
+    // NOTE(csh): Non-Sheet Keyword 해석 기능 수행 + 001 excel 파일 생성
     if (convertNonSheetInputSignalKeyword() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QString filePath = ivis::common::APP_PWD() + "/001.Convert.excel_Non_Sheet_Keyword";
@@ -60,7 +60,9 @@ QString ConvertDataManager::excuteConvertDataManager() {
         return QString("Failed to convert Non-Sheet InputSignalKeyword");
     }
 
+    // NOTE(csh): [Sheet] Keyword 해석 기능 수행 + 002 excel 파일 생성
     if (convertSheetKeywordData() == true) {
+        // [Sheet] 키워드 존재 시 + 002 Excel 파일 생성
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QString filePath = ivis::common::APP_PWD() + "/002.Convert.excel2_Sheet_Keyword";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
@@ -71,10 +73,10 @@ QString ConvertDataManager::excuteConvertDataManager() {
         return QString("Failed to convert Sheet InputSignalKeyword");
     }
 
-    // NOTE(csh): Config(동작 조건) Data 처리 (Data 추가) + config excel 파일 생성
+    // NOTE(csh): Config(동작 조건) Data 처리 (Data 추가) + 003 config excel 파일 생성
     int appendConfigResult = appendConvertConfigSignalSet();
     if (appendConfigResult == 1) {
-        // config 관련 처리 조건이 있는 경우 -> Config Excel 생성 필요
+        // config 관련 처리 조건이 있는 경우 -> 003 Config Excel 파일 생성
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QString filePath = ivis::common::APP_PWD() + "/003.Convert.excel3_Config";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
@@ -89,7 +91,7 @@ QString ConvertDataManager::excuteConvertDataManager() {
         return QString("Failed to convert Config Signal");
     }
 
-    // NOTE(csh): 최종 signal 조합 set 구성(Data 추가) + 002 excel 파일 생성
+    // NOTE(csh): 최종 signal 조합 set 구성(Data 추가) + 004 Excel 파일 생성
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
             QString filePath = ivis::common::APP_PWD() + "/004.Convert.excel4_All_TC_Signal_Set";
@@ -326,6 +328,22 @@ int ConvertDataManager::appendConvertConfigSignalSet() {
     return result;
 }
 
+bool ConvertDataManager::isSFCTalltaleSignal(const QString& signalName) {
+    static QRegularExpression re("^SFC\\..*\\.Telltale\\..*$");
+    return re.match(signalName).hasMatch();
+}
+
+QStringList ConvertDataManager::filterUsedTelltaleEnumValues(const QStringList& sfcNotUsedEnumValueList) {
+    static const QSet<QString> kUsedTelltaleValues = {"NONE", "ON", "OFF", "MAX"};
+    QStringList filteredList;
+    for (const auto& val : sfcNotUsedEnumValueList) {
+        if (kUsedTelltaleValues.contains(val)) {
+            filteredList.append(val);
+        }
+    }
+    return filteredList;
+}
+
 bool ConvertDataManager::appendConvertAllTCSignalSet() {
     bool result = true;
 
@@ -430,7 +448,15 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
                             // no operation
                         } else if ((tmpInfo.getValueEnum().isEmpty() == false) && (tmpInfo.getNotUsedEnum().isEmpty() == false)) {
                             // Enum Value
-                            inputDataStr += tmpInfo.getNotUsedEnum().join(", ");
+                            QStringList notUsedEnumValue = tmpInfo.getNotUsedEnum();
+                            // 다른 case에서 사용되는 signal을 [Not_Trigger]로 추가하는 경우
+                            // Value도 다른 Case에서 사용되지 않는 Value를 모두 입력하는 경우, 너무 많은 Case가 존재하여 생성 실패
+                            // 우선 SFC의 Telltale 노드의 경우에만 NONE, ON, OFF, MAX만 precondition에 사용
+                            // TODO(csh): Telltale에 한정 적용 -> 추 후 타 SFC Node에도 필요하다면 추가 구현 필요
+                            if (ConvertDataManager::isSFCTalltaleSignal(inputSignalStr) == true) {
+                                notUsedEnumValue = filterUsedTelltaleEnumValues(notUsedEnumValue);
+                            }
+                            inputDataStr += notUsedEnumValue.join(", ");
                         } else if ((tmpInfo.getValueEnum().isEmpty() == true) && (tmpInfo.getNotUsedEnum().isEmpty() == false)) {
                             // Not Enum Value
                             inputDataStr += tmpInfo.getNotUsedEnum().join(", ");
@@ -936,6 +962,30 @@ QString ConvertDataManager::convertCustomKeywordType(const int& keywordType) {
                 static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare));
 #if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
             qDebug() << "[[[DontCare]]] used only int, uint, double (except enum value)";
+#endif
+            break;
+        }
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotFlow): {
+            customKeywordType = ExcelUtil::instance().data()->isKeywordString(
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow));
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+            qDebug() << "[[[NotFlow]]]";
+#endif
+            break;
+        }
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::FlowNot): {
+            customKeywordType = ExcelUtil::instance().data()->isKeywordString(
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot));
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+            qDebug() << "[[[FlowNot]]]";
+#endif
+            break;
+        }
+        case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotRange): {
+            customKeywordType = ExcelUtil::instance().data()->isKeywordString(
+                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange));
+#if defined(ENABLE_CONVERTING_KEYWORD_DATA_INFO)
+            qDebug() << "[[[NotRange]]]";
 #endif
             break;
         }
@@ -1722,9 +1772,11 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
     auto convertInputValues = [this, notTriggerStr, customNotTrigger](CaseDataInfo& caseDataInfo) {
         for (auto& convertKeywordInfo : caseDataInfo.convertInputDataInfo) {
             if (convertKeywordInfo.inputSignal.contains(notTriggerStr, Qt::CaseInsensitive)) {
-                convertKeywordInfo.inputValue.prepend(customNotTrigger);
                 convertKeywordInfo.inputSignal.replace(
                     QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption), "");
+                convertKeywordInfo.inputValue = this->constructConvertKeywordDataInfo(
+                    static_cast<int>(convertKeywordInfo.keywordType), convertKeywordInfo.inputValue);
+                convertKeywordInfo.inputValue.prepend(customNotTrigger);
             } else if (convertKeywordInfo.keywordType != ivis::common::KeywordTypeEnum::KeywordType::Invalid &&
                        !convertKeywordInfo.inputValue.contains('[')) {
                 convertKeywordInfo.inputValue = this->constructConvertKeywordDataInfo(
@@ -2225,7 +2277,13 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
                                 // e.g) [Sheet]Private_A - [Not_Trigger]OFF 가 되면 다음 [Sheet] 해석 시 OFF 찾지 못함
                                 if (!appendMergedSignalStr.contains("[Sheet]") &&
                                     !appendMergedSignalStr.startsWith(SFC_IGN_ELAPSED)) {
-                                    appendMergedDataStr = customNotTriggerSheet + appendMergedDataStr;
+                                    QString customNotTrigger = ExcelUtil::instance().data()->isKeywordString(
+                                        static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger));
+                                    // [CustomNotTrigger]가 이미 존재하는 경우에는 [CustomNotTriggerSheet] 추가 하지 않음
+                                    //  - e.g) [Sheet] 참조된 곳의 signalName에 [Not_Trigger]존재하는 경우
+                                    if (appendMergedDataStr.contains(customNotTrigger) == false) {
+                                        appendMergedDataStr = customNotTriggerSheet + appendMergedDataStr;
+                                    }
                                 }
                             }
                             mergedDataList.append(appendMergedDataStr);

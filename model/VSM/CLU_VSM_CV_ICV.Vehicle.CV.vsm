@@ -38,18 +38,6 @@
   type: branch
 
 
-- AMS:
-  type: branch
-
-
-- ASR:
-  type: branch
-
-
-- AVH:
-  type: branch
-
-
 - Air_Bag_CV:
   type: branch
 
@@ -65,11 +53,23 @@
     0x4: "CIRCUIT_FAILURE"
 
 
+- AMS:
+  type: branch
+
+
+- ASR:
+  type: branch
+
+
 - Auto_Grease:
   type: branch
 
 
 - Aux_Battery_Warning_CV:
+  type: branch
+
+
+- AVH:
   type: branch
 
 
@@ -85,11 +85,11 @@
   type: branch
 
 
-- CNG_Fuel_System_CV:
+- Cab_Tilting:
   type: branch
 
 
-- Cab_Tilting:
+- CNG_Fuel_System_CV:
   type: branch
 
 
@@ -106,18 +106,6 @@
 
 
 - DEA:
-  type: branch
-
-
-- DPF_CV:
-  type: branch
-
-
-- DSM:
-  type: branch
-
-
-- DSW:
   type: branch
 
 
@@ -149,6 +137,18 @@
 
 
 - Down_Hill_Cruise:
+  type: branch
+
+
+- DPF_CV:
+  type: branch
+
+
+- DSM:
+  type: branch
+
+
+- DSW:
   type: branch
 
 
@@ -249,10 +249,6 @@
   type: branch
 
 
-- ISG_CV:
-  type: branch
-
-
 - Illumination_CV:
   type: branch
 
@@ -342,15 +338,15 @@
   type: branch
 
 
+- ISG_CV:
+  type: branch
+
+
 - Jake_Brake_CV:
   type: branch
 
 
 - Key_System_CV:
-  type: branch
-
-
-- LWS:
   type: branch
 
 
@@ -366,6 +362,10 @@
   type: branch
 
 
+- LWS:
+  type: branch
+
+
 - MIL_OBD_Lamp:
   type: branch
 
@@ -378,11 +378,11 @@
   type: branch
 
 
-- PDC:
+- Parking_Brake_CV:
   type: branch
 
 
-- Parking_Brake_CV:
+- PDC:
   type: branch
 
 
@@ -467,10 +467,6 @@
     0x0: "DEFAULT"
     0x1: "RESET_REQ"
     0x2: "INVALID"
-
-
-- Set_Speed:
-  type: branch
 
 
 - Settings_CV:
@@ -655,6 +651,10 @@
     0x2: "USM_OFF"
 
 
+- Set_Speed:
+  type: branch
+
+
 - Sliding_Ramp:
   type: branch
 
@@ -684,15 +684,15 @@
   type: branch
 
 
+- Tachograph:
+  type: branch
+
+
 - TM_High_Low_Range:
   type: branch
 
 
 - TPMS_CV:
-  type: branch
-
-
-- Tachograph:
   type: branch
 
 
@@ -816,7 +816,15 @@
   type: branch
 
 
+- Working_Lamp:
+  type: branch
+
+
 - WPC_CV:
+  type: branch
+
+
+- xEV_Motor:
   type: branch
 
 
@@ -1532,6 +1540,12 @@
     0x10: "HDP_BE_PREPARED_TO_TAKEOVER"
     0x11: "EMERGENCY_STOP"
     0x12: "EMERGENCY_STOP_INACTIVE"
+    0x13: "HDA_HF_MANUAL_ON_REQUEST"
+    0x14: "HANDS_ON_REQUEST_LEVEL1"
+    0x15: "HANDS_ON_REQUEST_LEVEL2"
+    0x16: "DAW_TAKE_REST_WITH_OK_BUTTON"
+    0x17: "TD_LV2_IN_BIGGER"
+    0x18: "EMERGENCY_STOP_ACTIVE_IN_BIGGER"
   matchingTable:
     0x01: 0x1
     0x02: 0x2
@@ -1551,6 +1565,12 @@
     0x10: 0x10
     0x15: 0x11
     0x16: 0x12
+    0x17: 0x13
+    0x18: 0x14
+    0x19: 0x15
+    0x1A: 0x16
+    0x1B: 0x17
+    0x1C: 0x18
     ELSE: 0x0
 
 
@@ -2802,6 +2822,44 @@
     ELSE: 0x0
 
 
+- Air_Bag_CV.Input_AcuSysWarnLampStatus:
+  type: sensor
+  signalName: ACU_SysWrngLmpDis
+  dataType: HUInt64
+  abstractionName: Input_AcuSysWarnLampStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "FLASH"
+    0x2: "INVALID"
+    0x3: "MESSAGE_TIMEOUT"
+    0x4: "OFF"
+  matchingTable:
+    0x0: 0x4
+    0x1: 0x0
+    0x2: 0x1
+    TIMEOUT: 0x3
+    ELSE: 0x2
+
+
+- Air_Bag_CV.Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_SRSWrngLmpSta
+  dataType: HUInt64
+  abstractionName: Output_AirBagIndictorStatus_CCAN
+  valueEnum:
+    0x0: "INDI_OFF"
+    0x1: "INDI_ON"
+    0x2: "INDI_FLASHING"
+    0x3: "MESSAGE_ERROR"
+    0x4: "CIRCUIT_FAILURE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+
+
 - AMS.Input_AMSMILLampStatus:
   type: sensor
   signalName: AMS_CLU_INFO_MIL
@@ -2922,78 +2980,6 @@
     ELSE: 0x0
 
 
-- AVH.Input_AVHStatus:
-  type: sensor
-  signalName: AVH_CLU_Signal
-  dataType: HUInt64
-  abstractionName: Input_AVHStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "READY"
-    0x2: "ACTIVE"
-    0x3: "WARN"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
-    ELSE: 0x0
-
-
-- AVH.Input_AVHInfo:
-  type: sensor
-  signalName: AVH_CLU_Inform
-  dataType: HUInt64
-  abstractionName: Input_AVHInfo
-  valueEnum:
-    0x0: "OFF"
-    0x1: "RELEASE"
-    0x2: "INHIBIT_AVH"
-    0x3: "AUTO_PARKING"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
-    ELSE: 0x0
-
-
-- Air_Bag_CV.Input_AcuSysWarnLampStatus:
-  type: sensor
-  signalName: ACU_SysWrngLmpDis
-  dataType: HUInt64
-  abstractionName: Input_AcuSysWarnLampStatus
-  valueEnum:
-    0x0: "ON"
-    0x1: "FLASH"
-    0x2: "INVALID"
-    0x3: "MESSAGE_TIMEOUT"
-    0x4: "OFF"
-  matchingTable:
-    0x0: 0x4
-    0x1: 0x0
-    0x2: 0x1
-    TIMEOUT: 0x3
-    ELSE: 0x2
-
-
-- Air_Bag_CV.Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN:
-  type: actuator
-  signalName: CV_CLU_SRSWrngLmpSta
-  dataType: HUInt64
-  abstractionName: Output_AirBagIndictorStatus.Output_AirBagIndictorStatus_CCAN
-  valueEnum:
-    0x0: "INDI_OFF"
-    0x1: "INDI_ON"
-    0x2: "INDI_FLASHING"
-    0x3: "MESSAGE_ERROR"
-    0x4: "CIRCUIT_FAILURE"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
-    0x7: 0x4
-
-
 - Auto_Grease.Input_AutoGreaseWarnStatus:
   type: sensor
   signalName: AutoGreaseState
@@ -3097,6 +3083,53 @@
   valueEnum:
     0x0: "OFF"
     0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- AVH.Input_AVHStatus:
+  type: sensor
+  signalName: AVH_CLU_Signal
+  dataType: HUInt64
+  abstractionName: Input_AVHStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVE"
+    0x3: "WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AVH.Input_AVHInfo:
+  type: sensor
+  signalName: AVH_CLU_Inform
+  dataType: HUInt64
+  abstractionName: Input_AVHInfo
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RELEASE"
+    0x2: "INHIBIT_AVH"
+    0x3: "AUTO_PARKING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- AVH.Input_EHSPopUp:
+  type: sensor
+  signalName: EHS_CLU_PopUp
+  dataType: HUInt64
+  abstractionName: Input_EHSPopUp
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INHIBIT_RELEASE"
   matchingTable:
     0x1: 0x1
     ELSE: 0x0
@@ -3262,6 +3295,19 @@
     ELSE: 0x0
 
 
+- Cab_Tilting.Input_CabTiltWarnStatus:
+  type: sensor
+  signalName: TiltLockSWStatus
+  dataType: HUInt64
+  abstractionName: Input_CabTiltWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - CNG_Fuel_System_CV.Input_EngineLowFuelWarnStatus:
   type: sensor
   signalName: VehicleFuelLevelLowLampCmd
@@ -3283,19 +3329,6 @@
   matchingTable:
     VALUE:
     TIMEOUT: 0x0
-
-
-- Cab_Tilting.Input_CabTiltWarnStatus:
-  type: sensor
-  signalName: TiltLockSWStatus
-  dataType: HUInt64
-  abstractionName: Input_CabTiltWarnStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
 
 
 - Cooling_System.Input_EngineCoolingWaterTemperature:
@@ -3445,176 +3478,6 @@
     ELSE: 0x0
 
 
-- DPF_CV.Input_DPFAutoRegenStatus:
-  type: sensor
-  signalName: DPFautoregenerationGreenLamp
-  dataType: HUInt64
-  abstractionName: Input_DPFAutoRegenStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- DPF_CV.Input_DPFManualRegenStatus:
-  type: sensor
-  signalName: DPFManRegenerAmberLamp
-  dataType: HUInt64
-  abstractionName: Input_DPFManualRegenStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-    0x2: "BLINK"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    ELSE: 0x0
-
-
-- DPF_CV.Input_DPFCoolingFanStatus:
-  type: sensor
-  signalName: CoolingFanInd
-  dataType: HUInt64
-  abstractionName: Input_DPFCoolingFanStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-    0x2: "BLINK2"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-    0x2: 0x2
-    ELSE: 0x0
-
-
-- DPF_CV.Input_SootLevelValue:
-  type: sensor
-  signalName: SOOTLevel
-  dataType: HUInt64
-  abstractionName: Input_SootLevelValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xA
-
-
-- DPF_CV.Input_EngineDPFRegenStopLamp:
-  type: sensor
-  signalName: DPFRegenStopLamp
-  dataType: HUInt64
-  abstractionName: Input_EngineDPFRegenStopLamp
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- DPF_CV.Input_EngineTVSRwarning:
-  type: sensor
-  signalName: TVSRWarningLamp
-  dataType: HUInt64
-  abstractionName: Input_EngineTVSRwarning
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- DSM.Input_CVDSMStatus:
-  type: sensor
-  signalName: CV_DSM_Status
-  dataType: HUInt64
-  abstractionName: Input_CVDSMStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-    0x2: "MESSAGE_TIMEOUT"
-  matchingTable:
-    0x3: 0x1
-    TIMEOUT: 0x2
-    ELSE: 0x0
-
-
-- DSW.Input_DSWWarnStatus:
-  type: sensor
-  signalName: CV_DSW_WarningStat
-  dataType: HUInt64
-  abstractionName: Input_DSWWarnStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "DISTRACTION_WARN"
-    0x2: "DROWSINESS_WARN"
-    0x3: "BLOCKAGE_WARN"
-    0x4: "FAILURE_WARN"
-    0x5: "DEGRADATION_WARN"
-    0x6: "DDMS_WARN"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x6
-    0x5: 0x5
-    0x6: 0x3
-    0x7: 0x4
-    ELSE: 0x0
-
-
-- DSW.Input_DSWWarnSymbolDistStatus:
-  type: sensor
-  signalName: CV_DSW_WarningSmblDistStat
-  dataType: HUInt64
-  abstractionName: Input_DSWWarnSymbolDistStatus
-  valueEnum:
-    0x0: "ON"
-    0x1: "OFF"
-  matchingTable:
-    0x1: 0x0
-    ELSE: 0x1
-
-
-- DSW.Input_DSWWarnSymbolDrowStatus:
-  type: sensor
-  signalName: CV_DSW_WarningSmblDrowStat
-  dataType: HUInt64
-  abstractionName: Input_DSWWarnSymbolDrowStatus
-  valueEnum:
-    0x0: "ON"
-    0x1: "OFF"
-  matchingTable:
-    0x1: 0x0
-    ELSE: 0x1
-
-
-- DSW.Input_DSWWarnSoundStatus:
-  type: sensor
-  signalName: CV_DSW_WarningSndStat
-  dataType: HUInt64
-  abstractionName: Input_DSWWarnSoundStatus
-  valueEnum:
-    0x0: "ON"
-    0x1: "OFF"
-  matchingTable:
-    0x1: 0x0
-    ELSE: 0x1
-
-
-- DSW.Input_DSWWarnSound2Status:
-  type: sensor
-  signalName: CV_DSW_WarningSnd2Stat
-  dataType: HUInt64
-  abstractionName: Input_DSWWarnSound2Status
-  valueEnum:
-    0x0: "ON"
-    0x1: "OFF"
-  matchingTable:
-    0x1: 0x0
-    ELSE: 0x1
-
-
 - Differential_Lock.Input_DiffLockStatus:
   type: sensor
   signalName: DiffLockTT
@@ -3705,7 +3568,7 @@
   type: actuator
   signalName: CV_CLU_DSP_Hours
   dataType: HUInt64
-  abstractionName: Output_CLUHoursValue.Output_CLUHoursValue_CCAN
+  abstractionName: Output_CLUHoursValue_CCAN
   matchingTable:
     VALUE:
 
@@ -3714,7 +3577,7 @@
   type: actuator
   signalName: CV_CLU_DSP_Minutes
   dataType: HUInt64
-  abstractionName: Output_CLUMinutesValue.Output_CLUMinutesValue_CCAN
+  abstractionName: Output_CLUMinutesValue_CCAN
   matchingTable:
     VALUE:
 
@@ -3723,7 +3586,7 @@
   type: actuator
   signalName: CV_CLU_DSP_Seconds
   dataType: HUInt64
-  abstractionName: Output_CLUSecondsValue.Output_CLUSecondsValue_CCAN
+  abstractionName: Output_CLUSecondsValue_CCAN
   matchingTable:
     VALUE:
 
@@ -3962,6 +3825,176 @@
     0x1: 0x1
     0x2: 0x2
     ELSE: 0x0
+
+
+- DPF_CV.Input_DPFAutoRegenStatus:
+  type: sensor
+  signalName: DPFautoregenerationGreenLamp
+  dataType: HUInt64
+  abstractionName: Input_DPFAutoRegenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DPF_CV.Input_DPFManualRegenStatus:
+  type: sensor
+  signalName: DPFManRegenerAmberLamp
+  dataType: HUInt64
+  abstractionName: Input_DPFManualRegenStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DPF_CV.Input_DPFCoolingFanStatus:
+  type: sensor
+  signalName: CoolingFanInd
+  dataType: HUInt64
+  abstractionName: Input_DPFCoolingFanStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK2"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- DPF_CV.Input_SootLevelValue:
+  type: sensor
+  signalName: SOOTLevel
+  dataType: HUInt64
+  abstractionName: Input_SootLevelValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xA
+
+
+- DPF_CV.Input_EngineDPFRegenStopLamp:
+  type: sensor
+  signalName: DPFRegenStopLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineDPFRegenStopLamp
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DPF_CV.Input_EngineTVSRwarning:
+  type: sensor
+  signalName: TVSRWarningLamp
+  dataType: HUInt64
+  abstractionName: Input_EngineTVSRwarning
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- DSM.Input_CVDSMStatus:
+  type: sensor
+  signalName: CV_DSM_Status
+  dataType: HUInt64
+  abstractionName: Input_CVDSMStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "MESSAGE_TIMEOUT"
+  matchingTable:
+    0x3: 0x1
+    TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- DSW.Input_DSWWarnStatus:
+  type: sensor
+  signalName: CV_DSW_WarningStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DISTRACTION_WARN"
+    0x2: "DROWSINESS_WARN"
+    0x3: "BLOCKAGE_WARN"
+    0x4: "FAILURE_WARN"
+    0x5: "DEGRADATION_WARN"
+    0x6: "DDMS_WARN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x6
+    0x5: 0x5
+    0x6: 0x3
+    0x7: 0x4
+    ELSE: 0x0
+
+
+- DSW.Input_DSWWarnSymbolDistStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSmblDistStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSymbolDistStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- DSW.Input_DSWWarnSymbolDrowStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSmblDrowStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSymbolDrowStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- DSW.Input_DSWWarnSoundStatus:
+  type: sensor
+  signalName: CV_DSW_WarningSndStat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSoundStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- DSW.Input_DSWWarnSound2Status:
+  type: sensor
+  signalName: CV_DSW_WarningSnd2Stat
+  dataType: HUInt64
+  abstractionName: Input_DSWWarnSound2Status
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
 
 
 - Dual_Power.Input_EngineEcoLampStatus:
@@ -4527,7 +4560,7 @@
   type: actuator
   signalName: CLU_SocSegmentVal_MM
   dataType: HUInt64
-  abstractionName: Output_SocDisplayLevelStatus.Output_SocDisplayLevelStatus_MCAN
+  abstractionName: Output_SocDisplayLevelStatus_MCAN
   valueEnum:
     0x0: "SEG0"
     0x1: "SEG1"
@@ -4647,6 +4680,7 @@
     0x1: "ON"
   matchingTable:
     0x01~0x11: 0x1
+    0x1F: 0x1
     ELSE: 0x0
 
 
@@ -4669,7 +4703,7 @@
   type: actuator
   signalName: CLU_WelcomeStartReq
   dataType: HUInt64
-  abstractionName: Output_WelcomeStartReq.Output_WelcomeStartReq_CCAN
+  abstractionName: Output_WelcomeStartReq_CCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "WELCOME_START"
@@ -4716,26 +4750,6 @@
     0x1: "ON"
   matchingTable:
     0x1: 0x1
-    ELSE: 0x0
-
-
-- ISG_CV.Input_ISGCVStatus:
-  type: sensor
-  signalName: VCU_IsgSte_VU
-  dataType: HUInt64
-  abstractionName: Input_ISGCVStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "AUTO_STOP"
-    0x2: "ENFORCED_AUTO_START"
-    0x3: "ESS_ERROR"
-    0x4: "AUTO_STOP_DEACTIVATED"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-    0x2: 0x2
-    0x4: 0x3
-    0x5: 0x4
     ELSE: 0x0
 
 
@@ -4893,7 +4907,7 @@
   type: actuator
   signalName: CV_CLU_DtntOutSta
   dataType: HUInt64
-  abstractionName: Output_DetentStatus.Output_DetentStatus_CCAN
+  abstractionName: Output_DetentStatus_CCAN
   valueEnum:
     0x0: "OFF"
     0x1: "ON"
@@ -4906,7 +4920,7 @@
   type: actuator
   signalName: CV_CLU_RhstaLvlSta
   dataType: HUInt64
-  abstractionName: Output_RheostatLevelStatus.Output_RheostatLevelStatus_CCAN
+  abstractionName: Output_RheostatLevelStatus_CCAN
   valueEnum:
     0x0: "STEP1"
     0x1: "STEP2"
@@ -4959,7 +4973,7 @@
   type: actuator
   signalName: CLU_RhstaLvlSta
   dataType: HUInt64
-  abstractionName: Output_RheostatLevelStatus.Output_RheostatLevelStatus_MCAN
+  abstractionName: Output_RheostatLevelStatus_MCAN
   valueEnum:
     0x0: "STEP1"
     0x1: "STEP2"
@@ -5012,7 +5026,7 @@
   type: actuator
   signalName: CV_CLU_AutoBrightSta
   dataType: HUInt64
-  abstractionName: Output_IlluminationLevelValue.Output_IlluminationLevelValue_CCAN
+  abstractionName: Output_IlluminationLevelValue_CCAN
   matchingTable:
     VALUE:
 
@@ -5021,7 +5035,7 @@
   type: actuator
   signalName: CLU_RhstaStepInfo_MM
   dataType: HUInt64
-  abstractionName: Output_RheostatMaxInfo.Output_RheostatMaxInfo_MCAN
+  abstractionName: Output_RheostatMaxInfo_MCAN
   valueEnum:
     0x0: "STEP20"
     0x1: "STEP21"
@@ -5036,7 +5050,7 @@
   type: actuator
   signalName: CV_CLU_NotMinModeBrightSta
   dataType: HUInt64
-  abstractionName: Output_NotMinIlluminationLevelValue.Output_NotMinIlluminationLevelValue_CCAN
+  abstractionName: Output_NotMinIlluminationLevelValue_CCAN
   matchingTable:
     VALUE:
 
@@ -5171,6 +5185,19 @@
     ELSE: 0x0
 
 
+- Input_Output_Processing_CV.Output_OkSwitchStatus.Output_OkSwitchStatus_CCAN:
+  type: actuator
+  signalName: CV_CLU_OKSwSta
+  dataType: HUInt64
+  abstractionName: Output_OkSwitchStatus_CCAN
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
 - Input_Output_Processing_CV.Input_WheelBasedVehicleSpeedValue:
   type: sensor
   signalName: WheelBasedVehicleSpeed
@@ -5181,26 +5208,13 @@
     TIMEOUT: 0xFFFF
 
 
-- Input_Output_Processing_CV.Output_OkSwitchStatus.Output_OkSwitchStatus_CCAN:
-  type: actuator
-  signalName: CV_CLU_OKSwSta
-  dataType: HUInt64
-  abstractionName: Output_OkSwitchStatus.Output_OkSwitchStatus_CCAN
-  valueEnum:
-    0x0: "DEFAULT"
-    0x1: "PRESSED"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-
-
 - Input_Output_Processing_CV.Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN:
   type: actuator
   signalName: USM_CluSrvRmndrRemainDstSta_MM
   dataType: HInt64
   rawType: SIGN_MAGNITUDE
   rawSize: 18
-  abstractionName: Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN
+  abstractionName: Output_SrvReminderRemainDistValue_MCAN
   matchingTable:
     VALUE:
 
@@ -5211,7 +5225,7 @@
   dataType: HInt64
   rawType: SIGN_MAGNITUDE
   rawSize: 15
-  abstractionName: Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN
+  abstractionName: Output_SrvReminderRemainPeriodValue_MCAN
   matchingTable:
     VALUE:
 
@@ -5315,6 +5329,26 @@
   matchingTable:
     0x1: 0x1
     TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- ISG_CV.Input_ISGCVStatus:
+  type: sensor
+  signalName: VCU_IsgSte_VU
+  dataType: HUInt64
+  abstractionName: Input_ISGCVStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AUTO_STOP"
+    0x2: "ENFORCED_AUTO_START"
+    0x3: "ESS_ERROR"
+    0x4: "AUTO_STOP_DEACTIVATED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x4: 0x3
+    0x5: 0x4
     ELSE: 0x0
 
 
@@ -5531,141 +5565,6 @@
     ELSE: 0x0
 
 
-- LWS.Input_LWS1AxleLeftValue:
-  type: sensor
-  signalName: LWS1AxleLeft
-  dataType: HUInt64
-  abstractionName: Input_LWS1AxleLeftValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS1AxleRightValue:
-  type: sensor
-  signalName: LWS1AxleRight
-  dataType: HUInt64
-  abstractionName: Input_LWS1AxleRightValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS2AxleLeftValue:
-  type: sensor
-  signalName: LWS2AxleLeft
-  dataType: HUInt64
-  abstractionName: Input_LWS2AxleLeftValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS2AxleRightValue:
-  type: sensor
-  signalName: LWS2AxleRight
-  dataType: HUInt64
-  abstractionName: Input_LWS2AxleRightValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS3AxleLeftValue:
-  type: sensor
-  signalName: LWS3AxleLeft
-  dataType: HUInt64
-  abstractionName: Input_LWS3AxleLeftValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS3AxleRightValue:
-  type: sensor
-  signalName: LWS3AxleRight
-  dataType: HUInt64
-  abstractionName: Input_LWS3AxleRightValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS4AxleLeftValue:
-  type: sensor
-  signalName: LWS4AxleLeft
-  dataType: HUInt64
-  abstractionName: Input_LWS4AxleLeftValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS4AxleRightValue:
-  type: sensor
-  signalName: LWS4AxleRight
-  dataType: HUInt64
-  abstractionName: Input_LWS4AxleRightValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS5AxleLeftValue:
-  type: sensor
-  signalName: LWS5AxleLeft
-  dataType: HUInt64
-  abstractionName: Input_LWS5AxleLeftValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWS5AxleRightValue:
-  type: sensor
-  signalName: LWS5AxleRight
-  dataType: HUInt64
-  abstractionName: Input_LWS5AxleRightValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- LWS.Input_LWSWarningSignalStatus:
-  type: sensor
-  signalName: LWSFault
-  dataType: HUInt64
-  abstractionName: Input_LWSWarningSignalStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-    0x2: "BLINK1"
-    0x3: "BLINK2"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
-    ELSE: 0x0
-
-
-- LWS.Input_LWSPageStatus:
-  type: sensor
-  signalName: VehicleType
-  dataType: HUInt64
-  abstractionName: Input_LWSPageStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x1
-    0x3: 0x1
-    0x4: 0x1
-    0x5: 0x1
-    0x6: 0x1
-    ELSE: 0x0
-
-
 - Lamp_Fail_Warning_CV.Input_AFLSLedLampWarnStatus:
   type: sensor
   signalName: LED_Warning_Sta
@@ -5811,6 +5710,141 @@
   matchingTable:
     0x0: 0x0
     ELSE: 0x1
+
+
+- LWS.Input_LWS1AxleLeftValue:
+  type: sensor
+  signalName: LWS1AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS1AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS1AxleRightValue:
+  type: sensor
+  signalName: LWS1AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS1AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS2AxleLeftValue:
+  type: sensor
+  signalName: LWS2AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS2AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS2AxleRightValue:
+  type: sensor
+  signalName: LWS2AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS2AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS3AxleLeftValue:
+  type: sensor
+  signalName: LWS3AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS3AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS3AxleRightValue:
+  type: sensor
+  signalName: LWS3AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS3AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS4AxleLeftValue:
+  type: sensor
+  signalName: LWS4AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS4AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS4AxleRightValue:
+  type: sensor
+  signalName: LWS4AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS4AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS5AxleLeftValue:
+  type: sensor
+  signalName: LWS5AxleLeft
+  dataType: HUInt64
+  abstractionName: Input_LWS5AxleLeftValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWS5AxleRightValue:
+  type: sensor
+  signalName: LWS5AxleRight
+  dataType: HUInt64
+  abstractionName: Input_LWS5AxleRightValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- LWS.Input_LWSWarningSignalStatus:
+  type: sensor
+  signalName: LWSFault
+  dataType: HUInt64
+  abstractionName: Input_LWSWarningSignalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "BLINK1"
+    0x3: "BLINK2"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- LWS.Input_LWSPageStatus:
+  type: sensor
+  signalName: VehicleType
+  dataType: HUInt64
+  abstractionName: Input_LWSPageStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x1
+    0x3: 0x1
+    0x4: 0x1
+    0x5: 0x1
+    0x6: 0x1
+    ELSE: 0x0
 
 
 - MIL_OBD_Lamp.Input_MILLampStatus:
@@ -5999,87 +6033,6 @@
     ELSE: 0x16
 
 
-- PDC.Input_PDCBatteryDischargeStatus:
-  type: sensor
-  signalName: Bat_dischrg
-  dataType: HUInt64
-  abstractionName: Input_PDCBatteryDischargeStatus
-  valueEnum:
-    0x0: "ON"
-    0x1: "OFF"
-  matchingTable:
-    0x1~0x3: 0x0
-    ELSE: 0x1
-
-
-- PDC.Input_PDCPowerAutoCutModeStatus:
-  type: sensor
-  signalName: ICU_PowerAutoCutModSta
-  dataType: HUInt64
-  abstractionName: Input_PDCPowerAutoCutModeStatus
-  valueEnum:
-    0x0: "FACTORY_MODE"
-    0x1: "DELIVERY_MODE"
-    0x2: "OFF"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-    ELSE: 0x2
-
-
-- PDC.Input_PDC24VSocValue:
-  type: sensor
-  signalName: IBS24_SOC
-  dataType: HUInt64
-  abstractionName: Input_PDC24VSocValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- PDC.Input_PDC12VSocValue:
-  type: sensor
-  signalName: IBS12_SOC
-  dataType: HUInt64
-  abstractionName: Input_PDC12VSocValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- PDC.Input_WaterPumpStatus:
-  type: sensor
-  signalName: WaterPumpStatus
-  dataType: HUInt64
-  abstractionName: Input_WaterPumpStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- PDC.Input_PDC24VVoltageValue:
-  type: sensor
-  signalName: C_VBAT
-  dataType: HUInt64
-  abstractionName: Input_PDC24VVoltageValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0x0000
-
-
-- PDC.Input_PDC12VVoltageValue:
-  type: sensor
-  signalName: VBat_12V
-  dataType: HUInt64
-  abstractionName: Input_PDC12VVoltageValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0x0000
-
-
 - Parking_Brake_CV.Input_ParkingSwitchStatus:
   type: sensor
   signalName: PrkTelltale
@@ -6230,6 +6183,87 @@
   matchingTable:
     0x1: 0x1
     ELSE: 0x0
+
+
+- PDC.Input_PDCBatteryDischargeStatus:
+  type: sensor
+  signalName: Bat_dischrg
+  dataType: HUInt64
+  abstractionName: Input_PDCBatteryDischargeStatus
+  valueEnum:
+    0x0: "ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1~0x3: 0x0
+    ELSE: 0x1
+
+
+- PDC.Input_PDCPowerAutoCutModeStatus:
+  type: sensor
+  signalName: ICU_PowerAutoCutModSta
+  dataType: HUInt64
+  abstractionName: Input_PDCPowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DELIVERY_MODE"
+    0x2: "OFF"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- PDC.Input_PDC24VSocValue:
+  type: sensor
+  signalName: IBS24_SOC
+  dataType: HUInt64
+  abstractionName: Input_PDC24VSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- PDC.Input_PDC12VSocValue:
+  type: sensor
+  signalName: IBS12_SOC
+  dataType: HUInt64
+  abstractionName: Input_PDC12VSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- PDC.Input_WaterPumpStatus:
+  type: sensor
+  signalName: WaterPumpStatus
+  dataType: HUInt64
+  abstractionName: Input_WaterPumpStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- PDC.Input_PDC24VVoltageValue:
+  type: sensor
+  signalName: C_VBAT
+  dataType: HUInt64
+  abstractionName: Input_PDC24VVoltageValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0000
+
+
+- PDC.Input_PDC12VVoltageValue:
+  type: sensor
+  signalName: VBat_12V
+  dataType: HUInt64
+  abstractionName: Input_PDC12VVoltageValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0000
 
 
 - Regenerative_Braking_System.Input_RetarderSwitchStatus:
@@ -6626,7 +6660,7 @@
   type: actuator
   signalName: CLU_ADASSetShortcut_Req_MM
   dataType: HUInt64
-  abstractionName: Output_AdasSettingMenuOnReq.Output_AdasSettingMenuOnReq_MCAN
+  abstractionName: Output_AdasSettingMenuOnReq_MCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "MENU_ON"
@@ -6639,7 +6673,7 @@
   type: actuator
   signalName: CLU_LanguageInfo_NEW
   dataType: HUInt64
-  abstractionName: Output_ClusterLanguageStatus.Output_ClusterLanguageStatus_MCAN
+  abstractionName: Output_ClusterLanguageStatus_MCAN
   valueEnum:
     0x0: "KOREA"
     0x1: "ENGLISH_US"
@@ -6744,7 +6778,7 @@
   type: actuator
   signalName: CV_EDGReset
   dataType: HUInt64
-  abstractionName: Output_EDGScoreResetStatus.Output_EDGScoreResetStatus_CCAN
+  abstractionName: Output_EDGScoreResetStatus_CCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "RESET_REQ"
@@ -6753,164 +6787,6 @@
     0x0: 0x0
     0x1: 0x1
     0x2~0x3: 0x2
-
-
-- Set_Speed.Input_EngineCcActive:
-  type: sensor
-  signalName: CruiseCtrlActive
-  dataType: HUInt64
-  abstractionName: Input_EngineCcActive
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- Set_Speed.Input_SmvSetSpeedStatus:
-  type: sensor
-  signalName: SMV_SetSpdSta
-  dataType: HUInt64
-  abstractionName: Input_SmvSetSpeedStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "GRAY"
-    0x2: "GREEN"
-    0x3: "WHITE"
-    0x4: "WHITE_BLINK"
-    0x5: "CYAN"
-  matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
-    0x4: 0x4
-    0x6: 0x5
-    ELSE: 0x0
-
-
-- Set_Speed.Input_SRSActiveStatus:
-  type: sensor
-  signalName: SRS_DH_act
-  dataType: HUInt64
-  abstractionName: Input_SRSActiveStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
-- Set_Speed.Input_RetarderSwitchStatus:
-  type: sensor
-  signalName: C_RetarderSW
-  dataType: HUInt64
-  abstractionName: Input_RetarderSwitchStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "READY"
-    0x2: "STEP1"
-    0x3: "STEP2"
-    0x4: "STEP3"
-    0x5: "STEP4"
-  matchingTable:
-    0x0: 0x1
-    0x1: 0x2
-    0x2: 0x3
-    0x3: 0x4
-    0x4: 0x5
-    ELSE: 0x0
-
-
-- Set_Speed.Input_EngineCcSetSpeed:
-  type: sensor
-  signalName: CruiseCtrlSetSpeed
-  dataType: HUInt64
-  abstractionName: Input_EngineCcSetSpeed
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0x0
-
-
-- Set_Speed.Input_SmvSetSpeedValue:
-  type: sensor
-  signalName: SMV_SetSpdVal
-  dataType: HUInt64
-  abstractionName: Input_SmvSetSpeedValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFF
-
-
-- Set_Speed.Input_SRSSetSpeedValue:
-  type: sensor
-  signalName: SRS_DHSetSpd
-  dataType: HUInt64
-  abstractionName: Input_SRSSetSpeedValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFFFFFFFF
-
-
-- Set_Speed.Input_BremsomatSetSpeedValue:
-  type: sensor
-  signalName: BremsomatSetSpeed
-  dataType: HUInt64
-  abstractionName: Input_BremsomatSetSpeedValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFFFFFFFF
-
-
-- Set_Speed.Input_MCCStatus:
-  type: sensor
-  signalName: MCCstate
-  dataType: HUInt64
-  abstractionName: Input_MCCStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x10: 0x1
-    0x11: 0x1
-    ELSE: 0x0
-
-
-- Set_Speed.Input_DHCState:
-  type: sensor
-  signalName: DHC_State
-  dataType: HUInt64
-  abstractionName: Input_DHCState
-  valueEnum:
-    0x0: "OFF"
-    0x1: "READY"
-    0x2: "ACTIVE"
-  matchingTable:
-    0x0: 0x0
-    0x1: 0x1
-    0x2: 0x2
-    ELSE: 0x0
-
-
-- Set_Speed.Input_MCCMinSpeedValue:
-  type: sensor
-  signalName: MCC_Min_Speed
-  dataType: HUInt64
-  abstractionName: Input_MCCMinSpeedValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0xFFFFFFFF
-
-
-- Set_Speed.Input_DHCToleranceValue:
-  type: sensor
-  signalName: DHC_Tolerance
-  dataType: HUInt64
-  abstractionName: Input_DHCToleranceValue
-  matchingTable:
-    VALUE:
-    TIMEOUT: 0x0
 
 
 - Settings_CV.Input_AdasWarnVolumeSetReqStatus:
@@ -7312,7 +7188,7 @@
   type: actuator
   signalName: CV_CLU_AdasVolAutoOnSetReq_MM
   dataType: HUInt64
-  abstractionName: Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_CCAN
+  abstractionName: Output_AdasWarnSoundAutoOnReq_CCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "ON_REQUEST"
@@ -7325,7 +7201,7 @@
   type: actuator
   signalName: CLU_AdasVolAutoOnSetReq_MM
   dataType: HUInt64
-  abstractionName: Output_AdasWarnSoundAutoOnReq.Output_AdasWarnSoundAutoOnReq_MCAN
+  abstractionName: Output_AdasWarnSoundAutoOnReq_MCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "ON_REQUEST"
@@ -7338,7 +7214,7 @@
   type: actuator
   signalName: USM_CluAdasVolSta
   dataType: HUInt64
-  abstractionName: Output_AdasWarnVolStatus.Output_AdasWarnVolStatus_CCAN
+  abstractionName: Output_AdasWarnVolStatus_CCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "VOL_OFF"
@@ -7357,7 +7233,7 @@
   type: actuator
   signalName: USM_CluDISWrngSta_MM
   dataType: HUInt64
-  abstractionName: Output_DisWarnSetStatus.Output_DisWarnSetStatus_MCAN
+  abstractionName: Output_DisWarnSetStatus_MCAN
   valueEnum:
     0x0: "DISABLE"
     0x1: "ENABLE"
@@ -7372,7 +7248,7 @@
   type: actuator
   signalName: USM_CluFuelEconUnitkmSta_MM
   dataType: HUInt64
-  abstractionName: Output_FuelEconomyUnitKmStatus.Output_FuelEconomyUnitKmStatus_MCAN
+  abstractionName: Output_FuelEconomyUnitKmStatus_MCAN
   valueEnum:
     0x0: "KM_PER_LITTER"
     0x1: "LITTER_PER_KM"
@@ -7387,7 +7263,7 @@
   type: actuator
   signalName: USM_CluFuelEconUnitmiSta_MM
   dataType: HUInt64
-  abstractionName: Output_FuelEconomyUnitMiStatus.Output_FuelEconomyUnitMiStatus_MCAN
+  abstractionName: Output_FuelEconomyUnitMiStatus_MCAN
   valueEnum:
     0x0: "US_GALLON"
     0x1: "UK_GALLON"
@@ -7402,7 +7278,7 @@
   type: actuator
   signalName: USM_CluMFSWPopupSta_MM
   dataType: HUInt64
-  abstractionName: Output_MfswPopupSetStatus.Output_MfswPopupSetStatus_MCAN
+  abstractionName: Output_MfswPopupSetStatus_MCAN
   valueEnum:
     0x0: "DISABLE"
     0x1: "ENABLE"
@@ -7417,7 +7293,7 @@
   type: actuator
   signalName: USM_CluSrvRmndrMdeSta_MM
   dataType: HUInt64
-  abstractionName: Output_SrvReminderModeSetStatus.Output_SrvReminderModeSetStatus_MCAN
+  abstractionName: Output_SrvReminderModeSetStatus_MCAN
   valueEnum:
     0x0: "CUSTOM_MODE"
     0x1: "WORKSHOP_MODE"
@@ -7434,7 +7310,7 @@
   dataType: HInt64
   rawType: SIGN_MAGNITUDE
   rawSize: 18
-  abstractionName: Output_SrvReminderRemainDistValue.Output_SrvReminderRemainDistValue_MCAN
+  abstractionName: Output_SrvReminderRemainDistValue_MCAN
   matchingTable:
     VALUE:
 
@@ -7445,7 +7321,7 @@
   dataType: HInt64
   rawType: SIGN_MAGNITUDE
   rawSize: 15
-  abstractionName: Output_SrvReminderRemainPeriodValue.Output_SrvReminderRemainPeriodValue_MCAN
+  abstractionName: Output_SrvReminderRemainPeriodValue_MCAN
   matchingTable:
     VALUE:
 
@@ -7454,7 +7330,7 @@
   type: actuator
   signalName: USM_CluSrvRmndrUsrSetDstSta_MM
   dataType: HUInt64
-  abstractionName: Output_SrvReminderSetDistValue.Output_SrvReminderSetDistValue_MCAN
+  abstractionName: Output_SrvReminderSetDistValue_MCAN
   matchingTable:
     VALUE:
 
@@ -7463,7 +7339,7 @@
   type: actuator
   signalName: USM_CluSrvRmndrUsrSetPrdSta_MM
   dataType: HUInt64
-  abstractionName: Output_SrvReminderSetPeriodValue.Output_SrvReminderSetPeriodValue_MCAN
+  abstractionName: Output_SrvReminderSetPeriodValue_MCAN
   matchingTable:
     VALUE:
 
@@ -7472,7 +7348,7 @@
   type: actuator
   signalName: USM_CluSrvRmndrSetSta_MM
   dataType: HUInt64
-  abstractionName: Output_SrvReminderSetStatus.Output_SrvReminderSetStatus_MCAN
+  abstractionName: Output_SrvReminderSetStatus_MCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "OFF"
@@ -7487,7 +7363,7 @@
   type: actuator
   signalName: USM_CluThmDtlListType_New
   dataType: HUInt64
-  abstractionName: Output_ClusterDetailThemeListStatus.Output_ClusterDetailThemeListStatus_MCAN
+  abstractionName: Output_ClusterDetailThemeListStatus_MCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "INVALID"
@@ -7504,7 +7380,7 @@
   type: actuator
   signalName: USM_CluThmDtlSetSta_New
   dataType: HUInt64
-  abstractionName: Output_ClusterDetailThemeStatus.Output_ClusterDetailThemeStatus_MCAN
+  abstractionName: Output_ClusterDetailThemeStatus_MCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "INVALID"
@@ -7525,7 +7401,7 @@
   type: actuator
   signalName: USM_CluThmListType_New
   dataType: HUInt64
-  abstractionName: Output_ClusterMainThemeListStatus.Output_ClusterMainThemeListStatus_MCAN
+  abstractionName: Output_ClusterMainThemeListStatus_MCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "INVALID"
@@ -7546,7 +7422,7 @@
   type: actuator
   signalName: USM_CluThmSta_New
   dataType: HUInt64
-  abstractionName: Output_ClusterMainThemeStatus.Output_ClusterMainThemeStatus_MCAN
+  abstractionName: Output_ClusterMainThemeStatus_MCAN
   valueEnum:
     0x0: "NON_OPTION"
     0x1: "INVALID"
@@ -7567,7 +7443,7 @@
   type: actuator
   signalName: USM_WelcomeSndSta_MM
   dataType: HUInt64
-  abstractionName: Output_WelcomeSoundSetStatus.Output_WelcomeSoundSetStatus_MCAN
+  abstractionName: Output_WelcomeSoundSetStatus_MCAN
   valueEnum:
     0x0: "DISABLE"
     0x1: "ENABLE"
@@ -7582,7 +7458,7 @@
   type: actuator
   signalName: Wrn_Snd_AdasVolFdbck
   dataType: HUInt64
-  abstractionName: Output_AdasWarnVolFeedbackReq.Output_AdasWarnVolFeedbackReq_CCAN
+  abstractionName: Output_AdasWarnVolFeedbackReq_CCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "WARN_OFF"
@@ -7601,7 +7477,7 @@
   type: actuator
   signalName: CV_USM_TPMSPrsrUnitSta_MM
   dataType: HUInt64
-  abstractionName: Output_PressureUnit_stat.Output_PressureUnit_stat_CCAN
+  abstractionName: Output_PressureUnit_stat_CCAN
   valueEnum:
     0x0: "PSI"
     0x1: "KPA"
@@ -7618,7 +7494,7 @@
   type: actuator
   signalName: CV_USM_WeightUnitSta_MM
   dataType: HUInt64
-  abstractionName: Output_WeightUnit_stat.Output_WeightUnit_stat_CCAN
+  abstractionName: Output_WeightUnit_stat_CCAN
   valueEnum:
     0x0: "KG"
     0x1: "POUND"
@@ -7627,6 +7503,164 @@
     0x1: 0x0
     0x2: 0x1
     0x7: 0x2
+
+
+- Set_Speed.Input_EngineCcActive:
+  type: sensor
+  signalName: CruiseCtrlActive
+  dataType: HUInt64
+  abstractionName: Input_EngineCcActive
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Set_Speed.Input_SmvSetSpeedStatus:
+  type: sensor
+  signalName: SMV_SetSpdSta
+  dataType: HUInt64
+  abstractionName: Input_SmvSetSpeedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GRAY"
+    0x2: "GREEN"
+    0x3: "WHITE"
+    0x4: "WHITE_BLINK"
+    0x5: "CYAN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x6: 0x5
+    ELSE: 0x0
+
+
+- Set_Speed.Input_SRSActiveStatus:
+  type: sensor
+  signalName: SRS_DH_act
+  dataType: HUInt64
+  abstractionName: Input_SRSActiveStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Set_Speed.Input_RetarderSwitchStatus:
+  type: sensor
+  signalName: C_RetarderSW
+  dataType: HUInt64
+  abstractionName: Input_RetarderSwitchStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "STEP1"
+    0x3: "STEP2"
+    0x4: "STEP3"
+    0x5: "STEP4"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    ELSE: 0x0
+
+
+- Set_Speed.Input_EngineCcSetSpeed:
+  type: sensor
+  signalName: CruiseCtrlSetSpeed
+  dataType: HUInt64
+  abstractionName: Input_EngineCcSetSpeed
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Set_Speed.Input_SmvSetSpeedValue:
+  type: sensor
+  signalName: SMV_SetSpdVal
+  dataType: HUInt64
+  abstractionName: Input_SmvSetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Set_Speed.Input_SRSSetSpeedValue:
+  type: sensor
+  signalName: SRS_DHSetSpd
+  dataType: HUInt64
+  abstractionName: Input_SRSSetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFFFF
+
+
+- Set_Speed.Input_BremsomatSetSpeedValue:
+  type: sensor
+  signalName: BremsomatSetSpeed
+  dataType: HUInt64
+  abstractionName: Input_BremsomatSetSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFFFF
+
+
+- Set_Speed.Input_MCCStatus:
+  type: sensor
+  signalName: MCCstate
+  dataType: HUInt64
+  abstractionName: Input_MCCStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x10: 0x1
+    0x11: 0x1
+    ELSE: 0x0
+
+
+- Set_Speed.Input_DHCState:
+  type: sensor
+  signalName: DHC_State
+  dataType: HUInt64
+  abstractionName: Input_DHCState
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "ACTIVE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Set_Speed.Input_MCCMinSpeedValue:
+  type: sensor
+  signalName: MCC_Min_Speed
+  dataType: HUInt64
+  abstractionName: Input_MCCMinSpeedValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFFFF
+
+
+- Set_Speed.Input_DHCToleranceValue:
+  type: sensor
+  signalName: DHC_Tolerance
+  dataType: HUInt64
+  abstractionName: Input_DHCToleranceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
 
 
 - Sliding_Ramp.Input_SlidingRampOpenStatus:
@@ -7646,7 +7680,7 @@
   type: actuator
   signalName: CLU_AdasWarnSndStat
   dataType: HUInt64
-  abstractionName: Output_AdasWarnSoundStatus.Output_AdasWarnSoundStatus_CCAN
+  abstractionName: Output_AdasWarnSoundStatus_CCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "WARN_OFF"
@@ -7962,6 +7996,19 @@
   signalName: CallBzSWStatus
   dataType: HUInt64
   abstractionName: Input_StopStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Tachograph.Input_TachographSysFailStatus:
+  type: sensor
+  signalName: SystemEvent
+  dataType: HUInt64
+  abstractionName: Input_TachographSysFailStatus
   valueEnum:
     0x0: "OFF"
     0x1: "ON"
@@ -8297,19 +8344,6 @@
     ELSE: 0x0
 
 
-- Tachograph.Input_TachographSysFailStatus:
-  type: sensor
-  signalName: SystemEvent
-  dataType: HUInt64
-  abstractionName: Input_TachographSysFailStatus
-  valueEnum:
-    0x0: "OFF"
-    0x1: "ON"
-  matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
-
-
 - Transmission_Indicator_CV.Input_TransmissionCurrentGearStatus:
   type: sensor
   signalName: TransCurrentGear
@@ -8512,9 +8546,11 @@
   valueEnum:
     0x0: "AUTO"
     0x1: "MANUAL"
+    0x2: "OFF"
   matchingTable:
     0x0: 0x0
-    ELSE: 0x1
+    0x1: 0x1
+    ELSE: 0x2
 
 
 - Transmission_Indicator_CV.Input_SwitchRequestedGearStatus2:
@@ -8574,6 +8610,32 @@
     0x79: 0xD
     0xFB: 0xE
     ELSE: 0xF
+
+
+- Transmission_Indicator_CV.Input_ZFSelectModeStatus:
+  type: sensor
+  signalName: Transmission_Mode1_Indicator
+  dataType: HUInt64
+  abstractionName: Input_ZFSelectModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Transmission_Indicator_CV.Input_AllisonSelectModeStatus:
+  type: sensor
+  signalName: Temporary_Manual_Mode_Indicator
+  dataType: HUInt64
+  abstractionName: Input_AllisonSelectModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
 
 
 - Transmission_Warning_CV.Input_ATMOverHeatLampStatus:
@@ -8976,7 +9038,7 @@
   type: actuator
   signalName: CLU_AvgFuelCnsmptnVal_Digit_MM
   dataType: HUInt64
-  abstractionName: Output_AvgFuelEconomyDigitStatus.Output_AvgFuelEconomyDigitStatus_MCAN
+  abstractionName: Output_AvgFuelEconomyDigitStatus_MCAN
   valueEnum:
     0x0: "DIGIT2"
     0x1: "DIGIT3"
@@ -8989,7 +9051,7 @@
   type: actuator
   signalName: CLU_AvgFuelCnsmptnUnitSta_MM
   dataType: HUInt64
-  abstractionName: Output_AvgFuelEconomyUnitStatus.Output_AvgFuelEconomyUnitStatus_MCAN
+  abstractionName: Output_AvgFuelEconomyUnitStatus_MCAN
   valueEnum:
     0x0: "KM_PER_LITTER"
     0x1: "LITTER_PER_KM"
@@ -9006,7 +9068,7 @@
   type: actuator
   signalName: CLU_AvgFuelCnsmptnVal_MM
   dataType: HUInt64
-  abstractionName: Output_AvgFuelEconomyValue.Output_AvgFuelEconomyValue_MCAN
+  abstractionName: Output_AvgFuelEconomyValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9015,7 +9077,7 @@
   type: actuator
   signalName: CLU_AvgFCL_DrvInfo_Digit_MM
   dataType: HUInt64
-  abstractionName: Output_DrvInfoAvgFuelConsDigit.Output_DrvInfoAvgFuelConsDigit_MCAN
+  abstractionName: Output_DrvInfoAvgFuelConsDigit_MCAN
   valueEnum:
     0x0: "DIGIT2"
     0x1: "DIGIT3"
@@ -9028,7 +9090,7 @@
   type: actuator
   signalName: CLU_AvgFCL_DrvInfo_reset_MM
   dataType: HUInt64
-  abstractionName: Output_DrvInfoAvgFuelConsResetStatus.Output_DrvInfoAvgFuelConsResetStatus_MCAN
+  abstractionName: Output_DrvInfoAvgFuelConsResetStatus_MCAN
   valueEnum:
     0x0: "DEFAULT"
     0x1: "RESET"
@@ -9041,7 +9103,7 @@
   type: actuator
   signalName: CLU_AvgFCL_DrvInfo_MM
   dataType: HUInt64
-  abstractionName: Output_DrvInfoAvgFuelConsValue.Output_DrvInfoAvgFuelConsValue_MCAN
+  abstractionName: Output_DrvInfoAvgFuelConsValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9050,7 +9112,7 @@
   type: actuator
   signalName: CLU_EVDTEDisp_MM
   dataType: HUInt64
-  abstractionName: Output_EvDTEValue.Output_EvDTEValue_MCAN
+  abstractionName: Output_EvDTEValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9059,7 +9121,7 @@
   type: actuator
   signalName: CV_CLU_OdoVal
   dataType: HUInt64
-  abstractionName: Output_OdometerValue.Output_OdometerValue_CCAN
+  abstractionName: Output_OdometerValue_CCAN
   matchingTable:
     VALUE:
 
@@ -9068,7 +9130,7 @@
   type: actuator
   signalName: CLU_OdoVal
   dataType: HUInt64
-  abstractionName: Output_OdometerValue.Output_OdometerValue_MCAN
+  abstractionName: Output_OdometerValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9077,7 +9139,7 @@
   type: actuator
   signalName: CV_CLU_DTEVal
   dataType: HUInt64
-  abstractionName: Output_TotalDTEValue.Output_TotalDTEValue_CCAN
+  abstractionName: Output_TotalDTEValue_CCAN
   matchingTable:
     VALUE:
 
@@ -9086,7 +9148,7 @@
   type: actuator
   signalName: CLU_DTEVal
   dataType: HUInt64
-  abstractionName: Output_TotalDTEValue.Output_TotalDTEValue_MCAN
+  abstractionName: Output_TotalDTEValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9095,7 +9157,7 @@
   type: actuator
   signalName: CLU_TermAvgSync_MM
   dataType: HUInt64
-  abstractionName: Output_TermAvgFuelConsSyncCounter.Output_TermAvgFuelConsSyncCounter_MCAN
+  abstractionName: Output_TermAvgFuelConsSyncCounter_MCAN
   valueEnum:
     0x0: "TIME0"
     0x1: "TIME1"
@@ -9112,7 +9174,7 @@
   type: actuator
   signalName: CLU_TermAvgFuelCnsmptnVal_MM
   dataType: HUInt64
-  abstractionName: Output_TermAvgFuelConsValue.Output_TermAvgFuelConsValue_MCAN
+  abstractionName: Output_TermAvgFuelConsValue_MCAN
   matchingTable:
     VALUE:
 
@@ -9121,7 +9183,7 @@
   type: actuator
   signalName: CLU_TermAvgFCL_Digit_MM
   dataType: HUInt64
-  abstractionName: Output_TermAvgFuelConsValueDigit.Output_TermAvgFuelConsValueDigit_MCAN
+  abstractionName: Output_TermAvgFuelConsValueDigit_MCAN
   valueEnum:
     0x0: "DIGIT2"
     0x1: "DIGIT3"
@@ -9136,7 +9198,7 @@
   type: actuator
   signalName: CV_CLU_TripUnitSta
   dataType: HUInt64
-  abstractionName: Output_TripUnitStatus.Output_TripUnitStatus_CCAN
+  abstractionName: Output_TripUnitStatus_CCAN
   valueEnum:
     0x0: "KM"
     0x1: "MILE"
@@ -9151,7 +9213,7 @@
   type: actuator
   signalName: CLU_TripUnitSta
   dataType: HUInt64
-  abstractionName: Output_TripUnitStatus.Output_TripUnitStatus_MCAN
+  abstractionName: Output_TripUnitStatus_MCAN
   valueEnum:
     0x0: "KM"
     0x1: "MILE"
@@ -9752,6 +9814,19 @@
     ELSE: 0x5
 
 
+- Working_Lamp.Input_WorkingLampStatus:
+  type: sensor
+  signalName: C_WorkingLampOut
+  dataType: HUInt64
+  abstractionName: Input_WorkingLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - WPC_CV.Input_WPCPopUpStatus:
   type: sensor
   signalName: WPC_PhnLftWrngSta
@@ -9842,6 +9917,23 @@
     ELSE: 0x0
 
 
+- xEV_Motor.Input_ShiftLeverPositionAcceptance:
+  type: sensor
+  signalName: ShiftLeverPositionAcceptance
+  dataType: HUInt64
+  abstractionName: Input_ShiftLeverPositionAcceptance
+  valueEnum:
+    0x0: "OFF"
+    0x1: "COND_1"
+    0x2: "COND_2"
+    0x3: "COND_3"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
 - xEV_Service_Lamp_CV.Input_ServiceIndiReqStatusFromLDC:
   type: sensor
   signalName: LDC_AmberWarningLampStatus
@@ -9868,6 +9960,19 @@
     0x0: 0x0
     0x1: 0x1
     TIMEOUT: 0x2
+    ELSE: 0x0
+
+
+- xEV_Service_Lamp_CV.Input_AmberStopLampStatus_AuxInv:
+  type: sensor
+  signalName: Amber_Stop_Lamp_Status_AuxInv
+  dataType: HUInt64
+  abstractionName: Input_AmberStopLampStatus_AuxInv
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
     ELSE: 0x0
 
 

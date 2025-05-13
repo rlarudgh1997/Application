@@ -46,6 +46,10 @@
   type: branch
 
 
+- Illumination_2_0:
+  type: branch
+
+
 - Input_Output_Processing:
   type: branch
 
@@ -66,7 +70,15 @@
   type: branch
 
 
+- Screen_Control_Logic_2_0:
+  type: branch
+
+
 - Settings:
+  type: branch
+
+
+- Settings_2_0:
   type: branch
 
 
@@ -79,6 +91,10 @@
 
 
 - Sunroof_Window_Open:
+  type: branch
+
+
+- Sunroof_Window_Open_2_0:
   type: branch
 
 
@@ -483,6 +499,24 @@
     0x2: "INVALID"
 
 
+- Illumination_2_0.Output_DetentStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+
+
+- Illumination_2_0.Output_IlluminationLevelValue:
+  type: branch
+  dataType: HUInt64
+
+
+- Illumination_2_0.Output_NotMinIlluminationLevelValue:
+  type: branch
+  dataType: HUInt64
+
+
 - Input_Output_Processing.Output_SrvReminderRemainDistValue:
   type: branch
   dataType: HInt64
@@ -654,6 +688,72 @@
     0x2: "CANCEL"
     0x3: "INVALID"
     0x4: "DEFAULT"
+
+
+- Screen_Control_Logic_2_0.Output_AutoStopTimeManualResetReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET_REQ"
+
+
+- Screen_Control_Logic_2_0.Output_ClusterLanguageStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "INVALID"
+    0x30: "THAI"
+    0x31: "LITHUANIAN"
+    0x32: "LATVIAN"
+    0x33: "ESTONIAN"
 
 
 - Settings.Output_AdasWarnSoundAutoOnReq:
@@ -1058,6 +1158,17 @@
     0x2: "INVALID"
 
 
+- Settings_2_0.Output_AdasWarnVolFeedbackReq:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "VOL1"
+    0x3: "VOL2"
+    0x4: "VOL3"
+
+
 - Sound.Output_AdasWarnSoundStatus:
   type: branch
   dataType: HUInt64
@@ -1088,6 +1199,7 @@
     0x0: "DEFAULT"
     0x1: "TAKE_OVER_REQ"
     0x2: "OVER_SPEED_WARN"
+    0x3: "MSLA_WARN"
 
 
 - Sound.Output_AmpSoundImsReqStatus:
@@ -2388,6 +2500,49 @@
     ELSE: 0x0
 
 
+- Convenience_Device_Control_Screen.Input_OutMirrorFoldStatusFromBCM:
+  type: sensor
+  signalName: Mirror_FldCtrlSta
+  dataType: HUInt64
+  description: "Mirror Fold and Folding Control State"
+  abstractionName: Input_OutMirrorFoldStatusFromBCM
+  valueEnum:
+    0x0: "FOLDING"
+    0x1: "FOLD"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Convenience_Device_Control_Screen.Input_OutMirrorUnfoldStatusFromBCM:
+  type: sensor
+  signalName: Mirror_UnFldCtrlSta
+  dataType: HUInt64
+  description: "Mirror Unfold and Unfolding Control State"
+  abstractionName: Input_OutMirrorUnfoldStatusFromBCM
+  valueEnum:
+    0x0: "UNFOLDING"
+    0x1: "UNFOLD"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Convenience_Device_Control_Screen.Input_PowerTrunkOpenPositionValue:
+  type: sensor
+  signalName: PTGM_FD_PositionPercentage
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PowerTrunkOpenPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
 - Convenience_Device_Control_Screen.Input_PtgmFromBdcOnOffStatus:
   type: sensor
   signalName: USM_PTLPTGPwrModeSta
@@ -2420,6 +2575,24 @@
     ELSE: 0x0
 
 
+- Convenience_Device_Control_Screen.Input_PtgmOptionInfoStatus:
+  type: sensor
+  signalName: PTGM_TrnkTlgtOption
+  dataType: HUInt64
+  description: "PTGM(Power Tail Gate Module) Option Signal"
+  abstractionName: Input_PtgmOptionInfoStatus
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "POWER_TRUNK"
+    0x2: "POWER_TAILGATE"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
 - Convenience_Device_Control_Screen.Input_SideMirrorOpenStatus:
   type: sensor
   signalName: dummy node
@@ -2429,6 +2602,374 @@
   valueEnum:
     0x0: "FOLD"
     0x1: "UNFOLD"
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone10FaultStatus:
+  type: sensor
+  signalName: SGU_Zone10Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone10FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone10OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone10Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone10OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone1FaultStatus:
+  type: sensor
+  signalName: SGU_Zone1Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone1FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone1OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone1Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone1OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone2FaultStatus:
+  type: sensor
+  signalName: SGU_Zone2Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone2FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone2OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone2Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone2OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone3FaultStatus:
+  type: sensor
+  signalName: SGU_Zone3Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone3FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone3OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone3Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone3OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone4FaultStatus:
+  type: sensor
+  signalName: SGU_Zone4Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone4FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone4OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone4Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone4OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone5FaultStatus:
+  type: sensor
+  signalName: SGU_Zone5Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone5FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone5OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone5Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone5OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone6FaultStatus:
+  type: sensor
+  signalName: SGU_Zone6Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone6FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone6OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone6Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone6OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone7FaultStatus:
+  type: sensor
+  signalName: SGU_Zone7Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone7FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone7OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone7Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone7OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone8FaultStatus:
+  type: sensor
+  signalName: SGU_Zone8Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone8FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone8OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone8Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone8OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone9FaultStatus:
+  type: sensor
+  signalName: SGU_Zone9Fault
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone9FaultStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAULT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SmartRoofGlassZone9OnOffStatus:
+  type: sensor
+  signalName: SGU_Zone9Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SmartRoofGlassZone9OnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLEAR_ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SunroofFrontBlindOpenPositionValue:
+  type: sensor
+  signalName: RCM_BldDetailPos
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SunroofFrontBlindOpenPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Convenience_Device_Control_Screen.Input_SunroofFrontGlassOpenPositionValue:
+  type: sensor
+  signalName: RCM_GlsDetailPos
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SunroofFrontGlassOpenPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Convenience_Device_Control_Screen.Input_SunroofFrontGlassStatus:
+  type: sensor
+  signalName: RCM_GlsPosSta
+  dataType: HUInt64
+  description: "Sunroof Glass Position Status"
+  abstractionName: Input_SunroofFrontGlassStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x7: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_SunroofRearBlindOpenPositionValue:
+  type: sensor
+  signalName: RCM_RR_BldDetailPos
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SunroofRearBlindOpenPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Convenience_Device_Control_Screen.Input_SunroofRearGlassOpenPositionValue:
+  type: sensor
+  signalName: RCM_RR_GlsDetailPos
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_SunroofRearGlassOpenPositionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Convenience_Device_Control_Screen.Input_SunroofRearGlassStatus:
+  type: sensor
+  signalName: RCM_RR_GlsPosSta
+  dataType: HUInt64
+  description: "Sunroof Glass Position Status"
+  abstractionName: Input_SunroofRearGlassStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "ERROR"
+  matchingTable:
+    0x7: 0x1
+    ELSE: 0x0
+
+
+- Convenience_Device_Control_Screen.Input_TrunkOpenStatus:
+  type: sensor
+  signalName: Trunk_TrnkTlgtSwSta
+  dataType: HUInt64
+  description: "Full Lock SW Status Signal(TailGate/TrunkLid Tpye all)1. Luggage or Trunkroom Lamp On/Off2. TailGate/TrunkLid Open Ind in cluster3. Normal Open SW  - SW Off: Full Lock(Full Close state)  - SW On: ^Full Lock"
+  abstractionName: Input_TrunkOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
 
 
 - Convenience_Device_Control_Screen.Input_TrunkTailgateMotorOpenStatusFromBdc2nd:
@@ -3400,6 +3941,7 @@
     0x4: "DEEP_SNOW"
     0x5: "ROCK"
     0x6: "OFF"
+    0x7: "DESERT"
   matchingTable:
     0x1: 0x0
     0x2: 0x1
@@ -3407,6 +3949,7 @@
     0x4: 0x3
     0x5: 0x4
     0x6: 0x5
+    0x7: 0x7
     ELSE: 0x6
 
 
@@ -3920,6 +4463,22 @@
     ELSE: 0x0
 
 
+- Illumination.Input_ExtLowBeamOnReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoOnReq
+  dataType: HUInt64
+  description: "-(Old)C_HLampLowON"
+  abstractionName: Input_ExtLowBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
 - Illumination.Input_InteriorLampOnReqStatus:
   type: sensor
   signalName: Lamp_IntTailLmpOnReq
@@ -4125,6 +4684,188 @@
     0x1: 0x0
     0x2: 0x1
     0x0: 0x2
+
+
+- Illumination_2_0.Input_AutolightSensorNightStatus:
+  type: sensor
+  signalName: Lamp_AutoLtSnsrNightSta
+  dataType: HUInt64
+  description: "This signal indicates autolight sensor output "
+  abstractionName: Input_AutolightSensorNightStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NIGHT"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_2_0.Input_AvTailLampStatus:
+  type: sensor
+  signalName: Lamp_AvTailLmpSta
+  dataType: HUInt64
+  description: "-Send with at the same time with C_IntTailOn-Initiail Value: 1"
+  abstractionName: Input_AvTailLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_2_0.Input_CampModeOnOffStatus:
+  type: sensor
+  signalName: HU_CampModeSta
+  dataType: HUInt64
+  description: "Camp mode set siganl"
+  abstractionName: Input_CampModeOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Illumination_2_0.Input_ExtLowBeamOnReqStatus:
+  type: sensor
+  signalName: Lamp_HdLmpLoOnReq
+  dataType: HUInt64
+  description: "-(Old)C_HLampLowON"
+  abstractionName: Input_ExtLowBeamOnReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Illumination_2_0.Input_NaviMapDayNightStatus:
+  type: sensor
+  signalName: HU_DayNightState
+  dataType: HUInt64
+  description: "HU(AVNT) display day and night time state (When automatically adjusted)"
+  abstractionName: Input_NaviMapDayNightStatus
+  valueEnum:
+    0x0: "DAY"
+    0x1: "NIGHT"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Illumination_2_0.Input_RheostatLevelSetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluRheostatLvl
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_RheostatLevelSetReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "STEP1"
+    0x2: "STEP2"
+    0x3: "STEP3"
+    0x4: "STEP4"
+    0x5: "STEP5"
+    0x6: "STEP6"
+    0x7: "STEP7"
+    0x8: "STEP8"
+    0x9: "STEP9"
+    0xA: "STEP10"
+    0xB: "STEP11"
+    0xC: "STEP12"
+    0xD: "STEP13"
+    0xE: "STEP14"
+    0xF: "STEP15"
+    0x10: "STEP16"
+    0x11: "STEP17"
+    0x12: "STEP18"
+    0x13: "STEP19"
+    0x14: "STEP20"
+    0x15: "STEP21"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    0x0F: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    0x12: 0x12
+    0x13: 0x13
+    0x14: 0x14
+    0x15: 0x15
+    ELSE: 0x0
+
+
+- Illumination_2_0.Input_UtilityModeOnOffStatus:
+  type: sensor
+  signalName: VCU_UtilModeUsmSta
+  dataType: HUInt64
+  description: "USM Status of Rest Mode function"
+  abstractionName: Input_UtilityModeOnOffStatus
+  valueEnum:
+    0x0: "NON_OPTION"
+    0x1: "MODE_OFF"
+    0x2: "MODE_ON"
+    0x3: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Illumination_2_0.Output_DetentStatus.Output_DetentStatus_CCAN:
+  type: actuator
+  signalName: CLU_DtntOutSta
+  dataType: HUInt64
+  description: "This signal indicates the status of detent illumination. Cluster sends the detent information for a Unified Illumination system."
+  abstractionName: Output_DetentStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Illumination_2_0.Output_IlluminationLevelValue.Output_IlluminationLevelValue_CCAN:
+  type: actuator
+  signalName: CLU_AutoBrightSta
+  dataType: HUInt64
+  description: "This signal is used for a auto bright level of CLUSTER from 1step to 200step for a Unified Illumination system.※ Start Value : Current value"
+  abstractionName: Output_IlluminationLevelValue
+  matchingTable:
+    VALUE:
+
+
+- Illumination_2_0.Output_NotMinIlluminationLevelValue.Output_NotMinIlluminationLevelValue_CCAN:
+  type: actuator
+  signalName: CLU_NotMinModeBrightSta
+  dataType: HUInt64
+  description: "This signal is used for a Cluster brightness level when not in minimum brightness mode.※ Start Value : Current value"
+  abstractionName: Output_NotMinIlluminationLevelValue
+  matchingTable:
+    VALUE:
 
 
 - Input_Output_Processing.Input_ClusterSwitchScrollCounterStatus:
@@ -5046,6 +5787,32 @@
     ELSE: 0x0
 
 
+- Screen_Control_Logic.Input_TelematicsWeatherTypeInfo:
+  type: sensor
+  signalName: WeatherType_New
+  dataType: HUInt64
+  description: "Send weather informations in to 7 Types(clear, cloudy, rain, snow, fog, Thunder and Lightening, clear up)"
+  abstractionName: Input_TelematicsWeatherTypeInfo
+  valueEnum:
+    0x0: "CLEAR"
+    0x1: "CLOUDY"
+    0x2: "RAIN"
+    0x3: "SNOW"
+    0x4: "FOG"
+    0x5: "THUNDER"
+    0x6: "CLEAR_UP"
+    0x7: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    ELSE: 0x7
+
+
 - Screen_Control_Logic.Output_AdasSettingMenuOnReq.Output_AdasSettingMenuOnReq_MCAN:
   type: actuator
   signalName: CLU_ADASSetShortcut_Req_MM
@@ -5318,6 +6085,134 @@
     0x2: 0x1
     0x3: 0x2
     0x7: 0x3
+
+
+- Screen_Control_Logic_2_0.Output_AutoStopTimeManualResetReq.Output_AutoStopTimeManualResetReq_CCAN:
+  type: actuator
+  signalName: CLU_ISGoperationTimeRstReq
+  dataType: HUInt64
+  description: "It is the signal that request initialization for ISG operating accumulated timeThis signal transmit value 0x1 when press and hold 'OK' button on  in ISG page screenAfter EMS receive this signal, EMS should reset ISG operating accumulated time to zero  "
+  abstractionName: Output_AutoStopTimeManualResetReq
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "RESET_REQ"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+
+- Screen_Control_Logic_2_0.Output_ClusterLanguageStatus.Output_ClusterLanguageStatus_CCAN:
+  type: actuator
+  signalName: CLU_LanguageInfo_NEW
+  dataType: HUInt64
+  description: "Output of Cluster Displayed Language Information (Extended Languages)(Old signal : CLU_02_100ms@CLU_LngSta)"
+  abstractionName: Output_ClusterLanguageStatus
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "INVALID"
+    0x30: "THAI"
+    0x31: "LITHUANIAN"
+    0x32: "LATVIAN"
+    0x33: "ESTONIAN"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+    0x16: 0x15
+    0x17: 0x16
+    0x18: 0x17
+    0x19: 0x18
+    0x1A: 0x19
+    0x1B: 0x1A
+    0x1C: 0x1B
+    0x1D: 0x1C
+    0x1E: 0x1D
+    0x1F: 0x1E
+    0x20: 0x1F
+    0x21: 0x20
+    0x22: 0x21
+    0x23: 0x22
+    0x24: 0x23
+    0x25: 0x24
+    0x26: 0x25
+    0x27: 0x26
+    0x28: 0x27
+    0x29: 0x28
+    0x2A: 0x29
+    0x2B: 0x2A
+    0x2C: 0x2B
+    0x2D: 0x2C
+    0x2E: 0x2D
+    0x2F: 0x2E
+    0x30: 0x30
+    0x33: 0x31
+    0x34: 0x32
+    0x35: 0x33
+    0xFF: 0x2F
 
 
 - Settings.Input_AdasWarnVolumeSetReqStatus:
@@ -6862,6 +7757,74 @@
     0x0: 0x2
 
 
+- Settings_2_0.Input_UserProfileIDFromIAU:
+  type: sensor
+  signalName: IAU_ProfileIDRVal
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UserProfileIDFromIAU
+  valueEnum:
+    0x0: "GUEST"
+    0x1: "PROFILE1"
+    0x2: "PROFILE2"
+    0x3: "PROFILE3"
+    0x4: "PROFILE4"
+    0x5: "PROFILE5"
+    0x6: "PROFILE6"
+    0x7: "PROFILE7"
+    0x8: "PROFILE8"
+    0x9: "PROFILE9"
+    0xA: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    0x8: 0x7
+    0x9: 0x8
+    0xA: 0x9
+    ELSE: 0xA
+
+
+- Settings_2_0.Output_AdasWarnVolFeedbackReq.Output_AdasWarnVolFeedbackReq_CCAN:
+  type: actuator
+  signalName: Wrn_Snd_AdasVolFdbck
+  dataType: HUInt64
+  description: "Signal for Amp AdasVolume feedback Sound"
+  abstractionName: Output_AdasWarnVolFeedbackReq
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "WARN_OFF"
+    0x2: "VOL1"
+    0x3: "VOL2"
+    0x4: "VOL3"
+  matchingTable:
+    0x0: 0x0
+    0x6: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+
+
+- Sound.Input_AmpSupportMslaStatus:
+  type: sensor
+  signalName: AMP_SupportMsla
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_AmpSupportMslaStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "NOT_SUPPORT"
+    0x2: "SUPPORT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
 - Sound.Input_SeatBeltWarnStepSoundStatus:
   type: sensor
   signalName: SBR_StBltStpWrngBzrSta
@@ -6934,10 +7897,12 @@
     0x0: "DEFAULT"
     0x1: "TAKE_OVER_REQ"
     0x2: "OVER_SPEED_WARN"
+    0x3: "MSLA_WARN"
   matchingTable:
     0x0: 0x0
     0x1: 0x1
     0x2: 0x2
+    0x3: 0x3
 
 
 - Sound.Output_AmpSoundImsReqStatus.Output_AmpSoundImsReqStatus_MCAN:
@@ -7393,6 +8358,118 @@
     ELSE: 0x0
 
 
+- Sunroof_Window_Open_2_0.Input_SunroofFrontOpenStatusFromPDCex:
+  type: sensor
+  signalName: PDCex_FrtSunroofOpnSta
+  dataType: HUInt64
+  description: "Front Sunroof Open StatusWhen PDCex is applied to MPV or Pickup vehicle and PDCex receives a front sunroof open/close status signal directly, this signal replaces IBU's BCM_SunRoofOpnSta (BCM_10_200ms) or RCM's RCM_SunroofOpnSta@RCM_02_200ms"
+  abstractionName: Input_SunroofFrontOpenStatusFromPDCex
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_SunroofFrontOpenStatusFromRCM:
+  type: sensor
+  signalName: RCM_SunroofOpnSta
+  dataType: HUInt64
+  description: "Sunroof Glass Open Status"
+  abstractionName: Input_SunroofFrontOpenStatusFromRCM
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_SunroofRearOpenStatusFromPDCex:
+  type: sensor
+  signalName: PDCex_RrSunroofOpnSta
+  dataType: HUInt64
+  description: "Rear Sunroof Open StatusWhen PDCex is applied to MPV vehicle and PDCex receives a rear sunroof open/close status signal directly, this signal replaces IBU's BCM_RrSunroofOpnSta(BCM_10_200ms)"
+  abstractionName: Input_SunroofRearOpenStatusFromPDCex
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_SunroofRearOpenStatusFromRCM:
+  type: sensor
+  signalName: RCM_RR_SunroofOpnSta
+  dataType: HUInt64
+  description: "Sunroof Glass Open Status"
+  abstractionName: Input_SunroofRearOpenStatusFromRCM
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_WindowOpenAssistSideStatus:
+  type: sensor
+  signalName: Window_AsstSdWdwSta_BCM
+  dataType: HUInt64
+  description: "-(Old)C_AstWdwStat"
+  abstractionName: Input_WindowOpenAssistSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_WindowOpenDriverSideStatus:
+  type: sensor
+  signalName: Window_DrvrSdWdwSta_BCM
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_WindowOpenDriverSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_WindowOpenRearLeftSideStatus:
+  type: sensor
+  signalName: Window_RrLftWdwSta_BCM
+  dataType: HUInt64
+  description: "-(Old)C_RLWdwSta"
+  abstractionName: Input_WindowOpenRearLeftSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Sunroof_Window_Open_2_0.Input_WindowOpenRearRightSideStatus:
+  type: sensor
+  signalName: Window_RrRtWdwSta_BCM
+  dataType: HUInt64
+  description: "-(Old)C_RRWdwStat"
+  abstractionName: Input_WindowOpenRearRightSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - Trip_Info.Input_DoorOpenDriverSideStatus:
   type: sensor
   signalName: Warn_DrvDrSwSta
@@ -7684,6 +8761,20 @@
   matchingTable:
     VALUE:
     TIMEOUT: 0x0
+
+
+- Trip_Info.Input_H2RefuelDetectionStatus:
+  type: sensor
+  signalName: HMU1_RefuelForDte
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_H2RefuelDetectionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
 
 
 - Trip_Info.Input_HeadUnitFuelEcoGraphResetStatus:

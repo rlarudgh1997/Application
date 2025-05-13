@@ -125,6 +125,7 @@ public:
         PropertyTypeExcelMergeEnd,
         PropertyTypeShortcutType,
         PropertyTypeGenTypeList,
+        PropertyTypeTerminalInfo,
 
         PropertyTypeTestReport,
         PropertyTypeKey,
@@ -249,6 +250,7 @@ public:
         EventTypeViewTCDisplay,
         EventTypeViewLogDisplay,
         EventTypeGenSSFS,
+        EventTypeTerminalMode,
         EventTypeInitModule,
         EventTypeShowModule,
         EventTypeSelectModule,
@@ -329,10 +331,11 @@ public:
 
 class ViewTypeEnum {
 public:
-    enum MeneViewType {
-        MeneTypeInvalid = 0,
-        MenuTypeConfig,
-        MenuTypeNode,
+    enum CenterViewType {
+        CenterViewTypeInvalid = 0,
+        CenterViewTypeConfig,
+        CenterViewTypeNode,
+        CenterViewTypeTerminal,
     };
     enum ExcelType {
         ExcelTypeInvalid = 0,
@@ -537,26 +540,26 @@ public:
         Cal,
         Range,
         Collect,
-        Over,
+        Over,  // 5
         Under,
         Other,
         NotTrigger,
         NotTriggerSheet,
-        Preset,
+        Preset,  // 10
         ValueChanged,
         Flow,
         FlowNot,
         Not,
-        NotFlow,
+        NotFlow,  // 15
         NotRange,
         DontCare,
         Timeout,
         Crc,
-        TwoWay,
+        TwoWay,  // 20
         DependentOn,
         MoreThanEqual,
         LessThanEqual,
-        Config,
+        Config,  // 24
 
         CustomNotUsed,
         CustomNotTrigger,
@@ -568,12 +571,12 @@ public:
         CustomFlowNot,
         CustomOver,
         CustomUnder,
-        CustomRange,
+        CustomRange,  // 35
         CustomTwoWay,
         CustomFlow,
         CustomIgn,
         CustomMoreThanEqual,
-        CustomLessThanEqual,
+        CustomLessThanEqual,  // 40
         CustomConfig,
         CustomNotDefined,
         Max,

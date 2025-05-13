@@ -1,0 +1,43 @@
+# Copyright (c) 2020 IVIS, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable IVIS license agreement.
+
+- Vehicle:
+  type: branch
+  description: High-level vehicle data.
+
+- Vehicle.AV:
+  type: branch
+#include CLU_VSM_CV_SKEL.Vehicle.AV.vsm Vehicle.AV SKEL
+#include CLU_VSM_CV_ICV.Vehicle.AV.vsm Vehicle.AV ICV
+#include CLU_VSM_CV_EV.Vehicle.AV.vsm Vehicle.AV EV
+#include CLU_VSM_CV_FCEV.Vehicle.AV.vsm Vehicle.AV FCEV
+
+- Vehicle.CD:
+  type: branch
+#include CLU_VSM_CV_SKEL.Vehicle.CD.vsm Vehicle.CD SKEL
+#include CLU_VSM_CV_ICV.Vehicle.CD.vsm Vehicle.CD ICV
+#include CLU_VSM_CV_EV.Vehicle.CD.vsm Vehicle.CD EV
+#include CLU_VSM_CV_FCEV.Vehicle.CD.vsm Vehicle.CD FCEV
+
+- Vehicle.CV:
+  type: branch
+#include CLU_VSM_CV_SKEL.Vehicle.CV.vsm Vehicle.CV SKEL
+#include CLU_VSM_CV_ICV.Vehicle.CV.vsm Vehicle.CV ICV
+#include CLU_VSM_CV_EV.Vehicle.CV.vsm Vehicle.CV EV
+#include CLU_VSM_CV_FCEV.Vehicle.CV.vsm Vehicle.CV FCEV
+
+- Vehicle.EC:
+  type: branch
+#include CLU_VSM_CV_SKEL.Vehicle.EC.vsm Vehicle.EC SKEL
+#include CLU_VSM_CV_ICV.Vehicle.EC.vsm Vehicle.EC ICV
+#include CLU_VSM_CV_EV.Vehicle.EC.vsm Vehicle.EC EV
+#include CLU_VSM_CV_FCEV.Vehicle.EC.vsm Vehicle.EC FCEV
+
+- Vehicle.System:
+  type: branch
+  description: EOL/Variant/HardWire Values
+#include System.vsm Vehicle.System
+

@@ -24,6 +24,7 @@ private:
     void updateNodeAddress(const bool& check);
     void updateSelectModuleList(const bool& show);
     void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
+    void updateTerminalMode();
 
 protected:
     virtual AbstractHandler* isHandler();
@@ -46,8 +47,6 @@ public slots:
 
 private:
     AbstractHandler* mHandler = nullptr;
-    // QSharedPointer<ivis::common::ExcuteProgramThread> mProcess =
-    //     QSharedPointer<ivis::common::ExcuteProgramThread>(new ivis::common::ExcuteProgramThread(true), &QObject::deleteLater);
 };
 
 #endif  // CONTROL_CENTER_H

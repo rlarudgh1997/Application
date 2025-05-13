@@ -74,6 +74,10 @@
   type: branch
 
 
+- Engine_Temperature_2_0:
+  type: branch
+
+
 - Engine_Warning:
   type: branch
 
@@ -91,6 +95,10 @@
 
 
 - EV_Charging_System:
+  type: branch
+
+
+- EV_Charging_System_2_0:
   type: branch
 
 
@@ -203,6 +211,10 @@
 
 
 - Utility_Mode:
+  type: branch
+
+
+- Utility_Mode_2_0:
   type: branch
 
 
@@ -510,7 +522,7 @@
 
 - Aux_Battery_Warning.Input_MainLBMRelayOnStatus:
   type: sensor
-  signalName: MainLBM_RlyOnSta
+  signalName: MainLBM_RlyOnSwReq
   dataType: HUInt64
   description: ""
   abstractionName: Input_MainLBMRelayOnStatus
@@ -565,9 +577,9 @@
 
 - AWD.Input_AwdFrontTorqueDisplayValue:
   type: sensor
-  signalName: VCU_FrntTqDispPcVal
+  signalName: HCU_FrntTqDispPcVal
   dataType: HUInt64
-  description: "Front Torque Display Percent Value"
+  description: ""
   abstractionName: Input_AwdFrontTorqueDisplayValue
   matchingTable:
     VALUE:
@@ -683,9 +695,9 @@
 
 - AWD.Input_AwdRearTorqueDisplayValue:
   type: sensor
-  signalName: VCU_RearTqDispPcVal
+  signalName: HCU_RearTqDispPcVal
   dataType: HUInt64
-  description: "Rear Torque Display Percent Value"
+  description: ""
   abstractionName: Input_AwdRearTorqueDisplayValue
   matchingTable:
     VALUE:
@@ -701,6 +713,20 @@
   matchingTable:
     VALUE:
     TIMEOUT: 0
+
+
+- AWD.Input_EawdHevErrorStatus:
+  type: sensor
+  signalName: HCU_AwdDiagDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EawdHevErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ERROR"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
 
 
 - AWD.Input_EldOperationStatus:
@@ -1409,6 +1435,26 @@
     ELSE: 0x0
 
 
+- Energy_Flow.Input_EawdRearEnergyFlowStatus:
+  type: sensor
+  signalName: HCU_AWDSysModSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EawdRearEnergyFlowStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "NOT_APPLIED"
+    0x2: "EAWD_STOP"
+    0x3: "EAWD_MOTORING"
+    0x4: "EAWD_GENERATING"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    ELSE: 0x0
+
+
 - Energy_Flow.Input_EvEnergyFlowStatus:
   type: sensor
   signalName: HCU_HevSysModSta
@@ -1626,6 +1672,47 @@
   matchingTable:
     VALUE:
     TIMEOUT: 0x0
+
+
+- Engine_Temperature_2_0.Input_EhrsTempWarnStatus:
+  type: sensor
+  signalName: HEV_EhrsTempSta
+  dataType: HUInt64
+  description: "The  signal is condition about EHRS' temperature"
+  abstractionName: Input_EhrsTempWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Engine_Temperature_2_0.Input_EngineCoolantTempGaugeValue:
+  type: sensor
+  signalName: All_ClntTempGauge
+  dataType: HUInt64
+  description: "This signal is Coolant Temperature Gauge(%) for cluster display purpose.This signal is only used for cluster display."
+  abstractionName: Input_EngineCoolantTempGaugeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x7F
+
+
+- Engine_Temperature_2_0.Input_EngineCoolanttTempWarnStatus:
+  type: sensor
+  signalName: All_ClntTempWLmp
+  dataType: HUInt64
+  description: "This signal is coolant temp warning lamp.This signal is only used for cluster display."
+  abstractionName: Input_EngineCoolanttTempWarnStatus
+  valueEnum:
+    0x0: "WARN_TEMPHIGH"
+    0x1: "WARN_OVERHEAT"
+    0x2: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
 
 
 - Engine_Warning.Input_EU7WarnReqStatus:
@@ -1941,6 +2028,20 @@
     ELSE: 0x0
 
 
+- EV_Battery_Warning.Input_PwrSavModeStatus:
+  type: sensor
+  signalName: VPC_PwrSavOnRq
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PwrSavModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_SAVE"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - EV_Boost_Mode.Input_EvBoostModeAvailableStatus:
   type: sensor
   signalName: VCU_BstAvailSta
@@ -2086,6 +2187,20 @@
     TIMEOUT: 0x0
 
 
+- EV_Charging_System.Input_EvChargeDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg
+  dataType: HUInt64
+  description: "Command for CDM Warning on cluster"
+  abstractionName: Input_EvChargeDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
 - EV_Charging_System.Input_EvChargeFailWarnStatusFromOBC:
   type: sensor
   signalName: OBC_ChrgStopAlrmDis
@@ -2116,6 +2231,34 @@
     0x0: 0x0
     0x1: 0x1
     ELSE: 0x2
+
+
+- EV_Charging_System.Input_EvChargeFrontDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg_Main
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargeFrontDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE_FRONT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargeRearDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg_Sub
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargeRearDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE_REAR"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
 
 
 - EV_Charging_System.Input_EvChargeSchedDayStatus:
@@ -2191,6 +2334,22 @@
     0x1: "CHARGING"
   matchingTable:
     0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System.Input_EvChargerRear2ndDoorStatus:
+  type: sensor
+  signalName: PDCex_RrChaDrSwSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargerRear2ndDoorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLOSE"
+    0x2: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
     ELSE: 0x0
 
 
@@ -2643,6 +2802,20 @@
     TIMEOUT: 0x0
 
 
+- EV_Charging_System.Input_V2lcChargingInfoStatus:
+  type: sensor
+  signalName: FCU_V2lChgSts
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_V2lcChargingInfoStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - EV_Charging_System.Input_VcmsReadyStatus:
   type: sensor
   signalName: VCMS_Rdy
@@ -2658,6 +2831,738 @@
 
 
 - EV_Charging_System.Input_VehicleReadyStatus:
+  type: sensor
+  signalName: HCU_HevRdySta
+  dataType: HUInt64
+  description: "Hybrid Vehicle Drivable ready"
+  abstractionName: Input_VehicleReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_DoorOpenAssistSideStatus:
+  type: sensor
+  signalName: Warn_AsstDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenAssistSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_DoorOpenDriverSideStatus:
+  type: sensor
+  signalName: Warn_DrvDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenDriverSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_DoorOpenRearLeftSideStatus:
+  type: sensor
+  signalName: Warn_RrLftDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenRearLeftSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_DoorOpenRearRightSideStatus:
+  type: sensor
+  signalName: Warn_RrRtDrSwSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DoorOpenRearRightSideStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+    0x2: "CRC_ERROR"
+  matchingTable:
+    0x1: 0x1
+    CRCERROR: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvBulkChargeRemainTimeValue:
+  type: sensor
+  signalName: EV_BulkSocRmnTimeVal
+  dataType: HUInt64
+  description: "Bulk Charging Remained Time(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvBulkChargeRemainTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- EV_Charging_System_2_0.Input_EvChargeAlarmSubInfoFromVCMS:
+  type: sensor
+  signalName: VCMS_ChgAlarm_Subcode
+  dataType: HUInt64
+  description: "Charge State Subcode for Charge Alarm0x0~0xF:raw value"
+  abstractionName: Input_EvChargeAlarmSubInfoFromVCMS
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg
+  dataType: HUInt64
+  description: "Command for CDM Warning on cluster"
+  abstractionName: Input_EvChargeDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeFailWarnStatusFromOBC:
+  type: sensor
+  signalName: OBC_ChrgStopAlrmDis
+  dataType: HUInt64
+  description: "(If there is no VCMS) Charge Stop Alram"
+  abstractionName: Input_EvChargeFailWarnStatusFromOBC
+  valueEnum:
+    0x0: "CHARGER_ERROR"
+    0x1: "CONNECTOR_ERROR"
+    0x2: "NORMAL"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- EV_Charging_System_2_0.Input_EvChargeFinishStatus:
+  type: sensor
+  signalName: CHRG_ChrgFnshSta
+  dataType: HUInt64
+  description: "Standard Charge finish flag (CF_BMS_ChgFinished)"
+  abstractionName: Input_EvChargeFinishStatus
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FINISHED"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- EV_Charging_System_2_0.Input_EvChargeFrontDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg_Main
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargeFrontDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE_FRONT"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeRearDoorErrorStatusFromCDM:
+  type: sensor
+  signalName: CDM_HS_WarnMsg_Sub
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargeRearDoorErrorStatusFromCDM
+  valueEnum:
+    0x0: "NORMAL"
+    0x1: "FAILURE_REAR"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeSchedDayStatus:
+  type: sensor
+  signalName: VCU_SchedChg_StDayDispSta
+  dataType: HUInt64
+  description: "Start Day of Scheduled time (0~6)"
+  abstractionName: Input_EvChargeSchedDayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SUN"
+    0x2: "MON"
+    0x3: "TUE"
+    0x4: "WED"
+    0x5: "THU"
+    0x6: "FRI"
+    0x7: "SAT"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    0x4: 0x5
+    0x5: 0x6
+    0x6: 0x7
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeSchedHourValue:
+  type: sensor
+  signalName: VCU_SchedChg_StHrDispVal
+  dataType: HUInt64
+  description: "Start Hour of Scheduled time (0~23)"
+  abstractionName: Input_EvChargeSchedHourValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x1F
+
+
+- EV_Charging_System_2_0.Input_EvChargeSchedMinValue:
+  type: sensor
+  signalName: VCU_SchedChg_StMinDispVal
+  dataType: HUInt64
+  description: "Start Min of Scheduled time (0~59)"
+  abstractionName: Input_EvChargeSchedMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x3F
+
+
+- EV_Charging_System_2_0.Input_EvChargeSchedWaitIndiStatus:
+  type: sensor
+  signalName: VCU_SchedChg_WaitIndSta
+  dataType: HUInt64
+  description: "Reservation Charge Waiting mode for Charge Indicator"
+  abstractionName: Input_EvChargeSchedWaitIndiStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargeStatus:
+  type: sensor
+  signalName: CHRG_ChrgSta
+  dataType: HUInt64
+  description: "0:None, 1:Charging"
+  abstractionName: Input_EvChargeStatus
+  valueEnum:
+    0x0: "NONE"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChargerRear2ndDoorStatus:
+  type: sensor
+  signalName: PDCex_RrChaDrSwSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvChargerRear2ndDoorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CLOSE"
+    0x2: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvChgCalculateErrorStatus:
+  type: sensor
+  signalName: VCMS_ChgPwrDerating
+  dataType: HUInt64
+  description: "Protection Flag of the AC Inlet OverTemperature"
+  abstractionName: Input_EvChgCalculateErrorStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CANNOT_CALCULATE"
+    0x2: "CHARGER_OVERHEAT"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvFastChargeEightyPercentDteValue:
+  type: sensor
+  signalName: VCU_DteQcChrgStsVal
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EvFastChargeEightyPercentDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvFastChargeFailWarnStatusFromVCMS:
+  type: sensor
+  signalName: VCMS_ChgAlarm_Stat
+  dataType: HUInt64
+  description: "Charge State for Alarm"
+  abstractionName: Input_EvFastChargeFailWarnStatusFromVCMS
+  valueEnum:
+    0x0: "V2L_START"
+    0x1: "CHARGING_FINISH"
+    0x2: "CHARGING_FAIL_AC"
+    0x3: "CHARGING_FAIL_DC"
+    0x4: "V2L_FAIL"
+    0x5: "OFF"
+    0x6: "CHARGING_WIRELESS"
+    0x7: "V2X_ON"
+    0x8: "CHARGING_SCHEDULE"
+    0x9: "CHARGING_NORMAL"
+  matchingTable:
+    0x7: 0x8
+    0x8: 0x9
+    0x9: 0x0
+    0xA: 0x6
+    0xB: 0x7
+    0xC: 0x1
+    0xD: 0x2
+    0xE: 0x3
+    0xF: 0x4
+    ELSE: 0x5
+
+
+- EV_Charging_System_2_0.Input_EvFastChargeStatus:
+  type: sensor
+  signalName: EV_FstChrgSta
+  dataType: HUInt64
+  description: "BMS sets this Flag when Battery is fast mode charging"
+  abstractionName: Input_EvFastChargeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvFastChargeTargetDteValue:
+  type: sensor
+  signalName: VCU_TgSocDteDcChgVal
+  dataType: HUInt64
+  description: "Estimated DTE for fast charger(QC/DC) target SOC"
+  abstractionName: Input_EvFastChargeTargetDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvFastChargeTargetSocValue:
+  type: sensor
+  signalName: EV_QuickTrgtSocVal
+  dataType: HUInt64
+  description: "EV Quick Target State Of Charge Value"
+  abstractionName: Input_EvFastChargeTargetSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System_2_0.Input_EvMergeChargeInputPowerValue:
+  type: sensor
+  signalName: VCMS_PwrDis
+  dataType: HUInt64
+  description: "VCMS_PwrDis - Charging/Discharging Power Value for AVN/CLU Display0x0~0xFFFF : Power Real Value"
+  abstractionName: Input_EvMergeChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvShiftPToChargeReqStatus:
+  type: sensor
+  signalName: CHRG_PShftChgSta
+  dataType: HUInt64
+  description: "The Flag To Change P Shift"
+  abstractionName: Input_EvShiftPToChargeReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvSocDisplayValue:
+  type: sensor
+  signalName: xEV_SocDis
+  dataType: HUInt64
+  description: "Cluster, AVN Display SOC(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvSocDisplayValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System_2_0.Input_EvStdChargeInputPowerValue:
+  type: sensor
+  signalName: OBC_AcPwrDis
+  dataType: HUInt64
+  description: "AC Input Power (t/CLU, BlueLink)(0x0~0xFF : Real values)"
+  abstractionName: Input_EvStdChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvStdChargeRemainTimeValue:
+  type: sensor
+  signalName: CHRG_StndChrgRmnTimeVal
+  dataType: HUInt64
+  description: "Standard Charging remained time (CR_Bms_ScChgRemainedTime_min)(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvStdChargeRemainTimeValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- EV_Charging_System_2_0.Input_EvStdChargeStatus:
+  type: sensor
+  signalName: CHRG_StndChrgSta
+  dataType: HUInt64
+  description: "BMS sets this Flag when Battery is standard mode charging (CF_Bms_StdCha)"
+  abstractionName: Input_EvStdChargeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvStdChargeTargetDteValue:
+  type: sensor
+  signalName: VCU_TgSocDteAcChgVal
+  dataType: HUInt64
+  description: "Estimated DTE for slow charger(SC/AC) target SOC"
+  abstractionName: Input_EvStdChargeTargetDteValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_EvStdChargeTargetSocValue:
+  type: sensor
+  signalName: CHRG_ScChgTargetSOCSync
+  dataType: HUInt64
+  description: "Feedback SOC of Standard Charging for sync by BMS (CR_Bms_ScChgTargetSOC_SYNC)(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_EvStdChargeTargetSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- EV_Charging_System_2_0.Input_EvUnreliableSocWarn:
+  type: sensor
+  signalName: EV_Unreliable_SOC
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_EvUnreliableSocWarn
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARN30PER"
+    0x2: "WARN70PER"
+    0x3: "WARN100PER"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_PhevPlugConnectStatusFromOBC:
+  type: sensor
+  signalName: OBC_AcConnSta
+  dataType: HUInt64
+  description: "(If there is no VCMS) OBC AC Connector State"
+  abstractionName: Input_PhevPlugConnectStatusFromOBC
+  valueEnum:
+    0x0: "OFF"
+    0x1: "CONNECTED"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: SCU_FF_WrnMsgClu
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x10: 0xE
+    0x12: 0x10
+    0x13: 0x11
+    0x14: 0x12
+    0x15: 0x13
+    ELSE: 0xF
+
+
+- EV_Charging_System_2_0.Input_TimeDisplayInformationFromAvn:
+  type: sensor
+  signalName: HU_TimeFormat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TimeDisplayInformationFromAvn
+  valueEnum:
+    0x0: "OFF"
+    0x1: "TWELVE"
+    0x2: "TWENTYFOUR"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LCAlarmSubInfo:
+  type: sensor
+  signalName: V2LC_ChgAlarm_Subcode
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCAlarmSubInfo
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LCChargeInputPowerValue:
+  type: sensor
+  signalName: V2LC_AcPwrDis
+  dataType: HUInt64
+  description: "AC Input Power (t/CLU, BlueLink)"
+  abstractionName: Input_V2LCChargeInputPowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LCDisplayOnOffStatus:
+  type: sensor
+  signalName: V2LC_CluDisMode
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCDisplayOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LCUsingAvailableTimeMinValue:
+  type: sensor
+  signalName: V2LC_V2LEstDischgRmnTime
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCUsingAvailableTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LCWarnStatus:
+  type: sensor
+  signalName: V2LC_ChgAlarm_Stat
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LCWarnStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "V2LC_START"
+    0x2: "V2LC_FINISH_SOC"
+    0x3: "V2LC_STOP_CONNECTOR"
+    0x4: "V2LC_FAIL"
+  matchingTable:
+    0x9: 0x1
+    0xC: 0x2
+    0xD: 0x3
+    0xF: 0x4
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LDisplayOnFromVCMS:
+  type: sensor
+  signalName: VCMS_CluDisMode
+  dataType: HUInt64
+  description: "Cluster Display Mode"
+  abstractionName: Input_V2LDisplayOnFromVCMS
+  valueEnum:
+    0x0: "V2L_DISPLAY_ON"
+    0x1: "OFF"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- EV_Charging_System_2_0.Input_V2LMinimumSocFromVcmsValue:
+  type: sensor
+  signalName: VCMS_V2XDischgLimSocVal_SYNC
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LMinimumSocFromVcmsValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LMinimumSocValue:
+  type: sensor
+  signalName: CHRG_V2XDischrgLimSocVal_SYNC
+  dataType: HUInt64
+  description: "Feedback SOC of  V2X discharge limitation for sync by BMS***New Signal***(All the analog value indicate valid values except for Error ID)"
+  abstractionName: Input_V2LMinimumSocValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LMsgAppliedStatus:
+  type: sensor
+  signalName: VCMS_DisOpFlag
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LMsgAppliedStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LOnlyDoorOpenStatus:
+  type: sensor
+  signalName: DischrgDr_OpnClsState_SBCM
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_V2LOnlyDoorOpenStatus
+  valueEnum:
+    0x0: "CLOSE"
+    0x1: "OPEN"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LRemainDteAfterUseValue:
+  type: sensor
+  signalName: VCU_DteV2LVal
+  dataType: HUInt64
+  description: "This signal is the V2L DTE when V2L SOC value is limited"
+  abstractionName: Input_V2LRemainDteAfterUseValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2LUsingAvailableTimeMinValue:
+  type: sensor
+  signalName: VCMS_V2LEstDischgRmnTime
+  dataType: HUInt64
+  description: "Estimated Ramain Time of using V2L"
+  abstractionName: Input_V2LUsingAvailableTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- EV_Charging_System_2_0.Input_V2lcChargingInfoStatus:
+  type: sensor
+  signalName: FCU_V2lChgSts
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_V2lcChargingInfoStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_CHARGING"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_VcmsReadyStatus:
+  type: sensor
+  signalName: VCMS_Rdy
+  dataType: HUInt64
+  description: "(CF_Cms_Rdy) VCMS Controller Wake-up"
+  abstractionName: Input_VcmsReadyStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- EV_Charging_System_2_0.Input_VehicleReadyStatus:
   type: sensor
   signalName: HCU_HevRdySta
   dataType: HUInt64
@@ -3259,8 +4164,9 @@
     0x0: "OFF"
     0x1: "ON"
   matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
+    0x0: 0x0
+    TIMEOUT: 0x0
+    ELSE: 0x1
 
 
 - High_Performance_For_N_Brand.Input_DmicEngAppliedStatus:
@@ -3273,8 +4179,9 @@
     0x0: "OFF"
     0x1: "ON"
   matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
+    0x0: 0x0
+    TIMEOUT: 0x0
+    ELSE: 0x1
 
 
 - High_Performance_For_N_Brand.Input_DmicMdpsAppliedStatus:
@@ -3287,8 +4194,9 @@
     0x0: "OFF"
     0x1: "ON"
   matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
+    0x0: 0x0
+    TIMEOUT: 0x0
+    ELSE: 0x1
 
 
 - High_Performance_For_N_Brand.Input_DmicModeAppliedStatus:
@@ -3315,8 +4223,9 @@
     0x0: "OFF"
     0x1: "ON"
   matchingTable:
-    0x1: 0x1
-    ELSE: 0x0
+    0x0: 0x0
+    TIMEOUT: 0x0
+    ELSE: 0x1
 
 
 - High_Performance_For_N_Brand.Input_EkdReadyStatus:
@@ -3431,6 +4340,24 @@
   matchingTable:
     0x1: 0x1
     0x2: 0x2
+    ELSE: 0x0
+
+
+- High_Performance_For_N_Brand.Input_NBatteryStatus:
+  type: sensor
+  signalName: VPC_NBattSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_NBatteryStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DRAG"
+    0x2: "SPRINT"
+    0x3: "ENDURANCE"
+  matchingTable:
+    0x3: 0x1
+    0x4: 0x2
+    0x5: 0x3
     ELSE: 0x0
 
 
@@ -4386,23 +5313,25 @@
 
 - PMPD.Input_PmpdActStatus:
   type: sensor
-  signalName: VCU_PMPDActSta
+  signalName: HCU_PMPDActSta
   dataType: HUInt64
-  description: "None"
+  description: ""
   abstractionName: Input_PmpdActStatus
   valueEnum:
     0x0: "OFF"
     0x1: "TORQUE_LIMIT"
     0x2: "BRAKE_ACT"
+    0x3: "NONE"
   matchingTable:
+    0x0: 0x0
     0x1: 0x1
     0x2: 0x2
-    ELSE: 0x0
+    ELSE: 0x3
 
 
 - PMPD.Input_PmpdActiveStatus:
   type: sensor
-  signalName: VCU_PMPDWarnSta
+  signalName: HCU_PMPDWarnSta
   dataType: HUInt64
   description: ""
   abstractionName: Input_PmpdActiveStatus
@@ -4412,9 +5341,9 @@
     0x2: "FAIL"
     0x3: "ACTIVATE"
   matchingTable:
-    0x1: 0x1
-    0x2: 0x2
-    0x3: 0x3
+    0x1: 0x3
+    0x2: 0x1
+    0x3: 0x2
     ELSE: 0x0
 
 
@@ -4623,6 +5552,26 @@
     ELSE: 0x3
 
 
+- Regen_System.Input_EvRegenBrakeChcWarnStatus:
+  type: sensor
+  signalName: VCU_CluMsgCstHydComp
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_EvRegenBrakeChcWarnStatus
+  valueEnum:
+    0x0: "NO_WARN"
+    0x1: "CHC_ON_RESTORED"
+    0x2: "CHC_ON_LOWTEMP"
+    0x3: "CHC_OFF_BRAKEPAD"
+    0x4: "CHC_OFF_INTERVNETION"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
 - Regen_System.Input_EvRegenBrakeFunctionWarnStatus:
   type: sensor
   signalName: HCU_PaddleCoastCtrlSta
@@ -4634,6 +5583,10 @@
     0x1: "WARN"
     0x2: "REGEN_RESTORED"
     0x3: "WARN_LOWTEMP"
+    0x4: "CHC_ON_RESTORED"
+    0x5: "CHC_ON_LOWTEMP"
+    0x6: "CHC_OFF_BRAKEPAD"
+    0x7: "CHC_OFF_INTERVNETION"
   matchingTable:
     0x2: 0x1
     ELSE: 0x0
@@ -4806,10 +5759,12 @@
     0x1: "STOP"
     0x2: "INVALID"
     0x3: "APPLIED_STEP3"
+    0x4: "MAX"
   matchingTable:
     0x0: 0x0
     0x1: 0x1
     0x2: 0x3
+    0x3: 0x4
     ELSE: 0x2
 
 
@@ -6111,11 +7066,13 @@
     0x3: "STAGE_R"
     0x4: "CRC_ERROR"
     0x5: "INVALID"
+    0x6: "STAGE_M"
   matchingTable:
     0x0: 0x0
     0x5: 0x1
     0x6: 0x2
     0x7: 0x3
+    0xD: 0x6
     CRCERROR: 0x4
     ELSE: 0x5
 
@@ -6353,8 +7310,12 @@
   valueEnum:
     0x0: "OFF"
     0x1: "COLUMN"
+    0x2: "COLUMN_LEVER_R"
+    0x3: "COLUMN_LEVER_L"
   matchingTable:
     0x3: 0x1
+    0x4: 0x2
+    0x5: 0x3
     ELSE: 0x0
 
 
@@ -6761,6 +7722,135 @@
 
 
 - Utility_Mode.Input_StayModeUsingTimeMinValue:
+  type: sensor
+  signalName: HCU_STAYEstDischgRmnTime
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeUsingTimeMinValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- Utility_Mode_2_0.Input_EvUtilModeStatus:
+  type: sensor
+  signalName: VCU_UtilModeActSta
+  dataType: HUInt64
+  description: "Utility Mode Activation Status"
+  abstractionName: Input_EvUtilModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Utility_Mode_2_0.Input_SbwWarnStatusFromSCU:
+  type: sensor
+  signalName: SCU_FF_WrnMsgClu
+  dataType: HUInt64
+  description: "This signal indicates the status of “SCU Warning message”"
+  abstractionName: Input_SbwWarnStatusFromSCU
+  valueEnum:
+    0x0: "PARK_MALFUNCTION"
+    0x1: "GEAR_CHANGE_CONDITION_NOT_MET"
+    0x2: "BRAKE_TO_CHANGE_GEAR"
+    0x3: "STOP_BEFORE_SHIFT_P"
+    0x4: "ALREADY_SELECTED_P"
+    0x5: "BRAKE_AND_N"
+    0x6: "ALREADY_SELECTED_R"
+    0x7: "BRAKE_AND_P_RELEASE"
+    0x8: "GEAR_CHANGE_UNAVAILABLE"
+    0x9: "AVOID_SHIFTING"
+    0xA: "UNLOCK_AND_CHANGE_GEAR"
+    0xB: "START_AND_CHANGE_GEAR"
+    0xC: "ALREADY_SELECTED_N"
+    0xD: "ALREADY_SELECTED_D"
+    0xE: "SYS_CHK"
+    0xF: "OFF"
+    0x10: "STAY_MODE"
+    0x11: "V2LC_TAILGATE"
+    0x12: "AUTOHOLD_EPB_RELEASE_N"
+    0x13: "ALREADY_D_FOR_M"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x10: 0xE
+    0x12: 0x10
+    0x13: 0x11
+    0x14: 0x12
+    0x15: 0x13
+    ELSE: 0xF
+
+
+- Utility_Mode_2_0.Input_SocRealValue:
+  type: sensor
+  signalName: xEV_SocVal
+  dataType: HUInt64
+  description: "State Of Charge-All the analog value indicate valid values except for Error ID"
+  abstractionName: Input_SocRealValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Utility_Mode_2_0.Input_StayModeChargeControlStatus:
+  type: sensor
+  signalName: HCU_STAYModBattMngmntSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeChargeControlStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Utility_Mode_2_0.Input_StayModePowerValue:
+  type: sensor
+  signalName: HCU_AcPwrDis
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModePowerValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Utility_Mode_2_0.Input_StayModeStatus:
+  type: sensor
+  signalName: HCU_STAYModSta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_StayModeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON_NORMAL"
+    0x2: "ON_HOLD"
+    0x3: "ON_ENGINE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Utility_Mode_2_0.Input_StayModeUsingTimeMinValue:
   type: sensor
   signalName: HCU_STAYEstDischgRmnTime
   dataType: HUInt64

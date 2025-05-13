@@ -36,6 +36,8 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, QVariant(false));
+
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QVariant(""));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

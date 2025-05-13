@@ -69,6 +69,42 @@
     0x2: "INVALID"
 
 
+- ADAS_PARKING_2_0.Output_AdasParkingDirectionSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaOperationSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaPathSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaRecordSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
 - ADAS_PARKING_2_0.Output_AdasParkingMraOperationSoftKeyStatus:
   type: branch
   dataType: HUInt64
@@ -87,6 +123,42 @@
     0x2: "INVALID"
 
 
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3OperationSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingLeftDirectionSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingOperationSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingRightDirectionSoftKeyStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+
+
 - ADAS_PARKING_2_0.Output_AdasParkingRspaEntryOperationSoftKeyStatus:
   type: branch
   dataType: HUInt64
@@ -94,6 +166,28 @@
     0x0: "KEY_OFF"
     0x1: "KEY_ON"
     0x2: "INVALID"
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingSlotStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SLOT_01"
+    0x2: "SLOT_02"
+    0x3: "SLOT_03"
+    0x4: "SLOT_04"
+    0x5: "SLOT_05"
+    0x6: "SLOT_06"
+    0x7: "SLOT_07"
+    0x8: "SLOT_08"
+    0x9: "SLOT_09"
+    0xA: "SLOT_10"
+    0xB: "SLOT_11"
+    0xC: "SLOT_12"
+    0xD: "SLOT_13"
+    0xE: "SLOT_14"
+    0xF: "INVALID"
 
 
 - ADAS_PARKING_2_0.Output_PdwWarningSoundMuteSoftKeyStatus:
@@ -3589,6 +3683,8 @@
     0x11: "SUGGEST_LANE_CHANGE_TO_RIGHT_SIDE"
     0x12: "TUNNEL_AHEAD"
     0x13: "UNSUPPORTED_LANE_AHEAD"
+    0x14: "UNSUPPORTED_WEATHER_CONDITIONS"
+    0x15: "ROAD_CONSTRUCTION_AHEAD"
   matchingTable:
     0x01: 0x1
     0x02: 0x2
@@ -3607,6 +3703,8 @@
     0x0F: 0xF
     0x10: 0x12
     0x11: 0x13
+    0x12: 0x14
+    0x13: 0x15
     0x21: 0x10
     0x22: 0x11
     ELSE: 0x0
@@ -4912,13 +5010,11 @@
   matchingTable:
     0x1: 0x1
     0x2: 0x2
+    0x3: 0x9
     0x4: 0x3
     0x5: 0x4
     0x6: 0x5
     0x7: 0x6
-    0x8: 0x7
-    0xA: 0x8
-    0xB: 0x9
     ELSE: 0x0
 
 
@@ -7239,7 +7335,7 @@
     0xB: "STEERING_FRONT_LEFT"
     0xC: "STEERING_FRONT_RIGHT"
     0xD: "STEERING_FRONT_LEFT_PATH"
-    0xE: "STEERING_FRONTRIGHT_PATH"
+    0xE: "STEERING_FRONT_RIGHT_PATH"
     0xF: "STEERING_REAR_LEFT"
     0x10: "STEERING_REAR_RIGHT"
     0x11: "END_OF_ASSIST"
@@ -7513,6 +7609,24 @@
     ELSE: 0x0
 
 
+- ADAS_DRIVING_2_0.Input_NTFGroup7HdaPlusFailureStatus:
+  type: sensor
+  signalName: NT_F_Group7_HndsFreeFlrSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_NTFGroup7HdaPlusFailureStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FAILURE"
+    0x2: "CAMERA_BLOCKAGE"
+    0x3: "RADAR_BLOCKAGE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
 - ADAS_DRIVING_2_0.Input_NTFGroup7IslaFailureStatus:
   type: sensor
   signalName: NT_F_Group7_ISLA_FlrSta
@@ -7734,7 +7848,7 @@
     0xF: "DEACTIVATION_HIGHWAY_DRIVING_ASSIST"
     0x10: "TUNNEL_AHEAD"
     0x11: "UNSUPPORTED_LANE_AHEAD"
-    0x12: "UNSUPPORTED_WEATHER_CONDITONS"
+    0x12: "UNSUPPORTED_WEATHER_CONDITIONS"
     0x13: "ROAD_CONSTRUCTION_AHEAD"
     0x14: "SUGGEST_LANE_CHANGE_TO_LEFT_SIDE"
     0x15: "SUGGEST_LANE_CHANGE_TO_RIGHT_SIDE"
@@ -8571,6 +8685,8 @@
     0x11: "SUGGEST_LANE_CHANGE_TO_RIGHT_SIDE"
     0x12: "TUNNEL_AHEAD"
     0x13: "UNSUPPORTED_LANE_AHEAD"
+    0x14: "UNSUPPORTED_WEATHER_CONDITIONS"
+    0x15: "ROAD_CONSTRUCTION_AHEAD"
   matchingTable:
     0x01: 0x1
     0x02: 0x2
@@ -8589,6 +8705,8 @@
     0x0F: 0xF
     0x10: 0x12
     0x11: 0x13
+    0x12: 0x14
+    0x13: 0x15
     0x21: 0x10
     0x22: 0x11
     ELSE: 0x0
@@ -12236,6 +12354,28 @@
     ELSE: 0x0
 
 
+- ADAS_PARKING_2_0.Input_AdasPcaWarningPhraseStatus:
+  type: sensor
+  signalName: PCA_WrngPhrs
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AdasPcaWarningPhraseStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING"
+    0x2: "ASSIST"
+    0x3: "ASSIST_ENDED"
+    0x4: "BRAKE_HOLD"
+    0x5: "PDW_R_DEACTIVATED"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
 - ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel01Value:
   type: sensor
   signalName: ADAS_PRK_PDW_FrContrLnLvl01Val
@@ -13837,6 +13977,17 @@
     TIMEOUT: 0xFF
 
 
+- ADAS_PARKING_2_0.Input_INDAdasParkingRemainedDistanceValue:
+  type: sensor
+  signalName: IND_RmndDstVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDAdasParkingRemainedDistanceValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
 - ADAS_PARKING_2_0.Input_IbuCarBodyDisplayStatus:
   type: sensor
   signalName: PDW_CRBdDis
@@ -14689,6 +14840,42 @@
     ELSE: 0x0
 
 
+- ADAS_PARKING_2_0.Input_MpaButtunDisplayStatus:
+  type: sensor
+  signalName: MPA_CLUBtnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_MpaButtunDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "MPA_PATH_BUTTON"
+    0x2: "ENABLE_MPA_START_BUTTON"
+    0x3: "CANCEL_MPA_BUTTON"
+    0x4: "INVALID"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x7: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_MpaRecordButtunDisplayStatus:
+  type: sensor
+  signalName: MPA_CLURcrdBtnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_MpaRecordButtunDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DISABLED_MPA_RECORD_BUTTON"
+    0x2: "ENABLED_MPA_RECORD_BUTTON"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
 - ADAS_PARKING_2_0.Input_MraButtunDisplayStatus:
   type: sensor
   signalName: MRA_BtnDispSta
@@ -14704,6 +14891,92 @@
     0x1: 0x1
     0x2: 0x2
     0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_NTFGroup1AdasWarning1_1Status:
+  type: sensor
+  signalName: NT_F_Group1_ADASWarn1_1Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_NTFGroup1AdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_FRONT"
+    0x2: "WARNING_FRONT_LEFT"
+    0x3: "WARNING_FRONT_RIGHT"
+    0x4: "WARNING_FRONT_LEFT_CROSSING"
+    0x5: "WARNING_FRONT_RIGHT_CROSSING"
+    0x6: "BRAKING_FRONT"
+    0x7: "BRAKING_FRONT_LEFT"
+    0x8: "BRAKING_FRONT_RIGHT"
+    0x9: "BRAKING_FRONT_LEFT_CROSSING"
+    0xA: "BRAKING_FRONT_RIGHT_CROSSING"
+    0xB: "STEERING_FRONT_LEFT"
+    0xC: "STEERING_FRONT_RIGHT"
+    0xD: "STEERING_FRONT_LEFT_PATH"
+    0xE: "STEERING_FRONT_RIGHT_PATH"
+    0xF: "STEERING_REAR_LEFT"
+    0x10: "STEERING_REAR_RIGHT"
+    0x11: "END_OF_ASSIST"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    0x0F: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_NTFGroup4AdasWarning1_1Status:
+  type: sensor
+  signalName: NT_F_Group4_ADASWarn1_1Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_NTFGroup4AdasWarning1_1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCC_MRM"
+    0x2: "SCC_ATTENTION_WARNING"
+    0x3: "SCC_AUTOMATIC_OFF"
+    0x4: "SCC_CONDITION_NOT_MET"
+    0x5: "SCC_STOP_CONTROL"
+    0x6: "CONNECTING_TRAILER_OFF"
+    0x7: "OFF_DUE_TO_LIMITATION_ON_DRIVER_MONITORING"
+    0x8: "SCC_CONDITION_NOT_MET_BY_MRM"
+    0x9: "LFA_CONDITION_NOT_MET"
+    0xA: "LFA_CONDITION_NOT_MET_BY_EMERGENCY_STOP"
+    0xB: "DAW_LEAD_VEHICLE_DEPARTURE"
+    0xC: "COMMON_INHIBIT_OFF_IN_REGULATIONS"
+    0xD: "COMMON_INHIBIT_OFF_IN_IIHS"
+    0xE: "HANDS_FREE_INITIAL_ACTIVATION"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
     ELSE: 0x0
 
 
@@ -14817,6 +15090,34 @@
     ELSE: 0x0
 
 
+- ADAS_PARKING_2_0.Input_PcaFrontLeftWarningDisplayStatus:
+  type: sensor
+  signalName: PCA_FrLtWarnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PcaFrontLeftWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_PcaFrontRightWarningDisplayStatus:
+  type: sensor
+  signalName: PCA_FrRtWarnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PcaFrontRightWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
 - ADAS_PARKING_2_0.Input_PcaModeDisplayStatus:
   type: sensor
   signalName: PCA_ModDis
@@ -14830,6 +15131,34 @@
   matchingTable:
     0x1: 0x1
     0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_PcaRearLeftWarningDisplayStatus:
+  type: sensor
+  signalName: PCA_RrLtWarnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PcaRearLeftWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_PcaRearRightWarningDisplayStatus:
+  type: sensor
+  signalName: PCA_RrRtWarnDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_PcaRearRightWarningDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_ASSIST"
+  matchingTable:
+    0x1: 0x1
     ELSE: 0x0
 
 
@@ -14919,6 +15248,26 @@
     ELSE: 0x0
 
 
+- ADAS_PARKING_2_0.Input_PuPvLabelStatus:
+  type: sensor
+  signalName: PU_PV_LblSta
+  dataType: HUInt64
+  description: "This signal shows RCCA warning label"
+  abstractionName: Input_PuPvLabelStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING"
+    0x2: "ASSIST"
+    0x3: "END"
+    0x4: "BRAKE_HOLD"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
 - ADAS_PARKING_2_0.Input_PuPvOutlineColorStatus:
   type: sensor
   signalName: PU_PV_OutlnColorSta
@@ -15004,19 +15353,45 @@
     0x23: "NOT_WORKING_CONDITION_USS_BLOCKAGE"
     0x24: "CANCELLED_DCT_OVERTEMP"
     0x25: "NOT_WORKING_CONDITION_DCT_OVERTEMP"
+    0x26: "REMOTE_PARKING"
+    0x27: "PARKING_COMPLETED"
+    0x28: "PULL_OUT_COMPLETED"
+    0x29: "RSPA_CANCELLED_OPERATE_VEHICLE_MANUALLY"
+    0x2A: "PARKING_COMPLETED_MANUALLY"
+    0x2B: "PULL_OUT_COMPLETED_MANUALLY"
+    0x2C: "RSPA_PAUSED_SEAT_BELT"
+    0x2D: "OPERATION_GUIDE_RELEASE_BRAKE"
+    0x2E: "RSPA_CANCELLED_NOT_STOP"
+    0x2F: "RSPA_CANCELLED_UNFASTEN_SEATBELT"
+    0x30: "RSPA_CANCELLED_CHECK_SVM_CAMERA"
+    0x31: "CHECKING_SPACE_STOP_THE_VEHICLE"
+    0x32: "CHECKING_COMPLETED_SELECT_PULL_OUT"
+    0x33: "OPERATION_GUIDE_REINPUT_SMART_KEY"
+    0x34: "SELECT_OPERATING_MODE"
+    0x35: "PARKING_MODE_GUIDE_SMART_PARKING"
+    0x36: "SMART_PULL_OUT"
   matchingTable:
+    0x03: 0x26
+    0x04: 0x27
+    0x06: 0x28
     0x07: 0x1
+    0x08: 0x29
     0x0B: 0x2
     0x0D: 0x3
     0x0E: 0x4
     0x10: 0x5
     0x11: 0x6
     0x12: 0x7
+    0x13: 0x2A
+    0x14: 0x2B
     0x16: 0x8
     0x17: 0x9
+    0x19: 0x2C
+    0x1A: 0x2D
     0x1B: 0xA
     0x1C: 0xB
     0x1D: 0xC
+    0x1F: 0x2E
     0x20: 0xD
     0x22: 0xE
     0x23: 0xF
@@ -15026,14 +15401,19 @@
     0x27: 0x13
     0x28: 0x14
     0x29: 0x15
+    0x2A: 0x2F
     0x2B: 0x16
     0x2C: 0x17
     0x2D: 0x18
     0x2E: 0x19
     0x2F: 0x1A
     0x30: 0x1B
+    0x31: 0x30
+    0x83: 0x31
+    0x84: 0x32
     0x85: 0x1C
     0x87: 0x1D
+    0x89: 0x33
     0x8A: 0x1E
     0x8B: 0x1F
     0x8C: 0x20
@@ -15042,12 +15422,112 @@
     0x8F: 0x23
     0x91: 0x24
     0x92: 0x25
+    0x94: 0x34
+    0x95: 0x35
+    0x96: 0x36
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_RspaParkingSlotValue:
+  type: sensor
+  signalName: VC_RSPA_ParkSlotVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_RspaParkingSlotValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- ADAS_PARKING_2_0.Input_VCAdasParkingPathDisplayStatus:
+  type: sensor
+  signalName: VC_PathDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCAdasParkingPathDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DISABLED"
+    0x2: "ENABLED"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_VCRspaAvailableStatus:
+  type: sensor
+  signalName: VC_RSPA_ParkAvlblSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRspaAvailableStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INIT"
+    0x2: "AVAILABLE"
+    0x3: "UNAVAILABLE"
+    0x4: "INVALID"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    0x2: 0x3
+    0x3: 0x4
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_VCRspaFunctionDisplayStatus:
+  type: sensor
+  signalName: VC_RSPA_FuncDispSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRspaFunctionDisplayStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "READY"
+    0x2: "FORWARD"
+    0x3: "BACKWARD"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_VCRspaUnparkingLeftDirectionStatus:
+  type: sensor
+  signalName: VC_RSPA_UnparkLtDirSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRspaUnparkingLeftDirectionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INIT"
+    0x2: "LEFT_DIRECTION_BUTTON_DISPLAY"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- ADAS_PARKING_2_0.Input_VCRspaUnparkingRightDirectionStatus:
+  type: sensor
+  signalName: VC_RSPA_UnparkRtDirSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRspaUnparkingRightDirectionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "INIT"
+    0x2: "RIGHT_DIRECTION_BUTTON_DISPLAY"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
     ELSE: 0x0
 
 
 - ADAS_PARKING_2_0.Input_VCTopviewControlStatus:
   type: sensor
-  signalName: VC_TopviewCtrlSta
+  signalName: VC_TopViewCtrlSta
   dataType: HUInt64
   description: ""
   abstractionName: Input_VCTopviewControlStatus
@@ -15061,7 +15541,7 @@
 
 - ADAS_PARKING_2_0.Input_VCTopviewScaleStatus:
   type: sensor
-  signalName: VC_TopviewScaleSta
+  signalName: VC_TopViewScaleSta
   dataType: HUInt64
   description: ""
   abstractionName: Input_VCTopviewScaleStatus
@@ -15081,6 +15561,70 @@
   dataType: HUInt64
   description: ""
   abstractionName: Output_AdasParkingCancelSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingDirectionSoftKeyStatus.Output_AdasParkingDirectionSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKParkingDirSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingDirectionSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaOperationSoftKeyStatus.Output_AdasParkingMpaOperationSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKMpaOperationSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingMpaOperationSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaPathSoftKeyStatus.Output_AdasParkingMpaPathSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKMpaPathSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingMpaPathSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingMpaRecordSoftKeyStatus.Output_AdasParkingMpaRecordSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKMpaRecordSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingMpaRecordSoftKeyStatus
   valueEnum:
     0x0: "KEY_OFF"
     0x1: "KEY_ON"
@@ -15123,6 +15667,70 @@
     0x3: 0x2
 
 
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3OperationSoftKeyStatus.Output_AdasParkingRspa3OperationSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKRspaPOperationSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingRspa3OperationSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingLeftDirectionSoftKeyStatus.Output_AdasParkingRspa3UnparkingLeftDirectionSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKRspaUPLtDirSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingRspa3UnparkingLeftDirectionSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingOperationSoftKeyStatus.Output_AdasParkingRspa3UnparkingOperationSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKRspaUPOpSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingRspa3UnparkingOperationSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingRspa3UnparkingRightDirectionSoftKeyStatus.Output_AdasParkingRspa3UnparkingRightDirectionSoftKeyStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKRspaUPRtDirSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingRspa3UnparkingRightDirectionSoftKeyStatus
+  valueEnum:
+    0x0: "KEY_OFF"
+    0x1: "KEY_ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
 - ADAS_PARKING_2_0.Output_AdasParkingRspaEntryOperationSoftKeyStatus.Output_AdasParkingRspaEntryOperationSoftKeyStatus_CCAN:
   type: actuator
   signalName: CLU_PRKRspaEOperationSoftkeySta
@@ -15137,6 +15745,48 @@
     0x0: 0x0
     0x1: 0x1
     0x3: 0x2
+
+
+- ADAS_PARKING_2_0.Output_AdasParkingSlotStatus.Output_AdasParkingSlotStatus_CCAN:
+  type: actuator
+  signalName: CLU_PRKParkingSlotSoftkeySta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Output_AdasParkingSlotStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SLOT_01"
+    0x2: "SLOT_02"
+    0x3: "SLOT_03"
+    0x4: "SLOT_04"
+    0x5: "SLOT_05"
+    0x6: "SLOT_06"
+    0x7: "SLOT_07"
+    0x8: "SLOT_08"
+    0x9: "SLOT_09"
+    0xA: "SLOT_10"
+    0xB: "SLOT_11"
+    0xC: "SLOT_12"
+    0xD: "SLOT_13"
+    0xE: "SLOT_14"
+    0xF: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    0xA: 0xA
+    0xB: 0xB
+    0xC: 0xC
+    0xD: 0xD
+    0xE: 0xE
+    0xF: 0xF
 
 
 - ADAS_PARKING_2_0.Output_PdwWarningSoundMuteSoftKeyStatus.Output_PdwWarningSoundMuteSoftKeyStatus_CCAN:

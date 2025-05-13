@@ -1,0 +1,129 @@
+# Copyright (c) 2021 IVIS, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable IVIS license agreement.
+
+# Note -
+# This VSM mode is provided for define Gateway signal
+# SignalName for NodeAddress should be same as NodeAddress to avoid duplicate.
+
+# Node Prefix : Vehicle.System.Gateway
+
+- Output_CLU_SWRCCrsSwSta:
+  type: actuator
+  signalName: CLU_SWRCCrsSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_SWRCCrsSwSta
+  valueEnum:
+    0x0: "IDLE_POSITION"
+    0x1: "PLUS"
+    0x2: "MINUS"
+    0x3: "Headway"
+    0x4: "CANCEL_PAUSE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+
+- Output_CLU_SWRCCrsMainSwSta:
+  type: actuator
+  signalName: CLU_SWRCCrsMainSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_SWRCCrsMainSwSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KEY_ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_SWRCSldMainSwSta:
+  type: actuator
+  signalName: CLU_SWRCSldMainSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_SWRCSldMainSwSta
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KEY_ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_PddlUpSwSta:
+  type: actuator
+  signalName: CLU_PddlUpSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_PddlUpSwSta
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_PddlDnSwSta:
+  type: actuator
+  signalName: CLU_PddlDnSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_PddlDnSwSta
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_SWRCLFASwSta:
+  type: actuator
+  signalName: CLU_SWRCLFASwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_SWRCLFASwSta
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_OKSwSta:
+  type: actuator
+  signalName: CLU_OKSwSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_OKSwSta
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "PRESSED"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+
+- Output_CLU_RhstaSwiSta:
+  type: actuator
+  signalName: CLU_RhstaSwiSta
+  dataType: HUInt64
+  abstractionName: Output_CLU_RhstaSwiSta
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "UP"
+    0x2: "DOWN"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+
+- Output_CLU_RhstaSwiSta_MM:
+  type: actuator
+  signalName: CLU_RhstaSwiSta_MM
+  dataType: HUInt64
+  abstractionName: Output_CLU_RhstaSwiSta_MM
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "UP"
+    0x2: "DOWN"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2

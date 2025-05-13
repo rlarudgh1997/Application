@@ -1,0 +1,51 @@
+# Copyright (c) 2020 IVIS, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable IVIS license agreement.
+
+# Note -
+# This VSM mode is provided for define EOL/Variant variables
+# SignalName for NodeAddress should be same as NodeAddress to avoid duplicate.
+
+# Node Prefix : Vehicle.System
+
+- HardWire:
+  type: branch
+  description: HardWire Values
+#include System.HardWire.vsm HardWire
+
+- Config:
+  type: branch
+  description: EOL/Variant Values
+#include System.Config.vsm Config
+
+- Extra:
+  type: branch
+  description: Extra Virtual Values
+#include System.Extra.vsm Extra
+
+- Gateway:
+  type: branch
+  description: Gateway Output Values
+#include System.Gateway.vsm Gateway
+
+- Engineering:
+  type: branch
+  description: Engineering Values
+#include System.Engineering.vsm Engineering
+
+- TP:
+  type: branch
+  description: TP Message
+#include System.TP.vsm TP
+
+- Micom:
+  type: branch
+  description: Micom
+#include System.Micom.vsm Micom
+
+- Undefined:
+  type: branch
+  description: Undefined Nodes
+#include System.Undefined.vsm Undefined

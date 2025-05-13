@@ -61,6 +61,7 @@ public:
     static QSharedPointer<ConvertDataManager>& instance();
 
     QString excuteConvertDataManager();
+    static bool isSFCTalltaleSignal(const QString& signalName);
 
 private:
     explicit ConvertDataManager();
@@ -116,6 +117,8 @@ private:
     QStringList getSheetHasMultiResult(const QString& tcName, const QString& result);
     QStringList getSheetResultListFromTCName(const QString& tcName);
     QString deleteEasterEggKeyword(const QString& keyword);
+
+    QStringList filterUsedTelltaleEnumValues(const QStringList& sfcNotUsedEnumValueList);
 };
 
 #endif  // CONVERT_DATA_MANAGER_H

@@ -137,7 +137,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedUnderDecimalValue.Output_DisplaySpeedUnderDecimalValue_CCAN
+  abstractionName: Output_DisplaySpeedUnderDecimalValue_CCAN
   matchingTable:
 
 
@@ -145,7 +145,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedKphValue.Output_DisplaySpeedKphValue_CCAN
+  abstractionName: Output_DisplaySpeedKphValue_CCAN
   matchingTable:
 
 
@@ -153,7 +153,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedValue.Output_DisplaySpeedValue_CCAN
+  abstractionName: Output_DisplaySpeedValue_CCAN
   matchingTable:
 
 
@@ -161,7 +161,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedValue.Output_DisplaySpeedValue_MCAN
+  abstractionName: Output_DisplaySpeedValue_MCAN
   matchingTable:
 
 
@@ -169,7 +169,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_CCAN
+  abstractionName: Output_DisplaySpeedUnit_CCAN
   valueEnum:
     0x0: "KPH"
     0x1: "MPH"
@@ -180,7 +180,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedUnit.Output_DisplaySpeedUnit_MCAN
+  abstractionName: Output_DisplaySpeedUnit_MCAN
   valueEnum:
     0x0: "KPH"
     0x1: "MPH"
@@ -191,7 +191,7 @@
   type: actuator
   signalName:
   dataType: HUInt64
-  abstractionName: Output_DisplaySpeedDefaultUnit.Output_DisplaySpeedDefaultUnit_MCAN
+  abstractionName: Output_DisplaySpeedDefaultUnit_MCAN
   valueEnum:
     0x0: "KPH"
     0x1: "KMPH"

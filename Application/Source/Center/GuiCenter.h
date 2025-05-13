@@ -49,6 +49,7 @@ private:
 
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress(const int& updateType);
+    void updateDisplayTerminal();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

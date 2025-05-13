@@ -22,11 +22,15 @@
   type: branch
 
 
+- Contents_UI_logic_2_0:
+  type: branch
+
+
 - Detail_Contents_ADAS_NEW:
   type: branch
 
 
-- Detail_Contents_ADAS_NEW_2_0:
+- Detail_Contents_ADAS_2_0:
   type: branch
 
 
@@ -38,6 +42,10 @@
   type: branch
 
 
+- Detail_Contents_ISLA_DIS_2_0:
+  type: branch
+
+
 - Detail_Contents_Speed:
   type: branch
 
@@ -46,7 +54,15 @@
   type: branch
 
 
+- Detail_Contents_TBT_2_0:
+  type: branch
+
+
 - Detail_Contents_Theme_2_0:
+  type: branch
+
+
+- Direction_Control:
   type: branch
 
 
@@ -54,7 +70,15 @@
   type: branch
 
 
+- Display_Settings_2_0:
+  type: branch
+
+
 - Height_Control:
+  type: branch
+
+
+- Height_Control_2_0:
   type: branch
 
 
@@ -70,7 +94,23 @@
   type: branch
 
 
+- Illumination_Control_2_0:
+  type: branch
+
+
+- Image_Distortion_Correction:
+  type: branch
+
+
+- Position_Control:
+  type: branch
+
+
 - Rotation_Control:
+  type: branch
+
+
+- Rotation_Control_2_0:
   type: branch
 
 
@@ -182,6 +222,87 @@
     0x2: "INVALID"
 
 
+- Display_Settings_2_0.Output_HudAdasInfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudAvInfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudCallInfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudCustom1InfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudCustom2InfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudDisInfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudImsAutoSaveStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
+- Display_Settings_2_0.Output_HudTbtInfoOnOffStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+
+
 - Height_Control.Output_HudHeightLevelStatus:
   type: branch
   dataType: HUInt64
@@ -224,6 +345,35 @@
 
 
 - Height_Control.Output_HudPbackStatus_Ext:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "STOP"
+    0x1: "PLAY1"
+    0x2: "PLAY2"
+    0x3: "SMART_IMS"
+    0x4: "GUEST"
+    0x5: "PROFILE1"
+    0x6: "PROFILE2"
+    0x7: "PLAY3"
+    0x8: "INVALID"
+
+
+- Height_Control_2_0.Output_HudPbackStatus:
+  type: branch
+  dataType: HUInt64
+  valueEnum:
+    0x0: "STOP"
+    0x1: "PLAY1"
+    0x2: "PLAY2"
+    0x3: "SMART_IMS"
+    0x4: "PROFILE1"
+    0x5: "PROFILE2"
+    0x6: "GUEST"
+    0x7: "INVALID"
+
+
+- Height_Control_2_0.Output_HudPbackStatus_Ext:
   type: branch
   dataType: HUInt64
   valueEnum:
@@ -730,6 +880,347 @@
 
 
 - Contents_UI_logic.Input_VgsOnOffStatus:
+  type: sensor
+  signalName: VCU_VgsSftMod
+  dataType: HUInt64
+  description: "VGS Shift Mode"
+  abstractionName: Input_VgsOnOffStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "VGS_ON"
+  matchingTable:
+    0x2: 0x1
+    0x3: 0x1
+    ELSE: 0x0
+
+
+- Contents_UI_logic_2_0.Input_TbtDisplayTypeStatus:
+  type: sensor
+  signalName: TBT_Display_Type
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TbtDisplayTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DIRECTION_TO_DESTINATION"
+    0x2: "ARRIVED"
+    0x3: "NO_ROUTE_GUIDANCE"
+    0x4: "CALC_ROUTE"
+    0x5: "RECALC_ROUTE"
+    0x6: "TURN"
+    0x7: "EXIT_R"
+    0x8: "EXIT_L"
+    0x9: "EXIT_COMBINATION_R"
+    0xA: "EXIT_COMBINATION_L"
+    0xB: "SERVICE_ROAD_R"
+    0xC: "SERVICE_ROAD_L"
+    0xD: "FORK2"
+    0xE: "U_TURN"
+    0xF: "EXIT_ROUNDABOUT_TRS_R"
+    0x10: "EXIT_ROUNDABOUT_TRS_L"
+    0x11: "OVERPASS_R"
+    0x12: "OVERPASS_L"
+    0x13: "UNDERPASS_R"
+    0x14: "UNDERPASS_L"
+    0x15: "TOLL"
+    0x16: "PRE_NODIRECTION"
+    0x17: "PRE_STRAIGHT"
+    0x18: "PRE_TURN1OCLOCK"
+    0x19: "PRE_TURN_R"
+    0x1A: "PRE_TURN4OCLOCK"
+    0x1B: "PRE_TURN8OCLOCK"
+    0x1C: "PRE_TURN_LEFT"
+    0x1D: "PRE_TURN11OCLOCK"
+    0x1E: "PRE_U_TURN_L"
+    0x1F: "PRE_U_TURN_R"
+    0x20: "PRE_PERMITTED_TUNR_L"
+    0x21: "PRE_ASIDE_OVERPASS_R"
+    0x22: "PRE_ASIDE_OVERPASS_L"
+    0x23: "PRE_ASIDE_UNDERPASS_R"
+    0x24: "PRE_ASIDE_UNDERPASS_L"
+    0x25: "PRE_INTO_OVERPASS_C"
+    0x26: "PRE_INTO_OVERPASS_R"
+    0x27: "PRE_INTO_OVERPASS_L"
+    0x28: "PRE_INTO_UNDERPASS_R"
+    0x29: "PRE_INTO_UNDERPASS_L"
+    0x2A: "PRE_ROUNDABOUT_R12"
+    0x2B: "PRE_ROUNDABOUT_R1"
+    0x2C: "PRE_ROUNDABOUT_R2"
+    0x2D: "PRE_ROUNDABOUT_R3"
+    0x2E: "PRE_ROUNDABOUT_R4"
+    0x2F: "PRE_ROUNDABOUT_R5"
+    0x30: "PRE_ROUNDABOUT_R6"
+    0x31: "PRE_ROUNDABOUT_R7"
+    0x32: "PRE_ROUNDABOUT_R8"
+    0x33: "PRE_ROUNDABOUT_R9"
+    0x34: "PRE_ROUNDABOUT_R10"
+    0x35: "PRE_ROUNDABOUT_R11"
+    0x36: "PRE_CHARGINGSTATION_C"
+    0x37: "PRE_CHARGINGSTATION_R"
+    0x38: "PRE_CHARGINGSTATION_L"
+    0x39: "PRE_DEST_C"
+    0x3A: "PRE_DEST_R"
+    0x3B: "PRE_DEST_L"
+    0x3C: "PRE_WAY_POINT1_C"
+    0x3D: "PRE_WAY_POINT1_R"
+    0x3E: "PRE_WAY_POINT1_L"
+    0x3F: "PRE_WAY_POINT2_C"
+    0x40: "PRE_WAY_POINT2_R"
+    0x41: "PRE_WAY_POINT2_L"
+    0x42: "PRE_WAY_POINT3_C"
+    0x43: "PRE_WAY_POINT3_R"
+    0x44: "PRE_WAY_POINT3_L"
+    0x45: "PRE_WAY_POINT4_C"
+    0x46: "PRE_WAY_POINT4_R"
+    0x47: "PRE_WAY_POINT4_L"
+    0x48: "PRE_WALK_TO_DEST"
+    0x49: "PRE_WALK_TO_WAY_POINT1"
+    0x4A: "PRE_FORK2_R"
+    0x4B: "PRE_FORK2_L"
+    0x4C: "PRE_FORK_S_R_STRAIGHT"
+    0x4D: "PRE_FORK_S_R_R"
+    0x4E: "PRE_FORK_S_L_STRAIGHT"
+    0x4F: "PRE_FORK_S_L_L"
+    0x50: "PRE_FWY_ENTRANCE_C"
+    0x51: "PRE_FWY_ENTRANCE_R"
+    0x52: "PRE_FWY_ENTRANCE_L"
+    0x53: "PRE_FWY_EXIT_C"
+    0x54: "PRE_FWY_EXIT_R"
+    0x55: "PRE_FWY_EXIT_L"
+    0x56: "PRE_MAIN_ROAD_ENTRANCE_C"
+    0x57: "PRE_MAIN_ROAD_ENTRANCE_R"
+    0x58: "PRE_MAIN_ROAD_ENTRANCE_L"
+    0x59: "PRE_FERRY"
+    0x5A: "PRE_TUNNEL"
+    0x5B: "PRE_TOLL"
+    0x5C: "PRE_S_A_ENTRANCE"
+    0x5D: "PRE_COIN_TOLL"
+    0x5E: "PRE_ROUNDABOUT_L12"
+    0x5F: "PRE_ROUNDABOUT_L1"
+    0x60: "PRE_ROUNDABOUT_L2"
+    0x61: "PRE_ROUNDABOUT_L3"
+    0x62: "PRE_ROUNDABOUT_L4"
+    0x63: "PRE_ROUNDABOUT_L5"
+    0x64: "PRE_ROUNDABOUT_L6"
+    0x65: "PRE_ROUNDABOUT_L7"
+    0x66: "PRE_ROUNDABOUT_L8"
+    0x67: "PRE_ROUNDABOUT_L9"
+    0x68: "PRE_ROUNDABOUT_L10"
+    0x69: "PRE_ROUNDABOUT_L11"
+    0x6A: "PRE_ENTER_ROUNDABOUT"
+    0x6B: "PRE_EXIT_ROUNDABOUT"
+    0x6C: "PRE_MOST_LEFT_OF_LINE"
+    0x6D: "PRE_MOST_RIGHT_OF_LINE"
+    0x6E: "PRE_MIDDLE_OF_LINE"
+    0x6F: "PRE_MOST_LEFT_OF3_NORMAL"
+    0x70: "PRE_MOST_RIGHT_OF3_NORMAL"
+    0x71: "PRE_ENTER_FERRY"
+    0x72: "PRE_EXIT_FERRY"
+    0x73: "PRE_LEFT2_BRANCH_LEFT_BASE"
+    0x74: "PRE_LEFT2_BRANCH_RIGHT_BASE"
+    0x75: "PRE_RIGHT2_BRANCH_LEFT_BASE"
+    0x76: "PRE_RIGHT2_BRANCH_RIGHT_BASE"
+    0x77: "PRE_STRAIGHT_FRONT"
+    0x78: "PRE_MIDLE_OF3_NORMAL"
+    0x79: "PRE_STARTING_POINT"
+    0x7A: "PRE_I_C2_ON_LEFT_STRAIGHT_WALK_I_C"
+    0x7B: "PRE_I_C2_ON_RIGHT_STRAIGHT_WALK_I_C"
+    0x7C: "PRE_NORMAL2_ON_LEFT_STRAIGHT_LINE"
+    0x7D: "PRE_NORMAL2_ON_RIGHT_STRAIGHT_LINE"
+    0x7E: "PRE_NORMAL3_ON_LEFT_STRAIGHT_LINE"
+    0x7F: "PRE_NORMAL3_ON_MIDDLE_STRAIGHT_LINE"
+    0x80: "PRE_NORMAL3_ON_RIGHT_STRAIGHT_LINE"
+    0x81: "PRE_I_C3_ON_LEFT_OF_I_C"
+    0x82: "PRE_I_C3_ON_MIDDLE_OF_I_C"
+    0x83: "PRE_I_C3_ON_RIGHT_OF_I_C"
+    0x84: "PRE_I_C3_ON_LEFT_STRAIGHT_LINE"
+    0x85: "PRE_I_C3_ON_MIDDLE_STRAIGHT_LINE"
+    0x86: "PRE_I_C3_ON_RIGHT_STRAIGHT_LINE"
+    0x87: "PRE8_DIRECTION_STRAIGHT_L"
+    0x88: "PRE8_DIRECTION_STRAIGHT_R"
+    0x89: "PRE8_DIRECTION_MOST_LEFT_STRAIGHT_LINE"
+    0x8A: "PRE8_DIRECTION_MOST_MIDDLE_STRAIGHT_LINE"
+    0x8B: "PRE8_DIRECTION_MOST_RIGHT_STRAIGHT_LINE"
+    0x8C: "PRE_LEFT3_BRANCH_LEFT_BASE"
+    0x8D: "PRE_LEFT3_BRANCH_MIDDLE_BASE"
+    0x8E: "PRE_LEFT3_BRANCH_RIGHT_BASE"
+    0x8F: "PRE_RIGHT3_BRANCH_LEFT_BASE"
+    0x90: "PRE_RIGHT3_BRANCH_MIDDLE_BASE"
+    0x91: "PRE_RIGHT3_BRANCH_RIGHT_BASE"
+    0x92: "PRE8_DIRECTION_TURN_AROUND_LEFT"
+    0x93: "PRE8_DIRECTION_TURN_AROUND_RIGHT"
+    0x94: "PRE8_DIRECTION_TURN_AROUND_MOST_LEFT"
+    0x95: "PRE8_DIRECTION_TURN_AROUND_MIDDLE"
+    0x96: "PRE8_DIRECTION_TURN_AROUND_MOST_RIGHT"
+    0x97: "PRE_FORK2_JOIN"
+    0x98: "PRE_CHARGING_STATION1_C"
+    0x99: "PRE_CHARGING_STATION1_R"
+    0x9A: "PRE_CHARGING_STATION1_L"
+    0x9B: "PRE_CHARGING_STATION2_C"
+    0x9C: "PRE_CHARGING_STATION2_R"
+    0x9D: "PRE_CHARGING_STATION2_L"
+  matchingTable:
+    0x02: 0x1
+    0x03: 0x2
+    0x08: 0x3
+    0x09: 0x4
+    0x0A: 0x5
+    0x0D: 0x6
+    0x11: 0x7
+    0x12: 0x8
+    0x13: 0x9
+    0x14: 0xA
+    0x17: 0xB
+    0x18: 0xC
+    0x19: 0xD
+    0x1F: 0xE
+    0x20: 0xF
+    0x21: 0x10
+    0x2B: 0x11
+    0x2C: 0x12
+    0x2D: 0x13
+    0x2E: 0x14
+    0x30: 0x15
+    0x40: 0x16
+    0x41: 0x17
+    0x42: 0x18
+    0x43: 0x19
+    0x44: 0x1A
+    0x45: 0x1B
+    0x46: 0x1C
+    0x47: 0x1D
+    0x48: 0x1E
+    0x49: 0x1F
+    0x4C: 0x20
+    0x51: 0x21
+    0x52: 0x22
+    0x54: 0x23
+    0x55: 0x24
+    0x56: 0x25
+    0x57: 0x26
+    0x58: 0x27
+    0x5A: 0x28
+    0x5B: 0x29
+    0x60: 0x2A
+    0x61: 0x2B
+    0x62: 0x2C
+    0x63: 0x2D
+    0x64: 0x2E
+    0x65: 0x2F
+    0x66: 0x30
+    0x67: 0x31
+    0x68: 0x32
+    0x69: 0x33
+    0x6A: 0x34
+    0x6B: 0x35
+    0x6D: 0x36
+    0x6E: 0x37
+    0x6F: 0x38
+    0x70: 0x39
+    0x71: 0x3A
+    0x72: 0x3B
+    0x73: 0x3C
+    0x74: 0x3D
+    0x75: 0x3E
+    0x76: 0x3F
+    0x77: 0x40
+    0x78: 0x41
+    0x79: 0x42
+    0x7A: 0x43
+    0x7B: 0x44
+    0x7C: 0x45
+    0x7D: 0x46
+    0x7E: 0x47
+    0x80: 0x98
+    0x81: 0x99
+    0x82: 0x9A
+    0x83: 0x9B
+    0x84: 0x9C
+    0x85: 0x9D
+    0x89: 0x48
+    0x8A: 0x49
+    0x8F: 0x97
+    0x90: 0x4A
+    0x91: 0x4B
+    0x92: 0x4C
+    0x93: 0x4D
+    0x94: 0x4E
+    0x95: 0x4F
+    0xA0: 0x50
+    0xA1: 0x51
+    0xA2: 0x52
+    0xA3: 0x53
+    0xA4: 0x54
+    0xA5: 0x55
+    0xAC: 0x56
+    0xAD: 0x57
+    0xAE: 0x58
+    0xB0: 0x59
+    0xB1: 0x5A
+    0xB2: 0x5B
+    0xB7: 0x5C
+    0xB8: 0x5D
+    0xC0: 0x5E
+    0xC1: 0x5F
+    0xC2: 0x60
+    0xC3: 0x61
+    0xC4: 0x62
+    0xC5: 0x63
+    0xC6: 0x64
+    0xC7: 0x65
+    0xC8: 0x66
+    0xC9: 0x67
+    0xCA: 0x68
+    0xCB: 0x69
+    0xCC: 0x6A
+    0xCD: 0x6B
+    0xCE: 0x6C
+    0xCF: 0x6D
+    0xD0: 0x6E
+    0xD1: 0x6F
+    0xD2: 0x70
+    0xD3: 0x71
+    0xD4: 0x72
+    0xD5: 0x73
+    0xD6: 0x74
+    0xD7: 0x75
+    0xD8: 0x76
+    0xD9: 0x77
+    0xDA: 0x78
+    0xDB: 0x79
+    0xDC: 0x7A
+    0xDD: 0x7B
+    0xDE: 0x7C
+    0xDF: 0x7D
+    0xE0: 0x7E
+    0xE1: 0x7F
+    0xE2: 0x80
+    0xE3: 0x81
+    0xE4: 0x82
+    0xE5: 0x83
+    0xE6: 0x84
+    0xE7: 0x85
+    0xE8: 0x86
+    0xE9: 0x87
+    0xEA: 0x88
+    0xEB: 0x89
+    0xEC: 0x8A
+    0xED: 0x8B
+    0xEE: 0x8C
+    0xEF: 0x8D
+    0xF0: 0x8E
+    0xF1: 0x8F
+    0xF2: 0x90
+    0xF3: 0x91
+    0xF8: 0x92
+    0xF9: 0x93
+    0xFA: 0x94
+    0xFB: 0x95
+    0xFC: 0x96
+    ELSE: 0x0
+
+
+- Contents_UI_logic_2_0.Input_VgsOnOffStatus:
   type: sensor
   signalName: VCU_VgsSftMod
   dataType: HUInt64
@@ -3595,6 +4086,8 @@
     0x11: "SUGGEST_LANE_CHANGE_TO_RIGHT_SIDE"
     0x12: "TUNNEL_AHEAD"
     0x13: "UNSUPPORTED_LANE_AHEAD"
+    0x14: "UNSUPPORTED_WEATHER_CONDITIONS"
+    0x15: "ROAD_CONSTRUCTION_AHEAD"
   matchingTable:
     0x01: 0x1
     0x02: 0x2
@@ -3613,6 +4106,8 @@
     0x0F: 0xF
     0x10: 0x12
     0x11: 0x13
+    0x12: 0x14
+    0x13: 0x15
     0x21: 0x10
     0x22: 0x11
     ELSE: 0x0
@@ -3870,7 +4365,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_BrakeLampControlCommand_Status:
+- Detail_Contents_ADAS_2_0.Input_BrakeLampControlCommand_Status:
   type: sensor
   signalName: BrkLmpCmd
   dataType: HUInt64
@@ -3890,7 +4385,7 @@
     ELSE: 0x4
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CcOnlySetSpeedValue:
+- Detail_Contents_ADAS_2_0.Input_CcOnlySetSpeedValue:
   type: sensor
   signalName: VCU_CrzSetSpdVal
   dataType: HUInt64
@@ -3901,7 +4396,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CcSldSetSpeedValue:
+- Detail_Contents_ADAS_2_0.Input_CcSldSetSpeedValue:
   type: sensor
   signalName: VCU_SpdLmtSetVal_HighSpd
   dataType: HUInt64
@@ -3912,7 +4407,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CrawlActiveStatus:
+- Detail_Contents_ADAS_2_0.Input_CrawlActiveStatus:
   type: sensor
   signalName: CRWL_LmpDis
   dataType: HUInt64
@@ -3934,7 +4429,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CrawlActiveStepStatus:
+- Detail_Contents_ADAS_2_0.Input_CrawlActiveStepStatus:
   type: sensor
   signalName: CRWL_SpdCtrl_Tar
   dataType: HUInt64
@@ -3956,7 +4451,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CrawlWarnStatus:
+- Detail_Contents_ADAS_2_0.Input_CrawlWarnStatus:
   type: sensor
   signalName: CRWL_CluDis
   dataType: HUInt64
@@ -4012,7 +4507,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CruiseInfoDisplayReqStatus:
+- Detail_Contents_ADAS_2_0.Input_CruiseInfoDisplayReqStatus:
   type: sensor
   signalName: VCU_CrzDrvAlertDisp
   dataType: HUInt64
@@ -4028,7 +4523,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CruiseMainIndReqStatus:
+- Detail_Contents_ADAS_2_0.Input_CruiseMainIndReqStatus:
   type: sensor
   signalName: VCU_CrzOnLampSta
   dataType: HUInt64
@@ -4042,7 +4537,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CruiseOverrideReqStatus:
+- Detail_Contents_ADAS_2_0.Input_CruiseOverrideReqStatus:
   type: sensor
   signalName: VCU_CrzOvrrideSta
   dataType: HUInt64
@@ -4056,7 +4551,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_CruiseSetIndReqStatus:
+- Detail_Contents_ADAS_2_0.Input_CruiseSetIndReqStatus:
   type: sensor
   signalName: VCU_CrzSetLampSta
   dataType: HUInt64
@@ -4070,7 +4565,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_ExtHighBeamOnReqStatus:
+- Detail_Contents_ADAS_2_0.Input_ExtHighBeamOnReqStatus:
   type: sensor
   signalName: Lamp_HdLmpHiOnReq
   dataType: HUInt64
@@ -4086,7 +4581,7 @@
     ELSE: 0x2
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_ExtLowBeamOnReqStatus:
+- Detail_Contents_ADAS_2_0.Input_ExtLowBeamOnReqStatus:
   type: sensor
   signalName: Lamp_HdLmpLoOnReq
   dataType: HUInt64
@@ -4102,7 +4597,35 @@
     ELSE: 0x2
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDDriverHandsOnOff1Status:
+- Detail_Contents_ADAS_2_0.Input_ExtTurnLeftLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpLftOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtTurnLeftLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_ExtTurnRightLampStatus:
+  type: sensor
+  signalName: Lamp_TrnSigLmpRtOnReq
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ExtTurnRightLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_INDDriverHandsOnOff1Status:
   type: sensor
   signalName: IND_DrvrHandsOnOff1Sta
   dataType: HUInt64
@@ -4118,7 +4641,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDDriverHandsOnOff2Status:
+- Detail_Contents_ADAS_2_0.Input_INDDriverHandsOnOff2Status:
   type: sensor
   signalName: IND_DrvrHandsOnOff2Sta
   dataType: HUInt64
@@ -4134,7 +4657,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLcaLeftSymbol1Status:
+- Detail_Contents_ADAS_2_0.Input_INDLcaLeftSymbol1Status:
   type: sensor
   signalName: IND_LCA_LtSymb1Sta
   dataType: HUInt64
@@ -4158,7 +4681,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLcaLeftSymbol2Status:
+- Detail_Contents_ADAS_2_0.Input_INDLcaLeftSymbol2Status:
   type: sensor
   signalName: IND_LCA_LtSymb2Sta
   dataType: HUInt64
@@ -4182,7 +4705,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLcaRightSymbol1Status:
+- Detail_Contents_ADAS_2_0.Input_INDLcaRightSymbol1Status:
   type: sensor
   signalName: IND_LCA_RtSymb1Sta
   dataType: HUInt64
@@ -4206,7 +4729,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLcaRightSymbol2Status:
+- Detail_Contents_ADAS_2_0.Input_INDLcaRightSymbol2Status:
   type: sensor
   signalName: IND_LCA_RtSymb2Sta
   dataType: HUInt64
@@ -4230,7 +4753,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLfaSymbol1Status:
+- Detail_Contents_ADAS_2_0.Input_INDLfaSymbol1Status:
   type: sensor
   signalName: IND_LFA_Symb1Sta
   dataType: HUInt64
@@ -4252,7 +4775,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDLfaSymbol2Status:
+- Detail_Contents_ADAS_2_0.Input_INDLfaSymbol2Status:
   type: sensor
   signalName: IND_LFA_Symb2Sta
   dataType: HUInt64
@@ -4274,7 +4797,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDNsccSymbolStatus:
+- Detail_Contents_ADAS_2_0.Input_INDNsccSymbolStatus:
   type: sensor
   signalName: IND_NSCC_SymbSta
   dataType: HUInt64
@@ -4294,17 +4817,15 @@
   matchingTable:
     0x1: 0x1
     0x2: 0x2
+    0x3: 0x9
     0x4: 0x3
     0x5: 0x4
     0x6: 0x5
     0x7: 0x6
-    0x8: 0x7
-    0xA: 0x8
-    0xB: 0x9
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDSccSymbol1Status:
+- Detail_Contents_ADAS_2_0.Input_INDSccSymbol1Status:
   type: sensor
   signalName: IND_SCC_Symb1Sta
   dataType: HUInt64
@@ -4328,7 +4849,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDSccSymbol2Status:
+- Detail_Contents_ADAS_2_0.Input_INDSccSymbol2Status:
   type: sensor
   signalName: IND_SCC_Symb2Sta
   dataType: HUInt64
@@ -4352,7 +4873,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDSetSpeed1Status:
+- Detail_Contents_ADAS_2_0.Input_INDSetSpeed1Status:
   type: sensor
   signalName: IND_SetSpd1Sta
   dataType: HUInt64
@@ -4380,7 +4901,18 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_INDSetSpeed2Status:
+- Detail_Contents_ADAS_2_0.Input_INDSetSpeed1Value:
+  type: sensor
+  signalName: IND_SetSpd1Val
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDSetSpeed1Value
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_ADAS_2_0.Input_INDSetSpeed2Status:
   type: sensor
   signalName: IND_SetSpd2Sta
   dataType: HUInt64
@@ -4408,7 +4940,18 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvCenterRoadSurfaceDistanceValue:
+- Detail_Contents_ADAS_2_0.Input_INDSetSpeed2Value:
+  type: sensor
+  signalName: IND_SetSpd2Val
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDSetSpeed2Value
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_ADAS_2_0.Input_MvCenterRoadSurfaceDistanceValue:
   type: sensor
   signalName: MV_CtRoadSrfcDstVal
   dataType: HUInt64
@@ -4419,7 +4962,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvCenterRoadSurfaceStatus:
+- Detail_Contents_ADAS_2_0.Input_MvCenterRoadSurfaceStatus:
   type: sensor
   signalName: MV_CtRoadSrfcSta
   dataType: HUInt64
@@ -4442,7 +4985,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvDriverHandsOnOff2Status:
+- Detail_Contents_ADAS_2_0.Input_MvDriverHandsOnOff2Status:
   type: sensor
   signalName: MV_DrvrHandsOnOff2Sta
   dataType: HUInt64
@@ -4468,7 +5011,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvDrivingLaneRadiusValue:
+- Detail_Contents_ADAS_2_0.Input_MvDrivingLaneRadiusValue:
   type: sensor
   signalName: MV_DrvLnRdsVal
   dataType: HUInt64
@@ -4479,7 +5022,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontLeftObjectMovingDirectionStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontLeftObjectMovingDirectionStatus:
   type: sensor
   signalName: MV_FrLtObjMvngDirSta
   dataType: HUInt64
@@ -4495,7 +5038,7 @@
     ELSE: 0x3
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontLeftRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontLeftRadarWaveStatus:
   type: sensor
   signalName: MV_FrLtRdrWaveSta
   dataType: HUInt64
@@ -4513,7 +5056,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObject01Status:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObject01Status:
   type: sensor
   signalName: MV_FrObj01Sta
   dataType: HUInt64
@@ -4531,7 +5074,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObjectClassification01Status:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObjectClassification01Status:
   type: sensor
   signalName: MV_FrObjClss01Sta
   dataType: HUInt64
@@ -4565,7 +5108,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObjectHeadingAngle01Value:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObjectHeadingAngle01Value:
   type: sensor
   signalName: MV_FrObjHdAngl01Val
   dataType: HUInt64
@@ -4576,7 +5119,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObjectLateralPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObjectLateralPosition01Value:
   type: sensor
   signalName: MV_FrObjLatPos01Val
   dataType: HUInt64
@@ -4587,7 +5130,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObjectLateralPositionValue:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObjectLateralPositionValue:
   type: sensor
   signalName: MV_FrObjLatPosVal
   dataType: HUInt64
@@ -4598,7 +5141,7 @@
     TIMEOUT: 0x41
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObjectLongitudinalPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObjectLongitudinalPosition01Value:
   type: sensor
   signalName: MV_FrObjLongPos01Val
   dataType: HUInt64
@@ -4609,7 +5152,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObstacleLateralPositionValue:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObstacleLateralPositionValue:
   type: sensor
   signalName: MV_FrObstLatPosVal
   dataType: HUInt64
@@ -4620,7 +5163,7 @@
     TIMEOUT: 0x41
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObstacleLongitudinalPositionValue:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObstacleLongitudinalPositionValue:
   type: sensor
   signalName: MV_FrObstLongPosVal
   dataType: HUInt64
@@ -4631,7 +5174,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontObstacleStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontObstacleStatus:
   type: sensor
   signalName: MV_FrObstSta
   dataType: HUInt64
@@ -4651,7 +5194,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontRadarWaveStatus:
   type: sensor
   signalName: MV_FrRdrWaveSta
   dataType: HUInt64
@@ -4669,7 +5212,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontRightObjectMovingDirectionStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontRightObjectMovingDirectionStatus:
   type: sensor
   signalName: MV_FrRtObjMvngDirSta
   dataType: HUInt64
@@ -4685,7 +5228,7 @@
     ELSE: 0x3
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvFrontRightRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_MvFrontRightRadarWaveStatus:
   type: sensor
   signalName: MV_FrRtRdrWaveSta
   dataType: HUInt64
@@ -4703,7 +5246,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvLaneChangeRectangleLateralPositionValue:
+- Detail_Contents_ADAS_2_0.Input_MvLaneChangeRectangleLateralPositionValue:
   type: sensor
   signalName: MV_LCRectLatPosVal
   dataType: HUInt64
@@ -4714,7 +5257,7 @@
     TIMEOUT: 0x41
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvLaneChangeRectangleStatus:
+- Detail_Contents_ADAS_2_0.Input_MvLaneChangeRectangleStatus:
   type: sensor
   signalName: MV_LCRectSta
   dataType: HUInt64
@@ -4730,7 +5273,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvLeftLineOffsetValue:
+- Detail_Contents_ADAS_2_0.Input_MvLeftLineOffsetValue:
   type: sensor
   signalName: MV_LtLnOffstVal
   dataType: HUInt64
@@ -4741,7 +5284,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvLeftLineStatus:
+- Detail_Contents_ADAS_2_0.Input_MvLeftLineStatus:
   type: sensor
   signalName: MV_LtLnSta
   dataType: HUInt64
@@ -4775,7 +5318,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvLeftRoadSurfaceStatus:
+- Detail_Contents_ADAS_2_0.Input_MvLeftRoadSurfaceStatus:
   type: sensor
   signalName: MV_LtRoadSrfcSta
   dataType: HUInt64
@@ -4791,7 +5334,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRearLeftRadarWave1Status:
+- Detail_Contents_ADAS_2_0.Input_MvRearLeftRadarWave1Status:
   type: sensor
   signalName: MV_RrLtRdrWave1Sta
   dataType: HUInt64
@@ -4809,7 +5352,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRearLeftRadarWave2Status:
+- Detail_Contents_ADAS_2_0.Input_MvRearLeftRadarWave2Status:
   type: sensor
   signalName: MV_RrLtRdrWave2Sta
   dataType: HUInt64
@@ -4827,7 +5370,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRearRightRadarWave1Status:
+- Detail_Contents_ADAS_2_0.Input_MvRearRightRadarWave1Status:
   type: sensor
   signalName: MV_RrRtRdrWave1Sta
   dataType: HUInt64
@@ -4845,7 +5388,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRearRightRadarWave2Status:
+- Detail_Contents_ADAS_2_0.Input_MvRearRightRadarWave2Status:
   type: sensor
   signalName: MV_RrRtRdrWave2Sta
   dataType: HUInt64
@@ -4863,7 +5406,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRightLineOffsetValue:
+- Detail_Contents_ADAS_2_0.Input_MvRightLineOffsetValue:
   type: sensor
   signalName: MV_RtLnOffstVal
   dataType: HUInt64
@@ -4874,7 +5417,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRightLineStatus:
+- Detail_Contents_ADAS_2_0.Input_MvRightLineStatus:
   type: sensor
   signalName: MV_RtLnSta
   dataType: HUInt64
@@ -4908,7 +5451,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvRightRoadSurfaceStatus:
+- Detail_Contents_ADAS_2_0.Input_MvRightRoadSurfaceStatus:
   type: sensor
   signalName: MV_RtRoadSrfcSta
   dataType: HUInt64
@@ -4924,7 +5467,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject01Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject01Status:
   type: sensor
   signalName: MV_SrrndObj01Sta
   dataType: HUInt64
@@ -4944,7 +5487,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject02Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject02Status:
   type: sensor
   signalName: MV_SrrndObj02Sta
   dataType: HUInt64
@@ -4964,7 +5507,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject03Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject03Status:
   type: sensor
   signalName: MV_SrrndObj03Sta
   dataType: HUInt64
@@ -4984,7 +5527,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject04Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject04Status:
   type: sensor
   signalName: MV_SrrndObj04Sta
   dataType: HUInt64
@@ -5004,7 +5547,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject05Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject05Status:
   type: sensor
   signalName: MV_SrrndObj05Sta
   dataType: HUInt64
@@ -5024,7 +5567,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject06Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject06Status:
   type: sensor
   signalName: MV_SrrndObj06Sta
   dataType: HUInt64
@@ -5044,7 +5587,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject07Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject07Status:
   type: sensor
   signalName: MV_SrrndObj07Sta
   dataType: HUInt64
@@ -5064,7 +5607,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject08Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject08Status:
   type: sensor
   signalName: MV_SrrndObj08Sta
   dataType: HUInt64
@@ -5084,7 +5627,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject09Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject09Status:
   type: sensor
   signalName: MV_SrrndObj09Sta
   dataType: HUInt64
@@ -5104,7 +5647,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject10Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject10Status:
   type: sensor
   signalName: MV_SrrndObj10Sta
   dataType: HUInt64
@@ -5124,7 +5667,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject11Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject11Status:
   type: sensor
   signalName: MV_SrrndObj11Sta
   dataType: HUInt64
@@ -5144,7 +5687,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject12Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject12Status:
   type: sensor
   signalName: MV_SrrndObj12Sta
   dataType: HUInt64
@@ -5164,7 +5707,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject13Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject13Status:
   type: sensor
   signalName: MV_SrrndObj13Sta
   dataType: HUInt64
@@ -5184,7 +5727,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObject14Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObject14Status:
   type: sensor
   signalName: MV_SrrndObj14Sta
   dataType: HUInt64
@@ -5204,7 +5747,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification01Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification01Status:
   type: sensor
   signalName: MV_SrrndObjClss01Sta
   dataType: HUInt64
@@ -5238,7 +5781,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification02Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification02Status:
   type: sensor
   signalName: MV_SrrndObjClss02Sta
   dataType: HUInt64
@@ -5272,7 +5815,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification03Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification03Status:
   type: sensor
   signalName: MV_SrrndObjClss03Sta
   dataType: HUInt64
@@ -5306,7 +5849,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification04Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification04Status:
   type: sensor
   signalName: MV_SrrndObjClss04Sta
   dataType: HUInt64
@@ -5340,7 +5883,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification05Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification05Status:
   type: sensor
   signalName: MV_SrrndObjClss05Sta
   dataType: HUInt64
@@ -5374,7 +5917,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification06Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification06Status:
   type: sensor
   signalName: MV_SrrndObjClss06Sta
   dataType: HUInt64
@@ -5408,7 +5951,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification07Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification07Status:
   type: sensor
   signalName: MV_SrrndObjClss07Sta
   dataType: HUInt64
@@ -5442,7 +5985,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification08Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification08Status:
   type: sensor
   signalName: MV_SrrndObjClss08Sta
   dataType: HUInt64
@@ -5476,7 +6019,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification09Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification09Status:
   type: sensor
   signalName: MV_SrrndObjClss09Sta
   dataType: HUInt64
@@ -5510,7 +6053,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification10Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification10Status:
   type: sensor
   signalName: MV_SrrndObjClss10Sta
   dataType: HUInt64
@@ -5544,7 +6087,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification11Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification11Status:
   type: sensor
   signalName: MV_SrrndObjClss11Sta
   dataType: HUInt64
@@ -5578,7 +6121,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification12Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification12Status:
   type: sensor
   signalName: MV_SrrndObjClss12Sta
   dataType: HUInt64
@@ -5612,7 +6155,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification13Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification13Status:
   type: sensor
   signalName: MV_SrrndObjClss13Sta
   dataType: HUInt64
@@ -5646,7 +6189,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectClassification14Status:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectClassification14Status:
   type: sensor
   signalName: MV_SrrndObjClss14Sta
   dataType: HUInt64
@@ -5680,7 +6223,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle01Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle01Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl01Val
   dataType: HUInt64
@@ -5691,7 +6234,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle02Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle02Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl02Val
   dataType: HUInt64
@@ -5702,7 +6245,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle03Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle03Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl03Val
   dataType: HUInt64
@@ -5713,7 +6256,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle04Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle04Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl04Val
   dataType: HUInt64
@@ -5724,7 +6267,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle05Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle05Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl05Val
   dataType: HUInt64
@@ -5735,7 +6278,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle06Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle06Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl06Val
   dataType: HUInt64
@@ -5746,7 +6289,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle07Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle07Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl07Val
   dataType: HUInt64
@@ -5757,7 +6300,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle08Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle08Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl08Val
   dataType: HUInt64
@@ -5768,7 +6311,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle09Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle09Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl09Val
   dataType: HUInt64
@@ -5779,7 +6322,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle10Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle10Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl10Val
   dataType: HUInt64
@@ -5790,7 +6333,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle11Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle11Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl11Val
   dataType: HUInt64
@@ -5801,7 +6344,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle12Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle12Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl12Val
   dataType: HUInt64
@@ -5812,7 +6355,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle13Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle13Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl13Val
   dataType: HUInt64
@@ -5823,7 +6366,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectHeadingAngle14Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectHeadingAngle14Value:
   type: sensor
   signalName: MV_SrrndObjHdAngl14Val
   dataType: HUInt64
@@ -5834,7 +6377,7 @@
     TIMEOUT: 0x7F
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition01Value:
   type: sensor
   signalName: MV_SrrndObjLatPos01Val
   dataType: HUInt64
@@ -5845,7 +6388,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition02Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition02Value:
   type: sensor
   signalName: MV_SrrndObjLatPos02Val
   dataType: HUInt64
@@ -5856,7 +6399,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition03Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition03Value:
   type: sensor
   signalName: MV_SrrndObjLatPos03Val
   dataType: HUInt64
@@ -5867,7 +6410,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition04Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition04Value:
   type: sensor
   signalName: MV_SrrndObjLatPos04Val
   dataType: HUInt64
@@ -5878,7 +6421,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition05Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition05Value:
   type: sensor
   signalName: MV_SrrndObjLatPos05Val
   dataType: HUInt64
@@ -5889,7 +6432,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition06Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition06Value:
   type: sensor
   signalName: MV_SrrndObjLatPos06Val
   dataType: HUInt64
@@ -5900,7 +6443,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition07Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition07Value:
   type: sensor
   signalName: MV_SrrndObjLatPos07Val
   dataType: HUInt64
@@ -5911,7 +6454,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition08Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition08Value:
   type: sensor
   signalName: MV_SrrndObjLatPos08Val
   dataType: HUInt64
@@ -5922,7 +6465,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition09Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition09Value:
   type: sensor
   signalName: MV_SrrndObjLatPos09Val
   dataType: HUInt64
@@ -5933,7 +6476,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition10Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition10Value:
   type: sensor
   signalName: MV_SrrndObjLatPos10Val
   dataType: HUInt64
@@ -5944,7 +6487,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition11Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition11Value:
   type: sensor
   signalName: MV_SrrndObjLatPos11Val
   dataType: HUInt64
@@ -5955,7 +6498,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition12Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition12Value:
   type: sensor
   signalName: MV_SrrndObjLatPos12Val
   dataType: HUInt64
@@ -5966,7 +6509,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition13Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition13Value:
   type: sensor
   signalName: MV_SrrndObjLatPos13Val
   dataType: HUInt64
@@ -5977,7 +6520,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLateralPosition14Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLateralPosition14Value:
   type: sensor
   signalName: MV_SrrndObjLatPos14Val
   dataType: HUInt64
@@ -5988,7 +6531,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition01Value:
   type: sensor
   signalName: MV_SrrndObjLongPos01Val
   dataType: HUInt64
@@ -5999,7 +6542,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition02Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition02Value:
   type: sensor
   signalName: MV_SrrndObjLongPos02Val
   dataType: HUInt64
@@ -6010,7 +6553,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition03Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition03Value:
   type: sensor
   signalName: MV_SrrndObjLongPos03Val
   dataType: HUInt64
@@ -6021,7 +6564,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition04Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition04Value:
   type: sensor
   signalName: MV_SrrndObjLongPos04Val
   dataType: HUInt64
@@ -6032,7 +6575,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition05Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition05Value:
   type: sensor
   signalName: MV_SrrndObjLongPos05Val
   dataType: HUInt64
@@ -6043,7 +6586,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition06Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition06Value:
   type: sensor
   signalName: MV_SrrndObjLongPos06Val
   dataType: HUInt64
@@ -6054,7 +6597,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition07Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition07Value:
   type: sensor
   signalName: MV_SrrndObjLongPos07Val
   dataType: HUInt64
@@ -6065,7 +6608,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition08Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition08Value:
   type: sensor
   signalName: MV_SrrndObjLongPos08Val
   dataType: HUInt64
@@ -6076,7 +6619,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition09Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition09Value:
   type: sensor
   signalName: MV_SrrndObjLongPos09Val
   dataType: HUInt64
@@ -6087,7 +6630,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition10Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition10Value:
   type: sensor
   signalName: MV_SrrndObjLongPos10Val
   dataType: HUInt64
@@ -6098,7 +6641,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition11Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition11Value:
   type: sensor
   signalName: MV_SrrndObjLongPos11Val
   dataType: HUInt64
@@ -6109,7 +6652,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition12Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition12Value:
   type: sensor
   signalName: MV_SrrndObjLongPos12Val
   dataType: HUInt64
@@ -6120,7 +6663,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition13Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition13Value:
   type: sensor
   signalName: MV_SrrndObjLongPos13Val
   dataType: HUInt64
@@ -6131,7 +6674,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvSurroundingObjectLongitudinalPosition14Value:
+- Detail_Contents_ADAS_2_0.Input_MvSurroundingObjectLongitudinalPosition14Value:
   type: sensor
   signalName: MV_SrrndObjLongPos14Val
   dataType: HUInt64
@@ -6142,7 +6685,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvVehicleDistanceStatus:
+- Detail_Contents_ADAS_2_0.Input_MvVehicleDistanceStatus:
   type: sensor
   signalName: MV_VehDstSta
   dataType: HUInt64
@@ -6162,7 +6705,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_MvVehicleDistanceValue:
+- Detail_Contents_ADAS_2_0.Input_MvVehicleDistanceValue:
   type: sensor
   signalName: MV_VehDstVal
   dataType: HUInt64
@@ -6173,7 +6716,7 @@
     TIMEOUT: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTFGroup1AdasWarning1_1Status:
+- Detail_Contents_ADAS_2_0.Input_NTFGroup1AdasWarning1_1Status:
   type: sensor
   signalName: NT_F_Group1_ADASWarn1_1Sta
   dataType: HUInt64
@@ -6194,7 +6737,7 @@
     0xB: "STEERING_FRONT_LEFT"
     0xC: "STEERING_FRONT_RIGHT"
     0xD: "STEERING_FRONT_LEFT_PATH"
-    0xE: "STEERING_FRONTRIGHT_PATH"
+    0xE: "STEERING_FRONT_RIGHT_PATH"
     0xF: "STEERING_REAR_LEFT"
     0x10: "STEERING_REAR_RIGHT"
     0x11: "END_OF_ASSIST"
@@ -6219,7 +6762,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTFGroup1AdasWarning1_2Status:
+- Detail_Contents_ADAS_2_0.Input_NTFGroup1AdasWarning1_2Status:
   type: sensor
   signalName: NT_F_Group1_ADASWarn1_2Sta
   dataType: HUInt64
@@ -6257,7 +6800,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTFGroup4AdasWarning1_1Status:
+- Detail_Contents_ADAS_2_0.Input_NTFGroup4AdasWarning1_1Status:
   type: sensor
   signalName: NT_F_Group4_ADASWarn1_1Sta
   dataType: HUInt64
@@ -6297,7 +6840,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTFHandsOffStatus:
+- Detail_Contents_ADAS_2_0.Input_NTFHandsOffStatus:
   type: sensor
   signalName: NT_F_HndsoffSta
   dataType: HUInt64
@@ -6313,7 +6856,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTMGroup2AdasWarning1_1Status:
+- Detail_Contents_ADAS_2_0.Input_NTMGroup2AdasWarning1_1Status:
   type: sensor
   signalName: NT_M_Group2_ADASWarn1_1Sta
   dataType: HUInt64
@@ -6365,7 +6908,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NTMGroup2AdasWarning1_2Status:
+- Detail_Contents_ADAS_2_0.Input_NTMGroup2AdasWarning1_2Status:
   type: sensor
   signalName: NT_M_Group2_ADASWarn1_2Sta
   dataType: HUInt64
@@ -6390,7 +6933,7 @@
     0xF: "DEACTIVATION_HIGHWAY_DRIVING_ASSIST"
     0x10: "TUNNEL_AHEAD"
     0x11: "UNSUPPORTED_LANE_AHEAD"
-    0x12: "UNSUPPORTED_WEATHER_CONDITONS"
+    0x12: "UNSUPPORTED_WEATHER_CONDITIONS"
     0x13: "ROAD_CONSTRUCTION_AHEAD"
     0x14: "SUGGEST_LANE_CHANGE_TO_LEFT_SIDE"
     0x15: "SUGGEST_LANE_CHANGE_TO_RIGHT_SIDE"
@@ -6419,7 +6962,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_NccCameraOperStatus:
+- Detail_Contents_ADAS_2_0.Input_NccCameraOperStatus:
   type: sensor
   signalName: HCU_CcCameraOperSta
   dataType: HUInt64
@@ -6435,7 +6978,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvHdaSymbol2Status:
+- Detail_Contents_ADAS_2_0.Input_SmvHdaSymbol2Status:
   type: sensor
   signalName: SMV_HDA_Symb2Sta
   dataType: HUInt64
@@ -6455,7 +6998,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvHostVehicle2Status:
+- Detail_Contents_ADAS_2_0.Input_SmvHostVehicle2Status:
   type: sensor
   signalName: SMV_HostVeh2Sta
   dataType: HUInt64
@@ -6473,7 +7016,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvIslaSetSpeedSymbolStatus:
+- Detail_Contents_ADAS_2_0.Input_SmvIslaSetSpeedSymbolStatus:
   type: sensor
   signalName: SMV_ISLA_SetSpdSymbSta
   dataType: HUInt64
@@ -6497,7 +7040,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvLcaLeftSymbolStatus:
+- Detail_Contents_ADAS_2_0.Input_SmvLcaLeftSymbolStatus:
   type: sensor
   signalName: SMV_LCA_LtSymbSta
   dataType: HUInt64
@@ -6529,7 +7072,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvLcaRightSymbolStatus:
+- Detail_Contents_ADAS_2_0.Input_SmvLcaRightSymbolStatus:
   type: sensor
   signalName: SMV_LCA_RtSymbSta
   dataType: HUInt64
@@ -6561,7 +7104,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvLfaSymbolStatus:
+- Detail_Contents_ADAS_2_0.Input_SmvLfaSymbolStatus:
   type: sensor
   signalName: SMV_LFA_SymbSta
   dataType: HUInt64
@@ -6591,7 +7134,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvSetSpeedStatus:
+- Detail_Contents_ADAS_2_0.Input_SmvSetSpeedStatus:
   type: sensor
   signalName: SMV_SetSpdSta
   dataType: HUInt64
@@ -6613,7 +7156,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvSetSpeedValue:
+- Detail_Contents_ADAS_2_0.Input_SmvSetSpeedValue:
   type: sensor
   signalName: SMV_SetSpdVal
   dataType: HUInt64
@@ -6624,7 +7167,7 @@
     TIMEOUT: 0xFF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvVehicleDistanceLevel2Status:
+- Detail_Contents_ADAS_2_0.Input_SmvVehicleDistanceLevel2Status:
   type: sensor
   signalName: SMV_VehDstLvl2Sta
   dataType: HUInt64
@@ -6648,7 +7191,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SmvVehicleDistanceLevelValue:
+- Detail_Contents_ADAS_2_0.Input_SmvVehicleDistanceLevelValue:
   type: sensor
   signalName: SMV_VehDstLvlVal
   dataType: HUInt64
@@ -6670,7 +7213,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SpeedLimitActiveStatus:
+- Detail_Contents_ADAS_2_0.Input_SpeedLimitActiveStatus:
   type: sensor
   signalName: VCU_SpdLmtActSta
   dataType: HUInt64
@@ -6684,7 +7227,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SpeedLimitInfoDisplayReqStatus:
+- Detail_Contents_ADAS_2_0.Input_SpeedLimitInfoDisplayReqStatus:
   type: sensor
   signalName: VCU_SpdLmtDrvAlertDisp
   dataType: HUInt64
@@ -6700,7 +7243,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_SpeedLimitReadyStatus:
+- Detail_Contents_ADAS_2_0.Input_SpeedLimitReadyStatus:
   type: sensor
   signalName: VCU_SpdLimSetLampSta
   dataType: HUInt64
@@ -6714,7 +7257,21 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCCenterRoadSurfaceStatus:
+- Detail_Contents_ADAS_2_0.Input_VCAdditionalStatus:
+  type: sensor
+  signalName: VC_AddtnlSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCAdditionalStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LEAD_VEHICLE_DEPARTURE_DISPLAY"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCCenterRoadSurfaceStatus:
   type: sensor
   signalName: VC_CtRoadSrfcSta
   dataType: HUInt64
@@ -6730,7 +7287,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCDrivingLaneRadiusValue:
+- Detail_Contents_ADAS_2_0.Input_VCDrivingLaneRadiusValue:
   type: sensor
   signalName: VC_DrvLnRdsVal
   dataType: HUInt64
@@ -6741,7 +7298,27 @@
     TIMEOUT: 0x00
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCFrontLeftObjectMovingDirectionStatus:
+- Detail_Contents_ADAS_2_0.Input_VCEmergencyStreeingStatus:
+  type: sensor
+  signalName: VC_EmergStrSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCEmergencyStreeingStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LEFT_DISPLAY"
+    0x2: "RIGHT_DISPLAY"
+    0x3: "LEFT_DISPLAY_WITH_ESA"
+    0x4: "RIGHT_DISPLAY_WITH_ESA"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCFrontLeftObjectMovingDirectionStatus:
   type: sensor
   signalName: VC_FrLtObjMvngDirSta
   dataType: HUInt64
@@ -6757,7 +7334,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCFrontLeftRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_VCFrontLeftRadarWaveStatus:
   type: sensor
   signalName: VC_FrLtRdrWaveSta
   dataType: HUInt64
@@ -6771,7 +7348,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCFrontRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_VCFrontRadarWaveStatus:
   type: sensor
   signalName: VC_FrRdrWaveSta
   dataType: HUInt64
@@ -6785,7 +7362,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCFrontRightObjectMovingDirectionStatus:
+- Detail_Contents_ADAS_2_0.Input_VCFrontRightObjectMovingDirectionStatus:
   type: sensor
   signalName: VC_FrRtObjMvngDirSta
   dataType: HUInt64
@@ -6801,7 +7378,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCFrontRightRadarWaveStatus:
+- Detail_Contents_ADAS_2_0.Input_VCFrontRightRadarWaveStatus:
   type: sensor
   signalName: VC_FrRtRdrWaveSta
   dataType: HUInt64
@@ -6815,7 +7392,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCLaneChangeAvailableStatus:
+- Detail_Contents_ADAS_2_0.Input_VCLaneChangeAvailableStatus:
   type: sensor
   signalName: VC_LCAvlblSta
   dataType: HUInt64
@@ -6835,7 +7412,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCLaneChangeRectangleLateralPositionValue:
+- Detail_Contents_ADAS_2_0.Input_VCLaneChangeRectangleLateralPositionValue:
   type: sensor
   signalName: VC_LCRectLatPosVal
   dataType: HUInt64
@@ -6846,7 +7423,7 @@
     TIMEOUT: 0x41
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCLaneChangeRectangleStatus:
+- Detail_Contents_ADAS_2_0.Input_VCLaneChangeRectangleStatus:
   type: sensor
   signalName: VC_LCRectSta
   dataType: HUInt64
@@ -6862,7 +7439,64 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCLeftLineOffsetValue:
+- Detail_Contents_ADAS_2_0.Input_VCLeftLaneChangeDirectionStatus:
+  type: sensor
+  signalName: VC_LtLCDirSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCLeftLaneChangeDirectionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GREEN_ARROW_ANIMATION"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCLeftLeftLineOffsetValue:
+  type: sensor
+  signalName: VC_LtLtLnOffstVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCLeftLeftLineOffsetValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ADAS_2_0.Input_VCLeftLeftLineStatus:
+  type: sensor
+  signalName: VC_LtLtLnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCLeftLeftLineStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LIGHT_GRAY"
+    0x2: "DARK_GRAY"
+    0x3: "GREEN"
+    0x4: "ORANGE"
+    0x5: "BLUE"
+    0x6: "BOTTS_DOT"
+    0x7: "DARK_GRAY_DASH"
+    0x8: "GREEN_DASH"
+    0x9: "ORANGE_DASH"
+    0xA: "BLUE_DASH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    0xA: 0xA
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCLeftLineOffsetValue:
   type: sensor
   signalName: VC_LtLnOffstVal
   dataType: HUInt64
@@ -6873,7 +7507,7 @@
     TIMEOUT: 0x00
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCLeftLineStatus:
+- Detail_Contents_ADAS_2_0.Input_VCLeftLineStatus:
   type: sensor
   signalName: VC_LtLnSta
   dataType: HUInt64
@@ -6929,7 +7563,43 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRearLeftRadarWave1Status:
+- Detail_Contents_ADAS_2_0.Input_VCRearLeftObjectMovingDirection1Status:
+  type: sensor
+  signalName: VC_RrLtObjMvngDir1Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRearLeftObjectMovingDirection1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_CROSSING"
+    0x2: "FAILURE_CROSSING"
+    0x3: "WARING_PASSING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRearLeftObjectMovingDirection2Status:
+  type: sensor
+  signalName: VC_RrLtObjMvngDir2Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRearLeftObjectMovingDirection2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_CROSSING"
+    0x2: "FAILURE_CROSSING"
+    0x3: "WARING_PASSING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRearLeftRadarWave1Status:
   type: sensor
   signalName: VC_RrLtRdrWave1Sta
   dataType: HUInt64
@@ -6943,7 +7613,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRearLeftRadarWave2Status:
+- Detail_Contents_ADAS_2_0.Input_VCRearLeftRadarWave2Status:
   type: sensor
   signalName: VC_RrLtRdrWave2Sta
   dataType: HUInt64
@@ -6957,7 +7627,43 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRearRightRadarWave1Status:
+- Detail_Contents_ADAS_2_0.Input_VCRearRightObjectMovingDirection1Status:
+  type: sensor
+  signalName: VC_RrRtObjMvngDir1Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRearRightObjectMovingDirection1Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_CROSSING"
+    0x2: "FAILURE_CROSSING"
+    0x3: "WARING_PASSING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRearRightObjectMovingDirection2Status:
+  type: sensor
+  signalName: VC_RrRtObjMvngDir2Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRearRightObjectMovingDirection2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING_CROSSING"
+    0x2: "FAILURE_CROSSING"
+    0x3: "WARING_PASSING"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRearRightRadarWave1Status:
   type: sensor
   signalName: VC_RrRtRdrWave1Sta
   dataType: HUInt64
@@ -6971,7 +7677,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRearRightRadarWave2Status:
+- Detail_Contents_ADAS_2_0.Input_VCRearRightRadarWave2Status:
   type: sensor
   signalName: VC_RrRtRdrWave2Sta
   dataType: HUInt64
@@ -6985,7 +7691,21 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRightLineOffsetValue:
+- Detail_Contents_ADAS_2_0.Input_VCRightLaneChangeDirectionStatus:
+  type: sensor
+  signalName: VC_RtLCDirSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRightLaneChangeDirectionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "GREEN_ARROW_ANIMATION"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRightLineOffsetValue:
   type: sensor
   signalName: VC_RtLnOffstVal
   dataType: HUInt64
@@ -6996,7 +7716,7 @@
     TIMEOUT: 0x00
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCRightLineStatus:
+- Detail_Contents_ADAS_2_0.Input_VCRightLineStatus:
   type: sensor
   signalName: VC_RtLnSta
   dataType: HUInt64
@@ -7052,7 +7772,50 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject01Status:
+- Detail_Contents_ADAS_2_0.Input_VCRightRightLineOffsetValue:
+  type: sensor
+  signalName: VC_RtRtLnOffstVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRightRightLineOffsetValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ADAS_2_0.Input_VCRightRightLineStatus:
+  type: sensor
+  signalName: VC_RtRtLnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_VCRightRightLineStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "LIGHT_GRAY"
+    0x2: "DARK_GRAY"
+    0x3: "GREEN"
+    0x4: "ORANGE"
+    0x5: "BLUE"
+    0x6: "BOTTS_DOT"
+    0x7: "DARK_GRAY_DASH"
+    0x8: "GREEN_DASH"
+    0x9: "ORANGE_DASH"
+    0xA: "BLUE_DASH"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    0xA: 0xA
+    ELSE: 0x0
+
+
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject01Status:
   type: sensor
   signalName: VC_SrrndObj01Sta
   dataType: HUInt64
@@ -7074,7 +7837,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject02Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject02Status:
   type: sensor
   signalName: VC_SrrndObj02Sta
   dataType: HUInt64
@@ -7096,7 +7859,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject03Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject03Status:
   type: sensor
   signalName: VC_SrrndObj03Sta
   dataType: HUInt64
@@ -7118,7 +7881,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject04Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject04Status:
   type: sensor
   signalName: VC_SrrndObj04Sta
   dataType: HUInt64
@@ -7140,7 +7903,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject05Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject05Status:
   type: sensor
   signalName: VC_SrrndObj05Sta
   dataType: HUInt64
@@ -7162,7 +7925,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject06Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject06Status:
   type: sensor
   signalName: VC_SrrndObj06Sta
   dataType: HUInt64
@@ -7184,7 +7947,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject07Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject07Status:
   type: sensor
   signalName: VC_SrrndObj07Sta
   dataType: HUInt64
@@ -7206,7 +7969,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject08Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject08Status:
   type: sensor
   signalName: VC_SrrndObj08Sta
   dataType: HUInt64
@@ -7228,7 +7991,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject09Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject09Status:
   type: sensor
   signalName: VC_SrrndObj09Sta
   dataType: HUInt64
@@ -7250,7 +8013,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject10Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject10Status:
   type: sensor
   signalName: VC_SrrndObj10Sta
   dataType: HUInt64
@@ -7272,7 +8035,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject11Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject11Status:
   type: sensor
   signalName: VC_SrrndObj11Sta
   dataType: HUInt64
@@ -7294,7 +8057,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject12Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject12Status:
   type: sensor
   signalName: VC_SrrndObj12Sta
   dataType: HUInt64
@@ -7316,7 +8079,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject13Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject13Status:
   type: sensor
   signalName: VC_SrrndObj13Sta
   dataType: HUInt64
@@ -7338,7 +8101,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject14Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject14Status:
   type: sensor
   signalName: VC_SrrndObj14Sta
   dataType: HUInt64
@@ -7360,7 +8123,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObject15Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObject15Status:
   type: sensor
   signalName: VC_SrrndObj15Sta
   dataType: HUInt64
@@ -7382,7 +8145,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification01Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification01Status:
   type: sensor
   signalName: VC_SrrndObjClss01Sta
   dataType: HUInt64
@@ -7420,7 +8183,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification02Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification02Status:
   type: sensor
   signalName: VC_SrrndObjClss02Sta
   dataType: HUInt64
@@ -7458,7 +8221,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification03Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification03Status:
   type: sensor
   signalName: VC_SrrndObjClss03Sta
   dataType: HUInt64
@@ -7496,7 +8259,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification04Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification04Status:
   type: sensor
   signalName: VC_SrrndObjClss04Sta
   dataType: HUInt64
@@ -7534,7 +8297,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification05Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification05Status:
   type: sensor
   signalName: VC_SrrndObjClss05Sta
   dataType: HUInt64
@@ -7572,7 +8335,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification06Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification06Status:
   type: sensor
   signalName: VC_SrrndObjClss06Sta
   dataType: HUInt64
@@ -7610,7 +8373,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification07Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification07Status:
   type: sensor
   signalName: VC_SrrndObjClss07Sta
   dataType: HUInt64
@@ -7648,7 +8411,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification08Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification08Status:
   type: sensor
   signalName: VC_SrrndObjClss08Sta
   dataType: HUInt64
@@ -7686,7 +8449,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification09Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification09Status:
   type: sensor
   signalName: VC_SrrndObjClss09Sta
   dataType: HUInt64
@@ -7724,7 +8487,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification10Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification10Status:
   type: sensor
   signalName: VC_SrrndObjClss10Sta
   dataType: HUInt64
@@ -7762,7 +8525,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification11Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification11Status:
   type: sensor
   signalName: VC_SrrndObjClss11Sta
   dataType: HUInt64
@@ -7800,7 +8563,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification12Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification12Status:
   type: sensor
   signalName: VC_SrrndObjClss12Sta
   dataType: HUInt64
@@ -7838,7 +8601,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification13Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification13Status:
   type: sensor
   signalName: VC_SrrndObjClss13Sta
   dataType: HUInt64
@@ -7876,7 +8639,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification14Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification14Status:
   type: sensor
   signalName: VC_SrrndObjClss14Sta
   dataType: HUInt64
@@ -7914,7 +8677,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectClassification15Status:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectClassification15Status:
   type: sensor
   signalName: VC_SrrndObjClss15Sta
   dataType: HUInt64
@@ -7952,7 +8715,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition01Value:
   type: sensor
   signalName: VC_SrrndObjLatPos01Val
   dataType: HUInt64
@@ -7963,7 +8726,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition02Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition02Value:
   type: sensor
   signalName: VC_SrrndObjLatPos02Val
   dataType: HUInt64
@@ -7974,7 +8737,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition03Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition03Value:
   type: sensor
   signalName: VC_SrrndObjLatPos03Val
   dataType: HUInt64
@@ -7985,7 +8748,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition04Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition04Value:
   type: sensor
   signalName: VC_SrrndObjLatPos04Val
   dataType: HUInt64
@@ -7996,7 +8759,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition05Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition05Value:
   type: sensor
   signalName: VC_SrrndObjLatPos05Val
   dataType: HUInt64
@@ -8007,7 +8770,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition06Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition06Value:
   type: sensor
   signalName: VC_SrrndObjLatPos06Val
   dataType: HUInt64
@@ -8018,7 +8781,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition07Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition07Value:
   type: sensor
   signalName: VC_SrrndObjLatPos07Val
   dataType: HUInt64
@@ -8029,7 +8792,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition08Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition08Value:
   type: sensor
   signalName: VC_SrrndObjLatPos08Val
   dataType: HUInt64
@@ -8040,7 +8803,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition09Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition09Value:
   type: sensor
   signalName: VC_SrrndObjLatPos09Val
   dataType: HUInt64
@@ -8051,7 +8814,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition10Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition10Value:
   type: sensor
   signalName: VC_SrrndObjLatPos10Val
   dataType: HUInt64
@@ -8062,7 +8825,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition11Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition11Value:
   type: sensor
   signalName: VC_SrrndObjLatPos11Val
   dataType: HUInt64
@@ -8073,7 +8836,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition12Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition12Value:
   type: sensor
   signalName: VC_SrrndObjLatPos12Val
   dataType: HUInt64
@@ -8084,7 +8847,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition13Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition13Value:
   type: sensor
   signalName: VC_SrrndObjLatPos13Val
   dataType: HUInt64
@@ -8095,7 +8858,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition14Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition14Value:
   type: sensor
   signalName: VC_SrrndObjLatPos14Val
   dataType: HUInt64
@@ -8106,7 +8869,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLateralPosition15Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLateralPosition15Value:
   type: sensor
   signalName: VC_SrrndObjLatPos15Val
   dataType: HUInt64
@@ -8117,7 +8880,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition01Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition01Value:
   type: sensor
   signalName: VC_SrrndObjLongPos01Val
   dataType: HUInt64
@@ -8128,7 +8891,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition02Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition02Value:
   type: sensor
   signalName: VC_SrrndObjLongPos02Val
   dataType: HUInt64
@@ -8139,7 +8902,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition03Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition03Value:
   type: sensor
   signalName: VC_SrrndObjLongPos03Val
   dataType: HUInt64
@@ -8150,7 +8913,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition04Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition04Value:
   type: sensor
   signalName: VC_SrrndObjLongPos04Val
   dataType: HUInt64
@@ -8161,7 +8924,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition05Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition05Value:
   type: sensor
   signalName: VC_SrrndObjLongPos05Val
   dataType: HUInt64
@@ -8172,7 +8935,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition06Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition06Value:
   type: sensor
   signalName: VC_SrrndObjLongPos06Val
   dataType: HUInt64
@@ -8183,7 +8946,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition07Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition07Value:
   type: sensor
   signalName: VC_SrrndObjLongPos07Val
   dataType: HUInt64
@@ -8194,7 +8957,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition08Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition08Value:
   type: sensor
   signalName: VC_SrrndObjLongPos08Val
   dataType: HUInt64
@@ -8205,7 +8968,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition09Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition09Value:
   type: sensor
   signalName: VC_SrrndObjLongPos09Val
   dataType: HUInt64
@@ -8216,7 +8979,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition10Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition10Value:
   type: sensor
   signalName: VC_SrrndObjLongPos10Val
   dataType: HUInt64
@@ -8227,7 +8990,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition11Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition11Value:
   type: sensor
   signalName: VC_SrrndObjLongPos11Val
   dataType: HUInt64
@@ -8238,7 +9001,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition12Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition12Value:
   type: sensor
   signalName: VC_SrrndObjLongPos12Val
   dataType: HUInt64
@@ -8249,7 +9012,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition13Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition13Value:
   type: sensor
   signalName: VC_SrrndObjLongPos13Val
   dataType: HUInt64
@@ -8260,7 +9023,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition14Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition14Value:
   type: sensor
   signalName: VC_SrrndObjLongPos14Val
   dataType: HUInt64
@@ -8271,7 +9034,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCSurroundingObjectLongitudinalPosition15Value:
+- Detail_Contents_ADAS_2_0.Input_VCSurroundingObjectLongitudinalPosition15Value:
   type: sensor
   signalName: VC_SrrndObjLongPos15Val
   dataType: HUInt64
@@ -8282,7 +9045,7 @@
     TIMEOUT: 0x7FF
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCVehicleDistanceLevelValue:
+- Detail_Contents_ADAS_2_0.Input_VCVehicleDistanceLevelValue:
   type: sensor
   signalName: VC_VehDstLvlVal
   dataType: HUInt64
@@ -8302,7 +9065,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCVehicleDistanceStatus:
+- Detail_Contents_ADAS_2_0.Input_VCVehicleDistanceStatus:
   type: sensor
   signalName: VC_VehDstSta
   dataType: HUInt64
@@ -8320,7 +9083,7 @@
     ELSE: 0x0
 
 
-- Detail_Contents_ADAS_NEW_2_0.Input_VCVehicleDistanceValue:
+- Detail_Contents_ADAS_2_0.Input_VCVehicleDistanceValue:
   type: sensor
   signalName: VC_VehDstVal
   dataType: HUInt64
@@ -8550,6 +9313,201 @@
     0x1: 0x1
     0x2: 0x2
     ELSE: 0x3
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaAdditionalTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_AddtnlTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaAdditionalTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCHOOL_CROSSING"
+    0x2: "PEDESTRIAN_CROSSING"
+    0x3: "BICYCLE_CROSSING"
+    0x4: "STOP"
+    0x5: "YIELD"
+    0x6: "STOP_AHEAD"
+    0x7: "YIELD_AHEAD"
+    0x8: "ROAD_CONSTRUCTION_AHEAD"
+    0x9: "LANE_REDUCTION"
+    0xA: "DO_NOT_PASS_LHD"
+    0xB: "DO_NOT_PASS_RHD"
+    0xC: "DO_NOT_ENTER"
+    0xD: "ROUNDABOUT_LHD"
+    0xE: "ROUNDABOUT_RHD"
+    0xF: "RIGHT_CURVE"
+    0x10: "LEFT_CURVE"
+    0x11: "RIGHT_LEFT_CURVES"
+    0x12: "LEFT_RIGHT_CURVES"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x08: 0x4
+    0x09: 0x5
+    0x0A: 0x6
+    0x0B: 0x7
+    0x0C: 0x8
+    0x0D: 0x9
+    0x10: 0xA
+    0x11: 0xB
+    0x13: 0xC
+    0x18: 0xD
+    0x19: 0xE
+    0x1A: 0xF
+    0x1B: 0x10
+    0x1C: 0x11
+    0x1D: 0x12
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaNextSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_NextSpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE_DISPLAY"
+    0x2: "GREEN_DISPLAY"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaNextSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_NextSpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaNextSupportTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_NextSuppTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSupportTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_SpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "BLACK_TEXT"
+    0x3: "BLACK_TEXT_BLINK"
+    0x4: "RED_TEXT"
+    0x5: "RED_TEXT_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_SpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaSupplementaryTrafficSign2Status:
+  type: sensor
+  signalName: IND_ISLA_SuppTrffcSgn2Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSupplementaryTrafficSign2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaSupplementaryTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_SuppTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSupplementaryTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_NEW.Input_INDIslaTrafficSignCountryInformationStatus:
+  type: sensor
+  signalName: IND_ISLA_TrffcSgnCntryInfoSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaTrafficSignCountryInformationStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DOMESTIC"
+    0x2: "GENERAL"
+    0x3: "MIDDLE_EAST"
+    0x4: "EUROPE"
+    0x5: "AUSTRALIA"
+    0x6: "CANADA"
+    0x7: "USA"
+    0x8: "CHINA"
+    0x9: "RUSSIA"
+    0xA: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    ELSE: 0xA
 
 
 - Detail_Contents_ISLA_DIS_NEW.Input_IslaAdditionalTrafficSignStatus:
@@ -8877,6 +9835,726 @@
 
 
 - Detail_Contents_ISLA_DIS_NEW.Input_NaviWarnDistUnitStatus:
+  type: sensor
+  signalName: Navi_WarnDist_Scale
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviWarnDistUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_DisCameraSafetyAlertStatus:
+  type: sensor
+  signalName: Navi_CameraSafetyAlert
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DisCameraSafetyAlertStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "FIXEDCAMERA"
+    0x2: "PORTABLECAMERA"
+    0x3: "SPEED_SIGNAL"
+    0x4: "BUSCAMERA"
+    0x5: "SCHOOLZONEFIXEDCAMERA"
+    0x6: "SCHOOLZONESPEEL_SIGNALCAMERA"
+    0x7: "CUTINLINE"
+    0x8: "ROADSHOULDERVIOLATION"
+    0x9: "TRAFFICINFORMATION"
+    0xA: "INTERSECTIONJAMMING"
+    0xB: "RAMPMETERING"
+    0xC: "LANECHANGE"
+    0xD: "AVERAGESPEEDCAMERA"
+    0xE: "AVERAGESPEEDCAMERAZONE"
+    0xF: "SPEEDENFORCEMET"
+    0x10: "SPEEDENFORCEMETZONE"
+    0x11: "MOBILEHOTSPOT"
+    0x12: "MOBILEHOTSPOTZONE"
+    0x13: "ACCIDENTBLACKSPOT1"
+    0x14: "ACCIDENTBLACKSPOTZONE"
+    0x15: "DANGERZONE"
+    0x16: "RISKZONE"
+    0x17: "RESTRICTED"
+    0x18: "OTHERS"
+    0x19: "BUSLANENOTAVAILABLE"
+    0x1A: "BUSLANEAVAILABLE"
+    0x1B: "ILLEGALPARKING"
+    0x1C: "DONOTENTER"
+    0x1D: "ACCIDENTBLACKSPOT2"
+    0x1E: "SCHOOLZONE"
+    0x1F: "FALLINGROCKS"
+    0x20: "RAILROADCROSSING"
+    0x21: "FOGGYAREA"
+    0x22: "STEEPSLOPE"
+    0x23: "ROADKILL"
+    0x24: "SPEEDBUMP"
+    0x25: "NARROWROAD"
+    0x26: "HIGHWAYCONSTRUCTIONZONE"
+    0x27: "ROADSLIPDETECTION"
+    0x28: "ROADDAMAGEDETECTION"
+    0x29: "ZONE_30"
+    0x2A: "STOP"
+    0x2B: "BLINDSLOPE_CONTINUOUS"
+    0x2C: "CROSSWIND"
+    0x2D: "HILLSIDEDANGEROUS"
+    0x2E: "HUMP_BRIDG"
+    0x2F: "JOINT_LEFT"
+    0x30: "JOINT_RIGHT"
+    0x31: "LOWSPEED"
+    0x32: "NARROW_BOTH"
+    0x33: "NARROWBRIDGE"
+    0x34: "NARROW_LEFT"
+    0x35: "NARROW_RIGHT"
+    0x36: "ROCKFALL_LEFT"
+    0x37: "ROCKFALL_RIGHT"
+    0x38: "SLIP"
+    0x39: "BLINDSLOPE_UP"
+    0x3A: "BLINDSLOPE_DOWN"
+    0x3B: "TUNNEL"
+    0x3C: "UNDERWATER"
+    0x3D: "UNEVEN"
+    0x3E: "UNMANAGED_RAILWAY_CROSS"
+    0x3F: "ZIPPASS"
+    0x40: "SLOPE_CONTINUOUSDOWN"
+    0x41: "SLOPE_UP"
+    0x42: "SLOPE_DOWN"
+    0x43: "RAILWAY_MANAGED"
+    0x44: "VILLAGE"
+    0x45: "AUDIBLEWARNING"
+    0x46: "OVERTAKING_LANE"
+    0x47: "FALLING_HAZARD"
+    0x48: "LANE_MOVE_REGULATION"
+    0x49: "DROWSY"
+    0x4A: "SENIOR_PROTECTION_ZONE"
+    0x4B: "DISABLED_PROTECTION_ZONE"
+    0x4C: "PEDESTRIAN_PRIORITY_ROAD"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x07: 0x7
+    0x08: 0x8
+    0x09: 0x9
+    0x0A: 0xA
+    0x0B: 0xB
+    0x0C: 0xC
+    0x0D: 0xD
+    0x0E: 0xE
+    0x0F: 0xF
+    0x10: 0x10
+    0x11: 0x11
+    0x12: 0x12
+    0x13: 0x13
+    0x14: 0x14
+    0x15: 0x15
+    0x16: 0x16
+    0x17: 0x17
+    0x18: 0x18
+    0x19~0x2F: 0x0
+    0x30: 0x19
+    0x31: 0x1A
+    0x32: 0x1B
+    0x33: 0x1C
+    0x34: 0x1D
+    0x35: 0x1E
+    0x36: 0x1F
+    0x37: 0x20
+    0x38: 0x21
+    0x39: 0x22
+    0x3A: 0x23
+    0x3B: 0x24
+    0x3C: 0x25
+    0x3D: 0x26
+    0x3E: 0x27
+    0x3F: 0x28
+    0x40: 0x29
+    0x41: 0x2A
+    0x42: 0x2B
+    0x43: 0x2C
+    0x44: 0x2D
+    0x45: 0x2E
+    0x46: 0x2F
+    0x47: 0x30
+    0x48: 0x31
+    0x49: 0x32
+    0x4A: 0x33
+    0x4B: 0x34
+    0x4C: 0x35
+    0x4D: 0x36
+    0x4E: 0x37
+    0x4F: 0x38
+    0x50: 0x39
+    0x51: 0x3A
+    0x52: 0x3B
+    0x53: 0x3C
+    0x54: 0x3D
+    0x55: 0x3E
+    0x56: 0x3F
+    0x57: 0x40
+    0x58: 0x41
+    0x59: 0x42
+    0x5A: 0x43
+    0x5B: 0x44
+    0x5C: 0x45
+    0x5D: 0x46
+    0x5E: 0x47
+    0x5F: 0x48
+    0x60: 0x49
+    0x61: 0x4A
+    0x62: 0x4B
+    0x63: 0x4C
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_DisSpeedLimitValue:
+  type: sensor
+  signalName: Navi_SpdLimit
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_DisSpeedLimitValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_HeadUnitNaviStatus:
+  type: sensor
+  signalName: HU_NaviStatus
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HeadUnitNaviStatus
+  valueEnum:
+    0x0: "BOOTING"
+    0x1: "NORMAL"
+    0x2: "NO_SDCARD"
+    0x3: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x3
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaAdditionalTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_AddtnlTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaAdditionalTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCHOOL_CROSSING"
+    0x2: "PEDESTRIAN_CROSSING"
+    0x3: "BICYCLE_CROSSING"
+    0x4: "STOP"
+    0x5: "YIELD"
+    0x6: "STOP_AHEAD"
+    0x7: "YIELD_AHEAD"
+    0x8: "ROAD_CONSTRUCTION_AHEAD"
+    0x9: "LANE_REDUCTION"
+    0xA: "DO_NOT_PASS_LHD"
+    0xB: "DO_NOT_PASS_RHD"
+    0xC: "DO_NOT_ENTER"
+    0xD: "ROUNDABOUT_LHD"
+    0xE: "ROUNDABOUT_RHD"
+    0xF: "RIGHT_CURVE"
+    0x10: "LEFT_CURVE"
+    0x11: "RIGHT_LEFT_CURVES"
+    0x12: "LEFT_RIGHT_CURVES"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x08: 0x4
+    0x09: 0x5
+    0x0A: 0x6
+    0x0B: 0x7
+    0x0C: 0x8
+    0x0D: 0x9
+    0x10: 0xA
+    0x11: 0xB
+    0x13: 0xC
+    0x18: 0xD
+    0x19: 0xE
+    0x1A: 0xF
+    0x1B: 0x10
+    0x1C: 0x11
+    0x1D: 0x12
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaNextSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_NextSpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE_DISPLAY"
+    0x2: "GREEN_DISPLAY"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaNextSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_NextSpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaNextSupportTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_NextSuppTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaNextSupportTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x00
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_SpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "BLACK_TEXT"
+    0x3: "BLACK_TEXT_BLINK"
+    0x4: "RED_TEXT"
+    0x5: "RED_TEXT_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: IND_ISLA_SpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaSupplementaryTrafficSign2Status:
+  type: sensor
+  signalName: IND_ISLA_SuppTrffcSgn2Sta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSupplementaryTrafficSign2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaSupplementaryTrafficSignStatus:
+  type: sensor
+  signalName: IND_ISLA_SuppTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaSupplementaryTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_INDIslaTrafficSignCountryInformationStatus:
+  type: sensor
+  signalName: IND_ISLA_TrffcSgnCntryInfoSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_INDIslaTrafficSignCountryInformationStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DOMESTIC"
+    0x2: "GENERAL"
+    0x3: "MIDDLE_EAST"
+    0x4: "EUROPE"
+    0x5: "AUSTRALIA"
+    0x6: "CANADA"
+    0x7: "USA"
+    0x8: "CHINA"
+    0x9: "RUSSIA"
+    0xA: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    ELSE: 0xA
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaAdditionalTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_AddtnlTrffcSgnSta
+  dataType: HUInt64
+  description: "This signal indicates a state of ISLA additional traffic sign telltale"
+  abstractionName: Input_IslaAdditionalTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "SCHOOL_CROSSING"
+    0x2: "PEDESTRIAN_CROSSING"
+    0x3: "BICYCLE_CROSSING"
+    0x4: "STOP"
+    0x5: "YIELD"
+    0x6: "STOP_AHEAD"
+    0x7: "YIELD_AHEAD"
+    0x8: "ROAD_CONSTRUCTION_AHEAD"
+    0x9: "LANE_REDUCTION"
+    0xA: "DO_NOT_PASS_LHD"
+    0xB: "DO_NOT_PASS_RHD"
+    0xC: "DO_NOT_ENTER"
+    0xD: "ROUNDABOUT_LHD"
+    0xE: "ROUNDABOUT_RHD"
+    0xF: "RIGHT_CURVE"
+    0x10: "LEFT_CURVE"
+    0x11: "RIGHT_LEFT_CURVES"
+    0x12: "LEFT_RIGHT_CURVES"
+  matchingTable:
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x08: 0x4
+    0x09: 0x5
+    0x0A: 0x6
+    0x0B: 0x7
+    0x0C: 0x8
+    0x0D: 0x9
+    0x10: 0xA
+    0x11: 0xB
+    0x13: 0xC
+    0x18: 0xD
+    0x19: 0xE
+    0x1A: 0xF
+    0x1B: 0x10
+    0x1C: 0x11
+    0x1D: 0x12
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaNextSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_NextSpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_IslaNextSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WHITE_DISPLAY"
+    0x2: "GREEN_DISPLAY"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaNextSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: TT_ISLA_NextSpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_IslaNextSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaNextSupportTrafficSignValue:
+  type: sensor
+  signalName: TT_ISLA_NextSuppTrffcSgnVal
+  dataType: HUInt64
+  description: ""
+  abstractionName: Input_IslaNextSupportTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaOptionStatus:
+  type: sensor
+  signalName: ISLA_OptUsmSta
+  dataType: HUInt64
+  description: "This is a ISLA option USM signal set by the driver."
+  abstractionName: Input_IslaOptionStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "WARNING"
+    0x2: "ASSIST"
+    0x3: "ERROR"
+    0x4: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x7: 0x3
+    ELSE: 0x4
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaSpeedLimitTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_SpdLimTrffcSgnSta
+  dataType: HUInt64
+  description: "This signal indicates a state of ISLA speed limit traffic sign telltale"
+  abstractionName: Input_IslaSpeedLimitTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "AMBER"
+    0x2: "BLACK_TEXT"
+    0x3: "BLACK_TEXT_BLINK"
+    0x4: "RED_TEXT"
+    0x5: "RED_TEXT_BLINK"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaSpeedLimitTrafficSignValue:
+  type: sensor
+  signalName: TT_ISLA_SpdLimTrffcSgnVal
+  dataType: HUInt64
+  description: "This signal indicates a value of ISLA speed limit traffic sign telltale"
+  abstractionName: Input_IslaSpeedLimitTrafficSignValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaSupplementaryTrafficSign2Status:
+  type: sensor
+  signalName: TT_ISLA_SuppTrffcSgn2Sta
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_IslaSupplementaryTrafficSign2Status
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaSupplementaryTrafficSignStatus:
+  type: sensor
+  signalName: TT_ISLA_SuppTrffcSgnSta
+  dataType: HUInt64
+  description: "This signal indicates a state of ISLA supplementary traffic sign telltale"
+  abstractionName: Input_IslaSupplementaryTrafficSignStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "RAIN"
+    0x2: "SNOW"
+    0x3: "SNOW_RAIN"
+    0x4: "TRAILER"
+    0x5: "GENERIC"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0xE: 0x5
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_IslaTrafficSignCountryInformationStatus:
+  type: sensor
+  signalName: TT_ISLA_TrffcSgnCntryInfoSta
+  dataType: HUInt64
+  description: "This signal indicates a state of ISLA traffic sign country information telltale"
+  abstractionName: Input_IslaTrafficSignCountryInformationStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DOMESTIC"
+    0x2: "GENERAL"
+    0x3: "MIDDLE_EAST"
+    0x4: "EUROPE"
+    0x5: "AUSTRALIA"
+    0x6: "CANADA"
+    0x7: "USA"
+    0x8: "CHINA"
+    0x9: "RUSSIA"
+    0xA: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    0x8: 0x8
+    0x9: 0x9
+    ELSE: 0xA
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviOverSpdUnit:
+  type: sensor
+  signalName: Navi_SpdLimit_Unit
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviOverSpdUnit
+  valueEnum:
+    0x0: "OFF"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviOverSpeedColor1:
+  type: sensor
+  signalName: Navi_OverSpd_Color1
+  dataType: HUInt64
+  description: "This signal informs the 24bit RGB color code for level 1 overspeed warning."
+  abstractionName: Input_NaviOverSpeedColor1
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFF
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviOverSpeedColor2:
+  type: sensor
+  signalName: Navi_OverSpd_Color2
+  dataType: HUInt64
+  description: "This signal informs the 24bit RGB color code for level 2 overspeed warning."
+  abstractionName: Input_NaviOverSpeedColor2
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFFFF
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviOverSpeedRange1:
+  type: sensor
+  signalName: Navi_OverSpd_Range1
+  dataType: HUInt64
+  description: "This signal informs the speed range for level 1overspeed warning."
+  abstractionName: Input_NaviOverSpeedRange1
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviOverSpeedRange2:
+  type: sensor
+  signalName: Navi_OverSpd_Range2
+  dataType: HUInt64
+  description: "This signal informs the speed range for level 2 overspeed warning."
+  abstractionName: Input_NaviOverSpeedRange2
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviRangeCamAvgSpdValue:
+  type: sensor
+  signalName: Navi_RangeCamAvgSpd
+  dataType: HUInt64
+  description: "Average speed information of vehicles within the range of the section enforcement camera"
+  abstractionName: Input_NaviRangeCamAvgSpdValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviWarnDistOverDecimalValue:
+  type: sensor
+  signalName: Navi_WarnDist_OverDec
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviWarnDistOverDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviWarnDistUnderDecimalValue:
+  type: sensor
+  signalName: Navi_WarnDist_UnderDec
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviWarnDistUnderDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_ISLA_DIS_2_0.Input_NaviWarnDistUnitStatus:
   type: sensor
   signalName: Navi_WarnDist_Scale
   dataType: HUInt64
@@ -9905,7 +11583,810 @@
     ELSE: 0x0
 
 
+- Detail_Contents_TBT_2_0.Input_HeadUnitLangugeStatus:
+  type: sensor
+  signalName: HU_LanguageInfo
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HeadUnitLangugeStatus
+  valueEnum:
+    0x0: "KOREA"
+    0x1: "ENGLISH_US"
+    0x2: "ENGLISH_UK"
+    0x3: "SIMPLIFIED_CHINESE"
+    0x4: "TRADITIONAL_CHINESE"
+    0x5: "FRENCH_EU"
+    0x6: "SPANISH_EU"
+    0x7: "ARABIC"
+    0x8: "CZECH"
+    0x9: "DANISH"
+    0xA: "GERMAN"
+    0xB: "ITALIAN"
+    0xC: "DUTCH"
+    0xD: "POLISH"
+    0xE: "PORTUGUESE"
+    0xF: "RUSSIAN"
+    0x10: "SLOVAK"
+    0x11: "SWEDISH"
+    0x12: "TURKISH"
+    0x13: "FRENCH_US"
+    0x14: "SPANISH_US"
+    0x15: "ENGLISH_INDIA"
+    0x16: "NORWEGIAN"
+    0x17: "FINNISH"
+    0x18: "INDONESIAN"
+    0x19: "BRAZILIAN_PORTUGUESE"
+    0x1A: "MALAY"
+    0x1B: "HUNGARIAN"
+    0x1C: "ENGLISH_AUSTRALIA"
+    0x1D: "JAPANESE"
+    0x1E: "HINDI"
+    0x1F: "HEBREW"
+    0x20: "GREEK"
+    0x21: "UKRAINIAN"
+    0x22: "SLOVENIAN"
+    0x23: "BULGARIAN"
+    0x24: "CROATIAN"
+    0x25: "ROMANIAN"
+    0x26: "BENGALI"
+    0x27: "MARATHI"
+    0x28: "TELUGU"
+    0x29: "TAMIL"
+    0x2A: "GUJARATI"
+    0x2B: "KANNADA"
+    0x2C: "ODIA"
+    0x2D: "MALAYALAM"
+    0x2E: "PUNJABI"
+    0x2F: "OLD_VALUE"
+    0x30: "INVALID"
+    0x31: "THAI"
+    0x32: "LITHUANIAN"
+    0x33: "LATVIAN"
+    0x34: "ESTONIAN"
+  matchingTable:
+    0x01: 0x0
+    0x02: 0x1
+    0x03: 0x2
+    0x04: 0x3
+    0x05: 0x4
+    0x06: 0x5
+    0x07: 0x6
+    0x08: 0x7
+    0x09: 0x8
+    0x0A: 0x9
+    0x0B: 0xA
+    0x0C: 0xB
+    0x0D: 0xC
+    0x0E: 0xD
+    0x0F: 0xE
+    0x10: 0xF
+    0x11: 0x10
+    0x12: 0x11
+    0x13: 0x12
+    0x14: 0x13
+    0x15: 0x14
+    0x16: 0x15
+    0x17: 0x16
+    0x18: 0x17
+    0x19: 0x18
+    0x1A: 0x19
+    0x1B: 0x1A
+    0x1C: 0x1B
+    0x1D: 0x1C
+    0x1E: 0x1D
+    0x1F: 0x1E
+    0x20: 0x1F
+    0x21: 0x20
+    0x22: 0x21
+    0x23: 0x22
+    0x24: 0x23
+    0x25: 0x24
+    0x26: 0x25
+    0x27: 0x26
+    0x28: 0x27
+    0x29: 0x28
+    0x2A: 0x29
+    0x2B: 0x2A
+    0x2C: 0x2B
+    0x2D: 0x2C
+    0x2E: 0x2D
+    0x2F: 0x2E
+    0x30: 0x31
+    0x33: 0x32
+    0x34: 0x33
+    0x35: 0x34
+    0x00: 0x2F
+    0xFF: 0x2F
+    TIMEOUT: 0x2F
+    ELSE: 0x30
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnFirstUnderDecimalValue:
+  type: sensor
+  signalName: NV_DistToTurn_F1
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnFirstUnderDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnFirstUnitStatus:
+  type: sensor
+  signalName: NV_DistToTurn_Unit1
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnFirstUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnFirstValue:
+  type: sensor
+  signalName: NV_DistToTurn_I1
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnFirstValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnSecondUnderDecimalValue:
+  type: sensor
+  signalName: NV_DistToTurn_F2
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnSecondUnderDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnSecondUnitStatus:
+  type: sensor
+  signalName: NV_DistToTurn_Unit2
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnSecondUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- Detail_Contents_TBT_2_0.Input_NaviDistToTurnSecondValue:
+  type: sensor
+  signalName: NV_DistToTurn_I2
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviDistToTurnSecondValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFFF
+
+
+- Detail_Contents_TBT_2_0.Input_NaviPatternTbt1IndexValue:
+  type: sensor
+  signalName: Advanced_TBT_Direction
+  dataType: HUInt64
+  description: "This is signal to send road pattern display image index."
+  abstractionName: Input_NaviPatternTbt1IndexValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviPatternTbt2IndexValue:
+  type: sensor
+  signalName: Advanced_TBT_Direction1
+  dataType: HUInt64
+  description: "This is signal to send road pattern display image index"
+  abstractionName: Input_NaviPatternTbt2IndexValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviPatternTbtBgIndexValue:
+  type: sensor
+  signalName: Advanced_TBT_Display
+  dataType: HUInt64
+  description: "This is signal to send road pattern display image index."
+  abstractionName: Input_NaviPatternTbtBgIndexValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviPopupReqStatus:
+  type: sensor
+  signalName: Navi_PopupInfo
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviPopupReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ROADSLIP_WRNG1"
+    0x2: "ROADSLIP_WRNG2"
+    0x3: "ROADDMG_WRNG1"
+    0x4: "ROADDMG_WRNG2"
+    0x5: "DO_NOT_ENTER"
+    0x6: "DANGEROUS_DRIVING"
+    0x7: "SECOND_COLLISION"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    0x5: 0x5
+    0x6: 0x6
+    0x7: 0x7
+    ELSE: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviRoadEventDistOverDecimalValue:
+  type: sensor
+  signalName: Navi_RoadEventDist_OverDec
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviRoadEventDistOverDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviRoadEventDistUnderDecimalValue:
+  type: sensor
+  signalName: Navi_RoadEventDist_UnderDec
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviRoadEventDistUnderDecimalValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Detail_Contents_TBT_2_0.Input_NaviRoadEventDistUnitStatus:
+  type: sensor
+  signalName: Navi_RoadEventDist_Scale
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviRoadEventDistUnitStatus
+  valueEnum:
+    0x0: "METER"
+    0x1: "KILOMETER"
+    0x2: "MILE"
+    0x3: "FEET"
+    0x4: "YARD"
+    0x5: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x5
+
+
+- Detail_Contents_TBT_2_0.Input_NaviRoadEventInfoStatus:
+  type: sensor
+  signalName: Navi_RoadEventInfo
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_NaviRoadEventInfoStatus
+  valueEnum:
+    0x0: "ROAD_CLOSED"
+    0x1: "ACCIDENT"
+    0x2: "ROAD_WORK"
+    0x3: "ETC"
+    0x4: "EVENT"
+    0x5: "OFF"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    ELSE: 0x5
+
+
+- Detail_Contents_TBT_2_0.Input_PatternGuideColorStatus:
+  type: sensor
+  signalName: Pattern_Guide_Color
+  dataType: HUInt64
+  description: "This signal indicates a color information for pattern guide line imgae that is displayed in HUD, with pattern branch guidance"
+  abstractionName: Input_PatternGuideColorStatus
+  valueEnum:
+    0x0: "PINK"
+    0x1: "LIGHT_GREEN"
+    0x2: "GREEN"
+    0x3: "YELLOW"
+    0x4: "ORANGE"
+    0x5: "BLUE"
+    0x6: "WHITE"
+    0x7: "NO_DATA"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+    0x4: 0x3
+    0x5: 0x4
+    0x6: 0x5
+    0x7: 0x6
+    ELSE: 0x7
+
+
+- Detail_Contents_TBT_2_0.Input_PatternGuideLaneStatus:
+  type: sensor
+  signalName: Pattern_Guide_Lane
+  dataType: HUInt64
+  description: "This signal indicates sub index information of pattern guide lanewhich is displayed whit pattern branch guidance.There are pattern guide lane image as a sub-item for each main image(Advanced_TBT_Display), and each bit indicates the sub-index of guide lane image(0: Not display / 1: Display)Bit 0 : 1st guide lane imageBit 1 : 2nd guide lane imageBit 2 : 3rd guide lane imageBit 3 : 4th guide lane imageBit 4 : 5th guide lane imageBit 5 : 6th guide lane imageBit 6 : 7th guide lane imageBit 7 : 8th guide lane image"
+  abstractionName: Input_PatternGuideLaneStatus
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0
+
+
+- Detail_Contents_TBT_2_0.Input_TbtDirectionValue:
+  type: sensor
+  signalName: TBT_Direction
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TbtDirectionValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFF
+
+
+- Detail_Contents_TBT_2_0.Input_TbtDisplayTypeStatus:
+  type: sensor
+  signalName: TBT_Display_Type
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_TbtDisplayTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "DIRECTION_TO_DESTINATION"
+    0x2: "ARRIVED"
+    0x3: "NO_ROUTE_GUIDANCE"
+    0x4: "CALC_ROUTE"
+    0x5: "RECALC_ROUTE"
+    0x6: "TURN"
+    0x7: "EXIT_R"
+    0x8: "EXIT_L"
+    0x9: "EXIT_COMBINATION_R"
+    0xA: "EXIT_COMBINATION_L"
+    0xB: "SERVICE_ROAD_R"
+    0xC: "SERVICE_ROAD_L"
+    0xD: "FORK2"
+    0xE: "U_TURN"
+    0xF: "EXIT_ROUNDABOUT_TRS_R"
+    0x10: "EXIT_ROUNDABOUT_TRS_L"
+    0x11: "OVERPASS_R"
+    0x12: "OVERPASS_L"
+    0x13: "UNDERPASS_R"
+    0x14: "UNDERPASS_L"
+    0x15: "TOLL"
+    0x16: "PRE_NODIRECTION"
+    0x17: "PRE_STRAIGHT"
+    0x18: "PRE_TURN1OCLOCK"
+    0x19: "PRE_TURN_R"
+    0x1A: "PRE_TURN4OCLOCK"
+    0x1B: "PRE_TURN8OCLOCK"
+    0x1C: "PRE_TURN_LEFT"
+    0x1D: "PRE_TURN11OCLOCK"
+    0x1E: "PRE_U_TURN_L"
+    0x1F: "PRE_U_TURN_R"
+    0x20: "PRE_PERMITTED_TUNR_L"
+    0x21: "PRE_ASIDE_OVERPASS_R"
+    0x22: "PRE_ASIDE_OVERPASS_L"
+    0x23: "PRE_ASIDE_UNDERPASS_R"
+    0x24: "PRE_ASIDE_UNDERPASS_L"
+    0x25: "PRE_INTO_OVERPASS_C"
+    0x26: "PRE_INTO_OVERPASS_R"
+    0x27: "PRE_INTO_OVERPASS_L"
+    0x28: "PRE_INTO_UNDERPASS_R"
+    0x29: "PRE_INTO_UNDERPASS_L"
+    0x2A: "PRE_ROUNDABOUT_R12"
+    0x2B: "PRE_ROUNDABOUT_R1"
+    0x2C: "PRE_ROUNDABOUT_R2"
+    0x2D: "PRE_ROUNDABOUT_R3"
+    0x2E: "PRE_ROUNDABOUT_R4"
+    0x2F: "PRE_ROUNDABOUT_R5"
+    0x30: "PRE_ROUNDABOUT_R6"
+    0x31: "PRE_ROUNDABOUT_R7"
+    0x32: "PRE_ROUNDABOUT_R8"
+    0x33: "PRE_ROUNDABOUT_R9"
+    0x34: "PRE_ROUNDABOUT_R10"
+    0x35: "PRE_ROUNDABOUT_R11"
+    0x36: "PRE_CHARGINGSTATION_C"
+    0x37: "PRE_CHARGINGSTATION_R"
+    0x38: "PRE_CHARGINGSTATION_L"
+    0x39: "PRE_DEST_C"
+    0x3A: "PRE_DEST_R"
+    0x3B: "PRE_DEST_L"
+    0x3C: "PRE_WAY_POINT1_C"
+    0x3D: "PRE_WAY_POINT1_R"
+    0x3E: "PRE_WAY_POINT1_L"
+    0x3F: "PRE_WAY_POINT2_C"
+    0x40: "PRE_WAY_POINT2_R"
+    0x41: "PRE_WAY_POINT2_L"
+    0x42: "PRE_WAY_POINT3_C"
+    0x43: "PRE_WAY_POINT3_R"
+    0x44: "PRE_WAY_POINT3_L"
+    0x45: "PRE_WAY_POINT4_C"
+    0x46: "PRE_WAY_POINT4_R"
+    0x47: "PRE_WAY_POINT4_L"
+    0x48: "PRE_WALK_TO_DEST"
+    0x49: "PRE_WALK_TO_WAY_POINT1"
+    0x4A: "PRE_FORK2_R"
+    0x4B: "PRE_FORK2_L"
+    0x4C: "PRE_FORK_S_R_STRAIGHT"
+    0x4D: "PRE_FORK_S_R_R"
+    0x4E: "PRE_FORK_S_L_STRAIGHT"
+    0x4F: "PRE_FORK_S_L_L"
+    0x50: "PRE_FWY_ENTRANCE_C"
+    0x51: "PRE_FWY_ENTRANCE_R"
+    0x52: "PRE_FWY_ENTRANCE_L"
+    0x53: "PRE_FWY_EXIT_C"
+    0x54: "PRE_FWY_EXIT_R"
+    0x55: "PRE_FWY_EXIT_L"
+    0x56: "PRE_MAIN_ROAD_ENTRANCE_C"
+    0x57: "PRE_MAIN_ROAD_ENTRANCE_R"
+    0x58: "PRE_MAIN_ROAD_ENTRANCE_L"
+    0x59: "PRE_FERRY"
+    0x5A: "PRE_TUNNEL"
+    0x5B: "PRE_TOLL"
+    0x5C: "PRE_S_A_ENTRANCE"
+    0x5D: "PRE_COIN_TOLL"
+    0x5E: "PRE_ROUNDABOUT_L12"
+    0x5F: "PRE_ROUNDABOUT_L1"
+    0x60: "PRE_ROUNDABOUT_L2"
+    0x61: "PRE_ROUNDABOUT_L3"
+    0x62: "PRE_ROUNDABOUT_L4"
+    0x63: "PRE_ROUNDABOUT_L5"
+    0x64: "PRE_ROUNDABOUT_L6"
+    0x65: "PRE_ROUNDABOUT_L7"
+    0x66: "PRE_ROUNDABOUT_L8"
+    0x67: "PRE_ROUNDABOUT_L9"
+    0x68: "PRE_ROUNDABOUT_L10"
+    0x69: "PRE_ROUNDABOUT_L11"
+    0x6A: "PRE_ENTER_ROUNDABOUT"
+    0x6B: "PRE_EXIT_ROUNDABOUT"
+    0x6C: "PRE_MOST_LEFT_OF_LINE"
+    0x6D: "PRE_MOST_RIGHT_OF_LINE"
+    0x6E: "PRE_MIDDLE_OF_LINE"
+    0x6F: "PRE_MOST_LEFT_OF3_NORMAL"
+    0x70: "PRE_MOST_RIGHT_OF3_NORMAL"
+    0x71: "PRE_ENTER_FERRY"
+    0x72: "PRE_EXIT_FERRY"
+    0x73: "PRE_LEFT2_BRANCH_LEFT_BASE"
+    0x74: "PRE_LEFT2_BRANCH_RIGHT_BASE"
+    0x75: "PRE_RIGHT2_BRANCH_LEFT_BASE"
+    0x76: "PRE_RIGHT2_BRANCH_RIGHT_BASE"
+    0x77: "PRE_STRAIGHT_FRONT"
+    0x78: "PRE_MIDLE_OF3_NORMAL"
+    0x79: "PRE_STARTING_POINT"
+    0x7A: "PRE_I_C2_ON_LEFT_STRAIGHT_WALK_I_C"
+    0x7B: "PRE_I_C2_ON_RIGHT_STRAIGHT_WALK_I_C"
+    0x7C: "PRE_NORMAL2_ON_LEFT_STRAIGHT_LINE"
+    0x7D: "PRE_NORMAL2_ON_RIGHT_STRAIGHT_LINE"
+    0x7E: "PRE_NORMAL3_ON_LEFT_STRAIGHT_LINE"
+    0x7F: "PRE_NORMAL3_ON_MIDDLE_STRAIGHT_LINE"
+    0x80: "PRE_NORMAL3_ON_RIGHT_STRAIGHT_LINE"
+    0x81: "PRE_I_C3_ON_LEFT_OF_I_C"
+    0x82: "PRE_I_C3_ON_MIDDLE_OF_I_C"
+    0x83: "PRE_I_C3_ON_RIGHT_OF_I_C"
+    0x84: "PRE_I_C3_ON_LEFT_STRAIGHT_LINE"
+    0x85: "PRE_I_C3_ON_MIDDLE_STRAIGHT_LINE"
+    0x86: "PRE_I_C3_ON_RIGHT_STRAIGHT_LINE"
+    0x87: "PRE8_DIRECTION_STRAIGHT_L"
+    0x88: "PRE8_DIRECTION_STRAIGHT_R"
+    0x89: "PRE8_DIRECTION_MOST_LEFT_STRAIGHT_LINE"
+    0x8A: "PRE8_DIRECTION_MOST_MIDDLE_STRAIGHT_LINE"
+    0x8B: "PRE8_DIRECTION_MOST_RIGHT_STRAIGHT_LINE"
+    0x8C: "PRE_LEFT3_BRANCH_LEFT_BASE"
+    0x8D: "PRE_LEFT3_BRANCH_MIDDLE_BASE"
+    0x8E: "PRE_LEFT3_BRANCH_RIGHT_BASE"
+    0x8F: "PRE_RIGHT3_BRANCH_LEFT_BASE"
+    0x90: "PRE_RIGHT3_BRANCH_MIDDLE_BASE"
+    0x91: "PRE_RIGHT3_BRANCH_RIGHT_BASE"
+    0x92: "PRE8_DIRECTION_TURN_AROUND_LEFT"
+    0x93: "PRE8_DIRECTION_TURN_AROUND_RIGHT"
+    0x94: "PRE8_DIRECTION_TURN_AROUND_MOST_LEFT"
+    0x95: "PRE8_DIRECTION_TURN_AROUND_MIDDLE"
+    0x96: "PRE8_DIRECTION_TURN_AROUND_MOST_RIGHT"
+    0x97: "PRE_FORK2_JOIN"
+    0x98: "PRE_CHARGING_STATION1_C"
+    0x99: "PRE_CHARGING_STATION1_R"
+    0x9A: "PRE_CHARGING_STATION1_L"
+    0x9B: "PRE_CHARGING_STATION2_C"
+    0x9C: "PRE_CHARGING_STATION2_R"
+    0x9D: "PRE_CHARGING_STATION2_L"
+  matchingTable:
+    0x02: 0x1
+    0x03: 0x2
+    0x08: 0x3
+    0x09: 0x4
+    0x0A: 0x5
+    0x0D: 0x6
+    0x11: 0x7
+    0x12: 0x8
+    0x13: 0x9
+    0x14: 0xA
+    0x17: 0xB
+    0x18: 0xC
+    0x19: 0xD
+    0x1F: 0xE
+    0x20: 0xF
+    0x21: 0x10
+    0x2B: 0x11
+    0x2C: 0x12
+    0x2D: 0x13
+    0x2E: 0x14
+    0x30: 0x15
+    0x40: 0x16
+    0x41: 0x17
+    0x42: 0x18
+    0x43: 0x19
+    0x44: 0x1A
+    0x45: 0x1B
+    0x46: 0x1C
+    0x47: 0x1D
+    0x48: 0x1E
+    0x49: 0x1F
+    0x4C: 0x20
+    0x51: 0x21
+    0x52: 0x22
+    0x54: 0x23
+    0x55: 0x24
+    0x56: 0x25
+    0x57: 0x26
+    0x58: 0x27
+    0x5A: 0x28
+    0x5B: 0x29
+    0x60: 0x2A
+    0x61: 0x2B
+    0x62: 0x2C
+    0x63: 0x2D
+    0x64: 0x2E
+    0x65: 0x2F
+    0x66: 0x30
+    0x67: 0x31
+    0x68: 0x32
+    0x69: 0x33
+    0x6A: 0x34
+    0x6B: 0x35
+    0x6D: 0x36
+    0x6E: 0x37
+    0x6F: 0x38
+    0x70: 0x39
+    0x71: 0x3A
+    0x72: 0x3B
+    0x73: 0x3C
+    0x74: 0x3D
+    0x75: 0x3E
+    0x76: 0x3F
+    0x77: 0x40
+    0x78: 0x41
+    0x79: 0x42
+    0x7A: 0x43
+    0x7B: 0x44
+    0x7C: 0x45
+    0x7D: 0x46
+    0x7E: 0x47
+    0x80: 0x98
+    0x81: 0x99
+    0x82: 0x9A
+    0x83: 0x9B
+    0x84: 0x9C
+    0x85: 0x9D
+    0x89: 0x48
+    0x8A: 0x49
+    0x8F: 0x97
+    0x90: 0x4A
+    0x91: 0x4B
+    0x92: 0x4C
+    0x93: 0x4D
+    0x94: 0x4E
+    0x95: 0x4F
+    0xA0: 0x50
+    0xA1: 0x51
+    0xA2: 0x52
+    0xA3: 0x53
+    0xA4: 0x54
+    0xA5: 0x55
+    0xAC: 0x56
+    0xAD: 0x57
+    0xAE: 0x58
+    0xB0: 0x59
+    0xB1: 0x5A
+    0xB2: 0x5B
+    0xB7: 0x5C
+    0xB8: 0x5D
+    0xC0: 0x5E
+    0xC1: 0x5F
+    0xC2: 0x60
+    0xC3: 0x61
+    0xC4: 0x62
+    0xC5: 0x63
+    0xC6: 0x64
+    0xC7: 0x65
+    0xC8: 0x66
+    0xC9: 0x67
+    0xCA: 0x68
+    0xCB: 0x69
+    0xCC: 0x6A
+    0xCD: 0x6B
+    0xCE: 0x6C
+    0xCF: 0x6D
+    0xD0: 0x6E
+    0xD1: 0x6F
+    0xD2: 0x70
+    0xD3: 0x71
+    0xD4: 0x72
+    0xD5: 0x73
+    0xD6: 0x74
+    0xD7: 0x75
+    0xD8: 0x76
+    0xD9: 0x77
+    0xDA: 0x78
+    0xDB: 0x79
+    0xDC: 0x7A
+    0xDD: 0x7B
+    0xDE: 0x7C
+    0xDF: 0x7D
+    0xE0: 0x7E
+    0xE1: 0x7F
+    0xE2: 0x80
+    0xE3: 0x81
+    0xE4: 0x82
+    0xE5: 0x83
+    0xE6: 0x84
+    0xE7: 0x85
+    0xE8: 0x86
+    0xE9: 0x87
+    0xEA: 0x88
+    0xEB: 0x89
+    0xEC: 0x8A
+    0xED: 0x8B
+    0xEE: 0x8C
+    0xEF: 0x8D
+    0xF0: 0x8E
+    0xF1: 0x8F
+    0xF2: 0x90
+    0xF3: 0x91
+    0xF8: 0x92
+    0xF9: 0x93
+    0xFA: 0x94
+    0xFB: 0x95
+    0xFC: 0x96
+    ELSE: 0x0
+
+
 - Detail_Contents_Theme_2_0.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Direction_Control.Input_ImsMemory1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP1Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP1CMD"
+  abstractionName: Input_ImsMemory1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_ImsMemory2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP2Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP2CMD"
+  abstractionName: Input_ImsMemory2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_ImsMemory3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP3Req
+  dataType: HUInt64
+  description: "Memory IMS3"
+  abstractionName: Input_ImsMemory3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_ImsPlay3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP3Req
+  dataType: HUInt64
+  description: "PLAY IMS3"
+  abstractionName: Input_ImsPlay3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Direction_Control.Input_UsmResetReqStatus:
   type: sensor
   signalName: CF_AVN_CluUSMReset
   dataType: HUInt64
@@ -10417,6 +12898,366 @@
     0x3: 0x2
 
 
+- Display_Settings_2_0.Input_HudAdasInfoOnOffReqStatus:
+  type: sensor
+  signalName: AVN_HudContentsADAS
+  dataType: HUInt64
+  description: "USM SetSignal for HUD Contents of ADAS"
+  abstractionName: Input_HudAdasInfoOnOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudAvInfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudContentsAVInfo
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HudAvInfoOnOffReqStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Display_Settings_2_0.Input_HudCallInfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudContentsCallPopup
+  dataType: HUInt64
+  description: "USM Set signal for Hud call pop up"
+  abstractionName: Input_HudCallInfoOnOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudCustom1InfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_SportHUD
+  dataType: HUInt64
+  description: "Related to HUD Sports mode of Usm"
+  abstractionName: Input_HudCustom1InfoOnOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudCustom2InfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_SportHUD2
+  dataType: HUInt64
+  description: "Related to HUD Sports mode of custom mode2"
+  abstractionName: Input_HudCustom2InfoOnOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudDisInfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudContetnsDIS
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HudDisInfoOnOffReqStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Display_Settings_2_0.Input_HudImsAutoSaveReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudImsAutoSave
+  dataType: HUInt64
+  description: "USM request for auto save HUD setting with IMS"
+  abstractionName: Input_HudImsAutoSaveReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "ENABLE"
+    0x2: "DISABLE"
+  matchingTable:
+    0x1: 0x2
+    0x2: 0x1
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudSet
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HudOnOffReqStatus
+  valueEnum:
+    0x0: "DEFAULT"
+    0x1: "DISABLE"
+    0x2: "ENABLE"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_HudTbtInfoOnOffReqStatus:
+  type: sensor
+  signalName: CF_AVN_HudContetnsTBT
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_HudTbtInfoOnOffReqStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    ELSE: 0x2
+
+
+- Display_Settings_2_0.Input_IMSOptionTypeStatus:
+  type: sensor
+  signalName: PSM_IMSOptTyp
+  dataType: HUInt64
+  description: "-(Old)C_IMSOption"
+  abstractionName: Input_IMSOptionTypeStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "IMS_OPTION"
+    0x2: "SMARTIMS_OPTION"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_ImsPlay3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP3Req
+  dataType: HUInt64
+  description: "PLAY IMS3"
+  abstractionName: Input_ImsPlay3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Display_Settings_2_0.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Display_Settings_2_0.Output_HudAdasInfoOnOffStatus.Output_HudAdasInfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ContentsADASstatus
+  dataType: HUInt64
+  description: "this signal shows the display contents status of ADAS on HUD"
+  abstractionName: Output_HudAdasInfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudAvInfoOnOffStatus.Output_HudAvInfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ContentsAVstatus
+  dataType: HUInt64
+  description: "20.02.04_MODIFY_INITIAL VALUE"
+  abstractionName: Output_HudAvInfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudCallInfoOnOffStatus.Output_HudCallInfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ContentsCallStatus
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Output_HudCallInfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudCustom1InfoOnOffStatus.Output_HudCustom1InfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_SportHUD
+  dataType: HUInt64
+  description: "This signal indicates that the ON/OFF status of sport mode display for HUD"
+  abstractionName: Output_HudCustom1InfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudCustom2InfoOnOffStatus.Output_HudCustom2InfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_SportHUD2
+  dataType: HUInt64
+  description: "This signal indicates that the ON/OFF status of sport mode display for HUD(Custom2)"
+  abstractionName: Output_HudCustom2InfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudDisInfoOnOffStatus.Output_HudDisInfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ContentsDISstatus
+  dataType: HUInt64
+  description: "20.02.04_MODIFY_INITIAL VALUE"
+  abstractionName: Output_HudDisInfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudImsAutoSaveStatus.Output_HudImsAutoSaveStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ImsAutoSaveStatus
+  dataType: HUInt64
+  description: "this signal shows that IMS auto save function status."
+  abstractionName: Output_HudImsAutoSaveStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x1: 0x0
+    0x2: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudOnOffStatus.Output_HudOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_HudsetSW
+  dataType: HUInt64
+  description: "20.02.04_MODIFY_INITIAL VALUE"
+  abstractionName: Output_HudOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
+- Display_Settings_2_0.Output_HudTbtInfoOnOffStatus.Output_HudTbtInfoOnOffStatus_MCAN:
+  type: actuator
+  signalName: CF_Hud_ContentsTBTstatus
+  dataType: HUInt64
+  description: "20.02.04_MODIFY_INITIAL VALUE"
+  abstractionName: Output_HudTbtInfoOnOffStatus
+  valueEnum:
+    0x0: "DISABLE"
+    0x1: "ENABLE"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x3: 0x2
+
+
 - Height_Control.Input_HudHeightLevelReqStatus:
   type: sensor
   signalName: CF_AVN_HudHeightSet
@@ -10685,6 +13526,197 @@
 
 
 - Height_Control.Output_HudPbackStatus_Ext.Output_HudPbackStatus_Ext_CCAN:
+  type: actuator
+  signalName: HUD_PbackSta_Ext
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Output_HudPbackStatus_Ext
+  valueEnum:
+    0x0: "STOP"
+    0x1: "PLAY1"
+    0x2: "PLAY2"
+    0x3: "SMART_IMS"
+    0x4: "GUEST"
+    0x5: "PROFILE1"
+    0x6: "PROFILE2"
+    0x7: "PLAY3"
+    0x8: "INVALID"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x06: 0x6
+    0x0E: 0x7
+    0x1F: 0x8
+
+
+- Height_Control_2_0.Input_ImsMemory1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP1Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP1CMD"
+  abstractionName: Input_ImsMemory1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsMemory2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP2Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP2CMD"
+  abstractionName: Input_ImsMemory2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsMemory3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP3Req
+  dataType: HUInt64
+  description: "Memory IMS3"
+  abstractionName: Input_ImsMemory3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsPlay3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP3Req
+  dataType: HUInt64
+  description: "PLAY IMS3"
+  abstractionName: Input_ImsPlay3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_ImsPlayStopReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckStpReq
+  dataType: HUInt64
+  description: "This signal is used to stop during playback"
+  abstractionName: Input_ImsPlayStopReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_SmartIMSPlayReqStatus:
+  type: sensor
+  signalName: SmrtIMS_PlyBckReq
+  dataType: HUInt64
+  description: "Signal for Health Care IMS Playback DB Number"
+  abstractionName: Input_SmartIMSPlayReqStatus
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0xFFF
+
+
+- Height_Control_2_0.Input_SmartIMSPlayStopReqStatus:
+  type: sensor
+  signalName: SmrtIMS_PlyBckStpReq
+  dataType: HUInt64
+  description: "Health Care IMS On/Off Flag"
+  abstractionName: Input_SmartIMSPlayStopReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "STOP"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Height_Control_2_0.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Height_Control_2_0.Output_HudPbackStatus.Output_HudPbackStatus_CCAN:
+  type: actuator
+  signalName: HUD_PbackSta
+  dataType: HUInt64
+  description: "Status signal for HUD interoperation with IMS(The number of memory is expanded.)"
+  abstractionName: Output_HudPbackStatus
+  valueEnum:
+    0x0: "STOP"
+    0x1: "PLAY1"
+    0x2: "PLAY2"
+    0x3: "SMART_IMS"
+    0x4: "PROFILE1"
+    0x5: "PROFILE2"
+    0x6: "GUEST"
+    0x7: "INVALID"
+  matchingTable:
+    0x00: 0x0
+    0x01: 0x1
+    0x02: 0x2
+    0x03: 0x3
+    0x04: 0x4
+    0x05: 0x5
+    0x6: 0x6
+    0x7: 0x7
+
+
+- Height_Control_2_0.Output_HudPbackStatus_Ext.Output_HudPbackStatus_Ext_CCAN:
   type: actuator
   signalName: HUD_PbackSta_Ext
   dataType: HUInt64
@@ -11038,6 +14070,251 @@
     0x1F: 0x14
 
 
+- Illumination_Control_2_0.Input_AutolightSensorHorResSTDStatus:
+  type: sensor
+  signalName: AutoLt_HorRes_STD
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AutolightSensorHorResSTDStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "LUX1"
+    0x2: "LUX20"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- Illumination_Control_2_0.Input_AutolightSensorHorValSTDValue:
+  type: sensor
+  signalName: AutoLt_HorVal_STD
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AutolightSensorHorValSTDValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Illumination_Control_2_0.Input_AutolightSensorHorizenValue:
+  type: sensor
+  signalName: Lamp_AutoLtSnsrHorVal
+  dataType: HUInt64
+  description: "This signal indicates autolight sensor output (for HUD)<BCS>0x0~0x3FE : Light Sensor Value0x3FF : Invalid<HELLA>0x0~0xFE, 100~0x3FE : Light Sensor Value0xFF, 0x3FF : Invalid"
+  abstractionName: Input_AutolightSensorHorizenValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Illumination_Control_2_0.Input_AutolightSensorVerResSTDStatus:
+  type: sensor
+  signalName: AutoLt_VerRes_STD
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AutolightSensorVerResSTDStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "LUX1"
+    0x2: "LUX20"
+  matchingTable:
+    0x0: 0x1
+    0x1: 0x2
+    ELSE: 0x0
+
+
+- Illumination_Control_2_0.Input_AutolightSensorVerValSTDValue:
+  type: sensor
+  signalName: AutoLt_VerVal_STD
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_AutolightSensorVerValSTDValue
+  matchingTable:
+    VALUE:
+    TIMEOUT: 0x0
+
+
+- Illumination_Control_2_0.Input_ExtTailLampOnReqStatusForHUD:
+  type: sensor
+  signalName: Lamp_ExtrnlTailLmpOnReq
+  dataType: HUInt64
+  description: "-(Old)C_EXTTailOn"
+  abstractionName: Input_ExtTailLampOnReqStatusForHUD
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+    0x2: "INVALID"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: 0x2
+
+
+- Illumination_Control_2_0.Input_ExtTailLampStatus:
+  type: sensor
+  signalName: ExtLamp_ExtrnlTailLmpSta
+  dataType: HUInt64
+  description: "-(Old)C_EXTTail_Act"
+  abstractionName: Input_ExtTailLampStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    ELSE: {OLDVALUE}
+
+
+- Illumination_Control_2_0.Input_LampVendorTypeStatus:
+  type: sensor
+  signalName: Lamp_VendorInfo
+  dataType: HUInt64
+  description: "Rain seosor Vendor info (LIN to CAN signal)- 001 : TRW(BCS)- 010 : HELLA"
+  abstractionName: Input_LampVendorTypeStatus
+  valueEnum:
+    0x0: "INVALID"
+    0x1: "TRW"
+    0x2: "HELLA"
+    0x3: "TRW_BCS_STD"
+    0x4: "HELLA_STD"
+  matchingTable:
+    0x1: 0x1
+    0x2: 0x2
+    0x3: 0x3
+    0x4: 0x4
+    ELSE: 0x0
+
+
+- Illumination_Control_2_0.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
+- Image_Distortion_Correction.Input_PowerAutoCutModeStatus:
+  type: sensor
+  signalName: ICU_PowerAutoCutModSta
+  dataType: HUInt64
+  description: "ICU Delivery Mode State"
+  abstractionName: Input_PowerAutoCutModeStatus
+  valueEnum:
+    0x0: "FACTORY_MODE"
+    0x1: "DEALER_MODE"
+    0x2: "CUSTOMER_MODE"
+  matchingTable:
+    0x0: 0x0
+    0x1: 0x1
+    0x2: 0x2
+    ELSE: {OLDVALUE}
+
+
+- Position_Control.Input_ImsMemory1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP1Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP1CMD"
+  abstractionName: Input_ImsMemory1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_ImsMemory2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP2Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP2CMD"
+  abstractionName: Input_ImsMemory2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_ImsMemory3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP3Req
+  dataType: HUInt64
+  description: "Memory IMS3"
+  abstractionName: Input_ImsMemory3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_ImsPlay3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP3Req
+  dataType: HUInt64
+  description: "PLAY IMS3"
+  abstractionName: Input_ImsPlay3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Position_Control.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
+
+
 - Rotation_Control.Input_HudRotationReqStatus:
   type: sensor
   signalName: CF_AVN_HudRotationSet
@@ -11202,5 +14479,103 @@
     0x14: 0x9
     0x15: 0xA
     0x1F: 0xB
+
+
+- Rotation_Control_2_0.Input_ImsMemory1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP1Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP1CMD"
+  abstractionName: Input_ImsMemory1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_ImsMemory2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP2Req
+  dataType: HUInt64
+  description: "-(Old)C_MEMP2CMD"
+  abstractionName: Input_ImsMemory2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_ImsMemory3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_MemoryP3Req
+  dataType: HUInt64
+  description: "Memory IMS3"
+  abstractionName: Input_ImsMemory3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_ImsPlay1ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP1Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay1ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_ImsPlay2ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP2Req
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_ImsPlay2ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_ImsPlay3ReqStatus:
+  type: sensor
+  signalName: DrvIMS_PlyBckP3Req
+  dataType: HUInt64
+  description: "PLAY IMS3"
+  abstractionName: Input_ImsPlay3ReqStatus
+  valueEnum:
+    0x0: "OFF"
+    0x1: "ON"
+  matchingTable:
+    0x1: 0x1
+    ELSE: 0x0
+
+
+- Rotation_Control_2_0.Input_UsmResetReqStatus:
+  type: sensor
+  signalName: CF_AVN_CluUSMReset
+  dataType: HUInt64
+  description: "None"
+  abstractionName: Input_UsmResetReqStatus
+  valueEnum:
+    0x0: "RESET_REQ"
+    0x1: "DEFAULT"
+  matchingTable:
+    0x1: 0x0
+    ELSE: 0x1
 
 
