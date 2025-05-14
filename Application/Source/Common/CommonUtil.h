@@ -426,10 +426,10 @@ inline bool isContainsString(const T1& orign, const T2& contains, const bool& ch
 }
 
 template <typename T1, typename T2>
-inline bool isCompareString(const T1& orign, const T2& contains) {
+inline bool isCompareString(const T1& orign, const T2& contains, bool caseSensitivity = false) {
     QString originStr = convertDataType<QString, T1>(orign);
     QString containsStr = convertDataType<QString, T2>(contains);
-    return (originStr.compare(containsStr, Qt::CaseInsensitive) == 0);
+    return (originStr.compare(containsStr, ((caseSensitivity) ? (Qt::CaseSensitive) : (Qt::CaseInsensitive))) == 0);
 }
 
 class CheckTimer {

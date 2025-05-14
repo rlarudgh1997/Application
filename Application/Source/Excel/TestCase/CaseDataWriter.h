@@ -95,6 +95,7 @@ public:
                                     QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
                                     QJsonObject caseObj = resultObj[caseKey].toObject();
                                     QString caseName = caseObj["Case"].toString();
+                                    qulonglong delay = caseObj["Delay"].toVariant().toULongLong();
                                     QString genType = caseObj["GenType"].toString();
                                     QStringList inputSignalList =
                                         resultObj[caseKey][QString("InputSignalList")].toObject().keys();
@@ -224,6 +225,9 @@ public:
                                         }
                                         if (parts[1].split(":").size() == 2) {
                                             testCase += "    input:\n";
+                                            if (delay > 0) {
+                                                testCase += "      - delay: " + QString::number(delay) + "\n";
+                                            }
                                             if (inputDataInfo[0].contains("SFC.Private.IGNElapsed")) {
                                                 triggerSignal =
                                                     ExcelUtil::instance().data()->isIGNElapsedName(inputDataInfo[1].toInt());
@@ -242,6 +246,10 @@ public:
                                             QString tempOutputSignal = outputSignal[outputCnt];
                                             if (tempOutputSignal.contains("Collect")) {
                                                 tempOutputSignal = "collect";
+                                            } else if (tempOutputSignal.contains("Delay")) {
+                                                tempOutputSignal = "delay";
+                                            } else {
+                                                // no operation
                                             }
                                             // Cal logic 구현 (단, Sheet 는 먼저 풀려있어야 함)
                                             QString tempOutputValue = outputValue[outputCnt];

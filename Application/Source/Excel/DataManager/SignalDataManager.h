@@ -74,7 +74,7 @@ public:
                                                                         const QPair<QStringList, QStringList>& list,
                                                                         QMap<QString, SignalData>& newSignalDataInfo);
     QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const int& sheetIndex,
-                                                                     const QPair<QStringList, QStringList>& list,
+                                                                     const QPair<QStringList, QStringList>& allList,
                                                                      QMap<QString, SignalData>& newSignalDataInfo);
     QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
     // QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
@@ -104,16 +104,15 @@ private:
                                                      const QMap<int, QStringList>& dataInfo);
     QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
+    bool isExceptionSignal(const QString& signalName);
+    int isContainConfigSignal(const QString& signalName, const int& keywordType, const QPair<QStringList, QStringList>& allList);
+    int isSignalDataType(const QString& signalName, const SignalData& signalData, QString& maxValue);
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
-    bool isExceptionSignal(const QString& signalName);
     QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType,
                                                          const QStringList& originData, const QStringList& otherAllData);
-#if 0
-    QMap<int, QPair<QStringList, QStringList>> isConvertedEnumData(const QString& signalName, const int& keywordType,
-                                                                   const QStringList& originData, const QStringList& convertData,
-                                                                   const QStringList& notUsedEnum);
-#endif
+    QMap<int, QPair<QStringList, QStringList>> isConvertedEnumData(const QString& signalName, const SignalData& signalData,
+                                                                   const bool& configState);
     QStringList isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo,
                                          const QStringList& inputData);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,

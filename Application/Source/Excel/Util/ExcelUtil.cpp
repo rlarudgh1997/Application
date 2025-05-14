@@ -203,13 +203,12 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString("[Not_Trigger]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)),
             qMakePair(QString("[Preset]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Preset)),
             qMakePair(QString("[DependentOn]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn)),
+            qMakePair(QString("delay"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
         keywordPattern = {
             qMakePair(QString("valuechanged"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)),
-            // qMakePair(QString("Value Changed"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged)),
             qMakePair(QString("~"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)),
-            // qMakePair(QString("="), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Equal)),
             qMakePair(QString("<=>"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)),
             qMakePair(QString(">="), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual)),
             qMakePair(QString("<="), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual)),
@@ -217,20 +216,16 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString(">"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over)),
             qMakePair(QString("<"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under)),
             qMakePair(QString("!"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Not)),
-            // qMakePair(QString("timeout"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
             qMakePair(QString("MESSAGE_TIMEOUT"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
-            // qMakePair(QString("Time out"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Timeout)),
             qMakePair(QString("CRC_ERROR"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
-            // qMakePair(QString("crc"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Crc)),
             qMakePair(QString("[Not_Trigger]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)),
-            // qMakePair(QString("D’"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
-            // qMakePair(QString("D`"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
             qMakePair(QString("D'"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DontCare)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)) {
         keywordPattern = {
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
             qMakePair(QString("collect"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect)),
+            qMakePair(QString("delay"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputValue)) {
         keywordPattern = {
@@ -267,11 +262,11 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
 
 QString ExcelUtil::isKeywordString(const int keywordType) {
     QMap<int, QString> keywordPatternInfo;
-    QStringList keywordString;
+    // QStringList keywordString;
     for (int index = 0; index <= static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max); ++index) {
         for (const auto& infoPair : isKeywordPatternInfo(index)) {
             keywordPatternInfo[infoPair.second] = infoPair.first;
-            keywordString.append(infoPair.first);
+            // keywordString.append(infoPair.first);
         }
     }
     return keywordPatternInfo[keywordType];
@@ -501,44 +496,44 @@ int ExcelUtil::isDataType(const QString& dataTypeStr) {
     return dataType;
 }
 
-QPair<int, int> ExcelUtil::isIGNElapsedType(const QString& singalName) {
+QPair<int, int> ExcelUtil::isIGNElapsedType(const QString& signalName) {
     QPair<int, int> ignInfo;
-    if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn0ms") == 0) {
+    if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn0ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn500ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3000ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn3000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn3000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn3500ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn3500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn3500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn4000ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn4000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn4000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOn10s") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn10s") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn10s),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff0ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOff0ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff0ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff500ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOff500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff700ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOff700ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff700ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1000ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOff1000ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff1000ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
-    } else if (singalName.compare("SFC.Private.IGNElapsed.ElapsedOff1500ms") == 0) {
+    } else if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOff1500ms") == 0) {
         ignInfo = QPair<int, int>(static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOff1500ms),
                                   static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms));
     } else {
         ignInfo = QPair<int, int>(-1, -1);
-        qDebug() << "Fail to read elapsed value(-1, -1) :" << singalName;
+        qDebug() << "Fail to read elapsed value(-1, -1) :" << signalName;
     }
     return ignInfo;
 }
@@ -761,8 +756,8 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
     return convertKeywordType;
 }
 
-QString ExcelUtil::isPreconditionMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
-                                          const QStringList& inputData, const QStringList& valueEnum) {
+QString ExcelUtil::isMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
+                              const QStringList& inputData, const QStringList& valueEnum) {
     const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
     // qDebug() << "isPreconditionMaxValue :" << signalName;

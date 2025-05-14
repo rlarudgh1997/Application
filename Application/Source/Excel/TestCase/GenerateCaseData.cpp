@@ -24,6 +24,7 @@ const QString TEXT_OTHERS = QString("Others");
 const QString TEXT_OTHER = QString("Other");
 const QString TEXT_SHEET = QString("Sheet");
 const QString TEXT_COLLECT = QString("Collect");
+const QString TEXT_DELAY = QString("Delay");
 const QString TEXT_VALUE_ENUM = QString("ValueEnum");
 const QString TEXT_EMPTY = QString("[Empty]");
 const QString TEXT_PRECONDITION_ORDER = QString("PreconditionOrder");
@@ -400,14 +401,9 @@ void GenerateCaseData::eraseMergeTag(QString& str) {
 void GenerateCaseData::appendCase(const QString& genType, const QString& caseName, const int& caseNumber,
                                   const QString& resultName, const int& resultNumber, const QString& vehicleType,
                                   const QString& tcName, const int& tcNameNumber, const QString& config, const int& sheetNumber) {
-    QPair<QString, QString> sendStrPair = getSignalInfoString(genType, sheetNumber, tcName, resultName, caseName, false);
-    QString sendStr1 = sendStrPair.first;
-    callPython(sendStr1);
+    QString sendStr = getSignalInfoString(genType, sheetNumber, tcName, resultName, caseName, false);
+    callPython(sendStr);
     QJsonObject caseJson1 = readJson();
-
-    // QString sendStr2 = sendStrPair.second;
-    // callPython(sendStr2);
-    // QJsonObject caseJson2 = readJson();
 #if 0
     qDebug() << "caseName: " << caseName;
 #endif
@@ -441,10 +437,10 @@ void GenerateCaseData::appendCase(const QString& genType, const QString& caseNam
     }
 }
 
-QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& genType, const int& sheetNum, const QString& tcName,
-                                                              const QString& resultName, const QString& caseName,
-                                                              const bool& isOther) {
-    QPair<QString, QString> ret;
+QString GenerateCaseData::getSignalInfoString(const QString& genType, const int& sheetNum, const QString& tcName,
+                                              const QString& resultName, const QString& caseName, const bool& isOther) {
+    // QPair<QString, QString> ret;
+    QString ret;
     QMap<int, QPair<QString, SignalData>> signalDataList;
     QMap<QString, SignalData> sigDataInfoMap;
     auto otherInputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true);
@@ -457,38 +453,55 @@ QPair<QString, QString> GenerateCaseData::getSignalInfoString(const QString& gen
                                                                                              sigDataInfoMap);
     }
 
+    QString globalStringDelay =
+        ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay));
+
+    long long int delayTimeMilliSec = 0;
     // 입력 순서가 보장되는 Signal list
     QStringList tmpListFirst;
     tmpListFirst << QString("TcGenType   : ") + genType;
 
     for (const auto& mapKey : signalDataList.keys()) {
+        auto sig = signalDataList[mapKey].first;
+        auto sigDataInfo = signalDataList[mapKey].second;
+        if (sig.toLower() == globalStringDelay.toLower()) {
+            delayTimeMilliSec = sigDataInfo.getConvertData().join(", ").toLongLong();
+            tmpListFirst << QString("Delay   : ") + QString::number(delayTimeMilliSec);
+            break;
+        }
+    }
+
+    for (const auto& mapKey : signalDataList.keys()) {
         auto sig1 = signalDataList[mapKey].first;
         auto sigDataInfo1 = signalDataList[mapKey].second;
-        tmpListFirst << QString("InputSignalName   : ") + sig1;
-        tmpListFirst << QString("InputDataType   : ") + QString::number(sigDataInfo1.getDataType());
-        tmpListFirst << QString("InputKeywordType   : ") + QString::number(sigDataInfo1.getKeywordType());
-        tmpListFirst << QString("InputData   : ") + sigDataInfo1.getConvertData().join(", ");
-        tmpListFirst << QString("InputPrecondition   : ") + sigDataInfo1.getPrecondition().join(", ");
-        tmpListFirst << QString("InputValueEnum   : ") + sigDataInfo1.getValueEnum().join(", ");
-        tmpListFirst << "\n";
+        if (sig1.toLower() != globalStringDelay.toLower()) {
+            tmpListFirst << QString("InputSignalName   : ") + sig1;
+            tmpListFirst << QString("InputDataType   : ") + QString::number(sigDataInfo1.getDataType());
+            tmpListFirst << QString("InputKeywordType   : ") + QString::number(sigDataInfo1.getKeywordType());
+            tmpListFirst << QString("InputData   : ") + sigDataInfo1.getConvertData().join(", ");
+            tmpListFirst << QString("InputPrecondition   : ") + sigDataInfo1.getPrecondition().join(", ");
+            tmpListFirst << QString("InputValueEnum   : ") + sigDataInfo1.getValueEnum().join(", ");
+            tmpListFirst << "\n";
+        }
     }
-    ret.first = tmpListFirst.join("\n");
 
-    // 입력 순서가 보장되지 않고 알파벳 순서로 재배열한 Signal list
-    QStringList tmpListSecond;
-    tmpListSecond << QString("TcGenType   : ") + genType;
+    ret = tmpListFirst.join("\n");
 
-    for (const auto& sig2 : sigDataInfoMap.keys()) {
-        auto sigDataInfo2 = sigDataInfoMap[sig2];
-        tmpListSecond << QString("InputSignalName   : ") + sig2;
-        tmpListSecond << QString("InputDataType   : ") + QString::number(sigDataInfo2.getDataType());
-        tmpListSecond << QString("InputKeywordType   : ") + QString::number(sigDataInfo2.getKeywordType());
-        tmpListSecond << QString("InputData   : ") + sigDataInfo2.getConvertData().join(", ");
-        tmpListSecond << QString("InputPrecondition   : ") + sigDataInfo2.getPrecondition().join(", ");
-        tmpListSecond << QString("InputValueEnum   : ") + sigDataInfo2.getValueEnum().join(", ");
-        tmpListSecond << "\n";
-    }
-    ret.second = tmpListSecond.join("\n");
+    // // 입력 순서가 보장되지 않고 알파벳 순서로 재배열한 Signal list
+    // QStringList tmpListSecond;
+    // tmpListSecond << QString("TcGenType   : ") + genType;
+
+    // for (const auto& sig2 : sigDataInfoMap.keys()) {
+    //     auto sigDataInfo2 = sigDataInfoMap[sig2];
+    //     tmpListSecond << QString("InputSignalName   : ") + sig2;
+    //     tmpListSecond << QString("InputDataType   : ") + QString::number(sigDataInfo2.getDataType());
+    //     tmpListSecond << QString("InputKeywordType   : ") + QString::number(sigDataInfo2.getKeywordType());
+    //     tmpListSecond << QString("InputData   : ") + sigDataInfo2.getConvertData().join(", ");
+    //     tmpListSecond << QString("InputPrecondition   : ") + sigDataInfo2.getPrecondition().join(", ");
+    //     tmpListSecond << QString("InputValueEnum   : ") + sigDataInfo2.getValueEnum().join(", ");
+    //     tmpListSecond << "\n";
+    // }
+    // ret = tmpListSecond.join("\n");
 #if 0
     qDebug().noquote() << "getSignalInfoString" << Qt::endl << ret << Qt::endl;
 #endif
@@ -700,9 +713,16 @@ QJsonObject GenerateCaseData::getOutputSig(const int& sheetIdx, const QString& t
         auto tmpValueEnum = tmpSignalDataInfo.getValueEnum();
         auto tmpIsInitialize = tmpSignalDataInfo.getInitialize();
         auto tmpOutputSigKey = outputSigKey;
-        if (tmpOutputSigKey == ExcelUtil::instance().data()->isKeywordString(
-                                   static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect))) {
+        QString globalStringCollect =
+            ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect));
+        QString globalStringDelay =
+            ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay));
+        if (tmpOutputSigKey.toLower() == globalStringCollect.toLower()) {
             tmpOutputSigKey = TEXT_COLLECT;
+        } else if (tmpOutputSigKey.toLower() == globalStringDelay.toLower()) {
+            tmpOutputSigKey = TEXT_DELAY;
+        } else {
+            // no operation
         }
         // 1. ret에서 QJsonObject를 가져오기
         QJsonObject outputObj = ret[tmpOutputSigKey].toObject();
@@ -763,7 +783,7 @@ void GenerateCaseData::appendOtherCaseJson(QJsonObject& fileJson, const QString&
     QString tcNameKey = QString("_%1[%2]").arg(titleTcName).arg(tcNameNumber, 3, 10, QChar('0'));
 
     QString genType = GEN_TYPE_DEFAULT;
-    QString sendStr = getSignalInfoString(genType, sheetNumber, tcName, QString(), QString(), true).second;
+    QString sendStr = getSignalInfoString(genType, sheetNumber, tcName, QString(), QString(), true);
     callPython(sendStr);
     QJsonObject otherCase = readJson();
 
@@ -889,6 +909,9 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
     newCaseJsonObject[TEXT_PRECONDITION_ORDER] = preconditionOrder;
     newCaseJsonObject[TEXT_INPUT_EMPTY_LIST] = inputEmptyList;
     newCaseJsonObject[JSON_NOT_TRIGGER_PRECONDITION_SET_NAME] = notTriggerPreconditionSet;
+    if (caseJsonObject.contains(TEXT_DELAY) == true) {
+        newCaseJsonObject[TEXT_DELAY] = caseJsonObject[TEXT_DELAY].toVariant().toLongLong();
+    }
 
     // finalStateCases: input 값이 적용된 후, 마지막 상태를 key 로 가지고 원래 TC line 정보를 value 로 가진다.
     // 형식: "Idx[TcCnt], final_state_val_0, ..., final_state_val_N": "tc_line"
@@ -1010,7 +1033,9 @@ QJsonObject GenerateCaseData::getCaseInfoJson(const QString& genType, const QStr
                     }
                     tcCnt++;
                 } else {
-                    qDebug() << "IGN Index Error";
+                    if (caseValue != "[Empty]") {
+                        qDebug() << "IGN Index Error";
+                    }
                 }
             } else {
                 QStringList loopArray = preconditionDataArray;

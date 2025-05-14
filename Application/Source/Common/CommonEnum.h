@@ -525,6 +525,14 @@ public:
         HString,
         Max,
     };
+    enum class SignalDataType {
+        Invalid = 0,
+        IgnElapsed,
+        Value,
+        MaxValue,
+        Enum,
+        Max,
+    };
 };
 
 class KeywordTypeEnum {
@@ -559,7 +567,8 @@ public:
         DependentOn,
         MoreThanEqual,
         LessThanEqual,
-        Config,  // 24
+        Config,
+        Delay,  // 25
 
         CustomNotUsed,
         CustomNotTrigger,
@@ -570,15 +579,16 @@ public:
         CustomNotRange,         // used int, uint, double type only (except enum type) -> TODO: 케이스 존재 시 개발 예정
         CustomFlowNot,
         CustomOver,
-        CustomUnder,
-        CustomRange,  // 35
+        CustomUnder,  // 35
+        CustomRange,
         CustomTwoWay,
         CustomFlow,
         CustomIgn,
-        CustomMoreThanEqual,
-        CustomLessThanEqual,  // 40
+        CustomMoreThanEqual,  // 40
+        CustomLessThanEqual,
         CustomConfig,
         CustomNotDefined,
+
         Max,
     };
 };
