@@ -150,7 +150,7 @@
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
     <addaction name="actionEnterScriptText"/>
-    <addaction name="actionTerminalMode"/>
+    <addaction name="actionTerminal"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -181,6 +181,7 @@
    <addaction name="actionMergeSplit"/>
    <addaction name="separator"/>
    <addaction name="actionNodeView"/>
+   <addaction name="actionTerminal"/>
    <addaction name="separator"/>
    <addaction name="actionLastFolder"/>
    <addaction name="actionLastFile"/>
@@ -516,9 +517,9 @@
     <string>Test</string>
    </property>
   </action>
-  <action name="actionTerminalMode">
+  <action name="actionTerminal">
    <property name="text">
-    <string>Terminal Mode</string>
+    <string>Terminal</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>

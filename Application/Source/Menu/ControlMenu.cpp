@@ -844,8 +844,13 @@ void ControlMenu::slotControlUpdate(const int& type, const QVariant& value) {
 
 void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
     switch (type) {
+        case ConfigInfo::ConfigTypeInit:
         case ConfigInfo::ConfigTypeSfcModelPath: {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, value);
+            QVariant sfcModelPath = value;
+            if (type == ConfigInfo::ConfigTypeInit) {
+                sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath);
+            }
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeSfcModelPath, sfcModelPath);
             break;
         }
         case ConfigInfo::ConfigTypeScreenInfo: {

@@ -1664,7 +1664,8 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
                         QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption),
                         "");
                 } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
-                    info.inputValue = constructConvertKeywordDataInfo(keywords[count], maxValue + ", " + info.validInputData);
+                    // info.inputValue = constructConvertKeywordDataInfo(keywords[count], maxValue + ", " + info.validInputData);
+                    info.inputValue = info.validInputData;
                 } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged) ||
                            keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Flow) ||
                            keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::TwoWay)) {

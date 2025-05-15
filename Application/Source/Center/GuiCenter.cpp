@@ -43,6 +43,21 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->NodeViewSearch, &QPushButton::clicked, [=]() { updateDialogAutoComplete(); });
     connect(mGui->NodeViewSelectModule, &QPushButton::clicked,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeShowModule, QVariant()); });
+
+    // Terminal View
+    connect(mGui->TerminalViewClose, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeViewInfoClose, ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
+    });
+    connect(mGui->TerminalViewClear, &QPushButton::clicked, [=]() {
+        mGui->TerminalViewInputText->clear();
+        mGui->TerminalViewDisplay->clear();
+        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, QString());
+    });
+    connect(mGui->TerminalViewInputText, &QLineEdit::returnPressed, [=]() {
+        QString inputCommand = mGui->TerminalViewInputText->text();
+        mGui->TerminalViewInputText->clear();
+        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, inputCommand);
+    });
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -67,6 +82,7 @@ void GuiCenter::updateDisplaySize() {
         rect.setHeight(size.height() - margin.height());
     }
     mMainView->setGeometry(rect);
+    mGui->TerminalViewWidget->setFixedSize(mMainView->size());
 }
 
 void GuiCenter::updateDisplayVisible() {
@@ -232,9 +248,8 @@ void GuiCenter::updateDisplayConfigInfo() {
     setConfigUpdating(false);
 }
 
-void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
-    QStringList nodeAddress = isHandler()->getProperty(updateType).toStringList();
-    // qDebug() << "updateDisplayNodeAddress :" << updateType << nodeAddress.size();
+void GuiCenter::updateDisplayNodeAddress() {
+    QStringList nodeAddress = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll).toStringList();
 
     mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeNode);
 
@@ -261,14 +276,39 @@ void GuiCenter::updateDisplayNodeAddress(const int& updateType) {
     mGui->NodeView->horizontalHeader()->resizeSection(0, 800);
 }
 
-void GuiCenter::updateDisplayTerminal() {
+void GuiCenter::updateDisplayTerminal(const bool& first) {
+    if (first) {
+        mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
+        mGui->TerminalViewWidget->setFixedSize(mMainView->size());
+        mGui->TerminalViewInputText->clear();
+        mGui->TerminalViewInputText->setFocus();
+    }
+
+    QString pathInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo).toString();
     QString terminalInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
+    mGui->TerminalViewPath->setText(QString(" Path : %1").arg(pathInfo));
+    mGui->TerminalViewDisplay->append(terminalInfo);
+}
 
-    qDebug() << "updateDisplayTerminal :" << terminalInfo;
-
-    mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
-
-    mGui->TerminalDisplay->setText(terminalInfo);
+void GuiCenter::updateDisplayViweType() {
+    int viewType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+    switch (viewType) {
+        case ivis::common::ViewTypeEnum::CenterViewTypeConfig: {
+            updateDisplayConfigInfo();
+            break;
+        }
+        case ivis::common::ViewTypeEnum::CenterViewTypeNode: {
+            updateDisplayNodeAddress();
+            break;
+        }
+        case ivis::common::ViewTypeEnum::CenterViewTypeTerminal: {
+            updateDisplayTerminal(true);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
@@ -285,20 +325,17 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayVisible();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo: {
-            updateDisplayConfigInfo();
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll: {
-            updateDisplayNodeAddress(type);
-            break;
-        }
         case ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule: {
             updateDialogSelectModule();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo: {
-            updateDisplayTerminal();
+        case ivis::common::PropertyTypeEnum::PropertyTypeViewType: {
+            updateDisplayViweType();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo:
+        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo: {
+            updateDisplayTerminal(false);
             break;
         }
         default: {

@@ -443,7 +443,9 @@ QString GenerateCaseData::getSignalInfoString(const QString& genType, const int&
     QString ret;
     QMap<int, QPair<QString, SignalData>> signalDataList;
     QMap<QString, SignalData> sigDataInfoMap;
-    auto otherInputList = ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true);
+    qDebug() << "getSignalInfoString";
+    auto otherInputList =
+        ExcelDataManager::instance().data()->isInputDataList(sheetNum, tcName, QString(), QString(), true, false);
     if (isOther) {
         signalDataList =
             SignalDataManager::instance().data()->isOtherInputSignalDataInfo(sheetNum, otherInputList, sigDataInfoMap);

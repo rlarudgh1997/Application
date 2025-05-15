@@ -126,6 +126,7 @@ public:
         PropertyTypeShortcutType,
         PropertyTypeGenTypeList,
         PropertyTypeTerminalInfo,
+        PropertyTypeTerminalPathInfo,
 
         PropertyTypeTestReport,
         PropertyTypeKey,
@@ -265,6 +266,7 @@ public:
         EventTypeWarningCopyCut,
         EventTypeUpdateGenTCInfo,
         EventTypeGenerateCancel,
+        EventTypeTerminalCommand,
 
         EventTypeTest = 3000,
 
@@ -647,6 +649,17 @@ public:
         SfcException,
         Vehicle,
         VehicleSystem,
+    };
+};
+
+class ProcessEnum {
+public:
+    enum class CommonadType {
+        Invalid = 0,
+        Start,
+        Input,
+        Clear,
+        Stop,
     };
 };
 

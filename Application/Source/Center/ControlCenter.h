@@ -24,6 +24,7 @@ private:
     void updateNodeAddress(const bool& check);
     void updateSelectModuleList(const bool& show);
     void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
+    void controlProcess(const int& type, const QString& command);
     void updateTerminalMode();
 
 protected:
@@ -47,6 +48,7 @@ public slots:
 
 private:
     AbstractHandler* mHandler = nullptr;
+    QSharedPointer<QProcess> mProcess = nullptr;
 };
 
 #endif  // CONTROL_CENTER_H

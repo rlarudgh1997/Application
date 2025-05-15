@@ -474,7 +474,7 @@ void GuiMenu::updateMenuRun() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeEnterScriptText, QVariant()); });
     connect(mGui->actionGenSSFS, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSSFS, QVariant()); });
-    connect(mGui->actionTerminalMode, &QAction::triggered,
+    connect(mGui->actionTerminal, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTerminalMode, QVariant()); });
 }
 

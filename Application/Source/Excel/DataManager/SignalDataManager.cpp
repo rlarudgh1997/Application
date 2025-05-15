@@ -1812,8 +1812,6 @@ int SignalDataManager::isSignalDataType(const QString& signalName, const SignalD
 
 QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                               QMap<QString, QMap<int, QStringList>>& dataInfo) {
-    QMap<QString, SignalData> signalDataInfo;
-
     const int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     const int configVehicleType = (appMode == ivis::common::AppModeEnum::AppModeTypePV) ? (ConfigInfo::ConfigTypeVehicleTypePV)
                                                                                         : (ConfigInfo::ConfigTypeVehicleTypeCV);
@@ -1840,6 +1838,7 @@ QMap<QString, SignalData> SignalDataManager::isSignalDataInfo(const QStringList&
     // qDebug() << "\t VehicleType :" << vehicleType;
     // qDebug() << "\t Keyword     :" << keywordString << "\n";
 
+    QMap<QString, SignalData> signalDataInfo;
     QMap<QString, QStringList> allConvertData;
 
     for (int index = 0; index < signalList.size(); ++index) {

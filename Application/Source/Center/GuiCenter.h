@@ -48,8 +48,9 @@ private:
     void updateDialogSelectModule();
 
     void updateDisplayConfigInfo();
-    void updateDisplayNodeAddress(const int& updateType);
-    void updateDisplayTerminal();
+    void updateDisplayNodeAddress();
+    void updateDisplayTerminal(const bool& first);
+    void updateDisplayViweType();
 
 public slots:
     virtual void slotPropertyChanged(const int& type, const QVariant& value);

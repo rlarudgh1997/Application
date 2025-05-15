@@ -127,10 +127,10 @@ void ControlCenter::updateConfigInfo() {
         allConfigData.append(QVariant(QVariantList({type, name, value})));
     }
     QVariantList previousConfig = getData(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo).toList();
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious, previousConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeConfig);
 }
 
 void ControlCenter::updateAllModuleList() {
@@ -302,11 +302,10 @@ void ControlCenter::updateNodeAddress(const bool& check) {
     QStringList vsmList = isNodeAddressMatchingModule(vsmListAll);
 
     // qDebug() << "VSM List Count :" << vsmListAll.size() << vsmList.size();
+    updateSelectModuleList(false);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeNode);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
-
-    updateSelectModuleList(false);
 }
 
 void ControlCenter::updateSelectModuleList(const bool& show) {
@@ -332,11 +331,72 @@ void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVari
     }
 }
 
+void ControlCenter::controlProcess(const int& type, const QString& command) {
+    static bool checkPWD = false;
+    switch (type) {
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start): {
+            if (mProcess.isNull()) {
+                mProcess = QSharedPointer<QProcess>(new QProcess(this), &QObject::deleteLater);
+            }
+            mProcess.data()->start("/bin/bash");  // "/usr/bin/zsh" ... 원하는 쉘 입력
+
+            connect(mProcess.data(), &QProcess::readyReadStandardOutput, [&]() {
+                QByteArray readData = mProcess.data()->readAllStandardOutput();
+                QString info = QString::fromUtf8(readData);
+
+                if (checkPWD) {
+                    checkPWD = false;
+                    // qDebug() << "Path :" << info;
+                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, info);
+                } else {
+                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, info, true);
+                }
+            });
+            break;
+        }
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input): {
+            if (mProcess.isNull() == false) {
+                bool normalCommand = (command.trimmed().startsWith("pwd") == false);
+                if (normalCommand) {
+                    mProcess.data()->write((command + "\n").toUtf8());
+                }
+                QTimer::singleShot(50, this, [=]() {
+                    checkPWD = (mProcess.data()->write("pwd\n"));
+                });
+            }
+            break;
+        }
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Clear): {
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
+            break;
+        }
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop): {
+            if (mProcess.isNull() == false) {
+                qDebug() << "Process is running -> stop";
+                disconnect(mProcess.data());
+                if (mProcess->state() != QProcess::NotRunning) {
+                    mProcess->terminate();                          // 종료 요청
+                    if (!mProcess->waitForFinished(3000)) {         // 최대 3초 대기
+                        mProcess->kill();                           // 강제 종료
+                        mProcess->waitForFinished();
+                    }
+                }
+                mProcess.reset();                                   // 안전하게 제거
+            }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
+
 void ControlCenter::updateTerminalMode() {
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeInvalid);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, "Terminal Mode");
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), QString());
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("pwd"));
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
 }
 
 void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
@@ -370,10 +430,17 @@ void ControlCenter::slotConfigChanged(const int& type, const QVariant& value) {
 
 void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     // qDebug() << "ControlCenter::slotHandlerEvent() ->" << type << "," << value;
+
+    int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
-            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeViewInfoClose, "");
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
+            updateDataHandler(
+                ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeInvalid);
+            if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) {
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop), QString());
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeUpdateConfig: {
@@ -386,7 +453,6 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeConfigReset: {
-            int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
             if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeConfig) {
                 ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
                 QVariantList text = QVariantList(
@@ -405,6 +471,15 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModule: {
             updateSelectModueNodeAddress(true, value.toList());
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeTerminalCommand: {
+            QString command = value.toString();
+            if (command.size() > 0) {
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
+            } else {
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Clear), QString());
+            }
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleError: {
