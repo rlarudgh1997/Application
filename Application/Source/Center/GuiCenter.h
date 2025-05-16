@@ -49,7 +49,7 @@ private:
 
     void updateDisplayConfigInfo();
     void updateDisplayNodeAddress();
-    void updateDisplayTerminal(const bool& first);
+    void updateDisplayTerminal(const bool& first, const bool& updatPath);
     void updateDisplayViweType();
 
 public slots:

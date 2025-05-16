@@ -21,6 +21,7 @@
 // #define ENABLE_OUTPUT_DATA_KEYWORD_DEBUG_LOG
 
 const QString kEasterEggTrigger = "$EASTEREGG$";
+const QString kEasterEggDummy = "$DUMMY$";
 const QString GEN_TYPE_NEGATIVE_AND_POSITIVE = QString("Negative/Positive");
 const QString GEN_TYPE_POSITIVE = QString("Positive");
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
@@ -1824,12 +1825,20 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
                         QMap<QString, QStringList> valueMap;
                         QStringList keys, inputValues, validInputData;
                         QList<int> keywords;
+                        bool isDummy = false;
                         for (const auto& keyword : caseCopy.convertInputDataInfo) {
                             valueMap[keyword.inputSignal] = keyword.validInputData.split(',');
                             keys << keyword.inputSignal;
                             keywords << static_cast<int>(keyword.keywordType);
                             inputValues << keyword.inputValue;
                             validInputData << keyword.validInputData;
+                            if (keyword.keywordType == ivis::common::KeywordTypeEnum::KeywordType::Range ||
+                                keyword.keywordType == ivis::common::KeywordTypeEnum::KeywordType::Over ||
+                                keyword.keywordType == ivis::common::KeywordTypeEnum::KeywordType::Under ||
+                                keyword.keywordType == ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual ||
+                                keyword.keywordType == ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual) {
+                                isDummy = true;
+                            }
                         }
                         auto results =
                             generateCombinations(exprTemplate, valueMap, keys, keywords, inputValues, validInputData,
@@ -1848,6 +1857,12 @@ QList<ResultInfo> ConvertDataManager::interpretCalKeywordAndRedefineResultInfo(c
                             }
                             newResult.caseDataInfoList << results.second[i];
                             resultList << newResult;
+                        }
+                        if (isDummy == true) {
+                            ResultInfo dummyResult;
+                            dummyResult.resultName = resultInfo.resultName + kEasterEggDummy;
+                            dummyResult.caseDataInfoList << caseCopy;
+                            resultList << dummyResult;
                         }
                     }
                 }
@@ -1882,14 +1897,17 @@ bool ConvertDataManager::decideSameCaseList(const QList<CaseDataInfo>& list1, co
 }
 
 QList<ResultInfo> ConvertDataManager::mergeAndCleanResultList(const QList<ResultInfo>& resultList) {
-    QMap<QString, QList<ResultInfo>> groupedMap;
+    QHash<QString, QList<ResultInfo>> groupedHash;
+    QList<QString> orderList;
     for (const ResultInfo& result : resultList) {
-        groupedMap[result.resultName].append(result);
+        if (!groupedHash.contains(result.resultName)) {
+            orderList.append(result.resultName);
+        }
+        groupedHash[result.resultName].append(result);
     }
     QList<ResultInfo> mergedResultList;
-    for (auto it = groupedMap.begin(); it != groupedMap.end(); ++it) {
-        const QString& resultName = it.key();
-        const QList<ResultInfo>& groupList = it.value();
+    for (const QString& resultName : orderList) {
+        const QList<ResultInfo>& groupList = groupedHash.value(resultName);
         QList<QList<CaseDataInfo>> uniqueCaseLists;
         QList<OutputDataInfo> sharedOutputList;
         bool isFirst = true;

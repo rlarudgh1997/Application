@@ -40,12 +40,12 @@ public:
         int testCaseCount = 1;
         auto quoteIfNotNumeric = [](const QString& value) {
             QString convertedValue = value;
-            static QRegularExpression intRegex("^-?\\d+$");
-            if (intRegex.match(convertedValue).hasMatch()) {
+            static QRegularExpression positiveIntRegex("^\\d+$");
+            if (positiveIntRegex.match(convertedValue).hasMatch()) {
                 convertedValue = convertedValue + " # 0x" + QString::number(convertedValue.toULongLong(), 16).toUpper();
             }
             return (!convertedValue.isEmpty() && !convertedValue[0].isDigit() && !convertedValue.contains("timeout") &&
-                    !convertedValue.contains("crc"))
+                    !convertedValue.contains("crc") && !convertedValue.contains("-"))
                        ? "\"" + convertedValue + "\""
                        : convertedValue;
         };
@@ -205,7 +205,8 @@ public:
                                             testCase += "    init:\n";
                                             for (int initCnt = 0; initCnt < isInitialize.size(); initCnt++) {
                                                 if (isInitialize[initCnt] == true) {
-                                                    if (outputValue[initCnt][0].isDigit() == true) {
+                                                    if (outputValue[initCnt][0].isDigit() == true ||
+                                                        outputValue[initCnt].contains("-")) {
                                                         if (outputValue[initCnt].contains("0x")) {
                                                             testCase += "      - " + outputSignal[initCnt] + ": 0x0 # NONE\n";
                                                         } else {

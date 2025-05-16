@@ -337,8 +337,9 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
         case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start): {
             if (mProcess.isNull()) {
                 mProcess = QSharedPointer<QProcess>(new QProcess(this), &QObject::deleteLater);
+                mProcess.data()->start("/bin/bash");  // "/usr/bin/zsh" ... 원하는 쉘 입력
+                // mProcess.data()->start("/bin/bash", QStringList({"-i", "-l"}));
             }
-            mProcess.data()->start("/bin/bash");  // "/usr/bin/zsh" ... 원하는 쉘 입력
 
             connect(mProcess.data(), &QProcess::readyReadStandardOutput, [&]() {
                 QByteArray readData = mProcess.data()->readAllStandardOutput();
@@ -346,7 +347,6 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
 
                 if (checkPWD) {
                     checkPWD = false;
-                    // qDebug() << "Path :" << info;
                     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, info);
                 } else {
                     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, info, true);
@@ -361,7 +361,7 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
                     mProcess.data()->write((command + "\n").toUtf8());
                 }
                 QTimer::singleShot(50, this, [=]() {
-                    checkPWD = (mProcess.data()->write("pwd\n"));
+                    checkPWD = (mProcess.data()->write(QString("pwd\n").toUtf8()));
                 });
             }
             break;
@@ -375,13 +375,13 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
                 qDebug() << "Process is running -> stop";
                 disconnect(mProcess.data());
                 if (mProcess->state() != QProcess::NotRunning) {
-                    mProcess->terminate();                          // 종료 요청
-                    if (!mProcess->waitForFinished(3000)) {         // 최대 3초 대기
-                        mProcess->kill();                           // 강제 종료
+                    mProcess->terminate();
+                    if (mProcess->waitForFinished(3000) == false) {
+                        mProcess->kill();
                         mProcess->waitForFinished();
                     }
                 }
-                mProcess.reset();                                   // 안전하게 제거
+                mProcess.reset();
             }
             break;
         }
@@ -392,11 +392,18 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
 }
 
 void ControlCenter::updateTerminalMode() {
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), QString());
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("pwd"));
+    int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+    if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) {
+        return;
+    }
 
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, QString());
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
+
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), QString());
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("pwd"));
 }
 
 void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
@@ -479,6 +486,18 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
             } else {
                 controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Clear), QString());
+            }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeTerminalSetPath: {
+            QVariant popupData = QVariant();
+            QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo);
+            ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
+                                               QVariantList({STRING_TERMINAL_PATH, path})) == ivis::common::PopupButton::OK) {
+                QString command = QString("cd %1").arg(popupData.toString());
+                qDebug() << "Terminal Path :" << command;
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
             }
             break;
         }

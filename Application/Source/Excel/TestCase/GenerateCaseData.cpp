@@ -36,6 +36,7 @@ const QString TEXT_PRECONDITION = QString("Precondition");
 const QString TEXT_DATA_TYPE = QString("DataType");
 const QString TEXT_TRIGGER_DATA = QString("TriggerData");
 const QString TEXT_IGN = QString("SFC.Private.IGNElapsed.Elapsed");
+const QString TEXT_DUMMY = "$DUMMY$";
 
 QSharedPointer<GenerateCaseData>& GenerateCaseData::instance() {
     static QSharedPointer<GenerateCaseData> gInstance;
@@ -410,30 +411,38 @@ void GenerateCaseData::appendCase(const QString& genType, const QString& caseNam
     auto negCaseName = caseName + " [Negative]";
     auto posiCaseName = caseName + " [Positive]";
 
-    if (genType == GEN_TYPE_DEFAULT) {
-        // Default case 추가
-        QJsonObject newCaseJson = getCaseInfoJson(genType, tcName, config, caseJson1, false);
-        appendCaseJson(mAllCaseJson, newCaseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
-                       tcNameNumber, sheetNumber, genType);
-        // Other 연산을 위한 mIntermediateDefaultJson 에 정보 추가 (TC 생성과 무관)
-        appendCaseJson(mIntermediateDefaultJson, caseJson1, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
-                       tcNameNumber, sheetNumber, genType);
-    } else if (genType == GEN_TYPE_NEGATIVE_AND_POSITIVE) {
-        // Positive case 추가
-        QJsonObject posiNewCaseJson = getCaseInfoJson(GEN_TYPE_POSITIVE, tcName, config, caseJson1, false);
-        appendCaseJson(mAllCaseJson, posiNewCaseJson, posiCaseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
-                       tcNameNumber, sheetNumber, GEN_TYPE_POSITIVE);
-        // Negative case 추가
-        QJsonObject negNewCaseJson = getCaseInfoJson(GEN_TYPE_NEGATIVE, tcName, config, caseJson1, false);
-        appendCaseJson(mAllCaseJson, negNewCaseJson, negCaseName, caseNumber + 1, resultName, resultNumber, vehicleType, tcName,
-                       tcNameNumber, sheetNumber, GEN_TYPE_NEGATIVE);
-    } else if (genType == GEN_TYPE_POSITIVE) {
-        // Positive case 만 추가
-        QJsonObject newCaseJson = getCaseInfoJson(genType, tcName, config, caseJson1, false);
-        appendCaseJson(mAllCaseJson, newCaseJson, posiCaseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
-                       tcNameNumber, sheetNumber, genType);
+    if (resultName.contains(TEXT_DUMMY, Qt::CaseSensitive) == true) {
+        if (genType == GEN_TYPE_DEFAULT) {
+            appendCaseJson(mIntermediateDefaultJson, caseJson1, caseName, caseNumber, resultName, resultNumber, vehicleType,
+                           tcName, tcNameNumber, sheetNumber, genType);
+        }
+        return;
     } else {
-        // no operation
+        if (genType == GEN_TYPE_DEFAULT) {
+            // Default case 추가
+            QJsonObject newCaseJson = getCaseInfoJson(genType, tcName, config, caseJson1, false);
+            appendCaseJson(mAllCaseJson, newCaseJson, caseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                           tcNameNumber, sheetNumber, genType);
+            // Other 연산을 위한 mIntermediateDefaultJson 에 정보 추가 (TC 생성과 무관)
+            appendCaseJson(mIntermediateDefaultJson, caseJson1, caseName, caseNumber, resultName, resultNumber, vehicleType,
+                           tcName, tcNameNumber, sheetNumber, genType);
+        } else if (genType == GEN_TYPE_NEGATIVE_AND_POSITIVE) {
+            // Positive case 추가
+            QJsonObject posiNewCaseJson = getCaseInfoJson(GEN_TYPE_POSITIVE, tcName, config, caseJson1, false);
+            appendCaseJson(mAllCaseJson, posiNewCaseJson, posiCaseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                           tcNameNumber, sheetNumber, GEN_TYPE_POSITIVE);
+            // Negative case 추가
+            QJsonObject negNewCaseJson = getCaseInfoJson(GEN_TYPE_NEGATIVE, tcName, config, caseJson1, false);
+            appendCaseJson(mAllCaseJson, negNewCaseJson, negCaseName, caseNumber + 1, resultName, resultNumber, vehicleType,
+                           tcName, tcNameNumber, sheetNumber, GEN_TYPE_NEGATIVE);
+        } else if (genType == GEN_TYPE_POSITIVE) {
+            // Positive case 만 추가
+            QJsonObject newCaseJson = getCaseInfoJson(genType, tcName, config, caseJson1, false);
+            appendCaseJson(mAllCaseJson, newCaseJson, posiCaseName, caseNumber, resultName, resultNumber, vehicleType, tcName,
+                           tcNameNumber, sheetNumber, genType);
+        } else {
+            // no operation
+        }
     }
 }
 
@@ -1244,6 +1253,9 @@ QString GenerateCaseData::getInitStr(const QJsonObject& inputSignalList) {
 void GenerateCaseData::checkNegativeAndPositive(const QString& genType, const QString& caseName, const int& caseNumber,
                                                 const QString& resultName, const int& resultNumber, const QString& tcName,
                                                 const int& tcNameNumber, const int& sheetNumber) {
+    if (resultName.contains(TEXT_DUMMY, Qt::CaseSensitive) == true) {
+        return;
+    }
     const int sheetIdxStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     QStringList sheetList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
@@ -1400,6 +1412,9 @@ void GenerateCaseData::removeMatchingKeysNegative(QJsonObject& caseJson, const Q
 void GenerateCaseData::eraseNotUsefulTC(const QString& genType, const QString& caseName, const int& caseNumber,
                                         const QString& resultName, const int& resultNumber, const QString& tcName,
                                         const int& tcNameNumber, const int& sheetNumber, const int& maxTriggerCnt) {
+    if (resultName.contains(TEXT_DUMMY, Qt::CaseSensitive) == true) {
+        return;
+    }
     const int sheetIdxStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     QStringList sheetList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
@@ -1550,6 +1565,9 @@ QJsonArray GenerateCaseData::copyQJsonArrayUpToIndex(const QJsonArray& array, co
 void GenerateCaseData::setPreconditionValues(const QString& genType, const QString& caseName, const int& caseNumber,
                                              const QString& resultName, const int& resultNumber, const QString& tcName,
                                              const int& tcNameNumber, const int& sheetNumber, const int& preconditionLimitCnt) {
+    if (resultName.contains(TEXT_DUMMY, Qt::CaseSensitive) == true) {
+        return;
+    }
     const int sheetIdxStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     QStringList sheetList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
@@ -1713,6 +1731,9 @@ void GenerateCaseData::applyPrecondition(QJsonObject& caseJson, const int& preco
 void GenerateCaseData::cleanIntermediateDataFromJson(const QString& caseName, const int& caseNumber, const QString& resultName,
                                                      const int& resultNumber, const QString& tcName, const int& tcNameNumber,
                                                      const int& sheetNumber) {
+    if (resultName.contains(TEXT_DUMMY, Qt::CaseSensitive) == true) {
+        return;
+    }
     const int sheetIdxStart = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     QStringList sheetList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSheetName).toStringList();
     QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();

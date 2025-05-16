@@ -58,6 +58,9 @@ void GuiCenter::drawDisplayDepth0() {
         mGui->TerminalViewInputText->clear();
         createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, inputCommand);
     });
+    connect(mGui->TerminalViewPathTitle, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalSetPath, QString());
+    });
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -276,18 +279,25 @@ void GuiCenter::updateDisplayNodeAddress() {
     mGui->NodeView->horizontalHeader()->resizeSection(0, 800);
 }
 
-void GuiCenter::updateDisplayTerminal(const bool& first) {
+void GuiCenter::updateDisplayTerminal(const bool& first, const bool& updatPath) {
     if (first) {
         mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
         mGui->TerminalViewWidget->setFixedSize(mMainView->size());
         mGui->TerminalViewInputText->clear();
         mGui->TerminalViewInputText->setFocus();
+        mGui->TerminalViewPathInfo->clear();
+        mGui->TerminalViewDisplay->clear();
     }
 
-    QString pathInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo).toString();
-    QString terminalInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
-    mGui->TerminalViewPath->setText(QString(" Path : %1").arg(pathInfo));
-    mGui->TerminalViewDisplay->append(terminalInfo);
+    if (updatPath) {
+        QString pathInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo).toString();
+        mGui->TerminalViewPathInfo->setText(QString(" Path : %1").arg(pathInfo));
+        // qDebug() << "\t Path :" << pathInfo;
+    } else {
+        QString info = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
+        mGui->TerminalViewDisplay->append(info);
+        qDebug() << "\t Info :" << info;
+    }
 }
 
 void GuiCenter::updateDisplayViweType() {
@@ -302,7 +312,7 @@ void GuiCenter::updateDisplayViweType() {
             break;
         }
         case ivis::common::ViewTypeEnum::CenterViewTypeTerminal: {
-            updateDisplayTerminal(true);
+            updateDisplayTerminal(true, false);
             break;
         }
         default: {
@@ -333,9 +343,12 @@ void GuiCenter::slotPropertyChanged(const int& type, const QVariant& value) {
             updateDisplayViweType();
             break;
         }
-        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo:
+        case ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo: {
+            updateDisplayTerminal(false, false);
+            break;
+        }
         case ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo: {
-            updateDisplayTerminal(false);
+            updateDisplayTerminal(false, true);
             break;
         }
         default: {

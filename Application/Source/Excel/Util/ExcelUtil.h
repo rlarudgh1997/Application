@@ -88,8 +88,8 @@ public:
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);
     int isConvertedKeywordType(const bool& toCustom, const int& keywordType);
-    QString isValidMaxValue(const bool& doubleType);
-    QString isMaxValue(const QString& signalName, const int& dataType, const int& keywordType, const QStringList& inputData,
+    QString isMaxValue(const bool& doubleType);
+    QString isValidMaxValue(const QString& signalName, const int& dataType, const int& keywordType, const QStringList& inputData,
                        const QStringList& valueEnum);
     // bool isExistsExcelSheet();
     bool isCheckPythonLibrary();
