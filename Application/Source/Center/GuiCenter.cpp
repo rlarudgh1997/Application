@@ -58,6 +58,9 @@ void GuiCenter::drawDisplayDepth0() {
         mGui->TerminalViewInputText->clear();
         createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, inputCommand);
     });
+    connect(mGui->TerminalViewPathTitle, &QPushButton::clicked, [=]() {
+        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalSetPath, QString());
+    });
 }
 
 void GuiCenter::drawDisplayDepth1() {
@@ -285,8 +288,9 @@ void GuiCenter::updateDisplayTerminal(const bool& first) {
     }
 
     QString pathInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo).toString();
+    mGui->TerminalViewPathInfo->setText(QString(" Path : %1").arg(pathInfo));
+
     QString terminalInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
-    mGui->TerminalViewPath->setText(QString(" Path : %1").arg(pathInfo));
     mGui->TerminalViewDisplay->append(terminalInfo);
 }
 

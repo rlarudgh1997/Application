@@ -929,8 +929,8 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
 QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputList, const bool& maxSkip) {
     QList<qint64> numberList;
     QStringList removeMaxValue({
-        ExcelUtil::instance().data()->isValidMaxValue(false),
-        ExcelUtil::instance().data()->isValidMaxValue(true),
+        ExcelUtil::instance().data()->isMaxValue(false),
+        ExcelUtil::instance().data()->isMaxValue(true),
     });
 
     qint64 minValue = 0;
@@ -986,9 +986,9 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
 
     const int keywordType = dataInfo.firstKey();
     const QStringList inputData = dataInfo[keywordType];
-    const QPair<qint64, qint64> minMaxValue = isMinMaxValue(inputData, true);
-    const qint64 minValue = minMaxValue.first;
-    const qint64 maxValue = minMaxValue.second;
+    const auto minMaxValue = isMinMaxValue(inputData, true);
+    const auto minValue = minMaxValue.first;
+    const auto maxValue = minMaxValue.second;
     const QMap<QString, qint64> exceptionInfo = {
         {"CRC_ERROR", (static_cast<quint64>(INT64_MAX) - 100)},
         {"MESSAGE_TIMEOUT", (static_cast<quint64>(INT64_MAX) - 200)},
@@ -1210,9 +1210,9 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
     const int gapValue = 1;
     const int keywordType = dataInfo.firstKey();
     const QStringList inputList = dataInfo[keywordType];
-    const QPair<int, int> minMaxValue = isMinMaxValue(inputList, true);
-    const qint64 minValue = minMaxValue.first;
-    const qint64 maxValue = minMaxValue.second;
+    const auto minMaxValue = isMinMaxValue(inputList, true);
+    const auto minValue = minMaxValue.first;
+    const auto maxValue = minMaxValue.second;
     const QSet<QString> existing(inputList.begin(), inputList.end());
 
     bool result = true;
@@ -1340,9 +1340,9 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     for (qint64 val : allIntValues) {
         numberList.append(QString::number(val));
     }
-    const QPair<int, int> minMaxValue = isMinMaxValue(numberList, true);
-    const qint64 minValue = minMaxValue.first;
-    const qint64 maxValue = minMaxValue.second;
+    const auto minMaxValue = isMinMaxValue(numberList, true);
+    const auto minValue = minMaxValue.first;
+    const auto maxValue = minMaxValue.second;
 
     // 생성 범위 계산
     qint64 minRange = (minValue - 1000);
@@ -1384,9 +1384,9 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
             for (qint64 val : refVals) {
                 refNumberList.append(QString::number(val));
             }
-            const QPair<int, int> refMinMaxValue = isMinMaxValue(refNumberList);
-            const qint64 refMin = refMinMaxValue.first;
-            const qint64 refMax = refMinMaxValue.second;
+            const auto refMinMaxValue = isMinMaxValue(refNumberList);
+            const auto refMin = refMinMaxValue.first;
+            const auto refMax = refMinMaxValue.second;
 
             if (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver) ||
                 keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual)) {
@@ -1789,7 +1789,7 @@ int SignalDataManager::isSignalDataType(const QString& signalName, const SignalD
     bool ignElapsedState = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
     bool valueState = ((allConvertData.size() > 0) && (valueEnum.size() == 0));
     bool enumState = (valueEnum.size() > 0);
-    maxValue = ExcelUtil::instance().data()->isMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
+    maxValue = ExcelUtil::instance().data()->isValidMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
     bool maxValueState = (maxValue.size() > 0);
 
     // 하기 조건 비교 순서 보장 필요
@@ -2136,7 +2136,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         bool ignState = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
         bool valueState = ((allConvertData.size() > 0) && (valueEnum.size() == 0));
         QString maxValueState =
-            ExcelUtil::instance().data()->isMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
+            ExcelUtil::instance().data()->isValidMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
         bool enumState = (valueEnum.size() > 0);
 
         // Signal, Data 처리 순서 보장 필요 : ignState -> valueState -> maxValueState -> enumState
@@ -2432,7 +2432,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
         bool ignState = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
         bool valueState = ((allConvertData.size() > 0) && (valueEnum.size() == 0));
         QString maxValueState =
-            ExcelUtil::instance().data()->isMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
+            ExcelUtil::instance().data()->isValidMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
         bool enumState = (valueEnum.size() > 0);
 
         // Signal, Data 처리 순서 보장 필요 : ignState -> valueState -> maxValueState -> enumState
@@ -2900,7 +2900,7 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 void SignalDataManager::testCode(const QVariantList& arg) {
     if (arg.size() == 0) {
         const static QMap<int, QStringList> customData_0 = {
-            {0, QStringList({"[CustomOver][0]", "[1]"})},
+            {0, QStringList({"[CustomUnder][100]", "[99]", "[105]", "104", "[CustomOver][200]", "[201]"})},
             {1, QStringList({"[CustomMoreThanEqual][-1]", "[0]"})},
             {2, QStringList({"[CustomOver][10]", "[11]"})},
             {3, QStringList({"[CustomMoreThanEqual][9]", "[10]"})},

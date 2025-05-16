@@ -756,14 +756,14 @@ int ExcelUtil::isConvertedKeywordType(const bool& toCustom, const int& keywordTy
     return convertKeywordType;
 }
 
-QString ExcelUtil::isValidMaxValue(const bool& doubleType) {
+QString ExcelUtil::isMaxValue(const bool& doubleType) {
     if (doubleType) {
         return QString("%1.0").arg(static_cast<quint64>(UINT32_MAX) + 1);  // Max : 4294967296.0
     }
     return QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1);  // Max : 4294967296
 }
 
-QString ExcelUtil::isMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
+QString ExcelUtil::isValidMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
                               const QStringList& inputData, const QStringList& valueEnum) {
     const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
@@ -797,7 +797,7 @@ QString ExcelUtil::isMaxValue(const QString& signalName, const int& dataType, co
         return QString();
     }
 
-    return isValidMaxValue(dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble));
+    return isMaxValue(dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble));
 }
 
 // bool ExcelUtil::isExistsExcelSheet() {

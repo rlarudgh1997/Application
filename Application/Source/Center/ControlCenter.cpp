@@ -392,6 +392,11 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
 }
 
 void ControlCenter::updateTerminalMode() {
+    int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
+    if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) {
+        return;
+    }
+
     controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), QString());
     controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("pwd"));
 
@@ -479,6 +484,15 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
             } else {
                 controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Clear), QString());
+            }
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeTerminalSetPath: {
+            QVariant popupData = QVariant();
+            QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo);
+            ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
+            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
+                                               QVariantList({STRING_TERMINAL_PATH, path})) == ivis::common::PopupButton::OK) {
             }
             break;
         }

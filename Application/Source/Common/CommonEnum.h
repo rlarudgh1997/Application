@@ -267,6 +267,7 @@ public:
         EventTypeUpdateGenTCInfo,
         EventTypeGenerateCancel,
         EventTypeTerminalCommand,
+        EventTypeTerminalSetPath,
 
         EventTypeTest = 3000,
 
