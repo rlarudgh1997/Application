@@ -27,7 +27,7 @@ public:
 
 public slots:
     void slotUpdateThread(const QStringList& detailLog) {
-        ivis::common::CheckTimer checkTimer;
+        // ivis::common::CheckTimer checkTimer;
         // ivis::common::CheckTimer checkTimer2;
         if ((mWidget) && (mWidget->isVisible())) {
             int count = 0;
@@ -47,7 +47,7 @@ public slots:
             }
             mWidget->verticalScrollBar()->setValue(mWidget->verticalScrollBar()->maximum());
         }
-        checkTimer.check(QString("slotUpdateThread : %1").arg(detailLog.size()));
+        // checkTimer.check(QString("slotUpdateThread : %1").arg(detailLog.size()));
     }
 
 private:

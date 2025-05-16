@@ -1188,17 +1188,49 @@ QString ConvertDataManager::findVehicleSignalElseTimeoutCrcValue(const QString& 
     return resultValue;
 }
 
-QString detectNumberFormat(const QString& input) {
-    QString convertedValue = input;
+QString adjustNumberString(const QString& numStr, double increment = 0.0) {
+    QString processedStr = numStr.trimmed();
     bool ok;
+
     static QRegularExpression hexRegex("^0[xX][0-9a-fA-F]+$");
-    if (hexRegex.match(convertedValue).hasMatch()) {
-        qulonglong intValue = convertedValue.toULongLong(&ok, 16);
+    if (hexRegex.match(processedStr).hasMatch()) {
+        qulonglong hexValue = processedStr.toULongLong(&ok, 16);
         if (ok) {
-            convertedValue = QString::number(intValue);
+            if (increment >= 0) {
+                return QString::number(hexValue + static_cast<qulonglong>(increment));
+            } else {
+                qlonglong result = static_cast<qlonglong>(hexValue) + static_cast<qlonglong>(increment);
+                return QString::number(result > 0 ? result : 0);
+            }
         }
     }
-    return convertedValue;
+
+    qlonglong intValue = processedStr.toLongLong(&ok);
+    if (ok && !processedStr.contains('.') && !processedStr.contains('e', Qt::CaseInsensitive)) {
+        return QString::number(intValue + static_cast<qlonglong>(increment));
+    }
+
+    double doubleValue = processedStr.toDouble(&ok);
+    if (ok) {
+        if (std::floor(doubleValue) == doubleValue && std::floor(increment) == increment &&
+            doubleValue <= static_cast<double>(std::numeric_limits<qlonglong>::max()) &&
+            doubleValue >= static_cast<double>(std::numeric_limits<qlonglong>::min())) {
+            return QString::number(static_cast<qlonglong>(doubleValue) + static_cast<qlonglong>(increment));
+        }
+
+        double resultValue = doubleValue + increment;
+        QString resultStr = QString::number(resultValue, 'f', 6);
+
+        resultStr.remove(QRegularExpression("\\.?0+$"));
+
+        if (resultStr.endsWith('.')) {
+            resultStr.chop(1);
+        }
+
+        return resultStr;
+    }
+
+    return numStr;
 }
 
 ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString& signal, const QString& value) {
@@ -1308,9 +1340,8 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
         if (part.contains('!') && part.contains('(')) {
             tempString.remove(QRegularExpression("[!()]"));
             keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
-            if ((detectNumberFormat(tempString).toDouble() || detectNumberFormat(tempString) == "0") ||
-                (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
-                 detectNumberFormat(tempString.split(",")[0]) == "0")) {
+            if (adjustNumberString(tempString).toDouble() || adjustNumberString(tempString) == "0" ||
+                adjustNumberString(tempString.split(",")[0]).toDouble() || adjustNumberString(tempString.split(",")[0]) == "0") {
                 tempResult += maxValue;
             } else {
                 for (const QString& enumString : tempString.split(',')) {
@@ -1325,10 +1356,10 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                 processTimeoutOrCrc("CRCERROR", tempString);
             }
-            if ((tempString.split(",").size() > 1) && (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
-                                                       detectNumberFormat(tempString.split(",")[0]) == "0")) {
+            if ((tempString.split(",").size() > 1) && (adjustNumberString(tempString.split(",")[0]).toDouble() ||
+                                                       adjustNumberString(tempString.split(",")[0]) == "0")) {
                 for (const QString& enumString : tempString.split(',')) {
-                    tempResult += detectNumberFormat(enumString) + ',';
+                    tempResult += adjustNumberString(enumString) + ',';
                 }
                 if (tempResult.endsWith(',')) {
                     tempResult.chop(1);
@@ -1339,7 +1370,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
         } else if (part.contains('!')) {
             tempString.remove('!');
             keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
-            tempString = detectNumberFormat(tempString);
+            tempString = adjustNumberString(tempString);
             if (tempString.toDouble() || tempString == "0") {
                 tempResult += maxValue;
             } else {
@@ -1352,7 +1383,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                 tempResult += "CRC_ERROR";
             } else {
-                tempResult += detectNumberFormat(tempString);
+                tempResult += adjustNumberString(tempString);
             }
         }
     };
@@ -1470,25 +1501,21 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                     tempString.remove(QRegularExpression("[!()]"));
                     enumString = tempString.split('~');
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::NotRange;
-                    if (detectNumberFormat(enumString[0]).toDouble() || detectNumberFormat(enumString[0]) == "0") {
+                    if (adjustNumberString(enumString[0]).toDouble() || adjustNumberString(enumString[0]) == "0") {
                         QStringList parts;
                         QStringList validParts;
-                        if ((detectNumberFormat(enumString[0]).toDouble() + 1.0) ==
-                            detectNumberFormat(enumString[1]).toDouble()) {
-                            parts << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble()) << maxValue;
+                        if (adjustNumberString(enumString[0], 1) == adjustNumberString(enumString[1])) {
+                            parts << adjustNumberString(enumString[0]) << maxValue << adjustNumberString(enumString[1])
+                                  << maxValue;
                             validParts << maxValue << maxValue;
-                        } else if ((detectNumberFormat(enumString[0]).toDouble() + 1.0) ==
-                                   (detectNumberFormat(enumString[1]).toDouble() - 1.0)) {
-                            parts << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble()) << maxValue;
+                        } else if (adjustNumberString(enumString[0], 1) == adjustNumberString(enumString[1], -1)) {
+                            parts << adjustNumberString(enumString[0]) << maxValue << adjustNumberString(enumString[0], 1)
+                                  << maxValue << adjustNumberString(enumString[1]) << maxValue;
                             validParts << maxValue << maxValue << maxValue;
                         } else {
-                            parts << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble() - 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble()) << maxValue;
+                            parts << adjustNumberString(enumString[0]) << maxValue << adjustNumberString(enumString[0], 1)
+                                  << maxValue << adjustNumberString(enumString[1], -1) << maxValue
+                                  << adjustNumberString(enumString[1]) << maxValue;
                             validParts << maxValue << maxValue << maxValue << maxValue;
                         }
                         resultString += parts.join(",");
@@ -1497,32 +1524,24 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 } else {
                     enumString = tempString.split('~');
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Range;
-                    if (detectNumberFormat(enumString[0]).toDouble() || detectNumberFormat(enumString[0]) == "0") {
+                    if (adjustNumberString(enumString[0]).toDouble() || adjustNumberString(enumString[0]) == "0") {
                         QStringList parts;
                         QStringList validParts;
-                        if ((detectNumberFormat(enumString[0]).toDouble() + 1.0) ==
-                            detectNumberFormat(enumString[1]).toDouble()) {
-                            parts << maxValue << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble());
-                            validParts << QString::number(detectNumberFormat(enumString[0]).toDouble())
-                                       << QString::number(detectNumberFormat(enumString[1]).toDouble());
-                        } else if ((detectNumberFormat(enumString[0]).toDouble() + 1.0) ==
-                                   (detectNumberFormat(enumString[1]).toDouble() - 1.0)) {
-                            parts << maxValue << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble());
-                            validParts << QString::number(detectNumberFormat(enumString[0]).toDouble())
-                                       << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0)
-                                       << QString::number(detectNumberFormat(enumString[1]).toDouble());
+                        if (adjustNumberString(enumString[0], 1) == adjustNumberString(enumString[1])) {
+                            parts << maxValue << adjustNumberString(enumString[0]) << maxValue
+                                  << adjustNumberString(enumString[1]);
+                            validParts << adjustNumberString(enumString[0]) << adjustNumberString(enumString[1]);
+                        } else if (adjustNumberString(enumString[0], 1) == adjustNumberString(enumString[1], -1)) {
+                            parts << maxValue << adjustNumberString(enumString[0]) << maxValue
+                                  << adjustNumberString(enumString[0], 1) << maxValue << adjustNumberString(enumString[1]);
+                            validParts << adjustNumberString(enumString[0]) << adjustNumberString(enumString[0], 1)
+                                       << adjustNumberString(enumString[1]);
                         } else {
-                            parts << maxValue << QString::number(detectNumberFormat(enumString[0]).toDouble()) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble() - 1.0) << maxValue
-                                  << QString::number(detectNumberFormat(enumString[1]).toDouble());
-                            validParts << QString::number(detectNumberFormat(enumString[0]).toDouble())
-                                       << QString::number(detectNumberFormat(enumString[0]).toDouble() + 1.0)
-                                       << QString::number(detectNumberFormat(enumString[1]).toDouble() - 1.0)
-                                       << QString::number(detectNumberFormat(enumString[1]).toDouble());
+                            parts << maxValue << adjustNumberString(enumString[0]) << maxValue
+                                  << adjustNumberString(enumString[0], 1) << maxValue << adjustNumberString(enumString[1], -1)
+                                  << maxValue << adjustNumberString(enumString[1]);
+                            validParts << adjustNumberString(enumString[0]) << adjustNumberString(enumString[0], 1)
+                                       << adjustNumberString(enumString[1], -1) << adjustNumberString(enumString[1]);
                         }
                         resultString += parts.join(",");
                         convertKeywordInfo.validInputData += validParts.join(",");
@@ -1530,40 +1549,40 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 }
             } else if (tempString.contains("<=")) {
                 tempString.remove("<=");
-                tempString = detectNumberFormat(tempString);
+                tempString = adjustNumberString(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual;
-                    resultString += QString("%1,%2").arg(QString::number(tempString.toDouble() + 1.0)).arg(tempString);
+                    resultString += QString("%1,%2").arg(adjustNumberString(tempString, 1)).arg(tempString);
                     convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains(">=")) {
                 tempString.remove(">=");
-                tempString = detectNumberFormat(tempString);
+                tempString = adjustNumberString(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual;
-                    resultString += QString("%1,%2").arg(QString::number(tempString.toDouble() - 1.0)).arg(tempString);
+                    resultString += QString("%1,%2").arg(adjustNumberString(tempString, -1)).arg(tempString);
                     convertKeywordInfo.validInputData += tempString;
                 }
             } else if (tempString.contains('<')) {
                 tempString.remove('<');
-                tempString = detectNumberFormat(tempString);
+                tempString = adjustNumberString(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Under;
-                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toDouble() - 1.0));
-                    convertKeywordInfo.validInputData += QString::number(tempString.toDouble() - 1.0);
+                    resultString += QString("%1,%2").arg(tempString).arg(adjustNumberString(tempString, -1));
+                    convertKeywordInfo.validInputData += adjustNumberString(tempString, -1);
                 }
             } else if (tempString.contains('>')) {
                 tempString.remove('>');
-                tempString = detectNumberFormat(tempString);
+                tempString = adjustNumberString(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Over;
-                    resultString += QString("%1,%2").arg(tempString).arg(QString::number(tempString.toDouble() + 1.0));
-                    convertKeywordInfo.validInputData += QString::number(tempString.toDouble() + 1.0);
+                    resultString += QString("%1,%2").arg(tempString).arg(adjustNumberString(tempString, 1));
+                    convertKeywordInfo.validInputData += adjustNumberString(tempString, 1);
                 }
             } else if (tempString.contains('!') && tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[!()]"));
-                if ((tempString.split(",").size() > 1) && (detectNumberFormat(tempString.split(",")[0]).toDouble() ||
-                                                           detectNumberFormat(tempString.split(",")[0]) == "0")) {
+                if ((tempString.split(",").size() > 1) && (adjustNumberString(tempString.split(",")[0]).toDouble() ||
+                                                           adjustNumberString(tempString.split(",")[0]) == "0")) {
                     QStringList parts;
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
                     for (const QString& enumString : tempString.split(",")) {
@@ -1582,7 +1601,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
             } else if (tempString.contains('(')) {
                 tempString.remove(QRegularExpression("[()]"));
                 for (const QString& value : tempString.split(",")) {
-                    tempString = detectNumberFormat(value);
+                    tempString = adjustNumberString(value);
                     if (tempString.contains("timeout", Qt::CaseInsensitive)) {
                         processTimeoutOrCrc("TIMEOUT", tempString);
                     } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
@@ -1592,7 +1611,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 }
             } else if (tempString.contains('!')) {
                 tempString.remove('!');
-                tempString = detectNumberFormat(tempString);
+                tempString = adjustNumberString(tempString);
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
                     tempString = QString("%1,%2").arg(tempString).arg(maxValue);
@@ -1609,7 +1628,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 } else if (tempString.contains("crc", Qt::CaseInsensitive)) {
                     processTimeoutOrCrc("CRCERROR", tempString);
                 }
-                resultString += detectNumberFormat(tempString) + ", ";
+                resultString += adjustNumberString(tempString) + ", ";
             }
         }
         prevTempString = tempString;
@@ -1663,7 +1682,11 @@ QPair<QStringList, QList<CaseDataInfo>> ConvertDataManager::generateCombinations
                     info.inputSignal.replace(
                         QRegularExpression(QRegularExpression::escape(notTriggerStr), QRegularExpression::CaseInsensitiveOption),
                         "");
-                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range)) {
+                } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Range) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Over) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Under) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::MoreThanEqual) ||
+                           keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::LessThanEqual)) {
                     // info.inputValue = constructConvertKeywordDataInfo(keywords[count], maxValue + ", " + info.validInputData);
                     info.inputValue = info.validInputData;
                 } else if (keywords[count] == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::ValueChanged) ||

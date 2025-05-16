@@ -926,15 +926,15 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
     return dataInfo;
 }
 
-QPair<int, int> SignalDataManager::isMinMaxValue(const QStringList& inputList, const bool& maxSkip) {
-    qint64 minValue = 0;
-    qint64 maxValue = 0;
-
+QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputList, const bool& maxSkip) {
     QList<qint64> numberList;
     QStringList removeMaxValue({
-        QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1),    // Max : 4294967296
-        QString("%1.0").arg(static_cast<quint64>(UINT32_MAX) + 1),  // Max : 4294967296.0
+        ExcelUtil::instance().data()->isValidMaxValue(false),
+        ExcelUtil::instance().data()->isValidMaxValue(true),
     });
+
+    qint64 minValue = 0;
+    qint64 maxValue = 0;
 
     for (auto input : inputList) {
         if (maxSkip) {
@@ -986,7 +986,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
 
     const int keywordType = dataInfo.firstKey();
     const QStringList inputData = dataInfo[keywordType];
-    const QPair<int, int> minMaxValue = isMinMaxValue(inputData, true);
+    const QPair<qint64, qint64> minMaxValue = isMinMaxValue(inputData, true);
     const qint64 minValue = minMaxValue.first;
     const qint64 maxValue = minMaxValue.second;
     const QMap<QString, qint64> exceptionInfo = {
@@ -1484,7 +1484,8 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
 
 #if 0
     bool log = false;
-    log = ((normal == false) && (signalName == "Vehicle.CV.Down_Hill_Cruise.Input_DHCToleranceValue"));
+    // log = ((normal == false) && (signalName == "Vehicle.CV.Down_Hill_Cruise.Input_DHCToleranceValue"));
+    log = true;
     if (log) {
         qDebug() << "*************************************************************************************************";
         qDebug() << "isConvertedValueData :" << normal << signalName;
