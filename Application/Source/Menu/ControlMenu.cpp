@@ -70,7 +70,7 @@ void ControlMenu::initNormalData() {
     updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 30);
 #endif
 
-    bool testVisible = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeTestButtonVisible).toBool();
+    bool testVisible = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTestButtonVisible).toBool();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, testVisible);
 }
 
@@ -337,7 +337,7 @@ void ControlMenu::updateViewTCFile() {
     QStringList moduleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAllModule).toStringList();
     // QStringList moduleList = getData(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList).toStringList();
 
-    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
     QString newModuleFile = QString("%1/%2.tc").arg(ivis::common::APP_PWD()).arg(newModule);
     if (QFile::exists(newModuleFile)) {
         moduleList.prepend(newModule);
@@ -348,7 +348,7 @@ void ControlMenu::updateViewTCFile() {
 void ControlMenu::updateViewTCDisplay(const QString& moduleName) {
     ivis::common::CheckTimer checkTimer;
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
     QString tcFile;
 
     if (moduleName == newModule) {
@@ -858,7 +858,7 @@ void ControlMenu::slotConfigChanged(const int& type, const QVariant& value) {
                               ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeScreenInfo).toRect());
             break;
         }
-        case ConfigInfo::ConfitTypeTestButtonVisible: {
+        case ConfigInfo::ConfigTypeTestButtonVisible: {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, value.toBool());
             break;
         }
@@ -978,7 +978,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
         }
         case ivis::common::EventTypeEnum::EventTypeGenTCModule:
         case ivis::common::EventTypeEnum::EventTypeGenTC: {
-            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGeneratePython).toBool()) {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGeneratePython).toBool()) {
                 updateSelectModuleList(type, QVariantList());
             } else {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, type);
@@ -1057,7 +1057,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeGenRunTCCancel: {
-            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGeneratePython).toBool() == false) {
+            if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGeneratePython).toBool() == false) {
                 sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeGenerateCancel);
             }
 

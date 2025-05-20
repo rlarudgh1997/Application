@@ -108,7 +108,7 @@ QString ConvertDataManager::excuteConvertDataManager() {
 }
 
 bool ConvertDataManager::isConvertStop(const QString& info) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         return false;
     }
     qDebug() << "isConvertStop :" << info;
@@ -1587,7 +1587,8 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                     QStringList parts;
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
                     for (const QString& enumString : tempString.split(",")) {
-                        parts << enumString << maxValue;
+                        parts << adjustNumberString(enumString) << maxValue;
+                        convertKeywordInfo.validInputData += maxValue + ", ";
                     }
                     tempString = parts.join(",");
                 } else {

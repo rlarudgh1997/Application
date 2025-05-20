@@ -51,15 +51,30 @@ void GuiCenter::drawDisplayDepth0() {
     connect(mGui->TerminalViewClear, &QPushButton::clicked, [=]() {
         mGui->TerminalViewInputText->clear();
         mGui->TerminalViewDisplay->clear();
+        mGui->TerminalViewInputText->setFocus();
         createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, QString());
     });
     connect(mGui->TerminalViewInputText, &QLineEdit::returnPressed, [=]() {
-        QString inputCommand = mGui->TerminalViewInputText->text();
-        mGui->TerminalViewInputText->clear();
-        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, inputCommand);
+        QString command = mGui->TerminalViewInputText->text();
+        if (command.size() == 0) {
+            return;
+        }
+
+        if (command.compare("clear") == 0) {
+            emit mGui->TerminalViewClear->clicked();
+        } else {
+            mGui->TerminalViewInputText->clear();
+            createSignal(ivis::common::EventTypeEnum::EventTypeTerminalCommand, command);
+        }
+
+        // Save : Command History
+        QStringList commandHistory = getCommandHistory();
+        commandHistory.prepend(command);
+        setCommandHistory(commandHistory);
     });
     connect(mGui->TerminalViewPathTitle, &QPushButton::clicked, [=]() {
         createSignal(ivis::common::EventTypeEnum::EventTypeTerminalSetPath, QString());
+        mGui->TerminalViewInputText->setFocus();
     });
 }
 
@@ -69,6 +84,40 @@ void GuiCenter::drawDisplayDepth1() {
 
 void GuiCenter::drawDisplayDepth2() {
     qDebug() << "GuiCenter::drawDisplayDepth2()";
+}
+
+bool GuiCenter::eventFilter(QObject* object, QEvent* event) {
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        int key = keyEvent->key();
+
+        switch (key) {
+            case ivis::common::KeyTypeEnum::KeyInputValueUp:
+            case ivis::common::KeyTypeEnum::KeyInputValueDown: {
+                QStringList commandHistory = getCommandHistory();
+                int historyCount = commandHistory.size();
+                int index = getHistoryIndex();
+
+                if (key == ivis::common::KeyTypeEnum::KeyInputValueUp) {
+                    ivis::common::REVOLVE_P(index, 1, 0, historyCount);
+                } else {
+                    ivis::common::REVOLVE_M(index, 1, 0, historyCount);
+                }
+                setHistoryIndex(index);
+                mGui->TerminalViewInputText->setText(commandHistory.at(index));
+                // qDebug() << "History :" << index << "/" << historyCount << "->" << commandHistory.at(index);
+                break;
+            }
+            // case ivis::common::KeyTypeEnum::KeyInputValueTab: {
+            //     // mGui->TerminalViewInputText->setFocus();
+            //     break;
+            // }
+            default: {
+                break;
+            }
+        }
+    }
+    return QObject::eventFilter(object, event);
 }
 
 void GuiCenter::updateDisplaySize() {
@@ -283,20 +332,41 @@ void GuiCenter::updateDisplayTerminal(const bool& first, const bool& updatPath) 
     if (first) {
         mMainView->setCurrentIndex(ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
         mGui->TerminalViewWidget->setFixedSize(mMainView->size());
-        mGui->TerminalViewInputText->clear();
-        mGui->TerminalViewInputText->setFocus();
         mGui->TerminalViewPathInfo->clear();
         mGui->TerminalViewDisplay->clear();
+        mGui->TerminalViewInputText->clear();
+        mGui->TerminalViewInputText->setFocus();
+
+        mGui->TerminalViewPathInfo->setFocusPolicy(Qt::NoFocus);
+        mGui->TerminalViewDisplay->setFocusPolicy(Qt::NoFocus);
+        mGui->TerminalViewTitle->setFocusPolicy(Qt::NoFocus);
+
+        mGui->TerminalViewPathTitle->setFocusPolicy(Qt::NoFocus);
+        mGui->TerminalViewClose->setFocusPolicy(Qt::NoFocus);
+        mGui->TerminalViewClear->setFocusPolicy(Qt::NoFocus);
+
+        mGui->TerminalViewInputText->installEventFilter(this);
+        setHistoryIndex(-1);
     }
 
     if (updatPath) {
         QString pathInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo).toString();
-        mGui->TerminalViewPathInfo->setText(QString(" Path : %1").arg(pathInfo));
+        mGui->TerminalViewPathInfo->setText(QString(" %1").arg(pathInfo));
         // qDebug() << "\t Path :" << pathInfo;
     } else {
+        const int bufferSize = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalBufferSize).toInt();
         QString info = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo).toString();
-        mGui->TerminalViewDisplay->append(info);
-        qDebug() << "\t Info :" << info;
+        mGui->TerminalViewDisplay->moveCursor(QTextCursor::End);
+        mGui->TerminalViewDisplay->insertPlainText(info);
+        mGui->TerminalViewDisplay->ensureCursorVisible();
+
+        QStringList currentText = mGui->TerminalViewDisplay->toPlainText().split('\n');
+        if (currentText.size() > bufferSize) {
+            int displaySize = currentText.size() - bufferSize;
+            currentText = currentText.mid(displaySize);
+            mGui->TerminalViewDisplay->setPlainText(currentText.join('\n'));
+            mGui->TerminalViewDisplay->moveCursor(QTextCursor::End);
+        }
     }
 }
 

@@ -720,7 +720,8 @@ QMap<int, QStringList> SignalDataManager::parsingKeywordData(const QStringList& 
     return keywordDataMap;
 }
 
-QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& originData, const bool& validValue) {
+QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const int& notTriggerType, const QStringList& originData,
+                                                            const bool& normal) {
     QMap<int, QStringList> keywordDataMap = parsingKeywordData(originData);
     int keywordGroup = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordGroup::Normal);
     QMap<int, QStringList> dataInfo;
@@ -751,7 +752,9 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
             d.remove('[').trimmed();
             d.remove(']').trimmed();
 
-            if (validValue) {
+            if (normal) {
+                keywordData.append(d);
+            } else {
                 if (index == 0) {
                     frontValue = d;
                 } else if (index == 1) {
@@ -762,8 +765,6 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                     rearValue.clear();
                     break;
                 }
-            } else {
-                keywordData.append(d);
             }
             index++;
         }
@@ -772,7 +773,7 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
         QString maxValueNormal(QString("%1").arg(static_cast<quint64>(UINT32_MAX) + 1));
         QString maxValueDouble(QString("%1.0").arg(static_cast<quint64>(UINT32_MAX) + 1));
 
-        if (validValue) {
+        if (normal == false) {
             int frontValueSize = frontValue.split(",", Qt::SkipEmptyParts).size();
             int rearValueSize = rearValue.split(",", Qt::SkipEmptyParts).size();
             bool append = ((frontValueSize > 0) && (frontValueSize == rearValueSize));
@@ -854,7 +855,9 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                     if (append) {
                         // !(2, 3, 4) : [CustomNot][2, 3, 4][MAX, MAX, MAX]
                         //              -> Valid : 2, 3, 4 가 아닌 값
-                        keywordData.append(frontValue);
+                        keywordData.append(rearValue);    // MAX, MAX, MAX
+                        keywordData.append(frontValue);    // 2, 3, 4
+                        removeDuplicate = false;
                     }
                     break;
                 }
@@ -865,7 +868,10 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
                     }
                     break;
                 }
-#if 0  // Value 인 경우 Config 처리 필요한지?
+#if 0
+                // 20250520 시점 기준으로 value 를 config 으로 사용하는 케이스는 존재하지 않음
+                // Value 인 경우 Config 처리 필요한지? -> 현재 불필요
+                // 추후 필요시 현재 코드에 구현필요
                 case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig): {
                     if (append) {
                         keywordData.append(frontValue);
@@ -908,11 +914,11 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
 
         if (log) {
             qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-            qDebug() << "isCustomValueInfo :" << validValue << values;
+            qDebug() << "isCustomValueInfo :" << notTriggerType << normal;
             qDebug() << "\t Joined      :" << joined;
             qDebug() << "\t SplitValue  :" << splitValue;
             qDebug() << "\t KeywordType :" << ExcelUtil::instance().data()->isKeywordString(keywordType) << keywordType;
-            if (validValue) {
+            if (normal == false) {
                 qDebug() << "\t FrontValue  :" << frontValue;
                 qDebug() << "\t RearValue   :" << rearValue;
             }
@@ -951,8 +957,13 @@ QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputL
         }
         bool ok = false;
         qint64 value = input.toLongLong(&ok);
+        // qint64 value = input.toLongLong(&ok, 0);    // 0을 주면 0x 접두사 자동 인식
         if (ok) {
             numberList.append(value);
+        } else {
+            if (input.trimmed().startsWith("0x")) {
+                qDebug() << "Fail to not conveted hex to int :" << input;
+            }
         }
     }
 
@@ -1008,6 +1019,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         for (const auto& val : numberStrList) {
             bool ok = false;
             qint64 number = val.toLongLong(&ok);
+            // qint64 number = val.toLongLong(&ok, 0);
             if (ok) {
                 numberList.append(number);
             } else {
@@ -1054,7 +1066,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         }
         return sortNumber(numberList);
     };
-    auto isOverlValue = [&](const bool& toValid, const QStringList& allList, const qint64& base) {
+    auto isOverValue = [&](const bool& toValid, const QStringList& allList, const qint64& base) {
         QList<qint64> numberList;
         for (const auto& number : toNumber(allList)) {
             bool append = ((toValid) ? (number >= base) : (number < base));
@@ -1064,11 +1076,20 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         }
         return sortNumber(numberList);
     };
-    auto isUnderlValue = [&](const bool& toValid, const QStringList& allList, const qint64& base) {
+    auto isUnderValue = [&](const bool& toValid, const QStringList& allList, const qint64& base) {
         QList<qint64> numberList;
         for (const auto& number : toNumber(allList)) {
             bool append = ((toValid) ? (number <= base) : (number > base));
             if (append) {
+                numberList.append(number);
+            }
+        }
+        return sortNumber(numberList);
+    };
+    auto isNotValue = [&](const bool& toValid, const QStringList& allList, const QStringList& inputList) {
+        QList<qint64> numberList = toNumber(inputList);
+        if (toValid) {
+            for (const auto& number : toNumber(allList)) {
                 numberList.append(number);
             }
         }
@@ -1092,10 +1113,10 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
             }
         }
         QPair<QStringList, QStringList> valueInfo;
-        if (notTrigger == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) {
+        if ((notTrigger == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) ||
+            (notTrigger == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet))) {
+            // isConvertedEnumData() 함수 내부 CustomNotTrigger, CustomNotTriggerSheet 처리 방식과 동일하게 해야함함
             valueInfo = qMakePair(QStringList(), validList);
-        } else if (notTrigger == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet)) {
-            valueInfo = qMakePair(invalidList, QStringList());
         } else {
             valueInfo = qMakePair(validList, invalidList);
         }
@@ -1116,23 +1137,23 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver): {
-            validData = isOverlValue(true, allData, maxValue);
-            invalidData = isOverlValue(false, allData, maxValue);
+            validData = isOverValue(true, allData, maxValue);
+            invalidData = isOverValue(false, allData, maxValue);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual): {
-            validData = isOverlValue(true, allData, maxValue);
-            invalidData = isOverlValue(false, allData, maxValue);
+            validData = isOverValue(true, allData, maxValue);
+            invalidData = isOverValue(false, allData, maxValue);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder): {
-            validData = isUnderlValue(true, allData, maxValue);
-            invalidData = isUnderlValue(false, allData, maxValue);
+            validData = isUnderValue(true, allData, maxValue);
+            invalidData = isUnderValue(false, allData, maxValue);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
-            validData = isUnderlValue(true, allData, maxValue);
-            invalidData = isUnderlValue(false, allData, maxValue);
+            validData = isUnderValue(true, allData, maxValue);
+            invalidData = isUnderValue(false, allData, maxValue);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
@@ -1157,8 +1178,17 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
-            validData = isNormalValue(false, allData, inputData);
-            invalidData = isNormalValue(true, allData, inputData);
+            // !(2, 3, 4) : [CustomNot][2, 3, 4][MAX, MAX, MAX]
+            //              -> Valid : 2, 3, 4 가 아닌 값
+            if (inputData.size() != 0) {
+                int splitSize = inputData.size() * 0.5;
+                validData = inputData.mid(0, splitSize);    // MAX, MAX, MAX
+                validData.removeDuplicates();
+                invalidData = inputData.mid(splitSize, inputData.size());   // 2, 3, 4
+
+                validData = isNotValue(true, allData, validData);
+                invalidData = isNotValue(false, QStringList(), invalidData);
+            }
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
@@ -1213,7 +1243,7 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
     const auto minMaxValue = isMinMaxValue(inputList, true);
     const auto minValue = minMaxValue.first;
     const auto maxValue = minMaxValue.second;
-    const QSet<QString> existing(inputList.begin(), inputList.end());
+    // const QSet<QString> existing(inputList.begin(), inputList.end());
 
     bool result = true;
     qint64 validValue = 0;
@@ -1323,6 +1353,7 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
         for (const QString& s : list) {
             bool ok = false;
             qint64 val = s.toLongLong(&ok);
+            // qint64 val = s.toLongLong(&ok, 0);
             if (ok) {
                 allIntValues.append(val);
                 if (val < 0)
@@ -1371,6 +1402,7 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
             for (const QString& s : refList) {
                 bool ok;
                 qint64 val = s.toLongLong(&ok);
+                // qint64 val = s.toLongLong(&ok, 0);
                 if (ok)
                     refVals.append(val);
             }
@@ -1436,7 +1468,7 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
 }
 
 QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QString& signalName, const int& dataType,
-                                                                        const QStringList& originData,
+                                                                        const bool& normal, const QStringList& originData,
                                                                         const QStringList& otherAllData) {
     if (signalName.trimmed().startsWith(SFC_IGN_ELAPSED)) {
         // signalName = "SFC.Private.IGNElapsed.Elapsed"
@@ -1444,7 +1476,6 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
         return QPair<QStringList, QStringList>();
     }
 
-    const bool normal = (otherAllData.size() == 0);
     QList<int> removeKeyword = {
         static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger),
         static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet),
@@ -1479,7 +1510,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
         }
     }
 
-    QMap<int, QStringList> dataInfo = isCustomValueInfo(currOriginData, (normal) ? (false) : (true));
+    QMap<int, QStringList> dataInfo = isCustomValueInfo(notTriggerType, currOriginData, normal);
     QPair<QStringList, QStringList> valueInfo;
 
 #if 0
@@ -1498,6 +1529,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
     }
 #endif
 
+    // currOriginData, otherAllData 내부에 Hex 값은 존재 하지 않음 -> Hex 값은 ConvertDataManager 에서 hex to int 처리 함
     if (normal) {
         if (dataInfo.size() > 1) {
             valueInfo = qMakePair(isMultiValidUniqueValue(dataType, dataInfo), QStringList());
@@ -1552,6 +1584,7 @@ QMap<int, QPair<QStringList, QStringList>> SignalDataManager::isConvertedEnumDat
     switch (keywordType) {
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger):
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet): {
+            // isValidValueList() 함수 내부 CustomNotTrigger, CustomNotTriggerSheet 처리 방식과 동일하게 해야함함
             if (configState) {
                 keywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
                 precondition.clear();
@@ -1977,7 +2010,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isNormalInputSignalData
         QStringList allConvertData = signalData.getAllConvertData();
 
         if ((ignState == false) && (valueEnum.size() == 0) && (notUsedEnum.size() == 0)) {
-            auto valueInfo = isConvertedValueData(signalName, dataType, originData, QStringList());
+            auto valueInfo = isConvertedValueData(signalName, dataType, true, originData, QStringList());
             notUsedEnum = valueInfo.first;
         }
 
@@ -2038,7 +2071,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
         QStringList allConvertData = signalData.getAllConvertData();
 
         bool removeDuplicate = true;
-#if 1
         QString maxValue;
 
         switch (isSignalDataType(signalName, signalData, maxValue)) {
@@ -2085,7 +2117,7 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
                 if (otherSignalDataInfo.size() == 1) {
                     QString key = otherSignalDataInfo.firstKey();
                     QStringList otherAllConvertData = otherSignalDataInfo[key].getAllConvertData();
-                    auto valueInfo = isConvertedValueData(signalName, dataType, originData, otherAllConvertData);
+                    auto valueInfo = isConvertedValueData(signalName, dataType, false, originData, otherAllConvertData);
                     convertData = valueInfo.first;
                     precondition = valueInfo.second;
                     if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) ||
@@ -2132,194 +2164,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isTestCaseInputSignalDa
             precondition.removeDuplicates();
         }
         keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-#else
-        bool ignState = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
-        bool valueState = ((allConvertData.size() > 0) && (valueEnum.size() == 0));
-        QString maxValueState =
-            ExcelUtil::instance().data()->isValidMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
-        bool enumState = (valueEnum.size() > 0);
-
-        // Signal, Data 처리 순서 보장 필요 : ignState -> valueState -> maxValueState -> enumState
-        if (ignState) {
-            QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
-            signalName = SFC_IGN_ELAPSED;
-            if (ignInfo.first >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
-                convertData = QStringList({QString("%1").arg(ignInfo.first)});
-                precondition = QStringList({QString("%1").arg(ignInfo.second)});
-            }
-            if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger)) ||
-                (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet))) {
-                convertData.clear();
-                precondition.clear();
-            }
-        } else if (valueState) {
-            QStringList otherSignalList;
-            QStringList otherDataList;
-            for (int index = 0; index < allList.first.size(); ++index) {
-                QString currentSignal(allList.first.at(index));
-                if ((signalName != currentSignal) || (index >= allList.second.size())) {
-                    continue;
-                }
-                otherSignalList.append(currentSignal);
-                otherDataList.append({allList.second.at(index)});
-            }
-
-            QPair<QStringList, QStringList> otherList = qMakePair(otherSignalList, otherDataList);
-            QMap<QString, SignalData> otherSignalDataInfo;
-            isOtherInputSignalDataInfo(sheetIndex, otherList, otherSignalDataInfo);
-            QStringList otherAllConvertData;
-
-            if (otherSignalDataInfo.size() == 1) {
-                QString key = otherSignalDataInfo.firstKey();
-                QStringList otherAllConvertData = otherSignalDataInfo[key].getAllConvertData();
-                auto valueInfo = isConvertedValueData(signalName, dataType, originData, otherAllConvertData);
-                convertData = valueInfo.first;
-                precondition = valueInfo.second;
-                if ((keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow)) ||
-                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay)) ||
-                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow)) ||
-                    (keywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlowNot))) {
-                    // 해당 조건이 경우 중복 삭제 하지 않고 데이터 저장
-                    removeDuplicate = false;
-                }
-            } else {
-                // qDebug() << "Fail to other all convert data size :" << otherSignalDataInfo.size();
-            }
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-            precondition = isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
-        } else if (maxValueState.size() > 0) {
-            precondition = QStringList({maxValueState});
-        } else if (enumState) {
-            const int customNotTriggerSheetIndex =
-                static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet);
-            const QString customNotTriggerSheetKeyword =
-                ExcelUtil::instance().data()->isKeywordString(customNotTriggerSheetIndex);
-            QStringList originDataTemp = originData;
-
-            for (auto& data : originDataTemp) {
-                if (data.contains(customNotTriggerSheetKeyword)) {
-                    keywordType = customNotTriggerSheetIndex;
-                    data.remove(customNotTriggerSheetKeyword);
-                    break;
-                }
-            }
-
-            switch (keywordType) {
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotUsed): {
-                    convertData.clear();
-                    notUsedEnum.clear();
-                    precondition.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTrigger): {
-                    bool isConfigType = false;
-                    const int configIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
-                    const QString configKeyword = ExcelUtil::instance().data()->isKeywordString(configIndex);
-                    // 원본 입력 시그널, 데이터에서 [CustomConfig] 가 있었으면 변경되어 나온 데이터 타입을 Config 로 변경
-                    // Data : [CustomNotTrigger]OFF -> [CustomConfig]OFF => 이건 변경 할지 결정 필요
-                    for (int index = 0; index < signalList.size(); ++index) {
-                        if (signalName == signalList.at(index)) {
-                            QString data = dataList.at(index);
-                            if (data.contains(configKeyword) == false) {
-                                continue;
-                            }
-                            isConfigType = true;
-                            // qDebug() << "[" << signalName << "] Data continas :" << configKeyword;
-                            break;
-                        }
-                    }
-                    if (isConfigType == false) {
-                        precondition = convertData;
-                        convertData.clear();
-                    } else {
-                        // e.g) [CustomConfig][CustomNotTrigger]EV
-                        // -> 동작은 NotTrigger 여서 Precondition 에서만 존재해야 하나 Config 와 공존하는 경우에는 ConvertData 로
-                        // 제공(대신 TC 생성시에는 precondition에만 작성됨)
-                        precondition.clear();
-                    }
-                    notUsedEnum.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotTriggerSheet): {
-                    // Value 인 경우에 대한 처리만 동작함
-                    // Enum 인 경우 처리 확인 필요
-                    bool isConfigType = false;
-                    const int configIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
-                    const QString configKeyword = ExcelUtil::instance().data()->isKeywordString(configIndex);
-                    // 원본 입력 시그널, 데이터에서 [CustomConfig] 가 있었으면 변경되어 나온 데이터 타입을 Config 로 변경
-                    // Data : [CustomNotTrigger]OFF -> [CustomConfig]OFF => 이건 변경 할지 결정 필요
-                    for (int index = 0; index < signalList.size(); ++index) {
-                        if (signalName == signalList.at(index)) {
-                            QString data = dataList.at(index);
-                            if (data.contains(configKeyword) == false) {
-                                continue;
-                            }
-                            isConfigType = true;
-                            // qDebug() << "[" << signalName << "] Data continas :" << configKeyword;
-                            break;
-                        }
-                    }
-
-                    if (isConfigType == false) {
-                        int dataKeywordType = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid);
-                        QMap<int, QStringList> dataInfo = isCustomValueInfo(originDataTemp, true);
-
-                        if (dataInfo.size() == 1) {
-                            dataKeywordType = dataInfo.firstKey();
-                        }
-                        if (dataKeywordType == static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid)) {
-                            precondition = convertData;
-                        } else {
-                            precondition = dataInfo[dataKeywordType];
-                        }
-                        convertData.clear();
-                    } else {
-                        keywordType = configIndex;
-                        // e.g) [CustomConfig][CustomNotTriggerSheet]EV
-                        // -> 동작은 NotTrigger 여서 Precondition 에서만 존재해야 하나 Config 와 공존하는 경우에는 ConvertData 로
-                        // 제공(대신 TC 생성시에는 precondition에만 작성됨)
-                        precondition.clear();
-                    }
-                    notUsedEnum.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotDefined): {
-                    int splitSize = convertData.size() * 0.5;
-                    precondition = convertData.mid(0, splitSize);
-                    convertData = convertData.mid(splitSize, convertData.size());
-                    notUsedEnum.clear();
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomIgn): {
-                    break;
-                }
-                default: {
-                    precondition = notUsedEnum;
-                    notUsedEnum.clear();
-                    break;
-                }
-            }
-
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-            precondition = isConvertedExceptionData(signalName, dataInfo[signalName], precondition);
-        } else {
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-        }
-
-        if (removeDuplicate) {
-            convertData.removeDuplicates();
-            precondition.removeDuplicates();
-        }
-#endif
 
         newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
                                                    notUsedEnum, precondition, allConvertData);
@@ -2378,7 +2222,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
         QStringList precondition = signalData.getPrecondition();
         QStringList allConvertData = signalData.getAllConvertData();
 
-#if 1
         bool saveSkip = false;
         QString maxValue;
 
@@ -2428,64 +2271,6 @@ QMap<int, QPair<QString, SignalData>> SignalDataManager::isOtherInputSignalDataI
         convertData.removeDuplicates();
         precondition.removeDuplicates();
         keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-#else
-        bool ignState = ivis::common::isContainsString(signalName, SFC_IGN_ELAPSED);
-        bool valueState = ((allConvertData.size() > 0) && (valueEnum.size() == 0));
-        QString maxValueState =
-            ExcelUtil::instance().data()->isValidMaxValue(signalName, dataType, keywordType, convertData, valueEnum);
-        bool enumState = (valueEnum.size() > 0);
-
-        // Signal, Data 처리 순서 보장 필요 : ignState -> valueState -> maxValueState -> enumState
-        if (ignState) {
-            QPair<int, int> ignInfo = ExcelUtil::instance().data()->isIGNElapsedType(signalName);
-            if (ignInfo.first >= static_cast<int>(ivis::common::IGNElapsedTypeEnum::IGNElapsedType::ElapsedOn0ms)) {
-                ignOriginData.append(QString("%1").arg(ignInfo.first));
-            }
-            continue;
-        } else if (valueState) {
-            // 이슈 : value 로 구성된 데이터에서 other 정보 구성시 convertData = maxValueState 만 구성 되는 문제 수정
-            // valueState, maxValueState 2가지 조건중 valueState 조건을 먼저 처리해야함
-            // valueEnum.size() == 0  때문에 maxValueState 조건이 처리 되어서 이슈 발생
-            // convertData = allConvertData;
-            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], allConvertData);
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            notUsedEnum.clear();
-            precondition.clear();
-        } else if (maxValueState.size() > 0) {
-            precondition = QStringList({maxValueState});
-        } else if (enumState) {
-            const int configIndex = static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomConfig);
-            const QString configKeyword = ExcelUtil::instance().data()->isKeywordString(configIndex);
-            // 원본 입력 시그널, 데이터에서 [CustomConfig] 가 있었으면 변경되어 나온 데이터 타입을 Config 로 변경
-            // Data : [CustomNotTrigger]OFF -> [CustomConfig]OFF => 이건 변경 할지 결정 필요
-            for (int index = 0; index < signalList.size(); ++index) {
-                if (signalName == signalList.at(index)) {
-                    QString data = dataList.at(index);
-                    if (data.contains(configKeyword) == false) {
-                        continue;
-                    }
-                    keywordType = configIndex;
-                    // qDebug() << "[" << signalName << "] Data continas :" << configKeyword;
-                    break;
-                }
-            }
-
-            QString tempMatchingValue;  // not used
-            convertData = isConvertedSignalDataValueEnum(true, signalName, valueEnum, tempMatchingValue);
-            convertData = isConvertedExceptionData(signalName, dataInfo[signalName], convertData);
-
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            notUsedEnum.clear();
-            precondition.clear();
-        } else {
-            keywordType = ExcelUtil::instance().data()->isConvertedKeywordType(false, keywordType);
-            notUsedEnum.clear();
-            precondition.clear();
-        }
-
-        convertData.removeDuplicates();
-        precondition.removeDuplicates();
-#endif
 
         newSignalDataInfo[signalName] = SignalData(signalName, dataType, init, keywordType, originData, convertData, valueEnum,
                                                    notUsedEnum, precondition, allConvertData);
@@ -2900,7 +2685,8 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 void SignalDataManager::testCode(const QVariantList& arg) {
     if (arg.size() == 0) {
         const static QMap<int, QStringList> customData_0 = {
-            {0, QStringList({"[CustomUnder][100]", "[99]", "[105]", "104", "[CustomOver][200]", "[201]"})},
+            {0, QStringList({"[CustomNotTrigger][CustomUnder][100]", "[99]", "[CustomOver][200]", "[201]", "[105]", "104",
+                             "[CustomNotTrigger][CustomMoreThanEqual][-1]", "[0]"})},
             {1, QStringList({"[CustomMoreThanEqual][-1]", "[0]"})},
             {2, QStringList({"[CustomOver][10]", "[11]"})},
             {3, QStringList({"[CustomMoreThanEqual][9]", "[10]"})},
@@ -2925,6 +2711,7 @@ void SignalDataManager::testCode(const QVariantList& arg) {
                               "[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]", "[1, 2, 9, 10]"})},
             {21, QStringList({"[CustomNotTrigger][CustomOver][100]", "[101]"})},
             {22, QStringList({"[CustomNotTrigger][CustomOver][100][101]"})},
+            {23, QStringList({"[CustomDontCare][]", "[4294967296]"})},
         };
         const static QMap<int, QStringList> customData_1 = {
             {0, QStringList({"[CustomOver][100]", "[101]"})},
@@ -2935,20 +2722,25 @@ void SignalDataManager::testCode(const QVariantList& arg) {
             {5, QStringList({"[CustomFlow][1, 1, 1, 1]", "[2, 3, 4, 5]"})},
             {6, QStringList({"[CustomTwoWay][1, 1, 1, 1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1, 1, 1, 1]"})},
             {7, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]", "[1, 2, 9, 10]"})},
-            {8, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967295]", "[1, 2, 4294967295, 4294967296]"})},
+            {8, QStringList({"[CustomRange][4294967296, 4294967296, 4294967296, 4294967296]", "[1, 2, 4294967295, 4294967296]"})},
             {9, QStringList({"[CustomNotRange][1, 2, 9, 10]", "[4294967296, 4294967296, 4294967296, 4294967296]"})},
             {10, QStringList({"[CustomNot][2, 3, 4]", "[4294967296, 4294967296, 4294967296]"})},
             {11, QStringList({"[CustomNotFlow][4294967296]", "[10]"})},
             {12, QStringList({"[CustomFlowNot][10]", "[4294967296]"})},
             {13, QStringList({"[CustomDontCare][]", "[4294967296]"})},
             {14, QStringList({"[CustomUnder][125]", "[124]"})},
+            {15, QStringList({"[CustomNotTriggerSheet][CustomNot][254, 255]", "[4294967296, 4294967296]"})},
+            {16, QStringList({"[CustomNotTriggerSheet][CustomOver][100]", "[101]"})},
+            {17, QStringList({"[CustomNotTriggerSheet][CustomRange][4294967296, 4294967296, 4294967296, 4294967296]",
+                              "[1, 2, 9, 10]"})},
         };
         static bool normal = false;
         static int index = 0;
         static QMap<int, QStringList> customData = customData_1;
-
         static int size = customData.size();
         // customData[index][0].prepend("[CustomNotTrigger]");
+
+        QStringList originData = customData[index];
 
         int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
         // dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
@@ -2957,16 +2749,17 @@ void SignalDataManager::testCode(const QVariantList& arg) {
         QStringList otherAllData;
         if (normal == false) {
             otherAllData.append(QStringList({"1", "20", "100", "30", "500", "1000", "10", "9", "11", "5"}));
+            // otherAllData.append(QStringList({"1", "2", "9", "10", "4294967296"}));
             // otherAllData.append(QStringList({"MESSAGE_TIMEOUT", "CRC_ERROR"}));
         }
 
         qDebug() << "====================================================================================================";
         qDebug() << index << "/" << (size - 1) << ". testCode :" << normal << dataType;
-        qDebug() << "\t OriginData   :" << customData[index];
+        qDebug() << "\t OriginData   :" << originData;
         qDebug() << "\t OtherAllData :" << otherAllData;
         qDebug() << "\n";
 
-        auto valueInfo = isConvertedValueData(QString("Signal.Test"), dataType, customData[index], otherAllData);
+        auto valueInfo = isConvertedValueData(QString("Signal.Test"), dataType, normal, originData, otherAllData);
 
         if (normal) {
             QStringList notUsedEnum = valueInfo.first;

@@ -43,7 +43,7 @@
 #define STRING_SETTING QString("Setting")
 #define STRING_MODEL_PATH QString("SFC Model Path")
 #define STRING_MODEL_PATH_TIP QString("Setting SFC model foler")
-#define STRING_TERMINAL_PATH QString("Terminla Path")
+#define STRING_TERMINAL_PATH QString("Terminal Path")
 #define STRING_TERMINAL_PATH_TIP QString("Setting default terminal foler")
 #define STRING_NODE_PATH QString("Node Path")
 #define STRING_NODE_PATH_TIP QString("Setting node address file path")

@@ -373,7 +373,7 @@ bool GenerateCaseData::genCase() {
 }
 
 bool GenerateCaseData::isGenerateStop(const QString& info) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         return false;
     }
     qDebug() << "isGenerateStop :" << info;

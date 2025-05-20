@@ -30,6 +30,8 @@ class GuiCenter : public AbstractGui {
     REGISTER_WRITABLE_VALUE(int, ScrolBarValue, 0)
     REGISTER_WRITABLE_VALUE(QStringList, NodeAddress, QStringList())
     REGISTER_WRITABLE_VALUE(bool, ConfigUpdating, false)
+    REGISTER_WRITABLE_VALUE(QStringList, CommandHistory, QStringList())
+    REGISTER_WRITABLE_VALUE(int, HistoryIndex, (-1))
 
 public:
     static QSharedPointer<GuiCenter>& instance(AbstractHandler* handler = nullptr);
@@ -42,6 +44,8 @@ private:
     virtual void drawDisplayDepth2();
     virtual void updateDisplaySize();
     virtual void updateDisplayVisible();
+
+    bool eventFilter(QObject* object, QEvent* event);
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     void updateDialogAutoComplete();

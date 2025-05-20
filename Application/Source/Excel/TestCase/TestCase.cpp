@@ -57,7 +57,7 @@ bool TestCase::start(const QStringList& arguments, const QFileInfo& fileInfo) {
         return false;
     }
     setOpenFile(fileInfo);
-    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, true);
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGenerateStart, true);
 
 #if defined (USE_TEST_CASE_THREAD)
     controlThread(mThread.data(), mWaitCondition, mMutex, static_cast<int>(ivis::common::ThreadEnum::ControlType::Resume));
@@ -81,10 +81,10 @@ bool TestCase::start(const QStringList& arguments, const QFileInfo& fileInfo) {
 }
 
 void TestCase::stop(const bool& appExit) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool() == false) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool() == false) {
         return;
     } else {
-        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
+        ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGenerateStart, false);
     }
     qDebug() << "TestCase::stop()";
 
@@ -136,7 +136,7 @@ void TestCase::runThread() {
             case ExcuteTypeStop:
             case ExcuteTypeCompleted: {
                 excuteType = ExcuteTypeInvalid;
-                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfitTypeGenerateStart, false);
+                ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGenerateStart, false);
                 emit signalTestCaseCompleted(nextType, (nextType == ExcuteTypeCompleted));
                 break;
             }
@@ -259,7 +259,7 @@ int TestCase::excuteTestCase(const int& excuteType) {
         }
     }
 
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         updateTestCaseExcuteInfo(nextType, text);
     }
 
@@ -685,7 +685,7 @@ bool TestCase::openExcelFile() {
         return false;
     }
 
-    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+    QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
     QList<QVariantList> sheetDataList;
     QString filePath;
     bool openState = false;

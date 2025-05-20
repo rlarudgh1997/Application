@@ -154,6 +154,11 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
 
+    if (ControlManager::instance()->getCurrentMode() == ivis::common::ScreenEnum::DisplayTypeExcel) {
+	    // Used Terminla Mode : Ctrl+C, Ctrl+ ....
+        return;
+    }
+
     if (inputType == ivis::common::KeyTypeEnum::KeyInputTypePress) {
         bool keySkip = (inputValue == ivis::common::KeyTypeEnum::KeyInputValueCtrl);
         updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeKeySkip, keySkip);
@@ -944,7 +949,7 @@ void ControlExcel::updateDataValidation(const QVariantList& cellInfo) {
 }
 
 void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_TEST_CASE_RUNNING,  STRING_POPUP_TEST_CASE_RUNNING_TIP}));
@@ -995,7 +1000,7 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         }
         case ivis::common::ViewTypeEnum::ExcelTypeNew: {
             if (selectModule.size() == 0) {
-                moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+                moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
                 optionInfo.append(moduleName);
             } else {
                 optionInfo.append(selectModule);
@@ -1043,7 +1048,7 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
 }
 
 void ControlExcel::updateSelectModuleList() {
-    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeGenerateStart).toBool()) {
+    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         QVariant popupData = QVariant();
         ivis::common::Popup::drawPopup(ivis::common::PopupType::TestCaseRunning, isHandler(), popupData,
                                        QVariantList({STRING_POPUP_TEST_CASE_RUNNING,  STRING_POPUP_TEST_CASE_RUNNING_TIP}));
@@ -1078,7 +1083,7 @@ void ControlExcel::updateSelectModuleList() {
             break;
         }
         case ivis::common::ViewTypeEnum::ExcelTypeNew: {
-            QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfitTypeNewModule).toString();
+            QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
             moduleList.prepend(newModule);
             selectModuleList.append(newModule);
             break;

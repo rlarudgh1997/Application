@@ -9,6 +9,8 @@ class ControlCenter : public AbstractControl {
 
 public:
     static QSharedPointer<ControlCenter>& instance();
+    ~ControlCenter();
+
     virtual void keyEvent(const int& inputType, const int& inputValue);
     virtual void resizeEvent(const int& width, const int& height);
 

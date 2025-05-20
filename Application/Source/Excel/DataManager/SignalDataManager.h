@@ -98,7 +98,7 @@ private:
                                                const QMap<int, QStringList>& dataInfo);
     QList<QStringList> parsingKeywordBlocks(const QStringList& originData);
     QMap<int, QStringList> parsingKeywordData(const QStringList& originData);
-    QMap<int, QStringList> isCustomValueInfo(const QStringList& originData, const bool& validValue);
+    QMap<int, QStringList> isCustomValueInfo(const int& notTriggerType, const QStringList& originData, const bool& normal);
     QPair<qint64, qint64> isMinMaxValue(const QStringList& inputList, const bool& maxSkip = false);
     QPair<QStringList, QStringList> isValidValueList(const int& notTriggerType, const QStringList& allData,
                                                      const QMap<int, QStringList>& dataInfo);
@@ -109,7 +109,7 @@ private:
     int isSignalDataType(const QString& signalName, const SignalData& signalData, QString& maxValue);
     QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList,
                                                QMap<QString, QMap<int, QStringList>>& dataInfo);
-    QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType,
+    QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType, const bool& normal,
                                                          const QStringList& originData, const QStringList& otherAllData);
     QMap<int, QPair<QStringList, QStringList>> isConvertedEnumData(const QString& signalName, const SignalData& signalData,
                                                                    const bool& configState);

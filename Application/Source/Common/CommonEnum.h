@@ -54,6 +54,7 @@ public:
         KeyInputValueDelete = Qt::Key::Key_Delete,
         KeyInputValueCapture = Qt::Key::Key_F12,
         KeyInputValueCtrl = Qt::Key::Key_Control,
+        KeyInputValueTab = Qt::Key::Key_Tab,
 #if defined(PLATFORM_X86)
         KeyInputValueNumUp = Qt::Key::Key_8,       // Numlock Key_8      - KeyInputValueUp
         KeyInputValueNumDown = Qt::Key::Key_2,     // Numlock Key_2      - KeyInputValueDown
@@ -127,6 +128,7 @@ public:
         PropertyTypeGenTypeList,
         PropertyTypeTerminalInfo,
         PropertyTypeTerminalPathInfo,
+        PropertyTypeTerminalBufferSize,
 
         PropertyTypeTestReport,
         PropertyTypeKey,

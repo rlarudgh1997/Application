@@ -31,8 +31,9 @@ public:
         ConfigTypeConfigTitle,
         ConfigTypeDependentOnTitle,
         ConfigTypeDescConfigVisible,
-        ConfitTypeGeneratePython,
-        ConfitTypeTestButtonVisible,
+        ConfigTypeGeneratePython,
+        ConfigTypeTerminalBufferSize,
+        ConfigTypeTestButtonVisible,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -88,8 +89,8 @@ public:
         ConfigTypeDoFileSave,
         ConfigTypeAllModule,
         ConfigTypeSelectModule,
-        ConfitTypeNewModule,
-        ConfitTypeGenerateStart,
+        ConfigTypeNewModule,
+        ConfigTypeGenerateStart,
 
         ConfigTypeMax,
     } ConfigType;
@@ -138,8 +139,9 @@ private:
         mConfigInfoData[ConfigTypeDependentOnTitle] = QPair<QString, QVariant>(
             "ConfigTypeDependentOnTitle", QVariant(QVariantList({"DependentName", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
-        mConfigInfoData[ConfitTypeGeneratePython] = QPair<QString, QVariant>("ConfitTypeGeneratePython", QVariant(false));
-        mConfigInfoData[ConfitTypeTestButtonVisible] = QPair<QString, QVariant>("ConfitTypeTestButtonVisible", QVariant(false));
+        mConfigInfoData[ConfigTypeTerminalBufferSize] = QPair<QString, QVariant>("ConfigTypeTerminalBufferSize", QVariant(9999));
+        mConfigInfoData[ConfigTypeGeneratePython] = QPair<QString, QVariant>("ConfigTypeGeneratePython", QVariant(false));
+        mConfigInfoData[ConfigTypeTestButtonVisible] = QPair<QString, QVariant>("ConfigTypeTestButtonVisible", QVariant(false));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));
@@ -208,8 +210,8 @@ private:
         mConfigInfoData[ConfigTypeAllModule] = QPair<QString, QVariant>("ConfigTypeAllModule", QVariant(""));
         mConfigInfoData[ConfigTypeSelectModule] = QPair<QString, QVariant>("ConfigTypeSelectModule", QVariant(""));
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
-        mConfigInfoData[ConfitTypeNewModule] = QPair<QString, QVariant>("ConfitTypeNewModule", QVariant("New_Module"));
-        mConfigInfoData[ConfitTypeGenerateStart] = QPair<QString, QVariant>("ConfitTypeGenerateStart", QVariant(false));
+        mConfigInfoData[ConfigTypeNewModule] = QPair<QString, QVariant>("ConfigTypeNewModule", QVariant("New_Module"));
+        mConfigInfoData[ConfigTypeGenerateStart] = QPair<QString, QVariant>("ConfigTypeGenerateStart", QVariant(false));
     }
 
 private:

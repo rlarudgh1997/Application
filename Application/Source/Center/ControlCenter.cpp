@@ -8,6 +8,8 @@
 #include "CommonPopup.h"
 #include "ExcelUtil.h"
 
+#include <QRegularExpression>
+
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
     if (gControl.isNull()) {
@@ -18,6 +20,10 @@ QSharedPointer<ControlCenter>& ControlCenter::instance() {
 
 ControlCenter::ControlCenter() {
     isHandler();
+}
+
+ControlCenter::~ControlCenter() {
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop), QString());
 }
 
 AbstractHandler* ControlCenter::isHandler() {
@@ -332,37 +338,42 @@ void ControlCenter::updateSelectModueNodeAddress(const bool& update, const QVari
 }
 
 void ControlCenter::controlProcess(const int& type, const QString& command) {
-    static bool checkPWD = false;
     switch (type) {
         case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start): {
             if (mProcess.isNull()) {
                 mProcess = QSharedPointer<QProcess>(new QProcess(this), &QObject::deleteLater);
-                mProcess.data()->start("/bin/bash");  // "/usr/bin/zsh" ... 원하는 쉘 입력
-                // mProcess.data()->start("/bin/bash", QStringList({"-i", "-l"}));
+                mProcess.data()->setProcessChannelMode(QProcess::MergedChannels);
+                mProcess.data()->start("/bin/bash", QStringList() << "-i" << "-l");
+                mProcess.data()->write("export PS1=\"\\u@\\h:\\w$ \"\n");   // 경로 정보에서 git 정보 표시 하지 않도록 설정
             }
+            mProcess.data()->write((command + "\n").toUtf8());
 
             connect(mProcess.data(), &QProcess::readyReadStandardOutput, [&]() {
                 QByteArray readData = mProcess.data()->readAllStandardOutput();
                 QString info = QString::fromUtf8(readData);
+                info.remove(QRegularExpression("\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])"));
 
-                if (checkPWD) {
-                    checkPWD = false;
-                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, info);
-                } else {
-                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, info, true);
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, info, true);
+
+                // 마지막 줄만 추출
+                QString pathInfoLine = info.section('\n', -1);
+                QRegularExpression regex(R"(:~(/[^$]*)\$)");
+                QRegularExpressionMatch match = regex.match(pathInfoLine);
+
+                if (match.hasMatch()) {
+                    QString relativePath = match.captured(1);
+                    QString absolutePath;
+                    if (relativePath.size() > 0) {
+                        absolutePath = QString("%1%2/").arg(QDir::homePath()).arg(relativePath);
+                    }
+                    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, absolutePath);
                 }
             });
             break;
         }
         case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input): {
             if (mProcess.isNull() == false) {
-                bool normalCommand = (command.trimmed().startsWith("pwd") == false);
-                if (normalCommand) {
-                    mProcess.data()->write((command + "\n").toUtf8());
-                }
-                QTimer::singleShot(50, this, [=]() {
-                    checkPWD = (mProcess.data()->write(QString("pwd\n").toUtf8()));
-                });
+                mProcess.data()->write((command + "\n").toUtf8());
             }
             break;
         }
@@ -372,8 +383,9 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
         }
         case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop): {
             if (mProcess.isNull() == false) {
-                qDebug() << "Process is running -> stop";
+                // qDebug() << "Terminal is running -> stop";
                 disconnect(mProcess.data());
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("exit"));
                 if (mProcess->state() != QProcess::NotRunning) {
                     mProcess->terminate();
                     if (mProcess->waitForFinished(3000) == false) {
@@ -397,13 +409,17 @@ void ControlCenter::updateTerminalMode() {
         return;
     }
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    QVariant bufferSize = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTerminalBufferSize);
+
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalBufferSize, bufferSize);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, QString());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
 
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), QString());
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("pwd"));
+    QString command = QString("cd %1").arg(ivis::common::APP_PWD());
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), command);
 }
 
 void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
