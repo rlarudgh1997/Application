@@ -222,15 +222,21 @@ void GuiExcel::updateDialogAutoCompleteConfigName() {
     updateDrawDialog(Dialog::DialogTypeAutoCompleteNormal, info);
 }
 
-void GuiExcel::updateDialogAutoCompleteSignal(const int& columnIndex) {
+void GuiExcel::updateDialogAutoCompleteSignal(const int& sheetIndex, const int& columnIndex) {
     QVariantList keywordTypeInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo).toList();
     QStringList keywordList;
-    int keyworedIndex = columnIndex;
 
-    if (keyworedIndex < keywordTypeInfo.size()) {
-        keywordList = keywordTypeInfo.at(keyworedIndex).toStringList();
+    if (columnIndex < keywordTypeInfo.size()) {
+        keywordList = keywordTypeInfo.at(columnIndex).toStringList();
     }
 
+    QStringList useOnlykeywordList;
+    if ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
+        (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
+        (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
+        useOnlykeywordList =
+            keywordTypeInfo.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)).toStringList();
+    }
     // qDebug() << "updateDialogAutoCompleteSignal :" << columnIndex;
     // qDebug() << "\t Keyword :" << keyworedIndex << keywordTypeInfo.size() << keywordList.size();
 
@@ -243,7 +249,9 @@ void GuiExcel::updateDialogAutoCompleteSignal(const int& columnIndex) {
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
+        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressDependentName).toStringList(),
         keywordList,
+        useOnlykeywordList
     });
     updateDrawDialog(Dialog::DialogTypeAutoComplete, info);
 }
@@ -749,6 +757,15 @@ void GuiExcel::refreshAutoCompleteData(const int& sheetIndex, const int& rowInde
             if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName)) {
                 eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteName;
             } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData)) {
+                eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
+            } else {
+            }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName)) {
+                eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteName;
+            } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
                 eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
             } else {
             }
@@ -1663,8 +1680,8 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
-            // supportAutoComplete = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName));
-            // checkValidation = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData));
+            supportAutoComplete = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName));
+            checkValidation = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData));
             break;
         }
         default: {
@@ -1706,12 +1723,12 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
-            // if (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
-            //     autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Signal;
-            // } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
-            //     autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Data;
-            // } else {
-            // }
+            if (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputSignal)) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Signal;
+            } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Data;
+            } else {
+            }
             break;
         }
         default: {
@@ -1753,7 +1770,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             break;
         }
         case ivis::common::AutoCompleteEnum::AutoComplete::Signal: {
-            updateDialogAutoCompleteSignal(column);
+            updateDialogAutoCompleteSignal(sheetIndex, column);
             break;
         }
         case ivis::common::AutoCompleteEnum::AutoComplete::Data: {

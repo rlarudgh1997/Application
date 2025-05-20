@@ -226,7 +226,7 @@ private:
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
     void updateDialogAutoCompleteVehicle();
     void updateDialogAutoCompleteConfigName();
-    void updateDialogAutoCompleteSignal(const int& columnIndex);
+    void updateDialogAutoCompleteSignal(const int& sheetIndex, const int& columnIndex);
     void updateDialogValueEnum(const QVariantList& data);
     void updateDialogTCNameResult(const QStringList& data);
     void updateDialogSelectGenType();

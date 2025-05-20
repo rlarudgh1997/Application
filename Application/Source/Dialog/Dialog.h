@@ -87,10 +87,12 @@ public:
         DataTypeViewLogStop,
         DataTypeAutoCompleteListInput,
         DataTypeAutoCompleteListKeyword,
+        DataTypeAutoCompleteListUseOnlyKeyword,
         DataTypeAutoCompleteListNormal,
         DataTypeAutoCompleteListSfc,
         DataTypeAutoCompleteListVehicle,
         DataTypeAutoCompleteListTCName,
+        DataTypeAutoCompleteListDependentName,
     };
     enum {
         DialogTypeInvalid = 0,
@@ -172,7 +174,8 @@ private:
     QList<QCheckBox*> isCheckWidget(const bool& option1) const;
     void updateSelectListCheckState(const bool& allCheck, const QStringList& selectList);
     void refreshViewLog(const int& refreshType);
-    void updateAutoCompleteSuggestionsList(const bool& normal, const bool& sfc, const bool& vehicle, const bool& tcName);
+    void updateAutoCompleteSuggestionsList(const bool& normal, const bool& sfc, const bool& vehicle, const bool& tcName,
+                                           const bool& dependentName);
 
     bool updateAppMode(const QVariantList& info);
     bool updateAppModeRadio(const QVariantList& info);

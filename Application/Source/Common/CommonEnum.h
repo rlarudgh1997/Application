@@ -90,6 +90,7 @@ public:
         PropertyTypeNodeAddressVSM,
         PropertyTypeNodeAddressTCName,
         PropertyTypeNodeAddressConfigName,
+        PropertyTypeNodeAddressDependentName,
         PropertyTypeNodeAddressModule,
         PropertyTypeAppMode,
         PropertyTypeGenType,
@@ -138,6 +139,7 @@ public:
         PropertyTypeViewLogFileList,
         PropertyTypeViewFileInfo,
         PropertyTypeKeywordTypeInfo,
+        // PropertyTypeUseOnlyKeywordInfo,
 
         PropertyTypeTestButtonVisible,
 

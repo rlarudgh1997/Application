@@ -1231,6 +1231,13 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="ListCheck4">
+           <property name="text">
+            <string>DependentName</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

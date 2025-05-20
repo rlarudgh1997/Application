@@ -434,31 +434,42 @@ void Dialog::connectAutoComplete(const bool& state) {
             setProperty(DataTypeAutoCompleteListInput, text);
 
             if (dialogType == DialogTypeNodeView) {
-                updateAutoCompleteSuggestionsList(false, true, false, false);
+                updateAutoCompleteSuggestionsList(false, true, false, false, false);
             } else {
                 bool sfc = (mGui->ListCheck1->checkState() == Qt::CheckState::Checked);
                 bool vehicle = (mGui->ListCheck2->checkState() == Qt::CheckState::Checked);
                 bool tcName = (mGui->ListCheck3->checkState() == Qt::CheckState::Checked);
-                updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
+                bool dependentName = (mGui->ListCheck4->checkState() == Qt::CheckState::Checked);
+                updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
             }
         });
         connect(mGui->ListCheck1, &QCheckBox::stateChanged, [=](int check) {
             bool sfc = check;
             bool vehicle = (mGui->ListCheck2->checkState() == Qt::CheckState::Checked);
             bool tcName = (mGui->ListCheck3->checkState() == Qt::CheckState::Checked);
-            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
+            bool dependentName = (mGui->ListCheck4->checkState() == Qt::CheckState::Checked);
+            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
         });
         connect(mGui->ListCheck2, &QCheckBox::stateChanged, [=](int check) {
             bool sfc = (mGui->ListCheck1->checkState() == Qt::CheckState::Checked);
             bool vehicle = check;
             bool tcName = (mGui->ListCheck3->checkState() == Qt::CheckState::Checked);
-            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
+            bool dependentName = (mGui->ListCheck4->checkState() == Qt::CheckState::Checked);
+            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
         });
         connect(mGui->ListCheck3, &QCheckBox::stateChanged, [=](int check) {
             bool sfc = (mGui->ListCheck1->checkState() == Qt::CheckState::Checked);
             bool vehicle = (mGui->ListCheck2->checkState() == Qt::CheckState::Checked);
             bool tcName = check;
-            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
+            bool dependentName = (mGui->ListCheck4->checkState() == Qt::CheckState::Checked);
+            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
+        });
+        connect(mGui->ListCheck4, &QCheckBox::stateChanged, [=](int check) {
+            bool sfc = (mGui->ListCheck1->checkState() == Qt::CheckState::Checked);
+            bool vehicle = (mGui->ListCheck2->checkState() == Qt::CheckState::Checked);
+            bool tcName = (mGui->ListCheck3->checkState() == Qt::CheckState::Checked);
+            bool dependentName = check;
+            updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
         });
         connect(mGui->AutoCompleteDisplay, &QLineEdit::returnPressed, [=]() {
             QString currentText = mGui->AutoCompleteDisplay->text();
@@ -470,15 +481,30 @@ void Dialog::connectAutoComplete(const bool& state) {
         });
         connect(mGui->SelectKeyword, &QComboBox::currentIndexChanged, [=](const int index) {
             QString selectKeyword = (index == 0) ? ("") : (mGui->SelectKeyword->currentText());
-            QString currentText = selectKeyword + mGui->AutoCompleteDisplay->text();
-            mGui->AutoCompleteDisplay->setText(currentText);
+            QString currentText = mGui->AutoCompleteDisplay->text();
+            for (const auto& keyword : getProperty(DataTypeAutoCompleteListKeyword).toStringList()) {
+                currentText.remove(keyword);
+            }
+            QStringList useOnlykeyword = getProperty(DataTypeAutoCompleteListUseOnlyKeyword).toStringList();
+            if (useOnlykeyword.contains(selectKeyword)) {
+                mGui->AutoCompleteDisplay->setText(selectKeyword);
+            } else {
+                mGui->AutoCompleteDisplay->setText(selectKeyword + currentText);
+            }
+            QStringList keywordList = getProperty(DataTypeAutoCompleteListKeyword).toStringList();
         });
         connect(mGui->AutoCompleteList, &QListWidget::itemPressed, [=](QListWidgetItem* item) {
             if (item) {
                 int index = mGui->SelectKeyword->currentIndex();
                 QString selectKeyword = (index == 0) ? ("") : (mGui->SelectKeyword->currentText());
-                QString currentText = selectKeyword + item->text();
-                mGui->AutoCompleteDisplay->setText(currentText);
+                QString currentText = item->text();
+
+                QStringList useOnlykeyword = getProperty(DataTypeAutoCompleteListUseOnlyKeyword).toStringList();
+                if (useOnlykeyword.contains(selectKeyword)) {
+                    mGui->AutoCompleteDisplay->setText(currentText);
+                } else {
+                    mGui->AutoCompleteDisplay->setText(selectKeyword + currentText);
+                }
             }
         });
         connect(mGui->AutoCompleteList, &QListWidget::itemDoubleClicked, [=](QListWidgetItem* item) {
@@ -504,7 +530,7 @@ void Dialog::connectAutoCompleteNormal(const bool& state) {
         connect(mGui->AutoCompleteNormalInput, &QLineEdit::textChanged, [=](const QString& text) {
             int dialogType = getProperty(DataTypeDialogType).toInt();
             setProperty(DataTypeAutoCompleteListInput, text);
-            updateAutoCompleteSuggestionsList(true, false, false, false);
+            updateAutoCompleteSuggestionsList(true, false, false, false, false);
         });
         connect(mGui->AutoCompleteNormalInput, &QLineEdit::returnPressed, [=]() {
             emit mGui->AutoCompleteNormalList->itemDoubleClicked(new QListWidgetItem(mGui->AutoCompleteNormalInput->text()));
@@ -750,7 +776,8 @@ void Dialog::refreshViewLog(const int& refreshType) {
     }
 }
 
-void Dialog::updateAutoCompleteSuggestionsList(const bool& normal, const bool& sfc, const bool& vehicle, const bool& tcName) {
+void Dialog::updateAutoCompleteSuggestionsList(const bool& normal, const bool& sfc, const bool& vehicle, const bool& tcName,
+                                               const bool& dependentName) {
     QStringList autoCompleteList;
 
     if (normal) {
@@ -766,6 +793,9 @@ void Dialog::updateAutoCompleteSuggestionsList(const bool& normal, const bool& s
         }
         if (tcName) {
             autoCompleteList.append(getProperty(DataTypeAutoCompleteListTCName).toStringList());
+        }
+        if (dependentName) {
+            autoCompleteList.append(getProperty(DataTypeAutoCompleteListDependentName).toStringList());
         }
     }
 
@@ -1055,7 +1085,7 @@ bool Dialog::updateViewLog(const QVariantList& info) {
 }
 
 bool Dialog::updateAutoComplete(const QVariantList& info) {
-    if (info.size() != 6) {
+    if (info.size() != 8) {
         return false;
     }
     updateDisplay(DisplayTypeAutoComplete, info.at(0).toString());
@@ -1064,20 +1094,24 @@ bool Dialog::updateAutoComplete(const QVariantList& info) {
     QStringList sfcList = info.at(2).toStringList();
     QStringList vehicleList = info.at(3).toStringList();
     QStringList tcNameList = info.at(4).toStringList();
-    QStringList keywordList = info.at(5).toStringList();
+    QStringList dependentNameList = info.at(5).toStringList();
+    QStringList keywordList = info.at(6).toStringList();
+    QStringList useOnlykeywordList = info.at(7).toStringList();
 
     setProperty(DataTypeAutoCompleteListInput, inputStr);
     setProperty(DataTypeAutoCompleteListSfc, sfcList);
     setProperty(DataTypeAutoCompleteListVehicle, vehicleList);
     setProperty(DataTypeAutoCompleteListTCName, tcNameList);
+    setProperty(DataTypeAutoCompleteListDependentName, dependentNameList);
     setProperty(DataTypeAutoCompleteListKeyword, keywordList);
+    setProperty(DataTypeAutoCompleteListUseOnlyKeyword, useOnlykeywordList);
 
     mGui->AutoCompleteInput->setText(inputStr);
 
     int dialogType = getProperty(DataTypeDialogType).toInt();
     if (dialogType == DialogTypeNodeView) {
         mGui->AutoCompleteListCheck->setVisible(false);
-        updateAutoCompleteSuggestionsList(false, true, false, false);
+        updateAutoCompleteSuggestionsList(false, true, false, false, false);
     } else {
         mGui->AutoCompleteListCheck->setVisible(true);
         bool keyword = (keywordList.size() > 0);
@@ -1100,11 +1134,16 @@ bool Dialog::updateAutoComplete(const QVariantList& info) {
         mGui->ListCheck3->setEnabled(tcName);
         mGui->ListCheck3->setText("TCName");
 
+        bool dependentName = (dependentNameList.size() > 0);
+        mGui->ListCheck4->setCheckState((dependentName) ? (Qt::CheckState::Checked) : (Qt::CheckState::Unchecked));
+        mGui->ListCheck4->setEnabled(dependentName);
+        mGui->ListCheck4->setText("DependentName");
+
         mGui->AutoCompleteListCheckTitle->setText("[Signal Type]");
         mGui->AutoCompleteInputTitle->setText("Search :");
         mGui->AutoCompleteDisplayTitle->setText("Select  :");
 
-        updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName);
+        updateAutoCompleteSuggestionsList(false, sfc, vehicle, tcName, dependentName);
     }
 
     return true;
@@ -1126,7 +1165,7 @@ bool Dialog::updateAutoCompleteNormal(const QVariantList& info) {
     mGui->AutoCompleteNormalInput->setVisible(dialogType != DialogTypeGenType);
     mGui->AutoCompleteNormalInput->setText(inputStr);
 
-    updateAutoCompleteSuggestionsList(true, false, false, false);
+    updateAutoCompleteSuggestionsList(true, false, false, false, false);
 
     return true;
 }

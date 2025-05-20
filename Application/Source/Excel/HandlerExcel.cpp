@@ -35,6 +35,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressDependentName, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum, QVariant(""));

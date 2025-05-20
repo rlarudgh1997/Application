@@ -223,7 +223,7 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::OutputSignal)) {
         keywordPattern = {
-            qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
+            // qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
             qMakePair(QString("collect"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Collect)),
             qMakePair(QString("delay"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay)),
         };

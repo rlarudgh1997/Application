@@ -84,6 +84,7 @@ void ControlExcel::initNormalData() {
         }
         keywordTypeInfo.append(keywordString);
     }
+    // updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUseOnlyKeywordInfo, keywordTypeInfo);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo, keywordTypeInfo);
 }
 
@@ -634,6 +635,7 @@ void ControlExcel::updateAutoCompleteName() {
 
     QStringList tcNameList;
     QStringList cofigNameList;
+    QStringList dependentNameList;
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
         for (const auto& rowDataList : getData(sheetIndex).toList()) {
             if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
@@ -645,6 +647,10 @@ void ControlExcel::updateAutoCompleteName() {
                 text = columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName));
                 ivis::common::getRemoved(text, mergeInfos);
                 cofigNameList.append(text);
+            } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) {
+                text = columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName));
+                ivis::common::getRemoved(text, mergeInfos);
+                dependentNameList.append(text);
             } else {
                 text = columnDataList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName));
                 ivis::common::getRemoved(text, mergeInfos);
@@ -652,6 +658,11 @@ void ControlExcel::updateAutoCompleteName() {
             }
         }
     }
+
+    // qDebug() << "updateAutoCompleteName";
+    // qDebug() << "\t TCName        :" << tcNameList;
+    // qDebug() << "\t ConfigName    :" << cofigNameList;
+    // qDebug() << "\t DependentName :" << dependentNameList;
 
     // Update : TCName
     tcNameList.sort();
@@ -665,9 +676,11 @@ void ControlExcel::updateAutoCompleteName() {
     cofigNameList.removeDuplicates();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressConfigName, cofigNameList, true);
 
-    // qDebug() << "updateAutoCompleteName";
-    // qDebug() << "\t TCName     :" << tcNameList;
-    // qDebug() << "\t ConfigName :" << cofigNameList;
+    // Update : DependentName
+    dependentNameList.sort();
+    dependentNameList.removeAll("");
+    dependentNameList.removeDuplicates();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressDependentName, dependentNameList, true);
 }
 
 void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QString& vehicleType, const int& columnIndex) {
@@ -750,6 +763,10 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
+                signalIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputSignal);
+                signalName = ExcelUtil::instance().data()->isCurrentCellText(sheetIndex, rowIndex, signalIndex);
+            }
             break;
         }
         default: {
