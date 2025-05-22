@@ -12,6 +12,8 @@ from .SignalData import SignalData
 class SignalCollection:
     def __init__(self, signal_objects={}):
         self.signals = signal_objects
+        self.gen_type = "NotDefined"
+        self.delay = 0
         self.all_case = []
         self.satisfy_case = []
         self.not_trigger_case = []
@@ -23,12 +25,17 @@ class SignalCollection:
         lines = input_str.strip().splitlines()
         i = 0
         signalOrder = 0
-        gen_type = "NotDefined"
         while i < len(lines):
-            if "TcGenType" in lines[i]:
-                gen_type = lines[i].split(":")[1].strip()
+            if "TcGenType   : " in lines[i]:
+                self.gen_type = lines[i].split(":")[1].strip()
                 i += 1
-            elif "InputSignalName" in lines[i]:
+            elif "Delay   : " in lines[i]:
+                try:
+                    self.delay = int(lines[i].split(":")[1].strip())
+                except ValueError:
+                    print("Fail to change delay string to int.")
+                i += 1
+            elif "InputSignalName   : " in lines[i]:
                 name = lines[i].split(":")[1].strip()
                 data_type = lines[i + 1].split(":")[1].strip()
                 keyword_type = lines[i + 2].split(":")[1].strip()
@@ -40,7 +47,6 @@ class SignalCollection:
                 tmp_value_enum = ":".join(lines[i + 5].split(":")[1:]).strip()
                 value_enum = [item.strip() for item in tmp_value_enum.split(",")]
                 signal_objects[name] = SignalData(
-                    gen_type,
                     name,
                     data_type,
                     keyword_type,

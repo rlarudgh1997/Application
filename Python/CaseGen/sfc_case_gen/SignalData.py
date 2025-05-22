@@ -8,7 +8,6 @@ This module provides Data for VSM or SFC Signal
 class SignalData:
     def __init__(
         self,
-        gen_type,
         name,
         data_type,
         keyword_type,
@@ -17,7 +16,6 @@ class SignalData:
         precondition_idx,
         value_enum,
     ):
-        self.gen_type = gen_type
         self.InputSignalName = name
         self.InputDataType = data_type
         self.InputKeywordType = keyword_type

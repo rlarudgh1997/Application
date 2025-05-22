@@ -7,7 +7,7 @@
 #include <QRegularExpression>
 #include <QRandomGenerator>
 
-#define USE_PARSING_KEYWORD_OLD
+// #define USE_PARSING_KEYWORD_OLD
 
 const QString VEHICLE_TYPE_ICV = QString("ICV");
 const QString VEHICLE_TYPE_EV = QString("EV");
@@ -1047,16 +1047,12 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
             dataInfo[keywordType].removeDuplicates();
         }
 
-#if 1
+#if 0
         bool log = false;
         log = true;
         if (log) {
             qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
             qDebug() << "isCustomValueInfo :" << normal;
-#if 0  // defined(USE_PARSING_KEYWORD_OLD)
-            qDebug() << "\t Joined      :" << joined;
-            qDebug() << "\t SplitValue  :" << splitValue;
-#endif
             qDebug() << "\t KeywordType :" << ExcelUtil::instance().data()->isKeywordString(keywordType) << keywordType;
             qDebug() << "\t FrontValue  :" << frontValueList.size() << frontValueList;
             qDebug() << "\t RearValue   :" << rearValueList.size() << rearValueList;
@@ -1349,7 +1345,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         qDebug() << "Fail to - all data size : 0";
     }
 
-#if 1
+#if 0
     bool log = true;
     if (log) {
         qDebug() << "\n";
@@ -1446,10 +1442,10 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
         // qDebug() << "\t Max         : " << maxValue;
     }
 
-#if 1
+#if 0
     qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     for (const auto& key : dataInfo.keys()) {
-        qDebug() << "\t KeywordInfo[" << ExcelUtil::instance().data()->isKeywordString(key) << "] :" << dataInfo[key];
+        qDebug() << "\t KeywordInfo        :" << ExcelUtil::instance().data()->isKeywordString(key) << key << dataInfo[key];
     }
     qDebug() << "\t isValidUniqueValue :" << result;
     qDebug() << "\t\t DataType    : " << dataType;
@@ -1470,130 +1466,6 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     if (dataInfo.size() < 2) {
         return validData;
     }
-
-
-    // for (const auto& key : dataInfo.keys()) {
-    //     QMap<int, QStringList> valueList = {{key, dataInfo[key]}};
-    //     QStringList validValue = isValidUniqueValue(dataType, valueList);
-    //     validData.append(validValue);
-    // }
-
-    // qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    // qDebug() << "isMultiValidUniqueValue";
-    // for (const auto& key : dataInfo.keys()) {
-    //     qDebug() << "\t Data      :" << ExcelUtil::instance().data()->isKeywordString(key) << key;
-    //     qDebug() << "\t           :" << dataInfo[key] << "\n";
-    // }
-    // qDebug() << "\n";
-    // qDebug() << "\t ValidData :" << validData.size() << validData;
-    // qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
-
-
-    auto toNumber = [&](const QStringList& numberStrList) {
-        QList<qint64> numberList;
-        for (const auto& val : numberStrList) {
-            bool ok = false;
-            qint64 number = val.toLongLong(&ok);
-            if (ok) {
-                numberList.append(number);
-                // qDebug() << "Fail to - change number :" << val << "->" << number;
-            }
-        }
-        return numberList;
-    };
-
-    qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    qDebug() << "isMultiValidUniqueValue";
-
-    QStringList candidateList;
-    for (const auto& key : dataInfo.keys()) {
-        QMap<int, QStringList> currDataInfo = {{key, dataInfo[key]}};
-        candidateList.append(isValidUniqueValue(dataType, currDataInfo));
-        qDebug() << "\t Data          :" << ExcelUtil::instance().data()->isKeywordString(key) << key;
-        qDebug() << "\t               :" << dataInfo[key] << "\n";
-    }
-
-    if (candidateList.isEmpty()) {
-        return validData;
-    }
-
-    qDebug() << "\t CandidateList :" << candidateList.size() << candidateList << "\n";
-
-    candidateList.removeDuplicates();
-    const auto candidateNumberList = toNumber(candidateList);
-
-    // 2. 후보값에서 모든 키워드 조건을 동시에 만족하는 값 찾기
-    for (const auto& candidate : candidateNumberList) {
-        bool isValid = true;
-        for (const auto& key : dataInfo.keys()) {
-            int keywordType = key;
-            QStringList valueList = dataInfo[key];
-
-            const auto minMaxValue = isMinMaxValue(valueList, true);
-            const auto minValue = minMaxValue.first;
-            const auto maxValue = minMaxValue.second;
-            const auto numberList = toNumber(valueList);
-
-            if (numberList.isEmpty()) {
-                isValid = false;
-                break;
-            }
-
-            switch (keywordType) {
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual): {
-                    if ((candidate < minValue) == false) {
-                        isValid = false;
-                    }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
-                    if ((candidate > maxValue) == false) {
-                        isValid = false;
-                    }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
-                    if (numberList.contains(candidate)) {
-                        isValid = false;
-                    }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
-                    if ((candidate >= minValue) && (candidate <= maxValue)) {
-                        isValid = false;
-                    }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
-                    if (numberList.contains(candidate)) {
-                        isValid = false;
-                    }
-                    break;
-                }
-                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-
-            if (isValid == false) {
-                break;
-            }
-        }
-
-        if (isValid) {
-            validData.append(QString::number(candidate));
-            break;  // 유효한 값 하나 찾으면 종료
-        }
-    }
-
 
 #if defined(USE_PARSING_KEYWORD_OLD)
     const int maxTryCount = 1000;
@@ -1728,10 +1600,116 @@ QStringList SignalDataManager::isMultiValidUniqueValue(const int& dataType, cons
     qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
 #else
+    auto toNumber = [&](const QStringList& numberStrList) {
+        QList<qint64> numberList;
+        for (const auto& val : numberStrList) {
+            bool ok = false;
+            qint64 number = val.toLongLong(&ok);
+            if (ok) {
+                numberList.append(number);
+                // qDebug() << "Fail to - change number :" << val << "->" << number;
+            }
+        }
+        return numberList;
+    };
 
+    QStringList candidateList;
+    for (const auto& key : dataInfo.keys()) {
+        QMap<int, QStringList> currDataInfo = {{key, dataInfo[key]}};
+        candidateList.append(isValidUniqueValue(dataType, currDataInfo));
+        // qDebug() << "\t Data          :" << ExcelUtil::instance().data()->isKeywordString(key) << key;
+        // qDebug() << "\t               :" << dataInfo[key] << "\n";
+    }
 
+    if (candidateList.isEmpty()) {
+        return validData;
+    }
+
+    candidateList.removeDuplicates();
+    const auto candidateNumberList = toNumber(candidateList);
+
+    for (const auto& candidate : candidateNumberList) {
+        bool isValid = true;
+        for (const auto& key : dataInfo.keys()) {
+            int keywordType = key;
+            QStringList valueList = dataInfo[key];
+
+            const auto minMaxValue = isMinMaxValue(valueList, true);
+            const auto minValue = minMaxValue.first;
+            const auto maxValue = minMaxValue.second;
+            const auto numberList = toNumber(valueList);
+
+            if (numberList.isEmpty()) {
+                isValid = false;
+                break;
+            }
+
+            switch (keywordType) {
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomMoreThanEqual): {
+                    if ((candidate < minValue) == false) {
+                        isValid = false;
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomUnder):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomLessThanEqual): {
+                    if ((candidate > maxValue) == false) {
+                        isValid = false;
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomFlow):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomTwoWay): {
+                    if (numberList.contains(candidate)) {
+                        isValid = false;
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomRange): {
+                    if ((candidate >= minValue) && (candidate <= maxValue)) {
+                        isValid = false;
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotRange):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNotFlow):
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomNot): {
+                    if (numberList.contains(candidate)) {
+                        isValid = false;
+                    }
+                    break;
+                }
+                case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomDontCare): {
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+
+            if (isValid == false) {
+                break;
+            }
+        }
+
+        if (isValid) {
+            validData.append(QString::number(candidate));  // 유효한 값 하나만 추가
+            break;
+        }
+    }
+
+#if 0
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+    qDebug() << "isMultiValidUniqueValue :" << dataType;
+    qDebug() << "\t CandidateList :" << candidateList.size() << candidateList << "\n";
+    for (const auto& key : dataInfo.keys()) {
+        qDebug() << "\t\t KeywordInfo   :" << ExcelUtil::instance().data()->isKeywordString(key) << key << dataInfo[key];
+    }
+    qDebug() << "\t ValidData     :" << validData;
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
 #endif
-
+#endif
 
     return validData;
 }
@@ -1784,7 +1762,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
     QMap<int, QStringList> dataInfo = isCustomValueInfo(currOriginData, normal);
     QPair<QStringList, QStringList> valueInfo;
 
-#if 1
+#if 0
     bool log = false;
     // log = ((normal == false) && (signalName == "Vehicle.CV.Down_Hill_Cruise.Input_DHCToleranceValue"));
     log = true;
@@ -1811,7 +1789,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
         valueInfo = isValidValueList(notTriggerType, otherAllData, dataInfo);
     }
 
-#if 1
+#if 0
     if (log) {
         qDebug() << "\n";
         qDebug() << "\t ValueInfo    :" << valueInfo.first;  // ConvertData

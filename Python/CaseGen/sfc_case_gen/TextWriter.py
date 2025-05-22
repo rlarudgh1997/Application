@@ -131,6 +131,8 @@ class TextWriter:
             self.json_data["InputSignalList"] = signal_name_list
             self.json_data["PreconditionOrder"] = user_input_order_list
             self.json_data["InputEmptyList"] = input_empty_list
+            if self.instance.delay != 0:
+                self.json_data["Delay"] = self.instance.delay
             return True
         else:
             print("The instance is NOT of type SignalCollection.")

@@ -356,6 +356,7 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
         qDebug() << (QString(120, '>'));
         qDebug() << "[Gen TC Result Info]";
         auto resultInfo = readGenTCResultInfo();
+        clearGenTCResultInfo();
         for (const auto& key : resultInfo.keys()) {
             QPairString moduleInfo = resultInfo[key];
             qDebug() << "[" << moduleInfo.first << "] :" << moduleInfo.second;
@@ -483,7 +484,7 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
             selectedItems = tempSelItems;
         }
     }
-    qDebug() << "parsingModules :" << selectedItems;
+    // qDebug() << "parsingModules :" << selectedItems;
 
     setSelectModules(selectedItems);
     setRemainingModules(selectedItems);
