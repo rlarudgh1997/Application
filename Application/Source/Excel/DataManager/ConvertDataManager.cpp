@@ -2341,12 +2341,24 @@ QPair<QStringList, QStringList> ConvertDataManager::getMergedInputDataInfo(const
             }
             continue;  // 기존의 [Sheet] 포함된 내부 signal/data는 무시
         }
-
         // [Sheet] 사용하는 case에 존재하는 input signal/data 추가하는 로직 (중복 아닌 경우 추가)
         if (!duplicatedSignalCheckList.contains(signal)) {
+            // origin signal이 [Sheet]의 inputSignal에 없는 경우에는 append
             duplicatedSignalCheckList.insert(signal);
             mergedSignalList.append(signal);
             mergedDataList.append(data);
+        } else {
+            // origin signal이 [Sheet]의 inputSignal과 중복되면, origin Signal의 InputData를 사용(origin 우선 사용 정책)
+            int index = mergedSignalList.indexOf(signal);
+            if (index == -1) {
+                qWarning() << "Error: Origin Signal is not found in [Sheet] inputSignal list.";
+                return retVal;
+            }
+            if (index >= mergedDataList.size()) {
+                qWarning() << "Error: datalist does not have a corresponding index.";
+                return retVal;
+            }
+            mergedDataList[index] = data;
         }
     }
 

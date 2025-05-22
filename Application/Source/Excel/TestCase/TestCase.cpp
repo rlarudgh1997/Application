@@ -272,9 +272,9 @@ int TestCase::excuteTestCase(const int& excuteType) {
 
 void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& text) {
     bool graphicsMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGraphicsMode).toBool();
-    if (graphicsMode == false) {
-        return;
-    }
+    // if (graphicsMode == false) {
+    //     return;
+    // }
 
     QStringList totalModules = getSelectModules();
     QStringList remainingModules = getRemainingModules();
@@ -286,6 +286,8 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
 
     QStringList genTCInfo = getGenTCInfo();
     int testResultType = ivis::common::TestResultTypeEnum::TestResultTypeUpdate;
+    bool resultInfoLog = false;
+    static QString moudleName;
 
     switch (excuteType) {
         case ExcuteTypeParsingAppMode: {
@@ -294,6 +296,7 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             break;
         }
         case ExcuteTypeExcelOpen: {
+            moudleName = currentModule;
             genTCInfo.append(QString("[%1]").arg(currentModule));
             genTCInfo.append(QString("        - Opening Excel file."));
             break;
@@ -316,6 +319,8 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             genTCInfo.append(QString("        - File : %1").arg(text));
             genTCInfo.append(QString("        - Result : %1").arg(((text.size() == 0)) ? ("FAIL") : ("PASS")));
             genTCInfo.append(QString(170, '-'));
+            setGenTCResultInfo(isSizeGenTCResultInfo(), QPairString(moudleName, text));
+            moudleName.clear();
             break;
         }
         case ExcuteTypeCompleted: {
@@ -334,10 +339,30 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             genTCInfo.append(QString("COMPLETE : FAIL"));
             break;
         }
+        case ExcuteTypeParsingModule: {
+            if (graphicsMode == false) {
+                resultInfoLog = true;
+            }
+            break;
+        }
         default: {
             testResultType = ivis::common::TestResultTypeEnum::TestResultTypeInvalid;
             break;
         }
+    }
+
+    if (resultInfoLog) {
+        qDebug() << "\033[32m";
+        qDebug() << (QString(120, '>'));
+        qDebug() << "[Gen TC Result Info]";
+        auto resultInfo = readGenTCResultInfo();
+        for (const auto& key : resultInfo.keys()) {
+            QPairString moduleInfo = resultInfo[key];
+            qDebug() << "[" << moduleInfo.first << "] :" << moduleInfo.second;
+        }
+        qDebug() << "\n";
+        qDebug() << (QString(120, '<'));
+        qDebug() << "\n\033[0m" << "\n\n";
     }
 
     if (testResultType != ivis::common::TestResultTypeEnum::TestResultTypeInvalid) {

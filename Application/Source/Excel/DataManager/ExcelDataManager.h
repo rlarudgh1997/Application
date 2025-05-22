@@ -98,7 +98,7 @@ public:
                              const bool& insertBefore = false);
     void updateOutputDataInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                               const QList<QStringList>& outputList);
-    bool isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList);
+    bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList);
 
 private:
     explicit ExcelDataManager();

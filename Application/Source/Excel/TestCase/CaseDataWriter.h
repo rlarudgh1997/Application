@@ -406,7 +406,7 @@ private:
             mStream << "# OF THE POSSIBILITY OF SUCH DAMAGES.\n";
             mStream << "#\n";
             mStream << "# [TC file last modification information]\n";
-            mStream << QString("#   Date   : %1\n").arg(currentTime.toString("yyyy-MM-dd hh:mm:ss"));
+            // mStream << QString("#   Date   : %1\n").arg(currentTime.toString("yyyy-MM-dd hh:mm:ss"));
             mStream << QString("#   User   : %1\n").arg(getUserName());
             mStream << QString("#   System : %1\n").arg(QSysInfo::prettyProductName());
             mStream << "#\n\n";

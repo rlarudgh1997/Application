@@ -155,8 +155,8 @@ void ControlExcel::keyEvent(const int& inputType, const int& inputValue) {
     Q_UNUSED(inputType)
     Q_UNUSED(inputValue)
 
-    if (ControlManager::instance()->getCurrentMode() == ivis::common::ScreenEnum::DisplayTypeExcel) {
-	    // Used Terminla Mode : Ctrl+C, Ctrl+ ....
+    if (ControlManager::instance()->getCurrentMode() != ivis::common::ScreenEnum::DisplayTypeExcel) {
+        // Used Terminla Mode : Ctrl+C, Ctrl+ ..
         return;
     }
 

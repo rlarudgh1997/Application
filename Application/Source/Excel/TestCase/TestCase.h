@@ -11,6 +11,7 @@
 #include <QWaitCondition>
 #endif
 
+using QPairString = QPair<QString, QString>;
 class TestCase : public QObject {
     Q_OBJECT
 
@@ -25,6 +26,7 @@ class TestCase : public QObject {
     REGISTER_WRITABLE_VALUE(bool, GenTCResult, false)
     REGISTER_WRITABLE_VALUE(bool, ThreadRunState, true)
     REGISTER_WRITABLE_VALUE(QFileInfo, OpenFile, QFileInfo())
+    REGISTER_WRITABLE_CONTAINER(QMap, int, QPairString, GenTCResultInfo)
 
 public:
     enum {

@@ -616,8 +616,15 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(con
             allIgnSignalContains = true;
         }
         QString data = allInputList.second.at(index);
+#if 1  // Parsing 오류
+        // removeDuplicates() 함수 동작시 리스트 중복(4294967296) 삭제
+        // In  : QList("[CustomRange][4294967296", "4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
+        // Out : QList("[CustomRange][4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
+        allInputInfo[signal].append(data);
+#else
         QStringList dataInfo = data.remove(" ").split(",");
         allInputInfo[signal].append(dataInfo);
+#endif
     }
     for (const auto& signal : caseInputSignalList) {
         if (ivis::common::isContainsString(signal, SFC_IGN_ELAPSED)) {
@@ -627,11 +634,22 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(con
     }
 
     QPair<QStringList, QStringList> inputList;
-    for (auto iter = allInputInfo.cbegin(); iter != allInputInfo.cend(); ++iter) {
-        QString signal = iter.key();
-        QStringList dataInfo = iter.value();
+    for (const auto& key : allInputInfo.keys()) {
+        QString signal = key;
+#if 1  // Parsing 오류
+        QStringList dataList = allInputInfo[key];
+        dataList.removeAll("");
+        dataList.removeDuplicates();
+
+        QStringList dataInfo;
+        for (auto d : dataList) {
+            dataInfo.append(d.remove(" ").split(","));
+        }
+#else
+        QStringList dataInfo = allInputInfo[key];
         dataInfo.removeAll("");
         dataInfo.removeDuplicates();
+#endif
 
         for (const auto& removeSignal : caseInputSignalList) {
             if (removeSignal.compare(signal) == 0) {
@@ -652,10 +670,14 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(con
         inputList.second.append(dontCare);
     }
 
-    // qDebug() << "isInputDataWithoutCaseList :" << tcName << resultName << caseName;
-    // qDebug() << "\t Signal  :" << inputList.first.size() << inputList.first;
-    // qDebug() << "\t Data    :" << inputList.second.size() << inputList.second;
-    // qDebug() << "\n";
+    // qDebug() << "==========================================================================================================";
+    // qDebug() << "isInputDataWithoutCaseList";
+    // qDebug() << "\t TcName :" << tcName;
+    // qDebug() << "\t Result :" << resultName;
+    // qDebug() << "\t Case   :" << caseName;
+    // qDebug() << "\t Signal :" << inputList.first.size() << inputList.first;
+    // qDebug() << "\t Data   :" << inputList.second.size() << inputList.second;
+    // qDebug() << "\n\n";
 
     return inputList;
 }
@@ -1077,25 +1099,28 @@ QPair<QStringList, QStringList> ExcelDataManager::reconstructInputData(const QPa
     return qMakePair(inputSignalList, inputDataList);
 }
 
-bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& configName, const QMap<QString, QString>& inputList) {
-    QList<QStringList> configList = isConfigDataList(configName, other, false);
+bool ExcelDataManager::isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList) {
+    bool allData = true;  // true : Config 컬럼 전체 데이터, false : InputSingnal, InputData 컬럼 데이터만 구성
+    QList<QStringList> configList = isConfigDataList(configName, allData, false);
     QMap<int, QPair<QStringList, QStringList>> inputMap;
     QStringList signalList;
     QStringList dataList;
 
-    // other = false
+    // allData = false
     // configList : 시그널 리스트에서 시그널, 데이터 별로 구성
     // inputList : 시그널과 데이터가 있는지 확인 후 전체가 시그널에 대한 결과를 만족해야 true
 
-    // other = true
+    // allData = true
     // configList : 시그널 리스트에서 andGroup 의 묶음으로 시그널, 데이터 구성
     // inputList : configList 와 동일하게 시그널 구성 되어 있으며 andGroup 별로 시그널, 데이터 하나만 만족해도 결과 true
 
     for (const auto& config : configList) {
-        if (config.size() == 2) {
+#if 0
+        // allData = false 조건을 같이 사용하려면 해당 코드 활성화화
+        if (config.size() == 2) {  // allData = false
             inputMap[0].first.append(config.at(0));
             inputMap[0].second.append(config.at(1));
-        } else if (config.size() == 4) {
+        } else if (config.size() == 4) {  // allData = true
             QString andGroup = config.at(1);
             signalList.append(config.at(2));
             dataList.append(config.at(3));
@@ -1107,6 +1132,20 @@ bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& conf
             }
         } else {
         }
+#else
+        if (config.size() != 4) {
+            continue;
+        }
+        QString andGroup = config.at(1);
+        signalList.append(config.at(2));
+        dataList.append(config.at(3));
+
+        if ((andGroup.compare(getMergeStart()) != 0) && (andGroup.compare(getMerge()) != 0)) {
+            inputMap[inputMap.size()] = qMakePair(signalList, dataList);
+            signalList.clear();
+            dataList.clear();
+        }
+#endif
     }
 
     QMap<QString, bool> resultMap;
@@ -1131,7 +1170,7 @@ bool ExcelDataManager::isValidConfigCheck(const bool& other, const QString& conf
     }
     bool result = false;
     for (int index = 0; index < inputMap.size(); ++index) {
-        QStringList checkSignalList = (other) ? (inputMap[index].first) : (inputList.keys());
+        QStringList checkSignalList = (allData) ? (inputMap[index].first) : (inputList.keys());
         for (const auto& signal : checkSignalList) {
             result = resultMap[signal];
             if (result == false) {
