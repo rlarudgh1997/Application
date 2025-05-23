@@ -240,7 +240,8 @@ int TestCase::excuteTestCase(const int& excuteType) {
         }
         case ExcuteTypeGenTCComplted: {
             if (getRemainingModules().size() == 0) {
-                nextType = (graphicsMode) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
+                bool cliAllModule = getAllModuleSelect();  // CLI 입력시 all 입력하여 전체 모듈 Gen TC 동작상태
+                nextType = ((graphicsMode) || (cliAllModule)) ? (ExcuteTypeCompleted) : (ExcuteTypeParsingModule);
             } else {
                 nextType = ExcuteTypeExcelOpen;
             }
@@ -261,6 +262,9 @@ int TestCase::excuteTestCase(const int& excuteType) {
 
     if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGenerateStart).toBool()) {
         updateTestCaseExcuteInfo(nextType, text);
+        if ((graphicsMode == false) && (getAllModuleSelect()) && (nextType == ExcuteTypeCompleted)) {
+            nextType = ExcuteTypeExit;
+        }
     }
 
     // qDebug() << (QString(120, '='));
@@ -326,6 +330,9 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
         case ExcuteTypeCompleted: {
             genTCInfo.append(QString("TC generation complete."));
             genTCInfo.append(QString("COMPLETE : %1").arg((getGenTCResult()) ? ("PASS") : ("FAIL")));
+            if ((graphicsMode == false) && (getAllModuleSelect())) {
+                resultInfoLog = true;
+            }
             break;
         }
         case ExcuteTypeStop: {
@@ -382,7 +389,8 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
 
 bool TestCase::parsingOptions(const QStringList& arguments) {
     const QString helpInfo("HELP");
-    const QString tcCheckInfo("ALL");
+    const QString moduleAllInfo("ALL");
+    const QString tcCheckInfo("CHECKALL");
     const QMap<QString, int> genTypeInfo = QMap<QString, int>({
         {"DEFAULT", ivis::common::GenTypeEnum::GenTypeDefault},
         {"NEGATIVE", ivis::common::GenTypeEnum::GenTypeNegativePositive},
@@ -400,6 +408,12 @@ bool TestCase::parsingOptions(const QStringList& arguments) {
     }
 
     // CLI Mode : all
+    if (currArguments.indexOf(moduleAllInfo) >= 0) {
+        currArguments.removeAll(moduleAllInfo);
+        setAllModuleSelect(true);
+    }
+
+    // CLI Mode : tc check all
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeCLIModeTCCheck, false);
     if (currArguments.indexOf(tcCheckInfo) >= 0) {
         currArguments.removeAll(tcCheckInfo);
@@ -464,11 +478,16 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
     if (graphicsMode) {
         selectedItems = arguments;
     } else {
-        for (const auto& arg : arguments) {
-            for (const auto& item : itemList) {
-                if (arg.compare(item, Qt::CaseInsensitive) == 0) {    // 대소문자 구분 없이 비교
-                    selectedItems.append(item);
-                    break;
+        if (getAllModuleSelect()) {
+            selectedItems = itemList.mid(1, 2);
+            // selectedItems = itemList.mid(1, itemList.size());
+        } else {
+            for (const auto& arg : arguments) {
+                for (const auto& item : itemList) {
+                    if (arg.compare(item, Qt::CaseInsensitive) == 0) {    // 대소문자 구분 없이 비교
+                        selectedItems.append(item);
+                        break;
+                    }
                 }
             }
         }
@@ -523,11 +542,12 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 
     if (excuteType == ExcuteTypeHelpMode) {
         displayText.append(QString("\n") + QString(lineCount, '=') + QString("\n"));
-        displayText.append(QString("Usage: \033[32mApplication gen [AppMode] all [GenType] [Modules]\033[0m\n"));
+        displayText.append(QString("Usage: \033[32mApplication gen [AppMode] all checkAll [GenType] [Modules]\033[0m\n"));
         displayText.append(QString("Options:\n"));
         displayText.append(QString("    gen                CLI Mode Start\n"));
         displayText.append(QString("    [AppMode]          App mode(cv, pv) selection\n"));
-        displayText.append(QString("    all                Select all TC names\n"));
+        displayText.append(QString("    all                All module selection\n"));
+        displayText.append(QString("    checkAll           All tc name sleection\n"));
         displayText.append(QString("    [GenType]          TC gen type(default/negative/positive) Specify all and create\n"));
         displayText.append(QString("    [Modules]          Enter multiple modules(abs_cv aem ...)\n"));
         displayText.append(QString("\n\n") + QString(lineCount, '=') + QString("\n\n\n"));

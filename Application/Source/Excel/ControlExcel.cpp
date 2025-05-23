@@ -97,9 +97,11 @@ void ControlExcel::initControlData() {
     QVariant lastSavedFile = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeLastSavedFilePath);
     updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile, lastSavedFile);
 
+#if 0
     // Construct : SFC, Vehicle SignalName
     auto sfcSignal = SignalDataManager::instance().data()->isSignalListInfo(true);
     auto vehiclSignal = SignalDataManager::instance().data()->isSignalListInfo(false);
+#endif
 }
 
 void ControlExcel::resetControl(const bool& reset) {

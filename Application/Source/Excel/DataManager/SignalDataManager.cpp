@@ -2821,7 +2821,7 @@ QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
     }
     file.close();
 
-#if 0
+#if 1
     qDebug() << "=======================================================================================================";
     int index = 0;
     for (const auto& signal : signalList) {
@@ -2836,67 +2836,10 @@ QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
 
 QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
     ivis::common::CheckTimer checkTimer;
-
-    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-    QStringList typeList;
-    QStringList vehicleTypeList;
-    QString fileNameBase;
+    QStringList fileList;
 
 #if 0
-    ConfigTypeVsmFileNameBasePV    CLU_VSM_%1.Vehicle.%2.vsm
-    ConfigTypeVsmFileNameBaseCV    CLU_VSM_CV_%1.Vehicle.%2.vsm
-
-    ConfigTypeVehicleTypePV        ICV, EV, FCEV, PHEV, HEV
-    ConfigTypeVehicleTypeCV        ICV, EV, FCEV
-
-    ConfigTypeSfcSpecTypePV        AD, AV, CD, CH, EC, HD, PT, ETC, extension
-    ConfigTypeSfcSpecTypeCV        AV, CD, CV, EC, PT, ETC, extension
-
-    ConfigTypeVsmSpecTypePV        AD, AV, CD, CH, EC, HD, PT, CS
-    ConfigTypeVsmSpecTypeCV        CV
-
-    ConfigTypeSystemTypePV         Config, Engineering, Extra, Gateway, HardWire, Micom, TP, Undefined
-
-    isVsmFileInfo(const QString& vehicleName, const QStringList& specType) {
-        QStringList fileName = QStringList();
-        QString vsmPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-        vsmPath.append("/VSM");
-        QString fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
-        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-        if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-            fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBasePV).toString();
-        }
-
-        for (const auto& spec : specType) {
-            if (vehicleName.compare("System") == 0) {
-                fileName.append(QString("%1/%2.%3.vsm").arg(vsmPath).arg(vehicleName).arg(spec));
-            } else {
-                fileName.append(QString("%1/%2").arg(vsmPath).arg(fileNameBase.arg(vehicleName).arg(spec)));
-            }
-        }
-    }
-#endif
-
-    if (appMode == ivis::common::AppModeEnum::AppModeTypePV) {
-        typeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypePV).toStringList();
-        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypePV).toStringList();
-        fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBasePV).toString();
-    } else {
-        typeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcSpecTypeCV).toStringList();
-        vehicleTypeList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVehicleTypeCV).toStringList();
-        fileNameBase = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeVsmFileNameBaseCV).toString();
-    }
-
-    // isSignalFileList();
-
-    if (sfcSignal) {
-    } else {
-        for (const auto& vehicleType : vehicleTypeList) {
-        }
-    }
-
-    QStringList fileList;
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
 
     if (sfcSignal) {
         sfcModelPath.append("/SFC/CV");
@@ -2912,14 +2855,35 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
         fileList.append(sfcModelPath + "/CLU_VSM_CV_SKEL.Vehicle.CV.vsm");
         fileList.append(sfcModelPath + "/CLU_VSM_CV_System.Vehicle.CV.vsm");
     }
+#else
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
 
-    auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-    QStringList moduleList = moduleInfo.keys();
+    if (sfcSignal) {
+        auto moduleInfoList = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true);
+        QStringList moduleList = moduleInfoList.keys();
+        QMap<QString, QString> moduleInfo;
+        int index = 0;
+        for (const auto& key : moduleInfoList.keys()) {
+            qDebug() << index++ << ". SfcInfo :" << key << moduleInfoList[key].second;
+            moduleInfo[key] = moduleInfoList[key].second;
+        }
+    } else {
+        // isVsmFileInfo()
+    }
+
+
+
+
+
+#endif
+
+
+
 
     // QString vehicleType = vehicleTypeList.toStringList().join(", ");
 
     QStringList signalList;
-#if 0
+#if 1
     for (const auto& file : fileList) {
         signalList.append(extractMatchingSignal(file));
     }
@@ -2930,6 +2894,12 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 }
 
 void SignalDataManager::testCode(const QVariantList& arg) {
+#if 1
+    isSignalListInfo(true);
+    // isSignalListInfo(false);
+    return;
+#endif
+
     if (arg.size() == 0) {
         const static QMap<int, QStringList> customData_0 = {
             {0, QStringList({"111", "222",
