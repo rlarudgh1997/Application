@@ -889,7 +889,7 @@ bool Dialog::updateSelectList(const QVariantList& info) {
     int rowIndex = 0;
     int columnIndex = 0;
     bool multiCheck = ((dialogType != DialogTypeSelectTCFile) && (dialogType != DialogTypeSelectLogFile) &&
-                       (dialogType != DialogTypeSelectValueEnumOutput) && (dialogType != DialogTypeSelectValueResult));
+                       /* (dialogType != DialogTypeSelectValueResult) && */ (dialogType != DialogTypeSelectValueEnumOutput));
 
     setProperty(DataTypeMultiCheck, multiCheck);
 

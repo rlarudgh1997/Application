@@ -708,6 +708,25 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
         return;  // Sheet 키워드가 아닌 경우 -> 자동완성 리스트 구성 하지 않음
     }
 
+#if 1
+    QStringList suggestionsDataInfo;
+    int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates;
+    int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs;
+
+    ExcelDataManager::instance().data()->reloadExcelData();
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        auto resultName = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, signalName);
+        if (resultName.size() > 0) {
+            // qDebug() << "AutoCompleteInfo :" << signalName  << resultName;
+            suggestionsDataInfo = resultName;
+            break;
+        }
+    }
+
+    if (suggestionsDataInfo.size() > 0) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult, suggestionsDataInfo, true);
+    }
+#else
     bool update = false;
     QStringList tcNameList = getData(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList();
     for (const auto& tcName : tcNameList) {
@@ -726,7 +745,10 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
         for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
             for (const auto& tcName : ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, true)) {
                 for (const auto& resultName : ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName)) {
-                    suggestionsDataInfo.append(resultName);
+                    // qDebug() << "AutoCompleteInfo :" << signalName << tcName << resultName;
+                    if (signalName == tcName) {
+                        suggestionsDataInfo.append(resultName);
+                    }
                 }
                 if (suggestionsDataInfo.size() > 0) {
                     sheetIndex = endIndex;
@@ -736,6 +758,7 @@ void ControlExcel::updateAutoCompleteTCName(const QString& signalName, const QSt
         }
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTCNameResult, suggestionsDataInfo, true);
     }
+#endif
 }
 
 void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) {
