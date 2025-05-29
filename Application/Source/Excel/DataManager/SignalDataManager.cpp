@@ -540,7 +540,7 @@ QString SignalDataManager::isSignalValueEnum(const QString& signalName, const QS
             resultValue = currentList.at(index);
         }
     }
-    qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
+    // qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
     return resultValue;
 }
 
@@ -2803,9 +2803,9 @@ QStringList SignalDataManager::extractMatchingSignal(const bool& sfcSignal, cons
         groupRegex1 = QRegularExpression(R"(^\s{4}-\s+(SFC\.[\w\.]+):)");  // YML : "    - SFC.*:"
         groupRegex2 = QRegularExpression(R"(^\s{6}dataType:)");            // YML : "      dataType:"
     } else {
-        groupRegex0 = QRegularExpression(R"(^\s*-\s*[\w\.]+:)");           // VSM :"- *:"
-        groupRegex1 = QRegularExpression(R"(^\s{2}signalName:)");          // VSM : "  signalName:"
-        groupRegex2 = QRegularExpression(R"(^\s{2}abstractionName:)");     // VSM : "  abstractionName:"
+        groupRegex0 = QRegularExpression(R"(^\s*-\s*[\w\.]+:)");        // VSM :"- *:"
+        groupRegex1 = QRegularExpression(R"(^\s{2}signalName:)");       // VSM : "  signalName:"
+        groupRegex2 = QRegularExpression(R"(^\s{2}abstractionName:)");  // VSM : "  abstractionName:"
     }
 
 #if 0
@@ -2989,7 +2989,6 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
     signalPrefixList.append("Vehicle.");
     signalPrefixList.append("Vehicle.System.");
 #endif
-
 
     QStringList signalList;
 #if 1

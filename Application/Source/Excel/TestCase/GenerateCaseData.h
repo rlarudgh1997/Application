@@ -91,7 +91,8 @@ private:
                                        const int& resultNumber, const QString& tcName, const int& tcNameNumber,
                                        const int& sheetNumber);
     void appendManualTcToJson();
-    void printCaseSize(const QString& genType);
+    void setTotalTcCnt();
+    void printCaseSize(const QString& genType) const;
 
 private:
     QMap<QString, int> mCaseSizeMap;

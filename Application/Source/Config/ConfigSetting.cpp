@@ -141,6 +141,7 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         case ConfigInfo::ConfigTypeConfigTitle:
         case ConfigInfo::ConfigTypeDependentOnTitle:
         case ConfigInfo::ConfigTypeManualTCTitle:
+        case ConfigInfo::ConfigTypeManualCycleMode:
         case ConfigInfo::ConfigTypeVehicleTypeCV:
         case ConfigInfo::ConfigTypeSfcSpecTypeCV:
         case ConfigInfo::ConfigTypeVehicleTypePV:

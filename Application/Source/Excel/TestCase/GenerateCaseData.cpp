@@ -150,6 +150,7 @@ bool GenerateCaseData::genCase() {
 
         if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC) {
             appendManualTcToJson();
+            setTotalTcCnt();
             continue;
         }
 
@@ -479,6 +480,7 @@ bool GenerateCaseData::genCase() {
             }  // Result 순회 종료
             tcNameCnt++;
         }  // TCName 순회 종료
+        setTotalTcCnt();
     }
     setGenerateCaseDataState(QString("GEN_END"));
     // qDebug() << "@@@@ GenerateCaseDataState: " << getGenerateCaseDataState();
@@ -2100,7 +2102,7 @@ void GenerateCaseData::appendManualTcToJson() {
             continue;
         }
         for (int i = 0; i < initSignalList.size(); i++) {
-            inputList[initSignalList[i]] = initValueList[i];
+            initList[initSignalList[i]] = initValueList[i];
         }
         tcNameJson["InitList"] = initList;
 
@@ -2112,10 +2114,85 @@ void GenerateCaseData::appendManualTcToJson() {
             qDebug() << "Size Error4: appendManualTcToJson";
             continue;
         }
-        for (int i = 0; i < initSignalList.size(); i++) {
+        for (int i = 0; i < outputSignalList.size(); i++) {
             outputListList[outputSignalList[i]] = outputValueList[i];
         }
         tcNameJson["OutputList"] = outputListList;
+
+        QStringList tcFormatList;
+        QString _tcName = QString("  - name : ManualTC[%1] / %2 (%3)")
+                              .arg(cnt, 3, 10, QChar('0'))
+                              .arg(manualTC.getTCName())
+                              .arg(mTotalTestCaseCount + cnt);
+        tcFormatList << _tcName;
+        if (manualTC.getVehicleType().isEmpty() != true) {
+            QString _vehicleType = QString("    tag: %1").arg(manualTC.getVehicleType());
+            tcFormatList << _vehicleType;
+        }
+
+        if (manualTC.getConfigOpt() == true) {
+            QString _configOpt = QString("    config: %1").arg(manualTC.getConfigOpt() ? "true" : "false");
+            tcFormatList << _configOpt;
+        }
+
+        if (manualTC.getRunnableOpt() == true) {
+            QString _runnableOpt = QString("    gcov: %1").arg(manualTC.getRunnableOpt() ? "true" : "false");
+            tcFormatList << _runnableOpt;
+        }
+
+        if (preconditionSignalList.size() != 0) {
+            tcFormatList << "    precondition:";
+            for (int i = 0; i < preconditionSignalList.size(); i++) {
+                QString _preconditionStr = QString("      - %1: %2").arg(preconditionSignalList[i]).arg(preconditionValueList[i]);
+                tcFormatList << _preconditionStr;
+            }
+        }
+
+        if (initSignalList.size() != 0) {
+            tcFormatList << "    init:";
+            for (int i = 0; i < initSignalList.size(); i++) {
+                QString _initStr;
+                if (initValueList[i].contains("E") || initValueList[i].contains("SND")) {
+                    _initStr = QString("      - %1: \"%2\"").arg(initSignalList[i]).arg(initValueList[i]);
+                } else {
+                    _initStr = QString("      - %1: %2").arg(initSignalList[i]).arg(initValueList[i]);
+                }
+                tcFormatList << _initStr;
+            }
+        }
+
+        if (inputSignalList.size() != 0) {
+            tcFormatList << "    input:";
+            for (int i = 0; i < inputSignalList.size(); i++) {
+                QString _inputStr = QString("      - %1: %2").arg(inputSignalList[i]).arg(inputValueList[i]);
+                tcFormatList << _inputStr;
+            }
+        }
+
+        if (manualTC.getCycleOption() == true) {
+            QString _periodStr = QString("      - period: %1").arg(manualTC.getCyclePeriod());
+            QString _deltaStr = QString("      - delta: %1").arg(static_cast<double>(manualTC.getCycleDelta()) / 100.0);
+            QString _durationStr = QString("      - duration: %1").arg(manualTC.getCycleDuration());
+            QString _modeStr = QString("      - mode: %1").arg(manualTC.getCycleMode());
+            tcFormatList << "    cycle:" << _periodStr << _deltaStr << _durationStr << _modeStr;
+        }
+
+        if (outputSignalList.size() != 0) {
+            tcFormatList << "    output:";
+            for (int i = 0; i < outputSignalList.size(); i++) {
+                QString _outputStr;
+                if (outputValueList[i].contains("E") || outputValueList[i].contains("SND")) {
+                    _outputStr = QString("      - %1: \"%2\"").arg(outputSignalList[i]).arg(outputValueList[i]);
+                } else {
+                    _outputStr = QString("      - %1: %2").arg(outputSignalList[i]).arg(outputValueList[i]);
+                }
+                tcFormatList << _outputStr;
+            }
+        }
+
+        QString tcFormat = tcFormatList.join("\n");
+        tcNameJson["TCFormat"] = tcFormat;
+        // qDebug().noquote().nospace() << "tc format:\n" << tcFormat;
         sheetJson[tcNameKey] = tcNameJson;
         cnt++;
     }
@@ -2123,28 +2200,30 @@ void GenerateCaseData::appendManualTcToJson() {
     mAllCaseJson[sheetKey] = sheetJson;
 }
 
-void GenerateCaseData::printCaseSize(const QString& genType) {
+void GenerateCaseData::setTotalTcCnt() {
+    int sum = 0;
+    for (const auto& key : mCaseSizeMap.keys()) {
+        sum += mCaseSizeMap[key];
+    }
+    mTotalTestCaseCount = sum;
+    setCompletedCaseCount(mTotalTestCaseCount);
+}
+
+void GenerateCaseData::printCaseSize(const QString& genType) const {
     qDebug() << "\n\033[31m";
     qDebug() << (QString(120, '=').toLatin1().data());
     qDebug() << "[GenerateCaseData Result] :" << genType.toLatin1().data();
     qDebug() << (QString(120, '-').toLatin1().data());
 
-    int sum = 0;
     int idx = 0;
-    QString allCasekey;
     for (const auto& key : mCaseSizeMap.keys()) {
-        sum += mCaseSizeMap[key];
         qDebug().nospace() << "Case[" << QString::number(idx).rightJustified(2, ' ').toLatin1().data()
                            << "] : " << QString::number(mCaseSizeMap[key]).rightJustified(5, ' ').toLatin1().data() << ",  "
                            << key.toLatin1().data();
         idx++;
     }
-    mTotalTestCaseCount = sum;
-
     qDebug() << (QString(120, '-').toLatin1().data());
-    qDebug() << (QString("Sum of cases => ") + QString::number(sum)).toLatin1().data();
+    qDebug() << (QString("Sum of cases => ") + QString::number(mTotalTestCaseCount)).toLatin1().data();
     qDebug() << (QString(120, '=').toLatin1().data());
     qDebug() << "\n\n\033[0m";
-
-    setCompletedCaseCount(sum);
 }

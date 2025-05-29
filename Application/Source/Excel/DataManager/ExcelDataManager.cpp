@@ -284,11 +284,10 @@ QStringList ExcelDataManager::isParsingDataList(const QStringList& data, const b
 
 QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                                                  const QString& caseName, const bool& origin, const bool& log) {
-    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) ?
-                             (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName)) :
-                             (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
-    const QStringList tcNameData =
-        isExcelSheetData(sheetIndex, columnIndex, origin);
+    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC)
+                                 ? (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName))
+                                 : (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
+    const QStringList tcNameData = isExcelSheetData(sheetIndex, columnIndex, origin);
     const QStringList resultData =
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result), origin);
     const QStringList caseData =
@@ -357,9 +356,9 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QS
 }
 
 QStringList ExcelDataManager::isTCNameDataList(const int& sheetIndex, const bool& all) {
-    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) ?
-                             (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName)) :
-                             (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
+    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC)
+                                 ? (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName))
+                                 : (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
     const auto currentData = isExcelSheetData(sheetIndex, columnIndex, true);
     const bool cliTCCheck = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCLIModeTCCheck).toBool();
     const bool appendAll = ((all) || (cliTCCheck));
@@ -623,9 +622,9 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataWithoutCaseList(con
         }
         QString data = allInputList.second.at(index);
 #if 1  // Parsing 오류
-        // removeDuplicates() 함수 동작시 리스트 중복(4294967296) 삭제
-        // In  : QList("[CustomRange][4294967296", "4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
-        // Out : QList("[CustomRange][4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
+       // removeDuplicates() 함수 동작시 리스트 중복(4294967296) 삭제
+       // In  : QList("[CustomRange][4294967296", "4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
+       // Out : QList("[CustomRange][4294967296", "4294967296", "4294967296]", "[1", "2", "99", "100]")
         allInputInfo[signal].append(data);
 #else
         QStringList dataInfo = data.remove(" ").split(",");
@@ -991,7 +990,7 @@ QList<ManualData> ExcelDataManager::isManualDataList() {
         manualDataList.append(manualData);
     }
 
-#if 1
+#if 0
     qDebug() << "isManualDataList :" << manualDataList.size();
     for (const auto& manualData : manualDataList) {
         qDebug() << "\t TCName        :" << manualData.getTCName();
