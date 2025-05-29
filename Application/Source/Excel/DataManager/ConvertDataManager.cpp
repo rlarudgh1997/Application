@@ -104,6 +104,9 @@ QString ConvertDataManager::excuteConvertDataManager() {
         return QString("Failed to convert All TC Signal Set");
     }
 
+    // NOTE(csh): Dependent On keyword 해석 및 제거 (TC Generate 시 조합에 필요한 Data 아님)
+    interpretDependentOnKeyword();
+
     return QString();
 }
 
@@ -167,8 +170,10 @@ int ConvertDataManager::appendConvertConfigSignalSet() {
             return -1;
         }
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC))) {
+            // qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -361,8 +366,10 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
         }
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "Not support sheet :" << sheetIndex;
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC))) {
+            // qDebug() << "Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -519,6 +526,19 @@ bool ConvertDataManager::appendConvertAllTCSignalSet() {
     return result;
 }
 
+bool ConvertDataManager::interpretDependentOnKeyword() {
+    bool result = false;
+    const int startIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription);
+    const int endIndex = static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax);
+
+    const QString dependentOnKeyword =
+        ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn));
+
+    ExcelDataManager::instance().data()->reloadExcelData();
+
+    return result;
+}
+
 int ConvertDataManager::convertInputSignalSheetKeyword() {
     // return value description
     // -1 : Unexpected Result
@@ -534,8 +554,10 @@ int ConvertDataManager::convertInputSignalSheetKeyword() {
     // Private ~ Output Sheet Loop
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "[convertInputSignalSheetKeyword] Not support sheet :" << sheetIndex;
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC))) {
+            // qDebug() << "[convertInputSignalSheetKeyword] Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -672,8 +694,10 @@ bool ConvertDataManager::convertNonSheetInputSignalKeyword() {
         }
 
         if ((sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription)) ||
-            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs))) {
-            qDebug() << "[convertNonSheetInputSignalKeyword] Not support sheet :" << sheetIndex;
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn)) ||
+            (sheetIndex == static_cast<int>(ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC))) {
+            // qDebug() << "[convertNonSheetInputSignalKeyword] Not support sheet :" << sheetIndex;
             continue;
         }
 
@@ -1123,7 +1147,9 @@ QStringList extractValidEnumString(const QString& vehicleSignal) {
         SignalDataManager::instance().data()->isSignalDataList(vehicleSignal, QStringList(), QString("ICV, EV, FCEV"), dataType);
     QStringList matchingTableList;
     QStringList validMatchValue;
-    if (vehicleSignal.contains("Vehicle.CV")) {
+    if (vehicleSignal.contains("Vehicle.CV") || vehicleSignal.contains("Vehicle.AD") || vehicleSignal.contains("Vehicle.AV") ||
+        vehicleSignal.contains("Vehicle.CD") || vehicleSignal.contains("Vehicle.CH") || vehicleSignal.contains("Vehicle.EC") ||
+        vehicleSignal.contains("Vehicle.HD") || vehicleSignal.contains("Vehicle.WYM")) {
         matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableICV];
         if (matchingTableList.isEmpty()) {
             matchingTableList = dataInfo[ivis::common::InputDataTypeEnum::InputDataTypeMatchingTableEV];
@@ -1617,6 +1643,7 @@ ConvertKeywordInfo ConvertDataManager::interpretInputValueKeyword(const QString&
                 if (tempString.toDouble() || tempString == "0") {
                     convertKeywordInfo.keywordType = ivis::common::KeywordTypeEnum::KeywordType::Not;
                     tempString = QString("%1,%2").arg(tempString).arg(maxValue);
+                    convertKeywordInfo.validInputData += maxValue;
                 } else {
                     processEnum(tempString, inputSignalEnumList);
                     tempString = inputSignalEnumList.join(", ");

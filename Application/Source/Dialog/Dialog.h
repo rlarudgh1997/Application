@@ -79,6 +79,7 @@ public:
         DataTypeDisplayType,
         DataTypePrevDisplayType,
         DataTypeAppMode,
+        DataTypeSelectRadioList,
         DataTypeScreenRect,
         DataTypeSelectAll,
         DataTypeMultiCheck,
@@ -98,6 +99,7 @@ public:
         DialogTypeInvalid = 0,
         DialogTypeAppModeCheck,
         DialogTypeAppModeRadio,
+        DialogTypeCycleMode,
         DialogTypeSelectMoudleInfo,
         DialogTypeSelectTCFile,
         DialogTypeSelectLogFile,
@@ -126,7 +128,7 @@ private:
     enum {
         DisplayTypeInvalid = 0,
         DisplayTypeAppMode,
-        DisplayTypeAppModeRadio,
+        DisplayTypeSelectRadio,
         DisplayTypeSelectList,
         DisplayTypeSelectOption,
         DisplayTypeEnterText,
@@ -135,6 +137,7 @@ private:
         DisplayTypeViewLog,
         DisplayTypeAutoCompleteNormal,
         DisplayTypeAutoComplete,
+        DisplayTypeSelectRadio2,
         DisplayTypeMax,
     };
     enum {
@@ -157,7 +160,8 @@ public:
 private:
     void controlConnet(const int& displayType);
     void connectAppMode(const bool& state);
-    void connectAppModeRadio(const bool& state);
+    void connectSelectRadio(const bool& state);
+    void connectSelectRadio2(const bool& state);
     void connectSelectList(const bool& state);
     void connectSelectOption(const bool& state);
     void connectEnterText(const bool& state);
@@ -178,7 +182,8 @@ private:
                                            const bool& dependentName);
 
     bool updateAppMode(const QVariantList& info);
-    bool updateAppModeRadio(const QVariantList& info);
+    bool updateSelectRadio(const QVariantList& info);
+    bool updateSelectRadio2(const QVariantList& info);
     bool updateSelectList(const QVariantList& info);
     bool updateSelectOption(const QVariantList& info);
     bool updateInputText(const QVariantList& info);
@@ -195,7 +200,8 @@ protected:
 #endif
 
 signals:
-    void signalSelectAppMode(const int& appMode);
+    void signalSelectRadio(const int& selectIndex);
+    void signalSelectRadioValue(const QString& text);
     void signalSelectListItem(const QList<QPair<int, QString>>& selectItem);
     void signalSelectOption(const bool& option1, const QList<QPair<QString, bool>>& option2);
     void signalScrollBarValueChanged(const int& value);

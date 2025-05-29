@@ -28,11 +28,67 @@ ExcelUtil::ExcelUtil() {
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
 }
 
+QString ExcelUtil::isModuleFilePath(const QString& path, const QString& module, const QString& fileExtension) {
+    QDir directory(path);
+    if (directory.exists() == false) {
+        qDebug() << "Fail to - directory does not exist:" << path;
+        return QString();
+    }
+
+    QString modulePath;
+    QStringList subDirectorys = directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString& dirName : subDirectorys) {
+        QString subDirPath = directory.absoluteFilePath(dirName);
+        QString filePath = QDir(subDirPath).filePath(module);
+        QFileInfo fileInfo;
+
+        fileInfo.setFile(filePath);
+
+        if (fileInfo.exists() == false) {
+            continue;
+        }
+
+        if (fileInfo.isDir() == false) {
+            continue;
+        }
+
+        if (fileExtension.size() == 0) {
+            modulePath = QDir(filePath).absolutePath();
+            break;
+        }
+
+#if 1
+        QDir moduleDir(fileInfo.absoluteFilePath());
+        QStringList nameFilters(QString("%1*%2").arg(module).arg(fileExtension));  // ABS_CV_TEMP[CV330].xlsx
+
+        QStringList matchedFiles = moduleDir.entryList(nameFilters, QDir::Files);
+        if (matchedFiles.isEmpty() == false) {
+            filePath = moduleDir.absoluteFilePath(matchedFiles.first());
+            modulePath = filePath;
+            break;
+        }
+#else
+        filePath = QDir(fileInfo.absoluteFilePath()).filePath(module + "*" + fileExtension);
+        fileInfo.setFile(filePath);
+
+        qDebug() << "\t FileInfo :" << fileInfo.isFile() << fileInfo.absoluteFilePath();
+
+        if (fileInfo.isFile()) {
+            modulePath = fileInfo.absoluteFilePath();
+            break;
+        }
+#endif
+    }
+
+    // qDebug() << "isModuleFileInfo :" << modulePath;
+    return modulePath;
+}
+
 QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& yml, const bool& toUpper) {
-    bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
-    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-    QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
-    QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
+    const bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
+    const QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    const QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
+    const QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
     QMap<QString, QPair<QString, QString>> moduleInfo;
 
     // Json Parsing
@@ -56,7 +112,14 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
             for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
                 if (module.isString()) {
                     QString moduleName = (toUpper) ? (module.toString().toUpper()) : (module.toString());
-                    QString modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
+                    QString modulePath;
+                    if (appModeCV) {
+                        modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
+                    } else {
+                        // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(""));  // 폴더
+                        // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".yml"));  // *.yml
+                        modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".xlsx"));  // *.xlsx
+                    }
                     modulePahtList[moduleName] = modulePath;
                 }
             }
@@ -107,6 +170,7 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
                 }
             }
         } else {
+            modulePath.replace(".yml", ".xlsx");  // 경로 찾을때 yml 파일로 찾았을 경우
             moduleInfo[moduleName] = qMakePair(modulePath, QString());
         }
     }
@@ -202,7 +266,7 @@ QList<QPair<QString, int>> ExcelUtil::isKeywordPatternInfo(const int& columnInde
             qMakePair(QString("[Sheet]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Sheet)),
             qMakePair(QString("[Not_Trigger]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::NotTrigger)),
             qMakePair(QString("[Preset]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Preset)),
-            qMakePair(QString("[DependentOn]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn)),
+            qMakePair(QString("[Dependent_On]"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn)),
             qMakePair(QString("delay"), static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Delay)),
         };
     } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData)) {
@@ -764,7 +828,7 @@ QString ExcelUtil::isMaxValue(const bool& doubleType) {
 }
 
 QString ExcelUtil::isValidMaxValue(const QString& signalName, const int& dataType, const int& keywordType,
-                              const QStringList& inputData, const QStringList& valueEnum) {
+                                   const QStringList& inputData, const QStringList& valueEnum) {
     const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
     // qDebug() << "isPreconditionMaxValue :" << signalName;
@@ -916,6 +980,7 @@ void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
     auto descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle).toStringList();
     auto configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle).toStringList();
     auto dependentOnTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDependentOnTitle).toStringList();
+    auto manualTCTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeManualTCTitle).toStringList();
     auto otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
 
     int writeSize = 0;
@@ -943,6 +1008,11 @@ void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
             case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
             case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
                 contentTitle = dependentOnTitle;
+                break;
+            }
+            case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC:
+            case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC: {
+                contentTitle = manualTCTitle;
                 break;
             }
             default: {
@@ -1010,6 +1080,7 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
     const QVariant descTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDescTitle);
     const QVariant configTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeConfigTitle);
     const QVariant dependentOnTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDependentOnTitle);
+    const QVariant manualTCTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeManualTCTitle);
     const QVariant otherTitle = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle);
 
     QList<QVariantList> sheetDataList;
@@ -1029,6 +1100,9 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
             checkTitle = false;
         } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) {
             titleList = dependentOnTitle.toStringList();
+            checkTitle = false;
+        } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+            titleList = manualTCTitle.toStringList();
             checkTitle = false;
         } else {
             titleList = otherTitle.toStringList();
@@ -1076,6 +1150,8 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                             continue;
                         }
                         temp.insert(insertIndex, appendText);
+                    } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+                        // do nothing
                     } else {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
                             insertIndex = 0;             // Befor Index   : TCName

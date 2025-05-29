@@ -69,8 +69,11 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="AppModeRadio">
-    <widget class="QWidget" name="AppModeRadioWidget" native="true">
+   <widget class="QWidget" name="SelectRadio">
+    <widget class="QWidget" name="SelectRadioWidget" native="true">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -79,7 +82,7 @@
        <height>230</height>
       </rect>
      </property>
-     <widget class="QPushButton" name="AppModeRadioOK">
+     <widget class="QPushButton" name="SelectRadioOK">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -92,7 +95,7 @@
        <string>OK</string>
       </property>
      </widget>
-     <widget class="QFrame" name="AppModeRadioFrame">
+     <widget class="QFrame" name="SelectRadioFrame">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -125,7 +128,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton1">
+       <widget class="QRadioButton" name="SelectRadioButton1">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -154,7 +157,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton2">
+       <widget class="QRadioButton" name="SelectRadioButton2">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -183,7 +186,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton3">
+       <widget class="QRadioButton" name="SelectRadioButton3">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -212,7 +215,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton4">
+       <widget class="QRadioButton" name="SelectRadioButton4">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -244,7 +247,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QLabel" name="AppModeRadioTitle">
+       <widget class="QLabel" name="SelectRadioTitle">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -287,7 +290,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton5">
+       <widget class="QRadioButton" name="SelectRadioButton5">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -316,7 +319,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton6">
+       <widget class="QRadioButton" name="SelectRadioButton6">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -345,7 +348,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton7">
+       <widget class="QRadioButton" name="SelectRadioButton7">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -374,7 +377,7 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QRadioButton" name="AppModeRadioButton8">
+       <widget class="QRadioButton" name="SelectRadioButton8">
         <property name="geometry">
          <rect>
           <x>5</x>
@@ -1288,14 +1291,14 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLineEdit" name="AutoCompleteInput">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="maximumSize">
             <size>
-             <width>600</width>
+             <width>16777215</width>
              <height>23</height>
             </size>
            </property>
@@ -1390,6 +1393,79 @@ p, li { white-space: pre-wrap; }
           <width>16777215</width>
           <height>427</height>
          </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="SelectRadio2">
+    <widget class="QWidget" name="verticalWidget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>500</width>
+       <height>230</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QPushButton" name="SelectRadioOK2">
+        <property name="text">
+         <string>OK</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_01">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_02">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_03">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_04">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_05">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_06">
+        <property name="text">
+         <string>RadioButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="SelectRadioButton_07">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>RadioButton</string>
         </property>
        </widget>
       </item>

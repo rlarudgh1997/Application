@@ -66,6 +66,8 @@ public:
                                             int& dataType);
     QString isSignalValueEnum(const QString& signalName, const QString& value);
     QStringList isSignalValueEnum(const bool& toEnum, const QString& signalName);
+    QStringList isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
+                                               QString& matchingValue);
 
     QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const int& sheetIndex,
                                                                       const QPair<QStringList, QStringList>& list);
@@ -92,8 +94,6 @@ private:
     QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData,
                                                  const QMap<int, QStringList>& fileList, int& dataType);
     QStringList isValidValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo);
-    QStringList isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName, const QStringList& valueEnum,
-                                               QString& matchingValue);
     QStringList isConvertedSignalDataMatchingTable(const bool& toHex, const QString& signalName,
                                                const QMap<int, QStringList>& dataInfo);
     QList<QStringList> parsingKeywordBlocks(const QStringList& originData);
@@ -117,7 +117,7 @@ private:
                                          const QStringList& inputData);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);
-    QStringList extractMatchingSignal(const QString& filePath);
+    QStringList extractMatchingSignal(const bool& sfcSignal, const QString& filePath, const QString& prefix);
 };
 
 #endif  // SIGNAL_DATA_MANAGER_H

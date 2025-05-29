@@ -118,7 +118,9 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
         qDebug() << "Skip - Config value is the same value. :" << configValue;
         return;
     }
-    QVariant editValue = QVariant();
+    QVariant editValue;
+
+#if 1
     switch (configType) {
         case ConfigInfo::ConfigTypeNewSheetRowCount: {
             editValue = (configValue.toInt() >= 1000) ? (1000) : (configValue.toInt());
@@ -132,11 +134,19 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
             }
             break;
         }
+        case ConfigInfo::ConfigTypeGenTypeList:
         case ConfigInfo::ConfigTypeSheetName:
         case ConfigInfo::ConfigTypeDescTitle:
         case ConfigInfo::ConfigTypeOtherTitle:
+        case ConfigInfo::ConfigTypeConfigTitle:
+        case ConfigInfo::ConfigTypeDependentOnTitle:
+        case ConfigInfo::ConfigTypeManualTCTitle:
+        case ConfigInfo::ConfigTypeVehicleTypeCV:
+        case ConfigInfo::ConfigTypeSfcSpecTypeCV:
+        case ConfigInfo::ConfigTypeVehicleTypePV:
         case ConfigInfo::ConfigTypeSfcSpecTypePV:
-        case ConfigInfo::ConfigTypeVsmSpecTypePV: {
+        case ConfigInfo::ConfigTypeVsmSpecTypePV:
+        case ConfigInfo::ConfigTypeSystemTypePV: {
             QStringList value = configValue.toString().split(", ");
             QVariantList list = QVariantList();
             for (const auto& v : value) {
@@ -162,6 +172,58 @@ void ConfigSetting::editConfig(const int& configType, const QVariant& configValu
             break;
         }
     }
+#else
+    switch (configValue.typeId()) {
+        case QMetaType::Bool: {
+            editValue = configValue.toBool();
+
+            break;
+        }
+        case QMetaType::Int: {
+            int value = configValue.toInt();
+            editValue = (configType == ConfigInfo::ConfigTypeNewSheetRowCount) ? (qMin(value, 1000)) : (value);
+            break;
+        }
+        case QMetaType::QString: {
+            const QStringList parts = configValue.toString().split(", ", Qt::SkipEmptyParts);
+            if (parts.size() == 4) {    // QRect : ConfigTypeScreenInfo
+                QVector<int> rectValues;
+                for (const QString& part : parts) {
+                    bool ok = false;
+                    int value = part.toInt(&ok);
+                    if (ok == false) {
+                        break;
+                    }
+                    rectValues.append(value);
+                }
+                if (rectValues.size() == 4) {
+                    editValue = QRect(rectValues[0], rectValues[1], rectValues[2], rectValues[3]);
+                }
+            } else {
+                QVariantList list;
+                for (const QString& part : parts) {
+                    list.append(part);
+                }
+                editValue = list;
+            }
+            break;
+        }
+        case QMetaType::QVariantList: {
+            editValue = configValue;
+            break;
+        }
+        case QMetaType::QRect: {
+            editValue = configValue;
+            break;
+        }
+        default: {
+            editValue = configValue;
+            break;
+        }
+    }
+    qDebug() << "EditConfig :" << configValue.typeId() << configValue << "-" << editValue;
+#endif
+
     writeConfig(configType, editValue);
 }
 

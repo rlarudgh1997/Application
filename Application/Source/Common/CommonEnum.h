@@ -119,7 +119,8 @@ public:
         PropertyTypeExcelSheetName,
         PropertyTypeExcelDescTitle,
         PropertyTypeExcelConfigTitle,
-        PropertyTypeExcelDependentOn,
+        PropertyTypeExcelDependentOnTitle,
+        PropertyTypeExcelManualTCTitle,
         PropertyTypeExcelOtherTitle,
         PropertyTypeExcelView,
         PropertyTypeExcelMergeStart,
@@ -130,6 +131,7 @@ public:
         PropertyTypeTerminalInfo,
         PropertyTypeTerminalPathInfo,
         PropertyTypeTerminalBufferSize,
+        PropertyTypeManualCycleMode,
 
         PropertyTypeTestReport,
         PropertyTypeKey,
@@ -154,6 +156,7 @@ public:
         PropertyTypeOriginSheetOutputs,
         PropertyTypeOriginSheetConfigs,
         PropertyTypeOriginSheetDependentOn,
+        PropertyTypeOriginSheetManualTC,
         PropertyTypeOriginSheetMax,  // 3011
         PropertyTypeConvertSheetDescription,
         PropertyTypeConvertSheetPrivates,
@@ -165,6 +168,7 @@ public:
         PropertyTypeConvertSheetOutputs,
         PropertyTypeConvertSheetConfigs,
         PropertyTypeConvertSheetDependentOn,
+        PropertyTypeConvertSheetManualTC,
         PropertyTypeConvertSheetMax,
         PropertyTypeListMax,
 
@@ -325,6 +329,7 @@ public:
         ConfigName,
         Signal,
         Data,
+        CycleMode,
     };
 };
 
@@ -380,10 +385,30 @@ public:
         Max,
     };
     enum class DependentOn {
-        DependentName = 0,
+        TCName = 0,
         Result,
         InputSignal,
         InputData,
+        Max,
+    };
+    enum class ManualTC {
+        TCName = 0,
+        VehicleType,
+        RunnableOpt,
+        ConfigOpt,
+        CycleOption,
+        CyclePeriod,
+        CycleDelta,
+        CycleDuration,
+        CycleMode,
+        PreconditionSignal,
+        PreconditionValue,
+        InputSignal,
+        InputValue,
+        InitSignal,
+        InitValue,
+        OutputSignal,
+        OutputValue,
         Max,
     };
     enum class Other {

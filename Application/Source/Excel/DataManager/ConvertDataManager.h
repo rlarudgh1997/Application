@@ -70,6 +70,7 @@ private:
     bool convertSheetKeywordData();
     int appendConvertConfigSignalSet();
     bool appendConvertAllTCSignalSet();
+    bool interpretDependentOnKeyword();
 
     int convertInputSignalSheetKeyword();
     bool convertNonSheetInputSignalKeyword();

@@ -119,6 +119,9 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
         connect(mDialog.data(), &Dialog::signalScrollBarValueChanged, [=](const int& value) {
             setScrolBarValue(value);
         });
+        connect(mDialog.data(), &Dialog::signalSelectRadioValue, [=](const QString& text) {
+            updateSelectedCellItem(text);
+        });
         connect(mDialog.data(), &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
             if (dialogType == Dialog::DialogTypeSelectMoudleInfo) {
@@ -193,6 +196,20 @@ void GuiExcel::updateDrawDialog(const int& dialogType, const QVariantList& info)
     }
 }
 
+void GuiExcel::updateDialogCycleMode(const QString& text) {
+    auto cycleMode = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeManualCycleMode).toStringList();
+    int currentIndex = (cycleMode.indexOf(text));
+    int max = cycleMode.size();
+    ivis::common::LIMIT(currentIndex, 0, max);
+
+    QVariantList info = QVariantList({
+        QString("Select Cycle Mode"),
+        currentIndex,
+        cycleMode,
+    });
+    updateDrawDialog(Dialog::DialogTypeCycleMode, info);
+}
+
 void GuiExcel::updateDialogAutoCompleteVehicle() {
     QVariantList info = QVariantList({
         QString("Select Vehicle"),
@@ -226,7 +243,11 @@ void GuiExcel::updateDialogAutoCompleteSignal(const int& sheetIndex, const int& 
     QVariantList keywordTypeInfo = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeKeywordTypeInfo).toList();
     QStringList keywordList;
 
-    if (columnIndex < keywordTypeInfo.size()) {
+    if ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
+        (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
+        (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) &&
+        (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) &&
+        (columnIndex < keywordTypeInfo.size())) {
         keywordList = keywordTypeInfo.at(columnIndex).toStringList();
     }
 
@@ -243,13 +264,26 @@ void GuiExcel::updateDialogAutoCompleteSignal(const int& sheetIndex, const int& 
     QString currentCellText = mGui->CellInfoContent->text();
     ivis::common::getRemoved(currentCellText, keywordList);
 
+    auto sfcList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC);
+    auto vsmList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM);
+    auto tcNameList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName);
+    auto dependentList = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressDependentName);
+
+    if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC)) {
+        tcNameList.clear();
+        dependentList.clear();
+    }
+
     QVariantList info = QVariantList({
         QString("Auto Complete"),
         currentCellText,
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressSFC).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressVSM).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressTCName).toStringList(),
-        isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressDependentName).toStringList(),
+        sfcList.toStringList(),
+        vsmList.toStringList(),
+        tcNameList.toStringList(),
+        dependentList.toStringList(),
         keywordList,
         useOnlykeywordList
     });
@@ -380,11 +414,21 @@ int GuiExcel::isCheckState(const int& sheetIndex, const int& rowIndex, const int
         return static_cast<int>(ivis::common::CheckState::Invalid);
     }
 
-    bool checkValid = ((sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) &&
-                       (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
-                       (sheetIndex != ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) &&
-                       (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)));
-    if (checkValid == false) {
+    bool checkVisible = false;
+    if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
+        checkVisible = false;
+    } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+        checkVisible = ((columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) ||
+                      (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt)) ||
+                      // (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) ||
+                      (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption)));
+    } else {
+        checkVisible = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
+    }
+
+    if (checkVisible == false) {
         return static_cast<int>(ivis::common::CheckState::Invalid);
     }
 
@@ -763,11 +807,20 @@ void GuiExcel::refreshAutoCompleteData(const int& sheetIndex, const int& rowInde
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
-            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName)) {
+            if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::TCName)) {
                 eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteName;
             } else if (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData)) {
                 eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
             } else {
+            }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC: {
+            if ((columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionValue)) ||
+                (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputValue))||
+                (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitValue))||
+                (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputValue))) {
+                eventType = ivis::common::EventTypeEnum::EventTypeUpdateAutoCompleteData;
             }
             break;
         }
@@ -905,7 +958,14 @@ int GuiExcel::updateShortcutMergeSplit(const int& sheetIndex) {
 
     const int columnStart = cellSelectedInfo.getColumnStart();
     const int columnCount = cellSelectedInfo.getColumnCount();
-    bool notSupport = (columnCount > 1) || (columnStart >= static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+    bool notSupport = false;
+
+    if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+        notSupport = (columnStart >= static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode));
+    } else {
+        notSupport = (columnStart >= static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal));
+    }
+    notSupport = (columnCount > 1);
 
     if (notSupport) {  // 병합은 Column 기준 1개만 지원
         qDebug() << "Not support : multilple slected column.";
@@ -955,6 +1015,11 @@ int GuiExcel::updateShortcutMergeSplit(const int& sheetIndex) {
         (sheetIndex < ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) &&
         (columnStart < static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result))) {
         for (int index = 0; index < static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result); ++index) {
+            columnList.append(index);
+        }
+    } else if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) &&
+        (columnStart < static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionSignal))) {
+        for (int index = 0; index < static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionSignal); ++index) {
             columnList.append(index);
         }
     } else {
@@ -1385,8 +1450,9 @@ void GuiExcel::updateSelectedCellItem(const QString& text) {
         return;
     }
 
-    // qDebug() << "updateSelectedCellItem :" << text;
     mSelectItem->setText(text);
+    mGui->CellInfoContent->setText(text);
+    qDebug() << "updateSelectedCellItem :" << text;
 }
 
 void GuiExcel::updateCellContent(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
@@ -1445,9 +1511,17 @@ void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, c
         (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
         (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
         return;
-    }
-    if (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
-        return;
+    } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+        if ((columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) &&
+            (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt)) &&
+            // (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) &&
+            (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption))) {
+            return;
+        }
+    } else {
+        if (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+            return;
+        }
     }
 
     QTableWidget* currentSheet = mExcelSheet[sheetIndex];
@@ -1680,8 +1754,15 @@ void GuiExcel::updateDisplayCellDataInfo(const int& sheetIndex, const int& row, 
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn: {
-            supportAutoComplete = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName));
+            supportAutoComplete = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::TCName));
             checkValidation = (column == static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData));
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC: {
+            checkValidation = ((column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionValue)) ||
+                               (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputValue)) ||
+                               (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitValue)) ||
+                               (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputValue)));
             break;
         }
         default: {
@@ -1731,6 +1812,25 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
             }
             break;
         }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC: {
+            if (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::VehicleType)) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::VehicleType;
+            } else if (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::CycleMode;
+            } else if ((column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionSignal)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputSignal)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitSignal)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputSignal))) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Signal;
+            } else if ((column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionValue)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputValue)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitValue)) ||
+                (column == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputValue))) {
+                autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::Data;
+            } else {
+            }
+            break;
+        }
         default: {
             if (column == static_cast<int>(ivis::common::ExcelSheetTitle::Other::GenType)) {
                 autoCompleteType = ivis::common::AutoCompleteEnum::AutoComplete::GenType;
@@ -1775,6 +1875,10 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
         }
         case ivis::common::AutoCompleteEnum::AutoComplete::Data: {
             refreshAutoCompleteData(sheetIndex, row, column);
+            break;
+        }
+        case ivis::common::AutoCompleteEnum::AutoComplete::CycleMode: {
+            updateDialogCycleMode(isCurrentCellText(sheetIndex, row, column));
             break;
         }
         default: {
@@ -1927,26 +2031,30 @@ void GuiExcel::updateDisplayExcelSheet() {
     }
 
     // Draw : Sheet
-    auto sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName).toStringList();
-    auto descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle).toStringList();
-    auto configTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle).toStringList();
-    auto dependentOnTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOn).toStringList();
-    auto otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle).toStringList();
+    auto sheetName = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName);
+    auto descTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle);
+    auto configTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle);
+    auto dependentOnTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOnTitle);
+    auto manualTCTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelManualTCTitle);
+    auto otherTitle = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle);
     int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
     QList<int> sheetIndexList;
 
-    for (const auto& sheet : sheetName) {
+    for (const auto& sheet : sheetName.toStringList()) {
         QStringList contentTitle;
         if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription) {
-            contentTitle = descTitle;
+            contentTitle = descTitle.toStringList();
         } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) {
-            contentTitle = configTitle;
+            contentTitle = configTitle.toStringList();
         } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn) {
-            contentTitle = dependentOnTitle;
+            contentTitle = dependentOnTitle.toStringList();
+        } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
+            contentTitle = manualTCTitle.toStringList();
         } else {
-            contentTitle = otherTitle;
+            contentTitle = otherTitle.toStringList();
         }
         int columnMax = contentTitle.size();
+        // qDebug() << "sheet[" << columnMax << "] :" << contentTitle;
 
         // Draw Sheet
         mExcelSheet[sheetIndex] = new QTableWidget(0, columnMax);

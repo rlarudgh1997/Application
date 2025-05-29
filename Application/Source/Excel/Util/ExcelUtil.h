@@ -73,6 +73,7 @@ class ExcelUtil : public QObject {
 public:
     static QSharedPointer<ExcelUtil>& instance();
 
+    QString isModuleFilePath(const QString& path, const QString& module, const QString& fileExtension);
     QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& yml = false,
                                                                 const bool& toUpper = false);
     QStringList isDescriptionDataInfo();

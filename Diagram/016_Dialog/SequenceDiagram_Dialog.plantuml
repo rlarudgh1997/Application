@@ -40,7 +40,7 @@ User -> Dialog : Dialog : select CV/PV -> OK
 
 
 
-MenuGui <-- Dialog : emit signalSelectAppMode()
+MenuGui <-- Dialog : emit signalSelectRadio()
 activate MenuGui
 
 deactivate Dialog

@@ -5,7 +5,7 @@ class Dialog {
     +void drawDialog(const int& type, const QVariantList& info)
     -void controlConnet(const int& displayType)
     -void connectAppMode(const bool& state)
-    -void connectAppModeRadio(const bool& state)
+    -void connectSelectRadio(const bool& state)
     -void connectSelectList(const bool& state)
     -void connectSelectOption(const bool& state)
     -void connectEnterText(const bool& state)
@@ -61,7 +61,7 @@ class Dialog {
     ' -QStringList getAutoCompleteList()
     ' -void setAutoCompleteList(const QStringList& autoCompleteList)
 
-    -void signalSelectAppMode(const int& appMode) <<signal>>
+    -void signalSelectRadio(const int& appMode) <<signal>>
     -void signalSelectListItem(const QList<QPair<int, QString>>& selectItem) <<signal>>
     -void signalSelectOption(const bool& option1, const QList<QPair<QString, bool>>& option2) <<signal>>
     -void signalScrollBarValueChanged(const int& value) <<signal>>

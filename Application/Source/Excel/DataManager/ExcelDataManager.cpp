@@ -4,6 +4,7 @@
 #include "ConfigSetting.h"
 #include "ExcelUtil.h"
 #include "ExcelData.h"
+#include "SignalDataManager.h"
 
 const QString SFC_IGN_ELAPSED = QString("SFC.Private.IGNElapsed.Elapsed");
 
@@ -283,8 +284,11 @@ QStringList ExcelDataManager::isParsingDataList(const QStringList& data, const b
 
 QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                                                  const QString& caseName, const bool& origin, const bool& log) {
+    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) ?
+                             (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName)) :
+                             (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
     const QStringList tcNameData =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName), origin);
+        isExcelSheetData(sheetIndex, columnIndex, origin);
     const QStringList resultData =
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result), origin);
     const QStringList caseData =
@@ -353,8 +357,10 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QS
 }
 
 QStringList ExcelDataManager::isTCNameDataList(const int& sheetIndex, const bool& all) {
-    const QStringList currentData =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName), true);
+    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) ?
+                             (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName)) :
+                             (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
+    const auto currentData = isExcelSheetData(sheetIndex, columnIndex, true);
     const bool cliTCCheck = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCLIModeTCCheck).toBool();
     const bool appendAll = ((all) || (cliTCCheck));
     // const bool appendAll = all;
@@ -773,7 +779,7 @@ QList<QStringList> ExcelDataManager::isDependentDataList(const QString& dependen
                                                          const bool& allData) {
     const int sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn;
     const QStringList dependentNameList =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::DependentName), true);
+        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::TCName), true);
     const QStringList resultList =
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Result), true);
     const QStringList inputSignalList =
@@ -831,6 +837,192 @@ QList<QStringList> ExcelDataManager::isDependentDataList(const QString& dependen
 #endif
 
     return dataInfo;
+}
+
+QPair<QStringList, QStringList> ExcelDataManager::isConvertedToEnum(const QStringList& signalList, const QStringList& dataList) {
+    QStringList dataHexList;
+
+    for (int index = 0; index < signalList.size(); ++index) {
+        if (index >= dataList.size()) {
+            continue;
+        }
+        auto signal = signalList.at(index);
+        auto data = dataList.at(index);
+        auto enumList = SignalDataManager::instance().data()->isSignalValueEnum(true, signal);
+        auto hexList = SignalDataManager::instance().data()->isSignalValueEnum(false, signal);
+
+        QStringList tempHexList;
+        for (const auto& d : data.remove(" ").split(",")) {
+            int validIndex = enumList.indexOf(d);
+            if (validIndex >= hexList.size()) {
+                continue;
+            }
+            QString value = ((validIndex >= 0) && (validIndex < hexList.size())) ? (hexList.at(validIndex)) : (d);
+            // qDebug() << "\t Info :" << signal << validIndex << hexList.size() << d << "->" << value;
+            tempHexList.append(value);
+        }
+        dataHexList.append(tempHexList.join(", "));
+    }
+
+#if 0
+    qDebug() << "isConvertedToEnum";
+    qDebug() << "\t Signal :" << signalList.size() << signalList;
+    qDebug() << "\t Data   :" << dataList.size() << dataList;
+    qDebug() << "\t Hex    :" << dataHexList.size() << dataHexList << "\n";
+#endif
+
+    return qMakePair(signalList, dataHexList);
+}
+
+QList<ManualData> ExcelDataManager::isManualDataList() {
+    const auto sheetIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC;
+    reloadExcelData(sheetIndex);
+
+    QMap<QString, QPair<int, int>> tcNameRowInfo;
+    QMap<int, QStringList> readManualData;
+
+    for (const auto& tcName : isTCNameDataList(sheetIndex, true)) {
+        tcNameRowInfo[tcName] = isRowIndexInfo(sheetIndex, tcName, QString(), QString(), true);
+        for (int columnIndex = 0; columnIndex < static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Max); ++columnIndex) {
+            readManualData[columnIndex] = isExcelSheetData(sheetIndex, columnIndex, true);
+        }
+    }
+
+    QList<ManualData> manualDataList;
+
+    for (const auto& key : tcNameRowInfo.keys()) {
+        int start = tcNameRowInfo[key].first;
+        int end = (tcNameRowInfo[key].second + 1);
+        // qDebug() << "\t RowInfo[" << key << "] :" << start << "~" << end;
+
+        ManualData manualData;
+        for (const auto& columnIndex : readManualData.keys()) {
+            QStringList value = readManualData[columnIndex].mid(start, end);
+            for (auto& v : value) {
+                v.remove(getMergeStart());
+                v.remove(getMerge());
+                v.remove(getMergeEnd());
+            }
+            value.removeAll("");
+            value.removeDuplicates();
+
+            QString toString = (value.size() > 0) ? (value.at(0)) : (QString());
+            bool toBool = (value.size() > 0) ? (value.at(0).size() > 0) : (false);
+            bool ok = false;
+            int toInt = (value.size() > 0) ? (value.at(0).toInt(&ok)) : (0);
+            toInt = (ok) ? (toInt) : (0);
+
+            // qDebug() << "\t\t value :" << value.size() << value << "->" << toString << toBool << toInt << "\n";
+
+            switch (columnIndex) {
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName): {
+                    manualData.setTCName(toString);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::VehicleType): {
+                    manualData.setVehicleType(toString);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt): {
+                    manualData.setRunnableOpt(toBool);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt): {
+                    manualData.setConfigOpt(toBool);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption): {
+                    manualData.setCycleOption(toBool);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CyclePeriod): {
+                    manualData.setCyclePeriod(toInt);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleDelta): {
+                    manualData.setCycleDelta(toInt);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleDuration): {
+                    manualData.setCycleDuration(toInt);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode): {
+                    manualData.setCycleMode(toString);
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionSignal): {
+                    manualData.setPreconditionList(qMakePair(value, QStringList()));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::PreconditionValue): {
+                    manualData.setPreconditionList(isConvertedToEnum(manualData.getPreconditionList().first, value));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputSignal): {
+                    manualData.setInputList(qMakePair(value, QStringList()));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputValue): {
+                    manualData.setInputList(isConvertedToEnum(manualData.getInputList().first, value));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitSignal): {
+                    manualData.setInitList(qMakePair(value, QStringList()));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InitValue): {
+                    manualData.setInitList(isConvertedToEnum(manualData.getInitList().first, value));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputSignal): {
+                    manualData.setOutputList(qMakePair(value, QStringList()));
+                    break;
+                }
+                case static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::OutputValue): {
+                    manualData.setOutputList(isConvertedToEnum(manualData.getOutputList().first, value));
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        }
+        manualDataList.append(manualData);
+    }
+
+#if 1
+    qDebug() << "isManualDataList :" << manualDataList.size();
+    for (const auto& manualData : manualDataList) {
+        qDebug() << "\t TCName        :" << manualData.getTCName();
+        qDebug() << "\t VehicleType   :" << manualData.getVehicleType();
+        qDebug() << "\t RunnableOpt   :" << manualData.getRunnableOpt();
+        qDebug() << "\t ConfigOpt     :" << manualData.getConfigOpt();
+        qDebug() << "\t CycleOption   :" << manualData.getCycleOption();
+        qDebug() << "\t CyclePeriod   :" << manualData.getCyclePeriod();
+        qDebug() << "\t CycleDelta    :" << manualData.getCycleDelta();
+        qDebug() << "\t CycleDuration :" << manualData.getCycleDuration();
+        qDebug() << "\t CycleMode     :" << manualData.getCycleMode();
+        for (int index = 0; index < manualData.getPreconditionList().first.size(); ++index) {
+            qDebug() << "\t Precondition  :" << index << manualData.getPreconditionList().first.at(index)
+                                             << "->" << manualData.getPreconditionList().second.at(index);
+        }
+        for (int index = 0; index < manualData.getInputList().first.size(); ++index) {
+            qDebug() << "\t Input         :" << index << manualData.getInputList().first.at(index)
+                                             << "->" << manualData.getInputList().second.at(index);
+        }
+        for (int index = 0; index < manualData.getInitList().first.size(); ++index) {
+            qDebug() << "\t Init          :" << index << manualData.getInitList().first.at(index)
+                                             << "->" << manualData.getInitList().second.at(index);
+        }
+        for (int index = 0; index < manualData.getOutputList().first.size(); ++index) {
+            qDebug() << "\t Output        :" << index << manualData.getOutputList().first.at(index)
+                                             << "->" << manualData.getOutputList().second.at(index);
+        }
+        qDebug() << "\n";
+    }
+#endif
+    return manualDataList;
 }
 
 int ExcelDataManager::isCaseIndex(const int& sheetIndex, const QString& tcName, const QString& resultName,
@@ -965,6 +1157,12 @@ QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, c
         case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
         case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
             columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Max);
+            // removeMergeState = false;
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC: {
+            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Max);
             // removeMergeState = false;
             break;
         }

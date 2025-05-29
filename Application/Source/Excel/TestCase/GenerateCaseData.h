@@ -17,8 +17,11 @@
 class GenerateCaseData : public QObject {
 public:
     static QSharedPointer<GenerateCaseData>& instance();
-
     QString excuteGenerateCaseData();
+
+    REGISTER_WRITABLE_VALUE(QString, GenerateCaseDataState, QStringLiteral("READY"))
+    REGISTER_WRITABLE_VALUE(int, CheckedTestCaseCount, 0)
+    REGISTER_WRITABLE_VALUE(int, CompletedCaseCount, 0)
 
 private:
     explicit GenerateCaseData();
@@ -87,6 +90,7 @@ private:
     void cleanIntermediateDataFromJson(const QString& caseName, const int& caseNumber, const QString& resultName,
                                        const int& resultNumber, const QString& tcName, const int& tcNameNumber,
                                        const int& sheetNumber);
+    void appendManualTcToJson();
     void printCaseSize(const QString& genType);
 
 private:

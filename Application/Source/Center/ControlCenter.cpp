@@ -136,7 +136,8 @@ void ControlCenter::updateConfigInfo() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfoPrevious, previousConfig);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeConfigInfo, QVariant(allConfigData), true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeConfig);
+    updateDataHandler(
+        ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeConfig, true);
 }
 
 void ControlCenter::updateAllModuleList() {
@@ -311,7 +312,7 @@ void ControlCenter::updateNodeAddress(const bool& check) {
     updateSelectModuleList(false);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeNodeAddressAll, QVariant(vsmList), true);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeNode);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeNode, true);
 }
 
 void ControlCenter::updateSelectModuleList(const bool& show) {
@@ -416,7 +417,8 @@ void ControlCenter::updateTerminalMode() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal);
+    updateDataHandler(
+        ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal, true);
 
     QString command = QString("cd %1").arg(ivis::common::APP_PWD());
     controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), command);

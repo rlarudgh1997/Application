@@ -61,6 +61,58 @@ public:
     }
 };
 
+class ManualData {
+    REGISTER_WRITABLE_VALUE(QString, TCName, QString())
+    REGISTER_WRITABLE_VALUE(QString, VehicleType, QString())
+    REGISTER_WRITABLE_VALUE(bool, RunnableOpt, false)
+    REGISTER_WRITABLE_VALUE(bool, ConfigOpt, false)
+    REGISTER_WRITABLE_VALUE(bool, CycleOption, false)
+    REGISTER_WRITABLE_VALUE(int, CyclePeriod, 0)
+    REGISTER_WRITABLE_VALUE(int, CycleDelta, 0)
+    REGISTER_WRITABLE_VALUE(int, CycleDuration, 0)
+    REGISTER_WRITABLE_VALUE(QString, CycleMode, QString())
+    REGISTER_WRITABLE_VALUE(QPairStrList, PreconditionList, QPairStrList())
+    REGISTER_WRITABLE_VALUE(QPairStrList, InputList, QPairStrList())
+    REGISTER_WRITABLE_VALUE(QPairStrList, InitList, QPairStrList())
+    REGISTER_WRITABLE_VALUE(QPairStrList, OutputList, QPairStrList())
+
+public:
+    ManualData(const QString& tcName, const QString& vehicleType, const bool& runnableOpt, const bool& configOpt,
+               const bool& cycleOption, const int& cyclePeriod, const int& cycleDelta, const int& cycleDuration,
+               const QString& cycleMode, const QPairStrList& preconditionList, const QPairStrList& inputList,
+               const QPairStrList& initList, const QPairStrList& outputList) {
+        setTCName(tcName);
+        setVehicleType(vehicleType);
+        setRunnableOpt(runnableOpt);
+        setConfigOpt(configOpt);
+        setCycleOption(cycleOption);
+        setCyclePeriod(cyclePeriod);
+        setCycleDelta(cycleDelta);
+        setCycleDuration(cycleDuration);
+        setCycleMode(cycleMode);
+        setPreconditionList(preconditionList);
+        setInputList(inputList);
+        setInitList(initList);
+        setOutputList(outputList);
+    }
+    ManualData() = default;
+    ManualData(const ManualData& other) = default;
+    ManualData& operator=(const ManualData& other) = default;
+
+    bool operator==(const ManualData& other) const {
+        return ((getTCName() == other.getTCName()) && (getVehicleType() == other.getVehicleType()) &&
+                (getRunnableOpt() == other.getRunnableOpt()) && (getConfigOpt() == other.getConfigOpt()) &&
+                (getCycleOption() == other.getCycleOption()) && (getCyclePeriod() == other.getCyclePeriod()) &&
+                (getCycleDelta() == other.getCycleDelta()) && (getCycleDuration() == other.getCycleDuration()) &&
+                (getCycleMode() == other.getCycleMode()) && (getPreconditionList() == other.getPreconditionList()) &&
+                (getInputList() == other.getInputList()) && (getInitList() == other.getInitList()) &&
+                (getOutputList() == other.getOutputList()));
+    }
+    bool operator!=(const ManualData& other) const {
+        return !(*this == other);
+    }
+};
+
 class ExcelDataManager : public QObject {
     Q_OBJECT
 
@@ -90,6 +142,7 @@ public:
     QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true, const bool& removeMerge = false);
     QList<QStringList> isDependentDataList(const QString& dependentName, const QString& resultName, const bool& allData = true);
+    QList<ManualData> isManualDataList();
 
     void reloadExcelData(const int& sheetIndex = 0);
     void writeExcelSheetData(const int& sheetIndex = 0);
@@ -112,6 +165,7 @@ private:
     QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace);
     QPair<int, int> isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                                    const QString& caseName, const bool& origin, const bool& log = false);
+    QPair<QStringList, QStringList> isConvertedToEnum(const QStringList& signalList, const QStringList& dataList);
     int isCaseIndex(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName);
     QMapIntStrList updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData);
     QPair<QStringList, QStringList> reconstructInputData(const QPair<QStringList, QStringList>& inputList,

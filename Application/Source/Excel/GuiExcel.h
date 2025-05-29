@@ -224,6 +224,7 @@ private:
     virtual void updateDisplayVisible();
 
     void updateDrawDialog(const int& dialogType, const QVariantList& info);
+    void updateDialogCycleMode(const QString& text);
     void updateDialogAutoCompleteVehicle();
     void updateDialogAutoCompleteConfigName();
     void updateDialogAutoCompleteSignal(const int& sheetIndex, const int& columnIndex);

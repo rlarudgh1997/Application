@@ -216,13 +216,17 @@ int TestCase::excuteTestCase(const int& excuteType) {
                     nextType = ExcuteTypeExcelOpen;
                 }
             } else {
-                nextType = ExcuteTypeExit;
+                nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeExit);
+                // nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeParsingModule);
             }
             break;
         }
         case ExcuteTypeExcelOpen: {
             if (openExcelFile()) {
                 nextType = ExcuteTypeGenConvertData;
+            } else {
+                nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeExit);
+                // nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeParsingModule);
             }
             break;
         }
@@ -299,6 +303,12 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             setGenTCResult(true);
             break;
         }
+        case ExcuteTypeParsingModule: {
+            if (graphicsMode == false) {
+                resultInfoLog = (isSizeGenTCResultInfo() > 0);
+            }
+            break;
+        }
         case ExcuteTypeExcelOpen: {
             moudleName = currentModule;
             genTCInfo.append(QString("[%1]").arg(currentModule));
@@ -319,7 +329,10 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             if (text.size() == 0) {
                 setGenTCResult(false);
             }
+            int caseCount = GenerateCaseData::instance().data()->getCompletedCaseCount();
+            int testCaseCount = GenerateCaseData::instance().data()->getCheckedTestCaseCount();
             currentCount--;
+            genTCInfo.append(QString("        - Case : %1, %2").arg(testCaseCount).arg(caseCount));
             genTCInfo.append(QString("        - File : %1").arg(text));
             genTCInfo.append(QString("        - Result : %1").arg(((text.size() == 0)) ? ("FAIL") : ("PASS")));
             genTCInfo.append(QString(170, '-'));
@@ -344,12 +357,6 @@ void TestCase::updateTestCaseExcuteInfo(const int& excuteType, const QString& te
             currentCount--;
             genTCInfo.append(QString("ERROR_INFO : %1").arg(text));
             genTCInfo.append(QString("COMPLETE : FAIL"));
-            break;
-        }
-        case ExcuteTypeParsingModule: {
-            if (graphicsMode == false) {
-                resultInfoLog = true;
-            }
             break;
         }
         default: {
@@ -493,6 +500,7 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
         }
 
         if (selectedItems.size() == 0) {
+#if 0
             QStringList tempSelItems;
             selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
             for (const auto& item : selectedItems) {
@@ -501,6 +509,26 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
                 }
             }
             selectedItems = tempSelItems;
+#else
+            QStringList tempSelItems;
+            selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
+            for (const auto& item : selectedItems) {
+                if (itemList.indexOf(item) >= 0) {
+                    tempSelItems.append(item);
+                } else {
+                    auto sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath);
+                    auto defaultPath = QString("%1/SFC/").arg(sfcModelPath.toString());
+                    for (const auto& item : selectedItems) {
+                        QString filePath = ExcelUtil::instance().data()->isModuleFilePath(defaultPath, item, QString(".xlsx"));
+                        if (filePath.size() == 0) {
+                            continue;
+                        }
+                        tempSelItems.append(filePath);
+                    }
+                }
+            }
+            selectedItems = tempSelItems;
+#endif
         }
     }
     // qDebug() << "parsingModules :" << selectedItems;
@@ -556,7 +584,7 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
         displayText.append(QString("Please enter valid numbers between : 1 ~ %1\n").arg(itemList.size() - 1));
         displayText.append(QString("Enter the numbers of your choices separated by spaces : "));
     } else if (excuteType == ExcuteTypeManualInput) {
-        displayText.append(QString("Please enter manual module name : "));
+        displayText.append(QString("Please enter module name : "));
     } else {
         displayText.append(QString(lineCount, '*') + QString("\n"));
         if (excuteType == ExcuteTypeParsingAppMode) {

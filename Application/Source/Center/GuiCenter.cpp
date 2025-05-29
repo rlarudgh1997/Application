@@ -134,6 +134,8 @@ void GuiCenter::updateDisplaySize() {
         rect.setHeight(size.height() - margin.height());
     }
     mMainView->setGeometry(rect);
+    // mGui->ConfigView->setFixedSize(mMainView->size());
+    // mGui->NodeView->setFixedSize(mMainView->size());
     mGui->TerminalViewWidget->setFixedSize(mMainView->size());
 }
 
@@ -282,10 +284,12 @@ void GuiCenter::updateDisplayConfigInfo() {
         for (int columnIndex = 0; columnIndex < title.size(); ++columnIndex) {
             QTableWidgetItem* item = new QTableWidgetItem((columnIndex == 0) ? (config.first) : (config.second));
             mGui->ConfigView->setItem(rowIndex, columnIndex, item);
-
+#if 0
             QHeaderView::ResizeMode resizeMode = (columnIndex == 0) ? QHeaderView::Fixed : QHeaderView::ResizeToContents;
             mGui->ConfigView->horizontalHeader()->setSectionResizeMode(columnIndex, resizeMode);
-
+#else
+            mGui->ConfigView->horizontalHeader()->setSectionResizeMode(columnIndex, QHeaderView::Fixed);
+#endif
             Qt::ItemFlags flags = mGui->ConfigView->item(rowIndex, columnIndex)->flags();
             flags = (columnIndex == 0) ? (flags & ~Qt::ItemIsEditable) : (flags | Qt::ItemIsEditable);
             mGui->ConfigView->item(rowIndex, columnIndex)->setFlags(flags);
@@ -293,9 +297,13 @@ void GuiCenter::updateDisplayConfigInfo() {
         mGui->ConfigView->verticalHeader()->resizeSection(rowIndex, 30);
         rowIndex++;
     }
-    // mGui->ConfigView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     mGui->ConfigView->resizeColumnsToContents();
-    // mGui->ConfigView->resizeRowsToContents();
+    if (title.size() == 2) {
+        int mainWidth = mMainView->size().width();
+        int columnWidth = (mGui->ConfigView->columnWidth(0) + 100);  // 0 : Config Name
+        mGui->ConfigView->horizontalHeader()->resizeSection(1, (mainWidth - columnWidth));   // 1 : Config Value
+    }
 
     setConfigUpdating(false);
 }
@@ -324,8 +332,17 @@ void GuiCenter::updateDisplayNodeAddress() {
     mGui->NodeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mGui->NodeView->resizeColumnsToContents();
     mGui->NodeView->resizeRowsToContents();
+
+#if 0
     mGui->NodeView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     mGui->NodeView->horizontalHeader()->resizeSection(0, 800);
+#else
+    if (title.size() == 2) {
+        int mainWidth = mMainView->size().width();
+        int columnWidth = (mGui->NodeView->columnWidth(1) + 300);
+        mGui->NodeView->horizontalHeader()->resizeSection(0, (mainWidth - columnWidth));
+    }
+#endif
 }
 
 void GuiCenter::updateDisplayTerminal(const bool& first, const bool& updatPath) {

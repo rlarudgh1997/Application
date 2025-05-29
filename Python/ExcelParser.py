@@ -13,6 +13,7 @@ class ExcelParser:
         self.title_desc = []
         self.title_config = []
         self.title_dependent = []
+        self.title_manual = []
         self.title_other = []
         self.sheet_info = []
         self.config_info = {}
@@ -34,6 +35,7 @@ class ExcelParser:
         self.title_desc = self.config_info["ConfigTypeDescTitle"].split(", ")
         self.title_config = self.config_info["ConfigTypeConfigTitle"].split(", ")
         self.title_dependent = self.config_info["ConfigTypeDependentOnTitle"].split(", ")
+        self.title_manual = self.config_info["ConfigTypeManualTCTitle"].split(", ")
         self.title_other = self.config_info["ConfigTypeOtherTitle"].split(", ")
 
     def read_from_excel(self, file_path):
@@ -56,6 +58,8 @@ class ExcelParser:
                     sheet_data.append(self.title_config)
                 elif (sheet == "DependentOn"):
                     sheet_data.append(self.title_dependent)
+                elif (sheet == "ManualTC"):
+                    sheet_data.append(self.title_manual)
                 else:
                     continue
 

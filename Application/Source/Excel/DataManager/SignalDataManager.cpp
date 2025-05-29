@@ -540,7 +540,7 @@ QString SignalDataManager::isSignalValueEnum(const QString& signalName, const QS
             resultValue = currentList.at(index);
         }
     }
-    // qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
+    qDebug() << "isSignalValueEnum :" << signalName << "," << value << "->" << resultValue;
     return resultValue;
 }
 
@@ -583,6 +583,7 @@ QStringList SignalDataManager::isConvertedSignalDataValueEnum(const bool& toEnum
             }
         }
     }
+    // qDebug() << "isConvertedSignalDataValueEnum :" << convertDataInfo.size() << convertDataInfo;
     return convertDataInfo;
 }
 
@@ -1220,11 +1221,21 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         }
         return sortNumber(numberList);
     };
-    auto isNotValue = [&](const bool& toValid, const QStringList& allList, const QStringList& inputList) {
-        QList<qint64> numberList = toNumber(inputList);
+    auto isNotValue = [&](const bool& toValid, const QStringList& allList, const QStringList& validList,
+                          const QStringList& invalidList) {
+        QList<qint64> numberList = toNumber((toValid) ? (validList) : (invalidList));
         if (toValid) {
             for (const auto& number : toNumber(allList)) {
-                numberList.append(number);
+                bool append = true;
+                for (const auto& numberRemove : toNumber(invalidList)) {
+                    if (number == numberRemove) {
+                        append = false;
+                        break;
+                    }
+                }
+                if (append) {
+                    numberList.append(number);
+                }
             }
         }
         return sortNumber(numberList);
@@ -1320,8 +1331,8 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
                 validData.removeDuplicates();
                 invalidData = inputData.mid(splitSize, inputData.size());  // 2, 3, 4
 
-                validData = isNotValue(true, allData, validData);
-                invalidData = isNotValue(false, QStringList(), invalidData);
+                validData = isNotValue(true, allData, validData, invalidData);
+                invalidData = isNotValue(false, QStringList(), QStringList(), invalidData);
             }
             break;
         }
@@ -2775,7 +2786,7 @@ bool SignalDataManager::isExcelDataValidation() {
     return validCheck;
 }
 
-QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
+QStringList SignalDataManager::extractMatchingSignal(const bool& sfcSignal, const QString& filePath, const QString& prefix) {
     QFile file(filePath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text) == false) {
         qDebug() << "Fail to open file :" << filePath;
@@ -2783,51 +2794,125 @@ QStringList SignalDataManager::extractMatchingSignal(const QString& filePath) {
     }
 
     QStringList signalList;
-    QRegularExpression signalRegex(R"(^\s*-\s*([^:]+):\s*(.*)$)");   // 시작 : "- "    끝 ":" 확인인
-    QRegularExpression signalNameRegex(R"(signalName:)");            // "signalName:" 포함 확인
-    QRegularExpression abstractionNameRegex(R"(abstractionName:)");  // " :" 포함 확인
+    QRegularExpression groupRegex0;
+    QRegularExpression groupRegex1;
+    QRegularExpression groupRegex2;
 
-    QString foundSignal;
-    bool foundSignalName = false;
-    bool foundAbstractionName = false;
+    if (sfcSignal) {
+        groupRegex0 = QRegularExpression(R"(^\s{2}outputs:)");             // YML : "  outputs:"
+        groupRegex1 = QRegularExpression(R"(^\s{4}-\s+(SFC\.[\w\.]+):)");  // YML : "    - SFC.*:"
+        groupRegex2 = QRegularExpression(R"(^\s{6}dataType:)");            // YML : "      dataType:"
+    } else {
+        groupRegex0 = QRegularExpression(R"(^\s*-\s*[\w\.]+:)");           // VSM :"- *:"
+        groupRegex1 = QRegularExpression(R"(^\s{2}signalName:)");          // VSM : "  signalName:"
+        groupRegex2 = QRegularExpression(R"(^\s{2}abstractionName:)");     // VSM : "  abstractionName:"
+    }
 
+#if 0
+    // int foundStep = 0;
+#endif
+
+    QMap<int, QString> matchingInfo;
+    int count = 0;
     QTextStream in(&file);
+
     while (in.atEnd() == false) {
-        QString line = in.readLine().trimmed();
-        QRegularExpressionMatch match = signalRegex.match(line);
+        QString readLine = in.readLine();
+#if 0
+        switch (foundStep) {
+            case 0: {
+                if (groupRegex0.match(readLine).hasMatch() || in.atEnd()) {
+                    qDebug() << "\t Read[0] :" << readLine;
+                    matchingInfo[0] = readLine;
+                    foundStep = 1;
+                }
+                break;
+            }
+            case 1: {
+                if (groupRegex1.match(readLine).hasMatch()) {
+                    qDebug() << "\t Read[1] :" << readLine;
+                    matchingInfo[1] = readLine;
+                    foundStep = 2;
+                } else {
+                    if (sfcSignal == false) {
+                        foundStep = 0;
+                    }
+                }
+                break;
+            }
+            case 2: {
+                if (groupRegex2.match(readLine).hasMatch()) {
+                    qDebug() << "\t Read[2] :" << readLine;
+                    matchingInfo[2] = readLine;
+                    foundStep = 100;
+                } else {
+                    if (sfcSignal == false) {
+                        foundStep = 1;
+                    }
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        if (foundStep == 100) {
+            bool append = true;
+            for (const auto& key : matchingInfo.keys()) {
+                if (matchingInfo[key].size() == 0) {
+                    append = false;
+                    break;
+                }
+            }
+            if (append) {
+                QString signal = (sfcSignal) ? (matchingInfo[1]) : (matchingInfo[0]);
+                signal.remove(QRegularExpression(R"([\s\-:]|_MCAN|_CCAN)"));  // 공백, 대시, 콜론, _MCAN, _CCAN 제거
+                qDebug() << "Signal[" << count++ << "] :" << signal;
+                signalList.append(signal);
+            }
+            matchingInfo.clear();
+            foundStep = (sfcSignal) ? (1) : (0);
+        }
+#else
+        if (groupRegex0.match(readLine).hasMatch() || in.atEnd()) {
+            matchingInfo[0] = readLine;
+            continue;
+        }
 
-        if ((match.hasMatch()) || in.atEnd()) {
-            if (foundSignal.size() == 0) {
-                foundSignal = match.captured(1).trimmed() + " " + match.captured(2).trimmed();
-                // qDebug() << "\t\t FoundSignal :" << foundSignal;
+        if (groupRegex1.match(readLine).hasMatch()) {
+            matchingInfo[1] = readLine;
+            if (sfcSignal == false) {
+                continue;
             }
         }
 
-        if (foundSignal.size() > 0) {
-            if ((foundSignalName == false) && (signalNameRegex.match(line).hasMatch())) {
-                foundSignalName = true;
-            }
-            if ((foundAbstractionName == false) && (abstractionNameRegex.match(line).hasMatch())) {
-                foundAbstractionName = true;
-            }
+        if (groupRegex2.match(readLine).hasMatch()) {
+            QString signal(prefix);
+            signal.append((sfcSignal) ? (matchingInfo[1]) : (matchingInfo[0]));
+            signal.remove(QRegularExpression(R"([\s\-:]|_MCAN|_CCAN)"));  // 공백, 대시, 콜론, _MCAN, _CCAN 제거
+            signalList.append(signal);
 
-            if ((foundSignalName) && (foundAbstractionName)) {
-                signalList.append(foundSignal);
-                foundSignal.clear();
-                foundSignalName = false;
-                foundAbstractionName = false;
-            }
+            // qDebug() << "Signal[" << count++ << "] :" << signal;
+            // qDebug() << "\t Matching[0] :" << matchingInfo[0];
+            // qDebug() << "\t Matching[1] :" << matchingInfo[1];
+            // matchingInfo[2] = readLine;
+            // qDebug() << "\t Matching[2] :" << matchingInfo[2];
+            // qDebug() << "\n"
+
+            matchingInfo.clear();
         }
+#endif
     }
     file.close();
+    // signalList.removeDuplicates();
 
 #if 1
     qDebug() << "=======================================================================================================";
+    qDebug() << "extractMatchingSignal :" << sfcSignal << file.fileName() << prefix;
     int index = 0;
     for (const auto& signal : signalList) {
-        qDebug() << "\t SignalList[" << index++ << "] :" << signal;
+        qDebug() << ((sfcSignal) ? ("\t YML[") : ("\t VSM[")) << index++ << "] :" << signal;
     }
-    qDebug() << "extractMatchingSignal :" << signalList.size() << file.fileName();
     qDebug() << "=======================================================================================================\n\n";
 #endif
 
@@ -2838,54 +2923,78 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
     ivis::common::CheckTimer checkTimer;
     QStringList fileList;
 
-#if 0
-    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-
-    if (sfcSignal) {
-        sfcModelPath.append("/SFC/CV");
-        fileList.append(sfcModelPath + "/ABS_CV/ABS_CV.yml");
-        fileList.append(sfcModelPath + "/ABS_NO_ABS_Trailer/ABS_NO_ABS_Trailer.yml");
-        fileList.append(sfcModelPath + "/ADAS_Driving_CV/ADAS_Driving_CV.yml");
-        fileList.append(sfcModelPath + "/ADAS_PARKING_CV/ADAS_PARKING_CV.yml");
-    } else {
-        sfcModelPath.append("/VSM");
-        fileList.append(sfcModelPath + "/CLU_VSM_CV_EV.Vehicle.CV.vsm");
-        fileList.append(sfcModelPath + "/CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
-        fileList.append(sfcModelPath + "/CLU_VSM_CV_ICV.Vehicle.CV.vsm");
-        fileList.append(sfcModelPath + "/CLU_VSM_CV_SKEL.Vehicle.CV.vsm");
-        fileList.append(sfcModelPath + "/CLU_VSM_CV_System.Vehicle.CV.vsm");
-    }
-#else
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    QString prefix;
 
+#if 1
     if (sfcSignal) {
         auto moduleInfoList = ExcelUtil::instance().data()->isModuleListFromJson(appMode, true);
         QStringList moduleList = moduleInfoList.keys();
         QMap<QString, QString> moduleInfo;
         int index = 0;
         for (const auto& key : moduleInfoList.keys()) {
-            qDebug() << index++ << ". SfcInfo :" << key << moduleInfoList[key].second;
-            moduleInfo[key] = moduleInfoList[key].second;
+            auto sfcFile = moduleInfoList[key].second;
+            if (sfcFile.size() == 0) {
+                // 12 . Module : Blue_Light_Filter
+                // 60 . Module : Master_Warning
+                // 60 . Module : Navigation_DIS
+                // 60 . Module : Navigation_TBT
+                // 68 . Module : Seatbelt_Warning
+                // 71 . Module : Speed_Gauge
+                // 82 . Module : VESS
+                continue;
+            }
+            // qDebug() << index <<". File SFC :" << key << sfcFile;
+            moduleInfo[key] = sfcFile;
+            fileList.append(sfcFile);
+            index++;
         }
+        fileList.resize(10);
     } else {
-        // isVsmFileInfo()
+        bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
+        QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+        sfcModelPath.append("/VSM");
+        fileList.append(sfcModelPath + "/CLU_VSM_CV_EV.Vehicle.CV.vsm");
+        // fileList.append(sfcModelPath + "/CLU_VSM_CV_FCEV.Vehicle.CV.vsm");
+        // fileList.append(sfcModelPath + "/CLU_VSM_CV_ICV.Vehicle.CV.vsm");
+        // fileList.append(sfcModelPath + "/CLU_VSM_CV_SKEL.Vehicle.CV.vsm");
+        // fileList.append(sfcModelPath + "/CLU_VSM_CV_System.Vehicle.CV.vsm");
+
+        // ConfigTypeVsmFileNameBaseCV
+        //     QVariant("CLU_VSM_CV_%1.Vehicle.%2.vsm"))
+        //     QVariant("CLU_VSM_%1.Vehicle.%2.vsm"))
+        // ConfigTypeVehicleTypeCV
+        //     QVariant(QVariantList({"ICV", "EV", "FCEV"})))
+        //     QVariant(QVariantList({"ICV", "EV", "FCEV", "PHEV", "HEV"})))
+        // ConfigTypeSfcSpecTypeCV
+        //     QVariant(QVariantList({"AV", "CD", "CV", "EC", "PT", "ETC", "extension"})))
+        //     QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "ETC", "extension"})))
+        // ConfigTypeVsmSpecTypeCV
+        //     QVariant("CV"));
+        //     QVariant(QVariantList({"AD", "AV", "CD", "CH", "EC", "HD", "PT", "CS"})))
+        // ConfigTypeSystemTypePV
+        //     QVariant(QVariantList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"})))
+
+        prefix = QString("Vehicle.CV.");
     }
-
-
-
-
-
+#else
+    QStringList signalPrefixList;
+    signalPrefixList.append("SFC.");
+    signalPrefixList.append("SFC.Event.");
+    signalPrefixList.append("SFC.Extension.");
+    signalPrefixList.append("SFC.Private.");
+    signalPrefixList.append("SFCFuel.Fuel_System.");
+    signalPrefixList.append("SFC_Common_Enum.");
+    signalPrefixList.append("SFC_Common_Enum_CV.");
+    signalPrefixList.append("Vehicle.");
+    signalPrefixList.append("Vehicle.System.");
 #endif
 
-
-
-
-    // QString vehicleType = vehicleTypeList.toStringList().join(", ");
 
     QStringList signalList;
 #if 1
     for (const auto& file : fileList) {
-        signalList.append(extractMatchingSignal(file));
+        signalList.append(extractMatchingSignal(sfcSignal, file, prefix));
     }
     checkTimer.check("isSignalListInfo");
 #endif
@@ -2894,9 +3003,9 @@ QStringList SignalDataManager::isSignalListInfo(const bool& sfcSignal) {
 }
 
 void SignalDataManager::testCode(const QVariantList& arg) {
-#if 1
+#if 0
     isSignalListInfo(true);
-    // isSignalListInfo(false);
+    isSignalListInfo(false);
     return;
 #endif
 
@@ -2966,6 +3075,7 @@ void SignalDataManager::testCode(const QVariantList& arg) {
             {20, QStringList({"0", "1", "254"})},
             {21, QStringList({"delay"})},
             {22, QStringList({"collect"})},
+            {23, QStringList({"[CustomNot][0]", "[4294967296]"})},
         };
         static bool normal = true;
         static QMap<int, QStringList> customData = (normal) ? (customData_0) : (customData_1);

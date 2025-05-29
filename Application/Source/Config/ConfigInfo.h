@@ -30,10 +30,12 @@ public:
         ConfigTypeOtherTitle,
         ConfigTypeConfigTitle,
         ConfigTypeDependentOnTitle,
+        ConfigTypeManualTCTitle,
         ConfigTypeDescConfigVisible,
         ConfigTypeGeneratePython,
         ConfigTypeTerminalBufferSize,
         ConfigTypeTestButtonVisible,
+        ConfigTypeManualCycleMode,
 
         // File
         ConfigTypeLastSavedFilePath,
@@ -125,7 +127,7 @@ private:
             "ConfigTypeGenTypeList", QVariant(QVariantList({"Default", "Negative/Positive", "Positive"})));
         mConfigInfoData[ConfigTypeSheetName] = QPair<QString, QVariant>(
             "ConfigTypeSheetName", QVariant(QVariantList({"Description", "Privates", "Telltales", "Constants", "Events", "Sounds",
-                                                          "Inters", "Outputs", "Configs", "DependentOn"})));
+                                                          "Inters", "Outputs", "Configs", "DependentOn", "ManualTC"})));
         mConfigInfoData[ConfigTypeDescTitle] = QPair<QString, QVariant>(
             "ConfigTypeDescTitle",
             QVariant(QVariantList({"test", "version", "description", "ValueCount", "PreconditionCount", "Config_Signal",
@@ -137,11 +139,17 @@ private:
         mConfigInfoData[ConfigTypeConfigTitle] = QPair<QString, QVariant>(
             "ConfigTypeConfigTitle", QVariant(QVariantList({"ConfigName", "AndGroup", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeDependentOnTitle] = QPair<QString, QVariant>(
-            "ConfigTypeDependentOnTitle", QVariant(QVariantList({"DependentName", "InputSignal", "InputData"})));
+            "ConfigTypeDependentOnTitle", QVariant(QVariantList({"TCName", "Result", "InputSignal", "InputData"})));
+        mConfigInfoData[ConfigTypeManualTCTitle] = QPair<QString, QVariant>("ConfigTypeManualTCTitle",
+            QVariant(QVariantList({"TCName", "VehicleType", "RunnableOpt", "ConfigOpt", "CycleOption", "CyclePeriod(ms)",
+                                   "CycleDelta(%)", "CycleDuration(ms)", "CycleMode", "PreconditionSignal", "PreconditionValue",
+                                   "InputSignal", "InputValue", "InitSignal", "InitValue", "OutputSignal", "OutputValue"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
         mConfigInfoData[ConfigTypeTerminalBufferSize] = QPair<QString, QVariant>("ConfigTypeTerminalBufferSize", QVariant(9999));
         mConfigInfoData[ConfigTypeGeneratePython] = QPair<QString, QVariant>("ConfigTypeGeneratePython", QVariant(false));
         mConfigInfoData[ConfigTypeTestButtonVisible] = QPair<QString, QVariant>("ConfigTypeTestButtonVisible", QVariant(false));
+        mConfigInfoData[ConfigTypeManualCycleMode] =
+            QPair<QString, QVariant>("ConfigTypeManualCycleMode", QVariant(QVariantList({"value", "time"})));
 
         // File
         mConfigInfoData[ConfigTypeLastSavedFilePath] = QPair<QString, QVariant>("ConfigTypeLastSavedFilePath", QVariant(""));

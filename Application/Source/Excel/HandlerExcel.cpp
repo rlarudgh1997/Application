@@ -50,7 +50,8 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelSheetName, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDescTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelConfigTitle, QVariant());
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOn, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelDependentOnTitle, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelManualTCTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelOtherTitle, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelView, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeExcelMergeStart, QVariant(""));
@@ -64,6 +65,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, QVariant());
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, QVariant());
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeManualCycleMode, QVariant());
 
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetPrivates, QVariant(""));
@@ -75,6 +77,7 @@ void HandlerExcel::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetOutputs, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn, QVariant(""));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC, QVariant(""));
 }
 
 void HandlerExcel::controlConnect(const bool& state) {

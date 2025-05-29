@@ -103,8 +103,8 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
                 }
             }
         });
-        connect(mDialog.data(), &Dialog::signalSelectAppMode,
-                [=](const int& appMode) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, appMode); });
+        connect(mDialog.data(), &Dialog::signalSelectRadio,
+                [=](const int& selectIndex) { createSignal(ivis::common::EventTypeEnum::EventTypeSelectAppMode, selectIndex); });
         connect(mDialog.data(), &Dialog::signalSelectListItem, [=](const QList<QPair<int, QString>>& selectItem) {
             int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
 
