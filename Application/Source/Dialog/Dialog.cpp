@@ -136,7 +136,7 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
     }
-    qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
+    // qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
 }
 
 void Dialog::controlConnet(const int& displayType) {
@@ -383,8 +383,6 @@ void Dialog::connectSelectList(const bool& state) {
 }
 
 void Dialog::connectSelectOption(const bool& state) {
-    qDebug() << "connectSelectOption :" << state;
-
     if (state) {
         connect(mGui->SelectOptionOK, &QPushButton::clicked, [=]() {
             bool option1 = (mGui->SelectOption1Check->checkState() == Qt::CheckState::Checked);
@@ -394,7 +392,6 @@ void Dialog::connectSelectOption(const bool& state) {
                     option2.append(QPair<QString, bool>(check->text(), (check->checkState() == Qt::CheckState::Checked)));
                 }
             }
-
             emit signalSelectOption(option1, option2);
             QDialog::accept();
         });
@@ -730,7 +727,7 @@ void Dialog::updateDisplay(const int& displayType, const QString& title) {
     this->setModal(true);
     this->setFocus();
     this->show();
-    qDebug() << "updateDisplay :" << getProperty(DataTypeDisplayType).toInt() << "->" << displayType << title << geometry();
+    // qDebug() << "updateDisplay :" << displayType << title << geometry();
 }
 
 QList<QPair<QFrame*, QRadioButton*>> Dialog::isRadioWidget() const {

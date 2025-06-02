@@ -847,7 +847,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
         int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
         int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
-        qDebug() << "updateAutoCompleteSuggestions :" << keywordType << sheetIndex << signalType << columnIndex << signalName;
+        // qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
         if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
             updateAutoCompleteTCName(signalName, vehicleType, keywordType);
         } else {
@@ -1055,9 +1055,7 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
                 }
                 optionInfo.append(moduleName);
             } else {
-                bool check = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
                 for (const auto& module : selectModule) {
-                    qDebug() << "\t Check :" << check << module << directory;
                     if (module == directory) {
                         editingModule = directory;
                         break;
@@ -1085,7 +1083,7 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         }
     }
 
-#if 1
+#if 0
     qDebug() << (QString(120, '='));
     qDebug() << "updateStartTestCase :" << excelView << selectModule.size();
     qDebug() << "\t selectModule   :" << selectModule;
@@ -1096,7 +1094,6 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
     qDebug() << "\t                :" << fileInfo.fileName();
     qDebug() << "\t                :" << directory;
     qDebug() << "\n\n";
-    // return;
 #endif
 
     if (optionInfo.size() > 0) {

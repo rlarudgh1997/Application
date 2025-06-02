@@ -136,7 +136,7 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
         connect(
             mDialog.data(), &Dialog::signalSelectOption, [=](const bool& option1, const QList<QPair<QString, bool>>& option2) {
                 int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
-                qDebug() << "signalSelectOption :" << dialogType;
+
                 if ((dialogType == Dialog::DialogTypeTestReportTC) || (dialogType == Dialog::DialogTypeTestReportGCOV)) {
                     QVariantList reportInfo = QVariantList();
                     if (dialogType == Dialog::DialogTypeTestReportTC) {

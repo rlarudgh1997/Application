@@ -1088,7 +1088,6 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun: {
-            qDebug() << "EventTypeSelectModuleOfRun :" << value.toList().size();
             if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
                 bool state = value.toList().at(1).toBool();
