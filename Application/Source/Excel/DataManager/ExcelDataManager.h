@@ -141,7 +141,7 @@ public:
                                                                const QString& resultName, const QString& caseName);
     QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName);
     QList<QStringList> isConfigDataList(const QString& configName, const bool& allData = true, const bool& removeMerge = false);
-    QList<QStringList> isDependentDataList(const QString& dependentName, const QString& resultName, const bool& allData = true);
+    QPair<QStringList, QStringList> isDependentDataList(const QString& tcName, const QString& resultName);
     QList<ManualData> isManualDataList();
 
     void reloadExcelData(const int& sheetIndex = 0);

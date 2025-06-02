@@ -157,7 +157,7 @@ public:
         PropertyTypeOriginSheetConfigs,
         PropertyTypeOriginSheetDependentOn,
         PropertyTypeOriginSheetManualTC,
-        PropertyTypeOriginSheetMax,  // 3011
+        PropertyTypeOriginSheetMax,  // 3012
         PropertyTypeConvertSheetDescription,
         PropertyTypeConvertSheetPrivates,
         PropertyTypeConvertSheetTelltales,
@@ -250,9 +250,10 @@ public:
         EventTypeUpdateConfig,
         EventTypeConfigReset,
         EventTypeTestReportReset,
-        EventTypeGenTCModule,
-        EventTypeRunTC,
-        EventTypeGenTC,
+        EventTypeGenSelectModule,
+        EventTypeGenCurrentModule,
+        EventTypeRunMultiDocker,
+        EventTypeRunSelectModule,
         EventTypeTestReportResult,
         EventTypeTestReportCoverage,
         EventTypeEnterScriptText,

@@ -74,12 +74,18 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuLast">
+     <property name="title">
+      <string>Last</string>
+     </property>
+     <addaction name="actionLastFolder_2"/>
+     <addaction name="actionLastFile_2"/>
+    </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
-    <addaction name="actionLastFolder"/>
-    <addaction name="actionLastFile"/>
+    <addaction name="menuLast"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
     <addaction name="separator"/>
@@ -143,9 +149,22 @@
     <property name="title">
      <string>Run</string>
     </property>
-    <addaction name="actionGenTCModule"/>
-    <addaction name="actionGenTC"/>
-    <addaction name="actionRunTC"/>
+    <widget class="QMenu" name="menuRunTC">
+     <property name="title">
+      <string>Run TC</string>
+     </property>
+     <addaction name="actionRunSelectModule"/>
+     <addaction name="actionRunMultiDocker"/>
+    </widget>
+    <widget class="QMenu" name="menuGenTC">
+     <property name="title">
+      <string>Gen TC</string>
+     </property>
+     <addaction name="actionGenSelectModule"/>
+     <addaction name="actionGenCurrentModule"/>
+    </widget>
+    <addaction name="menuGenTC"/>
+    <addaction name="menuRunTC"/>
     <addaction name="actionTCReport"/>
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
@@ -325,22 +344,6 @@
     <bool>true</bool>
    </property>
   </action>
-  <action name="actionGenTCModule">
-   <property name="text">
-    <string>Gen TC - Module</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+G</string>
-   </property>
-  </action>
-  <action name="actionRunTC">
-   <property name="text">
-    <string>Run TC</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+R</string>
-   </property>
-  </action>
   <action name="actionTCReport">
    <property name="text">
     <string>TC Report</string>
@@ -435,9 +438,6 @@
    <property name="text">
     <string>Gen TC</string>
    </property>
-   <property name="shortcut">
-    <string>Alt+M</string>
-   </property>
   </action>
   <action name="actionLastFile">
    <property name="enabled">
@@ -523,6 +523,48 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionRunSelectModule">
+   <property name="text">
+    <string>Select Module</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+R</string>
+   </property>
+  </action>
+  <action name="actionRunMultiDocker">
+   <property name="text">
+    <string>Multi Docker</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+D</string>
+   </property>
+  </action>
+  <action name="actionGenSelectModule">
+   <property name="text">
+    <string>Select Module</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+G</string>
+   </property>
+  </action>
+  <action name="actionGenCurrentModule">
+   <property name="text">
+    <string>Current Module</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+M</string>
+   </property>
+  </action>
+  <action name="actionLastFolder_2">
+   <property name="text">
+    <string>Folder</string>
+   </property>
+  </action>
+  <action name="actionLastFile_2">
+   <property name="text">
+    <string>File</string>
    </property>
   </action>
  </widget>

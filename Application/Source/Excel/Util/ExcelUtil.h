@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QJsonObject>
 
 #include "CommonDefine.h"
 #include "CommonUtil.h"
+
+using QMapStrStr = QMap<QString, QString>;
 
 class KeywordInfo {
 public:
@@ -69,6 +72,10 @@ class ExcelUtil : public QObject {
     REGISTER_WRITABLE_VALUE(QString, Merge, QString())
     REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
+    REGISTER_WRITABLE_VALUE(bool, InitPreset, false)
+    REGISTER_WRITABLE_VALUE(QJsonObject, JsonRoot, QJsonObject())
+    REGISTER_WRITABLE_VALUE(QStringList, JsonSectionInfo, QStringList())
+    REGISTER_WRITABLE_CONTAINER(QMap, QString, QMapStrStr, PresetInfo)
 
 public:
     static QSharedPointer<ExcelUtil>& instance();
@@ -97,9 +104,12 @@ public:
     QString pythonCall(const bool& readFile, const QString& filePath);
     void writeExcelSheet(const QString& filePath, const bool& convert);
     QList<QVariantList> openExcelFile(const QString& filePath);
+    QString readPreset(const QString& key);
 
 private:
     explicit ExcelUtil();
+
+    void initPresetInfo();
 };
 
 #endif  // EXCEL_UTIL_H

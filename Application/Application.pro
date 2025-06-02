@@ -67,12 +67,16 @@ message("INSTALL_PATH=$$INSTALL_PATH")
     python.files = $$PWD/../Python/ExcelParser.py $$PWD/../Python/CaseGen/
     node.path = $$INSTALL_PATH
     node.files = $$PWD/../Python/NodeAddress
+    preset.path = $$INSTALL_PATH
+    preset.files = $$PWD/../Preset
 } else {
     target.path = $$OUT_PWD
     python.path = $$OUT_PWD
     python.files = $$PWD/../Python/ExcelParser.py $$PWD/../Python/CaseGen/
     node.path = $$OUT_PWD
     node.files = $$PWD/../Python/NodeAddress
+    preset.path = $$INSTALL_PATH
+    preset.files = $$PWD/../Preset
 }
 
 
@@ -82,10 +86,13 @@ message("python.path=$${python.path}")
 message("python.files=$${python.files}")
 message("node.path=$${node.path}")
 message("node.files=$${node.files}")
+message("preset.path=$${preset.path}")
+message("preset.files=$${preset.files}")
 
 !isEmpty(target.path): INSTALLS += target
 !isEmpty(python.path): INSTALLS += python
 !isEmpty(node.path): INSTALLS += node
+!isEmpty(preset.path): INSTALLS += preset
 !isEmpty(module.path): INSTALLS += module
 
 message("INSTALLS=$$INSTALLS")

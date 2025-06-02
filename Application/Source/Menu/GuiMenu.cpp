@@ -136,7 +136,7 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
         connect(
             mDialog.data(), &Dialog::signalSelectOption, [=](const bool& option1, const QList<QPair<QString, bool>>& option2) {
                 int dialogType = mDialog.data()->getProperty(Dialog::DataTypeDialogType).toInt();
-
+                qDebug() << "signalSelectOption :" << dialogType;
                 if ((dialogType == Dialog::DialogTypeTestReportTC) || (dialogType == Dialog::DialogTypeTestReportGCOV)) {
                     QVariantList reportInfo = QVariantList();
                     if (dialogType == Dialog::DialogTypeTestReportTC) {
@@ -460,12 +460,14 @@ void GuiMenu::updateMenuSetting() {
 }
 
 void GuiMenu::updateMenuRun() {
-    connect(mGui->actionGenTCModule, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTCModule, QVariant()); });
-    connect(mGui->actionRunTC, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunTC, QVariant()); });
-    connect(mGui->actionGenTC, &QAction::triggered,
-            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenTC, QVariant()); });
+    connect(mGui->actionGenSelectModule, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSelectModule, QVariant()); });
+    connect(mGui->actionGenCurrentModule, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenCurrentModule, QVariant()); });
+    connect(mGui->actionRunSelectModule, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunSelectModule, QVariant()); });
+    connect(mGui->actionRunMultiDocker, &QAction::triggered,
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunMultiDocker, QVariant()); });
     connect(mGui->actionTCReport, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeTestReportResult, QVariant()); });
     connect(mGui->actionGCOVReport, &QAction::triggered,

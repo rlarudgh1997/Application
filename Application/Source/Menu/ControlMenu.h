@@ -29,6 +29,8 @@ private:
     void updateViewLogFile();
     void updateViewLogDisplay(const QString& titleName);
     void updateGenTCInfo(const QVariantList& infoList);
+    bool isRunningInDocker();
+    void startMultiDockerRunTC();
     void startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount);
     void startProcess(const QString& command, const QString& arg, const int& totalCount);
     bool excuteScript(const int& runType, const bool& state, const QVariantList& infoList);

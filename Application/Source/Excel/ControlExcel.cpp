@@ -1069,9 +1069,9 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         }
     }
 
-#if 0
+#if 1
     qDebug() << (QString(120, '='));
-    qDebug() << "updateStartTestCase";
+    qDebug() << "updateStartTestCase :" << excelView << selectModule.size();
     qDebug() << "\t Editing   :" << editingModule;
     qDebug() << "\t Option    :" << optionInfo;
     qDebug() << "\t FilePath  :" << fileInfo.filePath();
@@ -1147,7 +1147,7 @@ void ControlExcel::updateSelectModuleList() {
         }
     }
 
-    // qDebug() << "updateShowSelectModule :" << selectModuleList << moduleList.size();
+    // qDebug() << "updateShowSelectModule :" << excelView << selectModuleList << moduleList.size();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeAllModuleList, moduleList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeUpdateSelectModule, selectModuleList);
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, true, true);
@@ -1320,11 +1320,11 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             updateTCCheck(eventValue.toInt());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTCModule: {
+        case ivis::common::EventTypeEnum::EventTypeGenSelectModule: {
             updateSelectModuleList();
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTC: {
+        case ivis::common::EventTypeEnum::EventTypeGenCurrentModule: {
             updateStartTestCase();
             break;
         }
@@ -1333,13 +1333,29 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTest: {
-            // ExcelDataManager::instance().data()->reloadExcelData();
-            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_001", "Test1");
-            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_002", "Test2");
-            // ExcelDataManager::instance().data()->isDependentDataList("Dependent_002", "Test3");
-
-            // SignalDataManager::instance().data()->testCode();
+#if 1
+            SignalDataManager::instance().data()->testCode();
+#endif
+#if 0
             ExcelDataManager::instance().data()->isManualDataList();
+            ExcelUtil::instance().data()->readPreset("Preset_003");
+            ExcelUtil::instance().data()->readPreset("SFC.Extension.Param.Par_SpeedToleranceMph3");
+            ExcelUtil::instance().data()->readPreset("SFC.Extension.Memory.TEST_02");
+            ExcelUtil::instance().data()->readPreset("SFC.Extension.Memory_IGN.TEST_12");
+            ExcelUtil::instance().data()->readPreset("TEST");
+#endif
+#if 0
+            ExcelDataManager::instance().data()->reloadExcelData();
+            ExcelDataManager::instance().data()->isDependentDataList("IMG_TelltaleABSAmberLamp_stat", "ON_ABS_Spec");
+
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_01", "On");
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_01", "Off");
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Ok");
+
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Fail");
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Error");
+            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "TEST");
+#endif
             break;
         }
         default: {

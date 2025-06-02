@@ -1,0 +1,44 @@
+{
+  "General": {
+    "Preset_001": "\\b\\ad\\x19@\\x1f\\x10'",
+    "Preset_002": "\\x1",
+    "Preset_003": "\\x1"
+  },
+  "Param": {
+    "SFC.Extension.Param.Par_IllumDayDial": "\\0\\n\\0 \\0Z\\0",
+    "SFC.Extension.Param.Par_IllumNightDial": "\\0\\n\\0 \\02\\0",
+    "SFC.Extension.Param.Par_SpeedToleranceKph1": "2.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph2": "2.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph3": "3.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph4": "4",
+    "SFC.Extension.Param.Par_SpeedToleranceKph5": "4.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph6": "5.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph7": "6.5",
+    "SFC.Extension.Param.Par_SpeedToleranceKph8": "7",
+    "SFC.Extension.Param.Par_SpeedToleranceKph9": "8",
+    "SFC.Extension.Param.Par_SpeedToleranceKph10": "9",
+    "SFC.Extension.Param.Par_SpeedToleranceKph11": "10",
+    "SFC.Extension.Param.Par_SpeedToleranceKph12": "11",
+    "SFC.Extension.Param.Par_SpeedToleranceKph13": "12",
+    "SFC.Extension.Param.Par_SpeedToleranceKph14": "0",
+    "SFC.Extension.Param.Par_SpeedToleranceKph15": "0",
+    "SFC.Extension.Param.Par_SpeedToleranceMph1": "0.5",
+    "SFC.Extension.Param.Par_SpeedToleranceMph2": "0.9",
+    "SFC.Extension.Param.Par_SpeedToleranceMph3": "1.3",
+    "SFC.Extension.Param.Par_SpeedToleranceMph4": "1.8",
+    "SFC.Extension.Param.Par_SpeedToleranceMph5": "2.3",
+    "SFC.Extension.Param.Par_SpeedToleranceMph6": "2.8",
+    "SFC.Extension.Param.Par_SpeedToleranceMph7": "3.3",
+    "SFC.Extension.Param.Par_SpeedToleranceMph8": "3.8",
+    "SFC.Extension.Param.Par_SpeedToleranceMph9": "0",
+    "SFC.Extension.Param.Par_SpeedToleranceMph10": "0"
+  },
+  "Memory": {
+    "SFC.Extension.Memory.TEST_01": "1",
+    "SFC.Extension.Memory.TEST_02": "2"
+  },
+  "Memory_IGN": {
+    "SFC.Extension.Memory_IGN.TEST_11": "11",
+    "SFC.Extension.Memory_IGN.TEST_12": "12"
+  }
+}

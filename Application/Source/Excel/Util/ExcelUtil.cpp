@@ -5,8 +5,8 @@
 #include "ExcelData.h"
 
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonParseError>
 
 QSharedPointer<ExcelUtil>& ExcelUtil::instance() {
     static QSharedPointer<ExcelUtil> gUtil;
@@ -26,6 +26,8 @@ ExcelUtil::ExcelUtil() {
     setMerge(merge);
     setMergeEnd(mergeEnd);
     setMergeInfos(QStringList({mergeStart, merge, mergeEnd}));
+
+    initPresetInfo();
 }
 
 QString ExcelUtil::isModuleFilePath(const QString& path, const QString& module, const QString& fileExtension) {
@@ -1206,4 +1208,71 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
     }
 
     return sheetDataList;
+}
+
+void ExcelUtil::initPresetInfo() {
+    if (getInitPreset()) {
+        qDebug() << "Json preset information loading complete.";
+    }
+
+    const QString jsonFilePath = QString("%1/Preset/Preset.json").arg(ivis::common::APP_PWD());
+    QFile file(jsonFilePath);
+
+    if (file.open(QIODevice::ReadOnly) == false) {
+        qDebug() << "Fail to open json file :" << file.fileName();
+        return;
+    }
+
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        qDebug() << "Json parse error :" << parseError.errorString();
+        return;
+    }
+
+    if (doc.isObject() == false) {
+        qDebug() << "Json root is not an object.";
+        return;
+    }
+
+    QMap<QString, QMapStrStr> presetInfo;
+    QJsonObject root = doc.object();
+
+    for (const auto& section : root.keys()) {
+        QJsonObject sectionObj = root.value(section).toObject();
+        QMap<QString, QString> keyValues;
+
+        for (const auto& key : sectionObj.keys()) {
+            keyValues[key] = sectionObj.value(key).toString();
+        }
+        presetInfo[section] = keyValues;
+    }
+    writePresetInfo(presetInfo);
+
+    setJsonRoot(root);
+    setJsonSectionInfo(root.keys());
+    setInitPreset(true);
+}
+
+QString ExcelUtil::readPreset(const QString& key) {
+    if (getInitPreset() == false) {
+        initPresetInfo();
+    }
+
+    QMap<QString, QMapStrStr> presetInfo = readPresetInfo();
+    QString value;
+
+    for (const auto& section : presetInfo.keys()) {
+        const auto& sectionMap = presetInfo[section];
+        if (sectionMap.contains(key)) {
+            value = sectionMap.value(key);
+            break;
+        }
+    }
+
+    qDebug() << "readPreset :" << key << value;
+    return value;
 }

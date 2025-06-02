@@ -177,10 +177,10 @@ void ControlMenu::updateSelectModuleList(const int& eventType, const QVariantLis
     QString filter = QString();
     int runType = 0;
 
-    if (eventType == ivis::common::EventTypeEnum::EventTypeGenTCModule) {
+    if (eventType == ivis::common::EventTypeEnum::EventTypeGenSelectModule) {
         filter = QString(".xlsx");
         runType = ivis::common::RunTypeEnum::RunTypeGenTC;
-    } else if (eventType == ivis::common::EventTypeEnum::EventTypeRunTC) {
+    } else if (eventType == ivis::common::EventTypeEnum::EventTypeRunSelectModule) {
         filter = QString(".tc");
         runType = ivis::common::RunTypeEnum::RunTypeRunTC;
     } else {
@@ -452,6 +452,44 @@ void ControlMenu::updateGenTCInfo(const QVariantList& infoList) {
 
     ivis::common::Popup::clearPopup();
     updateTestResultInfo(resultType, totalCount, infoData, false);
+}
+
+bool ControlMenu::isRunningInDocker() {
+    QFile file("/proc/1/cgroup");
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if (line.contains("docker") || line.contains("kubepods") || line.contains("containerd")) {
+                return true;
+            }
+        }
+    }
+    return QFile::exists("/.dockerenv");
+}
+
+void ControlMenu::startMultiDockerRunTC() {
+    bool runningInDocker = isRunningInDocker();
+
+    qDebug() << "startMultiDockerRunTC :" << runningInDocker;
+
+#if 0
+    if (runningInDocker) {
+        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+        bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
+        QString option = QString(() ? (" -d") : (""));
+        QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+        QString script =
+            QString("%1/../validator/multi-docker-test/multi-docker-test.sh -t %2%3")
+                    .arg(sfcModelPath)
+                    .arg((appModeCV) ? ("CV") : ("PV"));
+                    .arg((appModeCV) ? ("-d") : (""));
+
+        // ./multi-docker-test.sh -t CV -d 1~max
+    } else {
+    }
+#endif
 }
 
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
@@ -972,12 +1010,16 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeRunTC: {
+        case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
+            startMultiDockerRunTC();
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeRunSelectModule: {
             updateSelectModuleList(type, QVariantList());
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeGenTCModule:
-        case ivis::common::EventTypeEnum::EventTypeGenTC: {
+        case ivis::common::EventTypeEnum::EventTypeGenSelectModule:
+        case ivis::common::EventTypeEnum::EventTypeGenCurrentModule: {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeGeneratePython).toBool()) {
                 updateSelectModuleList(type, QVariantList());
             } else {
@@ -1046,6 +1088,7 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleOfRun: {
+            qDebug() << "EventTypeSelectModuleOfRun :" << value.toList().size();
             if (value.toList().size() == 4) {
                 int runType = value.toList().at(0).toInt();
                 bool state = value.toList().at(1).toBool();
