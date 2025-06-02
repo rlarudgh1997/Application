@@ -82,7 +82,7 @@ private:
     bool openExcelFile();
 
 signals:
-    void signalTestCaseCompleted(const int& type, const bool& result);
+    void signalTestCaseCompleted(const int& type, const bool& sheetReload);
     void signalGenTCInfo(const int& resultType, const int& current, const int& total, const QStringList& info);
 
 private:

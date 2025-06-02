@@ -1439,7 +1439,7 @@ QStringList SignalDataManager::isValidUniqueValue(const int& dataType, const QMa
     QStringList validData;
     if (result) {
         if (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HString)) {
-            validData.append("[NotUsedString]");
+            // validData.append("[NotUsedString]");
         } else if (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble)) {
             validData.append(QString("%1.0").arg(validValue));
         } else {

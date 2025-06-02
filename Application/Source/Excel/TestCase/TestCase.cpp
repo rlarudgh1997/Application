@@ -137,7 +137,7 @@ void TestCase::runThread() {
             case ExcuteTypeCompleted: {
                 excuteType = ExcuteTypeInvalid;
                 ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGenerateStart, false);
-                emit signalTestCaseCompleted(nextType, (nextType == ExcuteTypeCompleted));
+                emit signalTestCaseCompleted(nextType, true);
                 break;
             }
             case ExcuteTypeExit: {
@@ -785,6 +785,7 @@ bool TestCase::openExcelFile() {
             // 엑셀 파일 오픈한 경로와 cv.json 파일에서 모듈정보, 파일경로 정보로 구성한 파일경로가 다른경우
             // -> 해당 조건인 경우 파일 오픈한 경로를 사용하도록
             filePath = openFilePath;
+            setOpenFile(QFileInfo());
         }
 
         if (currentModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시

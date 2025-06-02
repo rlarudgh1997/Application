@@ -193,7 +193,7 @@ QStringList ExcelUtil::isDescriptionDataInfo() {
 
     QStringList dataInfo(static_cast<int>(ivis::common::ExcelSheetTitle::Description::Max));
     int rowIndex = 0;
-    for (const auto& rowDataList : ExcelData::instance()->getSheetData(descriptSheetIndex).toList()) {
+    for (const auto& rowDataList : ExcelData::instance().data()->getSheetData(descriptSheetIndex).toList()) {
         QStringList rowData = rowDataList.toStringList();
         if (rowData.size() < static_cast<int>(ivis::common::ExcelSheetTitle::Description::Max)) {
             // qDebug() << "Fail to sheet data list size :" << rowData.size();
@@ -235,7 +235,7 @@ int ExcelUtil::isDescriptionPreconditionCount() {
 }
 
 QString ExcelUtil::isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex) {
-    auto rowDataList = ExcelData::instance()->getSheetData(sheetIndex).toList();
+    auto rowDataList = ExcelData::instance().data()->getSheetData(sheetIndex).toList();
     if (rowIndex >= rowDataList.size()) {
         return QString();
     }
@@ -871,7 +871,7 @@ QString ExcelUtil::isValidMaxValue(const QString& signalName, const int& dataTyp
 //     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 
 //     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-//         if (ExcelData::instance()->getSheetData(sheetIndex).toList().size() > 0) {
+//         if (ExcelData::instance().data()->getSheetData(sheetIndex).toList().size() > 0) {
 //             return true;
 //         }
 //     }

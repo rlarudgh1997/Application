@@ -78,8 +78,8 @@
      <property name="title">
       <string>Last</string>
      </property>
-     <addaction name="actionLastFolder_2"/>
-     <addaction name="actionLastFile_2"/>
+     <addaction name="actionLastFolder"/>
+     <addaction name="actionLastFile"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -169,6 +169,7 @@
     <addaction name="actionGCOVReport"/>
     <addaction name="separator"/>
     <addaction name="actionEnterScriptText"/>
+    <addaction name="actionGenSSFS"/>
     <addaction name="actionTerminal"/>
     <addaction name="separator"/>
    </widget>
@@ -368,14 +369,6 @@
     <string>Alt+E</string>
    </property>
   </action>
-  <action name="actionGenSSFS">
-   <property name="text">
-    <string>Gen SSFS</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+S</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
@@ -437,19 +430,6 @@
   <action name="actionGenTC">
    <property name="text">
     <string>Gen TC</string>
-   </property>
-  </action>
-  <action name="actionLastFile">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>LastFile</string>
-   </property>
-  </action>
-  <action name="actionLastFolder">
-   <property name="text">
-    <string>LastFolder</string>
    </property>
   </action>
   <action name="actionAllCheck">
@@ -557,14 +537,22 @@
     <string>Alt+M</string>
    </property>
   </action>
-  <action name="actionLastFolder_2">
+  <action name="actionLastFolder">
    <property name="text">
     <string>Folder</string>
    </property>
   </action>
-  <action name="actionLastFile_2">
+  <action name="actionLastFile">
    <property name="text">
     <string>File</string>
+   </property>
+  </action>
+  <action name="actionGenSSFS">
+   <property name="text">
+    <string>Gen SSFS</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>

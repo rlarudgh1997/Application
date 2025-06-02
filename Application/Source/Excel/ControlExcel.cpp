@@ -134,9 +134,9 @@ void ControlExcel::controlConnect(const bool& state) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeDisplaySize, screenSize);
         });
 #endif
-        connect(TestCase::instance().data(), &TestCase::signalTestCaseCompleted, [=](const int& type, const bool& result) {
+        connect(TestCase::instance().data(), &TestCase::signalTestCaseCompleted, [=](const int& type, const bool& sheetReload) {
             // TestCase 가 별도 쓰레드로 분리되어 동작함.
-            QMetaObject::invokeMethod(this, "slotTestCaseCompleted", Q_ARG(int, type), Q_ARG(bool, result));
+            QMetaObject::invokeMethod(this, "slotTestCaseCompleted", Q_ARG(int, type), Q_ARG(bool, sheetReload));
         });
         connect(TestCase::instance().data(), &TestCase::signalGenTCInfo,
             [=](const int& resultType, const int& current, const int& total, const QStringList& info) {
@@ -291,7 +291,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     }
 
     updateDataHandler(propertyType, originSheetData);
-    ExcelData::instance().data()->setSheetData(propertyType, originSheetData);
+    updateSheetDataToExcelData(propertyType, originSheetData);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
     int originSize = ExcelData::instance().data()->getSheetData(propertyType).toList().size();
@@ -306,6 +306,19 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     qDebug() << (QString(100, '<').toLatin1().data());
 #endif
     qDebug() << "\033[0m";
+}
+
+void ControlExcel::updateSheetDataToExcelData(const int& propertyType, const QVariantList& sheetData) {
+    bool updateAll = ((propertyType == 0) && (sheetData.toList().size() == 0));
+    if (updateAll) {
+        const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+        const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+        for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+            ExcelData::instance().data()->setSheetData(sheetIndex, getData(sheetIndex).toList());
+        }
+    } else {
+        ExcelData::instance().data()->setSheetData(propertyType, sheetData);
+    }
 }
 
 void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
@@ -834,7 +847,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
         int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
         int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
-        // qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
+        qDebug() << "updateAutoCompleteSuggestions :" << keywordType << sheetIndex << signalType << columnIndex << signalName;
         if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
             updateAutoCompleteTCName(signalName, vehicleType, keywordType);
         } else {
@@ -1042,7 +1055,9 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
                 }
                 optionInfo.append(moduleName);
             } else {
+                bool check = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
                 for (const auto& module : selectModule) {
+                    qDebug() << "\t Check :" << check << module << directory;
                     if (module == directory) {
                         editingModule = directory;
                         break;
@@ -1050,6 +1065,7 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
                 }
                 optionInfo.append(selectModule);
             }
+            fileInfo = QFileInfo();
             break;
         }
         case ivis::common::ViewTypeEnum::ExcelTypeNew: {
@@ -1072,13 +1088,15 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
 #if 1
     qDebug() << (QString(120, '='));
     qDebug() << "updateStartTestCase :" << excelView << selectModule.size();
-    qDebug() << "\t Editing   :" << editingModule;
-    qDebug() << "\t Option    :" << optionInfo;
-    qDebug() << "\t FilePath  :" << fileInfo.filePath();
-    qDebug() << "\t           :" << fileInfo.path();
-    qDebug() << "\t           :" << fileInfo.fileName();
-    qDebug() << "\t           :" << directory;
+    qDebug() << "\t selectModule   :" << selectModule;
+    qDebug() << "\t EditingModule  :" << editingModule;
+    qDebug() << "\t Option         :" << optionInfo;
+    // qDebug() << "\t FilePath       :" << fileInfo.filePath();
+    qDebug() << "\t FilePath       :" << fileInfo.path();
+    qDebug() << "\t                :" << fileInfo.fileName();
+    qDebug() << "\t                :" << directory;
     qDebug() << "\n\n";
+    // return;
 #endif
 
     if (optionInfo.size() > 0) {
@@ -1153,7 +1171,7 @@ void ControlExcel::updateSelectModuleList() {
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeShowSelectModule, true, true);
 }
 
-void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
+void ControlExcel::slotTestCaseCompleted(const int& type, const bool& sheetReload) {
     switch (type) {
         case TestCase::ExcuteTypeCompleted: {
             if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
@@ -1173,12 +1191,24 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& result) {
             }
             break;
         }
+        case TestCase::ExcuteTypeStop:
         case TestCase::ExcuteTypeFailed: {
             break;
         }
         default: {
             break;
         }
+    }
+
+    if (sheetReload) {
+        // AMS 파일 오픈 상태
+        // GenTC - SelectModule 로 Air_Bag_CV 모듈만 선택
+        // GenTC - Completed, Failed, Stop 시 Air_Bag_CV 모듈 파싱 정보가 저장됨
+        // TestCase::writeSheetData() 함수 내부 ExcelData::instance().data()->setSheetData() 함수에서 저장됨
+        // 이후 AMS - Event 시트에서 데이터 자동완성 화면 클릭시 Air_Bag_CV 의 자동완성이 표시됨
+        // ExcelUtil::isCurrentCellText() 함수 내부에서 ExcelData::instance().data()->getSheetData() 사용하여서 문제 발생
+        // 수정 : GenTC 완료후 ControlExcel 내부에 저장되어 있는 Property 로 ExcelData::instance().data()->setSheetData() 업데이트
+        updateSheetDataToExcelData();
     }
 }
 

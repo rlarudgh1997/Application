@@ -464,6 +464,8 @@ void GuiMenu::updateMenuRun() {
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenSelectModule, QVariant()); });
     connect(mGui->actionGenCurrentModule, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenCurrentModule, QVariant()); });
+    connect(mGui->actionGenTC, &QAction::triggered,  // ShortCut 별도로 구성됨
+            [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeGenCurrentModule, QVariant()); });
     connect(mGui->actionRunSelectModule, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeRunSelectModule, QVariant()); });
     connect(mGui->actionRunMultiDocker, &QAction::triggered,
