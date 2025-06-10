@@ -1,0 +1,157 @@
+#
+# @file Tachometer.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Tachometer:
+  sfcVersion: "16.0.1"
+  description: "Reference : [PT400] Tachometer Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - vehicleInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+        - Vehicle.System.Config.Inter_ConfigFuelType: mInter_ConfigFuelType
+    - dmsTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Drive_Mode.Telltale.Drive_Mode.DMS.Stat: mDMSStat
+        - SFC.Drive_Mode.Telltale.Drive_Mode.DMS.StatOptional: mDMSStatOptional
+    - engineRpmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_EngineRpmValue: mInput_EngineRpmValue
+        - Vehicle.PT.Tachometer.Input_EngineRpmErrorStatus: mInput_EngineRpmErrorStatus
+        - Vehicle.PT.Tachometer.Input_EngineRpmDisplayReqValue: mInput_EngineRpmDisplayReqValue
+    - emsVirtualRpmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_EmsVirtualRpmValue: mInput_EmsVirtualRpmValue
+        - Vehicle.PT.Tachometer.Input_EmsVirtualRpmEnableStatus: mInput_EmsVirtualRpmEnableStatus
+    - tcuRpmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_TcuRpmValueFromTCU: mInput_TcuRpmValueFromTCU
+        - Vehicle.PT.Tachometer.Input_TcuRpmValueFromHDCT: mInput_TcuRpmValueFromHDCT
+        - Vehicle.PT.Tachometer.Input_TcuRpmEnableStatus: mInput_TcuRpmEnableStatus
+    - engineTempChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_EngineOilTempValue: mInput_EngineOilTempValue
+    - ptLogicControlTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_PTLogicControlType: mInter_PTLogicControlType
+    - engineRpmNewErrorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_EngineRpmNewErrorStatus: mInput_EngineRpmNewErrorStatus
+    - rpmGaugeMaxReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_RpmGaugeMaxReqStatus: mInput_RpmGaugeMaxReqStatus
+    - rpmGaugeRedStartPointReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Tachometer.Input_RpmGaugeRedStartPointReqStatus: mInput_RpmGaugeRedStartPointReqStatus
+  outputs:
+      # RPM Value
+    - SFC.Tachometer.Constant.Rpm.Value:
+      description: "DCN: IMG_Rpm_value</br>
+                    Rpm value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat:
+      description: "DCN: IMG_RpmRedZone_stat</br>
+                    Redzone display except N brand"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: STEP_FROM4000, 0x2: STEP_FROM4250, 0x3: STEP_FROM4500, 0x4: STEP_FROM4750, 0x5: STEP_FROM5000, 0x6: STEP_FROM5250, 0x7: STEP_FROM5500, 0x8: STEP_FROM5750, 0x9: STEP_FROM6000, 0xa: STEP_FROM6250, 0xb: STEP_FROM6500, 0xc: STEP_FROM6750, 0xd: STEP_FROM7000, 0xe: STEP_FROM7750, 0xf: MAX
+    - SFC.Tachometer.Constant.RedZoneNbrand.Stat:
+      description: "DCN: IMG_RpmRedZoneRange_stat</br>
+                    Redzone display N brand"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        STEP_FROM4000: 0x1
+        STEP_FROM4250: 0x2
+        STEP_FROM4500: 0x3
+        STEP_FROM4750: 0x4
+        STEP_FROM5000: 0x5
+        STEP_FROM5250: 0x6
+        STEP_FROM5500: 0x7
+        STEP_FROM5750: 0x8
+        STEP_FROM6000: 0x9
+        STEP_FROM6250: 0xa
+        STEP_FROM6500: 0xb
+        STEP_FROM6750: 0xc
+        STEP_FROM7000: 0xd
+        STEP_FROM7750: 0xe
+        MAX: 0xf
+      # 0x0: NONE, 0x1: RPM6000, 0x2: RPM8000, 0x3: MAX
+    - SFC.Tachometer.Constant.MaxRpm.Stat:
+      description: "DCN: IMG_MaxRpm_stat</br>
+                    Max Rpm"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        RPM6000: 0x1
+        RPM8000: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: HOLD, 0x2: DAMPING_LV0, 0x3: DAMPING_LV1, 0x4: DAMPING_LV2, 0x5: DAMPING_LV3, 0x6: DAMPING_LV4, 0x7: DAMPING_LV5, 0x8: DAMPING_LV6, 0x9: DAMPING_LV7, 0xa: NO_DAMPING, 0xb: MAX
+    - SFC.Tachometer.Constant.RpmDamp.Stat:
+      description: "DCN: IMG_RpmDamp_stat</br>
+                    Rpm Damp"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        HOLD: 0x1
+        DAMPING_LV0: 0x2
+        DAMPING_LV1: 0x3
+        DAMPING_LV2: 0x4
+        DAMPING_LV3: 0x5
+        DAMPING_LV4: 0x6
+        DAMPING_LV5: 0x7
+        DAMPING_LV6: 0x8
+        DAMPING_LV7: 0x9
+        NO_DAMPING: 0xa
+        MAX: 0xb

@@ -1,0 +1,249 @@
+#
+# @file SCR.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- SCR:
+  sfcVersion: "6.0.1"
+  description: "Reference : [PT360] SCR. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - configSCRChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSCR: mInter_ConfigSCR
+    - scrLevelWarnIndiReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrLevelWarnIndiReqStatus: mInput_ScrLevelWarnIndiReqStatus
+    - scrUreaLevelValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrUreaLevelValue: mInput_ScrUreaLevelValue
+    - tripDistanceUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - scrRemainDistanceValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrRemainDistanceValue: mInput_ScrRemainDistanceValue
+    - scrLevelWarnDisplyReqStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrLevelWarnDisplayReqStatus: mInput_ScrLevelWarnDisplayReqStatus
+    - scrIncorrectUreaWarnStat1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrIncorrectUreaWarnStatus1: mInput_ScrIncorrectUreaWarnStatus1
+    - scrIncorrectUreaWarnStat2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SCR.Input_ScrIncorrectUreaWarnStatus2: mInput_ScrIncorrectUreaWarnStatus2
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.SCR.Telltale.SCR.Stat:
+      description: "DCN: IMG_TelltaleScr_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: REGION_EU, 0x2: REGION_NA, 0x3: REGION_OTHERS, 0x4: MAX
+    - SFC.SCR.Constant.ScrRegion.Stat:
+      description: "DCN: IMG_ScrRegion_stat</br>
+                    State of ScrRegion"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        REGION_EU: 0x1
+        REGION_NA: 0x2
+        REGION_OTHERS: 0x3
+        MAX: 0x4
+      # Level 0 ~ Level 20
+    - SFC.SCR.Constant.ScrUreaLvl.Value:
+      description: "DCN: IMG_ScrUreaLv_value</br>
+                    ScrUreaLvl Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: KM, 0x2: MI, 0x3: MAX
+    - SFC.SCR.Constant.ScrDistance.Stat:
+      description: "DCN: IMG_ScrDistanceunt_stat</br>
+                    State of ScrDistanceunt"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM: 0x1
+        MI: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KPH, 0x2: MPH, 0x3: MAX
+    - SFC.SCR.Constant.ScrSpdunt.Stat:
+      description: "DCN: IMG_ScrSpdunt_stat</br>
+                    State of ScrSpdunt"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KPH: 0x1
+        MPH: 0x2
+        MAX: 0x3
+      # km, mile speed value
+    - SFC.SCR.Constant.ScrSpd.Value:
+      description: "DCN: IMG_ScrSpd_Value</br>
+                    ScrSpd Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: VALUE, 0x2: DISPLAY_OFF, 0x3: MAX
+    - SFC.SCR.Constant.ScrRemainDistanceValue.Stat:
+      description: "DCN: IMG_ScrDistance_value</br>
+                    State of ScrRemainDistanceValue"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        DISPLAY_OFF: 0x2
+        MAX: 0x3
+      # 0~999, DISPLAY_OFF
+    - SFC.SCR.Constant.ScrRemainDistanceValue.Value:
+      description: "DCN: IMG_ScrDistance_value</br>
+                    ScrRemainDistanceValue Value"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.SCR.Event.ScrLvlWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ScrLvlWarn):E22901,E22902,E22903,E22904,E22905,E22906,E22907,E22908"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SCR.Event.ScrLvlWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SCR.Event.ScrLvlWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SCR.Event.ScrLvlWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SCR.Event.ScrLvlWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Sound output by duration
+    - SFC.SCR.Event.ScrLvlWarn.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.SCR.Event.IncorrectUreaWarn1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(IncorrectUreaWarn1):E22909,E22910,E22913,E22914,E22917,E22918"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SCR.Event.IncorrectUreaWarn1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SCR.Event.IncorrectUreaWarn1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SCR.Event.IncorrectUreaWarn1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SCR.Event.IncorrectUreaWarn1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.SCR.Event.IncorrectUreaWarn2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(IncorrectUreaWarn2):E22911,E22912,E22915,E22916"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SCR.Event.IncorrectUreaWarn2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SCR.Event.IncorrectUreaWarn2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SCR.Event.IncorrectUreaWarn2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.SCR.Event.IncorrectUreaWarn2.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event3
+      # Sound output maximum duration
+    - SFC.SCR.Event.IncorrectUreaWarn2.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event3
+      # Sound output by duration
+    - SFC.SCR.Event.IncorrectUreaWarn2.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event3

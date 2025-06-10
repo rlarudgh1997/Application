@@ -1,0 +1,3515 @@
+#
+# @file ADAS_DRIVING_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ADAS_DRIVING_2_0:
+  sfcVersion: "28.0.0"
+  description: "Reference : [AD081] ADAS_DRIVING_2_0. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configFca1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasFCA: mInter_ConfigAdasFCA
+    - configFca2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasFCA2: mInter_ConfigAdasFCA2
+    - configLkaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasLKA: mInter_ConfigAdasLKA
+    - configDawChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasDAW: mInter_ConfigAdasDAW
+    - configIlcuIfsChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigILCU: mInter_ConfigILCU
+        - Vehicle.System.Config.Inter_ConfigIFS: mInter_ConfigIFS
+    - configHbaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigNewHBA: mInter_ConfigNewHBA
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - configIslaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasISLA: mInter_ConfigAdasISLA
+    - configBcwChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigNewBCW: mInter_ConfigNewBCW
+    - configAdasSCCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasSCC: mInter_ConfigAdasSCC
+    - configAdasLFAChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasLFA: mInter_ConfigAdasLFA
+    - configAdasHDAChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasHDA: mInter_ConfigAdasHDA
+    - configAdasHDA2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasHDA2: mInter_ConfigAdasHDA2
+    - configAdasHDA3Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasHDA3: mInter_ConfigAdasHDA3
+    - configAdasEmergencyStopChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasEmergencyStop: mInter_ConfigAdasEmergencyStop
+    - disAddtnlSignChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Navigation_DIS.Inter_DISAddtnlSign: mInter_DISAddtnlSign
+    - tripDistanceUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - indIslaWarningSoundSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaWarningSoundSymbolStatus: mInput_INDIslaWarningSoundSymbolStatus
+    - indForwardSafetySymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDForwardSafetySymbolStatus: mInput_INDForwardSafetySymbolStatus
+    - IndEmergencySteeringSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDEmergencySteeringSymbolStatus: mInput_INDEmergencySteeringSymbolStatus
+    - IndLaneSafetySymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLaneSafetySymbolStatus: mInput_INDLaneSafetySymbolStatus
+    - IndDriveAttentionWarningSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDDriveAttentionWarningSymbolStatus: mInput_INDDriveAttentionWarningSymbolStatus
+    - interTelltaleIccDrowChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.ICC.Inter_TelltaleIccDrow: mInter_TelltaleIccDrow
+    - ilcuActWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_IlcuLhActWarnStatus: mInput_IlcuLhActWarnStatus
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_IlcuRhActWarnStatus: mInput_IlcuRhActWarnStatus
+    - indLfaSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLfaSymbol1Status: mInput_INDLfaSymbol1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLfaSymbol2Status: mInput_INDLfaSymbol2Status
+    - indLcaLeftSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLcaLeftSymbol1Status: mInput_INDLcaLeftSymbol1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLcaLeftSymbol2Status: mInput_INDLcaLeftSymbol2Status
+    - indLcaRightSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLcaRightSymbol1Status: mInput_INDLcaRightSymbol1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDLcaRightSymbol2Status: mInput_INDLcaRightSymbol2Status
+    - indDriverHandsOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDDriverHandsOnOff1Status: mInput_INDDriverHandsOnOff1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDDriverHandsOnOff2Status: mInput_INDDriverHandsOnOff2Status
+    - indSetSpeedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSetSpeed1Status: mInput_INDSetSpeed1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSetSpeed2Status: mInput_INDSetSpeed2Status
+    - indSetSpeedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSetSpeed1Value: mInput_INDSetSpeed1Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSetSpeed2Value: mInput_INDSetSpeed2Value
+    - indSccSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSccSymbol1Status: mInput_INDSccSymbol1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDSccSymbol2Status: mInput_INDSccSymbol2Status
+    - indNsccSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDNsccSymbolStatus: mInput_INDNsccSymbolStatus
+    - bgstausUppBarChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_BGStausUppBar: mInput_BGStausUppBar
+    - bgstausLeftBarChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_BGStausLeftBar: mInput_BGStausLeftBar
+    - bgstausRightBarChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_BGStausRightBar: mInput_BGStausRightBar
+    - ntfGroup7ForwardSafetyFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7ForwardSafetyFailureStatus: mInput_NTFGroup7ForwardSafetyFailureStatus
+    - ntfGroup7ForwardSideSafetyFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7ForwardSideSafetyFailureStatus: mInput_NTFGroup7ForwardSideSafetyFailureStatus
+    - ntfGroup7LaneSafetyFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7LaneSafetyFailureStatus: mInput_NTFGroup7LaneSafetyFailureStatus
+    - ntfGroup7BlindSpotSafetyFailure2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7BlindSpotSafetyFailure2Status: mInput_NTFGroup7BlindSpotSafetyFailure2Status
+    - ntfGroup7IslaFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7IslaFailureStatus: mInput_NTFGroup7IslaFailureStatus
+    - ntfGroup7DawFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7DawFailureStatus: mInput_NTFGroup7DawFailureStatus
+    - ntfGroup7HbaFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7HbaFailureStatus: mInput_NTFGroup7HbaFailureStatus
+    - ntfGroup7SccFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7SccFailureStatus: mInput_NTFGroup7SccFailureStatus
+    - ntfGroup7LfaFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7LfaFailureStatus: mInput_NTFGroup7LfaFailureStatus
+    - ntfGroup7HdaFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7HdaFailureStatus: mInput_NTFGroup7HdaFailureStatus
+    - ntfGroup7HdaPlusFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7HdaPlusFailureStatus: mInput_NTFGroup7HdaPlusFailureStatus
+    - ntfGroup7LcaFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7LcaFailureStatus: mInput_NTFGroup7LcaFailureStatus
+    - ntfGroup7MRMFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7MRMFailureStatus: mInput_NTFGroup7MRMFailureStatus
+    - ifsIndiReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_IfsIndiReqStatus: mInput_IfsIndiReqStatus
+    - indHbaSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDHbaSymbolStatus: mInput_INDHbaSymbolStatus
+    - vcLeftLineStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLeftLineStatus: mInput_VCLeftLineStatus
+    - vcLeftLineOffsetValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLeftLineOffsetValue: mInput_VCLeftLineOffsetValue
+    - vcDrivingLaneRadiusValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCDrivingLaneRadiusValue: mInput_VCDrivingLaneRadiusValue
+    - vcRightLineStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRightLineStatus: mInput_VCRightLineStatus
+    - vcRightLineOffsetValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRightLineOffsetValue: mInput_VCRightLineOffsetValue
+    - vcVehicleDistanceStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCVehicleDistanceStatus: mInput_VCVehicleDistanceStatus
+    - vcVehicleDistanceLevelValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCVehicleDistanceLevelValue: mInput_VCVehicleDistanceLevelValue
+    - vcVehicleDistanceValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCVehicleDistanceValue: mInput_VCVehicleDistanceValue
+    - vcCenterRoadSurfaceStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCCenterRoadSurfaceStatus: mInput_VCCenterRoadSurfaceStatus
+    - vcSurroundingObject01to08StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject01Status: mInput_VCSurroundingObject01Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject02Status: mInput_VCSurroundingObject02Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject03Status: mInput_VCSurroundingObject03Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject04Status: mInput_VCSurroundingObject04Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject05Status: mInput_VCSurroundingObject05Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject06Status: mInput_VCSurroundingObject06Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject07Status: mInput_VCSurroundingObject07Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject08Status: mInput_VCSurroundingObject08Status
+    - vcSurroundingObject09to15StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject09Status: mInput_VCSurroundingObject09Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject10Status: mInput_VCSurroundingObject10Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject11Status: mInput_VCSurroundingObject11Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject12Status: mInput_VCSurroundingObject12Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject13Status: mInput_VCSurroundingObject13Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject14Status: mInput_VCSurroundingObject14Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObject15Status: mInput_VCSurroundingObject15Status
+    - vcSurroundingObjectClassification01to08StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification01Status: mInput_VCSurroundingObjectClassification01Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification02Status: mInput_VCSurroundingObjectClassification02Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification03Status: mInput_VCSurroundingObjectClassification03Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification04Status: mInput_VCSurroundingObjectClassification04Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification05Status: mInput_VCSurroundingObjectClassification05Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification06Status: mInput_VCSurroundingObjectClassification06Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification07Status: mInput_VCSurroundingObjectClassification07Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification08Status: mInput_VCSurroundingObjectClassification08Status
+    - vcSurroundingObjectClassification09to15StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification09Status: mInput_VCSurroundingObjectClassification09Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification10Status: mInput_VCSurroundingObjectClassification10Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification11Status: mInput_VCSurroundingObjectClassification11Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification12Status: mInput_VCSurroundingObjectClassification12Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification13Status: mInput_VCSurroundingObjectClassification13Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification14Status: mInput_VCSurroundingObjectClassification14Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectClassification15Status: mInput_VCSurroundingObjectClassification15Status
+    - vcSurroundingObjectLateralPosition01to08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition01Value: mInput_VCSurroundingObjectLateralPosition01Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition02Value: mInput_VCSurroundingObjectLateralPosition02Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition03Value: mInput_VCSurroundingObjectLateralPosition03Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition04Value: mInput_VCSurroundingObjectLateralPosition04Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition05Value: mInput_VCSurroundingObjectLateralPosition05Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition06Value: mInput_VCSurroundingObjectLateralPosition06Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition07Value: mInput_VCSurroundingObjectLateralPosition07Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition08Value: mInput_VCSurroundingObjectLateralPosition08Value
+    - vcSurroundingObjectLateralPosition09to15ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition09Value: mInput_VCSurroundingObjectLateralPosition09Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition10Value: mInput_VCSurroundingObjectLateralPosition10Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition11Value: mInput_VCSurroundingObjectLateralPosition11Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition12Value: mInput_VCSurroundingObjectLateralPosition12Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition13Value: mInput_VCSurroundingObjectLateralPosition13Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition14Value: mInput_VCSurroundingObjectLateralPosition14Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLateralPosition15Value: mInput_VCSurroundingObjectLateralPosition15Value
+    - vcSurroundingObjectLongitudinalPosition01to08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition01Value: mInput_VCSurroundingObjectLongitudinalPosition01Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition02Value: mInput_VCSurroundingObjectLongitudinalPosition02Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition03Value: mInput_VCSurroundingObjectLongitudinalPosition03Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition04Value: mInput_VCSurroundingObjectLongitudinalPosition04Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition05Value: mInput_VCSurroundingObjectLongitudinalPosition05Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition06Value: mInput_VCSurroundingObjectLongitudinalPosition06Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition07Value: mInput_VCSurroundingObjectLongitudinalPosition07Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition08Value: mInput_VCSurroundingObjectLongitudinalPosition08Value
+    - vcSurroundingObjectLongitudinalPosition09to15ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition09Value: mInput_VCSurroundingObjectLongitudinalPosition09Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition10Value: mInput_VCSurroundingObjectLongitudinalPosition10Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition11Value: mInput_VCSurroundingObjectLongitudinalPosition11Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition12Value: mInput_VCSurroundingObjectLongitudinalPosition12Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition13Value: mInput_VCSurroundingObjectLongitudinalPosition13Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition14Value: mInput_VCSurroundingObjectLongitudinalPosition14Value
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCSurroundingObjectLongitudinalPosition15Value: mInput_VCSurroundingObjectLongitudinalPosition15Value
+    - vcFrontRadarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCFrontRadarWaveStatus: mInput_VCFrontRadarWaveStatus
+    - vcFrontLeftRadarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCFrontLeftRadarWaveStatus: mInput_VCFrontLeftRadarWaveStatus
+    - vcFrontRightRadarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCFrontRightRadarWaveStatus: mInput_VCFrontRightRadarWaveStatus
+    - vcRearLeftRadarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearLeftRadarWave1Status: mInput_VCRearLeftRadarWave1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearLeftRadarWave2Status: mInput_VCRearLeftRadarWave2Status
+    - vcRearRightRadarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearRightRadarWave1Status: mInput_VCRearRightRadarWave1Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearRightRadarWave2Status: mInput_VCRearRightRadarWave2Status
+    - vcLaneChangeRectangleStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLaneChangeRectangleStatus: mInput_VCLaneChangeRectangleStatus
+    - vcLaneChangeRectangleLateralPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLaneChangeRectangleLateralPositionValue: mInput_VCLaneChangeRectangleLateralPositionValue
+    - vcLeftLeftLineStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLeftLeftLineStatus: mInput_VCLeftLeftLineStatus
+    - vcLeftLeftLineOffsetValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLeftLeftLineOffsetValue: mInput_VCLeftLeftLineOffsetValue
+    - vcRightRightLineStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRightRightLineStatus: mInput_VCRightRightLineStatus
+    - vcRightRightLineOffsetValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRightRightLineOffsetValue: mInput_VCRightRightLineOffsetValue
+    - vcRearLeftObjectMovingDirection2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearLeftObjectMovingDirection2Status: mInput_VCRearLeftObjectMovingDirection2Status
+    - vcRearRightObjectMovingDirection2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRearRightObjectMovingDirection2Status: mInput_VCRearRightObjectMovingDirection2Status
+    - vcLaneChangeAvailableStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLaneChangeAvailableStatus: mInput_VCLaneChangeAvailableStatus
+    - brakeLampControlCommand_StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_BrakeLampControlCommand_Status: mInput_BrakeLampControlCommand_Status
+    - extLampInputValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_ExtTurnLeftLampStatus: mInput_ExtTurnLeftLampStatus
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_ExtTurnRightLampStatus: mInput_ExtTurnRightLampStatus
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_ExtLowBeamOnReqStatus: mInput_ExtLowBeamOnReqStatus
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_ExtHighBeamOnReqStatus: mInput_ExtHighBeamOnReqStatus
+    - vcFrontLeftObjectMovingDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCFrontLeftObjectMovingDirectionStatus: mInput_VCFrontLeftObjectMovingDirectionStatus
+    - vcFrontRightObjectMovingDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCFrontRightObjectMovingDirectionStatus: mInput_VCFrontRightObjectMovingDirectionStatus
+    - vcEmergencyStreeingStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCEmergencyStreeingStatus: mInput_VCEmergencyStreeingStatus
+    - vcAdditionalStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCAdditionalStatus: mInput_VCAdditionalStatus
+    - vcLeftLaneChangeDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCLeftLaneChangeDirectionStatus: mInput_VCLeftLaneChangeDirectionStatus
+    - vcRightLaneChangeDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_VCRightLaneChangeDirectionStatus: mInput_VCRightLaneChangeDirectionStatus
+    - indIslaSpeedLimitTrafficSignStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaSpeedLimitTrafficSignStatus: mInput_INDIslaSpeedLimitTrafficSignStatus
+    - indIslaTrafficSignCountryInformationStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaTrafficSignCountryInformationStatus: mInput_INDIslaTrafficSignCountryInformationStatus
+    - indIslaSpeedLimitTrafficSignValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaSpeedLimitTrafficSignValue: mInput_INDIslaSpeedLimitTrafficSignValue
+    - indIslaAdditionalTrafficSignStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaAdditionalTrafficSignStatus: mInput_INDIslaAdditionalTrafficSignStatus
+    - indIslaSupplementaryTrafficSignStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaSupplementaryTrafficSignStatus: mInput_INDIslaSupplementaryTrafficSignStatus
+    - indIslaNextSpeedLimitTrafficSignStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaNextSpeedLimitTrafficSignStatus: mInput_INDIslaNextSpeedLimitTrafficSignStatus
+    - indIslaNextSpeedLimitTrafficSignValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaNextSpeedLimitTrafficSignValue: mInput_INDIslaNextSpeedLimitTrafficSignValue
+    - indIslaNextSupportTrafficSignValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaNextSupportTrafficSignValue: mInput_INDIslaNextSupportTrafficSignValue
+    - indIslaSupplementaryTrafficSign2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_INDIslaSupplementaryTrafficSign2Status: mInput_INDIslaSupplementaryTrafficSign2Status
+    - ntfGroup1AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup1AdasWarning1_1Status: mInput_NTFGroup1AdasWarning1_1Status
+    - ntfGroup1AdasWarning1_2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup1AdasWarning1_2Status: mInput_NTFGroup1AdasWarning1_2Status
+    - ntfGroup1AdasWarning2_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup1AdasWarning2_1Status: mInput_NTFGroup1AdasWarning2_1Status
+    - ntfGroup4AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup4AdasWarning1_1Status: mInput_NTFGroup4AdasWarning1_1Status
+    - ntfGroup7OutsideMirrorSymbolFailure2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7OutsideMirrorSymbolFailure2Status: mInput_NTFGroup7OutsideMirrorSymbolFailure2Status
+    - ntfGroup7DriverAssistFailure1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7DriverAssistFailure1Status: mInput_NTFGroup7DriverAssistFailure1Status
+    - ntfGroup7DriverAssistFailure2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFGroup7DriverAssistFailure2Status: mInput_NTFGroup7DriverAssistFailure2Status
+    - ntmGroup2AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTMGroup2AdasWarning1_1Status: mInput_NTMGroup2AdasWarning1_1Status
+    - ntmGroup2AdasWarning1_2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTMGroup2AdasWarning1_2Status: mInput_NTMGroup2AdasWarning1_2Status
+    - ntfHandsOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_NTFHandsOffStatus: mInput_NTFHandsOffStatus
+    - soundWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning1_1Status: mInput_SoundWarning1_1Status
+    - soundWarning1_2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning1_2Status: mInput_SoundWarning1_2Status
+    - soundWarning1_4StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning1_4Status: mInput_SoundWarning1_4Status
+    - soundWarning1_5StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning1_5Status: mInput_SoundWarning1_5Status
+    - soundWarning2_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning2_1Status: mInput_SoundWarning2_1Status
+    - soundWarning1_3StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_SoundWarning1_3Status: mInput_SoundWarning1_3Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_IslaOption2Status: mInput_IslaOption2Status
+        - Vehicle.AD.ADAS_DRIVING_2_0.Input_AdasOverSpeedWarnOnOffStatus: mInput_AdasOverSpeedWarnOnOffStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.FCA.Stat:
+      description: "State of Telltale<br>
+                    DCN: IMG_CONN_TelltaleFCA_stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.ELK.Stat:
+      description: "State of Telltale<br>
+                    DCN: IMG_CONN_TelltaleELK_stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.LKA.Stat:
+      description: "State of Telltale<br>
+                    DCN: IMG_CONN_TelltaleLKA_stat"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: AMBER, 0x3: GRAY, 0x4: GREEN, 0x5: GRAY_OFF, 0x6: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.LKA.StatOptional:
+      description: "Optional State</br>
+                    DCN: IMG_CONN_TelltaleLKA_stat"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AMBER: 0x2
+        GRAY: 0x3
+        GREEN: 0x4
+        GRAY_OFF: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.DAW.Stat:
+      description: "State of Telltale<br>
+                    DCN: IMG_CONN_TelltaleDAW_stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_DRIVING_2_0.Telltale.HBA.Stat:
+      description: "State of Telltale<br>
+                    DCN: IMG_CONN_TelltaleHBA_stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NOT_READY, 0x1: READY, 0x2: RUNNING
+    - SFC.ADAS_DRIVING_2_0.Timer.OneShotTimerPriorityISLA.Stat:
+      description: "Status of OneShotTimerPriorityISLA Timer"
+      dataType: HUInt64
+      group: TimerStatus
+      valueEnum:
+        NOT_READY: 0x0
+        READY: 0x1
+        RUNNING: 0x2
+      # 0x0: NOT_READY, 0x1: READY, 0x2: RUNNING
+    - SFC.ADAS_DRIVING_2_0.Timer.OneShotTimerPriorityDIS.Stat:
+      description: "Status of OneShotTimerPriorityDIS Timer"
+      dataType: HUInt64
+      group: TimerStatus
+      valueEnum:
+        NOT_READY: 0x0
+        READY: 0x1
+        RUNNING: 0x2
+      # 0x0: NONE, 0x1: OFF, 0x2: LFA_GRAY, 0x3: LFA_GRAY_EXPENSION, 0x4: LFA_GREEN, 0x5: LFA_BLUE, 0x6: HANDS_ON_AMBER, 0x7: HANDS_ON_RED, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASFrontVehicle.Stat:
+      description: "DCN: IMG_CONN_LfaHandsOnOffTelltale_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LFA_GRAY: 0x2
+        LFA_GRAY_EXPENSION: 0x3
+        LFA_GREEN: 0x4
+        LFA_BLUE: 0x5
+        HANDS_ON_AMBER: 0x6
+        HANDS_ON_RED: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: BLUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.LCALeftTelltale.Stat:
+      description: "DCN: IMG_CONN_LCALeftTelltale_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        BLUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: BLUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.LCARightTelltale.Stat:
+      description: "DCN: IMG_CONN_LCARightTelltale_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        BLUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: BLACK, 0x5: BLUE, 0x6: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASSetSpeed.Color.Stat:
+      description: "DCN: IMG_CONN_ADASSetSpeed_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        BLACK: 0x4
+        BLUE: 0x5
+        MAX: 0x6
+      # Speed Value 0 to 254
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASSetSpeed.Value:
+      description: "DCN: IMG_CONN_ADASSetSpeed_Value</br>
+                    Set Speed Value (0~254)"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASSetSpeed.Stat:
+      description: "DCN: IMG_CONN_ADASSetSpeed_Value</br>
+                    Set Speed Value Status"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: BLUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.SccSymbol.Stat:
+      description: "DCN: IMG_CONN_SccSymbol_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        BLUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: SAFETY_ZONE, 0x3: CURVE, 0x4: IC_AND_JC_LEFT, 0x5: IC_AND_JC_RIGHT, 0x6: TOLLGATE, 0x7: ROUNDABOUT, 0x8: RESERVED_1, 0x9: RESERVED_2, 0xA: SPEED_BUMP, 0xB: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.NsccSymbol.Stat:
+      description: "DCN: IMG_CONN_NsccSymbol_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        SAFETY_ZONE: 0x2
+        CURVE: 0x3
+        IC_AND_JC_LEFT: 0x4
+        IC_AND_JC_RIGHT: 0x5
+        TOLLGATE: 0x6
+        ROUNDABOUT: 0x7
+        RESERVED_1: 0x8
+        RESERVED_2: 0x9
+        SPEED_BUMP: 0xA
+        MAX: 0xB
+      # 0x0: NONE, 0x1: OFF, 0x2: AMBER, 0x3: RED, 0x4: GREEN, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.BackgroundUpperBar.Stat:
+      description: "DCN: IMG_CONN_BackgroundUpperBar_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AMBER: 0x2
+        RED: 0x3
+        GREEN: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: AMBER, 0x3: RED, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.BackgroundLeft.Stat:
+      description: "DCN: IMG_CONN_BackgroundLeft_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AMBER: 0x2
+        RED: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: AMBER, 0x3: RED, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.BackgroundRight.Stat:
+      description: "DCN: IMG_CONN_BackgroundRight_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AMBER: 0x2
+        RED: 0x3
+        MAX: 0x4
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.ForwardSafetyFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(ForwardSafetyFailure):NT50001,NT50002,NT50003"
+      dataType: HString
+      group: Notification1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.ForwardSafetyFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.ForwardSideSafetyFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(ForwardSideSafetyFailure):NT50004,NT50005,NT50006"
+      dataType: HString
+      group: Notification2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.ForwardSideSafetyFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.LaneSafetyFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(LaneSafetyFailure):NT50007,NT50008"
+      dataType: HString
+      group: Notification3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.LaneSafetyFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.BlindSpotSafetyFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(BlindSpotSafetyFailure):NT50009,NT50010"
+      dataType: HString
+      group: Notification4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.BlindSpotSafetyFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.IslaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(IslaFailure):NT50011,NT50012"
+      dataType: HString
+      group: Notification5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.IslaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.DawFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(DawFailure):NT50013,NT50014"
+      dataType: HString
+      group: Notification6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.DawFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.HbaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(HbaFailure):NT50015"
+      dataType: HString
+      group: Notification7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.HbaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.SccFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(SccFailure):NT50016,NT50017"
+      dataType: HString
+      group: Notification8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.SccFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.LfaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(LfaFailure):NT50018"
+      dataType: HString
+      group: Notification9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.LfaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.HdaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(HdaFailure):NT50019"
+      dataType: HString
+      group: Notification10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.HdaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification10
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.LcaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(LcaFailure):NT50020,NT50021,NT50022"
+      dataType: HString
+      group: Notification11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.LcaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification11
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.HdaPlusFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(HdaPlusFailure):NT50023,NT50024,NT50025"
+      dataType: HString
+      group: Notification12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.HdaPlusFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification12
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_DRIVING_2_0.Event.EmergencyStopFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(EmergencyStopFailure):NT50026,NT50027,NT50028"
+      dataType: HString
+      group: Notification13
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.EmergencyStopFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: Notification13
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: LIGHT_GRAY, 0x3: DARK_GRAY, 0x4: AMBER, 0x5: GREEN, 0x6: DARK_GRAY_DASH, 0x7: GREEN_DASH, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLane.Stat:
+      description: "DCN: IMG_CONN_ADASLeftLane_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LIGHT_GRAY: 0x2
+        DARK_GRAY: 0x3
+        AMBER: 0x4
+        GREEN: 0x5
+        DARK_GRAY_DASH: 0x6
+        GREEN_DASH: 0x7
+        MAX: 0x8
+      # Left Line LatPos Value 0 to 63
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLineLatPos.Value:
+      description: "DCN: IMG_CONN_ADASLeftLineLatPos_Val</br>
+                    Left Line LatPos Value (0~63)"
+      dataType: HUInt64
+      group: Constant2
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLineLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASLeftLineLatPos_Val</br>
+                    Left Line LatPos Value Status"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # L/R Lane Cvrt Lvl Value 1 to 15
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLaneCvrtLvl.Value:
+      description: "DCN: IMG_CONN_ADASLaneCvrtLvl_Val</br>
+                    L/R Lane Cvrt Lvl Value (1~15)"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: STRAIGHT, 0x3: LEFT_VALUE, 0x4: RIGHT_VALUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLaneCvrtLvl.Stat:
+      description: "DCN: IMG_CONN_ADASLaneCvrtLvl_Val</br>
+                    L/R Lane Cvrt Lvl Value Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STRAIGHT: 0x2
+        LEFT_VALUE: 0x3
+        RIGHT_VALUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: LIGHT_GRAY, 0x3: DARK_GRAY, 0x4: AMBER, 0x5: GREEN, 0x6: DARK_GRAY_DASH, 0x7: GREEN_DASH, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightLane.Stat:
+      description: "DCN: IMG_CONN_ADASRightLane_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LIGHT_GRAY: 0x2
+        DARK_GRAY: 0x3
+        AMBER: 0x4
+        GREEN: 0x5
+        DARK_GRAY_DASH: 0x6
+        GREEN_DASH: 0x7
+        MAX: 0x8
+      # Right Line LatPos Value 0 to 45
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightLineLatPos.Value:
+      description: "DCN: IMG_CONN_ADASRightLineLatPos_Val</br>
+                    Right Line LatPos Value (0~63)"
+      dataType: HUInt64
+      group: Constant3
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightLineLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASRightLineLatPos_Val</br>
+                    Right Line LatPos Value Status"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: GREEN_DECEL, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASHeadwayDist.Color.Stat:
+      description: "DCN: IMG_CONN_ADASHeadwayDist_Stat</br>
+                    Headway Dist Color Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        GREEN_DECEL: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL1, 0x3: LEVEL2, 0x4: LEVEL3, 0x5: LEVEL4, 0x6: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASVehicleDistanceSetVal.Stat:
+      description: "DCN: IMG_CONN_ADASVehicleDistanceSet_Val</br>
+                    Headway Dist Color Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEVEL1: 0x2
+        LEVEL2: 0x3
+        LEVEL3: 0x4
+        LEVEL4: 0x5
+        MAX: 0x6
+      # Headway Dist Long Pos Value 0 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASHeadwayDist.Value:
+      description: "DCN: IMG_CONN_ADASHeadwayDist_Val</br>
+                    Headway Dist Long Pos Value (0~1500)"
+      dataType: HUInt64
+      group: Constant4
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASHeadwayDist.Stat:
+      description: "DCN: IMG_CONN_ADASHeadwayDist_Val</br>
+                    Headway Dist Long Pos Value Status"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: GRAY, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoad.Stat:
+      description: "DCN: IMG_CONN_ADASCenterRoad_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        GRAY: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadLeftLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASCenterRoadLeftLatPos_Val</br>
+                    Center Road Left LatPos Value State"
+      dataType: HUInt64
+      group: Constant5
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Value 0 to 63
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadLeftLatPos.Value:
+      description: "DCN: IMG_CONN_ADASCenterRoadLeftLatPos_Val</br>
+                    Center Road Left LatPos Value"
+      dataType: HUInt64
+      group: Constant5
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadRightLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASCenterRoadRightLatPos_Val</br>
+                    Center Road Right LatPos Value State"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Value 0 to 63
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadRightLatPos.Value:
+      description: "DCN: IMG_CONN_ADASCenterRoadRightLatPos_Val</br>
+                    Center Road Right LatPos Value"
+      dataType: HUInt64
+      group: Constant6
+      # 0x0: NONE, 0x1: OFF, 0x2: STRAIGHT, 0x3: LEFT_VALUE, 0x4: RIGHT_VALUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRoadCvrtLvl.Stat:
+      description: "DCN: IMG_CONN_ADASRoadCvrtLvl_Val</br>
+                    Road CvrtLvl Value State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STRAIGHT: 0x2
+        LEFT_VALUE: 0x3
+        RIGHT_VALUE: 0x4
+        MAX: 0x5
+      # Left Value 1 to 15, Right Value 1 to 15
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRoadCvrtLvl.Value:
+      description: "DCN: IMG_CONN_ADASRoadCvrtLvl_Val</br>
+                    Road CvrtLvl Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor01.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor01_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor02.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor02_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor03.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor03_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor04.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor04_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor05.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor05_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor06.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor06_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor07.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor07_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor08.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor08_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor09.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor09_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor10.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor10_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor11.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor11_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor12.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor12_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor13.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor13_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor14.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor14_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor15.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectColor15_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Color_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass01.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass01_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass02.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass02_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass03.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass03_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass04.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass04_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass05.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass05_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass06.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass06_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass07.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass07_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass08.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass08_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass09.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass09_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass10.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass10_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass11.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass11_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass12.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass12_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass13.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass13_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass14.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass14_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass15.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectClass15_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Surrounding_Object_Class_CONN_EnumValue
+      # ADAS View Surrounding Object Lat01 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat01.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat01_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat01
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat01.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat01_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat01
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat02 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat02.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat02_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat02
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat02.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat02_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat02
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat03 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat03.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat03_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat03
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat03.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat03_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat03
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat04 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat04.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat04_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat04
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat04.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat04_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat04
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat05 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat05.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat05_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat05
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat05.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat05_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat05
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat06 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat06.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat06_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat06
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat06.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat06_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat06
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat07 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat07.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat07_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat07
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat07.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat07_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat07
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat08 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat08.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat08_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat08
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat08.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat08_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat08
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat09 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat09.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat09_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat09
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat09.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat09_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat09
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat10 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat10.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat10_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat10
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat10.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat10_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat10
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat11 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat11.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat11_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat11
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat11.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat11_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat11
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat12 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat12.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat12_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat12
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat12.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat12_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat12
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat13 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat13.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat13_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat13
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat13.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat13_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat13
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat14 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat14.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat14_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat14
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat14.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat14_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat14
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat15 -300 to 300
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat15.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat15_Val</br>
+                    Value from -300 to 300"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLat15
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat15.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLat15_Val</br>
+                    Value Status for OFF/LEFT/RIGHT"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLat15
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Long01 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong01.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong01_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong01
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong01.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong01_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong01
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long02 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong02.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong02_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong02
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong02.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong02_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong02
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long03 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong03.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong03_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong03
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong03.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong03_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong03
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long04 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong04.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong04_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong04
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong04.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong04_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong04
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long05 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong05.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong05_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong05
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong05.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong05_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong05
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long06 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong06.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong06_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong06
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong06.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong06_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong06
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long07 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong07.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong07_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong07
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong07.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong07_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong07
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long08 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong08.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong08_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong08
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong08.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong08_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong08
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long09 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong09.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong09_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong09
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong09.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong09_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong09
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long10 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong10.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong10_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong10
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong10.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong10_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong10
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long11 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong11.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong11_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong11
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong11.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong11_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong11
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long12 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong12.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong12_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong12
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong12.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong12_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong12
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long13 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong13.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong13_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong13
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong13.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong13_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong13
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long14 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong14.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong14_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong14
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong14.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong14_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong14
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long15 -200 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong15.Value:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong15_Val</br>
+                    Value from -200 to 1500"
+      dataType: HInt64
+      group: ADASViewSurroundingObjectLong15
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong15.Stat:
+      description: "DCN: IMG_CONN_ADASViewSurroundingObjectLong15_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: ADASViewSurroundingObjectLong15
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_WAVE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewFrontWarn.Stat:
+      description: "DCN: IMG_CONN_ADASViewFrontWarn_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_WAVE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_WAVE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewFrontLeftWarn.Stat:
+      description: "DCN: IMG_CONN_ADASViewFrontLeftWarn_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_WAVE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_WAVE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewFrontRightWarn.Stat:
+      description: "DCN: IMG_CONN_ADASViewFrontRightWarn_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_WAVE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_WAVE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRearLeftWarn.Stat:
+      description: "DCN: IMG_CONN_ADASViewRearLeftWarn_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_WAVE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_WAVE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRearRightWarn.Stat:
+      description: "DCN: IMG_CONN_ADASViewRearRightWarn_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_WAVE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: DOTTED_LINE_SUGGESTION, 0x3: DOTTED_LINE_ASSIST, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLaneChangeRectangle.Stat:
+      description: "DCN: IMG_CONN_ADASViewLaneChangeRectangle_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DOTTED_LINE_SUGGESTION: 0x2
+        DOTTED_LINE_ASSIST: 0x3
+        MAX: 0x4
+      # ADAS View Lane Change Rectangle Lat Value(CENTER(0), RIGHT_1~62, LEFT_62~1)
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLaneChangeRectangleLat.Value:
+      description: "DCN: IMG_CONN_ADASViewLaneChangeRectangleLat_Val(CENTER, RIGHT_1~62, LEFT_62~1)"
+      dataType: HUInt64
+      group: Constant7
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT_VALUE, 0x4: LEFT_VALUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLaneChangeRectangleLat.Stat:
+      description: "DCN: IMG_CONN_ADASViewLaneChangeRectangleLat_Val Status"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT_VALUE: 0x3
+        LEFT_VALUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainBrakeLightActive.Stat:
+      description: "DCN: IMG_CONN_ADASViewMainBrakeLightActive_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorTurnLeftLampActive.Stat:
+      description: "DCN: IMG_CONN_ADASViewMainExteriorTurnLeftLampActive_Stat"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorTurnRightLampActive.Stat:
+      description: "DCN: IMG_CONN_ADASViewMainExteriorTurnRightLampActive_Stat"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorLowBeamActive.Stat:
+      description: "DCN: IMG_CONN_ADASViewMainExteriorLowBeamActive_Stat"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorHighBeamActive.Stat:
+      description: "DCN: IMG_CONN_ADASViewMainExteriorHighBeamActive_Stat"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_ARROW, 0x3: RED_ARROW_ANIMATION, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewFrontLeftCollisionWarning.Stat:
+      description: "DCN: IMG_CONN_ADASViewFrontLeftCollisionWarning_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_ARROW: 0x2
+        RED_ARROW_ANIMATION: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: RED_ARROW, 0x3: RED_ARROW_ANIMATION, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewFrontRightCollisionWarning.Stat:
+      description: "DCN: IMG_CONN_ADASViewFrontRightCollisionWarning_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED_ARROW: 0x2
+        RED_ARROW_ANIMATION: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewEmergencySteering.Stat:
+      description: "DCN: IMG_CONN_ADASViewEmergencySteering_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEAD_VEHICLE_DEPARTURE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewAdditionalVehicle.Stat:
+      description: "DCN: IMG_CONN_ADASViewAdditionalVehicle_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEAD_VEHICLE_DEPARTURE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN_ARROW_ANIMATION, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLeftArrow.Stat:
+      description: "DCN: IMG_CONN_ADASViewLeftArrow_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN_ARROW_ANIMATION: 0x2
+        MAX: 0x3
+      # ADAS View Lane Change Rectangle Lat Value(CENTER(0), RIGHT_1~62, LEFT_62~1)
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLeftArrowLat.Value:
+      description: "DCN: IMG_CONN_ADASViewLeftArrowLat_Val(CENTER, RIGHT_1~62, LEFT_62~1)"
+      dataType: HUInt64
+      group: Constant9
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT_VALUE, 0x4: LEFT_VALUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLeftArrowLat.Stat:
+      description: "DCN: IMG_CONN_ADASViewLeftArrowLat_Val Status"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT_VALUE: 0x3
+        LEFT_VALUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN_ARROW_ANIMATION, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRightArrow.Stat:
+      description: "DCN: IMG_CONN_ADASViewRightArrow_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN_ARROW_ANIMATION: 0x2
+        MAX: 0x3
+      # ADAS View Lane Change Rectangle Lat Value(CENTER(0), RIGHT_1~62, LEFT_62~1)
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRightArrowLat.Value:
+      description: "DCN: IMG_CONN_ADASViewRightArrowLat_Val(CENTER, RIGHT_1~62, LEFT_62~1)"
+      dataType: HUInt64
+      group: Constant10
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT_VALUE, 0x4: LEFT_VALUE, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRightArrowLat.Stat:
+      description: "DCN: IMG_CONN_ADASViewRightArrowLat_Val Status"
+      dataType: HUInt64
+      group: Constant10
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT_VALUE: 0x3
+        LEFT_VALUE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: LIGHT_GRAY, 0x3: DARK_GRAY, 0x4: GREEN, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLeftLane.Stat:
+      description: "DCN: IMG_CONN_ADASLeftLeftLane_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LIGHT_GRAY: 0x2
+        DARK_GRAY: 0x3
+        GREEN: 0x4
+        MAX: 0x5
+      # ADAS Left Left Line Lat Pos Value CENTER/RIGHT from 0 to 63
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLeftLineLatPos.Value:
+      description: "DCN: IMG_CONN_ADASLeftLeftLineLatPos_Val</br>
+                    Value from 0 to 63"
+      dataType: HUInt64
+      group: Constant11
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLeftLineLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASLeftLeftLineLatPos_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LIGHT_GRAY, 0x3: DARK_GRAY, 0x4: GREEN, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightRightLane.Stat:
+      description: "DCN: IMG_CONN_ADASRightRightLane_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LIGHT_GRAY: 0x2
+        DARK_GRAY: 0x3
+        GREEN: 0x4
+        MAX: 0x5
+      # ADAS Right Right Line Lat Pos Value from 0 to 63
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightRightLineLatPos.Value:
+      description: "DCN: IMG_CONN_ADASRightRightLineLatPos_Val</br>
+                    Value from 0 to 63"
+      dataType: HUInt64
+      group: Constant12
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASRightRightLineLatPos.Stat:
+      description: "DCN: IMG_CONN_ADASRightRightLineLatPos_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: Constant12
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: WARNING_CROSSING, 0x3: FAILURE_CROSSING, 0x4: WARING_PASSING, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRearLeftCollisionWarning.Stat:
+      description: "DCN: IMG_CONN_ADASViewRearLeftCollisionWarning_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARNING_CROSSING: 0x2
+        FAILURE_CROSSING: 0x3
+        WARING_PASSING: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARNING_CROSSING, 0x3: FAILURE_CROSSING, 0x4: WARING_PASSING, 0x5: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewRearRightCollisionWarning.Stat:
+      description: "DCN: IMG_CONN_ADASViewRearRightCollisionWarning_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARNING_CROSSING: 0x2
+        FAILURE_CROSSING: 0x3
+        WARING_PASSING: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ADASViewLaneChangeAvailable.Stat:
+      description: "DCN: IMG_CONN_ADASViewLaneChangeAvailable_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: TYPE1_INVALID, 0x3: TYPE2_INVALID, 0x4: TYPE3_INVALID, 0x5: TYPE3_VALID, 0x6: TYPE4_INVALID, 0x7: TYPE4_VALID, 0x8: TYPE5_INVALID, 0x9: TYPE5_VALID, 0xA: UNLIMITED, 0xB: TYPE6_VALID, 0xC: TYPE7_VALID, 0xD: TYPE8_VALID, 0xE: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLAMainSpeed.Stat:
+      description: "DCN: IMG_CONN_ISLAMainSpeed_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        TYPE1_INVALID: 0x2
+        TYPE2_INVALID: 0x3
+        TYPE3_INVALID: 0x4
+        TYPE3_VALID: 0x5
+        TYPE4_INVALID: 0x6
+        TYPE4_VALID: 0x7
+        TYPE5_INVALID: 0x8
+        TYPE5_VALID: 0x9
+        UNLIMITED: 0xA
+        TYPE6_VALID: 0xB
+        TYPE7_VALID: 0xC
+        TYPE8_VALID: 0xD
+        MAX: 0xE
+      # ISLA Main Sign Value 1 to 252
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLAMainSign.Value:
+      description: "DCN: IMG_CONN_ISLAMainSign_Val</br>
+                    ISLA Main Sign Value (1~252)"
+      dataType: HUInt64
+      group: Constant13
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: INVALID, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLAMainSign.Stat:
+      description: "DCN: IMG_CONN_ISLAMainSign_Val</br>
+                    ISLA Main Sign Value Status"
+      dataType: HUInt64
+      group: Constant13
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        VALUE: 0x2
+        INVALID: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ISLAADDTNLSIGN_STAT, 0x3: DISADDTNLSIGN_STAT, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.FinalAddtnlSign.Stat:
+      description: "DCN: IMG_CONN_FinalAddtnlSign_Stat</br>
+                    FinalAddtnlSign Status"
+      dataType: HUInt64
+      group: Constant14
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ISLAADDTNLSIGN_STAT: 0x2
+        DISADDTNLSIGN_STAT: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SCHOOL_CROSS_DOM, 0x2: SCHOOL_CROSS_EU, 0x3: SCHOOL_CROSS_AUS, 0x4: SCHOOL_CROSS_NA, 0x5: SCHOOL_CROSS_CN, 0x6: PEDESTRIAN_CROSSING_DOM, 0x7: PEDESTRIAN_CROSSING_EU, 0x8: PEDESTRIAN_CROSSING_AUS, 0x9: PEDESTRIAN_CROSSING_NA, 0xa: PEDESTRIAN_CROSSING_CN, 0xb: STOP_DOM, 0xc: STOP_EU, 0xd: STOP_CN, 0xe: YIELD_DOM, 0xf: YIELD_EU, 0x10: YIELD_AUS, 0x11: YIELD_NA, 0x12: YIELD_CN, 0x13: DO_NOT_PASS_LHD_DOM, 0x14: DO_NOT_PASS_LHD_EU, 0x15: DO_NOT_PASS_LHD_NA, 0x16: DO_NOT_PASS_LHD_CN, 0x17: DO_NOT_PASS_RHD_EU, 0x18: DO_NOT_ENTER, 0x19: ROUNDABOUT_LHD_DOM, 0x1a: ROUNDABOUT_LHD_EU, 0x1b: ROUNDABOUT_LHD_NA, 0x1c: ROUNDABOUT_LHD_CN, 0x1d: ROUNDABOUT_RHD_EU, 0x1e: ROUNDABOUT_RHD_AUS, 0x1f: RIGHT_CURVE_DOM, 0x20: RIGHT_CURVE_EU, 0x21: RIGHT_CURVE_NA, 0x22: RIGHT_CURVE_CN, 0x23: LEFT_CURVE_DOM, 0x24: LEFT_CURVE_EU, 0x25: LEFT_CURVE_NA, 0x26: LEFT_CURVE_CN, 0x27: RIGHT_LEFT_CURVES_DOM, 0x28: RIGHT_LEFT_CURVES_EU, 0x29: RIGHT_LEFT_CURVES_NA, 0x2a: RIGHT_LEFT_CURVES_CN, 0x2b: LEFT_RIGHT_CURVES_DOM, 0x2c: LEFT_RIGHT_CURVES_EU, 0x2d: LEFT_RIGHT_CURVES_NA, 0x2e: LEFT_RIGHT_CURVES_CN, 0x2f: OFF, 0x30: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.FinalISLAAddtnlSign.Stat:
+      description: "DCN: IMG_CONN_FinalAddtnlSign_Stat</br>
+                    Final ISLA Addtnl Sign Status"
+      dataType: HUInt64
+      group: Constant14
+      valueEnum:
+        NONE: 0x0
+        SCHOOL_CROSS_DOM: 0x1
+        SCHOOL_CROSS_EU: 0x2
+        SCHOOL_CROSS_AUS: 0x3
+        SCHOOL_CROSS_NA: 0x4
+        SCHOOL_CROSS_CN: 0x5
+        PEDESTRIAN_CROSSING_DOM: 0x6
+        PEDESTRIAN_CROSSING_EU: 0x7
+        PEDESTRIAN_CROSSING_AUS: 0x8
+        PEDESTRIAN_CROSSING_NA: 0x9
+        PEDESTRIAN_CROSSING_CN: 0xa
+        STOP_DOM: 0xb
+        STOP_EU: 0xc
+        STOP_CN: 0xd
+        YIELD_DOM: 0xe
+        YIELD_EU: 0xf
+        YIELD_AUS: 0x10
+        YIELD_NA: 0x11
+        YIELD_CN: 0x12
+        DO_NOT_PASS_LHD_DOM: 0x13
+        DO_NOT_PASS_LHD_EU: 0x14
+        DO_NOT_PASS_LHD_NA: 0x15
+        DO_NOT_PASS_LHD_CN: 0x16
+        DO_NOT_PASS_RHD_EU: 0x17
+        DO_NOT_ENTER: 0x18
+        ROUNDABOUT_LHD_DOM: 0x19
+        ROUNDABOUT_LHD_EU: 0x1a
+        ROUNDABOUT_LHD_NA: 0x1b
+        ROUNDABOUT_LHD_CN: 0x1c
+        ROUNDABOUT_RHD_EU: 0x1d
+        ROUNDABOUT_RHD_AUS: 0x1e
+        RIGHT_CURVE_DOM: 0x1f
+        RIGHT_CURVE_EU: 0x20
+        RIGHT_CURVE_NA: 0x21
+        RIGHT_CURVE_CN: 0x22
+        LEFT_CURVE_DOM: 0x23
+        LEFT_CURVE_EU: 0x24
+        LEFT_CURVE_NA: 0x25
+        LEFT_CURVE_CN: 0x26
+        RIGHT_LEFT_CURVES_DOM: 0x27
+        RIGHT_LEFT_CURVES_EU: 0x28
+        RIGHT_LEFT_CURVES_NA: 0x29
+        RIGHT_LEFT_CURVES_CN: 0x2a
+        LEFT_RIGHT_CURVES_DOM: 0x2b
+        LEFT_RIGHT_CURVES_EU: 0x2c
+        LEFT_RIGHT_CURVES_NA: 0x2d
+        LEFT_RIGHT_CURVES_CN: 0x2e
+        OFF: 0x2f
+        MAX: 0x30
+      # 0x0000: NONE, 0x0001: OFF, 0x1001: KOREA_FIXEDCAMERA, 0x1002: KOREA_PORTABLECAMERA, 0x1003: KOREA_SPEED_SIGNAL, 0x1004: KOREA_BUSCAMERA, 0x1005: KOREA_SCHOOLZONEFIXEDCAMERA, 0x1006: KOREA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x1007: KOREA_CUTINLINE, 0x1008: KOREA_ROADSHOULDERVIOLATION, 0x1009: KOREA_TRAFFICINFORMATION, 0x100A: KOREA_INTERSECTIONJAMMING, 0x100B: KOREA_RAMPMETERING, 0x100C: KOREA_LANECHANGE, 0x100D: KOREA_AVERAGESPEEDCAMERA, 0x100E: KOREA_AVERAGESPEEDCAMERAZONE, 0x100F: KOREA_SPEEDENFORCEMET, 0x1010: KOREA_SPEEDENFORCEMETZONE, 0x1011: KOREA_MOBILEHOTSPOT, 0x1012: KOREA_MOBILEHOTSPOTZONE, 0x1013: KOREA_ACCIDENTBLACKSPOT1, 0x1014: KOREA_ACCIDENTBLACKSPOTZONE, 0x1015: KOREA_DANGERZONE, 0x1016: KOREA_RISKZONE, 0x1017: KOREA_RESTRICTED, 0x1018: KOREA_OTHERS, 0x1019: KOREA_BUSLANENOTAVAILABLE, 0x101A: KOREA_BUSLANEAVAILABLE, 0x101B: KOREA_ILLEGALPARKING, 0x101C: KOREA_DONOTENTER, 0x101D: KOREA_ACCIDENTBLACKSPOT2, 0x101E: KOREA_SCHOOLZONE, 0x101F: KOREA_FALLINGROCKS, 0x1020: KOREA_RAILROADCROSSING, 0x1021: KOREA_FOGGYAREA, 0x1022: KOREA_STEEPSLOPE, 0x1023: KOREA_ROADKILL, 0x1024: KOREA_SPEEDBUMP, 0x1025: KOREA_NARROWROAD, 0x1026: KOREA_HIGHWAYCONSTRUCTIONZONE, 0x1027: KOREA_ROADSLIPDETECTION, 0x1028: KOREA_ROADDAMAGEDETECTION, 0x1029: KOREA_ZONE_30, 0x102A: KOREA_STOP, 0x102B: KOREA_BLINDSLOPE_CONTINUOUS, 0x102C: KOREA_CROSSWIND, 0x102D: KOREA_HILLSIDEDANGEROUS, 0x102E: KOREA_HUMP_BRIDG, 0x102F: KOREA_JOINT_LEFT, 0x1030: KOREA_JOINT_RIGHT, 0x1031: KOREA_LOWSPEED, 0x1032: KOREA_NARROW_BOTH, 0x1033: KOREA_NARROWBRIDGE, 0x1034: KOREA_NARROW_LEFT, 0x1035: KOREA_NARROW_RIGHT, 0x1036: KOREA_ROCKFALL_LEFT, 0x1037: KOREA_ROCKFALL_RIGHT, 0x1038: KOREA_SLIP, 0x1039: KOREA_BLINDSLOPE_UP, 0x103A: KOREA_BLINDSLOPE_DOWN, 0x103B: KOREA_TUNNEL, 0x103C: KOREA_UNDERWATER, 0x103D: KOREA_UNEVEN, 0x103E: KOREA_UNMANAGED_RAILWAY_CROSS, 0x103F: KOREA_ZIPPASS, 0x1040: KOREA_SLOPE_CONTINUOUSDOWN, 0x1041: KOREA_SLOPE_UP, 0x1042: KOREA_SLOPE_DOWN, 0x1043: KOREA_RAILWAY_MANAGED, 0x1044: KOREA_VILLAGE, 0x1045: KOREA_AUDIBLEWARNING, 0x1046: KOREA_OVERTAKING_LANE, 0x1047: KOREA_FALLING_HAZARD, 0x1048: KOREA_LANE_MOVE_REGULATION, 0x1049: KOREA_DROWSY, 0x2001: USA_FIXEDCAMERA, 0x2002: USA_PORTABLECAMERA, 0x2003: USA_SPEED_SIGNAL, 0x2004: USA_BUSCAMERA, 0x2005: USA_SCHOOLZONEFIXEDCAMERA, 0x2006: USA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x2007: USA_CUTINLINE, 0x2008: USA_ROADSHOULDERVIOLATION, 0x2009: USA_TRAFFICINFORMATION, 0x200A: USA_INTERSECTIONJAMMING, 0x200B: USA_RAMPMETERING, 0x200C: USA_LANECHANGE, 0x200D: USA_AVERAGESPEEDCAMERA, 0x200E: USA_AVERAGESPEEDCAMERAZONE, 0x200F: USA_SPEEDENFORCEMET, 0x2010: USA_SPEEDENFORCEMETZONE, 0x2011: USA_MOBILEHOTSPOT, 0x2012: USA_MOBILEHOTSPOTZONE, 0x2013: USA_ACCIDENTBLACKSPOT1, 0x2014: USA_ACCIDENTBLACKSPOTZONE, 0x2015: USA_DANGERZONE, 0x2016: USA_RISKZONE, 0x2017: USA_RESTRICTED, 0x2018: USA_OTHERS, 0x2019: USA_BUSLANENOTAVAILABLE, 0x201A: USA_BUSLANEAVAILABLE, 0x201B: USA_ILLEGALPARKING, 0x201C: USA_DONOTENTER, 0x201D: USA_ACCIDENTBLACKSPOT2, 0x201E: USA_SCHOOLZONE, 0x201F: USA_FALLINGROCKS, 0x2020: USA_RAILROADCROSSING, 0x2021: USA_FOGGYAREA, 0x2022: USA_STEEPSLOPE, 0x2023: USA_ROADKILL, 0x2024: USA_SPEEDBUMP, 0x2025: USA_NARROWROAD, 0x2026: USA_HIGHWAYCONSTRUCTIONZONE, 0x2027: USA_ROADSLIPDETECTION, 0x2028: USA_ROADDAMAGEDETECTION, 0x2029: USA_ZONE_30, 0x202A: USA_STOP, 0x202B: USA_BLINDSLOPE_CONTINUOUS, 0x202C: USA_CROSSWIND, 0x202D: USA_HILLSIDEDANGEROUS, 0x202E: USA_HUMP_BRIDG, 0x202F: USA_JOINT_LEFT, 0x2030: USA_JOINT_RIGHT, 0x2031: USA_LOWSPEED, 0x2032: USA_NARROW_BOTH, 0x2033: USA_NARROWBRIDGE, 0x2034: USA_NARROW_LEFT, 0x2035: USA_NARROW_RIGHT, 0x2036: USA_ROCKFALL_LEFT, 0x2037: USA_ROCKFALL_RIGHT, 0x2038: USA_SLIP, 0x2039: USA_BLINDSLOPE_UP, 0x203A: USA_BLINDSLOPE_DOWN, 0x203B: USA_TUNNEL, 0x203C: USA_UNDERWATER, 0x203D: USA_UNEVEN, 0x203E: USA_UNMANAGED_RAILWAY_CROSS, 0x203F: USA_ZIPPASS, 0x2040: USA_SLOPE_CONTINUOUSDOWN, 0x2041: USA_SLOPE_UP, 0x2042: USA_SLOPE_DOWN, 0x2043: USA_RAILWAY_MANAGED, 0x2044: USA_VILLAGE, 0x2045: USA_AUDIBLEWARNING, 0x2046: USA_OVERTAKING_LANE, 0x2047: USA_FALLING_HAZARD, 0x2048: USA_LANE_MOVE_REGULATION, 0x2049: USA_DROWSY, 0x3001: CANADA_FIXEDCAMERA, 0x3002: CANADA_PORTABLECAMERA, 0x3003: CANADA_SPEED_SIGNAL, 0x3004: CANADA_BUSCAMERA, 0x3005: CANADA_SCHOOLZONEFIXEDCAMERA, 0x3006: CANADA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x3007: CANADA_CUTINLINE, 0x3008: CANADA_ROADSHOULDERVIOLATION, 0x3009: CANADA_TRAFFICINFORMATION, 0x300A: CANADA_INTERSECTIONJAMMING, 0x300B: CANADA_RAMPMETERING, 0x300C: CANADA_LANECHANGE, 0x300D: CANADA_AVERAGESPEEDCAMERA, 0x300E: CANADA_AVERAGESPEEDCAMERAZONE, 0x300F: CANADA_SPEEDENFORCEMET, 0x3010: CANADA_SPEEDENFORCEMETZONE, 0x3011: CANADA_MOBILEHOTSPOT, 0x3012: CANADA_MOBILEHOTSPOTZONE, 0x3013: CANADA_ACCIDENTBLACKSPOT1, 0x3014: CANADA_ACCIDENTBLACKSPOTZONE, 0x3015: CANADA_DANGERZONE, 0x3016: CANADA_RISKZONE, 0x3017: CANADA_RESTRICTED, 0x3018: CANADA_OTHERS, 0x3019: CANADA_BUSLANENOTAVAILABLE, 0x301A: CANADA_BUSLANEAVAILABLE, 0x301B: CANADA_ILLEGALPARKING, 0x301C: CANADA_DONOTENTER, 0x301D: CANADA_ACCIDENTBLACKSPOT2, 0x301E: CANADA_SCHOOLZONE, 0x301F: CANADA_FALLINGROCKS, 0x3020: CANADA_RAILROADCROSSING, 0x3021: CANADA_FOGGYAREA, 0x3022: CANADA_STEEPSLOPE, 0x3023: CANADA_ROADKILL, 0x3024: CANADA_SPEEDBUMP, 0x3025: CANADA_NARROWROAD, 0x3026: CANADA_HIGHWAYCONSTRUCTIONZONE, 0x3027: CANADA_ROADSLIPDETECTION, 0x3028: CANADA_ROADDAMAGEDETECTION, 0x3029: CANADA_ZONE_30, 0x302A: CANADA_STOP, 0x302B: CANADA_BLINDSLOPE_CONTINUOUS, 0x302C: CANADA_CROSSWIND, 0x302D: CANADA_HILLSIDEDANGEROUS, 0x302E: CANADA_HUMP_BRIDG, 0x302F: CANADA_JOINT_LEFT, 0x3030: CANADA_JOINT_RIGHT, 0x3031: CANADA_LOWSPEED, 0x3032: CANADA_NARROW_BOTH, 0x3033: CANADA_NARROWBRIDGE, 0x3034: CANADA_NARROW_LEFT, 0x3035: CANADA_NARROW_RIGHT, 0x3036: CANADA_ROCKFALL_LEFT, 0x3037: CANADA_ROCKFALL_RIGHT, 0x3038: CANADA_SLIP, 0x3039: CANADA_BLINDSLOPE_UP, 0x303A: CANADA_BLINDSLOPE_DOWN, 0x303B: CANADA_TUNNEL, 0x303C: CANADA_UNDERWATER, 0x303D: CANADA_UNEVEN, 0x303E: CANADA_UNMANAGED_RAILWAY_CROSS, 0x303F: CANADA_ZIPPASS, 0x3040: CANADA_SLOPE_CONTINUOUSDOWN, 0x3041: CANADA_SLOPE_UP, 0x3042: CANADA_SLOPE_DOWN, 0x3043: CANADA_RAILWAY_MANAGED, 0x3044: CANADA_VILLAGE, 0x3045: CANADA_AUDIBLEWARNING, 0x3046: CANADA_OVERTAKING_LANE, 0x3047: CANADA_FALLING_HAZARD, 0x3048: CANADA_LANE_MOVE_REGULATION, 0x3049: CANADA_DROWSY, 0x4001: MEXICO_FIXEDCAMERA, 0x4002: MEXICO_PORTABLECAMERA, 0x4003: MEXICO_SPEED_SIGNAL, 0x4004: MEXICO_BUSCAMERA, 0x4005: MEXICO_SCHOOLZONEFIXEDCAMERA, 0x4006: MEXICO_SCHOOLZONESPEEL_SIGNALCAMERA, 0x4007: MEXICO_CUTINLINE, 0x4008: MEXICO_ROADSHOULDERVIOLATION, 0x4009: MEXICO_TRAFFICINFORMATION, 0x400A: MEXICO_INTERSECTIONJAMMING, 0x400B: MEXICO_RAMPMETERING, 0x400C: MEXICO_LANECHANGE, 0x400D: MEXICO_AVERAGESPEEDCAMERA, 0x400E: MEXICO_AVERAGESPEEDCAMERAZONE, 0x400F: MEXICO_SPEEDENFORCEMET, 0x4010: MEXICO_SPEEDENFORCEMETZONE, 0x4011: MEXICO_MOBILEHOTSPOT, 0x4012: MEXICO_MOBILEHOTSPOTZONE, 0x4013: MEXICO_ACCIDENTBLACKSPOT1, 0x4014: MEXICO_ACCIDENTBLACKSPOTZONE, 0x4015: MEXICO_DANGERZONE, 0x4016: MEXICO_RISKZONE, 0x4017: MEXICO_RESTRICTED, 0x4018: MEXICO_OTHERS, 0x4019: MEXICO_BUSLANENOTAVAILABLE, 0x401A: MEXICO_BUSLANEAVAILABLE, 0x401B: MEXICO_ILLEGALPARKING, 0x401C: MEXICO_DONOTENTER, 0x401D: MEXICO_ACCIDENTBLACKSPOT2, 0x401E: MEXICO_SCHOOLZONE, 0x401F: MEXICO_FALLINGROCKS, 0x4020: MEXICO_RAILROADCROSSING, 0x4021: MEXICO_FOGGYAREA, 0x4022: MEXICO_STEEPSLOPE, 0x4023: MEXICO_ROADKILL, 0x4024: MEXICO_SPEEDBUMP, 0x4025: MEXICO_NARROWROAD, 0x4026: MEXICO_HIGHWAYCONSTRUCTIONZONE, 0x4027: MEXICO_ROADSLIPDETECTION, 0x4028: MEXICO_ROADDAMAGEDETECTION, 0x4029: MEXICO_ZONE_30, 0x402A: MEXICO_STOP, 0x402B: MEXICO_BLINDSLOPE_CONTINUOUS, 0x402C: MEXICO_CROSSWIND, 0x402D: MEXICO_HILLSIDEDANGEROUS, 0x402E: MEXICO_HUMP_BRIDG, 0x402F: MEXICO_JOINT_LEFT, 0x4030: MEXICO_JOINT_RIGHT, 0x4031: MEXICO_LOWSPEED, 0x4032: MEXICO_NARROW_BOTH, 0x4033: MEXICO_NARROWBRIDGE, 0x4034: MEXICO_NARROW_LEFT, 0x4035: MEXICO_NARROW_RIGHT, 0x4036: MEXICO_ROCKFALL_LEFT, 0x4037: MEXICO_ROCKFALL_RIGHT, 0x4038: MEXICO_SLIP, 0x4039: MEXICO_BLINDSLOPE_UP, 0x403A: MEXICO_BLINDSLOPE_DOWN, 0x403B: MEXICO_TUNNEL, 0x403C: MEXICO_UNDERWATER, 0x403D: MEXICO_UNEVEN, 0x403E: MEXICO_UNMANAGED_RAILWAY_CROSS, 0x403F: MEXICO_ZIPPASS, 0x4040: MEXICO_SLOPE_CONTINUOUSDOWN, 0x4041: MEXICO_SLOPE_UP, 0x4042: MEXICO_SLOPE_DOWN, 0x4043: MEXICO_RAILWAY_MANAGED, 0x4044: MEXICO_VILLAGE, 0x4045: MEXICO_AUDIBLEWARNING, 0x4046: MEXICO_OVERTAKING_LANE, 0x4047: MEXICO_FALLING_HAZARD, 0x4048: MEXICO_LANE_MOVE_REGULATION, 0x4049: MEXICO_DROWSY, 0x5001: EUROPE_FIXEDCAMERA, 0x5002: EUROPE_PORTABLECAMERA, 0x5003: EUROPE_SPEED_SIGNAL, 0x5004: EUROPE_BUSCAMERA, 0x5005: EUROPE_SCHOOLZONEFIXEDCAMERA, 0x5006: EUROPE_SCHOOLZONESPEEL_SIGNALCAMERA, 0x5007: EUROPE_CUTINLINE, 0x5008: EUROPE_ROADSHOULDERVIOLATION, 0x5009: EUROPE_TRAFFICINFORMATION, 0x500A: EUROPE_INTERSECTIONJAMMING, 0x500B: EUROPE_RAMPMETERING, 0x500C: EUROPE_LANECHANGE, 0x500D: EUROPE_AVERAGESPEEDCAMERA, 0x500E: EUROPE_AVERAGESPEEDCAMERAZONE, 0x500F: EUROPE_SPEEDENFORCEMET, 0x5010: EUROPE_SPEEDENFORCEMETZONE, 0x5011: EUROPE_MOBILEHOTSPOT, 0x5012: EUROPE_MOBILEHOTSPOTZONE, 0x5013: EUROPE_ACCIDENTBLACKSPOT1, 0x5014: EUROPE_ACCIDENTBLACKSPOTZONE, 0x5015: EUROPE_DANGERZONE, 0x5016: EUROPE_RISKZONE, 0x5017: EUROPE_RESTRICTED, 0x5018: EUROPE_OTHERS, 0x5019: EUROPE_BUSLANENOTAVAILABLE, 0x501A: EUROPE_BUSLANEAVAILABLE, 0x501B: EUROPE_ILLEGALPARKING, 0x501C: EUROPE_DONOTENTER, 0x501D: EUROPE_ACCIDENTBLACKSPOT2, 0x501E: EUROPE_SCHOOLZONE, 0x501F: EUROPE_FALLINGROCKS, 0x5020: EUROPE_RAILROADCROSSING, 0x5021: EUROPE_FOGGYAREA, 0x5022: EUROPE_STEEPSLOPE, 0x5023: EUROPE_ROADKILL, 0x5024: EUROPE_SPEEDBUMP, 0x5025: EUROPE_NARROWROAD, 0x5026: EUROPE_HIGHWAYCONSTRUCTIONZONE, 0x5027: EUROPE_ROADSLIPDETECTION, 0x5028: EUROPE_ROADDAMAGEDETECTION, 0x5029: EUROPE_ZONE_30, 0x502A: EUROPE_STOP, 0x502B: EUROPE_BLINDSLOPE_CONTINUOUS, 0x502C: EUROPE_CROSSWIND, 0x502D: EUROPE_HILLSIDEDANGEROUS, 0x502E: EUROPE_HUMP_BRIDG, 0x502F: EUROPE_JOINT_LEFT, 0x5030: EUROPE_JOINT_RIGHT, 0x5031: EUROPE_LOWSPEED, 0x5032: EUROPE_NARROW_BOTH, 0x5033: EUROPE_NARROWBRIDGE, 0x5034: EUROPE_NARROW_LEFT, 0x5035: EUROPE_NARROW_RIGHT, 0x5036: EUROPE_ROCKFALL_LEFT, 0x5037: EUROPE_ROCKFALL_RIGHT, 0x5038: EUROPE_SLIP, 0x5039: EUROPE_BLINDSLOPE_UP, 0x503A: EUROPE_BLINDSLOPE_DOWN, 0x503B: EUROPE_TUNNEL, 0x503C: EUROPE_UNDERWATER, 0x503D: EUROPE_UNEVEN, 0x503E: EUROPE_UNMANAGED_RAILWAY_CROSS, 0x503F: EUROPE_ZIPPASS, 0x5040: EUROPE_SLOPE_CONTINUOUSDOWN, 0x5041: EUROPE_SLOPE_UP, 0x5042: EUROPE_SLOPE_DOWN, 0x5043: EUROPE_RAILWAY_MANAGED, 0x5044: EUROPE_VILLAGE, 0x5045: EUROPE_AUDIBLEWARNING, 0x5046: EUROPE_OVERTAKING_LANE, 0x5047: EUROPE_FALLING_HAZARD, 0x5048: EUROPE_LANE_MOVE_REGULATION, 0x5049: EUROPE_DROWSY, 0x6001: MIDDLE_EAST_FIXEDCAMERA, 0x6002: MIDDLE_EAST_PORTABLECAMERA, 0x6003: MIDDLE_EAST_SPEED_SIGNAL, 0x6004: MIDDLE_EAST_BUSCAMERA, 0x6005: MIDDLE_EAST_SCHOOLZONEFIXEDCAMERA, 0x6006: MIDDLE_EAST_SCHOOLZONESPEEL_SIGNALCAMERA, 0x6007: MIDDLE_EAST_CUTINLINE, 0x6008: MIDDLE_EAST_ROADSHOULDERVIOLATION, 0x6009: MIDDLE_EAST_TRAFFICINFORMATION, 0x600A: MIDDLE_EAST_INTERSECTIONJAMMING, 0x600B: MIDDLE_EAST_RAMPMETERING, 0x600C: MIDDLE_EAST_LANECHANGE, 0x600D: MIDDLE_EAST_AVERAGESPEEDCAMERA, 0x600E: MIDDLE_EAST_AVERAGESPEEDCAMERAZONE, 0x600F: MIDDLE_EAST_SPEEDENFORCEMET, 0x6010: MIDDLE_EAST_SPEEDENFORCEMETZONE, 0x6011: MIDDLE_EAST_MOBILEHOTSPOT, 0x6012: MIDDLE_EAST_MOBILEHOTSPOTZONE, 0x6013: MIDDLE_EAST_ACCIDENTBLACKSPOT1, 0x6014: MIDDLE_EAST_ACCIDENTBLACKSPOTZONE, 0x6015: MIDDLE_EAST_DANGERZONE, 0x6016: MIDDLE_EAST_RISKZONE, 0x6017: MIDDLE_EAST_RESTRICTED, 0x6018: MIDDLE_EAST_OTHERS, 0x6019: MIDDLE_EAST_BUSLANENOTAVAILABLE, 0x601A: MIDDLE_EAST_BUSLANEAVAILABLE, 0x601B: MIDDLE_EAST_ILLEGALPARKING, 0x601C: MIDDLE_EAST_DONOTENTER, 0x601D: MIDDLE_EAST_ACCIDENTBLACKSPOT2, 0x601E: MIDDLE_EAST_SCHOOLZONE, 0x601F: MIDDLE_EAST_FALLINGROCKS, 0x6020: MIDDLE_EAST_RAILROADCROSSING, 0x6021: MIDDLE_EAST_FOGGYAREA, 0x6022: MIDDLE_EAST_STEEPSLOPE, 0x6023: MIDDLE_EAST_ROADKILL, 0x6024: MIDDLE_EAST_SPEEDBUMP, 0x6025: MIDDLE_EAST_NARROWROAD, 0x6026: MIDDLE_EAST_HIGHWAYCONSTRUCTIONZONE, 0x6027: MIDDLE_EAST_ROADSLIPDETECTION, 0x6028: MIDDLE_EAST_ROADDAMAGEDETECTION, 0x6029: MIDDLE_EAST_ZONE_30, 0x602A: MIDDLE_EAST_STOP, 0x602B: MIDDLE_EAST_BLINDSLOPE_CONTINUOUS, 0x602C: MIDDLE_EAST_CROSSWIND, 0x602D: MIDDLE_EAST_HILLSIDEDANGEROUS, 0x602E: MIDDLE_EAST_HUMP_BRIDG, 0x602F: MIDDLE_EAST_JOINT_LEFT, 0x6030: MIDDLE_EAST_JOINT_RIGHT, 0x6031: MIDDLE_EAST_LOWSPEED, 0x6032: MIDDLE_EAST_NARROW_BOTH, 0x6033: MIDDLE_EAST_NARROWBRIDGE, 0x6034: MIDDLE_EAST_NARROW_LEFT, 0x6035: MIDDLE_EAST_NARROW_RIGHT, 0x6036: MIDDLE_EAST_ROCKFALL_LEFT, 0x6037: MIDDLE_EAST_ROCKFALL_RIGHT, 0x6038: MIDDLE_EAST_SLIP, 0x6039: MIDDLE_EAST_BLINDSLOPE_UP, 0x603A: MIDDLE_EAST_BLINDSLOPE_DOWN, 0x603B: MIDDLE_EAST_TUNNEL, 0x603C: MIDDLE_EAST_UNDERWATER, 0x603D: MIDDLE_EAST_UNEVEN, 0x603E: MIDDLE_EAST_UNMANAGED_RAILWAY_CROSS, 0x603F: MIDDLE_EAST_ZIPPASS, 0x6040: MIDDLE_EAST_SLOPE_CONTINUOUSDOWN, 0x6041: MIDDLE_EAST_SLOPE_UP, 0x6042: MIDDLE_EAST_SLOPE_DOWN, 0x6043: MIDDLE_EAST_RAILWAY_MANAGED, 0x6044: MIDDLE_EAST_VILLAGE, 0x6045: MIDDLE_EAST_AUDIBLEWARNING, 0x6046: MIDDLE_EAST_OVERTAKING_LANE, 0x6047: MIDDLE_EAST_FALLING_HAZARD, 0x6048: MIDDLE_EAST_LANE_MOVE_REGULATION, 0x6049: MIDDLE_EAST_DROWSY, 0x7001: AUSTRALIA_FIXEDCAMERA, 0x7002: AUSTRALIA_PORTABLECAMERA, 0x7003: AUSTRALIA_SPEED_SIGNAL, 0x7004: AUSTRALIA_BUSCAMERA, 0x7005: AUSTRALIA_SCHOOLZONEFIXEDCAMERA, 0x7006: AUSTRALIA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x7007: AUSTRALIA_CUTINLINE, 0x7008: AUSTRALIA_ROADSHOULDERVIOLATION, 0x7009: AUSTRALIA_TRAFFICINFORMATION, 0x700A: AUSTRALIA_INTERSECTIONJAMMING, 0x700B: AUSTRALIA_RAMPMETERING, 0x700C: AUSTRALIA_LANECHANGE, 0x700D: AUSTRALIA_AVERAGESPEEDCAMERA, 0x700E: AUSTRALIA_AVERAGESPEEDCAMERAZONE, 0x700F: AUSTRALIA_SPEEDENFORCEMET, 0x7010: AUSTRALIA_SPEEDENFORCEMETZONE, 0x7011: AUSTRALIA_MOBILEHOTSPOT, 0x7012: AUSTRALIA_MOBILEHOTSPOTZONE, 0x7013: AUSTRALIA_ACCIDENTBLACKSPOT1, 0x7014: AUSTRALIA_ACCIDENTBLACKSPOTZONE, 0x7015: AUSTRALIA_DANGERZONE, 0x7016: AUSTRALIA_RISKZONE, 0x7017: AUSTRALIA_RESTRICTED, 0x7018: AUSTRALIA_OTHERS, 0x7019: AUSTRALIA_BUSLANENOTAVAILABLE, 0x701A: AUSTRALIA_BUSLANEAVAILABLE, 0x701B: AUSTRALIA_ILLEGALPARKING, 0x701C: AUSTRALIA_DONOTENTER, 0x701D: AUSTRALIA_ACCIDENTBLACKSPOT2, 0x701E: AUSTRALIA_SCHOOLZONE, 0x701F: AUSTRALIA_FALLINGROCKS, 0x7020: AUSTRALIA_RAILROADCROSSING, 0x7021: AUSTRALIA_FOGGYAREA, 0x7022: AUSTRALIA_STEEPSLOPE, 0x7023: AUSTRALIA_ROADKILL, 0x7024: AUSTRALIA_SPEEDBUMP, 0x7025: AUSTRALIA_NARROWROAD, 0x7026: AUSTRALIA_HIGHWAYCONSTRUCTIONZONE, 0x7027: AUSTRALIA_ROADSLIPDETECTION, 0x7028: AUSTRALIA_ROADDAMAGEDETECTION, 0x7029: AUSTRALIA_ZONE_30, 0x702A: AUSTRALIA_STOP, 0x702B: AUSTRALIA_BLINDSLOPE_CONTINUOUS, 0x702C: AUSTRALIA_CROSSWIND, 0x702D: AUSTRALIA_HILLSIDEDANGEROUS, 0x702E: AUSTRALIA_HUMP_BRIDG, 0x702F: AUSTRALIA_JOINT_LEFT, 0x7030: AUSTRALIA_JOINT_RIGHT, 0x7031: AUSTRALIA_LOWSPEED, 0x7032: AUSTRALIA_NARROW_BOTH, 0x7033: AUSTRALIA_NARROWBRIDGE, 0x7034: AUSTRALIA_NARROW_LEFT, 0x7035: AUSTRALIA_NARROW_RIGHT, 0x7036: AUSTRALIA_ROCKFALL_LEFT, 0x7037: AUSTRALIA_ROCKFALL_RIGHT, 0x7038: AUSTRALIA_SLIP, 0x7039: AUSTRALIA_BLINDSLOPE_UP, 0x703A: AUSTRALIA_BLINDSLOPE_DOWN, 0x703B: AUSTRALIA_TUNNEL, 0x703C: AUSTRALIA_UNDERWATER, 0x703D: AUSTRALIA_UNEVEN, 0x703E: AUSTRALIA_UNMANAGED_RAILWAY_CROSS, 0x703F: AUSTRALIA_ZIPPASS, 0x7040: AUSTRALIA_SLOPE_CONTINUOUSDOWN, 0x7041: AUSTRALIA_SLOPE_UP, 0x7042: AUSTRALIA_SLOPE_DOWN, 0x7043: AUSTRALIA_RAILWAY_MANAGED, 0x7044: AUSTRALIA_VILLAGE, 0x7045: AUSTRALIA_AUDIBLEWARNING, 0x7046: AUSTRALIA_OVERTAKING_LANE, 0x7047: AUSTRALIA_FALLING_HAZARD, 0x7048: AUSTRALIA_LANE_MOVE_REGULATION, 0x7049: AUSTRALIA_DROWSY, 0x8001: SOUTH_AMERICA_FIXEDCAMERA, 0x8002: SOUTH_AMERICA_PORTABLECAMERA, 0x8003: SOUTH_AMERICA_SPEED_SIGNAL, 0x8004: SOUTH_AMERICA_BUSCAMERA, 0x8005: SOUTH_AMERICA_SCHOOLZONEFIXEDCAMERA, 0x8006: SOUTH_AMERICA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x8007: SOUTH_AMERICA_CUTINLINE, 0x8008: SOUTH_AMERICA_ROADSHOULDERVIOLATION, 0x8009: SOUTH_AMERICA_TRAFFICINFORMATION, 0x800A: SOUTH_AMERICA_INTERSECTIONJAMMING, 0x800B: SOUTH_AMERICA_RAMPMETERING, 0x800C: SOUTH_AMERICA_LANECHANGE, 0x800D: SOUTH_AMERICA_AVERAGESPEEDCAMERA, 0x800E: SOUTH_AMERICA_AVERAGESPEEDCAMERAZONE, 0x800F: SOUTH_AMERICA_SPEEDENFORCEMET, 0x8010: SOUTH_AMERICA_SPEEDENFORCEMETZONE, 0x8011: SOUTH_AMERICA_MOBILEHOTSPOT, 0x8012: SOUTH_AMERICA_MOBILEHOTSPOTZONE, 0x8013: SOUTH_AMERICA_ACCIDENTBLACKSPOT1, 0x8014: SOUTH_AMERICA_ACCIDENTBLACKSPOTZONE, 0x8015: SOUTH_AMERICA_DANGERZONE, 0x8016: SOUTH_AMERICA_RISKZONE, 0x8017: SOUTH_AMERICA_RESTRICTED, 0x8018: SOUTH_AMERICA_OTHERS, 0x8019: SOUTH_AMERICA_BUSLANENOTAVAILABLE, 0x801A: SOUTH_AMERICA_BUSLANEAVAILABLE, 0x801B: SOUTH_AMERICA_ILLEGALPARKING, 0x801C: SOUTH_AMERICA_DONOTENTER, 0x801D: SOUTH_AMERICA_ACCIDENTBLACKSPOT2, 0x801E: SOUTH_AMERICA_SCHOOLZONE, 0x801F: SOUTH_AMERICA_FALLINGROCKS, 0x8020: SOUTH_AMERICA_RAILROADCROSSING, 0x8021: SOUTH_AMERICA_FOGGYAREA, 0x8022: SOUTH_AMERICA_STEEPSLOPE, 0x8023: SOUTH_AMERICA_ROADKILL, 0x8024: SOUTH_AMERICA_SPEEDBUMP, 0x8025: SOUTH_AMERICA_NARROWROAD, 0x8026: SOUTH_AMERICA_HIGHWAYCONSTRUCTIONZONE, 0x8027: SOUTH_AMERICA_ROADSLIPDETECTION, 0x8028: SOUTH_AMERICA_ROADDAMAGEDETECTION, 0x8029: SOUTH_AMERICA_ZONE_30, 0x802A: SOUTH_AMERICA_STOP, 0x802B: SOUTH_AMERICA_BLINDSLOPE_CONTINUOUS, 0x802C: SOUTH_AMERICA_CROSSWIND, 0x802D: SOUTH_AMERICA_HILLSIDEDANGEROUS, 0x802E: SOUTH_AMERICA_HUMP_BRIDG, 0x802F: SOUTH_AMERICA_JOINT_LEFT, 0x8030: SOUTH_AMERICA_JOINT_RIGHT, 0x8031: SOUTH_AMERICA_LOWSPEED, 0x8032: SOUTH_AMERICA_NARROW_BOTH, 0x8033: SOUTH_AMERICA_NARROWBRIDGE, 0x8034: SOUTH_AMERICA_NARROW_LEFT, 0x8035: SOUTH_AMERICA_NARROW_RIGHT, 0x8036: SOUTH_AMERICA_ROCKFALL_LEFT, 0x8037: SOUTH_AMERICA_ROCKFALL_RIGHT, 0x8038: SOUTH_AMERICA_SLIP, 0x8039: SOUTH_AMERICA_BLINDSLOPE_UP, 0x803A: SOUTH_AMERICA_BLINDSLOPE_DOWN, 0x803B: SOUTH_AMERICA_TUNNEL, 0x803C: SOUTH_AMERICA_UNDERWATER, 0x803D: SOUTH_AMERICA_UNEVEN, 0x803E: SOUTH_AMERICA_UNMANAGED_RAILWAY_CROSS, 0x803F: SOUTH_AMERICA_ZIPPASS, 0x8040: SOUTH_AMERICA_SLOPE_CONTINUOUSDOWN, 0x8041: SOUTH_AMERICA_SLOPE_UP, 0x8042: SOUTH_AMERICA_SLOPE_DOWN, 0x8043: SOUTH_AMERICA_RAILWAY_MANAGED, 0x8044: SOUTH_AMERICA_VILLAGE, 0x8045: SOUTH_AMERICA_AUDIBLEWARNING, 0x8046: SOUTH_AMERICA_OVERTAKING_LANE, 0x8047: SOUTH_AMERICA_FALLING_HAZARD, 0x8048: SOUTH_AMERICA_LANE_MOVE_REGULATION, 0x8049: SOUTH_AMERICA_DROWSY, 0x9001: CHINA_FIXEDCAMERA, 0x9002: CHINA_PORTABLECAMERA, 0x9003: CHINA_SPEED_SIGNAL, 0x9004: CHINA_BUSCAMERA, 0x9005: CHINA_SCHOOLZONEFIXEDCAMERA, 0x9006: CHINA_SCHOOLZONESPEEL_SIGNALCAMERA, 0x9007: CHINA_CUTINLINE, 0x9008: CHINA_ROADSHOULDERVIOLATION, 0x9009: CHINA_TRAFFICINFORMATION, 0x900A: CHINA_INTERSECTIONJAMMING, 0x900B: CHINA_RAMPMETERING, 0x900C: CHINA_LANECHANGE, 0x900D: CHINA_AVERAGESPEEDCAMERA, 0x900E: CHINA_AVERAGESPEEDCAMERAZONE, 0x900F: CHINA_SPEEDENFORCEMET, 0x9010: CHINA_SPEEDENFORCEMETZONE, 0x9011: CHINA_MOBILEHOTSPOT, 0x9012: CHINA_MOBILEHOTSPOTZONE, 0x9013: CHINA_ACCIDENTBLACKSPOT1, 0x9014: CHINA_ACCIDENTBLACKSPOTZONE, 0x9015: CHINA_DANGERZONE, 0x9016: CHINA_RISKZONE, 0x9017: CHINA_RESTRICTED, 0x9018: CHINA_OTHERS, 0x9019: CHINA_BUSLANENOTAVAILABLE, 0x901A: CHINA_BUSLANEAVAILABLE, 0x901B: CHINA_ILLEGALPARKING, 0x901C: CHINA_DONOTENTER, 0x901D: CHINA_ACCIDENTBLACKSPOT2, 0x901E: CHINA_SCHOOLZONE, 0x901F: CHINA_FALLINGROCKS, 0x9020: CHINA_RAILROADCROSSING, 0x9021: CHINA_FOGGYAREA, 0x9022: CHINA_STEEPSLOPE, 0x9023: CHINA_ROADKILL, 0x9024: CHINA_SPEEDBUMP, 0x9025: CHINA_NARROWROAD, 0x9026: CHINA_HIGHWAYCONSTRUCTIONZONE, 0x9027: CHINA_ROADSLIPDETECTION, 0x9028: CHINA_ROADDAMAGEDETECTION, 0x9029: CHINA_ZONE_30, 0x902A: CHINA_STOP, 0x902B: CHINA_BLINDSLOPE_CONTINUOUS, 0x902C: CHINA_CROSSWIND, 0x902D: CHINA_HILLSIDEDANGEROUS, 0x902E: CHINA_HUMP_BRIDG, 0x902F: CHINA_JOINT_LEFT, 0x9030: CHINA_JOINT_RIGHT, 0x9031: CHINA_LOWSPEED, 0x9032: CHINA_NARROW_BOTH, 0x9033: CHINA_NARROWBRIDGE, 0x9034: CHINA_NARROW_LEFT, 0x9035: CHINA_NARROW_RIGHT, 0x9036: CHINA_ROCKFALL_LEFT, 0x9037: CHINA_ROCKFALL_RIGHT, 0x9038: CHINA_SLIP, 0x9039: CHINA_BLINDSLOPE_UP, 0x903A: CHINA_BLINDSLOPE_DOWN, 0x903B: CHINA_TUNNEL, 0x903C: CHINA_UNDERWATER, 0x903D: CHINA_UNEVEN, 0x903E: CHINA_UNMANAGED_RAILWAY_CROSS, 0x903F: CHINA_ZIPPASS, 0x9040: CHINA_SLOPE_CONTINUOUSDOWN, 0x9041: CHINA_SLOPE_UP, 0x9042: CHINA_SLOPE_DOWN, 0x9043: CHINA_RAILWAY_MANAGED, 0x9044: CHINA_VILLAGE, 0x9045: CHINA_AUDIBLEWARNING, 0x9046: CHINA_OVERTAKING_LANE, 0x9047: CHINA_FALLING_HAZARD, 0x9048: CHINA_LANE_MOVE_REGULATION, 0x9049: CHINA_DROWSY, 0xA001: INDIA_FIXEDCAMERA, 0xA002: INDIA_PORTABLECAMERA, 0xA003: INDIA_SPEED_SIGNAL, 0xA004: INDIA_BUSCAMERA, 0xA005: INDIA_SCHOOLZONEFIXEDCAMERA, 0xA006: INDIA_SCHOOLZONESPEEL_SIGNALCAMERA, 0xA007: INDIA_CUTINLINE, 0xA008: INDIA_ROADSHOULDERVIOLATION, 0xA009: INDIA_TRAFFICINFORMATION, 0xA00A: INDIA_INTERSECTIONJAMMING, 0xA00B: INDIA_RAMPMETERING, 0xA00C: INDIA_LANECHANGE, 0xA00D: INDIA_AVERAGESPEEDCAMERA, 0xA00E: INDIA_AVERAGESPEEDCAMERAZONE, 0xA00F: INDIA_SPEEDENFORCEMET, 0xA010: INDIA_SPEEDENFORCEMETZONE, 0xA011: INDIA_MOBILEHOTSPOT, 0xA012: INDIA_MOBILEHOTSPOTZONE, 0xA013: INDIA_ACCIDENTBLACKSPOT1, 0xA014: INDIA_ACCIDENTBLACKSPOTZONE, 0xA015: INDIA_DANGERZONE, 0xA016: INDIA_RISKZONE, 0xA017: INDIA_RESTRICTED, 0xA018: INDIA_OTHERS, 0xA019: INDIA_BUSLANENOTAVAILABLE, 0xA01A: INDIA_BUSLANEAVAILABLE, 0xA01B: INDIA_ILLEGALPARKING, 0xA01C: INDIA_DONOTENTER, 0xA01D: INDIA_ACCIDENTBLACKSPOT2, 0xA01E: INDIA_SCHOOLZONE, 0xA01F: INDIA_FALLINGROCKS, 0xA020: INDIA_RAILROADCROSSING, 0xA021: INDIA_FOGGYAREA, 0xA022: INDIA_STEEPSLOPE, 0xA023: INDIA_ROADKILL, 0xA024: INDIA_SPEEDBUMP, 0xA025: INDIA_NARROWROAD, 0xA026: INDIA_HIGHWAYCONSTRUCTIONZONE, 0xA027: INDIA_ROADSLIPDETECTION, 0xA028: INDIA_ROADDAMAGEDETECTION, 0xA029: INDIA_ZONE_30, 0xA02A: INDIA_STOP, 0xA02B: INDIA_BLINDSLOPE_CONTINUOUS, 0xA02C: INDIA_CROSSWIND, 0xA02D: INDIA_HILLSIDEDANGEROUS, 0xA02E: INDIA_HUMP_BRIDG, 0xA02F: INDIA_JOINT_LEFT, 0xA030: INDIA_JOINT_RIGHT, 0xA031: INDIA_LOWSPEED, 0xA032: INDIA_NARROW_BOTH, 0xA033: INDIA_NARROWBRIDGE, 0xA034: INDIA_NARROW_LEFT, 0xA035: INDIA_NARROW_RIGHT, 0xA036: INDIA_ROCKFALL_LEFT, 0xA037: INDIA_ROCKFALL_RIGHT, 0xA038: INDIA_SLIP, 0xA039: INDIA_BLINDSLOPE_UP, 0xA03A: INDIA_BLINDSLOPE_DOWN, 0xA03B: INDIA_TUNNEL, 0xA03C: INDIA_UNDERWATER, 0xA03D: INDIA_UNEVEN, 0xA03E: INDIA_UNMANAGED_RAILWAY_CROSS, 0xA03F: INDIA_ZIPPASS, 0xA040: INDIA_SLOPE_CONTINUOUSDOWN, 0xA041: INDIA_SLOPE_UP, 0xA042: INDIA_SLOPE_DOWN, 0xA043: INDIA_RAILWAY_MANAGED, 0xA044: INDIA_VILLAGE, 0xA045: INDIA_AUDIBLEWARNING, 0xA046: INDIA_OVERTAKING_LANE, 0xA047: INDIA_FALLING_HAZARD, 0xA048: INDIA_LANE_MOVE_REGULATION, 0xA049: INDIA_DROWSY, 0xB001: JAPAN_FIXEDCAMERA, 0xB002: JAPAN_PORTABLECAMERA, 0xB003: JAPAN_SPEED_SIGNAL, 0xB004: JAPAN_BUSCAMERA, 0xB005: JAPAN_SCHOOLZONEFIXEDCAMERA, 0xB006: JAPAN_SCHOOLZONESPEEL_SIGNALCAMERA, 0xB007: JAPAN_CUTINLINE, 0xB008: JAPAN_ROADSHOULDERVIOLATION, 0xB009: JAPAN_TRAFFICINFORMATION, 0xB00A: JAPAN_INTERSECTIONJAMMING, 0xB00B: JAPAN_RAMPMETERING, 0xB00C: JAPAN_LANECHANGE, 0xB00D: JAPAN_AVERAGESPEEDCAMERA, 0xB00E: JAPAN_AVERAGESPEEDCAMERAZONE, 0xB00F: JAPAN_SPEEDENFORCEMET, 0xB010: JAPAN_SPEEDENFORCEMETZONE, 0xB011: JAPAN_MOBILEHOTSPOT, 0xB012: JAPAN_MOBILEHOTSPOTZONE, 0xB013: JAPAN_ACCIDENTBLACKSPOT1, 0xB014: JAPAN_ACCIDENTBLACKSPOTZONE, 0xB015: JAPAN_DANGERZONE, 0xB016: JAPAN_RISKZONE, 0xB017: JAPAN_RESTRICTED, 0xB018: JAPAN_OTHERS, 0xB019: JAPAN_BUSLANENOTAVAILABLE, 0xB01A: JAPAN_BUSLANEAVAILABLE, 0xB01B: JAPAN_ILLEGALPARKING, 0xB01C: JAPAN_DONOTENTER, 0xB01D: JAPAN_ACCIDENTBLACKSPOT2, 0xB01E: JAPAN_SCHOOLZONE, 0xB01F: JAPAN_FALLINGROCKS, 0xB020: JAPAN_RAILROADCROSSING, 0xB021: JAPAN_FOGGYAREA, 0xB022: JAPAN_STEEPSLOPE, 0xB023: JAPAN_ROADKILL, 0xB024: JAPAN_SPEEDBUMP, 0xB025: JAPAN_NARROWROAD, 0xB026: JAPAN_HIGHWAYCONSTRUCTIONZONE, 0xB027: JAPAN_ROADSLIPDETECTION, 0xB028: JAPAN_ROADDAMAGEDETECTION, 0xB029: JAPAN_ZONE_30, 0xB02A: JAPAN_STOP, 0xB02B: JAPAN_BLINDSLOPE_CONTINUOUS, 0xB02C: JAPAN_CROSSWIND, 0xB02D: JAPAN_HILLSIDEDANGEROUS, 0xB02E: JAPAN_HUMP_BRIDG, 0xB02F: JAPAN_JOINT_LEFT, 0xB030: JAPAN_JOINT_RIGHT, 0xB031: JAPAN_LOWSPEED, 0xB032: JAPAN_NARROW_BOTH, 0xB033: JAPAN_NARROWBRIDGE, 0xB034: JAPAN_NARROW_LEFT, 0xB035: JAPAN_NARROW_RIGHT, 0xB036: JAPAN_ROCKFALL_LEFT, 0xB037: JAPAN_ROCKFALL_RIGHT, 0xB038: JAPAN_SLIP, 0xB039: JAPAN_BLINDSLOPE_UP, 0xB03A: JAPAN_BLINDSLOPE_DOWN, 0xB03B: JAPAN_TUNNEL, 0xB03C: JAPAN_UNDERWATER, 0xB03D: JAPAN_UNEVEN, 0xB03E: JAPAN_UNMANAGED_RAILWAY_CROSS, 0xB03F: JAPAN_ZIPPASS, 0xB040: JAPAN_SLOPE_CONTINUOUSDOWN, 0xB041: JAPAN_SLOPE_UP, 0xB042: JAPAN_SLOPE_DOWN, 0xB043: JAPAN_RAILWAY_MANAGED, 0xB044: JAPAN_VILLAGE, 0xB045: JAPAN_AUDIBLEWARNING, 0xB046: JAPAN_OVERTAKING_LANE, 0xB047: JAPAN_FALLING_HAZARD, 0xB048: JAPAN_LANE_MOVE_REGULATION, 0xB049: JAPAN_DROWSY, 0xC001: SOUTH_EAST_ASIA_E_FIXEDCAMERA, 0xC002: SOUTH_EAST_ASIA_E_PORTABLECAMERA, 0xC003: SOUTH_EAST_ASIA_E_SPEED_SIGNAL, 0xC004: SOUTH_EAST_ASIA_E_BUSCAMERA, 0xC005: SOUTH_EAST_ASIA_E_SCHOOLZONEFIXEDCAMERA, 0xC006: SOUTH_EAST_ASIA_E_SCHOOLZONESPEEL_SIGNALCAMERA, 0xC007: SOUTH_EAST_ASIA_E_CUTINLINE, 0xC008: SOUTH_EAST_ASIA_E_ROADSHOULDERVIOLATION, 0xC009: SOUTH_EAST_ASIA_E_TRAFFICINFORMATION, 0xC00A: SOUTH_EAST_ASIA_E_INTERSECTIONJAMMING, 0xC00B: SOUTH_EAST_ASIA_E_RAMPMETERING, 0xC00C: SOUTH_EAST_ASIA_E_LANECHANGE, 0xC00D: SOUTH_EAST_ASIA_E_AVERAGESPEEDCAMERA, 0xC00E: SOUTH_EAST_ASIA_E_AVERAGESPEEDCAMERAZONE, 0xC00F: SOUTH_EAST_ASIA_E_SPEEDENFORCEMET, 0xC010: SOUTH_EAST_ASIA_E_SPEEDENFORCEMETZONE, 0xC011: SOUTH_EAST_ASIA_E_MOBILEHOTSPOT, 0xC012: SOUTH_EAST_ASIA_E_MOBILEHOTSPOTZONE, 0xC013: SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOT1, 0xC014: SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOTZONE, 0xC015: SOUTH_EAST_ASIA_E_DANGERZONE, 0xC016: SOUTH_EAST_ASIA_E_RISKZONE, 0xC017: SOUTH_EAST_ASIA_E_RESTRICTED, 0xC018: SOUTH_EAST_ASIA_E_OTHERS, 0xC019: SOUTH_EAST_ASIA_E_BUSLANENOTAVAILABLE, 0xC01A: SOUTH_EAST_ASIA_E_BUSLANEAVAILABLE, 0xC01B: SOUTH_EAST_ASIA_E_ILLEGALPARKING, 0xC01C: SOUTH_EAST_ASIA_E_DONOTENTER, 0xC01D: SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOT2, 0xC01E: SOUTH_EAST_ASIA_E_SCHOOLZONE, 0xC01F: SOUTH_EAST_ASIA_E_FALLINGROCKS, 0xC020: SOUTH_EAST_ASIA_E_RAILROADCROSSING, 0xC021: SOUTH_EAST_ASIA_E_FOGGYAREA, 0xC022: SOUTH_EAST_ASIA_E_STEEPSLOPE, 0xC023: SOUTH_EAST_ASIA_E_ROADKILL, 0xC024: SOUTH_EAST_ASIA_E_SPEEDBUMP, 0xC025: SOUTH_EAST_ASIA_E_NARROWROAD, 0xC026: SOUTH_EAST_ASIA_E_HIGHWAYCONSTRUCTIONZONE, 0xC027: SOUTH_EAST_ASIA_E_ROADSLIPDETECTION, 0xC028: SOUTH_EAST_ASIA_E_ROADDAMAGEDETECTION, 0xC029: SOUTH_EAST_ASIA_E_ZONE_30, 0xC02A: SOUTH_EAST_ASIA_E_STOP, 0xC02B: SOUTH_EAST_ASIA_E_BLINDSLOPE_CONTINUOUS, 0xC02C: SOUTH_EAST_ASIA_E_CROSSWIND, 0xC02D: SOUTH_EAST_ASIA_E_HILLSIDEDANGEROUS, 0xC02E: SOUTH_EAST_ASIA_E_HUMP_BRIDG, 0xC02F: SOUTH_EAST_ASIA_E_JOINT_LEFT, 0xC030: SOUTH_EAST_ASIA_E_JOINT_RIGHT, 0xC031: SOUTH_EAST_ASIA_E_LOWSPEED, 0xC032: SOUTH_EAST_ASIA_E_NARROW_BOTH, 0xC033: SOUTH_EAST_ASIA_E_NARROWBRIDGE, 0xC034: SOUTH_EAST_ASIA_E_NARROW_LEFT, 0xC035: SOUTH_EAST_ASIA_E_NARROW_RIGHT, 0xC036: SOUTH_EAST_ASIA_E_ROCKFALL_LEFT, 0xC037: SOUTH_EAST_ASIA_E_ROCKFALL_RIGHT, 0xC038: SOUTH_EAST_ASIA_E_SLIP, 0xC039: SOUTH_EAST_ASIA_E_BLINDSLOPE_UP, 0xC03A: SOUTH_EAST_ASIA_E_BLINDSLOPE_DOWN, 0xC03B: SOUTH_EAST_ASIA_E_TUNNEL, 0xC03C: SOUTH_EAST_ASIA_E_UNDERWATER, 0xC03D: SOUTH_EAST_ASIA_E_UNEVEN, 0xC03E: SOUTH_EAST_ASIA_E_UNMANAGED_RAILWAY_CROSS, 0xC03F: SOUTH_EAST_ASIA_E_ZIPPASS, 0xC040: SOUTH_EAST_ASIA_E_SLOPE_CONTINUOUSDOWN, 0xC041: SOUTH_EAST_ASIA_E_SLOPE_UP, 0xC042: SOUTH_EAST_ASIA_E_SLOPE_DOWN, 0xC043: SOUTH_EAST_ASIA_E_RAILWAY_MANAGED, 0xC044: SOUTH_EAST_ASIA_E_VILLAGE, 0xC045: SOUTH_EAST_ASIA_E_AUDIBLEWARNING, 0xC046: SOUTH_EAST_ASIA_E_OVERTAKING_LANE, 0xC047: SOUTH_EAST_ASIA_E_FALLING_HAZARD, 0xC048: SOUTH_EAST_ASIA_E_LANE_MOVE_REGULATION, 0xC049: SOUTH_EAST_ASIA_E_DROWSY, 0xD001: SOUTH_EAST_ASIA_N_FIXEDCAMERA, 0xD002: SOUTH_EAST_ASIA_N_PORTABLECAMERA, 0xD003: SOUTH_EAST_ASIA_N_SPEED_SIGNAL, 0xD004: SOUTH_EAST_ASIA_N_BUSCAMERA, 0xD005: SOUTH_EAST_ASIA_N_SCHOOLZONEFIXEDCAMERA, 0xD006: SOUTH_EAST_ASIA_N_SCHOOLZONESPEEL_SIGNALCAMERA, 0xD007: SOUTH_EAST_ASIA_N_CUTINLINE, 0xD008: SOUTH_EAST_ASIA_N_ROADSHOULDERVIOLATION, 0xD009: SOUTH_EAST_ASIA_N_TRAFFICINFORMATION, 0xD00A: SOUTH_EAST_ASIA_N_INTERSECTIONJAMMING, 0xD00B: SOUTH_EAST_ASIA_N_RAMPMETERING, 0xD00C: SOUTH_EAST_ASIA_N_LANECHANGE, 0xD00D: SOUTH_EAST_ASIA_N_AVERAGESPEEDCAMERA, 0xD00E: SOUTH_EAST_ASIA_N_AVERAGESPEEDCAMERAZONE, 0xD00F: SOUTH_EAST_ASIA_N_SPEEDENFORCEMET, 0xD010: SOUTH_EAST_ASIA_N_SPEEDENFORCEMETZONE, 0xD011: SOUTH_EAST_ASIA_N_MOBILEHOTSPOT, 0xD012: SOUTH_EAST_ASIA_N_MOBILEHOTSPOTZONE, 0xD013: SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOT1, 0xD014: SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOTZONE, 0xD015: SOUTH_EAST_ASIA_N_DANGERZONE, 0xD016: SOUTH_EAST_ASIA_N_RISKZONE, 0xD017: SOUTH_EAST_ASIA_N_RESTRICTED, 0xD018: SOUTH_EAST_ASIA_N_OTHERS, 0xD019: SOUTH_EAST_ASIA_N_BUSLANENOTAVAILABLE, 0xD01A: SOUTH_EAST_ASIA_N_BUSLANEAVAILABLE, 0xD01B: SOUTH_EAST_ASIA_N_ILLEGALPARKING, 0xD01C: SOUTH_EAST_ASIA_N_DONOTENTER, 0xD01D: SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOT2, 0xD01E: SOUTH_EAST_ASIA_N_SCHOOLZONE, 0xD01F: SOUTH_EAST_ASIA_N_FALLINGROCKS, 0xD020: SOUTH_EAST_ASIA_N_RAILROADCROSSING, 0xD021: SOUTH_EAST_ASIA_N_FOGGYAREA, 0xD022: SOUTH_EAST_ASIA_N_STEEPSLOPE, 0xD023: SOUTH_EAST_ASIA_N_ROADKILL, 0xD024: SOUTH_EAST_ASIA_N_SPEEDBUMP, 0xD025: SOUTH_EAST_ASIA_N_NARROWROAD, 0xD026: SOUTH_EAST_ASIA_N_HIGHWAYCONSTRUCTIONZONE, 0xD027: SOUTH_EAST_ASIA_N_ROADSLIPDETECTION, 0xD028: SOUTH_EAST_ASIA_N_ROADDAMAGEDETECTION, 0xD029: SOUTH_EAST_ASIA_N_ZONE_30, 0xD02A: SOUTH_EAST_ASIA_N_STOP, 0xD02B: SOUTH_EAST_ASIA_N_BLINDSLOPE_CONTINUOUS, 0xD02C: SOUTH_EAST_ASIA_N_CROSSWIND, 0xD02D: SOUTH_EAST_ASIA_N_HILLSIDEDANGEROUS, 0xD02E: SOUTH_EAST_ASIA_N_HUMP_BRIDG, 0xD02F: SOUTH_EAST_ASIA_N_JOINT_LEFT, 0xD030: SOUTH_EAST_ASIA_N_JOINT_RIGHT, 0xD031: SOUTH_EAST_ASIA_N_LOWSPEED, 0xD032: SOUTH_EAST_ASIA_N_NARROW_BOTH, 0xD033: SOUTH_EAST_ASIA_N_NARROWBRIDGE, 0xD034: SOUTH_EAST_ASIA_N_NARROW_LEFT, 0xD035: SOUTH_EAST_ASIA_N_NARROW_RIGHT, 0xD036: SOUTH_EAST_ASIA_N_ROCKFALL_LEFT, 0xD037: SOUTH_EAST_ASIA_N_ROCKFALL_RIGHT, 0xD038: SOUTH_EAST_ASIA_N_SLIP, 0xD039: SOUTH_EAST_ASIA_N_BLINDSLOPE_UP, 0xD03A: SOUTH_EAST_ASIA_N_BLINDSLOPE_DOWN, 0xD03B: SOUTH_EAST_ASIA_N_TUNNEL, 0xD03C: SOUTH_EAST_ASIA_N_UNDERWATER, 0xD03D: SOUTH_EAST_ASIA_N_UNEVEN, 0xD03E: SOUTH_EAST_ASIA_N_UNMANAGED_RAILWAY_CROSS, 0xD03F: SOUTH_EAST_ASIA_N_ZIPPASS, 0xD040: SOUTH_EAST_ASIA_N_SLOPE_CONTINUOUSDOWN, 0xD041: SOUTH_EAST_ASIA_N_SLOPE_UP, 0xD042: SOUTH_EAST_ASIA_N_SLOPE_DOWN, 0xD043: SOUTH_EAST_ASIA_N_RAILWAY_MANAGED, 0xD044: SOUTH_EAST_ASIA_N_VILLAGE, 0xD045: SOUTH_EAST_ASIA_N_AUDIBLEWARNING, 0xD046: SOUTH_EAST_ASIA_N_OVERTAKING_LANE, 0xD047: SOUTH_EAST_ASIA_N_FALLING_HAZARD, 0xD048: SOUTH_EAST_ASIA_N_LANE_MOVE_REGULATION, 0xD049: SOUTH_EAST_ASIA_N_DROWSY, 0xE000: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.FinalDISAddtnlSign.Stat:
+      description: "DCN: IMG_CONN_FinalAddtnlSign_Stat</br>
+                    Final DIS Addtnl Sign Status"
+      dataType: HUInt64
+      group: Constant14
+      valueEnum:
+        NONE: 0x0000
+        OFF: 0x0001
+        KOREA_FIXEDCAMERA: 0x1001
+        KOREA_PORTABLECAMERA: 0x1002
+        KOREA_SPEED_SIGNAL: 0x1003
+        KOREA_BUSCAMERA: 0x1004
+        KOREA_SCHOOLZONEFIXEDCAMERA: 0x1005
+        KOREA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x1006
+        KOREA_CUTINLINE: 0x1007
+        KOREA_ROADSHOULDERVIOLATION: 0x1008
+        KOREA_TRAFFICINFORMATION: 0x1009
+        KOREA_INTERSECTIONJAMMING: 0x100A
+        KOREA_RAMPMETERING: 0x100B
+        KOREA_LANECHANGE: 0x100C
+        KOREA_AVERAGESPEEDCAMERA: 0x100D
+        KOREA_AVERAGESPEEDCAMERAZONE: 0x100E
+        KOREA_SPEEDENFORCEMET: 0x100F
+        KOREA_SPEEDENFORCEMETZONE: 0x1010
+        KOREA_MOBILEHOTSPOT: 0x1011
+        KOREA_MOBILEHOTSPOTZONE: 0x1012
+        KOREA_ACCIDENTBLACKSPOT1: 0x1013
+        KOREA_ACCIDENTBLACKSPOTZONE: 0x1014
+        KOREA_DANGERZONE: 0x1015
+        KOREA_RISKZONE: 0x1016
+        KOREA_RESTRICTED: 0x1017
+        KOREA_OTHERS: 0x1018
+        KOREA_BUSLANENOTAVAILABLE: 0x1019
+        KOREA_BUSLANEAVAILABLE: 0x101A
+        KOREA_ILLEGALPARKING: 0x101B
+        KOREA_DONOTENTER: 0x101C
+        KOREA_ACCIDENTBLACKSPOT2: 0x101D
+        KOREA_SCHOOLZONE: 0x101E
+        KOREA_FALLINGROCKS: 0x101F
+        KOREA_RAILROADCROSSING: 0x1020
+        KOREA_FOGGYAREA: 0x1021
+        KOREA_STEEPSLOPE: 0x1022
+        KOREA_ROADKILL: 0x1023
+        KOREA_SPEEDBUMP: 0x1024
+        KOREA_NARROWROAD: 0x1025
+        KOREA_HIGHWAYCONSTRUCTIONZONE: 0x1026
+        KOREA_ROADSLIPDETECTION: 0x1027
+        KOREA_ROADDAMAGEDETECTION: 0x1028
+        KOREA_ZONE_30: 0x1029
+        KOREA_STOP: 0x102A
+        KOREA_BLINDSLOPE_CONTINUOUS: 0x102B
+        KOREA_CROSSWIND: 0x102C
+        KOREA_HILLSIDEDANGEROUS: 0x102D
+        KOREA_HUMP_BRIDG: 0x102E
+        KOREA_JOINT_LEFT: 0x102F
+        KOREA_JOINT_RIGHT: 0x1030
+        KOREA_LOWSPEED: 0x1031
+        KOREA_NARROW_BOTH: 0x1032
+        KOREA_NARROWBRIDGE: 0x1033
+        KOREA_NARROW_LEFT: 0x1034
+        KOREA_NARROW_RIGHT: 0x1035
+        KOREA_ROCKFALL_LEFT: 0x1036
+        KOREA_ROCKFALL_RIGHT: 0x1037
+        KOREA_SLIP: 0x1038
+        KOREA_BLINDSLOPE_UP: 0x1039
+        KOREA_BLINDSLOPE_DOWN: 0x103A
+        KOREA_TUNNEL: 0x103B
+        KOREA_UNDERWATER: 0x103C
+        KOREA_UNEVEN: 0x103D
+        KOREA_UNMANAGED_RAILWAY_CROSS: 0x103E
+        KOREA_ZIPPASS: 0x103F
+        KOREA_SLOPE_CONTINUOUSDOWN: 0x1040
+        KOREA_SLOPE_UP: 0x1041
+        KOREA_SLOPE_DOWN: 0x1042
+        KOREA_RAILWAY_MANAGED: 0x1043
+        KOREA_VILLAGE: 0x1044
+        KOREA_AUDIBLEWARNING: 0x1045
+        KOREA_OVERTAKING_LANE: 0x1046
+        KOREA_FALLING_HAZARD: 0x1047
+        KOREA_LANE_MOVE_REGULATION: 0x1048
+        KOREA_DROWSY: 0x1049
+        USA_FIXEDCAMERA: 0x2001
+        USA_PORTABLECAMERA: 0x2002
+        USA_SPEED_SIGNAL: 0x2003
+        USA_BUSCAMERA: 0x2004
+        USA_SCHOOLZONEFIXEDCAMERA: 0x2005
+        USA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x2006
+        USA_CUTINLINE: 0x2007
+        USA_ROADSHOULDERVIOLATION: 0x2008
+        USA_TRAFFICINFORMATION: 0x2009
+        USA_INTERSECTIONJAMMING: 0x200A
+        USA_RAMPMETERING: 0x200B
+        USA_LANECHANGE: 0x200C
+        USA_AVERAGESPEEDCAMERA: 0x200D
+        USA_AVERAGESPEEDCAMERAZONE: 0x200E
+        USA_SPEEDENFORCEMET: 0x200F
+        USA_SPEEDENFORCEMETZONE: 0x2010
+        USA_MOBILEHOTSPOT: 0x2011
+        USA_MOBILEHOTSPOTZONE: 0x2012
+        USA_ACCIDENTBLACKSPOT1: 0x2013
+        USA_ACCIDENTBLACKSPOTZONE: 0x2014
+        USA_DANGERZONE: 0x2015
+        USA_RISKZONE: 0x2016
+        USA_RESTRICTED: 0x2017
+        USA_OTHERS: 0x2018
+        USA_BUSLANENOTAVAILABLE: 0x2019
+        USA_BUSLANEAVAILABLE: 0x201A
+        USA_ILLEGALPARKING: 0x201B
+        USA_DONOTENTER: 0x201C
+        USA_ACCIDENTBLACKSPOT2: 0x201D
+        USA_SCHOOLZONE: 0x201E
+        USA_FALLINGROCKS: 0x201F
+        USA_RAILROADCROSSING: 0x2020
+        USA_FOGGYAREA: 0x2021
+        USA_STEEPSLOPE: 0x2022
+        USA_ROADKILL: 0x2023
+        USA_SPEEDBUMP: 0x2024
+        USA_NARROWROAD: 0x2025
+        USA_HIGHWAYCONSTRUCTIONZONE: 0x2026
+        USA_ROADSLIPDETECTION: 0x2027
+        USA_ROADDAMAGEDETECTION: 0x2028
+        USA_ZONE_30: 0x2029
+        USA_STOP: 0x202A
+        USA_BLINDSLOPE_CONTINUOUS: 0x202B
+        USA_CROSSWIND: 0x202C
+        USA_HILLSIDEDANGEROUS: 0x202D
+        USA_HUMP_BRIDG: 0x202E
+        USA_JOINT_LEFT: 0x202F
+        USA_JOINT_RIGHT: 0x2030
+        USA_LOWSPEED: 0x2031
+        USA_NARROW_BOTH: 0x2032
+        USA_NARROWBRIDGE: 0x2033
+        USA_NARROW_LEFT: 0x2034
+        USA_NARROW_RIGHT: 0x2035
+        USA_ROCKFALL_LEFT: 0x2036
+        USA_ROCKFALL_RIGHT: 0x2037
+        USA_SLIP: 0x2038
+        USA_BLINDSLOPE_UP: 0x2039
+        USA_BLINDSLOPE_DOWN: 0x203A
+        USA_TUNNEL: 0x203B
+        USA_UNDERWATER: 0x203C
+        USA_UNEVEN: 0x203D
+        USA_UNMANAGED_RAILWAY_CROSS: 0x203E
+        USA_ZIPPASS: 0x203F
+        USA_SLOPE_CONTINUOUSDOWN: 0x2040
+        USA_SLOPE_UP: 0x2041
+        USA_SLOPE_DOWN: 0x2042
+        USA_RAILWAY_MANAGED: 0x2043
+        USA_VILLAGE: 0x2044
+        USA_AUDIBLEWARNING: 0x2045
+        USA_OVERTAKING_LANE: 0x2046
+        USA_FALLING_HAZARD: 0x2047
+        USA_LANE_MOVE_REGULATION: 0x2048
+        USA_DROWSY: 0x2049
+        CANADA_FIXEDCAMERA: 0x3001
+        CANADA_PORTABLECAMERA: 0x3002
+        CANADA_SPEED_SIGNAL: 0x3003
+        CANADA_BUSCAMERA: 0x3004
+        CANADA_SCHOOLZONEFIXEDCAMERA: 0x3005
+        CANADA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x3006
+        CANADA_CUTINLINE: 0x3007
+        CANADA_ROADSHOULDERVIOLATION: 0x3008
+        CANADA_TRAFFICINFORMATION: 0x3009
+        CANADA_INTERSECTIONJAMMING: 0x300A
+        CANADA_RAMPMETERING: 0x300B
+        CANADA_LANECHANGE: 0x300C
+        CANADA_AVERAGESPEEDCAMERA: 0x300D
+        CANADA_AVERAGESPEEDCAMERAZONE: 0x300E
+        CANADA_SPEEDENFORCEMET: 0x300F
+        CANADA_SPEEDENFORCEMETZONE: 0x3010
+        CANADA_MOBILEHOTSPOT: 0x3011
+        CANADA_MOBILEHOTSPOTZONE: 0x3012
+        CANADA_ACCIDENTBLACKSPOT1: 0x3013
+        CANADA_ACCIDENTBLACKSPOTZONE: 0x3014
+        CANADA_DANGERZONE: 0x3015
+        CANADA_RISKZONE: 0x3016
+        CANADA_RESTRICTED: 0x3017
+        CANADA_OTHERS: 0x3018
+        CANADA_BUSLANENOTAVAILABLE: 0x3019
+        CANADA_BUSLANEAVAILABLE: 0x301A
+        CANADA_ILLEGALPARKING: 0x301B
+        CANADA_DONOTENTER: 0x301C
+        CANADA_ACCIDENTBLACKSPOT2: 0x301D
+        CANADA_SCHOOLZONE: 0x301E
+        CANADA_FALLINGROCKS: 0x301F
+        CANADA_RAILROADCROSSING: 0x3020
+        CANADA_FOGGYAREA: 0x3021
+        CANADA_STEEPSLOPE: 0x3022
+        CANADA_ROADKILL: 0x3023
+        CANADA_SPEEDBUMP: 0x3024
+        CANADA_NARROWROAD: 0x3025
+        CANADA_HIGHWAYCONSTRUCTIONZONE: 0x3026
+        CANADA_ROADSLIPDETECTION: 0x3027
+        CANADA_ROADDAMAGEDETECTION: 0x3028
+        CANADA_ZONE_30: 0x3029
+        CANADA_STOP: 0x302A
+        CANADA_BLINDSLOPE_CONTINUOUS: 0x302B
+        CANADA_CROSSWIND: 0x302C
+        CANADA_HILLSIDEDANGEROUS: 0x302D
+        CANADA_HUMP_BRIDG: 0x302E
+        CANADA_JOINT_LEFT: 0x302F
+        CANADA_JOINT_RIGHT: 0x3030
+        CANADA_LOWSPEED: 0x3031
+        CANADA_NARROW_BOTH: 0x3032
+        CANADA_NARROWBRIDGE: 0x3033
+        CANADA_NARROW_LEFT: 0x3034
+        CANADA_NARROW_RIGHT: 0x3035
+        CANADA_ROCKFALL_LEFT: 0x3036
+        CANADA_ROCKFALL_RIGHT: 0x3037
+        CANADA_SLIP: 0x3038
+        CANADA_BLINDSLOPE_UP: 0x3039
+        CANADA_BLINDSLOPE_DOWN: 0x303A
+        CANADA_TUNNEL: 0x303B
+        CANADA_UNDERWATER: 0x303C
+        CANADA_UNEVEN: 0x303D
+        CANADA_UNMANAGED_RAILWAY_CROSS: 0x303E
+        CANADA_ZIPPASS: 0x303F
+        CANADA_SLOPE_CONTINUOUSDOWN: 0x3040
+        CANADA_SLOPE_UP: 0x3041
+        CANADA_SLOPE_DOWN: 0x3042
+        CANADA_RAILWAY_MANAGED: 0x3043
+        CANADA_VILLAGE: 0x3044
+        CANADA_AUDIBLEWARNING: 0x3045
+        CANADA_OVERTAKING_LANE: 0x3046
+        CANADA_FALLING_HAZARD: 0x3047
+        CANADA_LANE_MOVE_REGULATION: 0x3048
+        CANADA_DROWSY: 0x3049
+        MEXICO_FIXEDCAMERA: 0x4001
+        MEXICO_PORTABLECAMERA: 0x4002
+        MEXICO_SPEED_SIGNAL: 0x4003
+        MEXICO_BUSCAMERA: 0x4004
+        MEXICO_SCHOOLZONEFIXEDCAMERA: 0x4005
+        MEXICO_SCHOOLZONESPEEL_SIGNALCAMERA: 0x4006
+        MEXICO_CUTINLINE: 0x4007
+        MEXICO_ROADSHOULDERVIOLATION: 0x4008
+        MEXICO_TRAFFICINFORMATION: 0x4009
+        MEXICO_INTERSECTIONJAMMING: 0x400A
+        MEXICO_RAMPMETERING: 0x400B
+        MEXICO_LANECHANGE: 0x400C
+        MEXICO_AVERAGESPEEDCAMERA: 0x400D
+        MEXICO_AVERAGESPEEDCAMERAZONE: 0x400E
+        MEXICO_SPEEDENFORCEMET: 0x400F
+        MEXICO_SPEEDENFORCEMETZONE: 0x4010
+        MEXICO_MOBILEHOTSPOT: 0x4011
+        MEXICO_MOBILEHOTSPOTZONE: 0x4012
+        MEXICO_ACCIDENTBLACKSPOT1: 0x4013
+        MEXICO_ACCIDENTBLACKSPOTZONE: 0x4014
+        MEXICO_DANGERZONE: 0x4015
+        MEXICO_RISKZONE: 0x4016
+        MEXICO_RESTRICTED: 0x4017
+        MEXICO_OTHERS: 0x4018
+        MEXICO_BUSLANENOTAVAILABLE: 0x4019
+        MEXICO_BUSLANEAVAILABLE: 0x401A
+        MEXICO_ILLEGALPARKING: 0x401B
+        MEXICO_DONOTENTER: 0x401C
+        MEXICO_ACCIDENTBLACKSPOT2: 0x401D
+        MEXICO_SCHOOLZONE: 0x401E
+        MEXICO_FALLINGROCKS: 0x401F
+        MEXICO_RAILROADCROSSING: 0x4020
+        MEXICO_FOGGYAREA: 0x4021
+        MEXICO_STEEPSLOPE: 0x4022
+        MEXICO_ROADKILL: 0x4023
+        MEXICO_SPEEDBUMP: 0x4024
+        MEXICO_NARROWROAD: 0x4025
+        MEXICO_HIGHWAYCONSTRUCTIONZONE: 0x4026
+        MEXICO_ROADSLIPDETECTION: 0x4027
+        MEXICO_ROADDAMAGEDETECTION: 0x4028
+        MEXICO_ZONE_30: 0x4029
+        MEXICO_STOP: 0x402A
+        MEXICO_BLINDSLOPE_CONTINUOUS: 0x402B
+        MEXICO_CROSSWIND: 0x402C
+        MEXICO_HILLSIDEDANGEROUS: 0x402D
+        MEXICO_HUMP_BRIDG: 0x402E
+        MEXICO_JOINT_LEFT: 0x402F
+        MEXICO_JOINT_RIGHT: 0x4030
+        MEXICO_LOWSPEED: 0x4031
+        MEXICO_NARROW_BOTH: 0x4032
+        MEXICO_NARROWBRIDGE: 0x4033
+        MEXICO_NARROW_LEFT: 0x4034
+        MEXICO_NARROW_RIGHT: 0x4035
+        MEXICO_ROCKFALL_LEFT: 0x4036
+        MEXICO_ROCKFALL_RIGHT: 0x4037
+        MEXICO_SLIP: 0x4038
+        MEXICO_BLINDSLOPE_UP: 0x4039
+        MEXICO_BLINDSLOPE_DOWN: 0x403A
+        MEXICO_TUNNEL: 0x403B
+        MEXICO_UNDERWATER: 0x403C
+        MEXICO_UNEVEN: 0x403D
+        MEXICO_UNMANAGED_RAILWAY_CROSS: 0x403E
+        MEXICO_ZIPPASS: 0x403F
+        MEXICO_SLOPE_CONTINUOUSDOWN: 0x4040
+        MEXICO_SLOPE_UP: 0x4041
+        MEXICO_SLOPE_DOWN: 0x4042
+        MEXICO_RAILWAY_MANAGED: 0x4043
+        MEXICO_VILLAGE: 0x4044
+        MEXICO_AUDIBLEWARNING: 0x4045
+        MEXICO_OVERTAKING_LANE: 0x4046
+        MEXICO_FALLING_HAZARD: 0x4047
+        MEXICO_LANE_MOVE_REGULATION: 0x4048
+        MEXICO_DROWSY: 0x4049
+        EUROPE_FIXEDCAMERA: 0x5001
+        EUROPE_PORTABLECAMERA: 0x5002
+        EUROPE_SPEED_SIGNAL: 0x5003
+        EUROPE_BUSCAMERA: 0x5004
+        EUROPE_SCHOOLZONEFIXEDCAMERA: 0x5005
+        EUROPE_SCHOOLZONESPEEL_SIGNALCAMERA: 0x5006
+        EUROPE_CUTINLINE: 0x5007
+        EUROPE_ROADSHOULDERVIOLATION: 0x5008
+        EUROPE_TRAFFICINFORMATION: 0x5009
+        EUROPE_INTERSECTIONJAMMING: 0x500A
+        EUROPE_RAMPMETERING: 0x500B
+        EUROPE_LANECHANGE: 0x500C
+        EUROPE_AVERAGESPEEDCAMERA: 0x500D
+        EUROPE_AVERAGESPEEDCAMERAZONE: 0x500E
+        EUROPE_SPEEDENFORCEMET: 0x500F
+        EUROPE_SPEEDENFORCEMETZONE: 0x5010
+        EUROPE_MOBILEHOTSPOT: 0x5011
+        EUROPE_MOBILEHOTSPOTZONE: 0x5012
+        EUROPE_ACCIDENTBLACKSPOT1: 0x5013
+        EUROPE_ACCIDENTBLACKSPOTZONE: 0x5014
+        EUROPE_DANGERZONE: 0x5015
+        EUROPE_RISKZONE: 0x5016
+        EUROPE_RESTRICTED: 0x5017
+        EUROPE_OTHERS: 0x5018
+        EUROPE_BUSLANENOTAVAILABLE: 0x5019
+        EUROPE_BUSLANEAVAILABLE: 0x501A
+        EUROPE_ILLEGALPARKING: 0x501B
+        EUROPE_DONOTENTER: 0x501C
+        EUROPE_ACCIDENTBLACKSPOT2: 0x501D
+        EUROPE_SCHOOLZONE: 0x501E
+        EUROPE_FALLINGROCKS: 0x501F
+        EUROPE_RAILROADCROSSING: 0x5020
+        EUROPE_FOGGYAREA: 0x5021
+        EUROPE_STEEPSLOPE: 0x5022
+        EUROPE_ROADKILL: 0x5023
+        EUROPE_SPEEDBUMP: 0x5024
+        EUROPE_NARROWROAD: 0x5025
+        EUROPE_HIGHWAYCONSTRUCTIONZONE: 0x5026
+        EUROPE_ROADSLIPDETECTION: 0x5027
+        EUROPE_ROADDAMAGEDETECTION: 0x5028
+        EUROPE_ZONE_30: 0x5029
+        EUROPE_STOP: 0x502A
+        EUROPE_BLINDSLOPE_CONTINUOUS: 0x502B
+        EUROPE_CROSSWIND: 0x502C
+        EUROPE_HILLSIDEDANGEROUS: 0x502D
+        EUROPE_HUMP_BRIDG: 0x502E
+        EUROPE_JOINT_LEFT: 0x502F
+        EUROPE_JOINT_RIGHT: 0x5030
+        EUROPE_LOWSPEED: 0x5031
+        EUROPE_NARROW_BOTH: 0x5032
+        EUROPE_NARROWBRIDGE: 0x5033
+        EUROPE_NARROW_LEFT: 0x5034
+        EUROPE_NARROW_RIGHT: 0x5035
+        EUROPE_ROCKFALL_LEFT: 0x5036
+        EUROPE_ROCKFALL_RIGHT: 0x5037
+        EUROPE_SLIP: 0x5038
+        EUROPE_BLINDSLOPE_UP: 0x5039
+        EUROPE_BLINDSLOPE_DOWN: 0x503A
+        EUROPE_TUNNEL: 0x503B
+        EUROPE_UNDERWATER: 0x503C
+        EUROPE_UNEVEN: 0x503D
+        EUROPE_UNMANAGED_RAILWAY_CROSS: 0x503E
+        EUROPE_ZIPPASS: 0x503F
+        EUROPE_SLOPE_CONTINUOUSDOWN: 0x5040
+        EUROPE_SLOPE_UP: 0x5041
+        EUROPE_SLOPE_DOWN: 0x5042
+        EUROPE_RAILWAY_MANAGED: 0x5043
+        EUROPE_VILLAGE: 0x5044
+        EUROPE_AUDIBLEWARNING: 0x5045
+        EUROPE_OVERTAKING_LANE: 0x5046
+        EUROPE_FALLING_HAZARD: 0x5047
+        EUROPE_LANE_MOVE_REGULATION: 0x5048
+        EUROPE_DROWSY: 0x5049
+        MIDDLE_EAST_FIXEDCAMERA: 0x6001
+        MIDDLE_EAST_PORTABLECAMERA: 0x6002
+        MIDDLE_EAST_SPEED_SIGNAL: 0x6003
+        MIDDLE_EAST_BUSCAMERA: 0x6004
+        MIDDLE_EAST_SCHOOLZONEFIXEDCAMERA: 0x6005
+        MIDDLE_EAST_SCHOOLZONESPEEL_SIGNALCAMERA: 0x6006
+        MIDDLE_EAST_CUTINLINE: 0x6007
+        MIDDLE_EAST_ROADSHOULDERVIOLATION: 0x6008
+        MIDDLE_EAST_TRAFFICINFORMATION: 0x6009
+        MIDDLE_EAST_INTERSECTIONJAMMING: 0x600A
+        MIDDLE_EAST_RAMPMETERING: 0x600B
+        MIDDLE_EAST_LANECHANGE: 0x600C
+        MIDDLE_EAST_AVERAGESPEEDCAMERA: 0x600D
+        MIDDLE_EAST_AVERAGESPEEDCAMERAZONE: 0x600E
+        MIDDLE_EAST_SPEEDENFORCEMET: 0x600F
+        MIDDLE_EAST_SPEEDENFORCEMETZONE: 0x6010
+        MIDDLE_EAST_MOBILEHOTSPOT: 0x6011
+        MIDDLE_EAST_MOBILEHOTSPOTZONE: 0x6012
+        MIDDLE_EAST_ACCIDENTBLACKSPOT1: 0x6013
+        MIDDLE_EAST_ACCIDENTBLACKSPOTZONE: 0x6014
+        MIDDLE_EAST_DANGERZONE: 0x6015
+        MIDDLE_EAST_RISKZONE: 0x6016
+        MIDDLE_EAST_RESTRICTED: 0x6017
+        MIDDLE_EAST_OTHERS: 0x6018
+        MIDDLE_EAST_BUSLANENOTAVAILABLE: 0x6019
+        MIDDLE_EAST_BUSLANEAVAILABLE: 0x601A
+        MIDDLE_EAST_ILLEGALPARKING: 0x601B
+        MIDDLE_EAST_DONOTENTER: 0x601C
+        MIDDLE_EAST_ACCIDENTBLACKSPOT2: 0x601D
+        MIDDLE_EAST_SCHOOLZONE: 0x601E
+        MIDDLE_EAST_FALLINGROCKS: 0x601F
+        MIDDLE_EAST_RAILROADCROSSING: 0x6020
+        MIDDLE_EAST_FOGGYAREA: 0x6021
+        MIDDLE_EAST_STEEPSLOPE: 0x6022
+        MIDDLE_EAST_ROADKILL: 0x6023
+        MIDDLE_EAST_SPEEDBUMP: 0x6024
+        MIDDLE_EAST_NARROWROAD: 0x6025
+        MIDDLE_EAST_HIGHWAYCONSTRUCTIONZONE: 0x6026
+        MIDDLE_EAST_ROADSLIPDETECTION: 0x6027
+        MIDDLE_EAST_ROADDAMAGEDETECTION: 0x6028
+        MIDDLE_EAST_ZONE_30: 0x6029
+        MIDDLE_EAST_STOP: 0x602A
+        MIDDLE_EAST_BLINDSLOPE_CONTINUOUS: 0x602B
+        MIDDLE_EAST_CROSSWIND: 0x602C
+        MIDDLE_EAST_HILLSIDEDANGEROUS: 0x602D
+        MIDDLE_EAST_HUMP_BRIDG: 0x602E
+        MIDDLE_EAST_JOINT_LEFT: 0x602F
+        MIDDLE_EAST_JOINT_RIGHT: 0x6030
+        MIDDLE_EAST_LOWSPEED: 0x6031
+        MIDDLE_EAST_NARROW_BOTH: 0x6032
+        MIDDLE_EAST_NARROWBRIDGE: 0x6033
+        MIDDLE_EAST_NARROW_LEFT: 0x6034
+        MIDDLE_EAST_NARROW_RIGHT: 0x6035
+        MIDDLE_EAST_ROCKFALL_LEFT: 0x6036
+        MIDDLE_EAST_ROCKFALL_RIGHT: 0x6037
+        MIDDLE_EAST_SLIP: 0x6038
+        MIDDLE_EAST_BLINDSLOPE_UP: 0x6039
+        MIDDLE_EAST_BLINDSLOPE_DOWN: 0x603A
+        MIDDLE_EAST_TUNNEL: 0x603B
+        MIDDLE_EAST_UNDERWATER: 0x603C
+        MIDDLE_EAST_UNEVEN: 0x603D
+        MIDDLE_EAST_UNMANAGED_RAILWAY_CROSS: 0x603E
+        MIDDLE_EAST_ZIPPASS: 0x603F
+        MIDDLE_EAST_SLOPE_CONTINUOUSDOWN: 0x6040
+        MIDDLE_EAST_SLOPE_UP: 0x6041
+        MIDDLE_EAST_SLOPE_DOWN: 0x6042
+        MIDDLE_EAST_RAILWAY_MANAGED: 0x6043
+        MIDDLE_EAST_VILLAGE: 0x6044
+        MIDDLE_EAST_AUDIBLEWARNING: 0x6045
+        MIDDLE_EAST_OVERTAKING_LANE: 0x6046
+        MIDDLE_EAST_FALLING_HAZARD: 0x6047
+        MIDDLE_EAST_LANE_MOVE_REGULATION: 0x6048
+        MIDDLE_EAST_DROWSY: 0x6049
+        AUSTRALIA_FIXEDCAMERA: 0x7001
+        AUSTRALIA_PORTABLECAMERA: 0x7002
+        AUSTRALIA_SPEED_SIGNAL: 0x7003
+        AUSTRALIA_BUSCAMERA: 0x7004
+        AUSTRALIA_SCHOOLZONEFIXEDCAMERA: 0x7005
+        AUSTRALIA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x7006
+        AUSTRALIA_CUTINLINE: 0x7007
+        AUSTRALIA_ROADSHOULDERVIOLATION: 0x7008
+        AUSTRALIA_TRAFFICINFORMATION: 0x7009
+        AUSTRALIA_INTERSECTIONJAMMING: 0x700A
+        AUSTRALIA_RAMPMETERING: 0x700B
+        AUSTRALIA_LANECHANGE: 0x700C
+        AUSTRALIA_AVERAGESPEEDCAMERA: 0x700D
+        AUSTRALIA_AVERAGESPEEDCAMERAZONE: 0x700E
+        AUSTRALIA_SPEEDENFORCEMET: 0x700F
+        AUSTRALIA_SPEEDENFORCEMETZONE: 0x7010
+        AUSTRALIA_MOBILEHOTSPOT: 0x7011
+        AUSTRALIA_MOBILEHOTSPOTZONE: 0x7012
+        AUSTRALIA_ACCIDENTBLACKSPOT1: 0x7013
+        AUSTRALIA_ACCIDENTBLACKSPOTZONE: 0x7014
+        AUSTRALIA_DANGERZONE: 0x7015
+        AUSTRALIA_RISKZONE: 0x7016
+        AUSTRALIA_RESTRICTED: 0x7017
+        AUSTRALIA_OTHERS: 0x7018
+        AUSTRALIA_BUSLANENOTAVAILABLE: 0x7019
+        AUSTRALIA_BUSLANEAVAILABLE: 0x701A
+        AUSTRALIA_ILLEGALPARKING: 0x701B
+        AUSTRALIA_DONOTENTER: 0x701C
+        AUSTRALIA_ACCIDENTBLACKSPOT2: 0x701D
+        AUSTRALIA_SCHOOLZONE: 0x701E
+        AUSTRALIA_FALLINGROCKS: 0x701F
+        AUSTRALIA_RAILROADCROSSING: 0x7020
+        AUSTRALIA_FOGGYAREA: 0x7021
+        AUSTRALIA_STEEPSLOPE: 0x7022
+        AUSTRALIA_ROADKILL: 0x7023
+        AUSTRALIA_SPEEDBUMP: 0x7024
+        AUSTRALIA_NARROWROAD: 0x7025
+        AUSTRALIA_HIGHWAYCONSTRUCTIONZONE: 0x7026
+        AUSTRALIA_ROADSLIPDETECTION: 0x7027
+        AUSTRALIA_ROADDAMAGEDETECTION: 0x7028
+        AUSTRALIA_ZONE_30: 0x7029
+        AUSTRALIA_STOP: 0x702A
+        AUSTRALIA_BLINDSLOPE_CONTINUOUS: 0x702B
+        AUSTRALIA_CROSSWIND: 0x702C
+        AUSTRALIA_HILLSIDEDANGEROUS: 0x702D
+        AUSTRALIA_HUMP_BRIDG: 0x702E
+        AUSTRALIA_JOINT_LEFT: 0x702F
+        AUSTRALIA_JOINT_RIGHT: 0x7030
+        AUSTRALIA_LOWSPEED: 0x7031
+        AUSTRALIA_NARROW_BOTH: 0x7032
+        AUSTRALIA_NARROWBRIDGE: 0x7033
+        AUSTRALIA_NARROW_LEFT: 0x7034
+        AUSTRALIA_NARROW_RIGHT: 0x7035
+        AUSTRALIA_ROCKFALL_LEFT: 0x7036
+        AUSTRALIA_ROCKFALL_RIGHT: 0x7037
+        AUSTRALIA_SLIP: 0x7038
+        AUSTRALIA_BLINDSLOPE_UP: 0x7039
+        AUSTRALIA_BLINDSLOPE_DOWN: 0x703A
+        AUSTRALIA_TUNNEL: 0x703B
+        AUSTRALIA_UNDERWATER: 0x703C
+        AUSTRALIA_UNEVEN: 0x703D
+        AUSTRALIA_UNMANAGED_RAILWAY_CROSS: 0x703E
+        AUSTRALIA_ZIPPASS: 0x703F
+        AUSTRALIA_SLOPE_CONTINUOUSDOWN: 0x7040
+        AUSTRALIA_SLOPE_UP: 0x7041
+        AUSTRALIA_SLOPE_DOWN: 0x7042
+        AUSTRALIA_RAILWAY_MANAGED: 0x7043
+        AUSTRALIA_VILLAGE: 0x7044
+        AUSTRALIA_AUDIBLEWARNING: 0x7045
+        AUSTRALIA_OVERTAKING_LANE: 0x7046
+        AUSTRALIA_FALLING_HAZARD: 0x7047
+        AUSTRALIA_LANE_MOVE_REGULATION: 0x7048
+        AUSTRALIA_DROWSY: 0x7049
+        SOUTH_AMERICA_FIXEDCAMERA: 0x8001
+        SOUTH_AMERICA_PORTABLECAMERA: 0x8002
+        SOUTH_AMERICA_SPEED_SIGNAL: 0x8003
+        SOUTH_AMERICA_BUSCAMERA: 0x8004
+        SOUTH_AMERICA_SCHOOLZONEFIXEDCAMERA: 0x8005
+        SOUTH_AMERICA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x8006
+        SOUTH_AMERICA_CUTINLINE: 0x8007
+        SOUTH_AMERICA_ROADSHOULDERVIOLATION: 0x8008
+        SOUTH_AMERICA_TRAFFICINFORMATION: 0x8009
+        SOUTH_AMERICA_INTERSECTIONJAMMING: 0x800A
+        SOUTH_AMERICA_RAMPMETERING: 0x800B
+        SOUTH_AMERICA_LANECHANGE: 0x800C
+        SOUTH_AMERICA_AVERAGESPEEDCAMERA: 0x800D
+        SOUTH_AMERICA_AVERAGESPEEDCAMERAZONE: 0x800E
+        SOUTH_AMERICA_SPEEDENFORCEMET: 0x800F
+        SOUTH_AMERICA_SPEEDENFORCEMETZONE: 0x8010
+        SOUTH_AMERICA_MOBILEHOTSPOT: 0x8011
+        SOUTH_AMERICA_MOBILEHOTSPOTZONE: 0x8012
+        SOUTH_AMERICA_ACCIDENTBLACKSPOT1: 0x8013
+        SOUTH_AMERICA_ACCIDENTBLACKSPOTZONE: 0x8014
+        SOUTH_AMERICA_DANGERZONE: 0x8015
+        SOUTH_AMERICA_RISKZONE: 0x8016
+        SOUTH_AMERICA_RESTRICTED: 0x8017
+        SOUTH_AMERICA_OTHERS: 0x8018
+        SOUTH_AMERICA_BUSLANENOTAVAILABLE: 0x8019
+        SOUTH_AMERICA_BUSLANEAVAILABLE: 0x801A
+        SOUTH_AMERICA_ILLEGALPARKING: 0x801B
+        SOUTH_AMERICA_DONOTENTER: 0x801C
+        SOUTH_AMERICA_ACCIDENTBLACKSPOT2: 0x801D
+        SOUTH_AMERICA_SCHOOLZONE: 0x801E
+        SOUTH_AMERICA_FALLINGROCKS: 0x801F
+        SOUTH_AMERICA_RAILROADCROSSING: 0x8020
+        SOUTH_AMERICA_FOGGYAREA: 0x8021
+        SOUTH_AMERICA_STEEPSLOPE: 0x8022
+        SOUTH_AMERICA_ROADKILL: 0x8023
+        SOUTH_AMERICA_SPEEDBUMP: 0x8024
+        SOUTH_AMERICA_NARROWROAD: 0x8025
+        SOUTH_AMERICA_HIGHWAYCONSTRUCTIONZONE: 0x8026
+        SOUTH_AMERICA_ROADSLIPDETECTION: 0x8027
+        SOUTH_AMERICA_ROADDAMAGEDETECTION: 0x8028
+        SOUTH_AMERICA_ZONE_30: 0x8029
+        SOUTH_AMERICA_STOP: 0x802A
+        SOUTH_AMERICA_BLINDSLOPE_CONTINUOUS: 0x802B
+        SOUTH_AMERICA_CROSSWIND: 0x802C
+        SOUTH_AMERICA_HILLSIDEDANGEROUS: 0x802D
+        SOUTH_AMERICA_HUMP_BRIDG: 0x802E
+        SOUTH_AMERICA_JOINT_LEFT: 0x802F
+        SOUTH_AMERICA_JOINT_RIGHT: 0x8030
+        SOUTH_AMERICA_LOWSPEED: 0x8031
+        SOUTH_AMERICA_NARROW_BOTH: 0x8032
+        SOUTH_AMERICA_NARROWBRIDGE: 0x8033
+        SOUTH_AMERICA_NARROW_LEFT: 0x8034
+        SOUTH_AMERICA_NARROW_RIGHT: 0x8035
+        SOUTH_AMERICA_ROCKFALL_LEFT: 0x8036
+        SOUTH_AMERICA_ROCKFALL_RIGHT: 0x8037
+        SOUTH_AMERICA_SLIP: 0x8038
+        SOUTH_AMERICA_BLINDSLOPE_UP: 0x8039
+        SOUTH_AMERICA_BLINDSLOPE_DOWN: 0x803A
+        SOUTH_AMERICA_TUNNEL: 0x803B
+        SOUTH_AMERICA_UNDERWATER: 0x803C
+        SOUTH_AMERICA_UNEVEN: 0x803D
+        SOUTH_AMERICA_UNMANAGED_RAILWAY_CROSS: 0x803E
+        SOUTH_AMERICA_ZIPPASS: 0x803F
+        SOUTH_AMERICA_SLOPE_CONTINUOUSDOWN: 0x8040
+        SOUTH_AMERICA_SLOPE_UP: 0x8041
+        SOUTH_AMERICA_SLOPE_DOWN: 0x8042
+        SOUTH_AMERICA_RAILWAY_MANAGED: 0x8043
+        SOUTH_AMERICA_VILLAGE: 0x8044
+        SOUTH_AMERICA_AUDIBLEWARNING: 0x8045
+        SOUTH_AMERICA_OVERTAKING_LANE: 0x8046
+        SOUTH_AMERICA_FALLING_HAZARD: 0x8047
+        SOUTH_AMERICA_LANE_MOVE_REGULATION: 0x8048
+        SOUTH_AMERICA_DROWSY: 0x8049
+        CHINA_FIXEDCAMERA: 0x9001
+        CHINA_PORTABLECAMERA: 0x9002
+        CHINA_SPEED_SIGNAL: 0x9003
+        CHINA_BUSCAMERA: 0x9004
+        CHINA_SCHOOLZONEFIXEDCAMERA: 0x9005
+        CHINA_SCHOOLZONESPEEL_SIGNALCAMERA: 0x9006
+        CHINA_CUTINLINE: 0x9007
+        CHINA_ROADSHOULDERVIOLATION: 0x9008
+        CHINA_TRAFFICINFORMATION: 0x9009
+        CHINA_INTERSECTIONJAMMING: 0x900A
+        CHINA_RAMPMETERING: 0x900B
+        CHINA_LANECHANGE: 0x900C
+        CHINA_AVERAGESPEEDCAMERA: 0x900D
+        CHINA_AVERAGESPEEDCAMERAZONE: 0x900E
+        CHINA_SPEEDENFORCEMET: 0x900F
+        CHINA_SPEEDENFORCEMETZONE: 0x9010
+        CHINA_MOBILEHOTSPOT: 0x9011
+        CHINA_MOBILEHOTSPOTZONE: 0x9012
+        CHINA_ACCIDENTBLACKSPOT1: 0x9013
+        CHINA_ACCIDENTBLACKSPOTZONE: 0x9014
+        CHINA_DANGERZONE: 0x9015
+        CHINA_RISKZONE: 0x9016
+        CHINA_RESTRICTED: 0x9017
+        CHINA_OTHERS: 0x9018
+        CHINA_BUSLANENOTAVAILABLE: 0x9019
+        CHINA_BUSLANEAVAILABLE: 0x901A
+        CHINA_ILLEGALPARKING: 0x901B
+        CHINA_DONOTENTER: 0x901C
+        CHINA_ACCIDENTBLACKSPOT2: 0x901D
+        CHINA_SCHOOLZONE: 0x901E
+        CHINA_FALLINGROCKS: 0x901F
+        CHINA_RAILROADCROSSING: 0x9020
+        CHINA_FOGGYAREA: 0x9021
+        CHINA_STEEPSLOPE: 0x9022
+        CHINA_ROADKILL: 0x9023
+        CHINA_SPEEDBUMP: 0x9024
+        CHINA_NARROWROAD: 0x9025
+        CHINA_HIGHWAYCONSTRUCTIONZONE: 0x9026
+        CHINA_ROADSLIPDETECTION: 0x9027
+        CHINA_ROADDAMAGEDETECTION: 0x9028
+        CHINA_ZONE_30: 0x9029
+        CHINA_STOP: 0x902A
+        CHINA_BLINDSLOPE_CONTINUOUS: 0x902B
+        CHINA_CROSSWIND: 0x902C
+        CHINA_HILLSIDEDANGEROUS: 0x902D
+        CHINA_HUMP_BRIDG: 0x902E
+        CHINA_JOINT_LEFT: 0x902F
+        CHINA_JOINT_RIGHT: 0x9030
+        CHINA_LOWSPEED: 0x9031
+        CHINA_NARROW_BOTH: 0x9032
+        CHINA_NARROWBRIDGE: 0x9033
+        CHINA_NARROW_LEFT: 0x9034
+        CHINA_NARROW_RIGHT: 0x9035
+        CHINA_ROCKFALL_LEFT: 0x9036
+        CHINA_ROCKFALL_RIGHT: 0x9037
+        CHINA_SLIP: 0x9038
+        CHINA_BLINDSLOPE_UP: 0x9039
+        CHINA_BLINDSLOPE_DOWN: 0x903A
+        CHINA_TUNNEL: 0x903B
+        CHINA_UNDERWATER: 0x903C
+        CHINA_UNEVEN: 0x903D
+        CHINA_UNMANAGED_RAILWAY_CROSS: 0x903E
+        CHINA_ZIPPASS: 0x903F
+        CHINA_SLOPE_CONTINUOUSDOWN: 0x9040
+        CHINA_SLOPE_UP: 0x9041
+        CHINA_SLOPE_DOWN: 0x9042
+        CHINA_RAILWAY_MANAGED: 0x9043
+        CHINA_VILLAGE: 0x9044
+        CHINA_AUDIBLEWARNING: 0x9045
+        CHINA_OVERTAKING_LANE: 0x9046
+        CHINA_FALLING_HAZARD: 0x9047
+        CHINA_LANE_MOVE_REGULATION: 0x9048
+        CHINA_DROWSY: 0x9049
+        INDIA_FIXEDCAMERA: 0xA001
+        INDIA_PORTABLECAMERA: 0xA002
+        INDIA_SPEED_SIGNAL: 0xA003
+        INDIA_BUSCAMERA: 0xA004
+        INDIA_SCHOOLZONEFIXEDCAMERA: 0xA005
+        INDIA_SCHOOLZONESPEEL_SIGNALCAMERA: 0xA006
+        INDIA_CUTINLINE: 0xA007
+        INDIA_ROADSHOULDERVIOLATION: 0xA008
+        INDIA_TRAFFICINFORMATION: 0xA009
+        INDIA_INTERSECTIONJAMMING: 0xA00A
+        INDIA_RAMPMETERING: 0xA00B
+        INDIA_LANECHANGE: 0xA00C
+        INDIA_AVERAGESPEEDCAMERA: 0xA00D
+        INDIA_AVERAGESPEEDCAMERAZONE: 0xA00E
+        INDIA_SPEEDENFORCEMET: 0xA00F
+        INDIA_SPEEDENFORCEMETZONE: 0xA010
+        INDIA_MOBILEHOTSPOT: 0xA011
+        INDIA_MOBILEHOTSPOTZONE: 0xA012
+        INDIA_ACCIDENTBLACKSPOT1: 0xA013
+        INDIA_ACCIDENTBLACKSPOTZONE: 0xA014
+        INDIA_DANGERZONE: 0xA015
+        INDIA_RISKZONE: 0xA016
+        INDIA_RESTRICTED: 0xA017
+        INDIA_OTHERS: 0xA018
+        INDIA_BUSLANENOTAVAILABLE: 0xA019
+        INDIA_BUSLANEAVAILABLE: 0xA01A
+        INDIA_ILLEGALPARKING: 0xA01B
+        INDIA_DONOTENTER: 0xA01C
+        INDIA_ACCIDENTBLACKSPOT2: 0xA01D
+        INDIA_SCHOOLZONE: 0xA01E
+        INDIA_FALLINGROCKS: 0xA01F
+        INDIA_RAILROADCROSSING: 0xA020
+        INDIA_FOGGYAREA: 0xA021
+        INDIA_STEEPSLOPE: 0xA022
+        INDIA_ROADKILL: 0xA023
+        INDIA_SPEEDBUMP: 0xA024
+        INDIA_NARROWROAD: 0xA025
+        INDIA_HIGHWAYCONSTRUCTIONZONE: 0xA026
+        INDIA_ROADSLIPDETECTION: 0xA027
+        INDIA_ROADDAMAGEDETECTION: 0xA028
+        INDIA_ZONE_30: 0xA029
+        INDIA_STOP: 0xA02A
+        INDIA_BLINDSLOPE_CONTINUOUS: 0xA02B
+        INDIA_CROSSWIND: 0xA02C
+        INDIA_HILLSIDEDANGEROUS: 0xA02D
+        INDIA_HUMP_BRIDG: 0xA02E
+        INDIA_JOINT_LEFT: 0xA02F
+        INDIA_JOINT_RIGHT: 0xA030
+        INDIA_LOWSPEED: 0xA031
+        INDIA_NARROW_BOTH: 0xA032
+        INDIA_NARROWBRIDGE: 0xA033
+        INDIA_NARROW_LEFT: 0xA034
+        INDIA_NARROW_RIGHT: 0xA035
+        INDIA_ROCKFALL_LEFT: 0xA036
+        INDIA_ROCKFALL_RIGHT: 0xA037
+        INDIA_SLIP: 0xA038
+        INDIA_BLINDSLOPE_UP: 0xA039
+        INDIA_BLINDSLOPE_DOWN: 0xA03A
+        INDIA_TUNNEL: 0xA03B
+        INDIA_UNDERWATER: 0xA03C
+        INDIA_UNEVEN: 0xA03D
+        INDIA_UNMANAGED_RAILWAY_CROSS: 0xA03E
+        INDIA_ZIPPASS: 0xA03F
+        INDIA_SLOPE_CONTINUOUSDOWN: 0xA040
+        INDIA_SLOPE_UP: 0xA041
+        INDIA_SLOPE_DOWN: 0xA042
+        INDIA_RAILWAY_MANAGED: 0xA043
+        INDIA_VILLAGE: 0xA044
+        INDIA_AUDIBLEWARNING: 0xA045
+        INDIA_OVERTAKING_LANE: 0xA046
+        INDIA_FALLING_HAZARD: 0xA047
+        INDIA_LANE_MOVE_REGULATION: 0xA048
+        INDIA_DROWSY: 0xA049
+        JAPAN_FIXEDCAMERA: 0xB001
+        JAPAN_PORTABLECAMERA: 0xB002
+        JAPAN_SPEED_SIGNAL: 0xB003
+        JAPAN_BUSCAMERA: 0xB004
+        JAPAN_SCHOOLZONEFIXEDCAMERA: 0xB005
+        JAPAN_SCHOOLZONESPEEL_SIGNALCAMERA: 0xB006
+        JAPAN_CUTINLINE: 0xB007
+        JAPAN_ROADSHOULDERVIOLATION: 0xB008
+        JAPAN_TRAFFICINFORMATION: 0xB009
+        JAPAN_INTERSECTIONJAMMING: 0xB00A
+        JAPAN_RAMPMETERING: 0xB00B
+        JAPAN_LANECHANGE: 0xB00C
+        JAPAN_AVERAGESPEEDCAMERA: 0xB00D
+        JAPAN_AVERAGESPEEDCAMERAZONE: 0xB00E
+        JAPAN_SPEEDENFORCEMET: 0xB00F
+        JAPAN_SPEEDENFORCEMETZONE: 0xB010
+        JAPAN_MOBILEHOTSPOT: 0xB011
+        JAPAN_MOBILEHOTSPOTZONE: 0xB012
+        JAPAN_ACCIDENTBLACKSPOT1: 0xB013
+        JAPAN_ACCIDENTBLACKSPOTZONE: 0xB014
+        JAPAN_DANGERZONE: 0xB015
+        JAPAN_RISKZONE: 0xB016
+        JAPAN_RESTRICTED: 0xB017
+        JAPAN_OTHERS: 0xB018
+        JAPAN_BUSLANENOTAVAILABLE: 0xB019
+        JAPAN_BUSLANEAVAILABLE: 0xB01A
+        JAPAN_ILLEGALPARKING: 0xB01B
+        JAPAN_DONOTENTER: 0xB01C
+        JAPAN_ACCIDENTBLACKSPOT2: 0xB01D
+        JAPAN_SCHOOLZONE: 0xB01E
+        JAPAN_FALLINGROCKS: 0xB01F
+        JAPAN_RAILROADCROSSING: 0xB020
+        JAPAN_FOGGYAREA: 0xB021
+        JAPAN_STEEPSLOPE: 0xB022
+        JAPAN_ROADKILL: 0xB023
+        JAPAN_SPEEDBUMP: 0xB024
+        JAPAN_NARROWROAD: 0xB025
+        JAPAN_HIGHWAYCONSTRUCTIONZONE: 0xB026
+        JAPAN_ROADSLIPDETECTION: 0xB027
+        JAPAN_ROADDAMAGEDETECTION: 0xB028
+        JAPAN_ZONE_30: 0xB029
+        JAPAN_STOP: 0xB02A
+        JAPAN_BLINDSLOPE_CONTINUOUS: 0xB02B
+        JAPAN_CROSSWIND: 0xB02C
+        JAPAN_HILLSIDEDANGEROUS: 0xB02D
+        JAPAN_HUMP_BRIDG: 0xB02E
+        JAPAN_JOINT_LEFT: 0xB02F
+        JAPAN_JOINT_RIGHT: 0xB030
+        JAPAN_LOWSPEED: 0xB031
+        JAPAN_NARROW_BOTH: 0xB032
+        JAPAN_NARROWBRIDGE: 0xB033
+        JAPAN_NARROW_LEFT: 0xB034
+        JAPAN_NARROW_RIGHT: 0xB035
+        JAPAN_ROCKFALL_LEFT: 0xB036
+        JAPAN_ROCKFALL_RIGHT: 0xB037
+        JAPAN_SLIP: 0xB038
+        JAPAN_BLINDSLOPE_UP: 0xB039
+        JAPAN_BLINDSLOPE_DOWN: 0xB03A
+        JAPAN_TUNNEL: 0xB03B
+        JAPAN_UNDERWATER: 0xB03C
+        JAPAN_UNEVEN: 0xB03D
+        JAPAN_UNMANAGED_RAILWAY_CROSS: 0xB03E
+        JAPAN_ZIPPASS: 0xB03F
+        JAPAN_SLOPE_CONTINUOUSDOWN: 0xB040
+        JAPAN_SLOPE_UP: 0xB041
+        JAPAN_SLOPE_DOWN: 0xB042
+        JAPAN_RAILWAY_MANAGED: 0xB043
+        JAPAN_VILLAGE: 0xB044
+        JAPAN_AUDIBLEWARNING: 0xB045
+        JAPAN_OVERTAKING_LANE: 0xB046
+        JAPAN_FALLING_HAZARD: 0xB047
+        JAPAN_LANE_MOVE_REGULATION: 0xB048
+        JAPAN_DROWSY: 0xB049
+        SOUTH_EAST_ASIA_E_FIXEDCAMERA: 0xC001
+        SOUTH_EAST_ASIA_E_PORTABLECAMERA: 0xC002
+        SOUTH_EAST_ASIA_E_SPEED_SIGNAL: 0xC003
+        SOUTH_EAST_ASIA_E_BUSCAMERA: 0xC004
+        SOUTH_EAST_ASIA_E_SCHOOLZONEFIXEDCAMERA: 0xC005
+        SOUTH_EAST_ASIA_E_SCHOOLZONESPEEL_SIGNALCAMERA: 0xC006
+        SOUTH_EAST_ASIA_E_CUTINLINE: 0xC007
+        SOUTH_EAST_ASIA_E_ROADSHOULDERVIOLATION: 0xC008
+        SOUTH_EAST_ASIA_E_TRAFFICINFORMATION: 0xC009
+        SOUTH_EAST_ASIA_E_INTERSECTIONJAMMING: 0xC00A
+        SOUTH_EAST_ASIA_E_RAMPMETERING: 0xC00B
+        SOUTH_EAST_ASIA_E_LANECHANGE: 0xC00C
+        SOUTH_EAST_ASIA_E_AVERAGESPEEDCAMERA: 0xC00D
+        SOUTH_EAST_ASIA_E_AVERAGESPEEDCAMERAZONE: 0xC00E
+        SOUTH_EAST_ASIA_E_SPEEDENFORCEMET: 0xC00F
+        SOUTH_EAST_ASIA_E_SPEEDENFORCEMETZONE: 0xC010
+        SOUTH_EAST_ASIA_E_MOBILEHOTSPOT: 0xC011
+        SOUTH_EAST_ASIA_E_MOBILEHOTSPOTZONE: 0xC012
+        SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOT1: 0xC013
+        SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOTZONE: 0xC014
+        SOUTH_EAST_ASIA_E_DANGERZONE: 0xC015
+        SOUTH_EAST_ASIA_E_RISKZONE: 0xC016
+        SOUTH_EAST_ASIA_E_RESTRICTED: 0xC017
+        SOUTH_EAST_ASIA_E_OTHERS: 0xC018
+        SOUTH_EAST_ASIA_E_BUSLANENOTAVAILABLE: 0xC019
+        SOUTH_EAST_ASIA_E_BUSLANEAVAILABLE: 0xC01A
+        SOUTH_EAST_ASIA_E_ILLEGALPARKING: 0xC01B
+        SOUTH_EAST_ASIA_E_DONOTENTER: 0xC01C
+        SOUTH_EAST_ASIA_E_ACCIDENTBLACKSPOT2: 0xC01D
+        SOUTH_EAST_ASIA_E_SCHOOLZONE: 0xC01E
+        SOUTH_EAST_ASIA_E_FALLINGROCKS: 0xC01F
+        SOUTH_EAST_ASIA_E_RAILROADCROSSING: 0xC020
+        SOUTH_EAST_ASIA_E_FOGGYAREA: 0xC021
+        SOUTH_EAST_ASIA_E_STEEPSLOPE: 0xC022
+        SOUTH_EAST_ASIA_E_ROADKILL: 0xC023
+        SOUTH_EAST_ASIA_E_SPEEDBUMP: 0xC024
+        SOUTH_EAST_ASIA_E_NARROWROAD: 0xC025
+        SOUTH_EAST_ASIA_E_HIGHWAYCONSTRUCTIONZONE: 0xC026
+        SOUTH_EAST_ASIA_E_ROADSLIPDETECTION: 0xC027
+        SOUTH_EAST_ASIA_E_ROADDAMAGEDETECTION: 0xC028
+        SOUTH_EAST_ASIA_E_ZONE_30: 0xC029
+        SOUTH_EAST_ASIA_E_STOP: 0xC02A
+        SOUTH_EAST_ASIA_E_BLINDSLOPE_CONTINUOUS: 0xC02B
+        SOUTH_EAST_ASIA_E_CROSSWIND: 0xC02C
+        SOUTH_EAST_ASIA_E_HILLSIDEDANGEROUS: 0xC02D
+        SOUTH_EAST_ASIA_E_HUMP_BRIDG: 0xC02E
+        SOUTH_EAST_ASIA_E_JOINT_LEFT: 0xC02F
+        SOUTH_EAST_ASIA_E_JOINT_RIGHT: 0xC030
+        SOUTH_EAST_ASIA_E_LOWSPEED: 0xC031
+        SOUTH_EAST_ASIA_E_NARROW_BOTH: 0xC032
+        SOUTH_EAST_ASIA_E_NARROWBRIDGE: 0xC033
+        SOUTH_EAST_ASIA_E_NARROW_LEFT: 0xC034
+        SOUTH_EAST_ASIA_E_NARROW_RIGHT: 0xC035
+        SOUTH_EAST_ASIA_E_ROCKFALL_LEFT: 0xC036
+        SOUTH_EAST_ASIA_E_ROCKFALL_RIGHT: 0xC037
+        SOUTH_EAST_ASIA_E_SLIP: 0xC038
+        SOUTH_EAST_ASIA_E_BLINDSLOPE_UP: 0xC039
+        SOUTH_EAST_ASIA_E_BLINDSLOPE_DOWN: 0xC03A
+        SOUTH_EAST_ASIA_E_TUNNEL: 0xC03B
+        SOUTH_EAST_ASIA_E_UNDERWATER: 0xC03C
+        SOUTH_EAST_ASIA_E_UNEVEN: 0xC03D
+        SOUTH_EAST_ASIA_E_UNMANAGED_RAILWAY_CROSS: 0xC03E
+        SOUTH_EAST_ASIA_E_ZIPPASS: 0xC03F
+        SOUTH_EAST_ASIA_E_SLOPE_CONTINUOUSDOWN: 0xC040
+        SOUTH_EAST_ASIA_E_SLOPE_UP: 0xC041
+        SOUTH_EAST_ASIA_E_SLOPE_DOWN: 0xC042
+        SOUTH_EAST_ASIA_E_RAILWAY_MANAGED: 0xC043
+        SOUTH_EAST_ASIA_E_VILLAGE: 0xC044
+        SOUTH_EAST_ASIA_E_AUDIBLEWARNING: 0xC045
+        SOUTH_EAST_ASIA_E_OVERTAKING_LANE: 0xC046
+        SOUTH_EAST_ASIA_E_FALLING_HAZARD: 0xC047
+        SOUTH_EAST_ASIA_E_LANE_MOVE_REGULATION: 0xC048
+        SOUTH_EAST_ASIA_E_DROWSY: 0xC049
+        SOUTH_EAST_ASIA_N_FIXEDCAMERA: 0xD001
+        SOUTH_EAST_ASIA_N_PORTABLECAMERA: 0xD002
+        SOUTH_EAST_ASIA_N_SPEED_SIGNAL: 0xD003
+        SOUTH_EAST_ASIA_N_BUSCAMERA: 0xD004
+        SOUTH_EAST_ASIA_N_SCHOOLZONEFIXEDCAMERA: 0xD005
+        SOUTH_EAST_ASIA_N_SCHOOLZONESPEEL_SIGNALCAMERA: 0xD006
+        SOUTH_EAST_ASIA_N_CUTINLINE: 0xD007
+        SOUTH_EAST_ASIA_N_ROADSHOULDERVIOLATION: 0xD008
+        SOUTH_EAST_ASIA_N_TRAFFICINFORMATION: 0xD009
+        SOUTH_EAST_ASIA_N_INTERSECTIONJAMMING: 0xD00A
+        SOUTH_EAST_ASIA_N_RAMPMETERING: 0xD00B
+        SOUTH_EAST_ASIA_N_LANECHANGE: 0xD00C
+        SOUTH_EAST_ASIA_N_AVERAGESPEEDCAMERA: 0xD00D
+        SOUTH_EAST_ASIA_N_AVERAGESPEEDCAMERAZONE: 0xD00E
+        SOUTH_EAST_ASIA_N_SPEEDENFORCEMET: 0xD00F
+        SOUTH_EAST_ASIA_N_SPEEDENFORCEMETZONE: 0xD010
+        SOUTH_EAST_ASIA_N_MOBILEHOTSPOT: 0xD011
+        SOUTH_EAST_ASIA_N_MOBILEHOTSPOTZONE: 0xD012
+        SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOT1: 0xD013
+        SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOTZONE: 0xD014
+        SOUTH_EAST_ASIA_N_DANGERZONE: 0xD015
+        SOUTH_EAST_ASIA_N_RISKZONE: 0xD016
+        SOUTH_EAST_ASIA_N_RESTRICTED: 0xD017
+        SOUTH_EAST_ASIA_N_OTHERS: 0xD018
+        SOUTH_EAST_ASIA_N_BUSLANENOTAVAILABLE: 0xD019
+        SOUTH_EAST_ASIA_N_BUSLANEAVAILABLE: 0xD01A
+        SOUTH_EAST_ASIA_N_ILLEGALPARKING: 0xD01B
+        SOUTH_EAST_ASIA_N_DONOTENTER: 0xD01C
+        SOUTH_EAST_ASIA_N_ACCIDENTBLACKSPOT2: 0xD01D
+        SOUTH_EAST_ASIA_N_SCHOOLZONE: 0xD01E
+        SOUTH_EAST_ASIA_N_FALLINGROCKS: 0xD01F
+        SOUTH_EAST_ASIA_N_RAILROADCROSSING: 0xD020
+        SOUTH_EAST_ASIA_N_FOGGYAREA: 0xD021
+        SOUTH_EAST_ASIA_N_STEEPSLOPE: 0xD022
+        SOUTH_EAST_ASIA_N_ROADKILL: 0xD023
+        SOUTH_EAST_ASIA_N_SPEEDBUMP: 0xD024
+        SOUTH_EAST_ASIA_N_NARROWROAD: 0xD025
+        SOUTH_EAST_ASIA_N_HIGHWAYCONSTRUCTIONZONE: 0xD026
+        SOUTH_EAST_ASIA_N_ROADSLIPDETECTION: 0xD027
+        SOUTH_EAST_ASIA_N_ROADDAMAGEDETECTION: 0xD028
+        SOUTH_EAST_ASIA_N_ZONE_30: 0xD029
+        SOUTH_EAST_ASIA_N_STOP: 0xD02A
+        SOUTH_EAST_ASIA_N_BLINDSLOPE_CONTINUOUS: 0xD02B
+        SOUTH_EAST_ASIA_N_CROSSWIND: 0xD02C
+        SOUTH_EAST_ASIA_N_HILLSIDEDANGEROUS: 0xD02D
+        SOUTH_EAST_ASIA_N_HUMP_BRIDG: 0xD02E
+        SOUTH_EAST_ASIA_N_JOINT_LEFT: 0xD02F
+        SOUTH_EAST_ASIA_N_JOINT_RIGHT: 0xD030
+        SOUTH_EAST_ASIA_N_LOWSPEED: 0xD031
+        SOUTH_EAST_ASIA_N_NARROW_BOTH: 0xD032
+        SOUTH_EAST_ASIA_N_NARROWBRIDGE: 0xD033
+        SOUTH_EAST_ASIA_N_NARROW_LEFT: 0xD034
+        SOUTH_EAST_ASIA_N_NARROW_RIGHT: 0xD035
+        SOUTH_EAST_ASIA_N_ROCKFALL_LEFT: 0xD036
+        SOUTH_EAST_ASIA_N_ROCKFALL_RIGHT: 0xD037
+        SOUTH_EAST_ASIA_N_SLIP: 0xD038
+        SOUTH_EAST_ASIA_N_BLINDSLOPE_UP: 0xD039
+        SOUTH_EAST_ASIA_N_BLINDSLOPE_DOWN: 0xD03A
+        SOUTH_EAST_ASIA_N_TUNNEL: 0xD03B
+        SOUTH_EAST_ASIA_N_UNDERWATER: 0xD03C
+        SOUTH_EAST_ASIA_N_UNEVEN: 0xD03D
+        SOUTH_EAST_ASIA_N_UNMANAGED_RAILWAY_CROSS: 0xD03E
+        SOUTH_EAST_ASIA_N_ZIPPASS: 0xD03F
+        SOUTH_EAST_ASIA_N_SLOPE_CONTINUOUSDOWN: 0xD040
+        SOUTH_EAST_ASIA_N_SLOPE_UP: 0xD041
+        SOUTH_EAST_ASIA_N_SLOPE_DOWN: 0xD042
+        SOUTH_EAST_ASIA_N_RAILWAY_MANAGED: 0xD043
+        SOUTH_EAST_ASIA_N_VILLAGE: 0xD044
+        SOUTH_EAST_ASIA_N_AUDIBLEWARNING: 0xD045
+        SOUTH_EAST_ASIA_N_OVERTAKING_LANE: 0xD046
+        SOUTH_EAST_ASIA_N_FALLING_HAZARD: 0xD047
+        SOUTH_EAST_ASIA_N_LANE_MOVE_REGULATION: 0xD048
+        SOUTH_EAST_ASIA_N_DROWSY: 0xD049
+        MAX: 0xE000
+      # 0x0: NONE, 0x1: OFF, 0x2: RAIN, 0x3: SNOW, 0x4: SNOW_RAIN, 0x5: TRAILER, 0x6: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLAAddSign.Stat:
+      description: "DCN: IMG_CONN_ISLAAddSign_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RAIN: 0x2
+        SNOW: 0x3
+        SNOW_RAIN: 0x4
+        TRAILER: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: DISABLE, 0x3: ENABLE, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLASoundSymbol.Stat:
+      description: "DCN: IMG_CONN_ISLASoundSymbol_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DISABLE: 0x2
+        ENABLE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE_TYPE1, 0x3: WHITE_TYPE2, 0x4: WHITE_TYPE3, 0x5: GREEN_TYPE1, 0x6: GREEN_TYPE2, 0x7: GREEN_TYPE3, 0x8: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSpeedLimitTrafficSign.Type.Stat:
+      description: "DCN: IMG_CONN_ISLANextSpeedLimitTrafficSign_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE_TYPE1: 0x2
+        WHITE_TYPE2: 0x3
+        WHITE_TYPE3: 0x4
+        GREEN_TYPE1: 0x5
+        GREEN_TYPE2: 0x6
+        GREEN_TYPE3: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: INVALID, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSpeedLimitTrafficSign.Stat:
+      description: "DCN: IMG_CONN_ISLANextSpeedLimitTrafficSign_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: Constant15
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        VALUE: 0x2
+        INVALID: 0x3
+        MAX: 0x4
+      # ISLA Next Speed Limit Traffic Sign Value 1 to 252
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSpeedLimitTrafficSign.Value:
+      description: "DCN: IMG_CONN_ISLANextSpeedLimitTrafficSign_Val</br>
+                    Value from 1 to 252"
+      dataType: HUInt64
+      group: Constant15
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: FEET, 0x4: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSupportTrafficSign.Unit.Stat:
+      description: "DCN: IMG_CONN_ISLANextSupportTrafficSign_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        FEET: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSupportTrafficSign.Stat:
+      description: "DCN: IMG_CONN_ISLANextSupportTrafficSign_Val</br>
+                    Value Status for VALUE or OFF"
+      dataType: HUInt64
+      group: Constant16
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ISLA Next Support Traffic Sign Value 10 to 1500
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLANextSupportTrafficSign.Value:
+      description: "DCN: IMG_CONN_ISLANextSupportTrafficSign_Val</br>
+                    Value from 10 to 1500"
+      dataType: HUInt64
+      group: Constant16
+      # 0x0: NONE, 0x1: OFF, 0x2: RAIN, 0x3: SNOW, 0x4: SNOW_RAIN, 0x5: TRAILER, 0x6: MAX
+    - SFC.ADAS_DRIVING_2_0.Constant.ISLAAddSign2.Stat:
+      description: "DCN: IMG_CONN_ISLAAddSign2_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RAIN: 0x2
+        SNOW: 0x3
+        SNOW_RAIN: 0x4
+        TRAILER: 0x5
+        MAX: 0x6
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup1_1):E52002,E52003,E52004,E52005,E52006,E52007,E52008,E52009,E52010,E52011,E52012,E52013,E52014,E52015,E52016,E52017,E52018"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup1_2):E52019,E52020,E52021,E52022,E52023,E52069,E52073,E52113,E52110,E52114,E52116,E52117,E52119"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup1_2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup2_1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup2_1):E52030,E52094"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup2_1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup2_1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup2_1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.Group1FullPopup2_1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group4FullPopup1_1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group4FullPopup1_1):E52031,E52032,E52033,E52034,E52040,E52035,E52036,E52037,E52038,E52109,E52111,E52118,E52115,E52122"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group4FullPopup1_1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.Group4FullPopup1_1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group4FullPopup1_1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.Group4FullPopup1_1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupBlindSpotSafetyFailure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group7FullPopupBlindSpotSafetyFailure):E52050,E52051"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupBlindSpotSafetyFailure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupBlindSpotSafetyFailure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupOutsideMirrorSymbolFailure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group7FullPopupOutsideMirrorSymbolFailure):E52054"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupOutsideMirrorSymbolFailure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.Group7FullPopupOutsideMirrorSymbolFailure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DriverAssistFailure1):E52088,E52089,E52090,E52091"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DriverAssistFailure2):E52092,E52093"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_DRIVING_2_0.Event.DriverAssistFailure2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group2MiniPopup1_1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group2MiniPopup1_1):E52501,E52502,E52503,E52504,E52505,E52506,E52507,E52508,E52509,E52510,E52511,E52512,E52513,E52514,E52515,E52516,E52517,E52518,E52519,E52520"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group2MiniPopup1_1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.Group2Warning1_2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group2Warning1_2):E52644,E52645,E52646,E52647,E52648,E52649,E52650,E52651,E52652,E52653,E52654,E52655,E52656,E52657,E52658,E52659,E52660,E52663,E52664"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.Group2Warning1_2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_DRIVING_2_0.Event.LargeFullPopUp.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LargeFullPopUp):E52120,E52121"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Event.LargeFullPopUp.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_1.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning1_1):SND_ADAS_PopUpWarn2_Auto,SND_ADAS_PopUpWarn3_Auto"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_1.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_1.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_2.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning1_2):SND_ADAS_PopUpWarn1_Fixed,SND_ADAS_PopUpWarn1_Auto,SND_ADAS_PopUpWarn2_Auto"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_2.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_2.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_2.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound2
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_3.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning1_3):SND_ADAS_MSLA_Auto_Ancient,SND_ADAS_MSLA_Auto_Old,SND_ADAS_MSLA_Auto,SND_ADAS_PopUpInform1_Fixed"
+      dataType: HString
+      group: Sound3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_3.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_3.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_3.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound3
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_4.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning1_4):SND_ADAS_PopUpInform2_Fixed"
+      dataType: HString
+      group: Sound4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_4.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_4.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_4.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound4
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_5.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning1_5):SND_ADAS_LKAWarn_Auto"
+      dataType: HString
+      group: Sound5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_5.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound5
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning1_5.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound5
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Style is SND_NAME
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning2_1.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Warning2_1):SND_ADAS_BCW_Auto"
+      dataType: HString
+      group: Sound6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning2_1.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound6
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_DRIVING_2_0.Sound.Warning2_1.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound6
+      valueEnum: SFC_Common_Enum.Sound.Type

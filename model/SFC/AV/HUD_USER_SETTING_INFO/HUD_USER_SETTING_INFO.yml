@@ -1,0 +1,156 @@
+#
+# @file HUD_USER_SETTING_INFO.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- HUD_USER_SETTING_INFO:
+  sfcVersion: "0.0.0"
+  description: "Reference : [AV171] HUD_USER_SETTING_INFO. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: STEP_01, 0x2: STEP_02, 0x3: STEP_03, 0x4: STEP_04, 0x5: STEP_05, 0x6: STEP_06, 0x7: STEP_07, 0x8: STEP_08, 0x9: STEP_09, 0xA: STEP_10, 0xB: STEP_11, 0xC: STEP_12, 0xD: STEP_13, 0xE: STEP_14, 0xF: STEP_15, 0x10: STEP_16, 0x11: STEP_17, 0x12: STEP_18, 0x13: STEP_19, 0x14: STEP_20, 0x15: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudHeightLevelReqStat:
+      description: "Hud Height Level Req Stat<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudHeightLevelReqStat<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        STEP_01: 0x1
+        STEP_02: 0x2
+        STEP_03: 0x3
+        STEP_04: 0x4
+        STEP_05: 0x5
+        STEP_06: 0x6
+        STEP_07: 0x7
+        STEP_08: 0x8
+        STEP_09: 0x9
+        STEP_10: 0xA
+        STEP_11: 0xB
+        STEP_12: 0xC
+        STEP_13: 0xD
+        STEP_14: 0xE
+        STEP_15: 0xF
+        STEP_16: 0x10
+        STEP_17: 0x11
+        STEP_18: 0x12
+        STEP_19: 0x13
+        STEP_20: 0x14
+        MAX: 0x15
+      # 0x0: NONE, 0x1: STEP_01, 0x2: STEP_02, 0x3: STEP_03, 0x4: STEP_04, 0x5: STEP_05, 0x6: STEP_06, 0x7: STEP_07, 0x8: STEP_08, 0x9: STEP_09, 0xA: STEP_10, 0xB: STEP_11, 0xC: STEP_12, 0xD: STEP_13, 0xE: STEP_14, 0xF: STEP_15, 0x10: STEP_16, 0x11: STEP_17, 0x12: STEP_18, 0x13: STEP_19, 0x14: STEP_20, 0x15: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudBrightLevelReqStat:
+      description: "Hud Bright Level Req Stat<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudBrightLevelReqStat<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        STEP_01: 0x1
+        STEP_02: 0x2
+        STEP_03: 0x3
+        STEP_04: 0x4
+        STEP_05: 0x5
+        STEP_06: 0x6
+        STEP_07: 0x7
+        STEP_08: 0x8
+        STEP_09: 0x9
+        STEP_10: 0xA
+        STEP_11: 0xB
+        STEP_12: 0xC
+        STEP_13: 0xD
+        STEP_14: 0xE
+        STEP_15: 0xF
+        STEP_16: 0x10
+        STEP_17: 0x11
+        STEP_18: 0x12
+        STEP_19: 0x13
+        STEP_20: 0x14
+        MAX: 0x15
+      # 0x0: NONE, 0x1: CENTE, 0x2: CCW_01, 0x3: CCW_02, 0x4: CCW_03, 0x5: CCW_04, 0x6: CCW_05, 0x7: CCW_06, 0x8: CCW_07, 0x9: CCW_08, 0xA: CCW_09, 0xB: CCW_10, 0xC: CW_01, 0xD: CW_02, 0xE: CW_03, 0xF: CW_04, 0x10: CW_05, 0x11: CW_06, 0x12: CW_07, 0x13: CW_08, 0x14: CW_09, 0x15: CW_10, 0x16: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudRotationReqStat:
+      description: "Hud Rotation Req Stat<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudRotationReqStat<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CENTE: 0x1
+        CCW_01: 0x2
+        CCW_02: 0x3
+        CCW_03: 0x4
+        CCW_04: 0x5
+        CCW_05: 0x6
+        CCW_06: 0x7
+        CCW_07: 0x8
+        CCW_08: 0x9
+        CCW_09: 0xA
+        CCW_10: 0xB
+        CW_01: 0xC
+        CW_02: 0xD
+        CW_03: 0xE
+        CW_04: 0xF
+        CW_05: 0x10
+        CW_06: 0x11
+        CW_07: 0x12
+        CW_08: 0x13
+        CW_09: 0x14
+        CW_10: 0x15
+        MAX: 0x16
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsAVOnOffReqStatus:
+      description: "Hud Contents AV On Off Req Status<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudContentsAVOnOffReqStatus<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsCallPopUpOnOffReqStatus:
+      description: "Hud Contents Call PopUp On Off Req Status<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudContentsCallPopUpOnOffReqStatus<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsDISOnOffReqStatus:
+      description: "Hud Contents DIS On Off Req Status<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudContentsDISOnOffReqStatus<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsSCCOnOffReqStatus:
+      description: "Hud Contents SCC On Off Req Status<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudContentsSCCOnOffReqStatus<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsTBTOnOffReqStatus:
+      description: "Hud Contents TBT On Off Req Status<br>
+                    Spec:HUD_USER_SETTING_INFO[AV171]-Inter_HudContentsTBTOnOffReqStatus<br>
+                    Published in HUD_USER_SETTING_INFO[AV171]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue

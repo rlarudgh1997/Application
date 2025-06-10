@@ -1,0 +1,613 @@
+#
+# @file Screen_Control_Logic.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Screen_Control_Logic:
+  sfcVersion: "41.0.0"
+  description: "Reference : [CD120] Screen_Control_Logic. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configEawdHevChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEawdHev: mInter_ConfigEawdHev
+    - configBrandChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigBrand: mInter_ConfigBrand
+    - configTBTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTBT: mInter_ConfigTBT
+    - tbtDisplayTypeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDisplayTypeStatus: mInput_TbtDisplayTypeStatus
+    - predictShiftChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigPredictShift: mInter_ConfigPredictShift
+    - eventCheckDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Event_Control_Logic.Inter_EventCheckDisplayStatus: mInter_EventCheckDisplayStatus
+    - configCoolantTempGaugeFixedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigCoolantTempGaugeFixed: mInter_ConfigCoolantTempGaugeFixed
+    - configSCRChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSCR: mInter_ConfigSCR
+    - configTPMSMonitorPageChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTPMSMonitorPage: mInter_ConfigTPMSMonitorPage
+    - configTPMSSavePageChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTPMSSavePage: mInter_ConfigTPMSSavePage
+    - configISGChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigISG: mInter_ConfigISG
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - config4WDChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_Config4WD: mInter_Config4WD
+    - configOffRoadContentsChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigOffRoadContents: mInter_ConfigOffRoadContents
+    - displayThemeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_ClusterThemeSetStatus: mInter_ClusterThemeSetStatus
+        - SFC.Extension.Settings.Inter_ClusterThemeDetailSetStatus: mInter_ClusterThemeDetailSetStatus
+        - SFC.Drive_Mode.Inter_DriveModeSelectStatus: mInter_DriveModeSelectStatus
+        - SFC.Drive_Mode.Inter_TerrainModeSelectStatus: mInter_TerrainModeSelectStatus
+    - nModeSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Drive_Mode.Inter_NModeSelectStatus: mInter_NModeSelectStatus
+    - driveAssistSystemChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasLKA: mInter_ConfigAdasLKA
+        - Vehicle.System.Config.Inter_ConfigAdasSCC: mInter_ConfigAdasSCC
+        - Vehicle.System.Config.Inter_ConfigNewBCW: mInter_ConfigNewBCW
+    - rpmGaugeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigRPMGaugeFixed: mInter_ConfigRPMGaugeFixed
+        - SFC.Extension.Settings.Inter_RpmGaugeNormalModeSetStatus: mInter_RpmGaugeNormalModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeMyDriveModeSetStatus: mInter_RpmGaugeMyDriveModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeEcoModeSetStatus: mInter_RpmGaugeEcoModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeSportModeSetStatus: mInter_RpmGaugeSportModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeTerrainAutoModeSetStatus: mInter_RpmGaugeTerrainAutoModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeSnowModeSetStatus: mInter_RpmGaugeSnowModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeMudModeSetStatus: mInter_RpmGaugeMudModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeSandModeSetStatus: mInter_RpmGaugeSandModeSetStatus
+        - SFC.Extension.Settings.Inter_RpmGaugeSmartModeSetStatus: mInter_RpmGaugeSmartModeSetStatus
+    - displayLanguageStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_DisplayLanguageStatus: mInter_DisplayLanguageStatus
+    - configHighPerformanceChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+    - configTrailerBrakeControllerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTrailerBrakeController: mInter_ConfigTrailerBrakeController
+    - adasOnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.ADAS_Driving_New.Inter_AdasOnStatus: mInter_AdasOnStatus
+    - lapTimerActiveEventOnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Screen_Control_Logic.Input_N1SwitchMainSetStatus: mInput_N1SwitchMainSetStatus
+        - Vehicle.CD.Screen_Control_Logic.Input_N1SwitchStatus: mInput_N1SwitchStatus
+        - Vehicle.CD.Screen_Control_Logic.Input_N2SwitchMainSetStatus: mInput_N2SwitchMainSetStatus
+        - Vehicle.CD.Screen_Control_Logic.Input_N2SwitchStatus: mInput_N2SwitchStatus
+    - hdpSystemOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.ADAS_Driving_New.Inter_AdasViewFixStatus: mInter_AdasViewFixStatus
+    - headUnitDisplayOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Screen_Control_Logic.Input_HeadUnitDisplayOnOffStatus: mInput_HeadUnitDisplayOnOffStatus
+    - configEvDteGuideChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEvDteGuide: mInter_ConfigEvDteGuide
+    - configThemeUiChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Option_Classification_Logic.Inter_ConfigThemeUI: mInter_ConfigThemeUI
+    - telematicsWeatherTypeInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Screen_Control_Logic.Input_TelematicsWeatherTypeInfo: mInput_TelematicsWeatherTypeInfo
+  outputs:
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.AccumulScreenEnable.Stat:
+      description: "DCN: IMG_AccumulScreenEnable_stat</br>
+                    State of AccumulScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DriveInfoScreenEnable.Stat:
+      description: "DCN: IMG_DriveInfoScreenEnable_stat</br>
+                    State of DriveInfoScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.AfterRefuelScreenEnable.Stat:
+      description: "DCN: IMG_AfterRefuelScreenEnable_stat</br>
+                    State of AfterRefuelScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.ISGDetailScreenEnable.Stat:
+      description: "DCN: IMG_ISGDetailScreenEnable_stat</br>
+                    State of ISGDetailScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: ENABLE_EAWD, 0x4: MAX
+    - SFC.Screen_Control_Logic.Constant.EnergyFlowScreenEnable.Stat:
+      description: "DCN: IMG_EnergyFlowScreenEnable_stat</br>
+                    State of EnergyFlowScreenEnable"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLE: 0x1
+        ENABLE: 0x2
+        ENABLE_EAWD: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.TBTGuideScreenEnable.Stat:
+      description: "DCN: IMG_TBTGuideScreenEnable_stat</br>
+                    State of TBTGuideScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.TBTDestinationScreenEnable.Stat:
+      description: "DCN: IMG_TBTDestinationScreenEnable_stat</br>
+                    State of TBTDestinationScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DriverAssistScreenEnable.Stat:
+      description: "DCN: IMG_DriverAssistScreenEnable_stat</br>
+                    State of DriverAssistScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: ENERGY_FLOW, 0x2: DRIVE_INFO, 0x3: REFUEL_INFO, 0x4: ACCUMULATED_INFO, 0x5: DIGITAL_SPEED, 0x6: AUTO_STOP, 0x7: TPMS, 0x8: ENGINE_TEMP, 0x9: DPF_LEVEL, 0xA: AWD, 0xB: DRIVING_ASSIST, 0xC: TBT_GUIDE, 0xD: TBT_DESTINATION, 0xE: OTHERS, 0xF: INVALID, 0x10: MAX
+    - SFC.Screen_Control_Logic.Constant.ActiveScreen.Stat:
+      description: "DCN: IMG_ActiveScreen_stat</br>
+                    State of ActiveScreen"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ENERGY_FLOW: 0x1
+        DRIVE_INFO: 0x2
+        REFUEL_INFO: 0x3
+        ACCUMULATED_INFO: 0x4
+        DIGITAL_SPEED: 0x5
+        AUTO_STOP: 0x6
+        TPMS: 0x7
+        ENGINE_TEMP: 0x8
+        DPF_LEVEL: 0x9
+        AWD: 0xA
+        DRIVING_ASSIST: 0xB
+        TBT_GUIDE: 0xC
+        TBT_DESTINATION: 0xD
+        OTHERS: 0xE
+        INVALID: 0xF
+        MAX: 0x10
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.WarningScreenEnable.Stat:
+      description: "DCN: IMG_WarningScreenEnable_stat</br>
+                    State of WarningScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.RefSpeedometerScreenEnable.Stat:
+      description: "DCN: IMG_RefSpeedometerScreenEnable_stat</br>
+                    State of RefSpeedometerScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.CoolantTempScreenEnable.Stat:
+      description: "DCN: IMG_CoolantTempScreenEnable_stat</br>
+                    State of CoolantTempScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.UreaLevelScreenEnable.Stat:
+      description: "DCN: IMG_UreaLevelScreenEnable_stat</br>
+                    State of UreaLevelScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.ForceDistributeScreenEnable.Stat:
+      description: "DCN: IMG_ForceDistributeScreenEnable_stat</br>
+                    State of ForceDistributeScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.EVForceDistributeScreenEnable.Stat:
+      description: "DCN: IMG_EVForceDistributeScreenEnable_stat</br>
+                    State of EVForceDistributeScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.TPMSPressureMonitorScreenEnable.Stat:
+      description: "DCN: IMG_TPMSPressureMonitorScreenEnable_stat</br>
+                    State of TPMSPressureMonitorScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.TPMSPressureSaveScreenEnable.Stat:
+      description: "DCN: IMG_TPMSPressureSaveScreenEnable_stat</br>
+                    State of TPMSPressureSaveScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: KOREA, 0x2: ENGLISH_US, 0x3: ENGLISH_UK, 0x4: SIMPLIFIED_CHINESE, 0x5: TRADITIONAL_CHINESE, 0x6: FRENCH_EU, 0x7: SPANISH_EU, 0x8: ARABIC, 0x9: CZECH, 0xA: DANISH, 0xB: GERMAN, 0xC: ITALIAN, 0xD: DUTCH, 0xE: POLISH, 0xF: PORTUGUESE, 0x10: RUSSIAN, 0x11: SLOVAK, 0x12: SWEDISH, 0x13: TURKISH, 0x14: FRENCH_US, 0x15: SPANISH_US, 0x16: ENGLISH_INDIA, 0x17: NORWEGIAN, 0x18: FINNISH, 0x19: INDONESIAN, 0x1A: BRAZILIAN_PORTUGUESE, 0x1B: MALAY, 0x1C: HUNGARIAN, 0x1D: ENGLISH_AUSTRALIA, 0x1E: JAPANESE, 0x1F: HINDI, 0x20: HEBREW, 0x21: GREEK, 0x22: UKRAINIAN, 0x23: SLOVENIAN, 0x24: BULGARIAN, 0x25: CROATIAN, 0x26: ROMANIAN, 0x27: BENGALI, 0x28: MARATHI, 0x29: TELUGU, 0x2A: TAMIL, 0x2B: GUJARATI, 0x2C: KANNADA, 0x2D: ODIA, 0x2E: MALAYALAM, 0x2F: PUNJABI, 0x30: INVALID, 0x31: THAI, 0x32: LITHUANIAN, 0x33: LATVIAN, 0x34: ESTONIAN, 0x35: MAX
+    - SFC.Screen_Control_Logic.Constant.DisplayLanguage.Stat:
+      description: "DCN: IMG_DisplayLanguage_stat</br>
+                    State of DisplayLanguage"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KOREA: 0x1
+        ENGLISH_US: 0x2
+        ENGLISH_UK: 0x3
+        SIMPLIFIED_CHINESE: 0x4
+        TRADITIONAL_CHINESE: 0x5
+        FRENCH_EU: 0x6
+        SPANISH_EU: 0x7
+        ARABIC: 0x8
+        CZECH: 0x9
+        DANISH: 0xA
+        GERMAN: 0xB
+        ITALIAN: 0xC
+        DUTCH: 0xD
+        POLISH: 0xE
+        PORTUGUESE: 0xF
+        RUSSIAN: 0x10
+        SLOVAK: 0x11
+        SWEDISH: 0x12
+        TURKISH: 0x13
+        FRENCH_US: 0x14
+        SPANISH_US: 0x15
+        ENGLISH_INDIA: 0x16
+        NORWEGIAN: 0x17
+        FINNISH: 0x18
+        INDONESIAN: 0x19
+        BRAZILIAN_PORTUGUESE: 0x1A
+        MALAY: 0x1B
+        HUNGARIAN: 0x1C
+        ENGLISH_AUSTRALIA: 0x1D
+        JAPANESE: 0x1E
+        HINDI: 0x1F
+        HEBREW: 0x20
+        GREEK: 0x21
+        UKRAINIAN: 0x22
+        SLOVENIAN: 0x23
+        BULGARIAN: 0x24
+        CROATIAN: 0x25
+        ROMANIAN: 0x26
+        BENGALI: 0x27
+        MARATHI: 0x28
+        TELUGU: 0x29
+        TAMIL: 0x2A
+        GUJARATI: 0x2B
+        KANNADA: 0x2C
+        ODIA: 0x2D
+        MALAYALAM: 0x2E
+        PUNJABI: 0x2F
+        INVALID: 0x30
+        THAI: 0x31
+        LITHUANIAN: 0x32
+        LATVIAN: 0x33
+        ESTONIAN: 0x34
+        MAX: 0x35
+      # 0x0: NONE, 0x1: THEME_A_NORMAL, 0x2: THEME_A_ECO, 0x3: THEME_A_SPORT, 0x4: THEME_B_NORMAL, 0x5: THEME_B_ECO, 0x6: THEME_B_SPORT, 0x7: THEME_C_NORMAL, 0x8: THEME_C_ECO, 0x9: THEME_C_SPORT, 0xA: THEME_D_NORMAL, 0xB: THEME_D_ECO, 0xC: THEME_D_SPORT, 0xD: THEME_HYUNDAI_NTHEME, 0xE: MAX
+    - SFC.Screen_Control_Logic.Constant.DisplayTheme.Stat:
+      description: "DCN: IMG_DisplayTheme_stat</br>
+                    State of DisplayTheme"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        THEME_A_NORMAL: 0x1
+        THEME_A_ECO: 0x2
+        THEME_A_SPORT: 0x3
+        THEME_B_NORMAL: 0x4
+        THEME_B_ECO: 0x5
+        THEME_B_SPORT: 0x6
+        THEME_C_NORMAL: 0x7
+        THEME_C_ECO: 0x8
+        THEME_C_SPORT: 0x9
+        THEME_D_NORMAL: 0xA
+        THEME_D_ECO: 0xB
+        THEME_D_SPORT: 0xC
+        THEME_HYUNDAI_NTHEME: 0xD
+        MAX: 0xE
+      # 0x0: NONE, 0x1: THEME_A_NORMAL, 0x2: THEME_A_ECO, 0x3: THEME_A_SPORT, 0x4: THEME_B_NORMAL, 0x5: THEME_B_ECO, 0x6: THEME_B_SPORT, 0x7: THEME_C_NORMAL, 0x8: THEME_C_ECO, 0x9: THEME_C_SPORT, 0xA: THEME_D_NORMAL, 0xB: THEME_D_ECO, 0xC: THEME_D_SPORT, 0xD: THEME_HYUNDAI_NTHEME, 0xE: MAX
+    - SFC.Screen_Control_Logic.Constant.CurrentDisplayTheme.Stat:
+      description: "DCN: IMG_CurrentDisplayTheme_stat</br>
+                    State of Current DisplayTheme"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        THEME_A_NORMAL: 0x1
+        THEME_A_ECO: 0x2
+        THEME_A_SPORT: 0x3
+        THEME_B_NORMAL: 0x4
+        THEME_B_ECO: 0x5
+        THEME_B_SPORT: 0x6
+        THEME_C_NORMAL: 0x7
+        THEME_C_ECO: 0x8
+        THEME_C_SPORT: 0x9
+        THEME_D_NORMAL: 0xA
+        THEME_D_ECO: 0xB
+        THEME_D_SPORT: 0xC
+        THEME_HYUNDAI_NTHEME: 0xD
+        MAX: 0xE
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DrivingAssistSystemOnOff.Stat:
+      description: "DCN: IMG_DrivingAssistSystemOnOff_stat</br>
+                    State of DrivingAssistSystemOnOff"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_AccumInfoManualResetReq:
+      description: "Request of Accum Info Manual Reset<br>
+                    Spec:Trip_Info[CD180]-Inter_AccumInfoManualResetReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in Trip_Info[CD180]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_DriveInfoManualResetReq:
+      description: "Request of Drive Info Manual Reset<br>
+                    Spec:Trip_Info[CD180]-Inter_DriveInfoManualResetReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in Trip_Info[CD180]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_AutoStopTimeManualResetReq:
+      description: "Request of Auto Stop Time Manual Reset<br>
+                    Spec:Trip_Info[CD180]-Inter_AutoStopTimeManualResetReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in ISG[PT300]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.RPMGaugeDisplayEnable.Stat:
+      description: "DCN: IMG_RPMGaugeDisplayEnable_stat</br>
+                    State of RPMGaugeDisplayEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: START_REQ, 0x2: RESET_REQ, 0x3: DEFAULT, 0x4: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_LapTimerPlayReq:
+      description: "Request of Lap Timer Play<br>
+                    Spec:Trip_Info[CD180]-Inter_LapTimerPlayReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in High_Performance_For_N_Brand[PT270]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        START_REQ: 0x1
+        RESET_REQ: 0x2
+        DEFAULT: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: ON_REQ, 0x2: DEFAULT, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_SelfRgnOnoffReq:
+      description: "Request of Self Rgn On off<br>
+                    Spec:Trip_Info[CD180]-Inter_SelfRgnOnoffReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in Self_Regenerative[PT510]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON_REQ: 0x1
+        DEFAULT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.HighPerformanceScreenEnable.Stat:
+      description: "DCN: IMG_HighPerformanceScreenEnable_stat</br>
+                    State of HighPerformanceScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE_N_ICE, 0x3: ENABLE_N_EV2WD, 0x4: ENABLE_N_EV4WD, 0x5: MAX
+    - SFC.Screen_Control_Logic.Constant.NBrandScreenEnable.Stat:
+      description: "DCN: IMG_NBrandScreenEnable_stat</br>
+                    State of NBrandScreen"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLE: 0x1
+        ENABLE_N_ICE: 0x2
+        ENABLE_N_EV2WD: 0x3
+        ENABLE_N_EV4WD: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DteTotalScreenEnable.Stat:
+      description: "DCN: IMG_DteTotalScreenEnable_stat</br>
+                    State of DteTotalScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.PredictShiftScreenEnable.Stat:
+      description: "DCN: IMG_PredictShiftScreenEnable_stat</br>
+                    State of PredictShiftScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic.Inter_AfterRefuelInfoManualResetReq:
+      description: "Request of After Refuel Info Manual Reset<br>
+                    Spec:Trip_Info[CD180]-Inter_AfterRefuelInfoManualResetReq<br>
+                    Published in Screen_Control_Logic[CD120]<br>
+                    Subscribed in Trip_Info[CD180]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: THEME_A_NORMAL, 0x2: THEME_A_ECO, 0x3: THEME_A_SPORT, 0x4: THEME_B_NORMAL, 0x5: THEME_B_ECO, 0x6: THEME_B_SPORT, 0x7: THEME_C_NORMAL, 0x8: THEME_C_ECO, 0x9: THEME_C_SPORT, 0xA: THEME_D_NORMAL, 0xB: THEME_D_ECO, 0xC: THEME_D_SPORT, 0xD: THEME_HYUNDAI_NTHEME, 0xE: MAX
+    - SFC.Screen_Control_Logic.Inter_DisplayThemeStatus:
+      description: "Inter_DisplayThemeStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        THEME_A_NORMAL: 0x1
+        THEME_A_ECO: 0x2
+        THEME_A_SPORT: 0x3
+        THEME_B_NORMAL: 0x4
+        THEME_B_ECO: 0x5
+        THEME_B_SPORT: 0x6
+        THEME_C_NORMAL: 0x7
+        THEME_C_ECO: 0x8
+        THEME_C_SPORT: 0x9
+        THEME_D_NORMAL: 0xA
+        THEME_D_ECO: 0xB
+        THEME_D_SPORT: 0xC
+        THEME_HYUNDAI_NTHEME: 0xD
+        MAX: 0xE
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: ON_EVENT, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.LapTimerActiveEventOn.Stat:
+      description: "DCN: IMG_LapTimerActiveEventOn_stat</br>
+                    State of LapTimerActiveEventOn"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        ON_EVENT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.HDPSystemOnOff.Stat:
+      description: "DCN: IMG_HDPSystemOnOff_stat</br>
+                    State of HDPSystemOnOff"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.AVNDisplayOnOff.Stat:
+      description: "DCN: IMG_AVNDisplayOnOff_stat</br>
+                    State of AVNDisplayOnOff"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DteGuideScreenEnable.Stat:
+      description: "DCN: IMG_DteGuideScreenEnable_stat</br>
+                    State of DteGuideScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.DragTimerScreenEnable.Stat:
+      description: "DCN: IMG_DragTimerScreenEnable_stat</br>
+                    State of DragTimerScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.OffRoadContentsForEngScreenEnable.Stat:
+      description: "DCN: IMG_OffRoadContentsForEngScreenEnable_stat</br>
+                    State of OffRoadContentsForEngScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.GforceScreenEnable.Stat:
+      description: "DCN: IMG_GforceScreenEnable_stat</br>
+                    State of G-Force Screen Enable Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.LapTimerScreenEnable.Stat:
+      description: "DCN: IMG_LapTimerScreenEnable_stat</br>
+                    State of Lap Timer Screen Enable Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic.Constant.TrailerBrakeControllerEnable.Stat:
+      description: "DCN: IMG_TrailerBrakeControllerEnable_stat</br>
+                    State of Trailer Brake Controller Enable Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: CLOUDY, 0x3: RAIN, 0x4: SNOW, 0x5: FOG, 0x6: THUNDER, 0x7: CLEAR_UP, 0x8: MAX
+    - SFC.Screen_Control_Logic.Constant.WeatherType.Stat:
+      description: "DCN: IMG_WeatherType_stat</br>
+                    State of Weather Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        CLOUDY: 0x2
+        RAIN: 0x3
+        SNOW: 0x4
+        FOG: 0x5
+        THUNDER: 0x6
+        CLEAR_UP: 0x7
+        MAX: 0x8

@@ -1,0 +1,843 @@
+#
+# @file High_Performance_For_N_Brand.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- High_Performance_For_N_Brand:
+  sfcVersion: "32.0.0"
+  description: "Reference : [PT270] High_Performance_For_N_Brand. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+    - gForceChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_AccelerationLongValue: mInput_AccelerationLongValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_AccelerationLatValue: mInput_AccelerationLatValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_AccelerationLongStatus: mInput_AccelerationLongStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_AccelerationLatStatus: mInput_AccelerationLatStatus
+        - SFC.Input_Output_Processing.Inter_DrivingOnStatus: mInter_DrivingOnStatus
+    - lapTimerSignalChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoLapNumberValue: mInput_LapTimerAutoLapNumberValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoHourValue: mInput_LapTimerAutoHourValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoMinuteValue: mInput_LapTimerAutoMinuteValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoSecondValue: mInput_LapTimerAutoSecondValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoMilisecondValue: mInput_LapTimerAutoMilisecondValue
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerAutoRunningStatus: mInput_LapTimerAutoRunningStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_LapTimerOperationReqFromAvn: mInput_LapTimerOperationReqFromAvn
+        - SFC.Extension.Settings.Inter_LapTimerAutoMeasureSetStatus: mInter_LapTimerAutoMeasureSetStatus
+        - SFC.Extension.Settings.Inter_LapTimerDifferTimeSetStatus: mInter_LapTimerDifferTimeSetStatus
+        - SFC.Extension.Screen_Control_Logic.Inter_LapTimerPlayReq: mInter_LapTimerPlayReq
+    - creepOffIndiChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_CreepOffIndiStatus: mInput_CreepOffIndiStatus
+    - shiftLightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_ShiftLightNModeSetStatus: mInter_ShiftLightNModeSetStatus
+        - SFC.Extension.Settings.Inter_ShiftLightCustomModeSetStatus: mInter_ShiftLightCustomModeSetStatus
+        - SFC.Extension.Settings.Inter_ShiftLightSportModeSetStatus: mInter_ShiftLightSportModeSetStatus
+        - SFC.Extension.Settings.Inter_ShiftLightNormalModeSetStatus: mInter_ShiftLightNormalModeSetStatus
+        - SFC.Extension.Settings.Inter_ShiftLightEcoModeSetStatus: mInter_ShiftLightEcoModeSetStatus
+        - SFC.Drive_Mode.Inter_DriveModeSelectStatus: mInter_DriveModeSelectStatus
+    - nModeSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Drive_Mode.Inter_NModeSelectStatus: mInter_NModeSelectStatus
+    - gtModeSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Drive_Mode.Inter_GtModeSelectStatus: mInter_GtModeSelectStatus
+    - nTrackSenseDisplayReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NTrackSenseDisplayReqStatus: mInput_NTrackSenseDisplayReqStatus
+    - ngsTimerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NgsTimerStatus: mInput_NgsTimerStatus
+    - nCustomEngineSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom1EngineSetStatus: mInput_NCustom1EngineSetStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom2EngineSetStatus: mInput_NCustom2EngineSetStatus
+    - nCustomEcsSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom1EcsSetStatus: mInput_NCustom1EcsSetStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom2EcsSetStatus: mInput_NCustom2EcsSetStatus
+    - nCustomMdpsSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom1MdpsSetStatus: mInput_NCustom1MdpsSetStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom2MdpsSetStatus: mInput_NCustom2MdpsSetStatus
+    - ngsEventChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NgsActiveStatus: mInput_NgsActiveStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NgsFaultStatus: mInput_NgsFaultStatus
+    - soundChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_ShiftLightBeepSoundSetStatus: mInter_ShiftLightBeepSoundSetStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_ShiftLightIndReqStatus: mInput_ShiftLightIndReqStatus
+    - inputNroadsenseActiveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NroadsenseActiveStatus: mInput_NroadsenseActiveStatus
+    - brakepadCheckStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_PwiWarnStatus: mInput_PwiWarnStatus
+    - ekdReadyStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_EkdReadyStatus: mInput_EkdReadyStatus
+    - nCustomMotorSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom1MotorSetStatus: mInput_NCustom1MotorSetStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustom2MotorSetStatus: mInput_NCustom2MotorSetStatus
+    - overBoostStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_OverBoostStatus: mInput_OverBoostStatus
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - enduranceRaceStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_EvEndurancePowerLimitStatus: mInput_EvEndurancePowerLimitStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_TrackOptimizerOnOffStatus: mInput_TrackOptimizerOnOffStatus
+    - customSettingsDisplayTypesInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustomModeOptionStatus: mInput_NCustomModeOptionStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NCustomMode2OptionStatus: mInput_NCustomMode2OptionStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_DmicModeAppliedStatus: mInput_DmicModeAppliedStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_DmicEngAppliedStatus: mInput_DmicEngAppliedStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_DmicMdpsAppliedStatus: mInput_DmicMdpsAppliedStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_DmicVcuAppliedStatus: mInput_DmicVcuAppliedStatus
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_DmicEcsAppliedStatus: mInput_DmicEcsAppliedStatus
+    - nBatteryStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_For_N_Brand.Input_NBatteryStatus: mInput_NBatteryStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.CreepOff.Stat:
+      description: "DCN: IMG_TelltaleCreepOff_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.Stat:
+      description: "DCN: IMG_TelltaleShiftLigh_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueA:
+      description: "DCN: IMG_TelltaleShiftLigh_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueB:
+      description: "DCN: IMG_TelltaleShiftLigh_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: STEP1, 0x2: STEP2, 0x3: STEP3, 0x4: STEP4, 0x5: STEP5, 0x6: STEP6, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueBOptional:
+      description: "DCN: IMG_TelltaleShiftLigh_stat</br>
+                    Optional Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        STEP1: 0x1
+        STEP2: 0x2
+        STEP3: 0x3
+        STEP4: 0x4
+        STEP5: 0x5
+        STEP6: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: STEP1, 0x2: STEP2, 0x3: STEP3, 0x4: STEP4, 0x5: STEP5, 0x6: STEP6, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.StatOptional:
+      description: "DCN: IMG_TelltaleShiftLigh_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        STEP1: 0x1
+        STEP2: 0x2
+        STEP3: 0x3
+        STEP4: 0x4
+        STEP5: 0x5
+        STEP6: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: SEC_1, 0x3: SEC_2, 0x4: SEC_3, 0x5: SEC_4, 0x6: SEC_5, 0x7: SEC_6, 0x8: SEC_7, 0x9: SEC_8, 0xA: SEC_9, 0xB: SEC_10, 0xC: SEC_11, 0xD: SEC_12, 0xE: SEC_13, 0xF: SEC_14, 0x10: SEC_15, 0x11: SEC_16, 0x12: SEC_17, 0x13: SEC_18, 0x14: SEC_19, 0x15: SEC_20, 0x16: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NgsTimer.Stat:
+      description: "DCN: IMG_NgsTimer_stat</br>
+                    State of NGS Timer"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        SEC_1: 0x2
+        SEC_2: 0x3
+        SEC_3: 0x4
+        SEC_4: 0x5
+        SEC_5: 0x6
+        SEC_6: 0x7
+        SEC_7: 0x8
+        SEC_8: 0x9
+        SEC_9: 0xA
+        SEC_10: 0xB
+        SEC_11: 0xC
+        SEC_12: 0xD
+        SEC_13: 0xE
+        SEC_14: 0xF
+        SEC_15: 0x10
+        SEC_16: 0x11
+        SEC_17: 0x12
+        SEC_18: 0x13
+        SEC_19: 0x14
+        SEC_20: 0x15
+        MAX: 0x16
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NgsErrTimer.Stat:
+      description: "DCN: IMG_NgsErrTimer_value</br>
+                    State of NGS Error Timer"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 1~180sec
+    - SFC.High_Performance_For_N_Brand.Constant.NgsErrTimer.Value:
+      description: "DCN: IMG_NgsErrTimer_value</br>
+                    Value of NGS Error Timer"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NTrackSense.Stat:
+      description: "DCN: IMG_Ntracksense_stat</br>
+                    State of N Track Sense"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # -1.50G 초과시 고정표시, |1.50|G까지 표시, 1.50G 초과시 고정표시
+    - SFC.High_Performance_For_N_Brand.Constant.GForceXcord.Value:
+      description: "DCN: IMG_GforceXcord_value</br>
+                    Value of G Force Xcord"
+      dataType: HDouble
+      # -1.50G 초과시 고정표시, |1.50|G까지 표시, 1.50G 초과시 고정표시
+    - SFC.High_Performance_For_N_Brand.Constant.GForceYcord.Value:
+      description: "DCN: IMG_GforceYcord_value</br>
+                    Value of G Force Ycord"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: READY, 0x3: START, 0x4: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeAuto.Stat:
+      description: "DCN: IMG_LapTimeAutoStatus</br>
+                    State of Lap Time Auto"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        READY: 0x2
+        START: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiff.Stat:
+      description: "DCN: IMG_LapTimeDiffStat</br>
+                    State of Lap Time Diff Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 비교 랩타입 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiffHour.Value:
+      description: "DCN: IMG_LapTimeDiffVal</br>
+                    Value of Lap Time Diff Hour"
+      dataType: HUInt64
+      group: Constant1
+      # 비교 랩타입 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiffMin.Value:
+      description: "DCN: IMG_LapTimeDiffVal</br>
+                    Value of Lap Time Diff Min"
+      dataType: HUInt64
+      group: Constant1
+      # 비교 랩타입 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiffSec.Value:
+      description: "DCN: IMG_LapTimeDiffVal</br>
+                    Value of Lap Time Diff Sec"
+      dataType: HUInt64
+      group: Constant1
+      # 비교 랩타입 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiffMilliSec.Value:
+      description: "DCN: IMG_LapTimeDiffVal</br>
+                    Value of Lap Time Diff MilliSecond"
+      dataType: HUInt64
+      group: Constant1
+      # 현재랩넘버
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumReal.Value:
+      description: "DCN: IMG_LapNumReal</br>
+                    Value of Lap Num Real"
+      dataType: HUInt64
+      group: Constant2
+      # 실시간 랩타임 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeRealHour.Value:
+      description: "DCN: IMG_LapTimeReal</br>
+                    Value of Lap Time Real Hour"
+      dataType: HUInt64
+      group: Constant2
+      # 실시간 랩타임 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeRealMin.Value:
+      description: "DCN: IMG_LapTimeReal</br>
+                    Value of Lap Time Real Min"
+      dataType: HUInt64
+      group: Constant2
+      # 실시간 랩타임 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeRealSec.Value:
+      description: "DCN: IMG_LapTimeReal</br>
+                    Value of Lap Time Real Sec"
+      dataType: HUInt64
+      group: Constant2
+      # 실시간 랩타임 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeRealMilliSec.Value:
+      description: "DCN: IMG_LapTimeReal</br>
+                    Value of Lap Time Real MilliSecond"
+      dataType: HUInt64
+      group: Constant2
+      # BEST 랩넘버
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumRecordBest.Value:
+      description: "DCN: IMG_LapNumRecordBest</br>
+                    Value of Lap Num Record Best"
+      dataType: HUInt64
+      group: Constant3
+      # BEST 랩기록 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeBestHour.Value:
+      description: "DCN: IMG_LapTimeBest</br>
+                    Value of Lap Time Best Hour"
+      dataType: HUInt64
+      group: Constant3
+      # BEST 랩기록 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeBestMin.Value:
+      description: "DCN: IMG_LapTimeBest</br>
+                    Value of Lap Time Best Min"
+      dataType: HUInt64
+      group: Constant3
+      # BEST 랩기록 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeBestSec.Value:
+      description: "DCN: IMG_LapTimeBest</br>
+                    Value of Lap Time Best Sec"
+      dataType: HUInt64
+      group: Constant3
+      # BEST 랩기록 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeBestMilliSec.Value:
+      description: "DCN: IMG_LapTimeBest</br>
+                    Value of Lap Time Best MilliSecond"
+      dataType: HUInt64
+      group: Constant3
+      # 2등 랩넘버
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumRecordSecond.Value:
+      description: "DCN: IMG_LapNumRecordSecond</br>
+                    Value of Lap Num Record Second"
+      dataType: HUInt64
+      group: Constant4
+      # 2등 랩기록 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeSecondHour.Value:
+      description: "DCN: IMG_LapTimeSecond</br>
+                    Value of Lap Time Second Hour"
+      dataType: HUInt64
+      group: Constant4
+      # 2등 랩기록 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeSecondMin.Value:
+      description: "DCN: IMG_LapTimeSecond</br>
+                    Value of Lap Time Second Min"
+      dataType: HUInt64
+      group: Constant4
+      # 2등 랩기록 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeSecondSec.Value:
+      description: "DCN: IMG_LapTimeSecond</br>
+                    Value of Lap Time Second Sec"
+      dataType: HUInt64
+      group: Constant4
+      # 2등 랩기록 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeSecondMilliSec.Value:
+      description: "DCN: IMG_LapTimeSecond</br>
+                    Value of Lap Time Second MilliSecond"
+      dataType: HUInt64
+      group: Constant4
+      # 3등 랩넘버
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumRecordThird.Value:
+      description: "DCN: IMG_LapNumRecordThird</br>
+                    Value of Lap Num Record Third"
+      dataType: HUInt64
+      group: Constant5
+      # 3등 랩기록 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeThirdHour.Value:
+      description: "DCN: IMG_LapTimeThird</br>
+                    Value of Lap Time Third Hour"
+      dataType: HUInt64
+      group: Constant5
+      # 3등 랩기록 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeThirdMin.Value:
+      description: "DCN: IMG_LapTimeThird</br>
+                    Value of Lap Time Third Min"
+      dataType: HUInt64
+      group: Constant5
+      # 3등 랩기록 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeThirdSec.Value:
+      description: "DCN: IMG_LapTimeThird</br>
+                    Value of Lap Time Third Sec"
+      dataType: HUInt64
+      group: Constant5
+      # 3등 랩기록 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeThirdMilliSec.Value:
+      description: "DCN: IMG_LapTimeThird</br>
+                    Value of Lap Time Third MilliSecond"
+      dataType: HUInt64
+      group: Constant5
+      # 4등 랩넘버
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumRecordFourth.Value:
+      description: "DCN: IMG_LapNumRecordFourth</br>
+                    Value of Lap Num Record Fourth"
+      dataType: HUInt64
+      group: Constant6
+      # 4등 랩기록 (Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeFourthHour.Value:
+      description: "DCN: IMG_LapTimeFourth</br>
+                    Value of Lap Time Fourth Hour"
+      dataType: HUInt64
+      group: Constant6
+      # 4등 랩기록 (Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeFourthMin.Value:
+      description: "DCN: IMG_LapTimeFourth</br>
+                    Value of Lap Time Fourth Min"
+      dataType: HUInt64
+      group: Constant6
+      # 4등 랩기록 (Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeFourthSec.Value:
+      description: "DCN: IMG_LapTimeFourth</br>
+                    Value of Lap Time Fourth Sec"
+      dataType: HUInt64
+      group: Constant6
+      # 4등 랩기록 (ms)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeFourthMilliSec.Value:
+      description: "DCN: IMG_LapTimeFourth</br>
+                    Value of Lap Time Fourth MilliSecond"
+      dataType: HUInt64
+      group: Constant6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ENGINE_MDPS, 0x3: ENGINE_MDPS_ECS, 0x4: MOTOR_MDPS, 0x5: MOTOR_MDPS_ECS, 0x6: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NCustomSettingCase.Stat:
+      description: "DCN: IMG_NCustomSettingCase_stat</br>
+                    State of NCustomSettingCase"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ENGINE_MDPS: 0x2
+        ENGINE_MDPS_ECS: 0x3
+        MOTOR_MDPS: 0x4
+        MOTOR_MDPS_ECS: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STEP_0, 0x3: STEP_1, 0x4: STEP_2, 0x5: STEP_3, 0x6: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NCustomEngineSetting.Stat:
+      description: "DCN: IMG_NCustomEngineSetting_stat</br>
+                    State of N Custom Engine Setting"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STEP_0: 0x2
+        STEP_1: 0x3
+        STEP_2: 0x4
+        STEP_3: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STEP_0, 0x3: STEP_1, 0x4: STEP_2, 0x5: STEP_3, 0x6: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NCustomMdpsSetting.Stat:
+      description: "DCN: IMG_NCustomMdpsSetting_stat</br>
+                    State of N Custom MDPS Setting"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STEP_0: 0x2
+        STEP_1: 0x3
+        STEP_2: 0x4
+        STEP_3: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STEP_0, 0x3: STEP_1, 0x4: STEP_2, 0x5: STEP_3, 0x6: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NCustomEcsSetting.Stat:
+      description: "DCN: IMG_NCustomEcsSetting_stat</br>
+                    State of N Custom ECS Setting"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STEP_0: 0x2
+        STEP_1: 0x3
+        STEP_2: 0x4
+        STEP_3: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STEP_0, 0x3: STEP_1, 0x4: STEP_2, 0x5: STEP_3, 0x6: STEP_4, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.NCustomMotorSetting.Stat:
+      description: "DCN: IMG_NCustomMotorSetting_stat</br>
+                    State of NCustomMotorSetting"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STEP_0: 0x2
+        STEP_1: 0x3
+        STEP_2: 0x4
+        STEP_3: 0x5
+        STEP_4: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: RUNNING, 0x4: FINISH, 0x5: FINISH_PREVIOUS, 0x6: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.LaptimerOperation.Stat:
+      description: "DCN: IMG_LaptimerOperationStatus</br>
+                    State of LaptimerOperationStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        RUNNING: 0x3
+        FINISH: 0x4
+        FINISH_PREVIOUS: 0x5
+        MAX: 0x6
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.BrakeOverride.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BrakeOverride):E24801"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.BrakeOverride.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_For_N_Brand.Event.BrakeOverride.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.Ngs1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Ngs1):E24811"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.Ngs1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.Ngs2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Ngs2):E24812,E24813"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.Ngs2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_For_N_Brand.Event.Ngs2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.NRoadSense.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NRoadSense):E24814"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.NRoadSense.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_For_N_Brand.Event.NRoadSense.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BrakepadCheck):E24815"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_For_N_Brand.Event.BrakepadCheck.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ElectricKickDrift):E24816"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_For_N_Brand.Event.ElectricKickDrift.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is SND_NAME
+    - SFC.High_Performance_For_N_Brand.Sound.ShiftLightWarn.ID:
+      description: "Sound ID<br>
+                    Sound ID List(ShiftLightWarn):SND_ShiftLightWarn"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Sound.ShiftLightWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.High_Performance_For_N_Brand.Sound.ShiftLightWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.High_Performance_For_N_Brand.Sound.ShiftLightWarn.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1
+      # LapNumPrevious(Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumPreviousHour.Value:
+      description: "DCN: IMG_LapNumPrevious</br>
+                    Value of Lap Num Previous Hour"
+      dataType: HUInt64
+      group: LapNumPrevious
+      # LapNumPrevious(Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumPreviousMin.Value:
+      description: "DCN: IMG_LapNumPrevious</br>
+                    Value of Lap Num Previous Min"
+      dataType: HUInt64
+      group: LapNumPrevious
+      # LapNumPrevious(Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumPreviousSec.Value:
+      description: "DCN: IMG_LapNumPrevious</br>
+                    Value of Lap Num Previous Sec"
+      dataType: HUInt64
+      group: LapNumPrevious
+      # LapNumPrevious(MilliSec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapNumPreviousMilliSec.Value:
+      description: "DCN: IMG_LapNumPrevious</br>
+                    Value of Lap Num Previous MilliSec"
+      dataType: HUInt64
+      group: LapNumPrevious
+      # LapTimePrevious(Hour)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimePreviousHour.Value:
+      description: "DCN: IMG_LapTimePrevious</br>
+                    Value of Lap Time Previous Hour"
+      dataType: HUInt64
+      group: LapTimePrevious
+      # LapTimePrevious(Min)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimePreviousMin.Value:
+      description: "DCN: IMG_LapTimePrevious</br>
+                    Value of Lap Time Previous Min"
+      dataType: HUInt64
+      group: LapTimePrevious
+      # LapTimePrevious(Sec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimePreviousSec.Value:
+      description: "DCN: IMG_LapTimePrevious</br>
+                    Value of Lap Time Previous Sec"
+      dataType: HUInt64
+      group: LapTimePrevious
+      # LapTimePrevious(MilliSec)
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimePreviousMilliSec.Value:
+      description: "DCN: IMG_LapTimePrevious</br>
+                    Value of Lap Time Previous MilliSec"
+      dataType: HUInt64
+      group: LapTimePrevious
+      # 0x0: NONE, 0x1: PLUS, 0x2: MINUS, 0x3: MAX
+    - SFC.High_Performance_For_N_Brand.Constant.LapTimeDiffSignBestVsRecent.Stat:
+      description: "DCN: IMG_LapTimeDiffSignStat</br>
+                    State of Comparison Lap Time"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        PLUS: 0x1
+        MINUS: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.Stat:
+      description: "DCN: IMG_TelltaleEnduranceRace_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: ON_MAXRANGE, 0x2: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.EnduranceRace.StatOptional:
+      description: "DCN: IMG_TelltaleEnduranceRace_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON_MAXRANGE: 0x1
+        MAX: 0x2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.NBattery.Stat:
+      description: "DCN: IMG_TelltaleNBattery_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: DRAG, 0x2: SPRINT, 0x3: ENDURANCE, 0x4: DISPLAY_OFF, 0x5: MAX
+    - SFC.High_Performance_For_N_Brand.Telltale.NBattery.StatOptional:
+      description: "DCN: IMG_TelltaleNBattery_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DRAG: 0x1
+        SPRINT: 0x2
+        ENDURANCE: 0x3
+        DISPLAY_OFF: 0x4
+        MAX: 0x5

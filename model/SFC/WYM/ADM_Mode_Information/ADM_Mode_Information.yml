@@ -1,0 +1,164 @@
+#
+# @file ADM_Mode_Information.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ADM_Mode_Information:
+  sfcVersion: "1.0.0"
+  description: "Reference : [WYM010] ADM_Mode_Information. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configWaymoSDSAppliedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigWaymoSDSApplied: mInter_ConfigWaymoSDSApplied
+    - admModeStatusChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.WYM.ADM_Mode_Information.Input_AdmModeStatus: mInput_AdmModeStatus
+    - adm3VisualSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.WYM.ADM_Mode_Information.Input_Adm3VisualSelectStatus: mInput_Adm3VisualSelectStatus
+    - animationStatusFromSDSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.WYM.ADM_Mode_Information.Input_Adm3AnimationStatusFromSDS: mInput_Adm3AnimationStatusFromSDS
+    - adm0PropulsionSystemStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.WYM.ADM_Mode_Information.Input_Adm0PropulsionSystemStatus: mInput_Adm0PropulsionSystemStatus
+    - AEMInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ADM1, 0x3: ADM2, 0x4: ADM3, 0x5: MAX
+    - SFC.ADM_Mode_Information.Constant.Inter_AdmModeStatus.Stat1:
+      description: "DCN: Inter_AdmModeStatus</br>
+                    State of AdmMode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ADM1: 0x2
+        ADM2: 0x3
+        ADM3: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: NORMAL, 0x2: IGN1OFF, 0x3: SHORT_SIGNAL_ADM1, 0x4: SHORT_SIGNAL_ADM2, 0x5: SHORT_SIGNAL_ADM3, 0x6: STALE, 0x7: PROHIBIT_TO_ADM2, 0x8: PROHIBIT_TO_ADM3, 0x9: MAX
+    - SFC.ADM_Mode_Information.Constant.Inter_AdmModeStatus.Stat2:
+      description: "DCN: Inter_AdmModeStatus</br>
+                    State of AdmMode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        IGN1OFF: 0x2
+        SHORT_SIGNAL_ADM1: 0x3
+        SHORT_SIGNAL_ADM2: 0x4
+        SHORT_SIGNAL_ADM3: 0x5
+        STALE: 0x6
+        PROHIBIT_TO_ADM2: 0x7
+        PROHIBIT_TO_ADM3: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MANUAL, 0x3: AUTO, 0x4: STALE, 0x5: MAX
+    - SFC.ADM_Mode_Information.Constant.AdmMode.Stat:
+      description: "DCN: IMG_AdmMode_stat</br>
+                    State of AdmMode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MANUAL: 0x2
+        AUTO: 0x3
+        STALE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: THEME_DEFAULT, 0x2: THEME1, 0x3: THEME2, 0x4: THEME3, 0x5: THEME4, 0x6: THEME5, 0x7: THEME6, 0x8: THEME7, 0x9: THEME_OFF, 0xa: MAX
+    - SFC.ADM_Mode_Information.Constant.Adm3DisplayMode.Stat:
+      description: "DCN: IMG_Adm3DisplayMode_stat</br>
+                    State of Adm3DisplayMode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        THEME_DEFAULT: 0x1
+        THEME1: 0x2
+        THEME2: 0x3
+        THEME3: 0x4
+        THEME4: 0x5
+        THEME5: 0x6
+        THEME6: 0x7
+        THEME7: 0x8
+        THEME_OFF: 0x9
+        MAX: 0xa
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADM_Mode_Information.Constant.Adm3Animation.Stat:
+      description: "DCN: IMG_Adm3Animation_stat</br>
+                    State of Adm3 Animation On/Off Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.ADM_Mode_Information.Event.EW0001.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EW0001):EW0001"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADM_Mode_Information.Event.EW0001.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADM_Mode_Information.Event.EW0001.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADM_Mode_Information.Event.EW0001.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADM_Mode_Information.Event.EW0001.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1

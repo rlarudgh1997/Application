@@ -1,0 +1,23 @@
+- external:
+  sfcVersion: "1.0.0"
+  specVersion: "r001"
+  description: "external SFC"
+  subscriptions:
+  outputs:
+      # Numeric value / from fuelsystem::Fuel_System.yml
+    - SFCFuel.Fuel_System.Inter_FuelIndicationLevelValue:
+      description: "Indication capacity of fuel gauge"
+      dataType: HDouble
+      # Numeric value / from fuelsystem::Fuel_System.yml
+    - SFCFuel.Fuel_System.Inter_FuelDetectRealtimeModeStatus:
+      description: "status of fueling mode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # Numeric value / from fuelsystem::Fuel_System.yml
+    - SFCFuel.Fuel_System.Inter_RefuelDetectionValue:
+      description: "Refuel detection base value"
+      dataType: HDouble

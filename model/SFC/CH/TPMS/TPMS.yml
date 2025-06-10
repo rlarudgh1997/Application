@@ -1,0 +1,297 @@
+#
+# @file TPMS.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- TPMS:
+  sfcVersion: "9.0.3"
+  description: "Reference : [CH180] TPMS. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+        - Vehicle.System.Config.Inter_ConfigTPMS: mInter_ConfigTPMS
+    - tpmsChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.TPMS.Input_TpmsTreadWarnStatus: mInput_TpmsTreadWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsWarnStatus: mInput_TpmsWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsFrontLeftPosWarnStatus: mInput_TpmsFrontLeftPosWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsFrontRightPosWarnStatus: mInput_TpmsFrontRightPosWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsRearLeftPosWarnStatus: mInput_TpmsRearLeftPosWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsRearRightPosWarnStatus: mInput_TpmsRearRightPosWarnStatus
+        - Vehicle.CH.TPMS.Input_TpmsFrontLeftTirePressureValue: mInput_TpmsFrontLeftTirePressureValue
+        - Vehicle.CH.TPMS.Input_TpmsFrontRightTirePressureValue: mInput_TpmsFrontRightTirePressureValue
+        - Vehicle.CH.TPMS.Input_TpmsRearLeftTirePressureValue: mInput_TpmsRearLeftTirePressureValue
+        - Vehicle.CH.TPMS.Input_TpmsRearRightTirePressureValue: mInput_TpmsRearRightTirePressureValue
+        - Vehicle.CH.TPMS.Input_TpmsSensorStatus: mInput_TpmsSensorStatus
+        - Vehicle.CH.TPMS.Input_TpmsPressureUnitStatus: mInput_TpmsPressureUnitStatus
+    - dispReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.TPMS.Input_TpmsPressureSetDispReqStatus: mInput_TpmsPressureSetDispReqStatus
+    - tpmsOverPressWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.TPMS.Input_TpmsOverPressWarnStatus: mInput_TpmsOverPressWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS.Telltale.TPMS.Stat:
+      description: "DCN: IMG_TelltaleTPMS_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS.Telltale.TPMS.BlinkValueA:
+      description: "DCN: IMG_TelltaleTPMS_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS.Telltale.TPMS.BlinkValueB:
+      description: "DCN: IMG_TelltaleTPMS_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS.Telltale.TPMS.BlinkValueA.SubValueA:
+      description: "DCN: IMG_TelltaleTPMS_stat</br>
+                    Sub Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA.SubValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS.Telltale.TPMS.BlinkValueA.SubValueB:
+      description: "DCN: IMG_TelltaleTPMS_stat</br>
+                    Sub Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA.SubValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Constant.LowPressure.FL.Stat:
+      description: "DCN: IMG_TpmsPosFL_stat</br>
+                    Low pressure front left"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Constant.LowPressure.FR.Stat:
+      description: "DCN: IMG_TpmsPosFR_stat</br>
+                    Low pressure front right"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Constant.LowPressure.RL.Stat:
+      description: "DCN: IMG_TpmsPosRL_stat</br>
+                    Low pressure rear left"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Constant.LowPressure.RR.Stat:
+      description: "DCN: IMG_TpmsPosRR_stat</br>
+                    Low pressure rear right"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.TPMS.Constant.Pressure.FL.Stat:
+      description: "DCN: IMG_TpmsPressFL_value</br>
+                    Display Pressure value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.TPMS.Constant.Pressure.FR.Stat:
+      description: "DCN: IMG_TpmsPressFR_value</br>
+                    Display Pressure value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.TPMS.Constant.Pressure.RL.Stat:
+      description: "DCN: IMG_TpmsPressRL_value</br>
+                    Display Pressure value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.TPMS.Constant.Pressure.RR.Stat:
+      description: "DCN: IMG_TpmsPressRR_value</br>
+                    Display Pressure value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # PSI 0~254, KPA 0~999, BAR 0~9.9
+    - SFC.TPMS.Constant.Pressure.FL.Value:
+      description: "DCN: IMG_TpmsPressFL_value</br>
+                    Pressure value"
+      dataType: HDouble
+      # PSI 0~254, KPA 0~999, BAR 0~9.9
+    - SFC.TPMS.Constant.Pressure.FR.Value:
+      description: "DCN: IMG_TpmsPressFR_value</br>
+                    Pressure value"
+      dataType: HDouble
+      # PSI 0~254, KPA 0~999, BAR 0~9.9
+    - SFC.TPMS.Constant.Pressure.RL.Value:
+      description: "DCN: IMG_TpmsPressRL_value</br>
+                    Pressure value"
+      dataType: HDouble
+      # PSI 0~254, KPA 0~999, BAR 0~9.9
+    - SFC.TPMS.Constant.Pressure.RR.Value:
+      description: "DCN: IMG_TpmsPressRR_value</br>
+                    Pressure value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: PSI, 0x3: KPA, 0x4: BAR, 0x5: MAX
+    - SFC.TPMS.Constant.Pressure.Unit.Stat:
+      description: "DCN: IMG_TpmsUnit_stat</br>
+                    Presusre Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        PSI: 0x2
+        KPA: 0x3
+        BAR: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Constant.Pressure.BeforeDriving.Stat:
+      description: "DCN: IMG_TpmsBefore_stat</br>
+                    Display Before Driving"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: ERROR, 0x2: LOW_PRESSURE_SYMBOL_ONLY, 0x3: LOW_PRESSURE_DETAILED, 0x4: NORMAL, 0x5: MAX
+    - SFC.TPMS.Constant.Pressure.MonitorPage.Stat:
+      description: "DCN: IMG_MonitorPage_stat</br>
+                    TPMS Air pressure page status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ERROR: 0x1
+        LOW_PRESSURE_SYMBOL_ONLY: 0x2
+        LOW_PRESSURE_DETAILED: 0x3
+        NORMAL: 0x4
+        MAX: 0x5
+      # Style is E00000
+    - SFC.TPMS.Event.Pressure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Pressure):E31301,E31302,E31303,E31304,E31305,E31306,E31307,E31308,E31317,E31318,E31319,E31320,E31321,E31309,E31310,E31311"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Event.Pressure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.TPMS.Event.Pressure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.TPMS.Event.Pressure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.TPMS.Event.Pressure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.TPMS.Event.indirectPressure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(indirectPressure):E31312,E31313,E31314,E31315"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Event.indirectPressure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.TPMS.Event.indirectPressure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.TPMS.Event.indirectPressure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.TPMS.Event.indirectPressure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.TPMS.Event.OverPressure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(OverPressure):E31316"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS.Event.OverPressure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.TPMS.Event.OverPressure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.TPMS.Event.OverPressure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.TPMS.Event.OverPressure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3

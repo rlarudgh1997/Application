@@ -1,0 +1,5 @@
+0	1	2	3	4	5	6	7	8	9	10	11	12
+TCName	VehicleType	Config	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
+[MergeStart]IMG_TelltaleGreaseLowLamp_stat	[MergeStart]	[MergeStart]	[MergeStart]ON	[MergeStart]Input_GreaseLowWarnStatus == LOW	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Auto_Grease.Telltale.AutoGreaseWarnLamp.Stat	O	0x2			
+[Merge]IMG_TelltaleGreaseLowLamp_stat	[Merge]	[Merge]	[MergeEnd]ON	[MergeEnd]Input_GreaseLowWarnStatus == LOW	Vehicle.CV.Auto_Grease.Input_AutoGreaseWarnStatus	ON						
+[MergeEnd]IMG_TelltaleGreaseLowLamp_stat	[MergeEnd]	[MergeEnd]	OFF	Other			SFC.Auto_Grease.Telltale.AutoGreaseWarnLamp.Stat	O	0x1			

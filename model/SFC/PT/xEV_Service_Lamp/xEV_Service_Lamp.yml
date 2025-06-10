@@ -1,0 +1,215 @@
+#
+# @file xEV_Service_Lamp.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- xEV_Service_Lamp:
+  sfcVersion: "8.0.0"
+  description: "Reference : [PT200] xEV_Service_Lamp. Contains : Telltale, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - srvlampWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromHCU: mInput_ServiceIndiReqStatusFromHCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromMCU: mInput_ServiceIndiReqStatusFromMCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromMCU2: mInput_ServiceIndiReqStatusFromMCU2
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromBMS: mInput_ServiceIndiReqStatusFromBMS
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromLDC: mInput_ServiceIndiReqStatusFromLDC
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromTCU: mInput_ServiceIndiReqStatusFromTCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromDATC: mInput_ServiceIndiReqStatusFromDATC
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromVCU: mInput_ServiceIndiReqStatusFromVCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromEVSCU: mInput_ServiceIndiReqStatusFromEVSCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromWCCU: mInput_ServiceIndiReqStatusFromWCCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromBHDC: mInput_ServiceIndiReqStatusFromBHDC
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFACU: mInput_ServiceIndiReqStatusFromFACU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFCU: mInput_ServiceIndiReqStatusFromFCU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromHMU: mInput_ServiceIndiReqStatusFromHMU
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromALDC: mInput_ServiceIndiReqStatusFromALDC
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromFSVM: mInput_ServiceIndiReqStatusFromFSVM
+    - srvlampWarnChgChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromOBC: mInput_ServiceIndiReqStatusFromOBC
+        - Vehicle.PT.xEV_Service_Lamp.Input_ServiceIndiReqStatusFromVCMS: mInput_ServiceIndiReqStatusFromVCMS
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.xEV_Service_Lamp.Telltale.SrvLmpEv.Stat:
+      description: "DCN: IMG_TelltaleSrvLmpEv_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.xEV_Service_Lamp.Telltale.SrvLmpHev.Stat:
+      description: "DCN: IMG_TelltaleSrvLmpHev_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.xEV_Service_Lamp.Telltale.SrvLmpFcev.Stat:
+      description: "DCN: IMG_TelltaleSrvLmpFcev_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.xEV_Service_Lamp.Telltale.SrvLmpErev.Stat:
+      description: "DCN: IMG_TelltaleSrvLmpErev_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # Style is E00000
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnEv.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SrvlampWarnEv):E21501"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnEv.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnEv.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnEv.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnEv.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnHev.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SrvlampWarnHev):E21502"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnHev.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnHev.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnHev.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnHev.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnChgFcev.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SrvlampWarnChgFcev):E21503"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnChgFcev.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnChgFcev.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnChgFcev.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnChgFcev.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnErev.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SrvlampWarnFcev):E21504"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnErev.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnErev.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnErev.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.xEV_Service_Lamp.Event.SrvlampWarnErev.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4

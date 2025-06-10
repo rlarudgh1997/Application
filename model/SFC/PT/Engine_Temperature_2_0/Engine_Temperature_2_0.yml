@@ -1,0 +1,109 @@
+#
+# @file Engine_Temperature_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Engine_Temperature_2_0:
+  sfcVersion: "0.0.0"
+  description: "Reference : [PT141] Engine Temperature 2.0. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn10sChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn10s: mElapsedOn10s
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - inputEhrsTempWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Engine_Temperature_2_0.Input_EhrsTempWarnStatus: mInput_EhrsTempWarnStatus
+    - engineCoolantTempGaugeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Engine_Temperature_2_0.Input_EngineCoolantTempGaugeValue: mInput_EngineCoolantTempGaugeValue
+    - engineCoolantTempWarnStatus:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Engine_Temperature_2_0.Input_EngineCoolanttTempWarnStatus: mInput_EngineCoolanttTempWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Engine_Temperature_2_0.Telltale.CoolantTemp.Stat:
+      description: "DCN: IMG_TelltaleCoolantTemp_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # None
+    - SFC.Engine_Temperature_2_0.Constant.CoolantTemp.Value:
+      description: "DCN: IMG_CoolantTemp_Value</br>
+                    Engine Temperature Gauge Percentage Value"
+      dataType: HDouble
+      group: Constant1
+      # Style is E00000
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantTemp):E21101,E21102"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Blink On Duration Value
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.LinkedSound.BlinkOnDuration:
+      description: "Linked Sound Blink On Duration"
+      dataType: HUInt64
+      group: Event1
+      # Blink Off Duration Value
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.LinkedSound.BlinkOffDuration:
+      description: "Linked Sound Blink Off Duration"
+      dataType: HUInt64
+      group: Event1
+      # Sound output by count
+    - SFC.Engine_Temperature_2_0.Event.CoolantTemp.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1

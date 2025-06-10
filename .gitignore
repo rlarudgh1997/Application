@@ -9,7 +9,8 @@ debug
 */debug/
 deploy_target
 deploy_x86
-SFC
+#SFC
+*.tc
 .vscode
 .qmake.stash
 

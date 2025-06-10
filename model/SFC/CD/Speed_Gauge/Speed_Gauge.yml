@@ -1,0 +1,241 @@
+#
+# @file Speed_Gauge.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Speed_Gauge:
+  sfcVersion: "12.0.0"
+  description: "Reference : [CD160] Speed Gauge. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - actualVehicleSpeedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ActualVehicleSpeed: mInter_ActualVehicleSpeed
+    - actualVehicleSpeedValidityChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ActualVehicleSpeedValidity: mInter_ActualVehicleSpeedValidity
+    - areaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - displaySpeedUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigMainSpeedUnitChangeable: mInter_ConfigMainSpeedUnitChangeable
+        - Vehicle.System.Config.Inter_ConfigSpeedometerType: mInter_ConfigSpeedometerType
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - naviOverSpdUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Speed_Gauge.Input_NaviOverSpdUnit: mInput_NaviOverSpdUnit
+    - naviOverSpeedInputValidChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Speed_Gauge.Input_NaviOverSpeedColor1: mInput_NaviOverSpeedColor1
+        - Vehicle.CD.Speed_Gauge.Input_NaviOverSpeedColor2: mInput_NaviOverSpeedColor2
+        - Vehicle.CD.Speed_Gauge.Input_NaviOverSpeedRange1: mInput_NaviOverSpeedRange1
+        - Vehicle.CD.Speed_Gauge.Input_NaviOverSpeedRange2: mInput_NaviOverSpeedRange2
+    - analogSpeedMaxChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAnalogSpeedMax: mInter_ConfigAnalogSpeedMax
+    - maxDisplaySpeedKphChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_MaxDisplaySpeedKph: mPar_MaxDisplaySpeedKph
+    - maxDisplaySpeedMphChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_MaxDisplaySpeedMph: mPar_MaxDisplaySpeedMph
+    - speedGaugeParamChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_SpeedToleranceKph1: mPar_SpeedToleranceKph1
+        - SFC.Extension.Param.Par_SpeedToleranceKph2: mPar_SpeedToleranceKph2
+        - SFC.Extension.Param.Par_SpeedToleranceKph3: mPar_SpeedToleranceKph3
+        - SFC.Extension.Param.Par_SpeedToleranceKph4: mPar_SpeedToleranceKph4
+        - SFC.Extension.Param.Par_SpeedToleranceKph5: mPar_SpeedToleranceKph5
+        - SFC.Extension.Param.Par_SpeedToleranceKph6: mPar_SpeedToleranceKph6
+        - SFC.Extension.Param.Par_SpeedToleranceKph7: mPar_SpeedToleranceKph7
+        - SFC.Extension.Param.Par_SpeedToleranceKph8: mPar_SpeedToleranceKph8
+        - SFC.Extension.Param.Par_SpeedToleranceKph9: mPar_SpeedToleranceKph9
+        - SFC.Extension.Param.Par_SpeedToleranceKph10: mPar_SpeedToleranceKph10
+        - SFC.Extension.Param.Par_SpeedToleranceKph11: mPar_SpeedToleranceKph11
+        - SFC.Extension.Param.Par_SpeedToleranceKph12: mPar_SpeedToleranceKph12
+        - SFC.Extension.Param.Par_SpeedToleranceKph13: mPar_SpeedToleranceKph13
+        - SFC.Extension.Param.Par_SpeedToleranceKph14: mPar_SpeedToleranceKph14
+        - SFC.Extension.Param.Par_SpeedToleranceKph15: mPar_SpeedToleranceKph15
+        - SFC.Extension.Param.Par_SpeedToleranceMph1: mPar_SpeedToleranceMph1
+        - SFC.Extension.Param.Par_SpeedToleranceMph2: mPar_SpeedToleranceMph2
+        - SFC.Extension.Param.Par_SpeedToleranceMph3: mPar_SpeedToleranceMph3
+        - SFC.Extension.Param.Par_SpeedToleranceMph4: mPar_SpeedToleranceMph4
+        - SFC.Extension.Param.Par_SpeedToleranceMph5: mPar_SpeedToleranceMph5
+        - SFC.Extension.Param.Par_SpeedToleranceMph6: mPar_SpeedToleranceMph6
+        - SFC.Extension.Param.Par_SpeedToleranceMph7: mPar_SpeedToleranceMph7
+        - SFC.Extension.Param.Par_SpeedToleranceMph8: mPar_SpeedToleranceMph8
+        - SFC.Extension.Param.Par_SpeedToleranceMph9: mPar_SpeedToleranceMph9
+        - SFC.Extension.Param.Par_SpeedToleranceMph10: mPar_SpeedToleranceMph10
+    - AEMInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+  outputs:
+      # Numeric value
+    - SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH:
+      description: "Display Speed Value KPH"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Speed_Gauge.Inter_DisplaySpeedValueMPH:
+      description: "Display Speed Value MPH"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedAnalog.Stat:
+      description: "DCN: IMG_VehicleSpeedAnalogDisplay_value</br>
+                    Analog Display State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Numeric value
+    - SFC.Speed_Gauge.Constant.SpeedAnalog.Value:
+      description: "DCN: IMG_VehicleSpeedAnalogDisplay_value</br>
+                    Analog Display Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedDigital.Stat:
+      description: "DCN: IMG_VehicleSpeedDigitalDisplay_value</br>
+                    Digital Display State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Numeric value
+    - SFC.Speed_Gauge.Constant.SpeedDigital.Value:
+      description: "DCN: IMG_VehicleSpeedDigitalDisplay_value</br>
+                    Digital Display Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat:
+      description: "DCN: IMG_VehicleSpeedSubDigitalDisplay_value</br>
+                    SubDigital Display State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Numeric value
+    - SFC.Speed_Gauge.Constant.SpeedSubDigital.Value:
+      description: "DCN: IMG_VehicleSpeedSubDigitalDisplay_value</br>
+                    SubDigital Display Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: KM_PER_HOUR, 0x2: MILE_PER_HOUR, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedMainDisplayUnit.Stat:
+      description: "DCN: IMG_VehicleSpeedMainDisplayUnit_stat</br>
+                    MainDisplay Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_HOUR: 0x1
+        MILE_PER_HOUR: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KM_PER_HOUR, 0x2: MILE_PER_HOUR, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedAuxDisplayUnit.Stat:
+      description: "DCN: IMG_VehicleSpeedAuxDisplayUnit_stat</br>
+                    AuxDisplay Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_HOUR: 0x1
+        MILE_PER_HOUR: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat:
+      description: "DCN: IMG_VehicleSpeedSubDisplay_stat</br>
+                    SubDisplay State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: KPH160, 0x2: KPH220, 0x3: KPH260, 0x4: KPH300, 0x5: MAX
+    - SFC.Speed_Gauge.Constant.SpeedScaleMaximum.Stat:
+      description: "DCN: IMG_VehicleSpeedScaleMaximum_stat</br>
+                    Scale Maxium state"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KPH160: 0x1
+        KPH220: 0x2
+        KPH260: 0x3
+        KPH300: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: SPEED_0_7, 0x2: SPEED_7_10, 0x3: SPEED_OVER_10, 0x4: MAX
+    - SFC.Private.Speed_Gauge.DisplaySpeedValueKPHRange.Stat:
+      description: "State of Speed for Door_Trunk_Hood_Open SFC"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SPEED_0_7: 0x1
+        SPEED_7_10: 0x2
+        SPEED_OVER_10: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: KM_PER_HOUR, 0x2: MILE_PER_HOUR, 0x3: MAX
+    - SFC.Speed_Gauge.Inter_DisplaySpeedUnit:
+      description: "R0.05w specification, but added for use in HD100"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_HOUR: 0x1
+        MILE_PER_HOUR: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OVERSPEED1, 0x2: OVERSPEED2, 0x3: DEFAULT, 0x4: MAX
+    - SFC.Speed_Gauge.Constant.NaviSpeedLimit.Stat:
+      description: "DCN: IMG_NaviSpeedLimit_stat</br>
+                    Navi Speed Limit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OVERSPEED1: 0x1
+        OVERSPEED2: 0x2
+        DEFAULT: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Speed_Gauge.Constant.NaviSpeedLimitOver1Color.Value:
+      description: "DCN: IMG_NaviSpeedLimitOver1Color_value</br>
+                    Navi Speed Limit Over1 Color Value"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Speed_Gauge.Constant.NaviSpeedLimitOver2Color.Value:
+      description: "DCN: IMG_NaviSpeedLimitOver2Color_value</br>
+                    Navi Speed Limit Over2 Color Value"
+      dataType: HUInt64

@@ -1,0 +1,567 @@
+#
+# @file Navigation_TBT.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Navigation_TBT:
+  sfcVersion: "30.0.0"
+  description: "Reference : [AV030] Navigation_TBT. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - ConfigTBTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTBT: mInter_ConfigTBT
+    - NaviPointFlagChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Navigation_DIS.Inter_ConfigNaviDisCountry: mInter_ConfigNaviDisCountry
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPointFlagTypeStatus: mInput_NaviPointFlagTypeStatus
+    - NaviPointPinChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPointPinTypeStatus: mInput_NaviPointPinTypeStatus
+    - NaviTbtChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDisplayTypeStatus: mInput_TbtDisplayTypeStatus
+        - Vehicle.AV.NAVIGATION_TBT.Input_HeadUnitAliveStatus: mInput_HeadUnitAliveStatus
+        - Vehicle.AV.NAVIGATION_TBT.Input_HeadUnitNaviStatus: mInput_HeadUnitNaviStatus
+    - TbtDirectionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDirectionValue: mInput_TbtDirectionValue
+    - TbtSideStreetChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtSideStreetStatus: mInput_TbtSideStreetStatus
+    - TbtCombinedSideStreetChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtCombinedSideStreetStatus: mInput_TbtCombinedSideStreetStatus
+    - NaviDistToDestChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToDestUnderDecimalValue: mInput_NaviDistToDestUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToDestUnit: mInput_NaviDistToDestUnit
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToDestValue: mInput_NaviDistToDestValue
+    - TbtDistToTurnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDistToTurnPointUnderDecimalValue: mInput_TbtDistToTurnPointUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDstanceUnit: mInput_TbtDstanceUnit
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtDistToTurnPointValue: mInput_TbtDistToTurnPointValue
+    - TbtBarGraphChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TbtBarGraphLevelValue: mInput_TbtBarGraphLevelValue
+    - NaviDistToTurnFirstChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnFirstValue: mInput_NaviDistToTurnFirstValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnFirstUnderDecimalValue: mInput_NaviDistToTurnFirstUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnFirstUnitStatus: mInput_NaviDistToTurnFirstUnitStatus
+    - NaviDistToTurnSecondChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnSecondValue: mInput_NaviDistToTurnSecondValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnSecondUnderDecimalValue: mInput_NaviDistToTurnSecondUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviDistToTurnSecondUnitStatus: mInput_NaviDistToTurnSecondUnitStatus
+    - NaviLaneRemainDistChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviLaneRemainDistValue: mInput_NaviLaneRemainDistValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviLaneRemainDistUnderDecimalValue: mInput_NaviLaneRemainDistUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviLaneRemainDistUnitStatus: mInput_NaviLaneRemainDistUnitStatus
+    - NaviPopupChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPopupReqStatus: mInput_NaviPopupReqStatus
+    - NaviPopupDistChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPopupDistOverDecimalValue: mInput_NaviPopupDistOverDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPopupDistUnderDecimalValue: mInput_NaviPopupDistUnderDecimalValue
+        - Vehicle.AV.NAVIGATION_TBT.Input_NaviPopupDistUnitStatus: mInput_NaviPopupDistUnitStatus
+    - GuideColorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AV.NAVIGATION_TBT.Input_TBTGuideColorStatus: mInput_TBTGuideColorStatus
+  outputs:
+      # 0x0: NONE, 0x1: LOADING, 0x2: NORMAL, 0x3: NOSDCARD, 0x4: MAX
+    - SFC.Navigation_TBT.Inter_NaviAliveStatus:
+      description: "State of Inter_NaviAliveStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        LOADING: 0x1
+        NORMAL: 0x2
+        NOSDCARD: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: BRAND, 0x2: PINK, 0x3: LIGHT_GREEN, 0x4: GREEN, 0x5: YELLOW, 0x6: ORANGE, 0x7: BLUE, 0x8: WHITE, 0x9: MAX
+    - SFC.Navigation_TBT.Inter_NaviTbtColor:
+      description: "Color of NaviTbt"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        BRAND: 0x1
+        PINK: 0x2
+        LIGHT_GREEN: 0x3
+        GREEN: 0x4
+        YELLOW: 0x5
+        ORANGE: 0x6
+        BLUE: 0x7
+        WHITE: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: DIRECTION_TO_DESTINATION, 0x3: ARRIVED, 0x4: NO_ROUTE_GUIDANCE, 0x5: CALC_ROUTE, 0x6: RECALC_ROUTE, 0x7: TURN, 0x8: EXIT_R, 0x9: EXIT_L, 0xA: EXIT_COMBINATION_R, 0xB: EXIT_COMBINATION_L, 0xC: SERVICE_ROAD_R, 0xD: SERVICE_ROAD_L, 0xE: FORK2, 0xF: U_TURN, 0x10: EXIT_ROUNDABOUT_TRS_R, 0x11: EXIT_ROUNDABOUT_TRS_L, 0x12: OVERPASS_R, 0x13: OVERPASS_L, 0x14: UNDERPASS_R, 0x15: UNDERPASS_L, 0x16: NOSDCARD, 0x17: LOADING, 0x18: TOLL, 0x19: MAX
+    - SFC.Navigation_TBT.Constant.NaviTbt.Stat:
+      description: "DCN: IMG_NaviTbt_stat</br>
+                    State of Navigation TBT"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DIRECTION_TO_DESTINATION: 0x2
+        ARRIVED: 0x3
+        NO_ROUTE_GUIDANCE: 0x4
+        CALC_ROUTE: 0x5
+        RECALC_ROUTE: 0x6
+        TURN: 0x7
+        EXIT_R: 0x8
+        EXIT_L: 0x9
+        EXIT_COMBINATION_R: 0xA
+        EXIT_COMBINATION_L: 0xB
+        SERVICE_ROAD_R: 0xC
+        SERVICE_ROAD_L: 0xD
+        FORK2: 0xE
+        U_TURN: 0xF
+        EXIT_ROUNDABOUT_TRS_R: 0x10
+        EXIT_ROUNDABOUT_TRS_L: 0x11
+        OVERPASS_R: 0x12
+        OVERPASS_L: 0x13
+        UNDERPASS_R: 0x14
+        UNDERPASS_L: 0x15
+        NOSDCARD: 0x16
+        LOADING: 0x17
+        TOLL: 0x18
+        MAX: 0x19
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.DirectionType1.Stat:
+      description: "DCN: IMG_DirectionType1_stat</br>
+                    State of Direction Type"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Value of Direction1
+    - SFC.Navigation_TBT.Constant.DirectionType1.Value:
+      description: "DCN: IMG_DirectionType1_stat</br>
+                    Value of Direction Type"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.DirectionType2.Stat:
+      description: "DCN: IMG_DirectionType2_stat</br>
+                    State of Direction Type"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Value of Direction2
+    - SFC.Navigation_TBT.Constant.DirectionType2.Value:
+      description: "DCN: IMG_DirectionType2_stat</br>
+                    Value of Direction Type"
+      dataType: HUInt64
+      group: Constant2
+      # bit setting according to direction (0 ~ 14, on=1/off=0)
+    - SFC.Navigation_TBT.Constant.SideStreet.Bitmask:
+      description: "DCN: IMG_SideStreet_stat</br>
+                    State of SideStreet"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: RIGHT_COMBINED, 0x3: LEFT_COMBINED, 0x4: BOTH_COMBINED, 0x5: MAX
+    - SFC.Navigation_TBT.Constant.CombinedSideStreet.Stat:
+      description: "DCN: IMG_CombinedSideStreet_Stat</br>
+                    State of CombinedSideStreet"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RIGHT_COMBINED: 0x2
+        LEFT_COMBINED: 0x3
+        BOTH_COMBINED: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: DESTINATION_CHINA, 0x3: DESTINATION, 0x4: WAYPOINT1_CHINA, 0x5: WAYPOINT1, 0x6: WAYPOINT2_CHINA, 0x7: WAYPOINT2, 0x8: WAYPOINT3_CHINA, 0x9: WAYPOINT3, 0xA: WAYPOINT4_CHINA, 0xB: WAYPOINT4, 0xC: CHARGING_STATION, 0xD: MAX
+    - SFC.Navigation_TBT.Constant.NaviPointFlagType.Stat:
+      description: "DCN: IMG_NaviPointFlagType_stat</br>
+                    State of NaviPointFlagType"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DESTINATION_CHINA: 0x2
+        DESTINATION: 0x3
+        WAYPOINT1_CHINA: 0x4
+        WAYPOINT1: 0x5
+        WAYPOINT2_CHINA: 0x6
+        WAYPOINT2: 0x7
+        WAYPOINT3_CHINA: 0x8
+        WAYPOINT3: 0x9
+        WAYPOINT4_CHINA: 0xA
+        WAYPOINT4: 0xB
+        CHARGING_STATION: 0xC
+        MAX: 0xD
+      # 0x0: DEFAULT, 0x1: WAYPOINT1, 0x2: WAYPOINT2, 0x3: WAYPOINT3, 0x4: WAYPOINT4, 0x5: WAYPOINT5, 0x6: WAYPOINT6, 0x7: WAYPOINT7, 0x8: WAYPOINT8, 0x9: WAYPOINT9, 0xA: WAYPOINT10, 0xB: WAYPOINT11, 0xC: WAYPOINT12, 0xD: WAYPOINT13, 0xE: WAYPOINT14, 0xF: WAYPOINT15, 0x10: WAYPOINT16, 0x11: WAYPOINT17, 0x12: WAYPOINT18, 0x13: WAYPOINT19, 0x14: WAYPOINT20, 0x15: WAYPOINT21, 0x16: WAYPOINT22, 0x17: WAYPOINT23, 0x18: WAYPOINT24, 0x19: WAYPOINT25, 0x1A: WAYPOINT26, 0x1B: WAYPOINT27, 0x1C: WAYPOINT28, 0x1D: WAYPOINT29, 0x1E: WAYPOINT30, 0x1F: WAYPOINT_COMMON, 0x20: CHARGING_STATION1, 0x21: CHARGING_STATION2, 0x22: CHARGING_STATION3, 0x23: CHARGING_STATION4, 0x24: CHARGING_STATION5, 0x25: CHARGING_STATION6, 0x26: CHARGING_STATION7, 0x27: CHARGING_STATION8, 0x28: CHARGING_STATION9, 0x29: CHARGING_STATION10, 0x2A: CHARGING_STATION11, 0x2B: CHARGING_STATION12, 0x2C: CHARGING_STATION13, 0x2D: CHARGING_STATION14, 0x2E: CHARGING_STATION15, 0x2F: CHARGING_STATION16, 0x30: CHARGING_STATION17, 0x31: CHARGING_STATION18, 0x32: CHARGING_STATION19, 0x33: CHARGING_STATION20, 0x34: CHARGING_STATION21, 0x35: CHARGING_STATION22, 0x36: CHARGING_STATION23, 0x37: CHARGING_STATION24, 0x38: CHARGING_STATION25, 0x39: CHARGING_STATION26, 0x3A: CHARGING_STATION27, 0x3B: CHARGING_STATION28, 0x3C: CHARGING_STATION29, 0x3D: CHARGING_STATION30, 0x3E: CHARGING_STATION_COMMON, 0x3F: MAX
+    - SFC.Navigation_TBT.Constant.NaviPointPinType.Stat:
+      description: "DCN: IMG_NaviPointPinType_stat</br>
+                    State of NaviPointPinType"
+      dataType: HUInt64
+      valueEnum:
+        DEFAULT: 0x0
+        WAYPOINT1: 0x1
+        WAYPOINT2: 0x2
+        WAYPOINT3: 0x3
+        WAYPOINT4: 0x4
+        WAYPOINT5: 0x5
+        WAYPOINT6: 0x6
+        WAYPOINT7: 0x7
+        WAYPOINT8: 0x8
+        WAYPOINT9: 0x9
+        WAYPOINT10: 0xA
+        WAYPOINT11: 0xB
+        WAYPOINT12: 0xC
+        WAYPOINT13: 0xD
+        WAYPOINT14: 0xE
+        WAYPOINT15: 0xF
+        WAYPOINT16: 0x10
+        WAYPOINT17: 0x11
+        WAYPOINT18: 0x12
+        WAYPOINT19: 0x13
+        WAYPOINT20: 0x14
+        WAYPOINT21: 0x15
+        WAYPOINT22: 0x16
+        WAYPOINT23: 0x17
+        WAYPOINT24: 0x18
+        WAYPOINT25: 0x19
+        WAYPOINT26: 0x1A
+        WAYPOINT27: 0x1B
+        WAYPOINT28: 0x1C
+        WAYPOINT29: 0x1D
+        WAYPOINT30: 0x1E
+        WAYPOINT_COMMON: 0x1F
+        CHARGING_STATION1: 0x20
+        CHARGING_STATION2: 0x21
+        CHARGING_STATION3: 0x22
+        CHARGING_STATION4: 0x23
+        CHARGING_STATION5: 0x24
+        CHARGING_STATION6: 0x25
+        CHARGING_STATION7: 0x26
+        CHARGING_STATION8: 0x27
+        CHARGING_STATION9: 0x28
+        CHARGING_STATION10: 0x29
+        CHARGING_STATION11: 0x2A
+        CHARGING_STATION12: 0x2B
+        CHARGING_STATION13: 0x2C
+        CHARGING_STATION14: 0x2D
+        CHARGING_STATION15: 0x2E
+        CHARGING_STATION16: 0x2F
+        CHARGING_STATION17: 0x30
+        CHARGING_STATION18: 0x31
+        CHARGING_STATION19: 0x32
+        CHARGING_STATION20: 0x33
+        CHARGING_STATION21: 0x34
+        CHARGING_STATION22: 0x35
+        CHARGING_STATION23: 0x36
+        CHARGING_STATION24: 0x37
+        CHARGING_STATION25: 0x38
+        CHARGING_STATION26: 0x39
+        CHARGING_STATION27: 0x3A
+        CHARGING_STATION28: 0x3B
+        CHARGING_STATION29: 0x3C
+        CHARGING_STATION30: 0x3D
+        CHARGING_STATION_COMMON: 0x3E
+        MAX: 0x3F
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistToDest.Stat:
+      description: "DCN: IMG_NaviDistToDest_value</br>
+                    State of NaviDistToDest"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.NaviDistToDest.Value:
+      description: "DCN: IMG_NaviDistToDest_value</br>
+                    Value of NaviDistToDest"
+      dataType: HDouble
+      group: Constant3
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistUnit.Stat:
+      description: "DCN: IMG_NaviDistToDestUnit_stat</br>
+                    State of NaviDistUnit"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.TbtDistToTurnPoint.Stat:
+      description: "DCN: IMG_TbtDistToTurnPoint_value</br>
+                    State of TbtDistToTurnPoint"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.TbtDistToTurnPoint.Value:
+      description: "DCN: IMG_TbtDistToTurnPoint_value</br>
+                    Value of TbtDistToTurnPoint"
+      dataType: HDouble
+      group: Constant4
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.TbtDistanceUnit.Stat:
+      description: "DCN: IMG_TbtDstanceUnit_stat</br>
+                    State of TbtDstanceUnit"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.TbtBarGraphLevel.Stat:
+      description: "DCN: IMG_TbtBarGraphLevel_stat</br>
+                    State of TbtBarGraphLevel"
+      dataType: HUInt64
+      group: Constant5
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # TBT Bar Graph Level value
+    - SFC.Navigation_TBT.Constant.TbtBarGraphLevel.Value:
+      description: "DCN: IMG_TbtBarGraphLevel_stat</br>
+                    Value of TbtBarGraphLevel"
+      dataType: HUInt64
+      group: Constant5
+      # 0x0: NONE, 0x1: BRAND, 0x2: PINK, 0x3: LIGHT_GREEN, 0x4: GREEN, 0x5: YELLOW, 0x6: ORANGE, 0x7: BLUE, 0x8: WHITE, 0x9: MAX
+    - SFC.Navigation_TBT.Constant.TbtBarGraphLevel.Color:
+      description: "DCN: IMG_TbtBarGraphLevel_stat</br>
+                    Color of TbtBarGraphLevel"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        BRAND: 0x1
+        PINK: 0x2
+        LIGHT_GREEN: 0x3
+        GREEN: 0x4
+        YELLOW: 0x5
+        ORANGE: 0x6
+        BLUE: 0x7
+        WHITE: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistToTurn1.Stat:
+      description: "DCN: IMG_NaviDistToTurn1_value</br>
+                    State of NaviDistToTurn1"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.NaviDistToTurn1.Value:
+      description: "DCN: IMG_NaviDistToTurn1_value</br>
+                    Value of NaviDistToTurn1"
+      dataType: HDouble
+      group: Constant6
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistToTurnUnit1.Stat:
+      description: "DCN: IMG_NaviDistToTurnUnit1_stat</br>
+                    State of NaviDistToTurnUnit1"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistToTurn2.Stat:
+      description: "DCN: IMG_NaviDistToTurn2_value</br>
+                    State of NaviDistToTurn2"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.NaviDistToTurn2.Value:
+      description: "DCN: IMG_NaviDistToTurn2_value</br>
+                    Value of NaviDistToTurn2"
+      dataType: HDouble
+      group: Constant7
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.NaviDistToTurnUnit2.Stat:
+      description: "DCN: IMG_NaviDistToTurnUnit2_stat</br>
+                    State of NaviDistToTurnUnit2"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.NaviLaneRemainDist.Stat:
+      description: "DCN: IMG_naviRemainDistnace_value</br>
+                    State of NaviLaneRemainDist"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.NaviLaneRemainDist.Value:
+      description: "DCN: IMG_naviRemainDistnace_value</br>
+                    Value of NaviLaneRemainDist"
+      dataType: HDouble
+      group: Constant8
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.NaviLaneRemainDistUnit.Stat:
+      description: "DCN: IMG_naviRemainDistanceUnit_stat</br>
+                    State of NaviLaneRemainDistUnit"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: EMPTY, 0x3: VALUE, 0x4: FULL, 0x5: MAX
+    - SFC.Navigation_TBT.Constant.NaviPopupDistBar.Stat:
+      description: "DCN: IMG_NaviPopupDistBar_stat</br>
+                    State of NaviPopupDistBar"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        EMPTY: 0x2
+        VALUE: 0x3
+        FULL: 0x4
+        MAX: 0x5
+      # TBT Bar Graph Level value
+    - SFC.Navigation_TBT.Constant.NaviPopupDistBar.Value:
+      description: "DCN: IMG_NaviPopupDistBar_stat</br>
+                    Value of NaviPopupDistBar"
+      dataType: HDouble
+      group: Constant9
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Navigation_TBT.Constant.NaviPopupDistToDest.Stat:
+      description: "DCN: IMG_NaviPopupDistToDest_value</br>
+                    State of NaviPopupDistToDest"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Navigation_TBT.Constant.NaviPopupDistToDest.Value:
+      description: "DCN: IMG_NaviPopupDistToDest_value</br>
+                    Value of NaviPopupDistToDest"
+      dataType: HDouble
+      group: Constant9
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Navigation_TBT.Constant.NaviPopupDistUnit.Stat:
+      description: "DCN: IMG_naviPopupDistUnit_stat</br>
+                    State of NaviPopupDistUnit"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # Style is E00000
+    - SFC.Navigation_TBT.Event.NaviPopupDist.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NaviPopupDist):E40301,E40302,E40303,E40304,E40305,E40306,E40307"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Navigation_TBT.Event.NaviPopupDist.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Navigation_TBT.Event.NaviPopupDist.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Navigation_TBT.Event.NaviPopupDist.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Navigation_TBT.Event.NaviPopupDist.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1

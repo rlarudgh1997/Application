@@ -1,0 +1,140 @@
+#
+# @file Energy_Flow.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Energy_Flow:
+  sfcVersion: "9.0.0"
+  description: "Reference : [PT120] Energy_Flow. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - evEnergyFlowStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Energy_Flow.Input_EvEnergyFlowStatus: mInput_EvEnergyFlowStatus
+    - eawdRearEnergyFlowStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Energy_Flow.Input_EawdRearEnergyFlowStatus: mInput_EawdRearEnergyFlowStatus
+    - socGaugeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Energy_Flow.Input_EvSocDisplayValue: mInput_EvSocDisplayValue
+        - SFC.SOC_Gauge.Constant.SOCGauge.Value: mSOCGaugeValue
+  outputs:
+      # 0x0: NONE, 0x1: VEHICLE_STOP, 0x2: EV_PROPULSION, 0x3: POWER_ASSIST, 0x4: ENGINE_ONLY_PROPULSION, 0x5: ENGINE_GENERATION, 0x6: REGENERATION, 0x7: ENGINE_BRAKE, 0x8: POWER_RESEARVE, 0x9: ENGINE_GENERATION_MOTOR_DRIVE, 0xA: ENGINE_GENERATION_REGENERATION, 0xB: ENGINE_BRAKERE_GENERATION, 0xC: MAX
+    - SFC.Energy_Flow.Constant.EnergyFlowHEV.Stat:
+      description: "DCN: IMG_EnergyFlowHEV_stat</br>
+                    State of EnergyFlowHEV"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VEHICLE_STOP: 0x1
+        EV_PROPULSION: 0x2
+        POWER_ASSIST: 0x3
+        ENGINE_ONLY_PROPULSION: 0x4
+        ENGINE_GENERATION: 0x5
+        REGENERATION: 0x6
+        ENGINE_BRAKE: 0x7
+        POWER_RESEARVE: 0x8
+        ENGINE_GENERATION_MOTOR_DRIVE: 0x9
+        ENGINE_GENERATION_REGENERATION: 0xA
+        ENGINE_BRAKERE_GENERATION: 0xB
+        MAX: 0xC
+      # 0x0: NONE, 0x1: EAWD_STOP, 0x2: EAWD_MOTORING, 0x3: EAWD_GENERATING, 0x4: VEHICLE_STOP, 0x5: MAX
+    - SFC.Energy_Flow.Constant.EnergyFlowHEVeAWD.Stat:
+      description: "DCN: IMG_EnergyFlowHEVeAWD_stat</br>
+                    State of EnergyFlowHEVeAWD"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        EAWD_STOP: 0x1
+        EAWD_MOTORING: 0x2
+        EAWD_GENERATING: 0x3
+        VEHICLE_STOP: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: READY, 0x2: MOTOR, 0x3: CHARGING, 0x4: HYBRID, 0x5: ENGINE, 0x6: BRAKE, 0x7: MAX
+    - SFC.Energy_Flow.Constant.EnergyFlowHEVeAWDTitle.Stat:
+      description: "DCN: IMG_EnergyFlowHEVeAWDTitle_stat</br>
+                    State of EnergyFlowHEVeAWDTitle"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        READY: 0x1
+        MOTOR: 0x2
+        CHARGING: 0x3
+        HYBRID: 0x4
+        ENGINE: 0x5
+        BRAKE: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: VEHICLE_STOP, 0x2: EV_FRONT_MOTOR, 0x3: EV_REAR_MOTOR, 0x4: EV_DUAL_MOTOR, 0x5: EV_FRONT_GENERATION, 0x6: EV_REAR_GENERATION, 0x7: EV_DUAL_GENERATION, 0x8: MAX
+    - SFC.Energy_Flow.Constant.EnergyFlowEV.Stat:
+      description: "DCN: IMG_EnergyFlowEV_stat</br>
+                    State of EnergyFlowEV"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VEHICLE_STOP: 0x1
+        EV_FRONT_MOTOR: 0x2
+        EV_REAR_MOTOR: 0x3
+        EV_DUAL_MOTOR: 0x4
+        EV_FRONT_GENERATION: 0x5
+        EV_REAR_GENERATION: 0x6
+        EV_DUAL_GENERATION: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: VEHICLE_STOP, 0x2: FCEV_IDLE, 0x3: FCEV_CHARGE_IDLE, 0x4: FCEV_ASSIST_NORMAL, 0x5: FCEV_CHARGE_NORMAL, 0x6: FCEV_BATTERY, 0x7: FCEV_REGENERATION, 0x8: FCEV_FUELCELL, 0x9: MAX
+    - SFC.Energy_Flow.Constant.EnergyFlowFCEV.Stat:
+      description: "DCN: IMG_EnergyFlowFCEV_stat</br>
+                    State of energy flow of FCEV"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VEHICLE_STOP: 0x1
+        FCEV_IDLE: 0x2
+        FCEV_CHARGE_IDLE: 0x3
+        FCEV_ASSIST_NORMAL: 0x4
+        FCEV_CHARGE_NORMAL: 0x5
+        FCEV_BATTERY: 0x6
+        FCEV_REGENERATION: 0x7
+        FCEV_FUELCELL: 0x8
+        MAX: 0x9
+      # 0~100% (the same value as IMG_SOCgauge_value)
+    - SFC.Energy_Flow.Constant.BatteryBar.Value:
+      description: "DCN: IMG_BatteryBar_value</br>
+                    Value of BatteryBar"
+      dataType: HUInt64

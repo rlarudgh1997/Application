@@ -1,0 +1,206 @@
+#
+# @file Inverter_Coolant_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Inverter_Coolant_Warning:
+  sfcVersion: "5.1.0"
+  description: "Reference : [PT290] Inverter_Coolant_Warning. Contains : Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - coolantWarnStatus1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1: mInput_EwpCoolantRefillWarnStatus1
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1FromVCU: mInput_EwpCoolantRefillWarnStatus1FromVCU
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus1FromMCU2: mInput_EwpCoolantRefillWarnStatus1FromMCU2
+    - coolantWarnStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus2: mInput_EwpCoolantRefillWarnStatus2
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatus2FromVCU: mInput_EwpCoolantRefillWarnStatus2FromVCU
+    - coolantWarnStatusFromFCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatusFromFCU: mInput_EwpCoolantRefillWarnStatusFromFCU
+    - coolantErrorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantErrorStatus: mInput_EwpCoolantErrorStatus
+    - coolantWarnStatusFromEMSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Inverter_Coolant_Warning.Input_EwpCoolantRefillWarnStatusFromEMS: mInput_EwpCoolantRefillWarnStatusFromEMS
+  outputs:
+      # Style is E00000
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantWarn1):E22004"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantWarn2):E22005"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarn2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromFCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantWarnFromFCU):E22006"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromFCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromFCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromFCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromFCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Inverter_Coolant_Warning.Event.CoolantErrorStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantErrorStatus):E22007"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantErrorStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Inverter_Coolant_Warning.Event.CoolantErrorStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantErrorStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Inverter_Coolant_Warning.Event.CoolantErrorStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromEMS.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoolantWarnFromEMS):E22008"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromEMS.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromEMS.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromEMS.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Inverter_Coolant_Warning.Event.CoolantWarnFromEMS.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5

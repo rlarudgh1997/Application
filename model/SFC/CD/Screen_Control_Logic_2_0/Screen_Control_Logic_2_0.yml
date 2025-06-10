@@ -1,0 +1,174 @@
+#
+# @file Screen_Control_Logic_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Screen_Control_Logic_2_0:
+  sfcVersion: "1.1.0"
+  description: "Reference : [CD121] Screen_Control_Logic_2_0. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configISGChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigISG: mInter_ConfigISG
+    - configSCRChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSCR: mInter_ConfigSCR
+    - configTPMSMonitorPageChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTPMSMonitorPage: mInter_ConfigTPMSMonitorPage
+    - displayLanguageStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_DisplayLanguageStatus: mInter_DisplayLanguageStatus
+  outputs:
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic_2_0.Inter_AccumInfoManualResetReq:
+      description: "Inter_AccumInfoManualResetReq"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic_2_0.Inter_DriveInfoManualResetReq:
+      description: "Inter_DriveInfoManualResetReq"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic_2_0.Inter_AfterRefuelInfoManualResetReq:
+      description: "Inter_AfterRefuelInfoManualResetReq"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Extension.Screen_Control_Logic_2_0.Inter_AutoStopTimeManualResetReq:
+      description: "Inter_AutoStopTimeManualResetReq"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Default_ResetReq_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.AccumulScreenEnable.Stat:
+      description: "DCN: IMG_AccumulScreenEnable_stat</br>
+                    State of AccumulScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.DriveInfoScreenEnable.Stat:
+      description: "DCN: IMG_DriveInfoScreenEnable_stat</br>
+                    State of DriveInfoScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.AfterRefuelScreenEnable.Stat:
+      description: "DCN: IMG_AfterRefuelScreenEnable_stat</br>
+                    State of AfterRefuelScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.ISGDetailScreenEnable.Stat:
+      description: "DCN: IMG_ISGDetailScreenEnable_stat</br>
+                    State of ISGDetailScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.UreaLevelScreenEnable.Stat:
+      description: "DCN: IMG_UreaLevelScreenEnable_stat</br>
+                    State of UreaLevelScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.TPMSPressureMonitorScreenEnable.Stat:
+      description: "DCN: IMG_TPMSPressureMonitorScreenEnable_stat</br>
+                    State of TPMSPressureMonitorScreenEnable"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: KOREA, 0x2: ENGLISH_US, 0x3: ENGLISH_UK, 0x4: SIMPLIFIED_CHINESE, 0x5: TRADITIONAL_CHINESE, 0x6: FRENCH_EU, 0x7: SPANISH_EU, 0x8: ARABIC, 0x9: CZECH, 0xA: DANISH, 0xB: GERMAN, 0xC: ITALIAN, 0xD: DUTCH, 0xE: POLISH, 0xF: PORTUGUESE, 0x10: RUSSIAN, 0x11: SLOVAK, 0x12: SWEDISH, 0x13: TURKISH, 0x14: FRENCH_US, 0x15: SPANISH_US, 0x16: ENGLISH_INDIA, 0x17: NORWEGIAN, 0x18: FINNISH, 0x19: INDONESIAN, 0x1A: BRAZILIAN_PORTUGUESE, 0x1B: MALAY, 0x1C: HUNGARIAN, 0x1D: ENGLISH_AUSTRALIA, 0x1E: JAPANESE, 0x1F: HINDI, 0x20: HEBREW, 0x21: GREEK, 0x22: UKRAINIAN, 0x23: SLOVENIAN, 0x24: BULGARIAN, 0x25: CROATIAN, 0x26: ROMANIAN, 0x27: BENGALI, 0x28: MARATHI, 0x29: TELUGU, 0x2A: TAMIL, 0x2B: GUJARATI, 0x2C: KANNADA, 0x2D: ODIA, 0x2E: MALAYALAM, 0x2F: PUNJABI, 0x30: INVALID, 0x31: THAI, 0x32: LITHUANIAN, 0x33: LATVIAN, 0x34: ESTONIAN, 0x35: MAX
+    - SFC.Screen_Control_Logic_2_0.Constant.DisplayLanguage.Stat:
+      description: "DCN: IMG_DisplayLanguage_stat</br>
+                    State of DisplayLanguage"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KOREA: 0x1
+        ENGLISH_US: 0x2
+        ENGLISH_UK: 0x3
+        SIMPLIFIED_CHINESE: 0x4
+        TRADITIONAL_CHINESE: 0x5
+        FRENCH_EU: 0x6
+        SPANISH_EU: 0x7
+        ARABIC: 0x8
+        CZECH: 0x9
+        DANISH: 0xA
+        GERMAN: 0xB
+        ITALIAN: 0xC
+        DUTCH: 0xD
+        POLISH: 0xE
+        PORTUGUESE: 0xF
+        RUSSIAN: 0x10
+        SLOVAK: 0x11
+        SWEDISH: 0x12
+        TURKISH: 0x13
+        FRENCH_US: 0x14
+        SPANISH_US: 0x15
+        ENGLISH_INDIA: 0x16
+        NORWEGIAN: 0x17
+        FINNISH: 0x18
+        INDONESIAN: 0x19
+        BRAZILIAN_PORTUGUESE: 0x1A
+        MALAY: 0x1B
+        HUNGARIAN: 0x1C
+        ENGLISH_AUSTRALIA: 0x1D
+        JAPANESE: 0x1E
+        HINDI: 0x1F
+        HEBREW: 0x20
+        GREEK: 0x21
+        UKRAINIAN: 0x22
+        SLOVENIAN: 0x23
+        BULGARIAN: 0x24
+        CROATIAN: 0x25
+        ROMANIAN: 0x26
+        BENGALI: 0x27
+        MARATHI: 0x28
+        TELUGU: 0x29
+        TAMIL: 0x2A
+        GUJARATI: 0x2B
+        KANNADA: 0x2C
+        ODIA: 0x2D
+        MALAYALAM: 0x2E
+        PUNJABI: 0x2F
+        INVALID: 0x30
+        THAI: 0x31
+        LITHUANIAN: 0x32
+        LATVIAN: 0x33
+        ESTONIAN: 0x34
+        MAX: 0x35

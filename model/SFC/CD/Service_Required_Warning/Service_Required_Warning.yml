@@ -1,0 +1,153 @@
+#
+# @file Service_Required_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Service_Required_Warning:
+  sfcVersion: "5.0.10"
+  description: "Reference : [CD130] Service_Required_Warning. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn4000msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn4000ms: mElapsedOn4000ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - serviceChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_SrvRemindPeriodSetValue: mInter_SrvRemindPeriodSetValue
+        - SFC.Extension.Settings.Inter_SrvRemainPeriod: mInter_SrvRemainPeriod
+        - SFC.Extension.Settings.Inter_SrvRemindDistKmSetValue: mInter_SrvRemindDistKmSetValue
+        - SFC.Extension.Settings.Inter_SrvRemainDistanceKm: mInter_SrvRemainDistanceKm
+        - SFC.Extension.Settings.Inter_SrvRemindDistMiSetValue: mInter_SrvRemindDistMiSetValue
+        - SFC.Extension.Settings.Inter_SrvRemainDistanceMi: mInter_SrvRemainDistanceMi
+    - tripAndSrvStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+        - SFC.Extension.Settings.Inter_SrvRemindSetStatus: mInter_SrvRemindSetStatus
+    - systemCheckDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Event_Control_Logic.Inter_SystemCheckDisplayStatus: mInter_SystemCheckDisplayStatus
+  outputs:
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDay.Stat:
+      description: "DCN: IMG_ServiceRemindDay_value</br>
+                    Display value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # DAY -9999 ~ 9999
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDay.Value:
+      description: "DCN: IMG_ServiceRemindDay_value</br>
+                    Display value State"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDistKm.Stat:
+      description: "DCN: IMG_ServiceRemindDistKm_value</br>
+                    Display value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # KM -99999 ~ 99999
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDistKm.Value:
+      description: "DCN: IMG_ServiceRemindDistKm_value</br>
+                    Display value State"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDistMi.Stat:
+      description: "DCN: IMG_ServiceRemindDistMi_value</br>
+                    Display value State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # MILE -99999 ~ 99999
+    - SFC.Service_Required_Warning.Constant.ServiceRemindDistMi.Value:
+      description: "DCN: IMG_ServiceRemindDistMi_value</br>
+                    Display value"
+      dataType: HInt64
+      # Style is E00000
+    - SFC.Service_Required_Warning.Event.ServiceRemindApproach.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ServiceRemindApproach):E00601"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Service_Required_Warning.Event.ServiceRemindApproach.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Service_Required_Warning.Event.ServiceRemindApproach.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Service_Required_Warning.Event.ServiceRemindApproach.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Service_Required_Warning.Event.ServiceRemindApproach.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Service_Required_Warning.Event.ServiceRemindReach.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ServiceRemindReach):E00602"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Service_Required_Warning.Event.ServiceRemindReach.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Service_Required_Warning.Event.ServiceRemindReach.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Service_Required_Warning.Event.ServiceRemindReach.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Service_Required_Warning.Event.ServiceRemindReach.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2

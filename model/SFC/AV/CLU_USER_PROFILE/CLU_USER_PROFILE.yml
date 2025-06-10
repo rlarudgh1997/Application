@@ -1,0 +1,46 @@
+#
+# @file CLU_USER_PROFILE.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CLU_USER_PROFILE:
+  sfcVersion: "0.0.0"
+  description: "Reference : [AV151] CLU_USER_PROFILE. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: GUEST, 0x2: PROFILE_1, 0x3: PROFILE_2, 0x4: SIGNATURE_NULL, 0x5: MAX
+    - SFC.Extension.CLU_USER_PROFILE.Inter_UserProfilesProfileID:
+      description: "User Profiles Profile ID<br>
+                    Spec:CLU_USER_PROFILE[AV151]-Inter_UserProfilesProfileID<br>
+                    Published in CLU_USER_PROFILE[AV151]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        GUEST: 0x1
+        PROFILE_1: 0x2
+        PROFILE_2: 0x3
+        SIGNATURE_NULL: 0x4
+        MAX: 0x5

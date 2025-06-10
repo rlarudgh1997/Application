@@ -1,0 +1,69 @@
+#
+# @file CLU_INFOTAINMENT.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CLU_INFOTAINMENT:
+  sfcVersion: "16.1.0"
+  description: "Reference : [AV090] CLU_INFOTAINMENT. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: DRV_ECO, 0x2: DRV_NORMAL, 0x3: DRV_SPORT, 0x4: DRV_SPORTPLUS, 0x5: DRV_CHAUFFEUR, 0x6: DRV_MY, 0x7: DRV_SMART, 0x8: DRV_SNOW, 0x9: TER_READY, 0xA: TER_AUTO, 0xB: TER_SNOW, 0xC: TER_DEEPSNOW, 0xD: TER_MUD, 0xE: TER_SAND, 0xF: TER_ROCK, 0x10: TER_DEFAULT, 0x11: TER_CANCEL, 0x12: SIGNATURE_NULL, 0x13: TER_DESERT, 0x14: MAX
+    - SFC.Extension.CLU_INFOTAINMENT.Inter_DriveModeChangeReqFromAVNT:
+      description: "Drive Mode Change Req From AVNT<br>
+                    Spec:CLU_INFOTAINMENT[AV090]-Inter_DriveModeChangeReqFromAVNT<br>
+                    Published in CLU_INFOTAINMENT[AV090]<br>
+                    Subscribed in Drive_Mode[CD020] and Drive_Mode_2_0[CD021]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DRV_ECO: 0x1
+        DRV_NORMAL: 0x2
+        DRV_SPORT: 0x3
+        DRV_SPORTPLUS: 0x4
+        DRV_CHAUFFEUR: 0x5
+        DRV_MY: 0x6
+        DRV_SMART: 0x7
+        DRV_SNOW: 0x8
+        TER_READY: 0x9
+        TER_AUTO: 0xA
+        TER_SNOW: 0xB
+        TER_DEEPSNOW: 0xC
+        TER_MUD: 0xD
+        TER_SAND: 0xE
+        TER_ROCK: 0xF
+        TER_DEFAULT: 0x10
+        TER_CANCEL: 0x11
+        SIGNATURE_NULL: 0x12
+        TER_DESERT: 0x13
+        MAX: 0x14
+      # None
+    - SFC.Extension.CLU_INFOTAINMENT.Inter_HeadUnitFuelEcoGraphResetStatus:
+      description: "Head Unit Fuel Eco Graph Reset Status<br>
+                    Spec:CLU_INFOTAINMENT[AV090]-Inter_HeadUnitFuelEcoGraphResetStatus<br>
+                    Published in CLU_INFOTAINMENT[AV090]<br>
+                    Subscribed in Trip_Info[CD180]"
+      dataType: HBool

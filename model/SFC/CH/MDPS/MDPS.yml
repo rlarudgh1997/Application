@@ -1,0 +1,303 @@
+#
+# @file MDPS.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- MDPS:
+  sfcVersion: "3.0.0"
+  description: "Reference : [CH120] MDPS. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configMDPSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigMDPS: mInter_ConfigMDPS
+    - mdpsStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.MDPS.Input_MdpsWarnStatus: mInput_MdpsWarnStatus
+        - Vehicle.System.Config.Inter_ConfigSteerByWire: mInter_ConfigSteerByWire
+        - Vehicle.CH.MDPS.Input_SfaLampStatus: mInput_SfaLampStatus
+        - Vehicle.CH.MDPS.Input_Sfa2LampStatus: mInput_Sfa2LampStatus
+    - mdpsSysWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.MDPS.Input_MdpsSysWarnStatus: mInput_MdpsSysWarnStatus
+    - sfaAlignWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.MDPS.Input_SfaAlignWarnStatus: mInput_SfaAlignWarnStatus
+        - Vehicle.CH.MDPS.Input_Sfa2AlignWarnStatus: mInput_Sfa2AlignWarnStatus
+    - sfaWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.MDPS.Input_SfaWarnStatus: mInput_SfaWarnStatus
+        - Vehicle.CH.MDPS.Input_Sfa2WarnStatus: mInput_Sfa2WarnStatus
+    - sfaTimerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.MDPS.Input_SfaSpeedLimitWarnStatus: mInput_SfaSpeedLimitWarnStatus
+        - Vehicle.CH.MDPS.Input_Sfa2SpeedLimitWarnStatus: mInput_Sfa2SpeedLimitWarnStatus
+        - Vehicle.CH.MDPS.Input_SfaLongTimerSecValue: mInput_SfaLongTimerSecValue
+        - Vehicle.CH.MDPS.Input_Sfa2LongTimerSecValue: mInput_Sfa2LongTimerSecValue
+        - Vehicle.CH.MDPS.Input_SfaShortTimerSecValue: mInput_SfaShortTimerSecValue
+        - Vehicle.CH.MDPS.Input_Sfa2ShortTimerSecValue: mInput_Sfa2ShortTimerSecValue
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.MDPS.Telltale.MdpsWarn.Stat:
+      description: "DCN: IMG_TelltaleMdps_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.MDPS.Telltale.MdpsWarn.BlinkValueA:
+      description: "DCN: IMG_TelltaleMdps_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_AMBER, 0x3: MAX
+    - SFC.MDPS.Telltale.MdpsWarn.StatOptional:
+      description: "DCN: IMG_TelltaleMdps_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_AMBER: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.MDPS.Telltale.MdpsWarn.BlinkValueB:
+      description: "DCN: IMG_TelltaleMdps_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # Numeric value
+    - SFC.MDPS.Constant.SteerLongTimerSec.Value:
+      description: "DCN: IMG_SteerLongTimerSec_value</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.MDPS.Constant.SteerShortTimerSec.Value:
+      description: "DCN: IMG_SteerShortTimerSec_value</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.MDPS.Event.MDPSSysWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(MDPS System Warning Status):E30901"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.MDPSSysWarning.Stat:
+      description: "State of Event : MDPS System Warning Status (E30901)"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.MDPSSysWarning.LinkedSound.ID:
+      description: "Linked Sound ID : MDPS System Warning Status (E30901)"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.MDPSSysWarning.LinkedSound.Type:
+      description: "Linked Sound Type : MDPS System Warning Status (E30901)"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.MDPSSysWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : MDPS System Warning Status (E30901)"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.MDPS.Event.SfaWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Steer by Wire Warning):E30907,E30908,E30909"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.SfaWarn.Stat:
+      description: "State of Event : Steer by Wire Align (E30902 ~ E30906)"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.SfaWarn.LinkedSound.ID:
+      description: "Linked Sound ID : Steer by Wire Align (E30902 ~ E30906)"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.SfaWarn.LinkedSound.Type:
+      description: "Linked Sound Type : Steer by Wire Align (E30902 ~ E30906)"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.SfaWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : Steer by Wire Align (E30902 ~ E30906)"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.MDPS.Event.SfaAlignWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Steer by Wire Align Warning):E30902,E30903,E30904,E30905,E30906"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.SfaAlignWarn.Stat:
+      description: "State of Event : Steer by Wire Warning Status (E30907 ~ E30912)"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.SfaAlignWarn.LinkedSound.ID:
+      description: "Linked Sound ID : Steer by Wire Warning Status (E30907 ~ E30912)"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.SfaAlignWarn.LinkedSound.Type:
+      description: "Linked Sound Type : Steer by Wire Warning Status (E30907 ~ E30912)"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.SfaAlignWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : Steer by Wire Warning Status (E30907 ~ E30912)"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.MDPS.Event.SfaSteerLongTimer.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Steer by Wire Low Speed Timer):E30913"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.SfaSteerLongTimer.Stat:
+      description: "State of Event : Steer by Wire Low Speed Timer (E30913)"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.SfaSteerLongTimer.LinkedSound.ID:
+      description: "Linked Sound ID : Steer by Wire Low Speed Timer (E30913)"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.SfaSteerLongTimer.LinkedSound.Type:
+      description: "Linked Sound Type : Steer by Wire Low Speed Timer (E30913)"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.SfaSteerLongTimer.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : Steer by Wire Low Speed Timer (E30913)"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.MDPS.Event.SfaSteerShortTimer.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Steer by Wire Medium Speed Timer):E30914"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.SfaSteerShortTimer.Stat:
+      description: "State of Event : Steer by Wire Medium Speed Timer (E30914)"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.SfaSteerShortTimer.LinkedSound.ID:
+      description: "Linked Sound ID : Steer by Wire Medium Speed Timer (E30914)"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.SfaSteerShortTimer.LinkedSound.Type:
+      description: "Linked Sound Type : Steer by Wire Medium Speed Timer (E30914)"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.SfaSteerShortTimer.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : Steer by Wire Medium Speed Timer (E30914)"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Steer by Wire Without Speed Timer):E30915,E30916,E30917,E30918"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.Stat:
+      description: "State of Event : Steer by Wire Without Speed Timer (E30915 ~ E30918)"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.LinkedSound.ID:
+      description: "Linked Sound ID : Steer by Wire Without Speed Timer (E30915 ~ E30918)"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.LinkedSound.Type:
+      description: "Linked Sound Type : Steer by Wire Without Speed Timer (E30915 ~ E30918)"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count : Steer by Wire Without Speed Timer (E30915 ~ E30918)"
+      dataType: HUInt64
+      group: Event6
+      # Sound output by duration
+    - SFC.MDPS.Event.SfaSteerWithoutTimer.LinkedSound.Duration:
+      description: "Linked Sound Duration : Steer by Wire Without Speed Timer (E30915 ~ E30918)"
+      dataType: HUInt64
+      group: Event6

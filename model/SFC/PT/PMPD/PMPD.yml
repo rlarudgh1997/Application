@@ -1,0 +1,147 @@
+#
+# @file PMPD.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- PMPD:
+  sfcVersion: "2.0.0"
+  description: "Reference : [PT520] PMPD. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - pmpdActChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.PMPD.Input_PmpdActStatus: mInput_PmpdActStatus
+    - pmsaActivateWaitTimeValChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.PMPD.Input_PmsaActivateWaitTimeVal: mInput_PmsaActivateWaitTimeVal
+    - pmsaWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.PMPD.Input_PmsaWarnStatus: mInput_PmsaWarnStatus
+    - pmpdActiveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.PMPD.Input_PmpdActiveStatus: mInput_PmpdActiveStatus
+  outputs:
+      # PMSA Wait Timer Value(0~15)
+    - SFC.PMPD.Constant.PmsaWaitTimer.Value:
+      description: "DCN: IMG_PmsaWaitTimer_value</br>
+                    Value of PmsaWaitTimer"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.PMPD.Event.PMPD.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PMPD):E25401,E25402"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PMPD.Event.PMPD.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.PMPD.Event.PMPD.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.PMPD.Event.PMPD.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.PMPD.Event.PMPD.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.PMPD.Event.PMSAActive.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PMSAActive):E25406,E25407,E25408"
+      dataType: HString
+      group: PMSAActive
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PMPD.Event.PMSAActive.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: PMSAActive
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.PMPD.Event.PMSAActive.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: PMSAActive
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.PMPD.Event.PMSAActive.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: PMSAActive
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.PMPD.Event.PMSAActive.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: PMSAActive
+      # Style is E00000
+    - SFC.PMPD.Event.PMSA.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PMPD):E25403,E25404,E25405"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PMPD.Event.PMSA.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.PMPD.Event.PMSA.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.PMPD.Event.PMSA.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.PMPD.Event.PMSA.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2

@@ -1,0 +1,32 @@
+0	1	2	3	4	5	6	7	8	9	10	11	12
+TCName	VehicleType	Config	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
+[MergeStart]IMG_FrontAxleBrakeAir_value	[MergeStart]	[MergeStart]	[MergeStart]Value	[MergeStart]FrontAxleBrakeAirValue == 0x00 ~ 0xA2	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.FrontAxleBrakeAir.Value	O	[Cal]math.floor(Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue*[Sheet]Private_AirPressure_Factor)			
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[Merge]Value	[Merge]FrontAxleBrakeAirValue == 0x00 ~ 0xA2	[Sheet]Private_AirPressure_Factor	0.08,1.16						
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[MergeEnd]Value	[MergeEnd]FrontAxleBrakeAirValue == 0x00 ~ 0xA2	Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue	0~162						
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[MergeStart]0xFFE	[MergeStart]FrontAxleBrakeAirValue == 0xA3 ~ 0xFE	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.FrontAxleBrakeAir.Value	O	4094			
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[MergeEnd]0xFFE	[MergeEnd]FrontAxleBrakeAirValue == 0xA3 ~ 0xFE	Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue	163~254						
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[MergeStart]0xFFF	[MergeStart]FrontAxleBrakeAirValue == 0xFF	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.FrontAxleBrakeAir.Value	O	4095			
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeEnd]FrontAxleBrakeAirValue == 0xFF	Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue	255						
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeStart]FrontAxleBrakeAirValue == MESSAGE_TIMEOUT	SFC.Private.IGNElapsed.ElapsedOn0ms	D’						
+[Merge]IMG_FrontAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeEnd]FrontAxleBrakeAirValue == MESSAGE_TIMEOUT	Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue	timeout						
+[MergeEnd]IMG_FrontAxleBrakeAir_value	[MergeEnd]	[MergeEnd]	[MergeEnd]0xFFF	IGN1 off	SFC.Private.IGNElapsed.ElapsedOff0ms	D’						
+[MergeStart]IMG_RearAxleBrakeAir_value	[MergeStart]	[MergeStart]	[MergeStart]Value	[MergeStart]RearAxleBrakeAirValue == 0x00 ~ 0xA2	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.RearAxleBrakeAir.Value	O	[Cal]math.floor(Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue*[Sheet]Private_AirPressure_Factor)			
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[Merge]Value	[Merge]RearAxleBrakeAirValue == 0x00 ~ 0xA2	[Sheet]Private_AirPressure_Factor	0.08,1.16						
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[MergeEnd]Value	[MergeEnd]RearAxleBrakeAirValue == 0x00 ~ 0xA2	Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue	0~162						
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[MergeStart]0xFFE	[MergeStart]RearAxleBrakeAirValue == 0xA3 ~ 0xFE	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.RearAxleBrakeAir.Value	O	4094			
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[MergeEnd]0xFFE	[MergeEnd]RearAxleBrakeAirValue == 0xA3 ~ 0xFE	Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue	163~254						
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[MergeStart]0xFFF	[MergeStart]RearAxleBrakeAirValue == 0xFF	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.RearAxleBrakeAir.Value	O	4095			
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeEnd]RearAxleBrakeAirValue == 0xFF	Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue	255						
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeStart]RearAxleBrakeAirValue == MESSAGE_TIMEOUT	SFC.Private.IGNElapsed.ElapsedOn0ms	D’						
+[Merge]IMG_RearAxleBrakeAir_value	[Merge]	[Merge]	[Merge]0xFFF	[MergeEnd]RearAxleBrakeAirValue == MESSAGE_TIMEOUT	Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue	timeout						
+[MergeEnd]IMG_RearAxleBrakeAir_value	[MergeEnd]	[MergeEnd]	[MergeEnd]0xFFF	IGN1 off	SFC.Private.IGNElapsed.ElapsedOff0ms	D’						
+[MergeStart]IMG_FrontAxleBrakeAirColor_Status	[MergeStart]	[MergeStart]	[MergeStart]WARNING	[MergeStart]FrontAxleBrakeAirValue == 0x00 ~ 0x4B	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.FrontAxleBrakeAirColor.Stat	O	0x1			
+[Merge]IMG_FrontAxleBrakeAirColor_Status	[Merge]	[Merge]	[MergeEnd]WARNING	[MergeEnd]FrontAxleBrakeAirValue == 0x00 ~ 0x4B	Vehicle.CV.Brake_Air.Input_FrontAxleBrakeAirValue	0~75						
+[MergeEnd]IMG_FrontAxleBrakeAirColor_Status	[MergeEnd]	[MergeEnd]	NORMAL	Other			SFC.Brake_Air.Constant.FrontAxleBrakeAirColor.Stat	O	0x2			
+[MergeStart]IMG_RearAxleBrakeAirColor_Status	[MergeStart]	[MergeStart]	[MergeStart]WARNING	[MergeStart]RearAxleBrakeAirValue == 0x00 ~ 0x4B	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.Brake_Air.Constant.RearAxleBrakeAirColor.Stat	O	0x1			
+[Merge]IMG_RearAxleBrakeAirColor_Status	[Merge]	[Merge]	[MergeEnd]WARNING	[MergeEnd]RearAxleBrakeAirValue == 0x00 ~ 0x4B	Vehicle.CV.Brake_Air.Input_RearAxleBrakeAirValue	0~75						
+[MergeEnd]IMG_RearAxleBrakeAirColor_Status	[MergeEnd]	[MergeEnd]	NORMAL	Other			SFC.Brake_Air.Constant.RearAxleBrakeAirColor.Stat	O	0x2			
+[MergeStart]IMG_BrakeAirUnit_Status	[MergeStart]	[MergeStart]	PSI	IGN on && ConfigArea == USA	Vehicle.System.Config.Inter_ConfigArea	USA	SFC.Brake_Air.Constant.BrakeAirUnit.Stat	O	0x1			
+[MergeEnd]IMG_BrakeAirUnit_Status	[MergeEnd]	[MergeEnd]	X100KPA	IGN on && ConfigArea != USA	Vehicle.System.Config.Inter_ConfigArea	!USA	SFC.Brake_Air.Constant.BrakeAirUnit.Stat	O	0x2			
+[MergeStart]IMG_BrakeAirMax_Value	[MergeStart]	[MergeStart]	190	IGN on && ConfigArea == USA	Vehicle.System.Config.Inter_ConfigArea	USA	SFC.Brake_Air.Constant.BrakeAirMax.Value	O	190			
+[MergeEnd]IMG_BrakeAirMax_Value	[MergeEnd]	[MergeEnd]	13	IGN on && ConfigArea != USA	Vehicle.System.Config.Inter_ConfigArea	!USA	SFC.Brake_Air.Constant.BrakeAirMax.Value	O	13			

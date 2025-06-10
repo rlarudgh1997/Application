@@ -1,0 +1,53 @@
+#
+# @file AEM.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- AEM:
+  sfcVersion: "0.1.0"
+  description: "Reference : [ETC] virtual SFC to support AEM variables"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - telltaleHmiInitializeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Telltale.Inter_TelltaleHmiInitializeComplete: mInter_TelltaleHmiInitializeComplete
+  outputs:
+      # Do not write to Extension Memory Node before Inter_AEMInitializeComplete
+    - SFC.Extension.AEM.Inter_AEMInitializeComplete:
+      description: "AEM Initialization State<br>
+                    Published in AEM[ETC]<br>
+                    Subscribed in Trip_Info[CD180], Illumination[CD050], Input_Output_Processing[CD060], Drive_Mode[CD020], Blue_Light_Filter[CD210], Speed_Gauge[CD160], High_Performance_For_N_Brand[PT270], ISG[PT300]"
+      dataType: HBool
+      # 0x0: OFF, 0x1: RUNNING
+    - SFC.Extension.Telltale.Inter_TelltaleHmiInitializeComplete:
+      description: "Telltale Hmi Initialize Complete<br>
+                    Published in AEM[ETC]<br>
+                    Subscribed in AEM[ETC]"
+      dataType: HUInt64
+      valueEnum:
+        OFF: 0x0
+        RUNNING: 0x1

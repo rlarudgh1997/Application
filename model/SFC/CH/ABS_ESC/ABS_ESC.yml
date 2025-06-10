@@ -1,0 +1,331 @@
+#
+# @file ABS_ESC.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ABS_ESC:
+  sfcVersion: "11.0.1"
+  description: "Reference : [CH010] ABS_ESC. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigABS: mInter_ConfigABS
+        - Vehicle.System.Config.Inter_ConfigESC: mInter_ConfigESC
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOn4000msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn4000ms: mElapsedOn4000ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - absTelltaleChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_AbsWarnStatus: mInput_AbsWarnStatus
+    - escTelltaleChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_EscIndReqStatus: mInput_EscIndReqStatus
+        - Vehicle.CH.ABS_ESC.Input_EscIndReqStatusFromITC: mInput_EscIndReqStatusFromITC
+    - escOffTelltaleChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_EscOffIndReqStatus: mInput_EscOffIndReqStatus
+    - escOffEventChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_EscOffStepStatus: mInput_EscOffStepStatus
+    - brakeMalfunctionWarningEbdWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_EbdWarnStatus: mInput_EbdWarnStatus
+    - brakeMalfunctionWarningBrakeFluidWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_BrakeFluidWarnStatus: mInput_BrakeFluidWarnStatus
+    - escSportReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_EscSportIndReqStatus: mInput_EscSportIndReqStatus
+    - crosswindWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.ABS_ESC.Input_CrosswindWarnStatus: mInput_CrosswindWarnStatus
+    - nModeSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Drive_Mode.Inter_NModeSelectStatus: mInter_NModeSelectStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ABS.Stat:
+      description: "DCN: IMG_TelltaleABS_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ESC.Stat:
+      description: "DCN: IMG_TelltaleESC_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ESC.BlinkValueA:
+      description: "DCN: IMG_TelltaleESC_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ESC.BlinkValueB:
+      description: "DCN: IMG_TelltaleESC_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ESCSport.Stat:
+      description: "DCN: IMG_TelltaleESCSport_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ABS_ESC.Telltale.ESCOff.Stat:
+      description: "DCN: IMG_TelltaleESCoff_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # Style is E00000
+    - SFC.ABS_ESC.Event.Escoff.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Escoff):E30001,E30002"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Event.Escoff.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Event.Escoff.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ABS_ESC.Event.Escoff.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ABS_ESC.Event.Escoff.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ABS.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BrakeMalfunctionWarning_EBDWarn_ABS):E30003"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ABS.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ABS.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ABS.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ABS.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ESC.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BrakeMalfunctionWarning_EBDWarn_ESC):E30004"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ESC.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ESC.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ESC.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_EBDWarn_ESC.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_BrakeFluidWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BrakeMalfunctionWarning_BrakeFluidWarn):E30005"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_BrakeFluidWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_BrakeFluidWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_BrakeFluidWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ABS_ESC.Event.BrakeMalfunctionWarning_BrakeFluidWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.ABS_ESC.Event.CrosswindSafetyControl.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CrosswindSafetyControl):E30007"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Event.CrosswindSafetyControl.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Event.CrosswindSafetyControl.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ABS_ESC.Event.CrosswindSafetyControl.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ABS_ESC.Event.CrosswindSafetyControl.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Sound.EscOffInform1.ID:
+      description: "Sound ID<br>
+                    Sound ID List(EscOffInform1):SND_EscOffInform1"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Sound.EscOffInform1.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ABS_ESC.Sound.EscOffInform1.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ABS_ESC.Sound.EscOffInform1.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1
+      # Style is SND_NAME
+    - SFC.ABS_ESC.Sound.EscOffInform2.ID:
+      description: "Sound ID<br>
+                    Sound ID List(SND_EscOffInform2):SND_EscOffInform2"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ABS_ESC.Sound.EscOffInform2.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ABS_ESC.Sound.EscOffInform2.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ABS_ESC.Sound.EscOffInform2.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound2

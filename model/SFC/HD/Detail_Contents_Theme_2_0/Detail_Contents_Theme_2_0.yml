@@ -1,0 +1,48 @@
+#
+# @file Detail_Contents_Theme_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Detail_Contents_Theme_2_0:
+  sfcVersion: "0.0.0"
+  description: "Reference : [HD211] Detail_Contents_Theme_2_0. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: SIMPLE, 0x2: ADAS, 0x3: MAP, 0x4: ADASMAP, 0x5: OFFROAD, 0x6: MAX
+    - SFC.Extension.Detail_Contents_Theme_2_0.Inter_HudThemeSetStatus:
+      description: "Hud Theme Set Status<br>
+                    Spec:Detail_Contents_Theme_2_0[HD211]-Inter_HudThemeSetStatus<br>
+                    Published in Detail_Contents_Theme_2_0[HD211]<br>
+                    Subscribed in Application"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SIMPLE: 0x1
+        ADAS: 0x2
+        MAP: 0x3
+        ADASMAP: 0x4
+        OFFROAD: 0x5
+        MAX: 0x6

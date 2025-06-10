@@ -1,0 +1,244 @@
+#
+# @file Transmission_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Transmission_Warning:
+  sfcVersion: "2.0.0"
+  description: "Reference : [PT430] Transmission_Warning. Contains : Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - vehicleStopTimeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionVehicleStopTimeValue: mInput_TransmissionVehicleStopTimeValue
+    - limphomeWarnStatusInDCTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionLimphomeWarnStatusInDCT: mInput_TransmissionLimphomeWarnStatusInDCT
+    - highTempWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionHighTempWarnStatusInAT: mInput_TransmissionHighTempWarnStatusInAT
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionHighTempWarnStatusInDCT1: mInput_TransmissionHighTempWarnStatusInDCT1
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionHighTempWarnStatusInDCT2: mInput_TransmissionHighTempWarnStatusInDCT2
+    - hillHoldWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionHillHoldWarnStatusInAT: mInput_TransmissionHillHoldWarnStatusInAT
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionHillHoldWarnStatusInDCT: mInput_TransmissionHillHoldWarnStatusInDCT
+    - eolErrorWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionEolErrorWarnStatusFromTCU: mInput_TransmissionEolErrorWarnStatusFromTCU
+    - transmissionPowerLimitedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionPowerLimitStatus: mInput_TransmissionPowerLimitStatus
+    - transmissionWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionWarnSoundStatusFromTCU: mInput_TransmissionWarnSoundStatusFromTCU
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionWarnSoundStatusFromDCT: mInput_TransmissionWarnSoundStatusFromDCT
+    - transmissionSysWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Warning.Input_TransmissionSysWarnStatus: mInput_TransmissionSysWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: UNMEASURABLE, 0x2: VALID_DATA, 0x3: MAX
+    - SFC.Transmission_Warning.Constant.CoolingTime.Stat:
+      description: "DCN: IMG_CoolingTime_value</br>
+                    Vehicle stop time state"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UNMEASURABLE: 0x1
+        VALID_DATA: 0x2
+        MAX: 0x3
+      # 0x0 ~ 0x1F (0min~31min)
+    - SFC.Transmission_Warning.Constant.CoolingTime.Value:
+      description: "DCN: IMG_CoolingTime_value</br>
+                    Vehicle stop time value"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningLimpHome.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningLimpHome):E24101"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningLimpHome.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningOverHeated.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningOverHeated):E24102"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningOverHeated.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningCoolingCompleted.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningCoolingCompleted):E24103"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningCoolingCompleted.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningHighTemperature.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningHighTemperature):E24104"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningHighTemperature.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningCooling.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningCooling):E24105"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningCooling.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningHillHold.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningHillHold):E24106"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningHillHold.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.HighTempWarningImpossibleToDrive.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighTempWarningImpossibleToDrive):E24107"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.HighTempWarningImpossibleToDrive.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.TransmissionPowerLimited.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TransmissionPowerLimited):E24108"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.TransmissionPowerLimited.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Warning.Event.TransmissionPowerLimited.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Transmission_Warning.Event.TransmissionPowerLimited.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Transmission_Warning.Event.TransmissionPowerLimited.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.Transmission_Warning.Event.TransmissionSystemWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TransmissionSystemWarning):E24109"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Event.TransmissionSystemWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Warning.Sound.TransmissionHighTemp.ID:
+      description: "Sound ID<br>
+                    Sound ID List(TransmissionHighTemp):SND_TransmissionHighTemp"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning.Sound.TransmissionHighTemp.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Transmission_Warning.Sound.TransmissionHighTemp.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Transmission_Warning.Sound.TransmissionHighTemp.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1

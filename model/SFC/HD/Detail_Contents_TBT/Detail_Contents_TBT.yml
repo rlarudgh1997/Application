@@ -1,0 +1,465 @@
+#
+# @file Detail_Contents_TBT.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Detail_Contents_TBT:
+  sfcVersion: "20.0.0"
+  description: "Reference : [HD130] Detail_Contents_TBT. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - tbtDirectionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_TbtDirectionValue: mInput_TbtDirectionValue
+    - naviTbtChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_TbtDisplayTypeStatus: mInput_TbtDisplayTypeStatus
+    - naviDistToTurnFirstChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnFirstValue: mInput_NaviDistToTurnFirstValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnFirstUnderDecimalValue: mInput_NaviDistToTurnFirstUnderDecimalValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnFirstUnitStatus: mInput_NaviDistToTurnFirstUnitStatus
+    - naviDistToTurnSecondChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnSecondValue: mInput_NaviDistToTurnSecondValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnSecondUnderDecimalValue: mInput_NaviDistToTurnSecondUnderDecimalValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviDistToTurnSecondUnitStatus: mInput_NaviDistToTurnSecondUnitStatus
+    - signalPatternGuideLaneStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_PatternGuideLaneStatus: mInput_PatternGuideLaneStatus
+    - signalNaviPatternTbtIndexValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviPatternTbtBgIndexValue: mInput_NaviPatternTbtBgIndexValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviPatternTbt1IndexValue: mInput_NaviPatternTbt1IndexValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviPatternTbt2IndexValue: mInput_NaviPatternTbt2IndexValue
+    - signalNaviPatternGuideColorChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_PatternGuideColorStatus: mInput_PatternGuideColorStatus
+    - signalNaviRoadEventStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviRoadEventInfoStatus: mInput_NaviRoadEventInfoStatus
+        - SFC.Navigation_DIS.Inter_ConfigNaviDisCountry: mInter_ConfigNaviDisCountry
+    - signalNaviRoadEventDistChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviRoadEventDistUnitStatus: mInput_NaviRoadEventDistUnitStatus
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviRoadEventDistOverDecimalValue: mInput_NaviRoadEventDistOverDecimalValue
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviRoadEventDistUnderDecimalValue: mInput_NaviRoadEventDistUnderDecimalValue
+    - NaviPopupChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_TBT.Input_NaviPopupReqStatus: mInput_NaviPopupReqStatus
+    - signalHudTBTInfoOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Memory.Inter_HudTBTInfoOnOffStatus: mInter_HudTBTInfoOnOffStatus
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHUD: mInter_ConfigHUD
+        - Vehicle.System.Config.Inter_ConfigTBT: mInter_ConfigTBT
+        - Vehicle.System.Config.Inter_ConfigNewHUD: mInter_ConfigNewHUD
+    - naviAliveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Navigation_TBT.Inter_NaviAliveStatus: mInter_NaviAliveStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: DIRECTION_TO_DESTINATION, 0x3: ARRIVED, 0x4: NO_ROUTE_GUIDANCE, 0x5: CALC_ROUTE, 0x6: RECALC_ROUTE, 0x7: TURN, 0x8: EXIT_R, 0x9: EXIT_L, 0xA: EXIT_COMBINATION_R, 0xB: EXIT_COMBINATION_L, 0xC: SERVICE_ROAD_R, 0xD: SERVICE_ROAD_L, 0xE: FORK2, 0xF: U_TURN, 0x10: EXIT_ROUNDABOUT_TRS_R, 0x11: EXIT_ROUNDABOUT_TRS_L, 0x12: OVERPASS_R, 0x13: OVERPASS_L, 0x14: UNDERPASS_R, 0x15: UNDERPASS_L, 0x16: NOSDCARD, 0x17: LOADING, 0x18: TOLL, 0x19: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviTbt.Stat:
+      description: "DCN: HUD_IMG_NaviTbt_stat</br>
+                    State of Navigation TBT"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DIRECTION_TO_DESTINATION: 0x2
+        ARRIVED: 0x3
+        NO_ROUTE_GUIDANCE: 0x4
+        CALC_ROUTE: 0x5
+        RECALC_ROUTE: 0x6
+        TURN: 0x7
+        EXIT_R: 0x8
+        EXIT_L: 0x9
+        EXIT_COMBINATION_R: 0xA
+        EXIT_COMBINATION_L: 0xB
+        SERVICE_ROAD_R: 0xC
+        SERVICE_ROAD_L: 0xD
+        FORK2: 0xE
+        U_TURN: 0xF
+        EXIT_ROUNDABOUT_TRS_R: 0x10
+        EXIT_ROUNDABOUT_TRS_L: 0x11
+        OVERPASS_R: 0x12
+        OVERPASS_L: 0x13
+        UNDERPASS_R: 0x14
+        UNDERPASS_L: 0x15
+        NOSDCARD: 0x16
+        LOADING: 0x17
+        TOLL: 0x18
+        MAX: 0x19
+      # 0x0: NONE, 0x1: OFF, 0x2: 0x0, 0x3: 0x3, 0x4: 0x6, 0x5: 0x9, 0x6: 0xC, 0x7: 0xF, 0x8: 0x12, 0x9: 0x15, 0xA: 0x18, 0xB: 0x1B, 0xC: 0x1E, 0xD: 0x21, 0xE: 0x24, 0xF: 0x27, 0x10: 0x2A, 0x11: 0x2D, 0x12: MAX
+    - SFC.Detail_Contents_TBT.Constant.DirectionType.Stat:
+      description: "DCN: HUD_IMG_Direction_stat</br>
+                    State of Direction Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        VALUE_0x0: 0x2
+        VALUE_0x3: 0x3
+        VALUE_0x6: 0x4
+        VALUE_0x9: 0x5
+        VALUE_0xC: 0x6
+        VALUE_0xF: 0x7
+        VALUE_0x12: 0x8
+        VALUE_0x15: 0x9
+        VALUE_0x18: 0xA
+        VALUE_0x1B: 0xB
+        VALUE_0x1E: 0xC
+        VALUE_0x21: 0xD
+        VALUE_0x24: 0xE
+        VALUE_0x27: 0xF
+        VALUE_0x2A: 0x10
+        VALUE_0x2D: 0x11
+        MAX: 0x12
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurn1.Stat:
+      description: "DCN: HUD_IMG_NaviDistToTurn1_value</br>
+                    State of NaviDistToTurn1"
+      dataType: HUInt64
+      group: NaviDistToTurn1
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurn1.Value:
+      description: "DCN: HUD_IMG_NaviDistToTurn1_value</br>
+                    Value of NaviDistToTurn1"
+      dataType: HDouble
+      group: NaviDistToTurn1
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurnUnit1.Stat:
+      description: "DCN: HUD_IMG_NaviDistToTurnUnit1_stat</br>
+                    State of NaviDistToTurnUnit1"
+      dataType: HUInt64
+      group: NaviDistToTurn1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurn2.Stat:
+      description: "DCN: HUD_IMG_NaviDistToTurn2_value</br>
+                    State of NaviDistToTurn2"
+      dataType: HUInt64
+      group: NaviDistToTurn2
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # METER, FEET, YARD 소수점 이하 미표시 / KILOMETER, MILE 0.0~99.9 소수점 이하 표시, 100~65534 소수점 이하 미표시
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurn2.Value:
+      description: "DCN: HUD_IMG_NaviDistToTurn2_value</br>
+                    Value of NaviDistToTurn2"
+      dataType: HDouble
+      group: NaviDistToTurn2
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviDistToTurnUnit2.Stat:
+      description: "DCN: HUD_IMG_NaviDistToTurnUnit2_stat</br>
+                    State of NaviDistToTurnUnit2"
+      dataType: HUInt64
+      group: NaviDistToTurn2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: TYPE1, 0x3: TYPE2, 0x4: MAX
+    - SFC.Detail_Contents_TBT.Constant.Inter_PatternType:
+      description: "DCN: Inter_PatternType</br>
+                    Pattern Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        TYPE1: 0x2
+        TYPE2: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtBg.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtBg_stat</br>
+                    State of NaviPatternTbtBg"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtBg.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtBg_stat</br>
+                    Value of NaviPatternTbtBg"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbt1.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbt1_stat</br>
+                    State of NaviPatternTbt1"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbt1.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbt1_value</br>
+                    Value of NaviPatternTbt1"
+      dataType: HUInt64
+      group: Constant2
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbt2.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbt2_stat</br>
+                    State of NaviPatternTbt2"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbt2.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbt2_value</br>
+                    Value of NaviPatternTbt2"
+      dataType: HUInt64
+      group: Constant3
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane1.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane1_stat</br>
+                    State of NaviPatternTbtLane1"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane1.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane1_stat</br>
+                    Value of NaviPatternTbtLane1"
+      dataType: HUInt64
+      group: Constant4
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane2.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane2_stat</br>
+                    State of NaviPatternTbtLane2"
+      dataType: HUInt64
+      group: Constant5
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane2.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane2_stat</br>
+                    Value of NaviPatternTbtLane2"
+      dataType: HUInt64
+      group: Constant5
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane3.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane3_stat</br>
+                    State of NaviPatternTbtLane3"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane3.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane3_stat</br>
+                    Value of NaviPatternTbtLane3"
+      dataType: HUInt64
+      group: Constant6
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane4.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane4_stat</br>
+                    State of NaviPatternTbtLane4"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane4.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane4_stat</br>
+                    Value of NaviPatternTbtLane4"
+      dataType: HUInt64
+      group: Constant7
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane5.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane5_stat</br>
+                    State of NaviPatternTbtLane5"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane5.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane5_stat</br>
+                    Value of NaviPatternTbtLane5"
+      dataType: HUInt64
+      group: Constant8
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane6.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane6_stat</br>
+                    State of NaviPatternTbtLane6"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane6.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane6_stat</br>
+                    Value of NaviPatternTbtLane6"
+      dataType: HUInt64
+      group: Constant9
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane7.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane7_stat</br>
+                    State of NaviPatternTbtLane7"
+      dataType: HUInt64
+      group: Constant10
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane7.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane7_stat</br>
+                    Value of NaviPatternTbtLane7"
+      dataType: HUInt64
+      group: Constant10
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane8.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane8_stat</br>
+                    State of NaviPatternTbtLane8"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane8.Value:
+      description: "DCN: HUD_IMG_NaviPatternTbtLane8_stat</br>
+                    Value of NaviPatternTbtLane8"
+      dataType: HUInt64
+      group: Constant11
+      # 0x0: NONE, 0x1: OFF, 0x2: PINK, 0x3: LIGHT_GREEN, 0x4: GREEN, 0x5: YELLOW, 0x6: ORANGE, 0x7: BLUE, 0x8: WHITE, 0x9: BRAND, 0xA: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLaneColor.Stat:
+      description: "DCN: HUD_IMG_NaviPatternTbtLaneColor_stat</br>
+                    State of NaviPatternTbtLaneColor"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PINK: 0x2
+        LIGHT_GREEN: 0x3
+        GREEN: 0x4
+        YELLOW: 0x5
+        ORANGE: 0x6
+        BLUE: 0x7
+        WHITE: 0x8
+        BRAND: 0x9
+        MAX: 0xA
+      # 0x0: NONE, 0x1: OFF, 0x2: ROAD_CLOSED, 0x3: ROAD_CLOSED_CHINA, 0x4: ROAD_CLOSED_JAPAN, 0x5: ACCIDENT_A, 0x6: ACCIDENT_B, 0x7: ACCIDENT_C, 0x8: ACCIDENT_C_CHINA, 0x9: ACCIDENT_C_JAPAN, 0xA: ROAD_WORK_A, 0xB: ROAD_WORK_B, 0xC: ROAD_WORK_C, 0xD: ROAD_WORK_C_CHINA, 0xE: ROAD_WORK_C_JAPAN, 0xF: ETC_A, 0x10: ETC_B, 0x11: ETC_C, 0x12: EVENT, 0x13: EVENT_JAPAN, 0x14: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviRoadEvent.Stat:
+      description: "DCN: HUD_IMG_NaviRoadEvent_stat</br>
+                    State of NaviRoadEvent"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ROAD_CLOSED: 0x2
+        ROAD_CLOSED_CHINA: 0x3
+        ROAD_CLOSED_JAPAN: 0x4
+        ACCIDENT_A: 0x5
+        ACCIDENT_B: 0x6
+        ACCIDENT_C: 0x7
+        ACCIDENT_C_CHINA: 0x8
+        ACCIDENT_C_JAPAN: 0x9
+        ROAD_WORK_A: 0xA
+        ROAD_WORK_B: 0xB
+        ROAD_WORK_C: 0xC
+        ROAD_WORK_C_CHINA: 0xD
+        ROAD_WORK_C_JAPAN: 0xE
+        ETC_A: 0xF
+        ETC_B: 0x10
+        ETC_C: 0x11
+        EVENT: 0x12
+        EVENT_JAPAN: 0x13
+        MAX: 0x14
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviRoadEventDistToDest.Stat:
+      description: "DCN: HUD_IMG_NaviRoadEventDistToDest_stat</br>
+                    State of NaviRoadEventDistToDest"
+      dataType: HUInt64
+      group: Constant12
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # value
+    - SFC.Detail_Contents_TBT.Constant.NaviRoadEventDistToDest.Value:
+      description: "DCN: HUD_IMG_NaviRoadEventDistToDest_value</br>
+                    Value of NaviRoadEventDistToDest"
+      dataType: HDouble
+      group: Constant12
+      # 0x0: NONE, 0x1: OFF, 0x2: METER, 0x3: KILOMETER, 0x4: MILE, 0x5: FEET, 0x6: YARD, 0x7: MAX
+    - SFC.Detail_Contents_TBT.Constant.NaviRoadEventDistUnit.Stat:
+      description: "DCN: HUD_IMG_NaviRoadEventDistUnit_stat</br>
+                    State of NaviRoadEventDistUnit"
+      dataType: HUInt64
+      group: Constant12
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        METER: 0x2
+        KILOMETER: 0x3
+        MILE: 0x4
+        FEET: 0x5
+        YARD: 0x6
+        MAX: 0x7
+      # Style is E00000
+    - SFC.Detail_Contents_TBT.Event.NaviPopupDist.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NaviPopupDist):E71150,E71152,E71154,E71155,E71156"
+      dataType: HString
+      group: EventNaviPopupDist
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_TBT.Event.NaviPopupDist.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventNaviPopupDist
+      valueEnum: SFC_Common_Enum.Event.Stat

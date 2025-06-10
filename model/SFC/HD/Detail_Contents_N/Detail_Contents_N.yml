@@ -1,0 +1,486 @@
+#
+# @file Detail_Contents_N.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Detail_Contents_N:
+  sfcVersion: "6.1.0"
+  description: "Reference : [HD190] Detail Contents_N. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHUD: mInter_ConfigHUD
+        - Vehicle.System.Config.Inter_ConfigNewHUD: mInter_ConfigNewHUD
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+    - maxRpmStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Tachometer.Constant.MaxRpm.Stat: mMaxRpmStat
+    - regenNpedalLvlStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Regen_System.Constant.NpedalLvl.Stat: mNpedalLvlStat
+    - rpmValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Tachometer.Constant.Rpm.Value: mRpmValue
+    - rpmDampStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Tachometer.Constant.RpmDamp.Stat: mRpmDampStat
+    - redZoneRangeStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Tachometer.Constant.RedZoneNbrand.Stat: mRedZoneNbrandStat
+    - telltaleShiftLightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.Stat: mShiftLightStat
+        - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueA: mShiftLightBlinkValueA
+        - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueB: mShiftLightBlinkValueB
+        - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.BlinkValueBOptional: mShiftLightBlinkValueBOptional
+        - SFC.High_Performance_For_N_Brand.Telltale.ShiftLight.StatOptional: mShiftLightStatOptional
+    - transmissionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Transmission_Indicator.Constant.TransmissionDisplay.Value: mTransmissionDisplayValue
+        - SFC.Transmission_Indicator.Constant.TransmissionBlinking.Stat: mTransmissionBlinkingStat
+        - SFC.Transmission_Indicator.Constant.TransmissionBlinking.BlinkValueA: mTransmissionBlinkingBlinkValueA
+        - SFC.Transmission_Indicator.Constant.TransmissionBlinking.BlinkValueB: mTransmissionBlinkingBlinkValueB
+    - transmissionAgiStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Transmission_Indicator.Constant.TransmissionAgiUp.Stat: mTransmissionAgiUpStat
+        - SFC.Transmission_Indicator.Constant.TransmissionAgiDown.Stat: mTransmissionAgiDownStat
+    - boostTimerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.EV_Boost_Mode.Constant.BoostTimer.Value: mBoostTimerValue
+        - SFC.EV_Boost_Mode.Constant.BoostTimer.Stat: mBoostTimerStat
+  outputs:
+      # 0x0: NONE, 0x1: RPM6000, 0x2: RPM8000, 0x3: MAX
+    - SFC.Detail_Contents_N.Constant.MaxRpm.Stat:
+      description: "DCN: HUD_IMG_MaxRpm_stat</br>
+                    Max Rpm"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        RPM6000: 0x1
+        RPM8000: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Detail_Contents_N.Constant.Rpm.Value:
+      description: "DCN: HUD_IMG_Rpm_value</br>
+                    Rpm value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: HOLD, 0x2: DAMPING_LV0, 0x3: DAMPING_LV1, 0x4: DAMPING_LV2, 0x5: DAMPING_LV3, 0x6: DAMPING_LV4, 0x7: DAMPING_LV5, 0x8: DAMPING_LV6, 0x9: DAMPING_LV7, 0xA: NO_DAMPING, 0xB: MAX
+    - SFC.Detail_Contents_N.Constant.RpmDamp.Stat:
+      description: "DCN: HUD_IMG_RpmDamp_stat</br>
+                    RpmDamp"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        HOLD: 0x1
+        DAMPING_LV0: 0x2
+        DAMPING_LV1: 0x3
+        DAMPING_LV2: 0x4
+        DAMPING_LV3: 0x5
+        DAMPING_LV4: 0x6
+        DAMPING_LV5: 0x7
+        DAMPING_LV6: 0x8
+        DAMPING_LV7: 0x9
+        NO_DAMPING: 0xA
+        MAX: 0xB
+      # 0x0: NONE, 0x1: STEP_FROM4000, 0x2: STEP_FROM4250, 0x3: STEP_FROM4500, 0x4: STEP_FROM4750, 0x5: STEP_FROM5000, 0x6: STEP_FROM5250, 0x7: STEP_FROM5500, 0x8: STEP_FROM5750, 0x9: STEP_FROM6000, 0xA: STEP_FROM6250, 0xB: STEP_FROM6500, 0xC: STEP_FROM6750, 0xD: STEP_FROM7000, 0xE: STEP_FROM7750, 0xF: MAX
+    - SFC.Detail_Contents_N.Constant.RedZoneRange.Stat:
+      description: "DCN: HUD_IMG_RpmRedZoneRange_stat</br>
+                    RedZoneRange"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        STEP_FROM4000: 0x1
+        STEP_FROM4250: 0x2
+        STEP_FROM4500: 0x3
+        STEP_FROM4750: 0x4
+        STEP_FROM5000: 0x5
+        STEP_FROM5250: 0x6
+        STEP_FROM5500: 0x7
+        STEP_FROM5750: 0x8
+        STEP_FROM6000: 0x9
+        STEP_FROM6250: 0xA
+        STEP_FROM6500: 0xB
+        STEP_FROM6750: 0xC
+        STEP_FROM7000: 0xD
+        STEP_FROM7750: 0xE
+        MAX: 0xF
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: DISP_1, 0x09: DISP_2, 0x0A: DISP_3, 0x0B: DISP_4, 0x0C: DISP_5, 0x0D: DISP_6, 0x0E: DISP_7, 0x0F: DISP_8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionDisplay.Value:
+      description: "DCN: HUD_IMG_TransmissionDisplay_value</br>
+                    Value of Transmission Display"
+      dataType: HUInt64
+      group: TransmissionDisplay
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        DISP_1: 0x08
+        DISP_2: 0x09
+        DISP_3: 0x0A
+        DISP_4: 0x0B
+        DISP_5: 0x0C
+        DISP_6: 0x0D
+        DISP_7: 0x0E
+        DISP_8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        MAX: 0x20
+      # 0x0: NONE, 0x1: BLINK2, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionBlinking.Stat:
+      description: "DCN: HUD_IMG_TransmissionDisplay_value</br>
+                    State of Transmission Blink"
+      dataType: HUInt64
+      group: TransmissionDisplay
+      valueEnum:
+        NONE: 0x0
+        BLINK2: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: DISP_1, 0x09: DISP_2, 0x0A: DISP_3, 0x0B: DISP_4, 0x0C: DISP_5, 0x0D: DISP_6, 0x0E: DISP_7, 0x0F: DISP_8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionBlinking.BlinkValueA:
+      description: "DCN: HUD_IMG_TransmissionDisplay_value</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: TransmissionDisplay
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        DISP_1: 0x08
+        DISP_2: 0x09
+        DISP_3: 0x0A
+        DISP_4: 0x0B
+        DISP_5: 0x0C
+        DISP_6: 0x0D
+        DISP_7: 0x0E
+        DISP_8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        MAX: 0x20
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: DISP_1, 0x09: DISP_2, 0x0A: DISP_3, 0x0B: DISP_4, 0x0C: DISP_5, 0x0D: DISP_6, 0x0E: DISP_7, 0x0F: DISP_8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionBlinking.BlinkValueB:
+      description: "DCN: HUD_IMG_TransmissionDisplay_value</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: TransmissionDisplay
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        DISP_1: 0x08
+        DISP_2: 0x09
+        DISP_3: 0x0A
+        DISP_4: 0x0B
+        DISP_5: 0x0C
+        DISP_6: 0x0D
+        DISP_7: 0x0E
+        DISP_8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        MAX: 0x20
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: AVAILABLE_1, 0x3: AVAILABLE_2, 0x4: AVAILABLE_3, 0x5: AVAILABLE_4, 0x6: AVAILABLE_5, 0x7: AVAILABLE_6, 0x8: AVAILABLE_7, 0x9: AVAILABLE_8, 0xA: UNAVAILABLE_1, 0xB: UNAVAILABLE_2, 0xC: UNAVAILABLE_3, 0xD: UNAVAILABLE_4, 0xE: UNAVAILABLE_5, 0xF: UNAVAILABLE_6, 0x10: UNAVAILABLE_7, 0x11: UNAVAILABLE_8, 0x12: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionAgiUp.Stat:
+      description: "DCN: HUD_IMG_TransmissionAgiUp_stat</br>
+                    State of TransmissionAgiUp"
+      dataType: HUInt64
+      group: TransmissionAgi
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        AVAILABLE_1: 0x2
+        AVAILABLE_2: 0x3
+        AVAILABLE_3: 0x4
+        AVAILABLE_4: 0x5
+        AVAILABLE_5: 0x6
+        AVAILABLE_6: 0x7
+        AVAILABLE_7: 0x8
+        AVAILABLE_8: 0x9
+        UNAVAILABLE_1: 0xA
+        UNAVAILABLE_2: 0xB
+        UNAVAILABLE_3: 0xC
+        UNAVAILABLE_4: 0xD
+        UNAVAILABLE_5: 0xE
+        UNAVAILABLE_6: 0xF
+        UNAVAILABLE_7: 0x10
+        UNAVAILABLE_8: 0x11
+        MAX: 0x12
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: AVAILABLE_1, 0x3: AVAILABLE_2, 0x4: AVAILABLE_3, 0x5: AVAILABLE_4, 0x6: AVAILABLE_5, 0x7: AVAILABLE_6, 0x8: AVAILABLE_7, 0x9: AVAILABLE_8, 0xA: UNAVAILABLE_1, 0xB: UNAVAILABLE_2, 0xC: UNAVAILABLE_3, 0xD: UNAVAILABLE_4, 0xE: UNAVAILABLE_5, 0xF: UNAVAILABLE_6, 0x10: UNAVAILABLE_7, 0x11: UNAVAILABLE_8, 0x12: MAX
+    - SFC.Detail_Contents_N.Constant.TransmissionAgiDown.Stat:
+      description: "DCN: HUD_IMG_TransmissionAgiDown_stat</br>
+                    State of TransmissionAgiDown"
+      dataType: HUInt64
+      group: TransmissionAgi
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        AVAILABLE_1: 0x2
+        AVAILABLE_2: 0x3
+        AVAILABLE_3: 0x4
+        AVAILABLE_4: 0x5
+        AVAILABLE_5: 0x6
+        AVAILABLE_6: 0x7
+        AVAILABLE_7: 0x8
+        AVAILABLE_8: 0x9
+        UNAVAILABLE_1: 0xA
+        UNAVAILABLE_2: 0xB
+        UNAVAILABLE_3: 0xC
+        UNAVAILABLE_4: 0xD
+        UNAVAILABLE_5: 0xE
+        UNAVAILABLE_6: 0xF
+        UNAVAILABLE_7: 0x10
+        UNAVAILABLE_8: 0x11
+        MAX: 0x12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: DEFAULT, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Detail_Contents_N.Constant.ShiftLightIndicator.Stat:
+      description: "DCN: HUD_IMG_ShiftLightIndicator_stat</br>
+                    State of Shift Light Indicator"
+      dataType: HUInt64
+      group: ShiftLightIndicator
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        DEFAULT: 0x3
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Detail_Contents_N.Constant.ShiftLightIndicator.BlinkValueA:
+      description: "DCN: HUD_IMG_ShiftLightIndicator_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: ShiftLightIndicator
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Detail_Contents_N.Constant.ShiftLightIndicator.BlinkValueB:
+      description: "DCN: HUD_IMG_ShiftLightIndicator_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: ShiftLightIndicator
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: STEP1, 0x2: STEP2, 0x3: STEP3, 0x4: STEP4, 0x5: STEP5, 0x6: STEP6, 0x7: MAX
+    - SFC.Detail_Contents_N.Constant.ShiftLightIndicator.BlinkValueBOptional:
+      description: "DCN: HUD_IMG_ShiftLightIndicator_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: ShiftLightIndicator
+      valueEnum:
+        NONE: 0x0
+        STEP1: 0x1
+        STEP2: 0x2
+        STEP3: 0x3
+        STEP4: 0x4
+        STEP5: 0x5
+        STEP6: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: STEP1, 0x2: STEP2, 0x3: STEP3, 0x4: STEP4, 0x5: STEP5, 0x6: STEP6, 0x7: MAX
+    - SFC.Detail_Contents_N.Constant.ShiftLightIndicator.StatOptional:
+      description: "DCN: HUD_IMG_ShiftLightIndicator_stat</br>
+                    State of Shift Light Indicator"
+      dataType: HUInt64
+      group: ShiftLightIndicator
+      valueEnum:
+        NONE: 0x0
+        STEP1: 0x1
+        STEP2: 0x2
+        STEP3: 0x3
+        STEP4: 0x4
+        STEP5: 0x5
+        STEP6: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: NPEDAL_LV1, 0x3: NPEDAL_LV2, 0x4: NPEDAL_LV3, 0x5: MAX
+    - SFC.Detail_Contents_N.Constant.NpedalLvl.Stat:
+      description: "DCN: HUD_IMG_RegenNpedalLvl_stat</br>
+                    State of RegenNpedalLvl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        NPEDAL_LV1: 0x2
+        NPEDAL_LV2: 0x3
+        NPEDAL_LV3: 0x4
+        MAX: 0x5
+      # Numberic value (1~20)
+    - SFC.Detail_Contents_N.Constant.BoostTimer.Value:
+      description: "DCN: IMG_BoostTimer_Value</br>
+                    BoostTimer Value"
+      dataType: HUInt64
+      group: BoostTimer
+      # 0x0: NONE, 0x1: BOOST_OFF, 0x2: BOOST_READY, 0x3: BOOST_ON_NOTIMER, 0x4: BOOST_ON, 0x5: MAX
+    - SFC.Detail_Contents_N.Constant.BoostTimer.Stat:
+      description: "DCN: IMG_BoostTimer_Stat</br>
+                    State of BoostTimer"
+      dataType: HUInt64
+      group: BoostTimer
+      valueEnum:
+        NONE: 0x0
+        BOOST_OFF: 0x1
+        BOOST_READY: 0x2
+        BOOST_ON_NOTIMER: 0x3
+        BOOST_ON: 0x4
+        MAX: 0x5

@@ -1,0 +1,609 @@
+#
+# @file Key_System_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Key_System_2_0:
+  sfcVersion: "1.3.1"
+  description: "[EC081] Key_System_2_0. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - ignElapseOff700msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff700ms: mElapsedOff700ms
+    - configSBWChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSBW: mInter_ConfigSBW
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - immoIndiReqCANStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_ImmoIndiReqCANStatus: mInput_ImmoIndiReqCANStatus
+    - aCCIndicatorChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_AccessoryIndiReqStatus: mInput_AccessoryIndiReqStatus
+    - IAUWarnReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_IauWarnReqStatus: mInput_IauWarnReqStatus
+    - SMKWarnDisplayReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_SmkWarnDisplayReqStatus: mInput_SmkWarnDisplayReqStatus
+    - SMKDeactivationChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_SmkDeactivationWarnStatus: mInput_SmkDeactivationWarnStatus
+    - keyBattLowWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_KeyBattLowWarnStatus: mInput_KeyBattLowWarnStatus
+    - ESCLWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_EsclWarnSoundStatus: mInput_EsclWarnSoundStatus
+    - BCMWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_BcmWarnSoundStatus: mInput_BcmWarnSoundStatus
+    - SMKWarnDisplayReq2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_SmkWarnDisplayReq2Status: mInput_SmkWarnDisplayReq2Status
+    - SMKWarnDisplayReq3StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_SmkWarnDisplayReq3Status: mInput_SmkWarnDisplayReq3Status
+    - fingerPrintWarnReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_FingerPrintWarnReqStatus: mInput_FingerPrintWarnReqStatus
+    - serviceModeIndicatorChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_ServiceModeIndiReqStatus: mInput_ServiceModeIndiReqStatus
+    - evVehicleStartStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Key_System_2_0.Input_EvVehicleStartStatus: mInput_EvVehicleStartStatus
+    - aEMInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Key_System_2_0.Telltale.Key_System_2_0.Stat:
+      description: "DCN: IMG_TelltaleImmo_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # Value is defined as an integer value from 1 to 10
+    - SFC.Key_System_2_0.Constant.FpsTimeLimit.Value:
+      description: "DCN: IMG_FpsTimeLimit_value</br>
+                    Value of FpsTimeLimit"
+      dataType: HUInt64
+      group: ConstantFpsTimeLimit
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Key_System_2_0.Constant.FpsTimeLimit.ValueStat:
+      description: "DCN: IMG_FpsTimeLimit_value</br>
+                    State of FpsTimeLimit"
+      dataType: HUInt64
+      group: ConstantFpsTimeLimit
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Constant.EvStartTemporaryStandby.Stat:
+      description: "DCN: IMG_EvStartTemporaryStandby_status</br>
+                    State of EvStartTemporaryStandby"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.ACCIndicator.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ACCIndicator):E60701"
+      dataType: HString
+      group: EventACCIndicator
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.ACCIndicator.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventACCIndicator
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.DigitalKeyAuthenticationFailed.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DigitalKeyAuthenticationFailed):E60704,E60702,E60703,E60739,E60740,E60742"
+      dataType: HString
+      group: EventDigitalKeyAuth
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.DigitalKeyAuthenticationFailed.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventDigitalKeyAuth
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.DigitalKeyAuthenticationFailed.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventDigitalKeyAuth
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.DigitalKeyAuthenticationFailed.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventDigitalKeyAuth
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.DigitalKeyAuthenticationFailed.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventDigitalKeyAuth
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.ShiftToPRequest.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ShiftToPRequest):E60708,E60709,E60705,E60707,E60706"
+      dataType: HString
+      group: EventShiftToPRequest
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.ShiftToPRequest.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventShiftToPRequest
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.ShiftToPRequest.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventShiftToPRequest
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.ShiftToPRequest.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventShiftToPRequest
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FailToStart.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailToStart):E60711,E60712,E60720,E60722,E60749"
+      dataType: HString
+      group: EventFailToStart
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FailToStart.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFailToStart
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FailToStart.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFailToStart
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FailToStart.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFailToStart
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FailToStart.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFailToStart
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FailToStart_1_1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailToStart_1_1):E60715,E60716,E60718,E60723,E60724,E60744"
+      dataType: HString
+      group: EventFailToStart_1_1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_1_1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFailToStart_1_1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FailToStart_1_1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFailToStart_1_1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_1_1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFailToStart_1_1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FailToStart_1_1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFailToStart_1_1
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.SystemWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SystemWarning):E60725,E60726,E60727"
+      dataType: HString
+      group: EventSystemWarning
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.SystemWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventSystemWarning
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.SystemWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventSystemWarning
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.SystemWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventSystemWarning
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.SystemWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventSystemWarning
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.KeyUnrecognized.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(KeyUnrecognized):E60731,E60745"
+      dataType: HString
+      group: EventKeyUnrecognized
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.KeyUnrecognized.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventKeyUnrecognized
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.VehicleIsOnByDigitalKey.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(VehicleIsOnByDigitalKey):E60732,E60733"
+      dataType: HString
+      group: EventVehicleDigitalKey
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.VehicleIsOnByDigitalKey.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventVehicleDigitalKey
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.SystemFail.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SystemFail):E60734,E60735"
+      dataType: HString
+      group: EventSystemFail
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.SystemFail.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventSystemFail
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.SystemFail.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventSystemFail
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.SystemFail.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventSystemFail
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.SystemFail.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventSystemFail
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.DigitalKeyRecertificationRequest.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DigitalKeyRecertificationRequest):E60736,E60737,E60738,E60746,E60747,E60748,E60756"
+      dataType: HString
+      group: EventDigitalKeyRecert
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.DigitalKeyRecertificationRequest.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventDigitalKeyRecert
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.DigitalKeyRecertificationRequest.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventDigitalKeyRecert
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.DigitalKeyRecertificationRequest.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventDigitalKeyRecert
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.DigitalKeyRecertificationRequest.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventDigitalKeyRecert
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FingerprintRecognitionWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FingerprintRecognitionWarning):E60742,E60743,E60741"
+      dataType: HString
+      group: EventFingerprint
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FingerprintRecognitionWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFingerprint
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FingerprintRecognitionWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFingerprint
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FingerprintRecognitionWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFingerprint
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FingerprintRecognitionWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFingerprint
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.ServiceModeIndicator.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ServiceModeIndicator):E60754"
+      dataType: HString
+      group: EventServiceModeIndicator
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.ServiceModeIndicator.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventServiceModeIndicator
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.ServiceModeCondition.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ServiceModeCondition):E60755"
+      dataType: HString
+      group: EventServiceModeCondition
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.ServiceModeCondition.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventServiceModeCondition
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.ServiceModeCondition.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventServiceModeCondition
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.ServiceModeCondition.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventServiceModeCondition
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.ServiceModeCondition.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventServiceModeCondition
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FailToStart2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailToStart2):E60715,E60716,E60718,E60723,E60724,E60744"
+      dataType: HString
+      group: EventFailToStart2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FailToStart2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFailToStart2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FailToStart2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFailToStart2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FailToStart2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFailToStart2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FailToStart2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFailToStart2
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FailToStart_1_2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailToStart_1_2):E60715,E60716,E60718,E60723,E60724,E60744"
+      dataType: HString
+      group: EventFailToStart_1_2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_1_2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFailToStart_1_2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FailToStart_1_2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFailToStart_1_2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_1_2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFailToStart_1_2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FailToStart_1_2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFailToStart_1_2
+      # Style is E00000
+    - SFC.Key_System_2_0.Event.FailToStart_2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailToStart_2):E60757,E60758,E60759,E60760,E60761,E60762,E60763,E60764,E60765"
+      dataType: HString
+      group: EventFailToStart_2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventFailToStart_2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Event.FailToStart_2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EventFailToStart_2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_2_0.Event.FailToStart_2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EventFailToStart_2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_2_0.Event.FailToStart_2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EventFailToStart_2
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Sound.SMKDeactivation.ID:
+      description: "Sound ID<br>
+                    Sound ID List(SMKDeactivation):SND_DeactIDWarnSMK"
+      dataType: HString
+      group: SoundSMKDeactivation
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Sound.SMKDeactivation.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: SoundSMKDeactivation
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_2_0.Sound.SMKDeactivation.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: SoundSMKDeactivation
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Sound.KeyBattLow.ID:
+      description: "Sound ID<br>
+                    Sound ID List(KeyBattLow):SND_LowKeyBattery"
+      dataType: HString
+      group: SoundKeyBattLow
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Sound.KeyBattLow.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: SoundKeyBattLow
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_2_0.Sound.KeyBattLow.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: SoundKeyBattLow
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Key_System_2_0.Sound.KeyBattLow.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: SoundKeyBattLow
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Sound.ESCLWarn.ID:
+      description: "Sound ID<br>
+                    Sound ID List(ESCLWarn):SND_ESCLNotLockWarn"
+      dataType: HString
+      group: SoundESCLWarn
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Sound.ESCLWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: SoundESCLWarn
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_2_0.Sound.ESCLWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: SoundESCLWarn
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_2_0.Sound.BCMWarn.ID:
+      description: "Sound ID<br>
+                    Sound ID List(BCMWarn):SND_KeyOperatedWarn,SND_KeyLearning,SND_ParkBrakeWarn"
+      dataType: HString
+      group: SoundBCMWarn
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_2_0.Sound.BCMWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: SoundBCMWarn
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_2_0.Sound.BCMWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: SoundBCMWarn
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Key_System_2_0.Sound.BCMWarn.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: SoundBCMWarn

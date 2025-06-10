@@ -1,0 +1,884 @@
+#
+# @file EV_Charging_System_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- EV_Charging_System_2_0:
+  sfcVersion: "3.1.0"
+  description: "Reference : [PT171] EV_Charging_System_2_0. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - telltaleEvChargeCableChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_PhevPlugConnectStatusFromOBC: mInput_PhevPlugConnectStatusFromOBC
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LDisplayOnFromVCMS: mInput_V2LDisplayOnFromVCMS
+        - Vehicle.PT.EV_Charging_System_2_0.Input_VcmsReadyStatus: mInput_VcmsReadyStatus
+    - evFastChargeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvFastChargeStatus: mInput_EvFastChargeStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvFastChargeTargetSocValue: mInput_EvFastChargeTargetSocValue
+    - evSocDisplayValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvSocDisplayValue: mInput_EvSocDisplayValue
+    - doorOpenChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_DoorOpenAssistSideStatus: mInput_DoorOpenAssistSideStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_DoorOpenDriverSideStatus: mInput_DoorOpenDriverSideStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_DoorOpenRearLeftSideStatus: mInput_DoorOpenRearLeftSideStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_DoorOpenRearRightSideStatus: mInput_DoorOpenRearRightSideStatus
+    - evChargeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeSchedWaitIndiStatus: mInput_EvChargeSchedWaitIndiStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeStatus: mInput_EvChargeStatus
+    - evStdChargeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvStdChargeStatus: mInput_EvStdChargeStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvStdChargeTargetSocValue: mInput_EvStdChargeTargetSocValue
+    - evFastChargeFromVCMSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvFastChargeFailWarnStatusFromVCMS: mInput_EvFastChargeFailWarnStatusFromVCMS
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeAlarmSubInfoFromVCMS: mInput_EvChargeAlarmSubInfoFromVCMS
+    - chargingMaxDteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvFastChargeTargetDteValue: mInput_EvFastChargeTargetDteValue
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvStdChargeTargetDteValue: mInput_EvStdChargeTargetDteValue
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - v2lMsgAppliedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LMsgAppliedStatus: mInput_V2LMsgAppliedStatus
+    - v2lMinimumSocValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LMinimumSocValue: mInput_V2LMinimumSocValue
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LMinimumSocFromVcmsValue: mInput_V2LMinimumSocFromVcmsValue
+    - evShiftPToChargeReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvShiftPToChargeReqStatus: mInput_EvShiftPToChargeReqStatus
+    - evChargeFinishStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeFinishStatus: mInput_EvChargeFinishStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvBulkChargeRemainTimeValue: mInput_EvBulkChargeRemainTimeValue
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvStdChargeRemainTimeValue: mInput_EvStdChargeRemainTimeValue
+    - evChargeFailWarnStatusFromOBCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeFailWarnStatusFromOBC: mInput_EvChargeFailWarnStatusFromOBC
+    - evChgCalculateErrorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChgCalculateErrorStatus: mInput_EvChgCalculateErrorStatus
+    - eventDoorVsmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_VehicleReadyStatus: mInput_VehicleReadyStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeDoorFrontOpenStatus: mInput_EvChargeDoorFrontOpenStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeDoorRearOpenStatus: mInput_EvChargeDoorRearOpenStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeDoorOpenStatus: mInput_EvChargeDoorOpenStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeDoorMalfunctionStatus: mInput_EvChargeDoorMalfunctionStatus
+        - SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH: mInter_DisplaySpeedValueKPH
+    - chargingPwrChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvStdChargeInputPowerValue: mInput_EvStdChargeInputPowerValue
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvMergeChargeInputPowerValue: mInput_EvMergeChargeInputPowerValue
+    - evChargeSchedDayChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeSchedDayStatus: mInput_EvChargeSchedDayStatus
+    - evChargeSchedMinChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeSchedMinValue: mInput_EvChargeSchedMinValue
+    - v2lUsingAvailableTimeMinValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LUsingAvailableTimeMinValue: mInput_V2LUsingAvailableTimeMinValue
+    - v2lRemainDteAfterUseValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LRemainDteAfterUseValue: mInput_V2LRemainDteAfterUseValue
+    - evUnreliableSocWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvUnreliableSocWarn: mInput_EvUnreliableSocWarn
+    - v2LCUsingAvailableTimeMinValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LCUsingAvailableTimeMinValue: mInput_V2LCUsingAvailableTimeMinValue
+    - v2LCChargeInputPowerValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LCChargeInputPowerValue: mInput_V2LCChargeInputPowerValue
+    - v2LCWarnAndAlarmSubInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LCDisplayOnOffStatus: mInput_V2LCDisplayOnOffStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LCWarnStatus: mInput_V2LCWarnStatus
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LCAlarmSubInfo: mInput_V2LCAlarmSubInfo
+    - evFastChargeEightyPercentDteValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvFastChargeEightyPercentDteValue: mInput_EvFastChargeEightyPercentDteValue
+    - v2LOnlyDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_V2LOnlyDoorOpenStatus: mInput_V2LOnlyDoorOpenStatus
+    - sbwWarnStatusFromScuChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_SbwWarnStatusFromSCU: mInput_SbwWarnStatusFromSCU
+    - evChargeDoorErrorStatusFromCDMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeDoorErrorStatusFromCDM: mInput_EvChargeDoorErrorStatusFromCDM
+    - evChargeFrontDoorErrorStatusFromCDMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeFrontDoorErrorStatusFromCDM: mInput_EvChargeFrontDoorErrorStatusFromCDM
+    - evChargeRearDoorErrorStatusFromCDMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeRearDoorErrorStatusFromCDM: mInput_EvChargeRearDoorErrorStatusFromCDM
+    - evChargerRear2ndDoorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargerRear2ndDoorStatus: mInput_EvChargerRear2ndDoorStatus
+    - generalSettingsChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.CLU_GENERALSETTINGS.Inter_GeneralSettingsTimeFormat: mInter_GeneralSettingsTimeFormat
+        - Vehicle.PT.EV_Charging_System_2_0.Input_EvChargeSchedHourValue: mInput_EvChargeSchedHourValue
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.EV_Charging_System_2_0.Telltale.EvChgCable.Stat:
+      description: "DCN: IMG_TelltaleEvChgCable_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MIN, 0x3: MAX, 0x4: VALUE, 0x5: UNMEASURABLE
+    - SFC.EV_Charging_System_2_0.Constant.ChargingRemainTime.Stat:
+      description: "DCN: IMG_ChargingRemainTime_value</br>
+                    State of ChargingRemainTime"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MIN: 0x2
+        MAX: 0x3
+        VALUE: 0x4
+        UNMEASURABLE: 0x5
+      # 1~59999min, 정상값 / normal
+    - SFC.EV_Charging_System_2_0.Constant.ChargingRemainTime.Value:
+      description: "DCN: IMG_ChargingRemainTime_value</br>
+                    Value of ChargingRemainTime"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MIN, 0x3: VALUE, 0x4: UNMEASURABLE, 0x5: MAX
+    - SFC.EV_Charging_System_2_0.Constant.Charging80SocTime.Stat:
+      description: "DCN: IMG_Charging80SocTime_value</br>
+                    State of Charging80SocTime"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MIN: 0x2
+        VALUE: 0x3
+        UNMEASURABLE: 0x4
+        MAX: 0x5
+      # 1~5999min, 정상값 / normal
+    - SFC.EV_Charging_System_2_0.Constant.Charging80SocTime.Value:
+      description: "DCN: IMG_Charging80SocTime_value</br>
+                    Value of Charging80SocTime"
+      dataType: HUInt64
+      group: Constant2
+      # 0x0: NONE, 0x1: VALUE, 0x2: UNMEASURABLE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingMaxSoc.Stat:
+      description: "DCN: IMG_ChargingMaxSoc_value</br>
+                    State of ChargingMaxSoc"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        UNMEASURABLE: 0x2
+        MAX: 0x3
+      # Numeric value (0~100%)
+    - SFC.EV_Charging_System_2_0.Constant.ChargingMaxSoc.Value:
+      description: "DCN: IMG_ChargingMaxSoc_value</br>
+                    Value of ChargingMaxSoc"
+      dataType: HUInt64
+      group: Constant3
+      # 0x0: NONE, 0x1: VALUE, 0x2: UNMEASURABLE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingCurrentSoc.Stat:
+      description: "DCN: IMG_ChargingCurrentSoc_value</br>
+                    State of ChargingCurrentSoc"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        UNMEASURABLE: 0x2
+        MAX: 0x3
+      # Numeric value (0~100%)
+    - SFC.EV_Charging_System_2_0.Constant.ChargingCurrentSoc.Value:
+      description: "DCN: IMG_ChargingCurrentSoc_value</br>
+                    Value of ChargingCurrentSoc"
+      dataType: HUInt64
+      group: Constant4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: UNMEASURABLE, 0x4: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingPwr.Stat:
+      description: "DCN: IMG_ChargingPwr_value</br>
+                    State of ChargingPwr"
+      dataType: HUInt64
+      group: Constant5
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        VALUE: 0x2
+        UNMEASURABLE: 0x3
+        MAX: 0x4
+      # 1~510, 급속 (정수자리만 표시), 0.1~25.4, 완속 (소수점 첫째 자리까지 표시) or 완속-무선충전 (소수점 첫째 자리까지 표시)
+    - SFC.EV_Charging_System_2_0.Constant.ChargingPwr.Value:
+      description: "DCN: IMG_ChargingPwr_value</br>
+                    Value of ChargingPwr"
+      dataType: HDouble
+      group: Constant5
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingMaxDte.Stat:
+      description: "DCN: IMG_ChargingMaxDte_valuestat</br>
+                    State of ChargingMaxDte"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Value of ChargingSchedMin
+    - SFC.EV_Charging_System_2_0.Constant.ChargingMaxDte.Value:
+      description: "DCN: IMG_ChargingMaxDte_valuestat</br>
+                    Value of ChargingMaxDte"
+      dataType: HUInt64
+      group: Constant6
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingEightyPercentDte.Stat:
+      description: "DCN: IMG_ChargingEightyPercentDte_stat</br>
+                    State of ChargingEightyPercentDte"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum.DisplayOff_On_EnumValue
+      # Value of ChargingEightyPercentDte
+    - SFC.EV_Charging_System_2_0.Constant.ChargingEightyPercentDte.Value:
+      description: "DCN: IMG_ChargingEightyPercentDte_value</br>
+                    Value of ChargingEightyPercentDte"
+      dataType: HUInt64
+      group: Constant7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.V2LMinimumSoc.Stat:
+      description: "DCN: IMG_V2LMinimumSoc_valuestat</br>
+                    State of V2LMinimumSoc"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Value of V2LMinimumSoc
+    - SFC.EV_Charging_System_2_0.Constant.V2LMinimumSoc.Value:
+      description: "DCN: IMG_V2LMinimumSoc_valuestat</br>
+                    Value of V2LMinimumSoc"
+      dataType: HUInt64
+      group: Constant8
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: UNMEASURABLE, 0x4: MAX
+    - SFC.EV_Charging_System_2_0.Constant.V2LUsingAvailableTimeMin.Stat:
+      description: "DCN: IMG_V2LUsingAvailableTimeMinValue</br>
+                    State of V2LUsingAvailableTimeMin"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        VALUE: 0x2
+        UNMEASURABLE: 0x3
+        MAX: 0x4
+      # Value of V2LUsingAvailableTimeMin
+    - SFC.EV_Charging_System_2_0.Constant.V2LUsingAvailableTimeMin.Value:
+      description: "DCN: IMG_V2LUsingAvailableTimeMinValue</br>
+                    Value of V2LUsingAvailableTimeMin"
+      dataType: HUInt64
+      group: Constant9
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.V2LRemainDteAfterUse.Stat:
+      description: "DCN: IMG_V2LRemainDteAfterUseValue</br>
+                    State of V2LRemainDteAfterUse"
+      dataType: HUInt64
+      group: Constant10
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # Value of V2LRemainDteAfterUse
+    - SFC.EV_Charging_System_2_0.Constant.V2LRemainDteAfterUse.Value:
+      description: "DCN: IMG_V2LRemainDteAfterUseValue</br>
+                    Value of V2LRemainDteAfterUse"
+      dataType: HUInt64
+      group: Constant10
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: SUN, 0x3: MON, 0x4: TUE, 0x5: WED, 0x6: THU, 0x7: FRI, 0x8: SAT, 0x9: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedDay.Stat:
+      description: "DCN: IMG_ChargingSchedDay_stat</br>
+                    State of ChargingSchedDay"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        SUN: 0x2
+        MON: 0x3
+        TUE: 0x4
+        WED: 0x5
+        THU: 0x6
+        FRI: 0x7
+        SAT: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: AM, 0x3: PM, 0x4: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedAMPM.Stat:
+      description: "DCN: IMG_ChargingSchedAMPM_stat</br>
+                    State of ChargingSchedAMPM"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        AM: 0x2
+        PM: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedHour.Stat:
+      description: "DCN: IMG_ChargingSchedHour_value</br>
+                    State of ChargingSchedHour"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0~23 Hour
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedHour.Value:
+      description: "DCN: IMG_ChargingSchedHour_value</br>
+                    Value of ChargingSchedHour"
+      dataType: HUInt64
+      group: Constant11
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedMin.Stat:
+      description: "DCN: IMG_ChargingSchedMin_value</br>
+                    State of ChargingSchedMin"
+      dataType: HUInt64
+      group: Constant11
+      valueEnum: SFC_Common_Enum.DisplayOff_Value_EnumValue
+      # 0~59 Min
+    - SFC.EV_Charging_System_2_0.Constant.ChargingSchedMin.Value:
+      description: "DCN: IMG_ChargingSchedMin_value</br>
+                    Value of ChargingSchedMin"
+      dataType: HUInt64
+      group: Constant11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingOnOff.Stat:
+      description: "DCN: IMG_ChargingOnOff_Stat</br>
+                    State of ChargingOnOffStat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: UNMEASURABLE, 0x2: DISPLAY_OFF, 0x3: ON, 0x4: MAX
+    - SFC.EV_Charging_System_2_0.Constant.V2LCUsingAvailableTimeMin.Stat:
+      description: "DCN: IMG_V2LCUsingAvailableTimeMinValue</br>
+                    State of V2LCUsingAvailableTimeMin"
+      dataType: HUInt64
+      group: Constant13
+      valueEnum:
+        NONE: 0x0
+        UNMEASURABLE: 0x1
+        DISPLAY_OFF: 0x2
+        ON: 0x3
+        MAX: 0x4
+      # 0 ~ 59999
+    - SFC.EV_Charging_System_2_0.Constant.V2LCUsingAvailableTimeMin.Value:
+      description: "DCN: IMG_V2LCUsingAvailableTimeMinValue</br>
+                    Value of V2LCUsingAvailableTimeMin"
+      dataType: HUInt64
+      group: Constant13
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.V2LCChargingPwr.Stat:
+      description: "DCN: IMG_V2LCChargingPwr_value</br>
+                    State of V2LCChargingPwr"
+      dataType: HUInt64
+      group: Constant14
+      valueEnum: SFC_Common_Enum.DisplayOff_On_EnumValue
+      # -0.1 ~-25.0 Kw
+    - SFC.EV_Charging_System_2_0.Constant.V2LCChargingPwr.Value:
+      description: "DCN: IMG_V2LCChargingPwr_value</br>
+                    Value of V2LCChargingPwr"
+      dataType: HDouble
+      group: Constant14
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingWaitInfo.Stat:
+      description: "DCN: IMG_ChargingWaitInfo_stat</br>
+                    State of ChargingWaitInfo"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.DisplayOff_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CHARGING_EV, 0x3: CHARGING_PHEV, 0x4: COMPLETE, 0x5: V2L, 0x6: V2X, 0x7: V2LC, 0x8: MAX
+    - SFC.EV_Charging_System_2_0.Constant.ChargingInfoForConnect.Stat:
+      description: "DCN: IMG_ChargingInfoForConnect_Stat</br>
+                    State of ChargingInfoForConnect"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CHARGING_EV: 0x2
+        CHARGING_PHEV: 0x3
+        COMPLETE: 0x4
+        V2L: 0x5
+        V2X: 0x6
+        V2LC: 0x7
+        MAX: 0x8
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvShiftPToChargeReq.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvShiftPToChargeReq):E22101"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvShiftPToChargeReq.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvShiftPToChargeReq.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvShiftPToChargeReq.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvShiftPToChargeReq.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarnObc.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChargeFailWarnObc):E22102,E22103"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarnObc.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarnObc.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarnObc.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarnObc.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChargeFailWarn):E22102,E22103,E22104,E22105,E22106,E22112,E22113,E22114,E22132,E22119"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChargeFailWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChargeDoorOpen):E22107,E22108,E22133,E22134,E22135,E22136"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Sound output by duration
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorOpen.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorMalfunction.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChargeDoorMalfunction):E22109,E22137,E22138"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorMalfunction.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorMalfunction.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorMalfunction.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChargeDoorMalfunction.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChargeSchedWait.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChargeSchedWait):E22110"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeSchedWait.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChargeSchedWait.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChargeSchedWait.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChargeSchedWait.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvCharge.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvCharge):E22111,E22120"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvCharge.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvCharge.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvCharge.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvCharge.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvFastChargeFailWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvFastChargeFailWarn):E22115,E22116"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvFastChargeFailWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvFastChargeFailWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvFastChargeFailWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvFastChargeFailWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvChgCalculateError.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvChgCalculateError):E22117,E22118"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChgCalculateError.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvChgCalculateError.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvChgCalculateError.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvChgCalculateError.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.EvUnreliableSocWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvUnreliableSocWarn):E22121,E22122,E22123"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvUnreliableSocWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.EvUnreliableSocWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.EvUnreliableSocWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.EvUnreliableSocWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event10
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.V2LCInoperableAndRunning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(V2LCInoperableAndRunning):E22124,E22125,E22126,E22127,E22128"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LCInoperableAndRunning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.V2LCInoperableAndRunning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LCInoperableAndRunning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.V2LCInoperableAndRunning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event11
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(V2LOnlyDoorOpen):E22129,E22130"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event12
+      # Sound output by duration
+    - SFC.EV_Charging_System_2_0.Event.V2LOnlyDoorOpen.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event12
+      # Style is E00000
+    - SFC.EV_Charging_System_2_0.Event.V2LCTailgate.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(V2LCTailgate):E22131"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LCTailgate.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_2_0.Event.V2LCTailgate.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_2_0.Event.V2LCTailgate.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_2_0.Event.V2LCTailgate.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event13

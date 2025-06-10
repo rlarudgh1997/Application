@@ -1,0 +1,103 @@
+#
+# @file Vehicle_Auto_Shut_Off.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Vehicle_Auto_Shut_Off:
+  sfcVersion: "4.0.0"
+  description: "Reference : [PT440] Vehicle_Auto_Shut_Off. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - TimerValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType1TimerMinValue: mInput_VehicleAutoShutOffType1TimerMinValue
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType1TimerSecValue: mInput_VehicleAutoShutOffType1TimerSecValue
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2TimerMinValue: mInput_VehicleAutoShutOffType2TimerMinValue
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2TimerSecValue: mInput_VehicleAutoShutOffType2TimerSecValue
+    - WarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType1WarnStatus: mInput_VehicleAutoShutOffType1WarnStatus
+        - Vehicle.PT.Vehicle_Auto_Shut_Off.Input_VehicleAutoShutOffType2WarnStatus: mInput_VehicleAutoShutOffType2WarnStatus
+  outputs:
+      # Style is E00000
+    - SFC.Vehicle_Auto_Shut_Off.Event.DispWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DispWarning):E24001"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Vehicle_Auto_Shut_Off.Event.DispWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Vehicle_Auto_Shut_Off.Event.DispWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Vehicle_Auto_Shut_Off.Event.DispWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Vehicle_Auto_Shut_Off.Event.DispWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Min Value(0~250)
+    - SFC.Vehicle_Auto_Shut_Off.Constant.Min.Value:
+      description: "DCN: IMG_AutoShutOffTimeMin_value</br>
+                    MinValue"
+      dataType: HUInt64
+      group: Constant1
+      # Sec Value(0~60)
+    - SFC.Vehicle_Auto_Shut_Off.Constant.Sec.Value:
+      description: "DCN: IMG_AutoShutOffTimeSec_value</br>
+                    SecValue"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: INVALID, 0x2: VALID, 0x3: MAX
+    - SFC.Vehicle_Auto_Shut_Off.Constant.Time.Stat:
+      description: "DCN: IMG_AutoShutOffTime_stat</br>
+                    TimeStat"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        INVALID: 0x1
+        VALID: 0x2
+        MAX: 0x3

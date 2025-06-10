@@ -1,0 +1,2565 @@
+#
+# @file Detail_Contents_ADAS_NEW.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Detail_Contents_ADAS_NEW:
+  sfcVersion: "62.0.1"
+  description: "Reference : [HD170] Detail_Contents_ADAS_NEW. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - ccMslaActiveStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.CC_MSLA.Inter_CcActiveStat: mInter_CcActiveStat
+        - SFC.CC_MSLA.Inter_MslaActiveStat: mInter_MslaActiveStat
+    - ccSetIndStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CruiseSetIndReqStatus: mInput_CruiseSetIndReqStatus
+    - ccStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.CC_MSLA.Inter_CcOnOffStat: mInter_CcOnOffStat
+    - ccSldMaxSpeedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.CC_MSLA.Inter_CcSldMaxSpeedValue: mInter_CcSldMaxSpeedValue
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configOnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHUD: mInter_ConfigHUD
+        - Vehicle.System.Config.Inter_ConfigNewHUD: mInter_ConfigNewHUD
+    - configHDPNameChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHDPName: mInter_ConfigHDPName
+    - configSccChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasSCC: mInter_ConfigAdasSCC
+    - mslaStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.CC_MSLA.Inter_MslaOnOffStat: mInter_MslaOnOffStat
+    - mslaOverrideChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.CC_MSLA.Inter_Mslaoverride: mInter_Mslaoverride
+    - ccMslaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CcOnlySetSpeedValue: mInput_CcOnlySetSpeedValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CcSldSetSpeedValue: mInput_CcSldSetSpeedValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CruiseMainIndReqStatus: mInput_CruiseMainIndReqStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CruiseOverrideReqStatus: mInput_CruiseOverrideReqStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SpeedLimitActiveStatus: mInput_SpeedLimitActiveStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SpeedLimitReadyStatus: mInput_SpeedLimitReadyStatus
+    - crawlActiveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CrawlActiveStatus: mInput_CrawlActiveStatus
+    - crawlActiveStepStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CrawlActiveStepStatus: mInput_CrawlActiveStepStatus
+    - centerRoadChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvCenterRoadSurfaceDistanceValue: mInput_MvCenterRoadSurfaceDistanceValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvCenterRoadSurfaceStatus: mInput_MvCenterRoadSurfaceStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftLineOffsetValue: mInput_MvLeftLineOffsetValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightLineOffsetValue: mInput_MvRightLineOffsetValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvDrivingLaneRadiusValue: mInput_MvDrivingLaneRadiusValue
+    - frontLeftObjectPositionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontLeftObjectLateralPositionValue: mInput_MvFrontLeftObjectLateralPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontLeftObjectLongitudinalPositionValue: mInput_MvFrontLeftObjectLongitudinalPositionValue
+    - frontLeftObjectChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontLeftObjectStatus: mInput_MvFrontLeftObjectStatus
+    - frontObjectChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectLateralPositionValue: mInput_MvFrontObjectLateralPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectLongitudinalPositionValue: mInput_MvFrontObjectLongitudinalPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectStatus: mInput_MvFrontObjectStatus
+    - frontRightObjectPositionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontRightObjectLateralPositionValue: mInput_MvFrontRightObjectLateralPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontRightObjectLongitudinalPositionValue: mInput_MvFrontRightObjectLongitudinalPositionValue
+    - frontRightObjectChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontRightObjectStatus: mInput_MvFrontRightObjectStatus
+    - leftLineChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftLaneChangeDirectionStatus: mInput_MvLeftLaneChangeDirectionStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftLineStatus: mInput_MvLeftLineStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftRoadSurfaceStatus: mInput_MvLeftRoadSurfaceStatus
+    - leftObjectChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftObjectLateralPositionValue: mInput_MvLeftObjectLateralPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftObjectLongitudinalPositionValue: mInput_MvLeftObjectLongitudinalPositionValue
+    - leftObjectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLeftObjectStatus: mInput_MvLeftObjectStatus
+    - radarWaveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontRadarWaveStatus: mInput_MvFrontRadarWaveStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRearLeftRadarWave1Status: mInput_MvRearLeftRadarWave1Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRearLeftRadarWave2Status: mInput_MvRearLeftRadarWave2Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRearRightRadarWave1Status: mInput_MvRearRightRadarWave1Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRearRightRadarWave2Status: mInput_MvRearRightRadarWave2Status
+    - rightLineChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightLaneChangeDirectionStatus: mInput_MvRightLaneChangeDirectionStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightLineStatus: mInput_MvRightLineStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightRoadSurfaceStatus: mInput_MvRightRoadSurfaceStatus
+    - rightObjectChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightObjectLateralPositionValue: mInput_MvRightObjectLateralPositionValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightObjectLongitudinalPositionValue: mInput_MvRightObjectLongitudinalPositionValue
+    - rightObjectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvRightObjectStatus: mInput_MvRightObjectStatus
+    - mvFrontObstacleStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObstacleStatus: mInput_MvFrontObstacleStatus
+    - mvFrontObstacleLateralPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObstacleLateralPositionValue: mInput_MvFrontObstacleLateralPositionValue
+    - mvFrontObstacleLongitudinalPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObstacleLongitudinalPositionValue: mInput_MvFrontObstacleLongitudinalPositionValue
+    - vehicleDistanceChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvVehicleDistanceStatus: mInput_MvVehicleDistanceStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvVehicleDistanceValue: mInput_MvVehicleDistanceValue
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_NccCameraOperStatus: mInput_NccCameraOperStatus
+    - group1AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuFGroup1AdasWarning1_1Status: mInput_PuFGroup1AdasWarning1_1Status
+    - group1AdasWarning1_2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuFGroup1AdasWarning1_2Status: mInput_PuFGroup1AdasWarning1_2Status
+    - group4AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuFGroup4AdasWarning1_1Status: mInput_PuFGroup4AdasWarning1_1Status
+    - group2AdasWarning1_1StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuMGroup2AdasWarning1_1Status: mInput_PuMGroup2AdasWarning1_1Status
+    - group2AdasWarning1_2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuMGroup2AdasWarning1_2Status: mInput_PuMGroup2AdasWarning1_2Status
+    - group2AdasWarning1_3StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_PuMGroup2AdasWarning1_3Status: mInput_PuMGroup2AdasWarning1_3Status
+    - cruiseSymbolChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SccOperatingStatus: mInput_SccOperatingStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SccTargetSpeedSettingValue: mInput_SccTargetSpeedSettingValue
+    - mvLaneChangedRectangleStatus:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLaneChangeRectangleStatus: mInput_MvLaneChangeRectangleStatus
+    - mvLaneChangedRectangleLateralPositionValue:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvLaneChangeRectangleLateralPositionValue: mInput_MvLaneChangeRectangleLateralPositionValue
+    - isMvFrontObject01StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObject01Status: mInput_MvFrontObject01Status
+    - isMvFrontObjectClassification01StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectClassification01Status: mInput_MvFrontObjectClassification01Status
+    - isMvFrontObjectLateralPosition01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectLateralPosition01Value: mInput_MvFrontObjectLateralPosition01Value
+    - isMvFrontObjectLongitudinalPosition01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectLongitudinalPosition01Value: mInput_MvFrontObjectLongitudinalPosition01Value
+    - isMvFrontObjectHeadingAngle01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvFrontObjectHeadingAngle01Value: mInput_MvFrontObjectHeadingAngle01Value
+    - mvSurroundingObject01to05StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject01Status: mInput_MvSurroundingObject01Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject02Status: mInput_MvSurroundingObject02Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject03Status: mInput_MvSurroundingObject03Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject04Status: mInput_MvSurroundingObject04Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject05Status: mInput_MvSurroundingObject05Status
+    - mvSurroundingObject06to11StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject06Status: mInput_MvSurroundingObject06Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject07Status: mInput_MvSurroundingObject07Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject08Status: mInput_MvSurroundingObject08Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject09Status: mInput_MvSurroundingObject09Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject10Status: mInput_MvSurroundingObject10Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject11Status: mInput_MvSurroundingObject11Status
+    - mvSurroundingObject12to14StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject12Status: mInput_MvSurroundingObject12Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject13Status: mInput_MvSurroundingObject13Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObject14Status: mInput_MvSurroundingObject14Status
+    - mvSurroundingObjectClassification01to05StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification01Status: mInput_MvSurroundingObjectClassification01Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification02Status: mInput_MvSurroundingObjectClassification02Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification03Status: mInput_MvSurroundingObjectClassification03Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification04Status: mInput_MvSurroundingObjectClassification04Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification05Status: mInput_MvSurroundingObjectClassification05Status
+    - mvSurroundingObjectClassification06to11StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification06Status: mInput_MvSurroundingObjectClassification06Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification07Status: mInput_MvSurroundingObjectClassification07Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification08Status: mInput_MvSurroundingObjectClassification08Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification09Status: mInput_MvSurroundingObjectClassification09Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification10Status: mInput_MvSurroundingObjectClassification10Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification11Status: mInput_MvSurroundingObjectClassification11Status
+    - mvSurroundingObjectClassification12to14StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification12Status: mInput_MvSurroundingObjectClassification12Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification13Status: mInput_MvSurroundingObjectClassification13Status
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectClassification14Status: mInput_MvSurroundingObjectClassification14Status
+    - mvSurroundingObjectHeadingAngle01to05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle01Value: mInput_MvSurroundingObjectHeadingAngle01Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle02Value: mInput_MvSurroundingObjectHeadingAngle02Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle03Value: mInput_MvSurroundingObjectHeadingAngle03Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle04Value: mInput_MvSurroundingObjectHeadingAngle04Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle05Value: mInput_MvSurroundingObjectHeadingAngle05Value
+    - mvSurroundingObjectHeadingAngle06to11ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle06Value: mInput_MvSurroundingObjectHeadingAngle06Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle07Value: mInput_MvSurroundingObjectHeadingAngle07Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle08Value: mInput_MvSurroundingObjectHeadingAngle08Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle09Value: mInput_MvSurroundingObjectHeadingAngle09Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle10Value: mInput_MvSurroundingObjectHeadingAngle10Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle11Value: mInput_MvSurroundingObjectHeadingAngle11Value
+    - mvSurroundingObjectHeadingAngle12to14ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle12Value: mInput_MvSurroundingObjectHeadingAngle12Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle13Value: mInput_MvSurroundingObjectHeadingAngle13Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectHeadingAngle14Value: mInput_MvSurroundingObjectHeadingAngle14Value
+    - mvSurroundingObjectLateralPosition01to05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition01Value: mInput_MvSurroundingObjectLateralPosition01Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition02Value: mInput_MvSurroundingObjectLateralPosition02Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition03Value: mInput_MvSurroundingObjectLateralPosition03Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition04Value: mInput_MvSurroundingObjectLateralPosition04Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition05Value: mInput_MvSurroundingObjectLateralPosition05Value
+    - mvSurroundingObjectLateralPosition06to11ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition06Value: mInput_MvSurroundingObjectLateralPosition06Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition07Value: mInput_MvSurroundingObjectLateralPosition07Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition08Value: mInput_MvSurroundingObjectLateralPosition08Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition09Value: mInput_MvSurroundingObjectLateralPosition09Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition10Value: mInput_MvSurroundingObjectLateralPosition10Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition11Value: mInput_MvSurroundingObjectLateralPosition11Value
+    - mvSurroundingObjectLateralPosition12to14ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition12Value: mInput_MvSurroundingObjectLateralPosition12Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition13Value: mInput_MvSurroundingObjectLateralPosition13Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLateralPosition14Value: mInput_MvSurroundingObjectLateralPosition14Value
+    - mvSurroundingObjectLongitudinalPosition01to05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition01Value: mInput_MvSurroundingObjectLongitudinalPosition01Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition02Value: mInput_MvSurroundingObjectLongitudinalPosition02Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition03Value: mInput_MvSurroundingObjectLongitudinalPosition03Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition04Value: mInput_MvSurroundingObjectLongitudinalPosition04Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition05Value: mInput_MvSurroundingObjectLongitudinalPosition05Value
+    - mvSurroundingObjectLongitudinalPosition06to11ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition06Value: mInput_MvSurroundingObjectLongitudinalPosition06Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition07Value: mInput_MvSurroundingObjectLongitudinalPosition07Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition08Value: mInput_MvSurroundingObjectLongitudinalPosition08Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition09Value: mInput_MvSurroundingObjectLongitudinalPosition09Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition10Value: mInput_MvSurroundingObjectLongitudinalPosition10Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition11Value: mInput_MvSurroundingObjectLongitudinalPosition11Value
+    - mvSurroundingObjectLongitudinalPosition12to14ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition12Value: mInput_MvSurroundingObjectLongitudinalPosition12Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition13Value: mInput_MvSurroundingObjectLongitudinalPosition13Value
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvSurroundingObjectLongitudinalPosition14Value: mInput_MvSurroundingObjectLongitudinalPosition14Value
+    - smvChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvHdaSymbolStatus: mInput_SmvHdaSymbolStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvIslaSetSpeedSymbolStatus: mInput_SmvIslaSetSpeedSymbolStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvNsccSymbolStatus: mInput_SmvNsccSymbolStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvDrvAsstHUDSymbStatus: mInput_SmvDrvAsstHUDSymbStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvSetSpeedStatus: mInput_SmvSetSpeedStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvSetSpeedValue: mInput_SmvSetSpeedValue
+    - mvDriverHandsOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_MvDriverHandsOnOffStatus: mInput_MvDriverHandsOnOffStatus
+    - smvLfaSymbolStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SmvLfaSymbolStatus: mInput_SmvLfaSymbolStatus
+    - infoDisplayReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CruiseInfoDisplayReqStatus: mInput_CruiseInfoDisplayReqStatus
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_SpeedLimitInfoDisplayReqStatus: mInput_SpeedLimitInfoDisplayReqStatus
+    - hdpRDDWarningStateChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_HDP_RDDWarningState: mInput_HDP_RDDWarningState
+    - escHDPEngagedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_ESC_HDPEngagedStatus: mInput_ESC_HDPEngagedStatus
+    - rcuHDPEngagedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_RCU_HDPEngagedStatus: mInput_RCU_HDPEngagedStatus
+    - hudBcwInfoOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Memory.Inter_HudBcwInfoOnOffStatus: mInter_HudBcwInfoOnOffStatus
+    - hudSccAdasInfoOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Memory.Inter_HudSCCInfoOnOffStatus: mInter_HudSCCInfoOnOffStatus
+        - SFC.Extension.Memory.Inter_HudAdasInfoOnOffStatus: mInter_HudAdasInfoOnOffStatus
+    - hudBcwUnderAdasInfoOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Memory.Inter_HudBcwUnderAdasInfoOnOffStatus: mInter_HudBcwUnderAdasInfoOnOffStatus
+    - crawlWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.HD.Detail_Contents_ADAS_NEW.Input_CrawlWarnStatus: mInput_CrawlWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: BLINK2, 0x3: CRUISE_ACTIVE_FULL, 0x4: CRUISE_ACTIVE_HALF, 0x5: CRUISE_PAUSE_FULL, 0x6: CRUISE_PAUSE_HALF, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcColor.Stat:
+      description: "DCN: HUD_IMG_CcColor_stat</br>
+                    Cc Color Status"
+      dataType: HUInt64
+      group: CcColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        BLINK2: 0x2
+        CRUISE_ACTIVE_FULL: 0x3
+        CRUISE_ACTIVE_HALF: 0x4
+        CRUISE_PAUSE_FULL: 0x5
+        CRUISE_PAUSE_HALF: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_ACTIVE_FULL, 0x3: CRUISE_ACTIVE_HALF, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcColor.BlinkValueA:
+      description: "DCN: HUD_IMG_CcColor_stat</br>
+                    Cc Color Blink Value A"
+      dataType: HUInt64
+      group: CcColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_ACTIVE_FULL: 0x2
+        CRUISE_ACTIVE_HALF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_ACTIVE_FULL, 0x3: CRUISE_ACTIVE_HALF, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcColor.BlinkValueB:
+      description: "DCN: HUD_IMG_CcColor_stat</br>
+                    Cc Color Blink Value B"
+      dataType: HUInt64
+      group: CcColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_ACTIVE_FULL: 0x2
+        CRUISE_ACTIVE_HALF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: BLINK2, 0x3: CRUISE_ACTIVE_FULL, 0x4: CRUISE_ACTIVE_HALF, 0x5: CRUISE_PAUSE_FULL, 0x6: CRUISE_PAUSE_HALF, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaColor.Stat:
+      description: "DCN: HUD_IMG_MslaColor_stat</br>
+                    Msla Color Status"
+      dataType: HUInt64
+      group: MslaColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        BLINK2: 0x2
+        CRUISE_ACTIVE_FULL: 0x3
+        CRUISE_ACTIVE_HALF: 0x4
+        CRUISE_PAUSE_FULL: 0x5
+        CRUISE_PAUSE_HALF: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_ACTIVE_FULL, 0x3: CRUISE_ACTIVE_HALF, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaColor.BlinkValueA:
+      description: "DCN: HUD_IMG_MslaColor_stat</br>
+                    Msla Color Blink Value A"
+      dataType: HUInt64
+      group: MslaColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_ACTIVE_FULL: 0x2
+        CRUISE_ACTIVE_HALF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_ACTIVE_FULL, 0x3: CRUISE_ACTIVE_HALF, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaColor.BlinkValueB:
+      description: "DCN: HUD_IMG_MslaColor_stat</br>
+                    Msla Color Blink Value B"
+      dataType: HUInt64
+      group: MslaColor
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_ACTIVE_FULL: 0x2
+        CRUISE_ACTIVE_HALF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: READY, 0x3: ACTIVE, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.NaviCruise.Stat:
+      description: "DCN: HUD_IMG_NaviCruise_stat</br>
+                    Navi Cruise Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        READY: 0x2
+        ACTIVE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: ACTIVE, 0x4: BLINK2, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CrawlOperation.Stat:
+      description: "DCN: HUD_IMG_CrawlOperationStatus_stat</br>
+                    CrawlOperation Status"
+      dataType: HUInt64
+      group: CrawlOperation
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        ACTIVE: 0x3
+        BLINK2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: ACTIVE, 0x4: YELLOW, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CrawlOperation.BlinkValueA:
+      description: "DCN: HUD_IMG_CrawlOperation_stat</br>
+                    BlinkValueA"
+      dataType: HUInt64
+      group: CrawlOperation
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE: 0x2
+        ACTIVE: 0x3
+        YELLOW: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: ACTIVE, 0x4: YELLOW, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CrawlOperation.BlinkValueB:
+      description: "DCN: HUD_IMG_CrawlOperation_stat</br>
+                    BlinkValueB"
+      dataType: HUInt64
+      group: CrawlOperation
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE: 0x2
+        ACTIVE: 0x3
+        YELLOW: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: STEP1, 0x3: STEP2, 0x4: STEP3, 0x5: STEP4, 0x6: STEP5, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CrawlOperationStep.Stat:
+      description: "DCN: HUD_IMG_CrawlOperationStep_stat</br>
+                    CrawlOperation Step"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STEP1: 0x2
+        STEP2: 0x3
+        STEP3: 0x4
+        STEP4: 0x5
+        STEP5: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY_OFF_OVERRIDE, 0x3: BLINK2, 0x4: ACTIVATE, 0x5: DISPLAY_OFF_DEACTIVATE, 0x6: DEACTIVATE, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcSpeed.Stat:
+      description: "DCN: HUD_IMG_CcSpeed_Stat</br>
+                    Cc Speed Status"
+      dataType: HUInt64
+      group: CcSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        DISPLAY_OFF_OVERRIDE: 0x2
+        BLINK2: 0x3
+        ACTIVATE: 0x4
+        DISPLAY_OFF_DEACTIVATE: 0x5
+        DEACTIVATE: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ACTIVATE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcSpeed.BlinkValueA:
+      description: "DCN: HUD_IMG_CcSpeed_Stat</br>
+                    Cc Speed Blink Value A"
+      dataType: HUInt64
+      group: CcSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ACTIVATE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ACTIVATE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcSpeed.BlinkValueB:
+      description: "DCN: HUD_IMG_CcSpeed_Stat</br>
+                    Cc Speed Blink Value B"
+      dataType: HUInt64
+      group: CcSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ACTIVATE: 0x2
+        MAX: 0x3
+      # ICV, EV: (0, 510), Others: (0, 254)
+    - SFC.Detail_Contents_ADAS_NEW.Constant.CcSpeed.Value:
+      description: "DCN: HUD_IMG_CcSpeed_value</br>
+                    Cc Speed Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY_OFF_OVERRIDE, 0x3: BLINK2, 0x4: ACTIVATE, 0x5: ISLA_ON, 0x6: DISPLAY_OFF_DEACTIVATE, 0x7: DEACTIVATE, 0x8: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaSpeed.Stat:
+      description: "DCN: HUD_IMG_MslaSpeed_Stat</br>
+                    Msla Speed Status"
+      dataType: HUInt64
+      group: MslaSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        DISPLAY_OFF_OVERRIDE: 0x2
+        BLINK2: 0x3
+        ACTIVATE: 0x4
+        ISLA_ON: 0x5
+        DISPLAY_OFF_DEACTIVATE: 0x6
+        DEACTIVATE: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ACTIVATE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaSpeed.BlinkValueA:
+      description: "DCN: HUD_IMG_MslaSpeed_Stat</br>
+                    Msla Speed Blink Value A"
+      dataType: HUInt64
+      group: MslaSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ACTIVATE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ACTIVATE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaSpeed.BlinkValueB:
+      description: "DCN: HUD_IMG_MslaSpeed_Stat</br>
+                    Msla Speed Blink Value B"
+      dataType: HUInt64
+      group: MslaSpeed
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ACTIVATE: 0x2
+        MAX: 0x3
+      # ICV, EV: 510, Others: 254
+    - SFC.Detail_Contents_ADAS_NEW.Constant.MslaSpeed.Value:
+      description: "DCN: HUD_IMG_MslaSpeed_value</br>
+                    Msla Speed Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: PLUS_WHITE, 0x3: MINUS_WHITE, 0x4: PLUS_GREEN, 0x5: MINUS_GREEN, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ISLAManualSetSpeedForCcMsla.Stat:
+      description: "DCN: HUD_IMG_ISLAManualSetSpeedForCcMsla_Stat</br>
+                    ISLA Manual Set Speed For CC/MSLA Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PLUS_WHITE: 0x2
+        MINUS_WHITE: 0x3
+        PLUS_GREEN: 0x4
+        MINUS_GREEN: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: FREE_CYAN, 0x3: FREE_GREEN, 0x4: ON_CYAN, 0x5: ON_GRAY, 0x6: ON_AMBER, 0x7: ON_RED, 0x8: ON_WHITE, 0x9: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HandsOnOffTelltale.Stat:
+      description: "DCN: HUD_IMG_HandsOnOffTelltale_Stat</br>
+                    Hands On/Off Telltale Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        FREE_CYAN: 0x2
+        FREE_GREEN: 0x3
+        ON_CYAN: 0x4
+        ON_GRAY: 0x5
+        ON_AMBER: 0x6
+        ON_RED: 0x7
+        ON_WHITE: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY_HALF, 0x3: GRAY_FULL, 0x4: GREEN_HALF, 0x5: GREEN_FULL, 0x6: WHITE_HALF, 0x7: WHITE_FULL, 0x8: CYAN_HALF, 0x9: CYAN_FULL, 0xA: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCruise.Stat:
+      description: "DCN: IMG_ADASCRUISE_Stat</br>
+                    ADAS Cruise Status"
+      dataType: HUInt64
+      group: ADASCruise
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY_HALF: 0x2
+        GRAY_FULL: 0x3
+        GREEN_HALF: 0x4
+        GREEN_FULL: 0x5
+        WHITE_HALF: 0x6
+        WHITE_FULL: 0x7
+        CYAN_HALF: 0x8
+        CYAN_FULL: 0x9
+        MAX: 0xA
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: WHITE, 0x5: CYAN, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASSetSpeed.Stat:
+      description: "DCN: HUD_IMG_ADASSetSpeed_Stat</br>
+                    ADAS Set Speed Status"
+      dataType: HUInt64
+      group: ADASSetSpeed
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        WHITE: 0x4
+        CYAN: 0x5
+        MAX: 0x6
+      # ICV, EV: 510, Others: 254
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASSetSpeed.Value:
+      description: "DCN: HUD_IMG_ADASSetSpeed_Value</br>
+                    ADAS Set Speed Value"
+      dataType: HUInt64
+      group: ADASSetSpeed
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASSetSpeed.ValueStat:
+      description: "DCN: HUD_IMG_ADASSetSpeed_Value</br>
+                    ADAS Set Speed Value Status"
+      dataType: HUInt64
+      group: ADASSetSpeed
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: WHITE, 0x5: CYAN, 0x6: CYAN_B, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDAHDPTelltale.Stat:
+      description: "DCN: HUD_IMG_HDAHDPTelltale_Stat</br>
+                    HDA HDP Telltale Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        WHITE: 0x4
+        CYAN: 0x5
+        CYAN_B: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: WHITE, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.NSCCAutoSetTelltale.Stat:
+      description: "DCN: HUD_IMG_NSCCAutoSetTelltale_Stat</br>
+                    NSCC Auto Set Telltale Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        WHITE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: DOTTED_LINE, 0x3: SOLID_LINE, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLaneChangeRectangle.Stat:
+      description: "DCN: HUD_IMG_ADASViewLaneChangeRectangle_Stat</br>
+                    ADAS View Change Rectangle Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DOTTED_LINE: 0x2
+        SOLID_LINE: 0x3
+        MAX: 0x4
+      # Rectangle Lateral Position Value equals from 1 to 62
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLaneChangeRectangleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewLaneChangeRectangleLat_Val</br>
+                    ADAS View Change Rectangle Lateral Position<br>
+                    if ValueStat == CENTER, then Vaue == 0<br>
+                    if ValueStat == LEFT, then 1 <= Vaue <= 62<br>
+                    if ValueStat == RIGHT, then 1 <= Vaue <= 62"
+      dataType: HUInt64
+      group: ADASViewLaneChangeRectangleLat
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT, 0x4: LEFT, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLaneChangeRectangleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewLaneChangeRectangleLat_Val</br>
+                    ADAS View Change Rectangle Lateral Position"
+      dataType: HUInt64
+      group: ADASViewLaneChangeRectangleLat
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT: 0x3
+        LEFT: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectColor01.Stat:
+      description: "DCN: IMG_ADASViewFrontObjectColor01_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectClass01.Stat:
+      description: "DCN: IMG_ADASViewFrontObjectClass01_Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # ADAS View Front Object Lat01 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLat01.Value:
+      description: "DCN: IMG_ADASViewFrontObjectLat01_Val(-300~300)"
+      dataType: HInt64
+      group: ADASViewFrontObjectLat01
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLat01.Stat:
+      description: "DCN: IMG_ADASViewFrontObjectLat01_Stat"
+      dataType: HUInt64
+      group: ADASViewFrontObjectLat01
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Front Object Long01 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLong01.Value:
+      description: "DCN: IMG_ADASViewFrontObjectLong01_Val(-200~1500)"
+      dataType: HInt64
+      group: ADASViewFrontObjectLong01
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLong01.Stat:
+      description: "DCN: IMG_ADASViewFrontObjectLong01_Stat"
+      dataType: HUInt64
+      group: ADASViewFrontObjectLong01
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Front Object Heading Angle01 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectHeadingAngle01.Value:
+      description: "DCN: IMG_ADASViewFrontObjectHeadingAngle01_Val(0~72)"
+      dataType: HUInt64
+      group: ADASViewFrontObjectHeadingAngle01
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectHeadingAngle01.Stat:
+      description: "DCN: IMG_ADASViewFrontObjectHeadingAngle01_Stat"
+      dataType: HUInt64
+      group: ADASViewFrontObjectHeadingAngle01
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor01.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor01_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor02.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor02_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor03.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor03_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor04.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor04_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor05.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor05_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor06.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor06_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor07.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor07_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor08.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor08_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor09.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor09_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor10.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor10_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor11.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor11_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor12.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor12_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor13.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor13_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor14.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectColor14_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      valueEnum: SFC_Common_Enum.ADAS_View_Object_Color_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass01.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass01_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass02.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass02_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass03.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass03_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass04.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass04_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass05.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass05_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass06.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass06_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass07.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass07_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass08.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass08_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass09.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass09_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass10.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass10_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass11.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass11_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass12.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass12_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass13.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass13_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass14.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectClass14_Stat"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      valueEnum: SFC_Common_Enum.Adas_View_Object_Class_EnumValue
+      # ADAS View Surrounding Object Lat01 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat01.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat01_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject01
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat01.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat01_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat02 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat02.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat02_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject02
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat02.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat02_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat03 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat03.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat03_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject03
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat03.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat03_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat04 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat04.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat04_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject04
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat04.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat04_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat05 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat05.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat05_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject05
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat05.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat05_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat06 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat06.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat06_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject06
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat06.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat06_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat07 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat07.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat07_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject07
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat07.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat07_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat08 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat08.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat08_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject08
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat08.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat08_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat09 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat09.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat09_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject09
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat09.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat09_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat10 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat10.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat10_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject10
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat10.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat10_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat11 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat11.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat11_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject11
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat11.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat11_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat12 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat12.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat12_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject12
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat12.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat12_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat13 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat13.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat13_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject13
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat13.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat13_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Lat14 -300 to 300
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat14.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat14_Value</br>
+                    (-300~300)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject14
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat14.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLat14_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      valueEnum: SFC_Common_Enum.Off_Left_Right_EnumValue
+      # ADAS View Surrounding Object Long01 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong01.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong01_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject01
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong01.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong01_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long02 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong02.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong02_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject02
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong02.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong02_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long03 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong03.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong03_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject03
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong03.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong03_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long04 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong04.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong04_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject04
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong04.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong04_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long05 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong05.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong05_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject05
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong05.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong05_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long06 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong06.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong06_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject06
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong06.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong06_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long07 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong07.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong07_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject07
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong07.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong07_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long08 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong08.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong08_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject08
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong08.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong08_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long09 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong09.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong09_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject09
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong09.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong09_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long10 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong10.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong10_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject10
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong10.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong10_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long11 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong11.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong11_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject11
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong11.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong11_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long12 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong12.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong12_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject12
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong12.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong12_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long13 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong13.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong13_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject13
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong13.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong13_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Long14 -200 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong14.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong14_Value</br>
+                    (-200~1500)"
+      dataType: HInt64
+      group: ADASViewSurroundingObject14
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong14.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectLong14_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle01 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle01.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle01_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle01.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle01_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject01
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle02 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle02.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle02_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle02.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle02_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject02
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle03 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle03.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle03_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle03.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle03_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject03
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle04 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle04.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle04_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle04.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle04_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject04
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle05 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle05.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle05_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle05.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle05_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject05
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle06 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle06.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle06_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle06.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle06_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject06
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle07 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle07.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle07_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle07.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle07_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject07
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle08 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle08.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle08_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle08.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle08_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject08
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle09 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle09.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle09_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle09.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle09_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject09
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle10 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle10.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle10_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle10.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle10_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject10
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle11 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle11.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle11_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle11.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle11_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject11
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle12 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle12.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle12_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle12.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle12_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject12
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle13 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle13.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle13_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle13.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle13_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject13
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # ADAS View Surrounding Object Heading Angle14 0 to 72
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle14.Value:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle14_Val</br>
+                    (0~72)"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle14.Stat:
+      description: "DCN: IMG_ADASViewSurroundingObjectHeadingAngle14_Val</br>
+                    Value Status"
+      dataType: HUInt64
+      group: ADASViewSurroundingObject14
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: PLUS_WHITE, 0x3: MINUS_WHITE, 0x4: PLUS_GREEN, 0x5: MINUS_GREEN, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ISLAManualSetSpeed.Stat:
+      description: "DCN: HUD_IMG_ISLAManualSetSpeed_Stat</br>
+                    ISLA Manual Set Speed Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PLUS_WHITE: 0x2
+        MINUS_WHITE: 0x3
+        PLUS_GREEN: 0x4
+        MINUS_GREEN: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: WHITE, 0x4: AMBER, 0x5: GREEN, 0x6: WHITE_DASH, 0x7: AMBER_DASH, 0x8: GREEN_DASH, 0x9: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftLane.Stat:
+      description: "DCN: HUD_IMG_ADASLeftLane_Stat</br>
+                    ADAS Left Lane Status"
+      dataType: HUInt64
+      group: LeftLane
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        WHITE: 0x3
+        AMBER: 0x4
+        GREEN: 0x5
+        WHITE_DASH: 0x6
+        AMBER_DASH: 0x7
+        GREEN_DASH: 0x8
+        MAX: 0x9
+      # Left Line Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftLineLatPos.Value:
+      description: "DCN: HUD_IMG_ADASLeftLineLatPos_Val</br>
+                    ADAS Left Line Lat Pos Value"
+      dataType: HUInt64
+      group: LeftLane
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftLineLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASLeftLineLatPos_Val</br>
+                    ADAS Left Line Lat Pos Value Status"
+      dataType: HUInt64
+      group: LeftLane
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: STRAIGHT, 0x3: LEFT_VALUE, 0x4: RIGHT_VALUE, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLaneCvrtLvl.ValueStat:
+      description: "DCN: HUD_IMG_ADASLaneCvrtLvl_Val</br>
+                    ADAS Lane Cvrt Level Value Status"
+      dataType: HUInt64
+      group: LaneCvrt
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STRAIGHT: 0x2
+        LEFT_VALUE: 0x3
+        RIGHT_VALUE: 0x4
+        MAX: 0x5
+      # Left Value 1 to 15, Right Value 1 to 15
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLaneCvrtLvl.Value:
+      description: "DCN: HUD_IMG_ADASLaneCvrtLvl_Val</br>
+                    ADAS Lane Cvrt Level Value"
+      dataType: HUInt64
+      group: LaneCvrt
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: WHITE, 0x4: AMBER, 0x5: GREEN, 0x6: WHITE_DASH, 0x7: AMBER_DASH, 0x8: GREEN_DASH, 0x9: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightLane.Stat:
+      description: "DCN: HUD_IMG_ADASRightLane_Stat</br>
+                    ADAS Right Lane Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        WHITE: 0x3
+        AMBER: 0x4
+        GREEN: 0x5
+        WHITE_DASH: 0x6
+        AMBER_DASH: 0x7
+        GREEN_DASH: 0x8
+        MAX: 0x9
+      # Right Line Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightLineLatPos.Value:
+      description: "DCN: HUD_IMG_ADASRightLineLatPos_Val</br>
+                    ADAS Right Line Lat Pos Value"
+      dataType: HUInt64
+      group: RightLineLatPos
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightLineLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASRightLineLatPos_Val</br>
+                    ADAS Right Line Lat Pos Value Status"
+      dataType: HUInt64
+      group: RightLineLatPos
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: BRAND, 0x3: ECO, 0x4: SPORT, 0x5: WHITE, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASHeadwayDist.Stat:
+      description: "DCN: HUD_IMG_ADASHeadwayDist_Stat</br>
+                    ADAS Headway Distance Status"
+      dataType: HUInt64
+      group: HeadwayDist
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        BRAND: 0x2
+        ECO: 0x3
+        SPORT: 0x4
+        WHITE: 0x5
+        MAX: 0x6
+      # Headway Dist Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASHeadwayDist.Value:
+      description: "DCN: HUD_IMG_ADASHeadwayDist_Val</br>
+                    ADAS Headway Distance Value"
+      dataType: HUInt64
+      group: HeadwayDist
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASHeadwayDist.ValueStat:
+      description: "DCN: HUD_IMG_ADASHeadwayDist_Val</br>
+                    ADAS Headway Distance Value Status"
+      dataType: HUInt64
+      group: HeadwayDist
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: GRAY, 0x4: CYAN, 0x5: AMBER, 0x6: RED, 0x7: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoad.Stat:
+      description: "DCN: HUD_IMG_ADASCenterRoad_Stat</br>
+                    ADAS Center Road Status"
+      dataType: HUInt64
+      group: CenterRoad
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        GRAY: 0x3
+        CYAN: 0x4
+        AMBER: 0x5
+        RED: 0x6
+        MAX: 0x7
+      # Center Road Long Value 0 to 1500
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLong.Value:
+      description: "DCN: HUD_IMG_ADASCenterRoadLong_Val</br>
+                    ADAS Center Road Long Value"
+      dataType: HUInt64
+      group: CenterRoad
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASCenterRoadLong_Val</br>
+                    ADAS Center Road Long Value Status"
+      dataType: HUInt64
+      group: CenterRoad
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Center Road Left Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLeftLatPos.Value:
+      description: "DCN: HUD_IMG_ADASCenterRoadLeft LatPos_Val</br>
+                    ADAS Center Road Left Lat Pos Value"
+      dataType: HUInt64
+      group: CenterRoadLeft
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLeftLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASCenterRoadLeft LatPos_Val</br>
+                    ADAS Center Road Left Lat Pos Value Status"
+      dataType: HUInt64
+      group: CenterRoadLeft
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Center Road Right Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadRightLatPos.Value:
+      description: "DCN: HUD_IMG_ADASCenterRoadRightLatPos_Val</br>
+                    ADAS Center Road Right Lat Pos Value"
+      dataType: HUInt64
+      group: CenterRoadRight
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadRightLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASCenterRoadRightLatPos_Val</br>
+                    ADAS Center Road Right Lat Pos Value Status"
+      dataType: HUInt64
+      group: CenterRoadRight
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: STRAIGHT, 0x3: LEFT_VALUE, 0x4: RIGHT_VALUE, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRoadCvrtLvl.ValueStat:
+      description: "DCN: HUD_IMG_ADASRoadCvrtLvl_Val</br>
+                    ADAS Road Cvrt Level Value Status"
+      dataType: HUInt64
+      group: RoadCvrt
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STRAIGHT: 0x2
+        LEFT_VALUE: 0x3
+        RIGHT_VALUE: 0x4
+        MAX: 0x5
+      # Left Value 1 to 15, Right Value 1 to 15
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRoadCvrtLvl.Value:
+      description: "DCN: HUD_IMG_ADASRoadCvrtLvl_Val</br>
+                    ADAS Road Cvrt Level Value"
+      dataType: HUInt64
+      group: RoadCvrt
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftRoad.Stat:
+      description: "DCN: HUD_IMG_ADASLeftRoad_Stat</br>
+                    ADAS Left Road Status"
+      dataType: HUInt64
+      group: LeftRoad
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        MAX: 0x3
+      # Left Road Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftRoadLatPos.Value:
+      description: "DCN: HUD_IMG_ADASLeftRoadLatPos_Val</br>
+                    ADAS Left Road Lat Pos Value"
+      dataType: HUInt64
+      group: LeftRoad
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftRoadLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASLeftRoadLatPos_Val</br>
+                    ADAS Left Road Lat Pos Value Status"
+      dataType: HUInt64
+      group: LeftRoad
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightRoad.Stat:
+      description: "DCN: HUD_IMG_ADASRightRoad_Stat</br>
+                    ADAS Right Road Status"
+      dataType: HUInt64
+      group: RightRoad
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        MAX: 0x3
+      # Right Road Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightRoadLatPos.Value:
+      description: "DCN: HUD_IMG_ADASRightRoadLatPos_Val</br>
+                    ADAS Right Road Lat Pos Value"
+      dataType: HUInt64
+      group: RightRoad
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightRoadLatPos.ValueStat:
+      description: "DCN: HUD_IMG_ADASRightRoadLatPos_Val</br>
+                    ADAS Right Road Lat Pos Value Status"
+      dataType: HUInt64
+      group: RightRoad
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GRAY, 0x3: GREEN, 0x4: WHITE, 0x5: CYAN, 0x6: GRAY_TYPE_B, 0x7: GREEN_TYPE_B, 0x8: WHITE_TYPE_B, 0x9: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.LFATelltale.Stat:
+      description: "DCN: HUD_IMG_LFATelltale_Stat</br>
+                    LFA Telltale Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GRAY: 0x2
+        GREEN: 0x3
+        WHITE: 0x4
+        CYAN: 0x5
+        GRAY_TYPE_B: 0x6
+        GREEN_TYPE_B: 0x7
+        WHITE_TYPE_B: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: DARK_PASSENGER_VEHICLE, 0x5: BRIGHT_PASSENGER_VEHICLE, 0x6: DARK_COMMERCIAL_VEHICLE, 0x7: BRIGHT_COMMERCIAL_VEHICLE, 0x8: DARK_PEDESTRIAN, 0x9: BRIGHT_PEDESTRIAN, 0xA: DARK_CYCLIST, 0xB: BRIGHT_CYCLIST, 0xC: DARK_MOTORCYCLE_PTW, 0xD: BRIGHT_MOTORCYCLE_PTW, 0xE: DARK_RUBBER_CONE, 0xF: BRIGHT_RUBBER_CONE, 0x10: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicle.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontVehicle_Stat</br>
+                    ADAS View Front Vehicle Status"
+      dataType: HUInt64
+      group: FrontVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        DARK_PASSENGER_VEHICLE: 0x4
+        BRIGHT_PASSENGER_VEHICLE: 0x5
+        DARK_COMMERCIAL_VEHICLE: 0x6
+        BRIGHT_COMMERCIAL_VEHICLE: 0x7
+        DARK_PEDESTRIAN: 0x8
+        BRIGHT_PEDESTRIAN: 0x9
+        DARK_CYCLIST: 0xA
+        BRIGHT_CYCLIST: 0xB
+        DARK_MOTORCYCLE_PTW: 0xC
+        BRIGHT_MOTORCYCLE_PTW: 0xD
+        DARK_RUBBER_CONE: 0xE
+        BRIGHT_RUBBER_CONE: 0xF
+        MAX: 0x10
+      # View Front Vehicle Lat Pos Value 1 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontVehicleLat_Val</br>
+                    ADAS View Front Vehicle Lat Value"
+      dataType: HUInt64
+      group: FrontVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT_VALUE, 0x3: RIGHT_VALUE, 0x4: CENTER, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontVehicleLat_Val</br>
+                    ADAS View Front Vehicle Lat Value Status"
+      dataType: HUInt64
+      group: FrontVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEFT_VALUE: 0x2
+        RIGHT_VALUE: 0x3
+        CENTER: 0x4
+        MAX: 0x5
+      # Front Vehicle Long Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicleLong.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontVehicleLong_Val</br>
+                    ADAS View Front Vehicle Long Value"
+      dataType: HUInt64
+      group: FrontVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicleLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontVehicleLong_Val</br>
+                    ADAS View Front Vehicle Long Value Status"
+      dataType: HUInt64
+      group: FrontVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: DARK_PASSENGER_VEHICLE, 0x7: BRIGHT_PASSENGER_VEHICLE, 0x8: FADE_IN_PASSENGER_VEHICLE, 0x9: FADE_OUT_PASSENGER_VEHICLE, 0xA: DARK_COMMERCIAL_VEHICLE, 0xB: BRIGHT_COMMERCIAL_VEHICLE, 0xC: FADE_IN_COMMERCIAL_VEHICLE, 0xD: FADE_OUT_COMMERCIAL_VEHICLE, 0xE: DARK_PEDESTRIAN, 0xF: BRIGHT_PEDESTRIAN, 0x10: FADE_IN_PEDESTRIAN, 0x11: FADE_OUT_PEDESTRIAN, 0x12: DARK_CYCLIST, 0x13: BRIGHT_CYCLIST, 0x14: FADE_IN_CYCLIST, 0x15: FADE_OUT_CYCLIST, 0x16: DARK_MOTORCYCLE_PTW, 0x17: BRIGHT_MOTORCYCLE_PTW, 0x18: FADE_IN_MOTORCYCLE_PTW, 0x19: FADE_OUT_MOTORCYCLE_PTW, 0x1A: DARK_RUBBER_CONE, 0x1B: BRIGHT_RUBBER_CONE, 0x1C: FADE_IN_RUBBER_CONE, 0x1D: FADE_OUT_RUBBER_CONE, 0x1E: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicle.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontLeftVehicle_Stat</br>
+                    ADAS View Front Left Vehicle Status"
+      dataType: HUInt64
+      group: FrontLeftVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        FADE_IN: 0x4
+        FADE_OUT: 0x5
+        DARK_PASSENGER_VEHICLE: 0x6
+        BRIGHT_PASSENGER_VEHICLE: 0x7
+        FADE_IN_PASSENGER_VEHICLE: 0x8
+        FADE_OUT_PASSENGER_VEHICLE: 0x9
+        DARK_COMMERCIAL_VEHICLE: 0xA
+        BRIGHT_COMMERCIAL_VEHICLE: 0xB
+        FADE_IN_COMMERCIAL_VEHICLE: 0xC
+        FADE_OUT_COMMERCIAL_VEHICLE: 0xD
+        DARK_PEDESTRIAN: 0xE
+        BRIGHT_PEDESTRIAN: 0xF
+        FADE_IN_PEDESTRIAN: 0x10
+        FADE_OUT_PEDESTRIAN: 0x11
+        DARK_CYCLIST: 0x12
+        BRIGHT_CYCLIST: 0x13
+        FADE_IN_CYCLIST: 0x14
+        FADE_OUT_CYCLIST: 0x15
+        DARK_MOTORCYCLE_PTW: 0x16
+        BRIGHT_MOTORCYCLE_PTW: 0x17
+        FADE_IN_MOTORCYCLE_PTW: 0x18
+        FADE_OUT_MOTORCYCLE_PTW: 0x19
+        DARK_RUBBER_CONE: 0x1A
+        BRIGHT_RUBBER_CONE: 0x1B
+        FADE_IN_RUBBER_CONE: 0x1C
+        FADE_OUT_RUBBER_CONE: 0x1D
+        MAX: 0x1E
+      # Front Left Vehicle Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontLeftVehicleLat_Val</br>
+                    ADAS View Front Left Vehicle Lat Value"
+      dataType: HUInt64
+      group: FrontLeftVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontLeftVehicleLat_Val</br>
+                    ADAS View Front Left Vehicle Lat Value Status"
+      dataType: HUInt64
+      group: FrontLeftVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Front Left Vehicle Long Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLong.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontLeftVehicleLong_Val</br>
+                    ADAS View Front Left Vehicle Long Value"
+      dataType: HInt64
+      group: FrontLeftVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontLeftVehicleLong_Val</br>
+                    ADAS View Front Left Vehicle Long Value Status"
+      dataType: HUInt64
+      group: FrontLeftVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: DARK_PASSENGER_VEHICLE, 0x7: BRIGHT_PASSENGER_VEHICLE, 0x8: FADE_IN_PASSENGER_VEHICLE, 0x9: FADE_OUT_PASSENGER_VEHICLE, 0xA: DARK_COMMERCIAL_VEHICLE, 0xB: BRIGHT_COMMERCIAL_VEHICLE, 0xC: FADE_IN_COMMERCIAL_VEHICLE, 0xD: FADE_OUT_COMMERCIAL_VEHICLE, 0xE: DARK_PEDESTRIAN, 0xF: BRIGHT_PEDESTRIAN, 0x10: FADE_IN_PEDESTRIAN, 0x11: FADE_OUT_PEDESTRIAN, 0x12: DARK_CYCLIST, 0x13: BRIGHT_CYCLIST, 0x14: FADE_IN_CYCLIST, 0x15: FADE_OUT_CYCLIST, 0x16: DARK_MOTORCYCLE_PTW, 0x17: BRIGHT_MOTORCYCLE_PTW, 0x18: FADE_IN_MOTORCYCLE_PTW, 0x19: FADE_OUT_MOTORCYCLE_PTW, 0x1A: DARK_RUBBER_CONE, 0x1B: BRIGHT_RUBBER_CONE, 0x1C: FADE_IN_RUBBER_CONE, 0x1D: FADE_OUT_RUBBER_CONE, 0x1E: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicle.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontRightVehicle_Stat</br>
+                    ADAS View Front Right Vehicle Status"
+      dataType: HUInt64
+      group: FrontRightVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        FADE_IN: 0x4
+        FADE_OUT: 0x5
+        DARK_PASSENGER_VEHICLE: 0x6
+        BRIGHT_PASSENGER_VEHICLE: 0x7
+        FADE_IN_PASSENGER_VEHICLE: 0x8
+        FADE_OUT_PASSENGER_VEHICLE: 0x9
+        DARK_COMMERCIAL_VEHICLE: 0xA
+        BRIGHT_COMMERCIAL_VEHICLE: 0xB
+        FADE_IN_COMMERCIAL_VEHICLE: 0xC
+        FADE_OUT_COMMERCIAL_VEHICLE: 0xD
+        DARK_PEDESTRIAN: 0xE
+        BRIGHT_PEDESTRIAN: 0xF
+        FADE_IN_PEDESTRIAN: 0x10
+        FADE_OUT_PEDESTRIAN: 0x11
+        DARK_CYCLIST: 0x12
+        BRIGHT_CYCLIST: 0x13
+        FADE_IN_CYCLIST: 0x14
+        FADE_OUT_CYCLIST: 0x15
+        DARK_MOTORCYCLE_PTW: 0x16
+        BRIGHT_MOTORCYCLE_PTW: 0x17
+        FADE_IN_MOTORCYCLE_PTW: 0x18
+        FADE_OUT_MOTORCYCLE_PTW: 0x19
+        DARK_RUBBER_CONE: 0x1A
+        BRIGHT_RUBBER_CONE: 0x1B
+        FADE_IN_RUBBER_CONE: 0x1C
+        FADE_OUT_RUBBER_CONE: 0x1D
+        MAX: 0x1E
+      # Front Right Vehicle Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontRightVehicleLat_Val</br>
+                    ADAS View Front Right Vehicle Lat Value"
+      dataType: HUInt64
+      group: FrontRightVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontRightVehicleLat_Val</br>
+                    ADAS View Front Right Vehicle Lat Value Status"
+      dataType: HUInt64
+      group: FrontRightVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Front Right Vehicle Long Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLong.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontRightVehicle_Stat</br>
+                    ADAS View Front Right Vehicle Long Value"
+      dataType: HInt64
+      group: FrontRightVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewFrontRightVehicle_Stat</br>
+                    ADAS View Front Right Vehicle Long Value Status"
+      dataType: HUInt64
+      group: FrontRightVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: DARK_PASSENGER_VEHICLE, 0x7: BRIGHT_PASSENGER_VEHICLE, 0x8: FADE_IN_PASSENGER_VEHICLE, 0x9: FADE_OUT_PASSENGER_VEHICLE, 0xA: DARK_COMMERCIAL_VEHICLE, 0xB: BRIGHT_COMMERCIAL_VEHICLE, 0xC: FADE_IN_COMMERCIAL_VEHICLE, 0xD: FADE_OUT_COMMERCIAL_VEHICLE, 0xE: DARK_PEDESTRIAN, 0xF: BRIGHT_PEDESTRIAN, 0x10: FADE_IN_PEDESTRIAN, 0x11: FADE_OUT_PEDESTRIAN, 0x12: DARK_CYCLIST, 0x13: BRIGHT_CYCLIST, 0x14: FADE_IN_CYCLIST, 0x15: FADE_OUT_CYCLIST, 0x16: DARK_MOTORCYCLE_PTW, 0x17: BRIGHT_MOTORCYCLE_PTW, 0x18: FADE_IN_MOTORCYCLE_PTW, 0x19: FADE_OUT_MOTORCYCLE_PTW, 0x1A: DARK_RUBBER_CONE, 0x1B: BRIGHT_RUBBER_CONE, 0x1C: FADE_IN_RUBBER_CONE, 0x1D: FADE_OUT_RUBBER_CONE, 0x1E: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicle.Stat:
+      description: "DCN: HUD_IMG_ADASViewLeftVehicle_Stat</br>
+                    ADAS View Left Vehicle Status"
+      dataType: HUInt64
+      group: LeftVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        FADE_IN: 0x4
+        FADE_OUT: 0x5
+        DARK_PASSENGER_VEHICLE: 0x6
+        BRIGHT_PASSENGER_VEHICLE: 0x7
+        FADE_IN_PASSENGER_VEHICLE: 0x8
+        FADE_OUT_PASSENGER_VEHICLE: 0x9
+        DARK_COMMERCIAL_VEHICLE: 0xA
+        BRIGHT_COMMERCIAL_VEHICLE: 0xB
+        FADE_IN_COMMERCIAL_VEHICLE: 0xC
+        FADE_OUT_COMMERCIAL_VEHICLE: 0xD
+        DARK_PEDESTRIAN: 0xE
+        BRIGHT_PEDESTRIAN: 0xF
+        FADE_IN_PEDESTRIAN: 0x10
+        FADE_OUT_PEDESTRIAN: 0x11
+        DARK_CYCLIST: 0x12
+        BRIGHT_CYCLIST: 0x13
+        FADE_IN_CYCLIST: 0x14
+        FADE_OUT_CYCLIST: 0x15
+        DARK_MOTORCYCLE_PTW: 0x16
+        BRIGHT_MOTORCYCLE_PTW: 0x17
+        FADE_IN_MOTORCYCLE_PTW: 0x18
+        FADE_OUT_MOTORCYCLE_PTW: 0x19
+        DARK_RUBBER_CONE: 0x1A
+        BRIGHT_RUBBER_CONE: 0x1B
+        FADE_IN_RUBBER_CONE: 0x1C
+        FADE_OUT_RUBBER_CONE: 0x1D
+        MAX: 0x1E
+      # Left Vehicle Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewLeftVehicleLat_Val</br>
+                    ADAS View Left Vehicle Lat Value"
+      dataType: HUInt64
+      group: LeftVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewLeftVehicleLat_Val</br>
+                    ADAS View Left Vehicle Lat Value Status"
+      dataType: HUInt64
+      group: LeftVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Left Vehicle Long Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLong.Value:
+      description: "DCN: HUD_IMG_ADASViewLeftVehicleLong_Val</br>
+                    ADAS View Left Vehicle Long Value"
+      dataType: HUInt64
+      group: LeftVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewLeftVehicleLong_Val</br>
+                    ADAS View Left Vehicle Long Value Status"
+      dataType: HUInt64
+      group: LeftVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: DARK_PASSENGER_VEHICLE, 0x7: BRIGHT_PASSENGER_VEHICLE, 0x8: FADE_IN_PASSENGER_VEHICLE, 0x9: FADE_OUT_PASSENGER_VEHICLE, 0xA: DARK_COMMERCIAL_VEHICLE, 0xB: BRIGHT_COMMERCIAL_VEHICLE, 0xC: FADE_IN_COMMERCIAL_VEHICLE, 0xD: FADE_OUT_COMMERCIAL_VEHICLE, 0xE: DARK_PEDESTRIAN, 0xF: BRIGHT_PEDESTRIAN, 0x10: FADE_IN_PEDESTRIAN, 0x11: FADE_OUT_PEDESTRIAN, 0x12: DARK_CYCLIST, 0x13: BRIGHT_CYCLIST, 0x14: FADE_IN_CYCLIST, 0x15: FADE_OUT_CYCLIST, 0x16: DARK_MOTORCYCLE_PTW, 0x17: BRIGHT_MOTORCYCLE_PTW, 0x18: FADE_IN_MOTORCYCLE_PTW, 0x19: FADE_OUT_MOTORCYCLE_PTW, 0x1A: DARK_RUBBER_CONE, 0x1B: BRIGHT_RUBBER_CONE, 0x1C: FADE_IN_RUBBER_CONE, 0x1D: FADE_OUT_RUBBER_CONE, 0x1E: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicle.Stat:
+      description: "DCN: HUD_IMG_ADASViewRightVehicle_Stat</br>
+                    ADAS View Right Vehicle Status"
+      dataType: HUInt64
+      group: RightVehicle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        FADE_IN: 0x4
+        FADE_OUT: 0x5
+        DARK_PASSENGER_VEHICLE: 0x6
+        BRIGHT_PASSENGER_VEHICLE: 0x7
+        FADE_IN_PASSENGER_VEHICLE: 0x8
+        FADE_OUT_PASSENGER_VEHICLE: 0x9
+        DARK_COMMERCIAL_VEHICLE: 0xA
+        BRIGHT_COMMERCIAL_VEHICLE: 0xB
+        FADE_IN_COMMERCIAL_VEHICLE: 0xC
+        FADE_OUT_COMMERCIAL_VEHICLE: 0xD
+        DARK_PEDESTRIAN: 0xE
+        BRIGHT_PEDESTRIAN: 0xF
+        FADE_IN_PEDESTRIAN: 0x10
+        FADE_OUT_PEDESTRIAN: 0x11
+        DARK_CYCLIST: 0x12
+        BRIGHT_CYCLIST: 0x13
+        FADE_IN_CYCLIST: 0x14
+        FADE_OUT_CYCLIST: 0x15
+        DARK_MOTORCYCLE_PTW: 0x16
+        BRIGHT_MOTORCYCLE_PTW: 0x17
+        FADE_IN_MOTORCYCLE_PTW: 0x18
+        FADE_OUT_MOTORCYCLE_PTW: 0x19
+        DARK_RUBBER_CONE: 0x1A
+        BRIGHT_RUBBER_CONE: 0x1B
+        FADE_IN_RUBBER_CONE: 0x1C
+        FADE_OUT_RUBBER_CONE: 0x1D
+        MAX: 0x1E
+      # Right Vehicle Lat Pos Value 0 to 45
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLat.Value:
+      description: "DCN: HUD_IMG_ADASViewRightVehicleLat_Val</br>
+                    ADAS View Right Vehicle Lat Value"
+      dataType: HUInt64
+      group: RightVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewRightVehicleLat_Val</br>
+                    ADAS View Right Vehicle Lat Value Status"
+      dataType: HUInt64
+      group: RightVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # Right Vehicle Long Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLong.Value:
+      description: "DCN: HUD_IMG_ADASViewRightVehicleLong_Val</br>
+                    ADAS View Right Vehicle Long Value"
+      dataType: HUInt64
+      group: RightVehicle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLong.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewRightVehicleLong_Val</br>
+                    ADAS View Right Vehicle Long Value Status"
+      dataType: HUInt64
+      group: RightVehicle
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: DARK_RUBBER_CONE, 0x5: BRIGHT_RUBBER_CONE, 0x6: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontObstacle_Stat</br>
+                    View Front Obstacle Color Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        DARK_RUBBER_CONE: 0x4
+        BRIGHT_RUBBER_CONE: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT_VALUE, 0x3: RIGHT_VALUE, 0x4: CENTER, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.LatPos.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontObstacleLat_Val</br>
+                    View Front Obstacle Lat Pos Value Status"
+      dataType: HUInt64
+      group: ViewFrontObstacle
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEFT_VALUE: 0x2
+        RIGHT_VALUE: 0x3
+        CENTER: 0x4
+        MAX: 0x5
+      # View Front Obstacle Lat Pos Value (Center_0 / Left_1~45 / Right_1~45)
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.LatPos.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontObstacleLat_Val</br>
+                    View Front Obstacle Lat Pos Value (Center_0 / Left_1~45 / Right_1~45)"
+      dataType: HUInt64
+      group: ViewFrontObstacle
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.LongPos.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontObstacleLong_Val</br>
+                    View Front Obstacle Long Pos Status"
+      dataType: HUInt64
+      group: ViewFrontObstacleLongPos
+      valueEnum: SFC_Common_Enum.Off_Value_EnumValue
+      # View Front Obstacle Long Pos Value 0 to 1000
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.LongPos.Value:
+      description: "DCN: HUD_IMG_ADASViewFrontObstacleLong_Val</br>
+                    View Front Obstacle Long Pos Value (0~1000)"
+      dataType: HUInt64
+      group: ViewFrontObstacleLongPos
+      # 0x0: NONE, 0x1: OFF, 0x2: WAVE_WARNING, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontWarn.Stat:
+      description: "DCN: HUD_IMG_ADASViewFrontWarn_Stat</br>
+                    ADAS View Front Warn Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WAVE_WARNING: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: WAVE_WARNING, 0x3: WAVE, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRearLeftWarn.Stat:
+      description: "DCN: HUD_IMG_ADASViewRearLeftWarn_Stat</br>
+                    ADAS View Rear Left Warn Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WAVE_WARNING: 0x2
+        WAVE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: WAVE_WARNING, 0x3: WAVE, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRearRightWarn.Stat:
+      description: "DCN: HUD_IMG_ADASViewRearRightWarn_Stat</br>
+                    ADAS View Rear Right Warn Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WAVE_WARNING: 0x2
+        WAVE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN_ANIMATION, 0x3: GREEN_ANIMATION_TYPE_B, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftArrow.Stat:
+      description: "DCN: HUD_IMG_ADASViewLeftArrow_Stat</br>
+                    ADAS View Left Arrow Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN_ANIMATION: 0x2
+        GREEN_ANIMATION_TYPE_B: 0x3
+        MAX: 0x4
+      # Left Arrow Lateral Position Value equals from 1 to 62
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftArrowLat.Value:
+      description: "DCN: HUD_IMG_ADASViewLeftArrowLat_Val</br>
+                    ADAS View Left Arrow Lateral Position<br>
+                    if ValueStat == CENTER, then Vaue == 0<br>
+                    if ValueStat == LEFT, then 1 <= Vaue <= 62<br>
+                    ValueStat == RIGHT <- impossible condition"
+      dataType: HUInt64
+      group: ADASViewLeftArrowLatVal
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT, 0x4: LEFT, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftArrowLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewLeftArrowLat_Val</br>
+                    ADAS View Left Arrow Lateral Position"
+      dataType: HUInt64
+      group: ADASViewLeftArrowLatVal
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT: 0x3
+        LEFT: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN_ANIMATION, 0x3: GREEN_ANIMATION_TYPE_B, 0x4: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightArrow.Stat:
+      description: "DCN: HUD_IMG_ADASViewRightArrow_Stat</br>
+                    ADAS View Right Arrow Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN_ANIMATION: 0x2
+        GREEN_ANIMATION_TYPE_B: 0x3
+        MAX: 0x4
+      # Right Arrow Lateral Position Value equals from 1 to 62
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightArrowLat.Value:
+      description: "DCN: HUD_IMG_ADASViewRightArrowLat_Val</br>
+                    ADAS View Right Arrow Lateral Position<br>
+                    if ValueStat == CENTER, then Vaue == 0<br>
+                    if ValueStat == RIGHT, then 1 <= Vaue <= 62<br>
+                    ValueStat == LEFT <- impossible condition"
+      dataType: HUInt64
+      group: ADASViewRightArrowLatVal
+      # 0x0: NONE, 0x1: OFF, 0x2: CENTER, 0x3: RIGHT, 0x4: LEFT, 0x5: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightArrowLat.ValueStat:
+      description: "DCN: HUD_IMG_ADASViewRightArrowLat_Val</br>
+                    ADAS View Right Arrow Lateral Position"
+      dataType: HUInt64
+      group: ADASViewRightArrowLatVal
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CENTER: 0x2
+        RIGHT: 0x3
+        LEFT: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71770.Value:
+      description: "DCN: HUD_IMG_HDP_E71770</br>
+                    Additional Information of HDP 71770"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71774.Value:
+      description: "DCN: HUD_IMG_HDP_E71774</br>
+                    Additional Information of HDP 71774"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71776.Value:
+      description: "DCN: HUD_IMG_HDP_E71776</br>
+                    Additional Information of HDP 71776"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71800.Value:
+      description: "DCN: HUD_IMG_HDP_E71800</br>
+                    Additional Information of HDP 71800"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71801.Value:
+      description: "DCN: HUD_IMG_HDP_E71801</br>
+                    Additional Information of HDP 71801"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71739.Value:
+      description: "DCN: HUD_IMG_HDP_E71739</br>
+                    Additional Information of HDP 71739"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71740.Value:
+      description: "DCN: HUD_IMG_HDP_E71740</br>
+                    Additional Information of HDP 71740"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71741.Value:
+      description: "DCN: HUD_IMG_HDP_E71741</br>
+                    Additional Information of HDP 71741"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71742.Value:
+      description: "DCN: HUD_IMG_HDP_E71742</br>
+                    Additional Information of HDP 71742"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71747.Value:
+      description: "DCN: HUD_IMG_HDP_E71747</br>
+                    Additional Information of HDP 71747"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72523.Value:
+      description: "DCN: HUD_IMG_HDP_E72523</br>
+                    Additional Information of HDP 72523"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72524.Value:
+      description: "DCN: HUD_IMG_HDP_E72524</br>
+                    Additional Information of HDP 72524"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72534.Value:
+      description: "DCN: HUD_IMG_HDP_E72534</br>
+                    Additional Information of HDP 72534"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72527.Value:
+      description: "DCN: HUD_IMG_HDP_E72527</br>
+                    Additional Information of HDP 72527"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72616.Value:
+      description: "DCN: HUD_IMG_HDP_E72616</br>
+                    Additional Information of HDP 72616"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.TypeA_TypeB_EnumValue
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Crawl.ID:
+      description: "Event Scene ID (Crawl Mode - low speed Cruise Control)<br>
+                    Details provided in <a href=https://jira.ccos.dev/browse/EXNCP-38364>EXNCP-38364</a><br>
+                    Event ID List(Crawl):E71200"
+      dataType: HString
+      group: EventCrawl
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Crawl.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventCrawl
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Cc.ID:
+      description: "Event Scene ID (Crawl Mode - low speed Cruise Control)<br>
+                    Details provided in <a href=https://jira.ccos.dev/browse/EXNCP-38364>EXNCP-38364</a><br>
+                    Event ID List(Cc):E71204,E71205"
+      dataType: HString
+      group: EventCc
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Cc.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventCc
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Msla.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Msla):E71208,E71209"
+      dataType: HString
+      group: EventMsla
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Msla.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventMsla
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.CcMslaSummary.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CcMslaSummary):E71203"
+      dataType: HString
+      group: EventCcMslaSummary
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.CcMslaSummary.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EventCcMslaSummary
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_1Group1):E71702,E71703,E71704,E71705,E71706,E71707,E71708,E71709,E71710,E71711,E71712,E71713,E71714,E71715,E71716,E71717,E71718"
+      dataType: HString
+      group: Event1_1Group1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_1Group1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_2Group1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_2Group):E71719,E71720,E71721,E71722,E71723,E71769,E71770,E71771,E71777,E71778,E71780,E71781,E71782,E71783,E71784,E71772,E71773,E71774,E71775,E71776,E71796,E71797,E71798,E71810"
+      dataType: HString
+      group: Event1_2Group1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_2Group1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_2Group1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71799.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup3_1_E71799):E71799"
+      dataType: HString
+      group: Event_E71799
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71799.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event_E71799
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71800.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup3_1_E71800):E71800"
+      dataType: HString
+      group: Event_E71800
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71800.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event_E71800
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71801.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Group1FullPopup3_1_E71801):E71801"
+      dataType: HString
+      group: Event_E71801
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Group1FullPopup3_1_E71801.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event_E71801
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group4.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_1Group4):E71731,E71732,E71733,E71734,E71735,E71736,E71737,E71738,E71739,E71740,E71741,E71742,E71743,E71744,E71745,E71746,E71747,E71748,E71749,E71779"
+      dataType: HString
+      group: Event1_1Group4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group4.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_1Group4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_1Group2):E72501,E72502,E72503,E72504,E72505,E72506,E72507,E72508,E72631,E72632,E72633,E72634,E72509,E72510,E72511,E72512,E72513,E72514,E72515,E72516,E72517,E72518,E72519,E72520"
+      dataType: HString
+      group: Event1_1Group2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_1Group2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_1Group2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_2Group2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_2Group2):E72521,E72522,E72523,E72524,E72529,E72530,E72610,E72525,E72526,E72545,E72531,E72532,E72533,E72534,E72611,E72612,E72613,E72614,E72615,E72616,E72617,E72618,E72619,E72527,E72635,E72636,E72639"
+      dataType: HString
+      group: Event1_2Group2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_2Group2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_2Group2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_3Group2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event1_3Group2):E72644,E72645,E72646,E72647,E72648,E72649,E72650,E72651,E72652,E72653,E72654,E72655,E72656,E72657,E72658,E72659,E72660,E72661,E72662,E72663,E72664"
+      dataType: HString
+      group: Event1_3Group2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.Event1_3Group2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1_3Group2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Detail_Contents_ADAS_NEW.Event.CrawlWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event_Crawl):E70212,E70213,E70214,E70215,E70216,E70217,E70218,E70219,E70220,E70221,E70222,E70223,E70224,E70225,E70226,E70227,E70228,E70229"
+      dataType: HString
+      group: Event_Crawl
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_ADAS_NEW.Event.CrawlWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event_Crawl
+      valueEnum: SFC_Common_Enum.Event.Stat

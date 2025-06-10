@@ -1,0 +1,205 @@
+#
+# @file Drive_Mode_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Drive_Mode_2_0:
+  sfcVersion: "1.1.2"
+  description: "Reference : [CD021] Drive_Mode_2_0. Contains : Telltale. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configDriveModeOptionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigDriveModeOption: mInter_ConfigDriveModeOption
+    - configDriveModeOptionWithVpcChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigDriveModeOptionWithVpc: mInter_ConfigDriveModeOptionWithVpc
+    - awdModeDriveModeControlStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode_2_0.Input_AwdModeDriveModeControlStatus: mInput_AwdModeDriveModeControlStatus
+    - configOipDriveModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_Eco: mInter_ConfigOipDriveMode_Eco
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_Normal: mInter_ConfigOipDriveMode_Normal
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_Sport: mInter_ConfigOipDriveMode_Sport
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_SportPlus: mInter_ConfigOipDriveMode_SportPlus
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_Chauffeur: mInter_ConfigOipDriveMode_Chauffeur
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_My: mInter_ConfigOipDriveMode_My
+        - Vehicle.System.Config.Inter_ConfigCustomSmart: mInter_ConfigCustomSmart
+        - Vehicle.System.Config.Inter_ConfigOipDriveMode_Snow: mInter_ConfigOipDriveMode_Snow
+    - dynamicControlForOipSwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.HardWire.Input_DynamicControlForOipSwitchStatus: mInput_DynamicControlForOipSwitchStatus
+    - dmicInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode_2_0.Input_DmicTerrainModeMainSwitchStatus: mInput_DmicTerrainModeMainSwitchStatus
+        - Vehicle.CD.Drive_Mode_2_0.Input_DmicDriveModeSwitchStatus: mInput_DmicDriveModeSwitchStatus
+        - Vehicle.CD.Drive_Mode_2_0.Input_DmicCustomDriveModeSetStatus: mInput_DmicCustomDriveModeSetStatus
+        - Vehicle.CD.Drive_Mode_2_0.Input_DmicTerrainModeSwitchStatus: mInput_DmicTerrainModeSwitchStatus
+    - driveModeChangeReqFromAVNTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.CLU_INFOTAINMENT.Inter_DriveModeChangeReqFromAVNT: mInter_DriveModeChangeReqFromAVNT
+    - ignOnOffKeepDriveModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEcoMode: mInter_ConfigEcoMode
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepEco: mInter_ConfigDriveModeKeepEco
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepNormal: mInter_ConfigDriveModeKeepNormal
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepSport: mInter_ConfigDriveModeKeepSport
+        - Vehicle.System.Config.Inter_ConfigDriveModeDefault: mInter_ConfigDriveModeDefault
+    - offRoadModeEnableStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigOffRoad: mInter_ConfigOffRoad
+        - Vehicle.CD.Drive_Mode_2_0.Input_TerrainModeErrorStatus: mInput_TerrainModeErrorStatus
+    - configTerrainModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTerrainSnow: mInter_ConfigTerrainSnow
+        - Vehicle.System.Config.Inter_ConfigTerrainMud: mInter_ConfigTerrainMud
+        - Vehicle.System.Config.Inter_ConfigTerrainSand: mInter_ConfigTerrainSand
+        - Vehicle.System.Config.Inter_ConfigTerrainAuto: mInter_ConfigTerrainAuto
+        - Vehicle.System.Config.Inter_ConfigTerrainDeepSnow: mInter_ConfigTerrainDeepSnow
+        - Vehicle.System.Config.Inter_ConfigTerrainRock: mInter_ConfigTerrainRock
+        - Vehicle.System.Config.Inter_ConfigTerrainDesert: mInter_ConfigTerrainDesert
+    - smartDriveModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode_2_0.Input_SmartDriveModeStatus: mInput_SmartDriveModeStatus
+  outputs:
+      # 0x0: NONE, 0x1: ECO, 0x2: NORMAL, 0x3: SPORT, 0x4: SPORTPLUS, 0x5: CHAUFFEUR, 0x6: MY, 0x7: SMART, 0x8: SNOW, 0x9: MAX
+    - SFC.Drive_Mode_2_0.Inter_DriveModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_DriveModeSelectStatus"
+      dataType: HUInt64
+      group: DriveModeSelectStatus
+      valueEnum:
+        NONE: 0x0
+        ECO: 0x1
+        NORMAL: 0x2
+        SPORT: 0x3
+        SPORTPLUS: 0x4
+        CHAUFFEUR: 0x5
+        MY: 0x6
+        SMART: 0x7
+        SNOW: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: SNOW, 0x4: MUD, 0x5: SAND, 0x6: AUTO, 0x7: DEEP_SNOW, 0x8: ROCK, 0x9: DESERT, 0xA: MAX
+    - SFC.Drive_Mode_2_0.Inter_TerrainModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_TerrainModeSelectStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        SNOW: 0x3
+        MUD: 0x4
+        SAND: 0x5
+        AUTO: 0x6
+        DEEP_SNOW: 0x7
+        ROCK: 0x8
+        DESERT: 0x9
+        MAX: 0xA
+      # 0x0: NONE, 0x1: TERRAIN_UNAVAILABLE, 0x2: TRACTION_UNAVAILABLE, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Drive_Mode_2_0.Inter_DynamicControlPopupStatus:
+      description: "Output of Drive_Mode - Inter_DynamicControlPopupStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        TERRAIN_UNAVAILABLE: 0x1
+        TRACTION_UNAVAILABLE: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SUCCESS, 0x2: NOT_SUPPORTED, 0x3: INVALID_OPERATION, 0x4: MAX
+    - SFC.Drive_Mode_2_0.Inter_DriveModeChangeResultStatus:
+      description: "Output of Drive_Mode - Inter_DriveModeChangeResultStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SUCCESS: 0x1
+        NOT_SUPPORTED: 0x2
+        INVALID_OPERATION: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Drive_Mode_2_0.Telltale.DriveMode.Stat:
+      description: "DCN: IMG_TelltaleDriveMode_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: ECO, 0x1: NORMAL, 0x2: SPORT, 0x3: SPORTPLUS, 0x4: SMART_ECO, 0x5: SMART_COMFORT, 0x6: SMART_SPORT, 0x7: SMART, 0x8: CHAUFFEUR, 0x9: MY_DRIVE, 0xA: CUSTOM_SNOW, 0xB: TERRAIN_SNOW, 0xC: TERRAIN_MUD, 0xD: TERRAIN_SAND, 0xE: TERRAIN_AUTO, 0xF: TERRAIN_DEEP_SNOW, 0x10: TERRAIN_ROCK, 0x11: TERRAIN_DESERT, 0x12: OFF, 0x13: MAX
+    - SFC.Drive_Mode_2_0.Telltale.DriveMode.StatOptional:
+      description: "DCN: IMG_TelltaleDriveMode_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        ECO: 0x0
+        NORMAL: 0x1
+        SPORT: 0x2
+        SPORTPLUS: 0x3
+        SMART_ECO: 0x4
+        SMART_COMFORT: 0x5
+        SMART_SPORT: 0x6
+        SMART: 0x7
+        CHAUFFEUR: 0x8
+        MY_DRIVE: 0x9
+        CUSTOM_SNOW: 0xA
+        TERRAIN_SNOW: 0xB
+        TERRAIN_MUD: 0xC
+        TERRAIN_SAND: 0xD
+        TERRAIN_AUTO: 0xE
+        TERRAIN_DEEP_SNOW: 0xF
+        TERRAIN_ROCK: 0x10
+        TERRAIN_DESERT: 0x11
+        OFF: 0x12
+        MAX: 0x13

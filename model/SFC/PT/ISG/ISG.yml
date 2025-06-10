@@ -1,0 +1,220 @@
+#
+# @file ISG.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ISG:
+  sfcVersion: "6.0.1"
+  description: "Reference : [PT300] ISG. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn3000msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3000ms: mElapsedOn3000ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configIsgChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigISG: mInter_ConfigISG
+    - isgAutoStopTimeManualResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Screen_Control_Logic.Inter_AutoStopTimeManualResetReq: mInter_AutoStopTimeManualResetReq
+    - engineISGStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.ISG.Input_EngineISGStatus1: mInput_EngineISGStatus1
+        - Vehicle.PT.ISG.Input_EngineISGStatus2: mInput_EngineISGStatus2
+    - isgWarnSoundStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.ISG.Input_IsgWarnSoundStatus: mInput_IsgWarnSoundStatus
+    - isgOperStatDispReqStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.ISG.Input_IsgOperStatDispReqStatus: mInput_IsgOperStatDispReqStatus
+    - isgWarnDispReqStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.ISG.Input_IsgWarnDispReqStatus: mInput_IsgWarnDispReqStatus
+    - ptLogicControlType:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_PTLogicControlType: mInter_PTLogicControlType
+    - AEMInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - isgOperationTimeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.ISG.Input_IsgOperationTimeHourValue: mInput_IsgOperationTimeHourValue
+        - Vehicle.PT.ISG.Input_IsgOperationTimeMinValue: mInput_IsgOperationTimeMinValue
+        - Vehicle.PT.ISG.Input_IsgOperationTimeSecValue: mInput_IsgOperationTimeSecValue
+    - accumResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Trip_Info.Inter_AccumInfoResetReq: mInter_AccumInfoResetReq
+    - afterRefuelInfoResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Trip_Info.Inter_AfterRefuelInfoResetReq: mInter_AfterRefuelInfoResetReq
+    - driveInfoResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Trip_Info.Inter_DriveInfoResetReq: mInter_DriveInfoResetReq
+    - autoStopTimerSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_AutoStopTimerSetStatus: mInter_AutoStopTimerSetStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ISG.Telltale.ISG.Stat:
+      description: "DCN: IMG_TelltaleIsg_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ISG.Telltale.ISG.BlinkValueA:
+      description: "DCN: IMG_TelltaleIsg_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ISG.Telltale.ISG.BlinkValueB:
+      description: "DCN: IMG_TelltaleIsg_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # 0x0: OFF, 0x1: DISABLED_ENGINE_CONTROL, 0x2: DISABLED_BATTERY_CHARGING, 0x3: DISABLED_STEEP_ROADWAY, 0x4: DISABLED_TEMPERATURE, 0x5: DISABLED_DRIVEMODE, 0x6: DISABLED_HOOD_OPEN, 0x7: DISABLED_DOOR_OPEN, 0x8: DISABLED_SEATBELT_UNFASTENED, 0x9: DISABLED_WHEEL_UNALIGNED, 0xA: DISABLED_LOW_SPEED, 0xB: DISABLED_GEAR_POSITION_AT, 0xC: DISABLED_GEAR_POSITION_MT, 0xD: DISABLED_PRESS_BRAKE, 0xE: DISABLED_TRANSMISSION_MODE, 0xF: DISABLED_AUTO_START, 0x10: DISABLED_STOP_SIGN, 0x11: DISABLED_YIELD_SIGN, 0x12: DISABLED_ROUNDABOUT_SIGN, 0x13: DISABLED_WAITING_TURN, 0x14: DISABLED_SPEED_SIGN, 0x15: MAX
+    - SFC.ISG.Constant.IsgDisableCond.Stat:
+      description: "DCN: IMG_IsgDisableCond_stat</br>
+                    ISG disable cond State"
+      dataType: HUInt64
+      valueEnum:
+        OFF: 0x0
+        DISABLED_ENGINE_CONTROL: 0x1
+        DISABLED_BATTERY_CHARGING: 0x2
+        DISABLED_STEEP_ROADWAY: 0x3
+        DISABLED_TEMPERATURE: 0x4
+        DISABLED_DRIVEMODE: 0x5
+        DISABLED_HOOD_OPEN: 0x6
+        DISABLED_DOOR_OPEN: 0x7
+        DISABLED_SEATBELT_UNFASTENED: 0x8
+        DISABLED_WHEEL_UNALIGNED: 0x9
+        DISABLED_LOW_SPEED: 0xA
+        DISABLED_GEAR_POSITION_AT: 0xB
+        DISABLED_GEAR_POSITION_MT: 0xC
+        DISABLED_PRESS_BRAKE: 0xD
+        DISABLED_TRANSMISSION_MODE: 0xE
+        DISABLED_AUTO_START: 0xF
+        DISABLED_STOP_SIGN: 0x10
+        DISABLED_YIELD_SIGN: 0x11
+        DISABLED_ROUNDABOUT_SIGN: 0x12
+        DISABLED_WAITING_TURN: 0x13
+        DISABLED_SPEED_SIGN: 0x14
+        MAX: 0x15
+      # Style is E00000
+    - SFC.ISG.Event.ISG.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ISG):E25001,E25002,E25003,E25004,E25005,E25006,E25008,E25009"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ISG.Event.ISG.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ISG.Sound.ISG.ID:
+      description: "Sound ID<br>
+                    Sound ID List(ISG):SND_ISGWarn"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ISG.Sound.ISG.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ISG.Sound.ISG.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # ISG Able Time Hour
+    - SFC.ISG.Constant.IsgAbleTimeHour.Value:
+      description: "DCN: IMG_IsgAbleTimeHour_value</br>
+                    ISG Able Time Hour"
+      dataType: HUInt64
+      group: Constant1
+      # ISG Able Time Minute
+    - SFC.ISG.Constant.IsgAbleTimeMin.Value:
+      description: "DCN: IMG_IsgAbleTimeMin_value</br>
+                    ISG Able Time Minute"
+      dataType: HUInt64
+      group: Constant1
+      # ISG Able Time Second
+    - SFC.ISG.Constant.IsgAbleTimeSec.Value:
+      description: "DCN: IMG_IsgAbleTimeSec_value</br>
+                    ISG Able Time Seconds"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: MANUAL_RESET, 0x2: CURRENT_TRIP, 0x3: SINCE_REFUELING, 0x4: SINCE_RESET, 0x5: MAX
+    - SFC.ISG.Constant.IsgPageDisplay.Stat:
+      description: "DCN: IMG_IsgPageDisplay_stat</br>
+                    ISG Page Display Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        MANUAL_RESET: 0x1
+        CURRENT_TRIP: 0x2
+        SINCE_REFUELING: 0x3
+        SINCE_RESET: 0x4
+        MAX: 0x5

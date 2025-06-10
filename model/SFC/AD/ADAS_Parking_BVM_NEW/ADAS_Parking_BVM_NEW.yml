@@ -1,0 +1,112 @@
+#
+# @file ADAS_Parking_BVM_NEW.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ADAS_Parking_BVM_NEW:
+  sfcVersion: "5.0.1"
+  description: "Reference : [AD100] ADAS Parking_BVM_NEW. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - outMirrorFoldStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_BVM_NEW.Input_OutMirrorFoldStatusFromBCM: mInput_OutMirrorFoldStatusFromBCM
+    - bvmView2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_BVM_NEW.Input_BvmView2Status: mInput_BvmView2Status
+    - Input_BvmVideoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.ADAS_Parking_BVM_NEW.Input_BvmVideo: mInput_BvmVideo
+  outputs:
+      # 0x0: NONE, 0x1: VALID, 0x2: INVALID, 0x3: MAX
+    - SFC.Extension.ADAS_Parking_BVM_NEW.Input_BvmVideo:
+      description: "Bvm Video<br>
+                    Published in ADAS_Parking_BVM_NEW[AD100]<br>
+                    Subscribed in ADAS_Parking_BVM_NEW[AD100]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VALID: 0x1
+        INVALID: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_Parking_BVM_NEW.Constant.BVMLeftOutMirrorFold.Stat:
+      description: "DCN: IMG_BVMLeftOutMirrorFold_Stat</br>
+                    State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_Parking_BVM_NEW.Constant.BVMRightOutMirrorFold.Stat:
+      description: "DCN: IMG_BVMRightOutMirrorFold_Stat</br>
+                    State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldPrimary.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BVMOutMirrorFoldPrimary):E53901,E53902,E53903,E53904,E53905,E53906,E53907,E53908"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldPrimary.Stat:
+      description: "State of Event - BVMOutMirrorFoldPrimary"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldSecondary.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BVMOutMirrorFoldSecondary):E53901,E53902,E53903,E53904,E53905,E53906,E53907,E53908"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldSecondary.Stat:
+      description: "State of Event - BVMOutMirrorFoldSecondary"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldThird.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(BVMOutMirrorFoldThird):E53901,E53902,E53903,E53904,E53905,E53906,E53907,E53908"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_Parking_BVM_NEW.Event.BVMOutMirrorFoldThird.Stat:
+      description: "State of Event - BVMOutMirrorFoldThird"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat

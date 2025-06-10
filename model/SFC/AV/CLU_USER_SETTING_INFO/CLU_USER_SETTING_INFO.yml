@@ -1,0 +1,168 @@
+#
+# @file CLU_USER_SETTING_INFO.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CLU_USER_SETTING_INFO:
+  sfcVersion: "1.0.0"
+  description: "Reference : [AV161] CLU_USER_SETTING_INFO. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_WelcomeSoundSetReqStatus:
+      description: "Welcome Sound Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_WelcomeSoundSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_1, 0x3: LEVEL_2, 0x4: LEVEL_3, 0x5: SIGNATURE_NULL, 0x6: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_AdasWarnVolumeSetReqStatus:
+      description: "Adas Warn Volume Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_AdasWarnVolumeSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEVEL_1: 0x2
+        LEVEL_2: 0x3
+        LEVEL_3: 0x4
+        SIGNATURE_NULL: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_DisWarnSetReqStatus:
+      description: "Dis Warn Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_DisWarnSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_IceWarningSetReqStatus:
+      description: "Ice Warning Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_IceWarningSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_FuelEcoUnitKmSetReqStatus:
+      description: "Fuel Eco Unit Km Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_FuelEcoUnitKmSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_FuelEcoUnitMiSetReqStatus:
+      description: "Fuel Eco Unit Mi Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_FuelEcoUnitMiSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderSetReqStatus:
+      description: "Srv Reminder Set Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_SrvReminderSetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4
+      # Numeric Value (0~99)
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderPeriodSetReqValue:
+      description: "Srv Reminder Period Set Req Value (0~99)<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_SrvReminderPeriodSetReqValue<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      group: SrvReminderPeriodSetReq
+      # 0x0: NONE, 0x1: VALUE, 0x2: SIGNATURE_NULL, 0x3: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderPeriodSetReqStatus:
+      description: "Srv Reminder Period Set Req Value Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_SrvReminderPeriodSetReqValue<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      group: SrvReminderPeriodSetReq
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        SIGNATURE_NULL: 0x2
+        MAX: 0x3
+      # Numeric Value (0~99999)
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderDistanceSetReqValue:
+      description: "Srv Reminder Period Set Req Value (0~99999)<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-SrvReminderDistanceSetReqValue<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      group: SrvReminderDistanceSetReq
+      # 0x0: NONE, 0x1: VALUE, 0x2: SIGNATURE_NULL, 0x3: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderDistanceSetReqStatus:
+      description: "Srv Reminder Distance Set Req Value Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_SrvReminderDistanceSetReqValue<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      group: SrvReminderDistanceSetReq
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        SIGNATURE_NULL: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: VALUE_1, 0x2: SIGNATURE_NULL, 0x3: MAX
+    - SFC.Extension.CLU_USER_SETTING_INFO.Inter_SrvReminderResetReqStatus:
+      description: "Srv Reminder Reset Req Status<br>
+                    Spec:CLU_USER_SETTING_INFO[AV161]-Inter_SrvReminderResetReqStatus<br>
+                    Published in CLU_USER_SETTING_INFO[AV161]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VALUE_1: 0x1
+        SIGNATURE_NULL: 0x2
+        MAX: 0x3

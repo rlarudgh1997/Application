@@ -1,0 +1,379 @@
+#
+# @file EV_Battery_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- EV_Battery_Warning:
+  sfcVersion: "9.0.0"
+  description: "Reference : [PT160] EV_Battery_Warning. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - telltaleVsmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvLowSocWarnStatus: mInput_EvLowSocWarnStatus
+    - evBatteryLowWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryLowWarnStatus: mInput_EvBatteryLowWarnStatus
+    - evPowerLimitByBatTempWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvPowerLimitByBatTempWarnStatus: mInput_EvPowerLimitByBatTempWarnStatus
+    - evPowerLimitByOutTempWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvPowerLimitByOutTempWarnStatus: mInput_EvPowerLimitByOutTempWarnStatus
+    - evBatteryHighTempWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryHighTempWarnStatus: mInput_EvBatteryHighTempWarnStatus
+    - auxBatteryLowWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_AuxBatteryLowWarnStatus: mInput_AuxBatteryLowWarnStatus
+    - evBatteryConditioningOperChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryConditioningOperStatus: mInput_EvBatteryConditioningOperStatus
+    - evBatteryConditioningSymbolChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryConditioningSymbolstatus: mInput_EvBatteryConditioningSymbolstatus
+    - evBatteryPreHeatMaxTimeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryPreHeatMaxTimeValue: mInput_EvBatteryPreHeatMaxTimeValue
+    - evBatteryPreHeatStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_EvBatteryPreHeatStatus: mInput_EvBatteryPreHeatStatus
+    - preventOverheatModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_PreventOverheatModeStatus: mInput_PreventOverheatModeStatus
+    - pwrSavModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.EV_Battery_Warning.Input_PwrSavModeStatus: mInput_PwrSavModeStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.EV_Battery_Warning.Telltale.EvBatWarn.Stat:
+      description: "DCN: IMG_TelltaleEvBatWarn_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ON_COOLING, 0x4: MAX
+    - SFC.EV_Battery_Warning.Constant.EvBatConSymbol.Stat:
+      description: "DCN: IMG_EvBatteryConditioningSymbol_Stat</br>
+                    State of Conditioning Symbol"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ON_COOLING: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: VALUE, 0x2: UNMEASURABLE, 0x3: MAX
+    - SFC.EV_Battery_Warning.Constant.EvBatteryPreHeatMaxTime.Stat:
+      description: "DCN: IMG_EvBatteryPreHeatMaxTime_Value</br>
+                    State of Battery Pre heat time"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        UNMEASURABLE: 0x2
+        MAX: 0x3
+      # Value range is 0 ~ 243 and 255 is error
+    - SFC.EV_Battery_Warning.Constant.EvBatteryPreHeatMaxTime.Value:
+      description: "DCN: IMG_EvBatteryPreHeatMaxTime_Value</br>
+                    Value of Battery Pre heat time"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: ON_SAVEMODE, 0x3: MAX
+    - SFC.EV_Battery_Warning.Constant.EvPowerSaveMode.Stat:
+      description: "DCN: IMG_EvPowerSaveMode_Stat</br>
+                    State of EV Power Save Mode"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON_SAVEMODE: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvBatteryLowWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvBatteryLowWarn):E21301,E21302"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryLowWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvBatteryLowWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryLowWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.EvBatteryLowWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByBatTempWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvPowerLimitByBatTempWarn):E21303"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByBatTempWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByBatTempWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByBatTempWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByBatTempWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByOutTempWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvPowerLimitByOutTempWarn):E21304"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByOutTempWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByOutTempWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByOutTempWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.EvPowerLimitByOutTempWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvBatteryHighTempWarn):E21305"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event4
+      # Sound output maximum duration
+    - SFC.EV_Battery_Warning.Event.EvBatteryHighTempWarn.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(AuxBatteryLowWarn):E21306,E21307"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event5
+      # Sound output maximum duration
+    - SFC.EV_Battery_Warning.Event.AuxBatteryLowWarn.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvBatteryConditioningOper.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvBatteryConditioningOper):E21308,E21309,E21310,E21313"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryConditioningOper.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvBatteryConditioningOper.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryConditioningOper.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.EvBatteryConditioningOper.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.EvBatteryPreHeatStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvBatteryPreHeatStatus):E21311,E21312"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryPreHeatStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.EvBatteryPreHeatStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.EvBatteryPreHeatStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.EvBatteryPreHeatStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.EV_Battery_Warning.Event.PreventOverheatModeStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PreventOverheatModeStatus):E21314,E21315,E21316"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Battery_Warning.Event.PreventOverheatModeStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Battery_Warning.Event.PreventOverheatModeStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Battery_Warning.Event.PreventOverheatModeStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Battery_Warning.Event.PreventOverheatModeStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8

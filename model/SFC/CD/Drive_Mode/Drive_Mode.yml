@@ -1,0 +1,695 @@
+#
+# @file Drive_Mode.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Drive_Mode:
+  sfcVersion: "56.0.2"
+  description: "Reference : [CD020] Drive Mode. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - driveModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_TerrainModeErrorStatus: mInput_TerrainModeErrorStatus
+        - Vehicle.CD.Drive_Mode.Input_GearSelectStatusFromTCU: mInput_GearSelectStatusFromTCU
+        - Vehicle.CD.Drive_Mode.Input_EscCustom1EnableStatus: mInput_EscCustom1EnableStatus
+        - Vehicle.CD.Drive_Mode.Input_EscCustom2EnableStatus: mInput_EscCustom2EnableStatus
+        - Vehicle.CD.Drive_Mode.Input_SmartDriveModeStatus: mInput_SmartDriveModeStatus
+    - systemConfigChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigOffRoad: mInter_ConfigOffRoad
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+        - Vehicle.System.Config.Inter_ConfigTowModeLongKey: mInter_ConfigTowModeLongKey
+        - Vehicle.System.Config.Inter_ConfigCustomMyDrive: mInter_ConfigCustomMyDrive
+        - Vehicle.System.Config.Inter_ConfigCustomSnow: mInter_ConfigCustomSnow
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepEco: mInter_ConfigDriveModeKeepEco
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepSport: mInter_ConfigDriveModeKeepSport
+        - Vehicle.System.Config.Inter_ConfigDriveModeKeepNormal: mInter_ConfigDriveModeKeepNormal
+        - Vehicle.System.Config.Inter_ConfigCustomSmart: mInter_ConfigCustomSmart
+        - Vehicle.System.Config.Inter_ConfigDriveModeDefault: mInter_ConfigDriveModeDefault
+        - Vehicle.System.Config.Inter_ConfigTerrainAuto: mInter_ConfigTerrainAuto
+        - Vehicle.System.Config.Inter_ConfigTerrainMud: mInter_ConfigTerrainMud
+        - Vehicle.System.Config.Inter_ConfigTerrainSand: mInter_ConfigTerrainSand
+        - Vehicle.System.Config.Inter_ConfigTerrainSnow: mInter_ConfigTerrainSnow
+        - Vehicle.System.Config.Inter_ConfigTerrainDeepSnow: mInter_ConfigTerrainDeepSnow
+        - Vehicle.System.Config.Inter_ConfigTerrainRock: mInter_ConfigTerrainRock
+        - Vehicle.System.Config.Inter_ConfigTerrainDesert: mInter_ConfigTerrainDesert
+    - mcuInterChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Event_Control_Logic.Inter_NCustom1AdminStatus: mInter_NCustom1AdminStatus
+        - SFC.Extension.Event_Control_Logic.Inter_NCustom2AdminStatus: mInter_NCustom2AdminStatus
+        - SFC.Extension.Event_Control_Logic.Inter_NModeOnReq: mInter_NModeOnReq
+        - Vehicle.System.HardWire.Inter_NModeSwitchStatus: mInter_NModeSwitchStatus
+        - Vehicle.System.HardWire.Inter_DriveModeOnRoadSwitchStatus: mInter_DriveModeOnRoadSwitchStatus
+        - Vehicle.System.HardWire.Inter_DriveModeTerrainSwitchStatus: mInter_DriveModeTerrainSwitchStatus
+        - Vehicle.System.HardWire.Inter_DrvmodeSwitchStatus: mInter_DrvmodeSwitchStatus
+    - nModeSwitchChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_N1SwitchCustom1ModeSetStatus: mInput_N1SwitchCustom1ModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N1SwitchCustom2ModeSetStatus: mInput_N1SwitchCustom2ModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N1SwitchMainSetStatus: mInput_N1SwitchMainSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N1SwitchNModeSetStatus: mInput_N1SwitchNModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N1SwitchStatus: mInput_N1SwitchStatus
+        - Vehicle.CD.Drive_Mode.Input_N2SwitchCustom1ModeSetStatus: mInput_N2SwitchCustom1ModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N2SwitchCustom2ModeSetStatus: mInput_N2SwitchCustom2ModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N2SwitchMainSetStatus: mInput_N2SwitchMainSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N2SwitchNModeSetStatus: mInput_N2SwitchNModeSetStatus
+        - Vehicle.CD.Drive_Mode.Input_N2SwitchStatus: mInput_N2SwitchStatus
+    - rcsControllerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_RcsOptionStatus: mInput_RcsOptionStatus
+        - Vehicle.CD.Drive_Mode.Input_RcsDriveModeStatus: mInput_RcsDriveModeStatus
+        - Vehicle.CD.Drive_Mode.Input_RcsTerrainModeStatus: mInput_RcsTerrainModeStatus
+        - Vehicle.CD.Drive_Mode.Input_RcsDriveModeOnOffStatus: mInput_RcsDriveModeOnOffStatus
+        - Vehicle.CD.Drive_Mode.Input_RcsDriveModeRotateEndStatus: mInput_RcsDriveModeRotateEndStatus
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEcoMode: mInter_ConfigEcoMode
+        - Vehicle.System.Config.Inter_ConfigNormalMode: mInter_ConfigNormalMode
+        - Vehicle.System.Config.Inter_ConfigSportMode: mInter_ConfigSportMode
+        - Vehicle.System.Config.Inter_ConfigChauffeurMode: mInter_ConfigChauffeurMode
+    - driveModeOptionConfigChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigDriveModeOption: mInter_ConfigDriveModeOption
+    - endlessDialSwitchConfigChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEndlessDialSwitch: mInter_ConfigEndlessDialSwitch
+    - gtModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_GtSwitchStatus: mInput_GtSwitchStatus
+        - SFC.Extension.Event_Control_Logic.Inter_GtMyAdminStatus: mInter_GtMyAdminStatus
+    - awdModeStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_AwdMode2HStatus: mInput_AwdMode2HStatus
+    - awdModeDriveModeControlStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Drive_Mode.Input_AwdModeDriveModeControlStatus: mInput_AwdModeDriveModeControlStatus
+    - towModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Trailer_Mode.Telltale.TowMode.Stat: mTowModeStat
+    - driveModeChangeReqFromAVNTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.CLU_INFOTAINMENT.Inter_DriveModeChangeReqFromAVNT: mInter_DriveModeChangeReqFromAVNT
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Drive_Mode.Telltale.Drive_Mode.DMS.Stat:
+      description: "DCN: IMG_TelltaleDriveMode_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: ECO, 0x1: SPORT, 0x2: BABY, 0x3: SMART_ECO, 0x4: SMART_COMFORT, 0x5: SMART_SPORT, 0x6: SMART, 0x7: CHAUFFEUR, 0x8: MY_DRIVE, 0x9: RETRO, 0xa: CUSTOM_SNOW, 0xb: TERRAIN_SNOW, 0xc: TERRAIN_MUD, 0xd: TERRAIN_SAND, 0xe: TERRAIN_DESERT, 0xf: TERRAIN_AUTO, 0x10: TERRAIN_DEEP_SNOW, 0x11: TERRAIN_ROCK, 0x12: N, 0x13: N_CUSTOM1, 0x14: N_CUSTOM2, 0x15: GT, 0x16: GT_MY, 0x17: OFF, 0x18: MAX
+    - SFC.Drive_Mode.Telltale.Drive_Mode.DMS.StatOptional:
+      description: "DCN: IMG_TelltaleDriveMode_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        ECO: 0x0
+        SPORT: 0x1
+        BABY: 0x2
+        SMART_ECO: 0x3
+        SMART_COMFORT: 0x4
+        SMART_SPORT: 0x5
+        SMART: 0x6
+        CHAUFFEUR: 0x7
+        MY_DRIVE: 0x8
+        RETRO: 0x9
+        CUSTOM_SNOW: 0xa
+        TERRAIN_SNOW: 0xb
+        TERRAIN_MUD: 0xc
+        TERRAIN_SAND: 0xd
+        TERRAIN_DESERT: 0xe
+        TERRAIN_AUTO: 0xf
+        TERRAIN_DEEP_SNOW: 0x10
+        TERRAIN_ROCK: 0x11
+        N: 0x12
+        N_CUSTOM1: 0x13
+        N_CUSTOM2: 0x14
+        GT: 0x15
+        GT_MY: 0x16
+        OFF: 0x17
+        MAX: 0x18
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.Stat:
+      description: "DCN: IMG_TelltaleDriveModeDimmed_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: DIMMED, 0x1: NORMAL, 0x2: MAX
+    - SFC.Drive_Mode.Telltale.Drive_Mode.Dimmed.StatOptional:
+      description: "DCN: IMG_TelltaleDriveModeDimmed_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        DIMMED: 0x0
+        NORMAL: 0x1
+        MAX: 0x2
+      # 0x0: DRIVE_ONLY, 0x1: TRACTION, 0x2: TERRAIN, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupTitle_stat:
+      description: "DCN: IMG_DriveModePopupTitle_stat</br>
+                    Title of driving mode pop-up"
+      dataType: HUInt64
+      valueEnum:
+        DRIVE_ONLY: 0x0
+        TRACTION: 0x1
+        TERRAIN: 0x2
+        MAX: 0x3
+      # 0x0: ECO_ON, 0x1: NORMAL_ON, 0x2: SPORT_ON, 0x3: MY_DRIVE_ON, 0x4: SMART_ON, 0x5: SNOW_ON, 0x6: CHAUFFEUR_ON, 0x7: OFF, 0x8: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModeSelect_stat:
+      description: "DCN: IMG_DriveModeSelect_stat</br>
+                    Drive mode selection status"
+      dataType: HUInt64
+      valueEnum:
+        ECO_ON: 0x0
+        NORMAL_ON: 0x1
+        SPORT_ON: 0x2
+        MY_DRIVE_ON: 0x3
+        SMART_ON: 0x4
+        SNOW_ON: 0x5
+        CHAUFFEUR_ON: 0x6
+        OFF: 0x7
+        MAX: 0x8
+      # 0x0: SNOW_ON, 0x1: MUD_ON, 0x2: SAND_ON, 0x3: DESERT_ON, 0x4: AUTO_ON, 0x5: DEEP_SNOW_ON, 0x6: ROCK, 0x7: OFF, 0x8: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModeSelect_stat:
+      description: "DCN: IMG_TerrainModeSelect_stat</br>
+                    Terrain mode selection status"
+      dataType: HUInt64
+      valueEnum:
+        SNOW_ON: 0x0
+        MUD_ON: 0x1
+        SAND_ON: 0x2
+        DESERT_ON: 0x3
+        AUTO_ON: 0x4
+        DEEP_SNOW_ON: 0x5
+        ROCK: 0x6
+        OFF: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListNormal_stat:
+      description: "DCN: IMG_DriveModePopupListNormal_stat</br>
+                    Drive Mode Popup-List Normal Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListEco_stat:
+      description: "DCN: IMG_DriveModePopupListEco_stat</br>
+                    Drive Mode Popup-List Eco Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListSport_stat:
+      description: "DCN: IMG_DriveModePopupListSport_stat</br>
+                    Drive Mode Popup-List Sport Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListChauffeur_stat:
+      description: "DCN: IMG_DriveModePopupListChauffeur_stat</br>
+                    Drive Mode Popup-List Chauffeur Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListMyDrive_stat:
+      description: "DCN: IMG_DriveModePopupListMyDrive_stat</br>
+                    Drive Mode Popup-List My_Drive Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListSmart_stat:
+      description: "DCN: IMG_DriveModePopupListSmart_stat</br>
+                    Drive Mode Popup-List Smart Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListSnow_stat:
+      description: "DCN: IMG_DriveModePopupListSnow_stat</br>
+                    Drive Mode Popup-List Snow Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModeTowLongkeyQue_stat:
+      description: "DCN: IMG_DriveModeTowLongkeyQue_stat</br>
+                    Drive Mode TowLongkeyQue status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: N, 0x1: CUSTOM1, 0x2: CUSTOM2, 0x3: OFF, 0x4: MAX
+    - SFC.Drive_Mode.Constant.IMG_NModeSelect_stat:
+      description: "DCN: IMG_NModeSelect_stat</br>
+                    N driving mode selection status"
+      dataType: HUInt64
+      valueEnum:
+        N: 0x0
+        CUSTOM1: 0x1
+        CUSTOM2: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # Style is E00000
+    - SFC.Drive_Mode.Event.DrivingModeChange.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(DrivingModeChange):E00702,E00704,E00705,E00706,E00713,E00714"
+      dataType: HString
+      group: EvDMSChange
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.DrivingModeChange.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EvDMSChange
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Drive_Mode.Event.TerrainModeExitNotification.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TerrainModeExitNotification):E00707,E00716"
+      dataType: HString
+      group: EvTerrainExitNoti
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.TerrainModeExitNotification.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EvTerrainExitNoti
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EvTerrainExitNoti
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EvTerrainExitNoti
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.TerrainModeExitNotification.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EvTerrainExitNoti
+      # Style is E00000
+    - SFC.Drive_Mode.Event.ReconfirmNCustomMode.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ReconfirmNCustomMode):E00708,E00709,E00710,E00711"
+      dataType: HString
+      group: EvReconfirmNCustom
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.ReconfirmNCustomMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EvReconfirmNCustom
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EvReconfirmNCustom
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EvReconfirmNCustom
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.ReconfirmNCustomMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EvReconfirmNCustom
+      # Style is E00000
+    - SFC.Drive_Mode.Event.ModeSwitchingImpossible.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ModeSwitchingImpossible):E00712"
+      dataType: HString
+      group: EvModeSwichImpossible
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.ModeSwitchingImpossible.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: EvModeSwichImpossible
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: EvModeSwichImpossible
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: EvModeSwichImpossible
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.ModeSwitchingImpossible.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: EvModeSwichImpossible
+      # Style is E00000
+    - SFC.Drive_Mode.Event.ReconfirmGT_MYMode.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ReconfirmGT_MYMode):E00715"
+      dataType: HString
+      group: ReconfirmGT_MY
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.ReconfirmGT_MYMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: ReconfirmGT_MY
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: ReconfirmGT_MY
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: ReconfirmGT_MY
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.ReconfirmGT_MYMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: ReconfirmGT_MY
+      # 0x0: NONE, 0x1: NORMAL, 0x2: ECO, 0x3: SPORT, 0x4: CHAUFFEUR, 0x5: MY_DRIVE, 0x6: SMART, 0x7: SNOW, 0x8: MAX
+    - SFC.Drive_Mode.Inter_DriveModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_DriveModeSelectStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        ECO: 0x2
+        SPORT: 0x3
+        CHAUFFEUR: 0x4
+        MY_DRIVE: 0x5
+        SMART: 0x6
+        SNOW: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: SNOW, 0x4: MUD, 0x5: SAND, 0x6: DESERT, 0x7: AUTO, 0x8: DEEP_SNOW, 0x9: ROCK, 0xa: MAX
+    - SFC.Drive_Mode.Inter_TerrainModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_TerrainModeSelectStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        SNOW: 0x3
+        MUD: 0x4
+        SAND: 0x5
+        DESERT: 0x6
+        AUTO: 0x7
+        DEEP_SNOW: 0x8
+        ROCK: 0x9
+        MAX: 0xa
+      # 0x0: NONE, 0x1: OFF, 0x2: N, 0x3: CUSTOM1, 0x4: CUSTOM2, 0x5: MAX
+    - SFC.Drive_Mode.Inter_NModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_NModeSelectStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        N: 0x2
+        CUSTOM1: 0x3
+        CUSTOM2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: GT, 0x3: GT_MY, 0x4: MAX
+    - SFC.Drive_Mode.Inter_GtModeSelectStatus:
+      description: "Output of Drive_Mode - Inter_GtModeSelectStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GT: 0x2
+        GT_MY: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SUCCESS, 0x2: NOT_SUPPORTED, 0x3: INVALID_OPERATION, 0x4: MAX
+    - SFC.Drive_Mode.Inter_DriveModeChangeResultStatus:
+      description: "Output of Drive_Mode - Inter_DriveModeChangeResultStatus"
+      dataType: HUInt64
+      group: DriveModeChangeResultStatus
+      valueEnum:
+        NONE: 0x0
+        SUCCESS: 0x1
+        NOT_SUPPORTED: 0x2
+        INVALID_OPERATION: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListSnow_stat:
+      description: "DCN: IMG_TerrainModePopupListSnow_stat</br>
+                    Terrain Mode Popup List Snow Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListMud_stat:
+      description: "DCN: IMG_TerrainModePopupListMud_stat</br>
+                    Terrain Mode Popup List Mud Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListSand_stat:
+      description: "DCN: IMG_TerrainModePopupListSand_stat</br>
+                    Terrain Mode Popup List Sand Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListAuto_stat:
+      description: "DCN: IMG_TerrainModePopupListAuto_stat</br>
+                    Terrain Mode Popup List Auto Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListDeepSnow_stat:
+      description: "DCN: IMG_TerrainModePopupListDeepSnow_stat</br>
+                    Terrain Mode Popup List DeepSnow Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListRock_stat:
+      description: "DCN: IMG_TerrainModePopupListRock_stat</br>
+                    Terrain Mode Popup List Rock Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_TerrainModePopupListDesert_stat:
+      description: "DCN: IMG_TerrainModePopupListDesert_stat</br>
+                    Terrain Mode Popup List Rock Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_Unavailable_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N1ModePopupListN_stat:
+      description: "DCN: IMG_N1ModePopupListN_stat</br>
+                    N1 Mode PopupList N Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N1ModePopupListCustom1_stat:
+      description: "DCN: IMG_N1ModePopupListCustom1_stat</br>
+                    N1 Mode PopupList Custom1 Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N1ModePopupListCustom2_stat:
+      description: "DCN: IMG_N1ModePopupListCustom2_stat</br>
+                    N1 Mode PopupList Custom2 Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N2ModePopupListN_stat:
+      description: "DCN: IMG_N2ModePopupListN_stat</br>
+                    N2 Mode PopupList N Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N2ModePopupListCustom1_stat:
+      description: "DCN: IMG_N2ModePopupListCustom1_stat</br>
+                    N2 Mode PopupList Custom1 Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_N2ModePopupListCustom2_stat:
+      description: "DCN: IMG_N2ModePopupListCustom2_stat</br>
+                    N2 Mode PopupList Custom2 Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: TYPE1, 0x2: TYPE2, 0x3: MAX
+    - SFC.Drive_Mode.Constant.IMG_DriveModePopupListType_stat:
+      description: "DCN: IMG_DriveModePopupListType_stat</br>
+                    Drive Mode PopupList Type Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        TYPE1: 0x1
+        TYPE2: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_GtModePopupListGt_stat:
+      description: "DCN: IMG_GtModePopupListGt_stat</br>
+                    Gt Mode PopupList Gt Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+    - SFC.Drive_Mode.Constant.IMG_GtModePopupListMy_stat:
+      description: "DCN: IMG_GtModePopupListMy_stat</br>
+                    Gt Mode PopupList My Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Available_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: GT, 0x3: GT_MY, 0x4: MAX
+    - SFC.Drive_Mode.Constant.IMG_GtModeSelect_stat:
+      description: "DCN: IMG_GtModeSelect_stat</br>
+                    Gt Mode PopupList My Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GT: 0x2
+        GT_MY: 0x3
+        MAX: 0x4
+      # Style is E00000
+    - SFC.Drive_Mode.Event.Awd2hModeNotification.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Awd2hModeNotification):E00717"
+      dataType: HString
+      group: Awd2hModeNotification
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.Awd2hModeNotification.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Awd2hModeNotification
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.Awd2hModeNotification.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Awd2hModeNotification
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.Awd2hModeNotification.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Awd2hModeNotification
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.Awd2hModeNotification.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Awd2hModeNotification
+      # Style is E00000
+    - SFC.Drive_Mode.Event.UnableToSwitchModeByTowMode.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(UnableToSwitchModeByTowMode):E00718"
+      dataType: HString
+      group: UnableToSwitchModeByTowMode
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Drive_Mode.Event.UnableToSwitchModeByTowMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: UnableToSwitchModeByTowMode
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Drive_Mode.Event.UnableToSwitchModeByTowMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: UnableToSwitchModeByTowMode
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Drive_Mode.Event.UnableToSwitchModeByTowMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: UnableToSwitchModeByTowMode
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Drive_Mode.Event.UnableToSwitchModeByTowMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: UnableToSwitchModeByTowMode

@@ -1,0 +1,175 @@
+#
+# @file IMS.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- IMS:
+  sfcVersion: "2.2.1"
+  description: "Reference : [EC070] IMS. Contains : Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - imsMemory1ReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsMemory1ReqStatus: mInput_ImsMemory1ReqStatus
+    - imsMemory2ReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsMemory2ReqStatus: mInput_ImsMemory2ReqStatus
+    - imsMemoryEnableStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsMemoryEnableStatus: mInput_ImsMemoryEnableStatus
+    - imsPlay1ReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsPlay1ReqStatus: mInput_ImsPlay1ReqStatus
+    - imsPlay2ReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsPlay2ReqStatus: mInput_ImsPlay2ReqStatus
+    - imsPlayStopReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsPlayStopReqStatus: mInput_ImsPlayStopReqStatus
+    - imsErrorWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsErrorWarnStatus: mInput_ImsErrorWarnStatus
+    - imsSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.IMS.Input_ImsSoundStatus: mInput_ImsSoundStatus
+  outputs:
+      # Style is E00000
+    - SFC.IMS.Event.NotWorking.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NotWorking):E61610"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.NotWorking.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.Memory1ReqStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Memory1ReqStatus):E61601"
+      dataType: HString
+      group: Memory1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.Memory1ReqStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Memory1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.Memory2ReqStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Memory2ReqStatus):E61602"
+      dataType: HString
+      group: Memory2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.Memory2ReqStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Memory2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.MemoryEnableStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(MemoryEnableStatus):E61604"
+      dataType: HString
+      group: MemoryEnable
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.MemoryEnableStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: MemoryEnable
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.Play1ReqStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Play1ReqStatus):E61605"
+      dataType: HString
+      group: Play1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.Play1ReqStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Play1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.Play2ReqStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Play2ReqStatus):E61606"
+      dataType: HString
+      group: Play2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.Play2ReqStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Play2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.IMS.Event.PlayStopReqStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PlayStopReqStatus):E61608"
+      dataType: HString
+      group: PlayStop
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Event.PlayStopReqStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: PlayStop
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.IMS.Sound.IMS.ID:
+      description: "Sound ID<br>
+                    Sound ID List(IMS):SND_IMSBuzzer"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.IMS.Sound.IMS.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.IMS.Sound.IMS.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.IMS.Sound.IMS.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1

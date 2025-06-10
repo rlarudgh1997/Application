@@ -1,0 +1,339 @@
+#
+# @file SFC_Common_Enum_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- SFC_Common_Enum_CV:
+  description: "Define commonly used outuput enum"
+  outputs:
+    # Telltale
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.Stat:
+      description: "State of Telltale"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA:
+      description: "Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB:
+      description: "Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA.SubValueA:
+      description: "Sub Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA.SubValueB:
+      description: "Sub Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB.SubValueA:
+      description: "Sub Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB.SubValueB:
+      description: "Sub Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.StatAfterBlink:
+      description: "State of Telltale after Blink"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+    # Event
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - Event.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - Event.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        REPEAT_COUNT: 0x1
+        REPEAT_MINMAX: 0x2
+        DURATION: 0x3
+        DURATION_MINMAX: 0x4
+        INFINITE: 0x5
+        BLINK: 0x6
+        MAX: 0x7
+    # Sound
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - Sound.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - Sound.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        INFINITE: 0x1
+        DURATION_MINMAX: 0x2
+        REPEAT_COUNT: 0x3
+        INTERVAL: 0x4
+        INTERVAL_SKIP_FIRST: 0x5
+        REPEAT_MINMAX: 0x6
+        MAX: 0x7
+    # Additionally Same Enum Value
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+      # Signal List(24):['SFC.Extension.Settings.Inter_DisWarnSetStatus', 'SFC.Extension.Settings.Inter_SrvRemindSetStatus', 'SFC.Extension.Settings.Inter_WelcomeSoundSetStatus', 'SFC.Screen_Control_Logic_CV.Constant.AccumulScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.AfterRefuelScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.AxleWeightScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.BatteryGauge12V.Stat', 'SFC.Screen_Control_Logic_CV.Constant.BatteryGauge24V.Stat', 'SFC.Screen_Control_Logic_CV.Constant.DriveInfoScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.DriverAssistScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.EDGScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.EnergyFlowScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.GaugeInfoScreen1Enable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.GaugeInfoScreen2Enable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.LWSScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.OilPressGaugeInfoEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.RPMGaugeDisplayEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.SootGaugeInfoEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.TBTDestinationScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.TBTGuideScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.TPMSBattScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.TPMSPressScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.TPMSTempScreenEnable.Stat', 'SFC.Screen_Control_Logic_CV.Constant.WarningScreenEnable.Stat']
+    - EnumValue0:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLE: 0x1
+        ENABLE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+      # Signal List(12):['SFC.Trip_Info.Constant.AccumulDistance.Stat', 'SFC.Trip_Info.Constant.AccumulFuelEconomy.Stat', 'SFC.Trip_Info.Constant.AccumulSpeed.Stat', 'SFC.Trip_Info.Constant.AccumulTime.Stat', 'SFC.Trip_Info.Constant.AfterRefuelDistance.Stat', 'SFC.Trip_Info.Constant.AfterRefuelFuelEconomy.Stat', 'SFC.Trip_Info.Constant.AfterRefuelSpeed.Stat', 'SFC.Trip_Info.Constant.AfterRefuelTime.Stat', 'SFC.Trip_Info.Constant.DriveDistance.Stat', 'SFC.Trip_Info.Constant.DriveFuelEconomy.Stat', 'SFC.Trip_Info.Constant.DriveSpeed.Stat', 'SFC.Trip_Info.Constant.DriveTime.Stat']
+    - EnumValue1:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        DISPLAY: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+      # Signal List(18):['SFC.TPMS_CV.Constant.TireTemperature1_IL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature1_IR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature2_IL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature2_IR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature2_OL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature2_OR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature3_IL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature3_IR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature3_OL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature3_OR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature4_IL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature4_IR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature4_OL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature4_OR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature5_IL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature5_IR.Stat', 'SFC.TPMS_CV.Constant.TireTemperature5_OL.Stat', 'SFC.TPMS_CV.Constant.TireTemperature5_OR.Stat']
+    - EnumValue2:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        HIGH_TEMP_WARN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+      # Signal List(18):['SFC.TPMS_CV.Constant.TPMSBattery1_IL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery1_IR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery2_IL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery2_IR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery2_OL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery2_OR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery3_IL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery3_IR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery3_OL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery3_OR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery4_IL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery4_IR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery4_OL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery4_OR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery5_IL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery5_IR.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery5_OL.Stat', 'SFC.TPMS_CV.Constant.TPMSBattery5_OR.Stat']
+    - EnumValue3:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        LOW_BAT_WARN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+      # Signal List(18):['SFC.TPMS_CV.Constant.TirePressure1_IL.Stat', 'SFC.TPMS_CV.Constant.TirePressure1_IR.Stat', 'SFC.TPMS_CV.Constant.TirePressure2_IL.Stat', 'SFC.TPMS_CV.Constant.TirePressure2_IR.Stat', 'SFC.TPMS_CV.Constant.TirePressure2_OL.Stat', 'SFC.TPMS_CV.Constant.TirePressure2_OR.Stat', 'SFC.TPMS_CV.Constant.TirePressure3_IL.Stat', 'SFC.TPMS_CV.Constant.TirePressure3_IR.Stat', 'SFC.TPMS_CV.Constant.TirePressure3_OL.Stat', 'SFC.TPMS_CV.Constant.TirePressure3_OR.Stat', 'SFC.TPMS_CV.Constant.TirePressure4_IL.Stat', 'SFC.TPMS_CV.Constant.TirePressure4_IR.Stat', 'SFC.TPMS_CV.Constant.TirePressure4_OL.Stat', 'SFC.TPMS_CV.Constant.TirePressure4_OR.Stat', 'SFC.TPMS_CV.Constant.TirePressure5_IL.Stat', 'SFC.TPMS_CV.Constant.TirePressure5_IR.Stat', 'SFC.TPMS_CV.Constant.TirePressure5_OL.Stat', 'SFC.TPMS_CV.Constant.TirePressure5_OR.Stat']
+    - EnumValue4:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        LOW_PRESS_WARN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+      # Signal List(10):['SFC.LWS.Constant.Axle1Left.Stat', 'SFC.LWS.Constant.Axle1Right.Stat', 'SFC.LWS.Constant.Axle2Left.Stat', 'SFC.LWS.Constant.Axle2Right.Stat', 'SFC.LWS.Constant.Axle3Left.Stat', 'SFC.LWS.Constant.Axle3Right.Stat', 'SFC.LWS.Constant.Axle4Left.Stat', 'SFC.LWS.Constant.Axle4Right.Stat', 'SFC.LWS.Constant.Axle5Left.Stat', 'SFC.LWS.Constant.Axle5Right.Stat']
+    - EnumValue5:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        NORMAL: 0x2
+        WARN: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+      # Signal List(67):['SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus', 'SFC.ADAS_PARKING_CV.Constant.ParkCarBodyDisplay.Stat', 'SFC.CNG_Fuel_System_CV.Inter_FuelDetectRealtimeModeStatus', 'SFC.DSW.Inter_TelltaleIccDrow', 'SFC.DSW.Sound2.DSWWarn.Stat', 'SFC.Door_Open_CV.Constant.BusFrontDoorOpen.Stat', 'SFC.Door_Open_CV.Constant.BusMidDoorOpen.Stat', 'SFC.Extension.Event_Control_Logic.Inter_EventCheckDisplayStatus', 'SFC.Extension.Event_Control_Logic.Inter_EventInfoDisplayStatus', 'SFC.Extension.Event_Control_Logic.Inter_SystemCheckDisplayStatus', 'SFC.Extension.Illumination_CV.Inter_IgOffDisplayOnStatus', 'SFC.Extension.Settings.Inter_MfswPopupSetStatus', 'SFC.FCEV_Fuel_System.Constant.FCGauge.BlinkValueA', 'SFC.FCEV_Fuel_System.Constant.FCGauge.BlinkValueB', 'SFC.Illumination_CV.Inter_MinLightMode', 'SFC.Intro_Outro.Inter_AvnWelcomeSoundUsmSetStatus', 'SFC.LWS.Constant.Page.Stat', 'SFC.OAT_CV.Constant.ICEWarn.Stat', 'SFC.OAT_CV.Constant.OAT.Stat', 'SFC.Screen_Control_Logic_CV.Constant.AVNDisplayOnOff.Stat', 'SFC.Steering_Warning_Lamp.Constant.EHPSAmberEvent.Stat', 'SFC.Steering_Warning_Lamp.Constant.EHPSRedEvent.Stat', 'SFC.Steering_Warning_Lamp.Constant.MAHSAmberEvent.Stat', 'SFC.Steering_Warning_Lamp.Constant.MAHSRedEvent.Stat', 'SFC.Steering_Warning_Lamp.Constant.RASAmberEvent.Stat', 'SFC.Steering_Warning_Lamp.Constant.RASRedEvent.Stat', 'SFC.Transmission_Indicator_CV.Inter_SelectMode_Status', 'SFC.Transmission_Warning_CV.Constant.TMAirless.Stat', 'SFC.Transmission_Warning_CV.Constant.TMCheckPhase.Stat', 'SFC.Transmission_Warning_CV.Constant.TMClutchLoad.Stat', 'SFC.Transmission_Warning_CV.Constant.TMClutchWear.Stat', 'SFC.Transmission_Warning_CV.Constant.TMFailureModeSpanner.Stat', 'SFC.Transmission_Warning_CV.Constant.TMFailureModeStop.BlinkValueA', 'SFC.Transmission_Warning_CV.Constant.TMFailureModeStop.BlinkValueB', 'SFC.Transmission_Warning_CV.Constant.TMHighTemperature.Stat', 'SFC.Transmission_Warning_CV.Constant.TMPTO1OnOff.Stat', 'SFC.Transmission_Warning_CV.Constant.TMRangeInhibit.Stat', 'SFC.Transmission_Warning_CV.Constant.TMReleaseAccPedal.Stat', 'SFC.Trip_Info.Constant.DTEAvnCal.Stat', 'SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueA', 'SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueB', 'SFC.Trip_Info.Constant.DTEDashBlinkDisplayForEv.Stat', 'SFC.Trip_Info.Constant.DTEDashDisplayForEv.Stat', 'SFC.VCU.Constant.ADASDRVCommFault.Stat', 'SFC.VCU.Constant.AuxInvCommFault.Stat', 'SFC.VCU.Constant.BMSCommFault.Stat', 'SFC.VCU.Constant.DTGCommFault.Stat', 'SFC.VCU.Constant.EAPUCommFault.Stat', 'SFC.VCU.Constant.EBSCommFault.Stat', 'SFC.VCU.Constant.EMSCommFault.Stat', 'SFC.VCU.Constant.EPBCommFault.Stat', 'SFC.VCU.Constant.FCU1CommFault.Stat', 'SFC.VCU.Constant.FCU2CommFault.Stat', 'SFC.VCU.Constant.HMU1CommFault.Stat', 'SFC.VCU.Constant.IBUCommFault.Stat', 'SFC.VCU.Constant.IMUCommFault.Stat', 'SFC.VCU.Constant.IOBXCommFault.Stat', 'SFC.VCU.Constant.IPSMCommFault.Stat', 'SFC.VCU.Constant.LDCCommFault.Stat', 'SFC.VCU.Constant.MCUCommFault.Stat', 'SFC.VCU.Constant.MFSMCommFault.Stat', 'SFC.VCU.Constant.PDCCommFault.Stat', 'SFC.VCU.Constant.PTOFault.Stat', 'SFC.VCU.Constant.SPACommFault.Stat', 'SFC.VCU.Constant.TCUCommFault.Stat', 'SFC.VCU.Constant.VCUCANBusOff.Stat', 'SFC.VCU.Constant.VCUFault.Stat']
+    - EnumValue6:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3

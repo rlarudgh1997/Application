@@ -1,0 +1,130 @@
+#
+# @file Coasting.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Coasting:
+  sfcVersion: "4.0.1"
+  description: "Reference : [PT060] Coasting. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - CoastingIndiReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Coasting.Input_CoastingIndiReqStatus: mInput_CoastingIndiReqStatus
+    - CoastingWarnOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Coasting.Input_CoastingWarnOnOffStatus: mInput_CoastingWarnOnOffStatus
+    - ControlStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Coasting.Input_SscControlStatus: mInput_SscControlStatus
+        - Vehicle.PT.Coasting.Input_NccControlStatus: mInput_NccControlStatus
+        - Vehicle.PT.Coasting.Input_PreShiftCoastingDisplayStatus: mInput_PreShiftCoastingDisplayStatus
+  outputs:
+      # Style is E00000
+    - SFC.Coasting.Event.CoastingIndiReq.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CoastingIndiReq):E20802"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Coasting.Event.CoastingIndiReq.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Coasting.Event.CoastingIndiReq.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Coasting.Event.CoastingIndiReq.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Coasting.Event.CoastingIndiReq.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: BLINK1, 0x4: SET, 0x5: MAX
+    - SFC.Coasting.Constant.Coastinginertia.Stat:
+      description: "DCN: IMG_Coastinginertia_stat</br>
+                    State of Constant"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        BLINK1: 0x3
+        SET: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: MAX
+    - SFC.Coasting.Constant.Coastinginertia.BlinkValueA:
+      description: "DCN: IMG_Coastinginertia_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: MAX
+    - SFC.Coasting.Constant.Coastinginertia.BlinkValueB:
+      description: "DCN: IMG_Coastinginertia_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.Coasting.Event.Control.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Control):E20804"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Coasting.Event.Control.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat

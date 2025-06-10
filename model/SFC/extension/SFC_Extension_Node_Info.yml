@@ -1,0 +1,260 @@
+#
+# @file SFC_Extension_Node_Info.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- SFC_Extension_Node_Info:
+  description: "Define SFC Extension Node List and Information to be written for SFC_User_Guide"
+  Used_by_SFC_and_App:
+    - SFC.Extension.ADAS_Parking_BVM_NEW.Input_BvmVideo
+    - SFC.Extension.AEM.Inter_AEMInitializeComplete
+    - SFC.Extension.CLU_INFOTAINMENT.Inter_DriveModeChangeReqFromAVNT
+    - SFC.Extension.Event_Control_Logic.Inter_EventCheckDisplayStatus
+    - SFC.Extension.Event_Control_Logic.Inter_EventInfoDisplayStatus
+    - SFC.Extension.Event_Control_Logic.Inter_SystemCheckDisplayStatus
+    - SFC.Extension.Illumination.Inter_IgOffDisplayOnStatus
+    - SFC.Extension.Memory.Inter_AccumStartDistanceValue
+    - SFC.Extension.Memory.Inter_AccumStartElecFuelConsValue
+    - SFC.Extension.Memory.Inter_AccumStartFuelConsValue
+    - SFC.Extension.Memory.Inter_AccumStartHydrogenConsValue
+    - SFC.Extension.Memory.Inter_AccumStartTimeValue
+    - SFC.Extension.Memory.Inter_AfterRefuelStartDistanceValue
+    - SFC.Extension.Memory.Inter_AfterRefuelStartElecFuelConsValue
+    - SFC.Extension.Memory.Inter_AfterRefuelStartFuelConsValue
+    - SFC.Extension.Memory.Inter_AfterRefuelStartHydrogenConsValue
+    - SFC.Extension.Memory.Inter_AfterRefuelStartTimeValue
+    - SFC.Extension.Memory.Inter_DriveModeSelectStatus
+    - SFC.Extension.Memory.Inter_DriveStartDistanceValue
+    - SFC.Extension.Memory.Inter_DriveStartElecFuelConsValue
+    - SFC.Extension.Memory.Inter_DriveStartFuelConsValue
+    - SFC.Extension.Memory.Inter_DriveStartHydrogenConsValue
+    - SFC.Extension.Memory.Inter_DriveStartTimeValue
+    - SFC.Extension.Memory.Inter_DrivingTimeValue
+    - SFC.Extension.Memory.Inter_ElecFuelConsumptValue
+    - SFC.Extension.Memory.Inter_FuelConsumptValue
+    - SFC.Extension.Memory.Inter_HudAdasInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudBcwInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudBcwUnderAdasInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudDISInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudSCCInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudTBTInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HydrogenFuelConsumption
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourCurrentTrip
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourSinceRefueling
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourSinceReset
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourValue
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinCurrentTrip
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinSinceRefueling
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinSinceReset
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinValue
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecCurrentTrip
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecSinceRefueling
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecSinceReset
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecValue
+    - SFC.Extension.Memory.Inter_OdometerValue
+    - SFC.Extension.Memory.Inter_RheostatLevelStatus
+    - SFC.Extension.Memory.Inter_TargetFuelEcoValue
+    - SFC.Extension.Memory_IGN.Inter_AfterDriveFuelEcoValue
+    - SFC.Extension.Memory_IGN.Inter_NaviMapStatus
+    - SFC.Extension.Memory_IGN.Private_LaptimerOperationStatus
+    - SFC.Extension.Option_Classification_Logic.Inter_ConfigThemeUI
+    - SFC.Extension.Param.Par_FuelSender1
+    - SFC.Extension.Param.Par_FuelSender10
+    - SFC.Extension.Param.Par_FuelSender11
+    - SFC.Extension.Param.Par_FuelSender2
+    - SFC.Extension.Param.Par_FuelSender3
+    - SFC.Extension.Param.Par_FuelSender4
+    - SFC.Extension.Param.Par_FuelSender5
+    - SFC.Extension.Param.Par_FuelSender6
+    - SFC.Extension.Param.Par_FuelSender7
+    - SFC.Extension.Param.Par_FuelSender8
+    - SFC.Extension.Param.Par_FuelSender9
+    - SFC.Extension.Param.Par_FuelSenderOpen
+    - SFC.Extension.Param.Par_FuelSenderShort
+    - SFC.Extension.Param.Par_FuelSenderVolume1
+    - SFC.Extension.Param.Par_FuelSenderVolume10
+    - SFC.Extension.Param.Par_FuelSenderVolume11
+    - SFC.Extension.Param.Par_FuelSenderVolume2
+    - SFC.Extension.Param.Par_FuelSenderVolume3
+    - SFC.Extension.Param.Par_FuelSenderVolume4
+    - SFC.Extension.Param.Par_FuelSenderVolume5
+    - SFC.Extension.Param.Par_FuelSenderVolume6
+    - SFC.Extension.Param.Par_FuelSenderVolume7
+    - SFC.Extension.Param.Par_FuelSenderVolume8
+    - SFC.Extension.Param.Par_FuelSenderVolume9
+    - SFC.Extension.Param.Par_IllumDayDial
+    - SFC.Extension.Param.Par_IllumDayLCD
+    - SFC.Extension.Param.Par_IllumDayPointer
+    - SFC.Extension.Param.Par_IllumDaySymbolGreen
+    - SFC.Extension.Param.Par_IllumDaySymbolWhite
+    - SFC.Extension.Param.Par_IllumNightDial
+    - SFC.Extension.Param.Par_IllumNightLCD
+    - SFC.Extension.Param.Par_IllumNightPointer
+    - SFC.Extension.Param.Par_IllumNightSymbolGreen
+    - SFC.Extension.Param.Par_IllumNightSymbolWhite
+    - SFC.Extension.Param.Par_MaxDisplaySpeedKph
+    - SFC.Extension.Param.Par_MaxDisplaySpeedMph
+    - SFC.Extension.Param.Par_OdoCorrectionFactor
+    - SFC.Extension.Param.Par_SpeedToleranceKph1
+    - SFC.Extension.Param.Par_SpeedToleranceKph10
+    - SFC.Extension.Param.Par_SpeedToleranceKph11
+    - SFC.Extension.Param.Par_SpeedToleranceKph12
+    - SFC.Extension.Param.Par_SpeedToleranceKph13
+    - SFC.Extension.Param.Par_SpeedToleranceKph14
+    - SFC.Extension.Param.Par_SpeedToleranceKph15
+    - SFC.Extension.Param.Par_SpeedToleranceKph2
+    - SFC.Extension.Param.Par_SpeedToleranceKph3
+    - SFC.Extension.Param.Par_SpeedToleranceKph4
+    - SFC.Extension.Param.Par_SpeedToleranceKph5
+    - SFC.Extension.Param.Par_SpeedToleranceKph6
+    - SFC.Extension.Param.Par_SpeedToleranceKph7
+    - SFC.Extension.Param.Par_SpeedToleranceKph8
+    - SFC.Extension.Param.Par_SpeedToleranceKph9
+    - SFC.Extension.Param.Par_SpeedToleranceMph1
+    - SFC.Extension.Param.Par_SpeedToleranceMph10
+    - SFC.Extension.Param.Par_SpeedToleranceMph2
+    - SFC.Extension.Param.Par_SpeedToleranceMph3
+    - SFC.Extension.Param.Par_SpeedToleranceMph4
+    - SFC.Extension.Param.Par_SpeedToleranceMph5
+    - SFC.Extension.Param.Par_SpeedToleranceMph6
+    - SFC.Extension.Param.Par_SpeedToleranceMph7
+    - SFC.Extension.Param.Par_SpeedToleranceMph8
+    - SFC.Extension.Param.Par_SpeedToleranceMph9
+    - SFC.Extension.Screen_Control_Logic.Inter_AccumInfoManualResetReq
+    - SFC.Extension.Screen_Control_Logic.Inter_AfterRefuelInfoManualResetReq
+    - SFC.Extension.Screen_Control_Logic.Inter_AutoStopTimeManualResetReq
+    - SFC.Extension.Screen_Control_Logic.Inter_DriveInfoManualResetReq
+    - SFC.Extension.Screen_Control_Logic.Inter_LapTimerPlayReq
+    - SFC.Extension.Screen_Control_Logic.Inter_SelfRgnOnoffReq
+    - SFC.Extension.Settings.Inter_AutoStopTimerSetStatus
+    - SFC.Extension.Settings.Inter_ClusterThemeDetailSetStatus
+    - SFC.Extension.Settings.Inter_ClusterThemeSetStatus
+    - SFC.Extension.Settings.Inter_DisWarnSetStatus
+    - SFC.Extension.Settings.Inter_DisplayLanguageStatus
+    - SFC.Extension.Settings.Inter_FuelEcoUnitKmSetStatus
+    - SFC.Extension.Settings.Inter_FuelEcoUnitMiSetStatus
+    - SFC.Extension.Settings.Inter_IceWarnSetStatus
+    - SFC.Extension.Settings.Inter_LapTimerAutoMeasureSetStatus
+    - SFC.Extension.Settings.Inter_LapTimerDifferTimeSetStatus
+    - SFC.Extension.Settings.Inter_MfswPopupSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeEcoModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeMudModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeMyDriveModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeNormalModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeSandModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeSmartModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeSnowModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeSportModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeTerrainAutoModeSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightBeepSoundSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightCustomModeSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightEcoModeSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightNModeSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightNormalModeSetStatus
+    - SFC.Extension.Settings.Inter_ShiftLightSportModeSetStatus
+    - SFC.Extension.Settings.Inter_SrvRemainDistanceKm
+    - SFC.Extension.Settings.Inter_SrvRemainDistanceMi
+    - SFC.Extension.Settings.Inter_SrvRemainPeriod
+    - SFC.Extension.Settings.Inter_SrvRemindDistKmSetValue
+    - SFC.Extension.Settings.Inter_SrvRemindDistMiSetValue
+    - SFC.Extension.Settings.Inter_SrvRemindPeriodSetValue
+    - SFC.Extension.Settings.Inter_SrvRemindSetStatus
+    - SFC.Extension.Settings.Inter_TorqueUnitSetStatus
+    - SFC.Extension.Settings.Inter_TripDistanceUnit
+    - SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus
+    - SFC.Extension.Settings.Inter_WelcomeSoundSetStatus
+    - SFC.Extension.Telltale.Inter_TelltaleHmiInitializeComplete
+  Used_by_Only_App:
+    - SFC.Extension.Detail_Contents_Theme_2_0.Inter_HudThemeSetStatus
+    - SFC.Extension.Memory.Inter_AdasWarnVolumeSet
+    - SFC.Extension.Memory.Inter_AutoStopTimerSetStatus
+    - SFC.Extension.Memory.Inter_ClusterThemeDetailSet
+    - SFC.Extension.Memory.Inter_ClusterThemeSet
+    - SFC.Extension.Memory.Inter_DisWarnSet
+    - SFC.Extension.Memory.Inter_DisplayLanguage
+    - SFC.Extension.Memory.Inter_FuelEcoUnitKm
+    - SFC.Extension.Memory.Inter_FuelEcoUnitMi
+    - SFC.Extension.Memory.Inter_HudAvInfoOnOffStatus
+    - SFC.Extension.Memory.Inter_HudOnOffStatus
+    - SFC.Extension.Memory.Inter_HudThemeSetStatus
+    - SFC.Extension.Memory.Inter_IceWarnSet
+    - SFC.Extension.Memory.Inter_MfswPopupSet
+    - SFC.Extension.Memory.Inter_RpmGaugeComfortSet
+    - SFC.Extension.Memory.Inter_RpmGaugeEcoSet
+    - SFC.Extension.Memory.Inter_RpmGaugeMudSet
+    - SFC.Extension.Memory.Inter_RpmGaugeMyDriveSet
+    - SFC.Extension.Memory.Inter_RpmGaugeNormalSet
+    - SFC.Extension.Memory.Inter_RpmGaugeSandSet
+    - SFC.Extension.Memory.Inter_RpmGaugeSmartSet
+    - SFC.Extension.Memory.Inter_RpmGaugeSnowSet
+    - SFC.Extension.Memory.Inter_RpmGaugeSportSet
+    - SFC.Extension.Memory.Inter_RpmGaugeSprtPlusSet
+    - SFC.Extension.Memory.Inter_RpmGaugeTerrainAutoSet
+    - SFC.Extension.Memory.Inter_ShiftLightBeepSoundSet
+    - SFC.Extension.Memory.Inter_ShiftLightCustomModeSet
+    - SFC.Extension.Memory.Inter_ShiftLightEcoModeSet
+    - SFC.Extension.Memory.Inter_ShiftLightNModeSet
+    - SFC.Extension.Memory.Inter_ShiftLightNormalModeSet
+    - SFC.Extension.Memory.Inter_ShiftLightSportModeSet
+    - SFC.Extension.Memory.Inter_SrvRemainDistanceKm
+    - SFC.Extension.Memory.Inter_SrvRemainPeriod
+    - SFC.Extension.Memory.Inter_SrvRemindDistKmSet
+    - SFC.Extension.Memory.Inter_SrvRemindDistMiSet
+    - SFC.Extension.Memory.Inter_SrvRemindModeSet
+    - SFC.Extension.Memory.Inter_SrvRemindPeriodSet
+    - SFC.Extension.Memory.Inter_SrvRemindSet
+    - SFC.Extension.Memory.Inter_TorqueUnitSet
+    - SFC.Extension.Memory.Inter_TripDistanceUnit
+    - SFC.Extension.Memory.Inter_TurboPressureUnitSet
+    - SFC.Extension.Memory.Inter_WelcomeSoundSet
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordBest_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordFourth_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordSecond_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordThird_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapTimeBest_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapTimeFourth_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapTimeSecond_Previous
+    - SFC.Extension.Memory_IGN.Inter_LapTimeThird_Previous
+    - SFC.Extension.Param.Par_ConvMonthToDay
+    - SFC.Extension.Param.Par_FlatRefuelConfirm1Value
+    - SFC.Extension.Param.Par_FlatRefuelConfirm2Value
+    - SFC.Extension.Param.Par_FlatRefuelConfirm3Value
+    - SFC.Extension.Param.Par_FuelNominalCapacity
+    - SFC.Extension.Param.Par_FuelSenderLPIRedZoneWarn
+    - SFC.Extension.Param.Par_FuelSenderLowFuelWarn
+    - SFC.Extension.Param.Par_FuelSenderLowFuelWarnVolume
+    - SFC.Extension.Param.Par_FuelSlopetStabletime
+    - SFC.Extension.Param.Par_FuelStabletime
+    - SFC.Extension.Param.Par_RefuelSlopeValue
+    - SFC.Extension.Param.Par_SlopeRefuelConfirmDownValue
+    - SFC.Extension.Param.Par_SlopeRefuelConfirmUpValue
+    - SFC.Extension.Settings.Inter_AdasWarnVolAutoOnReq
+    - SFC.Extension.Settings.Inter_AdasWarnVolSetStatus
+    - SFC.Extension.Settings.Inter_AdasWarnVolStatus
+    - SFC.Extension.Settings.Inter_ClusterThemeAutoModeSetStatus
+    - SFC.Extension.Settings.Inter_FoDDisplayThemeCurrentStatus
+    - SFC.Extension.Settings.Inter_FuelEcoResetModeSetStatus
+    - SFC.Extension.Settings.Inter_N1SwitchCustomSetStatus
+    - SFC.Extension.Settings.Inter_N2SwitchCustomSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeComfortModeSetStatus
+    - SFC.Extension.Settings.Inter_RpmGaugeSprtPlusModeSetStatus
+    - SFC.Extension.Settings.Inter_SrvRemindSetModeStatus
+    - SFC.Extension.Settings.Inter_UserProfileStatus

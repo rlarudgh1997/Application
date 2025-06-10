@@ -1,0 +1,142 @@
+#
+# @file Memory_IGN.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Memory_IGN:
+  sfcVersion: "5.3.0"
+  description: "Reference : [CD] virtual SFC to support Memory_IGN variables"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # None
+    - SFC.Extension.Memory_IGN.Inter_AfterDriveFuelEcoValue:
+      description: "After Drive Fuel Eco Value<br>
+                    Spec:Trip_Info[CD180]-Private_AfterDriveFuelEcoValue<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: RUNNING, 0x4: FINISH, 0x5: FINISH_PREVIOUS, 0x6: MAX
+    - SFC.Extension.Memory_IGN.Private_LaptimerOperationStatus:
+      description: "Status of Laptimer Operation<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LaptimerOperationStatus<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        RUNNING: 0x3
+        FINISH: 0x4
+        FINISH_PREVIOUS: 0x5
+        MAX: 0x6
+      # BEST LAP record (time)
+    - SFC.Extension.Memory_IGN.Inter_LapTimeBest_Previous:
+      description: "Lap Time Best_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapTimeBest_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # BEST LAP record (number)
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordBest_Previous:
+      description: "Lap Num Record Best_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapNumRecordBest_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 2nd place rap record (time)
+    - SFC.Extension.Memory_IGN.Inter_LapTimeSecond_Previous:
+      description: "Lap Time Second_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapTimeSecond_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 2nd place rap record (number)
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordSecond_Previous:
+      description: "Lap Num Record Second_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapNumRecordSecond_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 3rd place rap record (time)
+    - SFC.Extension.Memory_IGN.Inter_LapTimeThird_Previous:
+      description: "Lap Time Third_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapTimeThird_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 3rd place rap record (number)
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordThird_Previous:
+      description: "Lap Num Record Third_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapNumRecordThird_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 4rd place rap record (time)
+    - SFC.Extension.Memory_IGN.Inter_LapTimeFourth_Previous:
+      description: "Lap Time Fourth_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapTimeFourth_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 4rd place rap record (number)
+    - SFC.Extension.Memory_IGN.Inter_LapNumRecordFourth_Previous:
+      description: "Lap Num Record Fourth_Previous<br>
+                    Spec:High_Performance_For_N_Brand[PT270]-IMG_LapNumRecordFourth_Previous<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DAY, 0x2: NIGHT, 0x3: MAX
+    - SFC.Extension.Memory_IGN.Inter_NaviMapStatus:
+      description: "Status of Navi Map<br>
+                    Spec:Illumination[CD050]-Private_NaviMapStatus<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DAY: 0x1
+        NIGHT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ADM1, 0x3: ADM2, 0x4: ADM3, 0x5: MAX
+    - SFC.Extension.Memory_IGN.Inter_AdmModeStatus1:
+      description: "WYM ADM_Mode_Information Private_AdmModeStatus<br>
+                    Spec:ADM_Mode_Information[WYM010]-Private_AdmModeStatus{stat1}<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ADM1: 0x2
+        ADM2: 0x3
+        ADM3: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: NORMAL, 0x2: IGN1OFF, 0x3: SHORT_SIGNAL_ADM1, 0x4: SHORT_SIGNAL_ADM2, 0x5: SHORT_SIGNAL_ADM3, 0x6: STALE, 0x7: PROHIBIT_TO_ADM2, 0x8: PROHIBIT_TO_ADM3, 0x9: MAX
+    - SFC.Extension.Memory_IGN.Inter_AdmModeStatus2:
+      description: "WYM ADM_Mode_Information Private_AdmModeStatus<br>
+                    Spec:ADM_Mode_Information[WYM010]-Private_AdmModeStatus{stat2}<br>
+                    Published in Memory_IGN[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        IGN1OFF: 0x2
+        SHORT_SIGNAL_ADM1: 0x3
+        SHORT_SIGNAL_ADM2: 0x4
+        SHORT_SIGNAL_ADM3: 0x5
+        STALE: 0x6
+        PROHIBIT_TO_ADM2: 0x7
+        PROHIBIT_TO_ADM3: 0x8
+        MAX: 0x9

@@ -1,0 +1,367 @@
+#
+# @file High_Performance_Gauge.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- High_Performance_Gauge:
+  sfcVersion: "16.0.1"
+  description: "Reference : [PT280] High_Performance_Gauge. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+    - tempChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_EngineOilTempValue: mInput_EngineOilTempValue
+        - Vehicle.PT.High_Performance_Gauge.Input_OutTempUnitStatus: mInput_OutTempUnitStatus
+        - Vehicle.PT.High_Performance_Gauge.Input_EngineCoolantTempValue: mInput_EngineCoolantTempValue
+        - Vehicle.PT.High_Performance_Gauge.Input_EvMotorFrontTempValue: mInput_EvMotorFrontTempValue
+        - Vehicle.PT.High_Performance_Gauge.Input_EvMotorRearTempValue: mInput_EvMotorRearTempValue
+        - Vehicle.PT.High_Performance_Gauge.Input_EvBatteryTempValue: mInput_EvBatteryTempValue
+    - turboChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration: 10
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_AtmosphericPressureValue: mInput_AtmosphericPressureValue
+        - Vehicle.PT.High_Performance_Gauge.Input_TurboBoostPressureValue: mInput_TurboBoostPressureValue
+        - SFC.Input_Output_Processing.Inter_EngineOnStatus: mInter_EngineOnStatus
+        - SFC.Extension.Settings.Inter_TurboPressureUnitSetStatus: mInter_TurboPressureUnitSetStatus
+    - torqueChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration: 10
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_EngineTorqueAfterCorrectionValue: mInput_EngineTorqueAfterCorrectionValue
+        - Vehicle.PT.High_Performance_Gauge.Input_EngineTorqueOfFrictionLossValue: mInput_EngineTorqueOfFrictionLossValue
+        - SFC.Extension.Settings.Inter_TorqueUnitSetStatus: mInter_TorqueUnitSetStatus
+        - Vehicle.PT.High_Performance_Gauge.Input_EvMotorTorqueFrontValue: mInput_EvMotorTorqueFrontValue
+        - Vehicle.PT.High_Performance_Gauge.Input_EvMotorTorqueRearValue: mInput_EvMotorTorqueRearValue
+    - launchControl1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_LaunchControlType1Status: mInput_LaunchControlType1Status
+    - launchControl2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_LaunchControlType2Status: mInput_LaunchControlType2Status
+    - launchControl3Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_LaunchControlType3Status: mInput_LaunchControlType3Status
+    - vgsOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_VgsOnOffStatus: mInput_VgsOnOffStatus
+    - highPerformanceWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.High_Performance_Gauge.Input_HighPerformanceWarnStatus: mInput_HighPerformanceWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_Gauge.Telltale.LaunchControl.Stat:
+      description: "DCN: IMG_TelltaleLaunchControl_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: DEACTIVATE, 0x3: ACTIVATE, 0x4: MAX
+    - SFC.High_Performance_Gauge.Telltale.LaunchControl.StatOptional:
+      description: "DCN: IMG_TelltaleLaunchControl_statOptional</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DEACTIVATE: 0x2
+        ACTIVATE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueA:
+      description: "DCN: IMG_TelltaleLaunchControl_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: DEACTIVATE, 0x3: ACTIVATE, 0x4: MAX
+    - SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueAOptional:
+      description: "DCN: IMG_TelltaleLaunchControl_stat</br>
+                    Optional Blink ValueA"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DEACTIVATE: 0x2
+        ACTIVATE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.High_Performance_Gauge.Telltale.LaunchControl.BlinkValueB:
+      description: "DCN: IMG_TelltaleLaunchControl_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum.Telltale.BlinkValueB
+      # 섭씨일 경우 -40~150, 화씨일 경우 -40~300
+    - SFC.High_Performance_Gauge.Constant.EngineOilTemp.Value:
+      description: "DCN: IMG_EngineOilTemp_value</br>
+                    Value of Engine Oil Temp<br>
+                    -40~150 or -40~300"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: CELSIUS, 0x2: FAHRENHEIT, 0x3: DISPLAY_OFF, 0x4: MAX
+    - SFC.High_Performance_Gauge.Constant.EngineOilTempUnit.Stat:
+      description: "DCN: IMG_EngineOilTempunit_stat</br>
+                    State of Engine Oil Temp Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CELSIUS: 0x1
+        FAHRENHEIT: 0x2
+        DISPLAY_OFF: 0x3
+        MAX: 0x4
+      # Engine Coolant Temp
+    - SFC.High_Performance_Gauge.Constant.EngineCoolantTemp.Value:
+      description: "DCN: IMG_EngineCoolantTemp_value</br>
+                    Value of Engine Coolant Temp"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: CELSIUS, 0x2: FAHRENHEIT, 0x3: DISPLAY_OFF, 0x4: MAX
+    - SFC.High_Performance_Gauge.Constant.EngineCoolantTempUnit.Stat:
+      description: "DCN: IMG_EngineCoolantTempunit_stat</br>
+                    State of Engine Coolant Temp Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CELSIUS: 0x1
+        FAHRENHEIT: 0x2
+        DISPLAY_OFF: 0x3
+        MAX: 0x4
+      # 0~999
+    - SFC.High_Performance_Gauge.Constant.TurboGauge.Value:
+      description: "DCN: IMG_TURBOgauge_value</br>
+                    Value of Turbo Gauge<br>
+                    0~999"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: KPA, 0x2: PSI, 0x3: BAR, 0x4: MAX
+    - SFC.High_Performance_Gauge.Constant.TurboUnit.Stat:
+      description: "DCN: IMG_TURBOunit_stat</br>
+                    State of Turbo Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KPA: 0x1
+        PSI: 0x2
+        BAR: 0x3
+        MAX: 0x4
+      # Private_Torque_value
+    - SFC.High_Performance_Gauge.Constant.TorqueGauge.Value:
+      description: "DCN: IMG_TORQUEgauge_value</br>
+                    Value of Torque Gauge"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: N_M, 0x2: LB_FT, 0x3: MAX
+    - SFC.High_Performance_Gauge.Constant.TorqueUnit.Stat:
+      description: "DCN: IMG_TORQUEunit_stat</br>
+                    State of Torque Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        N_M: 0x1
+        LB_FT: 0x2
+        MAX: 0x3
+      # 전륜토크값(4륜)
+    - SFC.High_Performance_Gauge.Constant.TorqueEvFront.Value:
+      description: "DCN: IMG_TorqueEvFront_value</br>
+                    Value of TorqueEvFront"
+      dataType: HInt64
+      # 후륜토크값(4륜)
+    - SFC.High_Performance_Gauge.Constant.TorqueEvRear.Value:
+      description: "DCN: IMG_TorqueEvRear_value</br>
+                    Value of TorqueEvRear"
+      dataType: HInt64
+      # 2륜토크값(전,후륜무관)
+    - SFC.High_Performance_Gauge.Constant.TorqueEv2wd.Value:
+      description: "DCN: IMG_TorqueEv2wd_value</br>
+                    Value of TorqueEv2wd"
+      dataType: HInt64
+      # 전륜모터온도(4륜)
+    - SFC.High_Performance_Gauge.Constant.MotorFrontTemp.Value:
+      description: "DCN: IMG_MotorFrontTemp_value</br>
+                    Value of MotorFrontTemp"
+      dataType: HInt64
+      # 후륜모터온도(4륜)
+    - SFC.High_Performance_Gauge.Constant.MotorRearTemp.Value:
+      description: "DCN: IMG_MotorRearTemp_value</br>
+                    Value of MotorRearTemp"
+      dataType: HInt64
+      # 2륜모터온도(전,후륜무관)
+    - SFC.High_Performance_Gauge.Constant.Motor2wdTemp.Value:
+      description: "DCN: IMG_Motor2wdTemp_value</br>
+                    Value of Motor2wdTemp"
+      dataType: HInt64
+      # 배터리 온도 표시(EV N 차종)
+    - SFC.High_Performance_Gauge.Constant.EvBatteryTemp.Value:
+      description: "DCN: IMG_EvBatteryTemp_value</br>
+                    Value of EvBatteryTemp"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: VGS_ON, 0x3: MAX
+    - SFC.High_Performance_Gauge.Constant.VgsOnOff.Stat:
+      description: "DCN: IMG_VgsOnOff_Stat</br>
+                    State of VgsOnOff Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        VGS_ON: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.High_Performance_Gauge.Event.LaunchControlType1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LaunchControlType1):E24802,E24803,E24804"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_Gauge.Event.LaunchControlType1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_Gauge.Event.LaunchControlType1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.High_Performance_Gauge.Event.LaunchControlType2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LaunchControlType2):E24805,E24806,E24822"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_Gauge.Event.LaunchControlType2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_Gauge.Event.LaunchControlType2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.High_Performance_Gauge.Event.LaunchControlType3.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LaunchControlType3):E24817,E24818,E24824,E24825"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType3.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_Gauge.Event.LaunchControlType3.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_Gauge.Event.LaunchControlType3.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_Gauge.Event.LaunchControlType3.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.High_Performance_Gauge.Event.HighPerformanceWarnStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HighPerformanceWarnStatus):E24819,E24820,E24821,E24823"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.High_Performance_Gauge.Event.HighPerformanceWarnStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.High_Performance_Gauge.Event.HighPerformanceWarnStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.High_Performance_Gauge.Event.HighPerformanceWarnStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.High_Performance_Gauge.Event.HighPerformanceWarnStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4

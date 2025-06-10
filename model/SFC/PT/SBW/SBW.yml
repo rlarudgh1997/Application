@@ -1,0 +1,387 @@
+#
+# @file SBW.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- SBW:
+  sfcVersion: "12.0.1"
+  description: "Reference : [PT350] SBW. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSBW: mInter_ConfigSBW
+        - Vehicle.System.Config.Inter_ConfigFwSBW: mInter_ConfigFwSBW
+        - Vehicle.System.Config.Inter_ConfigRwSBW: mInter_ConfigRwSBW
+    - driverPositionTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_DriverPositionTypeStatus: mInput_DriverPositionTypeStatus
+    - sbwWarnFromTCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwWarnStatusFromTCU: mInput_SbwWarnStatusFromTCU
+    - sbwWarnFromSCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwWarnStatusFromSCU: mInput_SbwWarnStatusFromSCU
+    - sbwWarnFromVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwWarnStatusFromVCU: mInput_SbwWarnStatusFromVCU
+    - sbwWarnFromEVSCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwWarnStatusFromEVSCU: mInput_SbwWarnStatusFromEVSCU
+    - lvrWrnSbwShifterChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwLeverWarnStatusFromSbwShifter: mInput_SbwLeverWarnStatusFromSbwShifter
+    - lvrWrnSbwChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_SbwLeverWarnStatusFromSBW: mInput_SbwLeverWarnStatusFromSBW
+    - nModeSettingFromVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_NPositionStayModeStatusFromVCU: mInput_NPositionStayModeStatusFromVCU
+    - nModeSettingFromTCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_NPositionStayModeStatusFromTCU: mInput_NPositionStayModeStatusFromTCU
+    - nModeSettingFromSCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.SBW.Input_NPositionStayModeStatusFromSCU: mInput_NPositionStayModeStatusFromSCU
+  outputs:
+      # 0x0: NONE, 0x1: LHD, 0x2: RHD, 0x3: MAX
+    - SFC.SBW.Constant.SBW.Stat:
+      description: "DCN: IMG_SBWPosition_stat</br>
+                    State of SBW"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        LHD: 0x1
+        RHD: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.SBW.Event.SbwWarnFromTCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SbwWarnFromTCU):E22806,E22807,E22808,E22828,E22841"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.SbwWarnFromTCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.SbwWarnFromTCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.SbwWarnFromTCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.SbwWarnFromTCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Sound output minimum count
+    - SFC.SBW.Event.SbwWarnFromTCU.LinkedSound.RepeatMin:
+      description: "Linked Sound Repeat Min"
+      dataType: HUInt64
+      group: Event1
+      # Sound output maximum count
+    - SFC.SBW.Event.SbwWarnFromTCU.LinkedSound.RepeatMax:
+      description: "Linked Sound Repeat Max"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.SBW.Event.SbwWarnFromSCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SbwWarnFromSCU):E22809,E22811,E22812,E22813,E22815,E22816,E22817,E22818,E22819,E22820,E22821,E22822,E22851,E22877,E22878"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.SbwWarnFromSCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.SbwWarnFromSCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.SbwWarnFromSCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.SbwWarnFromSCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Sound output minimum count
+    - SFC.SBW.Event.SbwWarnFromSCU.LinkedSound.RepeatMin:
+      description: "Linked Sound Repeat Min"
+      dataType: HUInt64
+      group: Event2
+      # Sound output maximum count
+    - SFC.SBW.Event.SbwWarnFromSCU.LinkedSound.RepeatMax:
+      description: "Linked Sound Repeat Max"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.SBW.Event.SbwWarnFromVCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SbwWarnFromVCU):E22809,E22810,E22811,E22812,E22827,E22828"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.SbwWarnFromVCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.SbwWarnFromVCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.SbwWarnFromVCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.SbwWarnFromVCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Sound output minimum count
+    - SFC.SBW.Event.SbwWarnFromVCU.LinkedSound.RepeatMin:
+      description: "Linked Sound Repeat Min"
+      dataType: HUInt64
+      group: Event3
+      # Sound output maximum count
+    - SFC.SBW.Event.SbwWarnFromVCU.LinkedSound.RepeatMax:
+      description: "Linked Sound Repeat Max"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.SBW.Event.SbwWarnFromEVSCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(SbwWarnFromEVSCU):E22818"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.SbwWarnFromEVSCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.SbwWarnFromEVSCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.SbwWarnFromEVSCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.SbwWarnFromEVSCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.SBW.Event.LvrWrnSbwShifter.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LvrWrnSbwShifter):E22829,E22830,E22831,E22832,E22833,E22834,E22836,E22838,E22839,E22841,E22852,E22853,E22854,E22855,E22858,E22859,E22860,E22861,E22862,E22863,E22864,E22866,E22870"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.LvrWrnSbwShifter.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.LvrWrnSbwShifter.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.LvrWrnSbwShifter.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.LvrWrnSbwShifter.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.SBW.Event.LvrWrnSbw.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LvrWrnSbw):E22841,E22842,E22843,E22844,E22845,E22846,E22847,E22848,E22849,E22871,E22872,E22873,E22875,E22876"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.LvrWrnSbw.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.LvrWrnSbw.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.LvrWrnSbw.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.LvrWrnSbw.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.SBW.Event.NModeSettingFromVCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NModeSettingFromVCU):E22801,E22802,E22803,E22804"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.NModeSettingFromVCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.NModeSettingFromVCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.NModeSettingFromVCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.NModeSettingFromVCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.SBW.Event.NModeSettingFromTCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NModeSettingFromTCU):E22801,E22802,E22803,E22804"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.NModeSettingFromTCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.NModeSettingFromTCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.NModeSettingFromTCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.NModeSettingFromTCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.SBW.Event.NModeSettingFromSCU.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(NModeSettingFromSCU):E22801,E22802,E22803,E22804"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.SBW.Event.NModeSettingFromSCU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.SBW.Event.NModeSettingFromSCU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.SBW.Event.NModeSettingFromSCU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.SBW.Event.NModeSettingFromSCU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9

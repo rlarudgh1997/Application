@@ -1,0 +1,260 @@
+#
+# @file MFSW.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- MFSW:
+  sfcVersion: "7.1.0"
+  description: "Reference : [EC110] MFSW. Contains : Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - mfswCANTypeAppliedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_MfswCANTypeAppliedStatus: mInput_MfswCANTypeAppliedStatus
+    - lightSwStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_LightSwitchStatusFromIBU: mInput_LightSwitchStatusFromIBU
+        - Vehicle.EC.MFSW.Input_LightSwitchStatusFromMFSW: mInput_LightSwitchStatusFromMFSW
+        - Vehicle.EC.MFSW.Input_LightPopUpReq: mInput_LightPopUpReq
+    - lightPopUpMsgTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_LightPopUpMsgType: mInput_LightPopUpMsgType
+    - wiperSwFrontStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_WiperSwitchFrontStatusFromIBU: mInput_WiperSwitchFrontStatusFromIBU
+        - Vehicle.EC.MFSW.Input_WiperSwitchFrontStatusFromMFSW: mInput_WiperSwitchFrontStatusFromMFSW
+    - wiperSwIntStepStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_WiperSwitchIntStepStatusFromIBU: mInput_WiperSwitchIntStepStatusFromIBU
+        - Vehicle.EC.MFSW.Input_WiperSwitchIntStepStatusFromMFSW: mInput_WiperSwitchIntStepStatusFromMFSW
+    - wiperSwRearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_WiperSwitchRearStatusFromMFSW: mInput_WiperSwitchRearStatusFromMFSW
+        - Vehicle.EC.MFSW.Input_WiperSwitchRearStatusFromIBU: mInput_WiperSwitchRearStatusFromIBU
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAutolight: mInter_ConfigAutolight
+        - Vehicle.System.Config.Inter_ConfigAutoWiper: mInter_ConfigAutoWiper
+        - Vehicle.System.Config.Inter_ConfigMfswSymbol: mInter_ConfigMfswSymbol
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - actualVehicleSpeedCompareValueTo10Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ActualVehicleSpeedCompareValueTo10: mInter_ActualVehicleSpeedCompareValueTo10
+    - headLampOffAlarmStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.MFSW.Input_AutolightSensorNightStatus: mInput_AutolightSensorNightStatus
+        - Vehicle.EC.MFSW.Input_ExtLowBeamOnReqStatus: mInput_ExtLowBeamOnReqStatus
+        - Vehicle.EC.MFSW.Input_Lamp_HdLmpLoOffPopUpReq: mInput_Lamp_HdLmpLoOffPopUpReq
+    - mfswPopupSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_MfswPopupSetStatus: mInter_MfswPopupSetStatus
+  outputs:
+      # 0x0: NONE, 0x1: AUTO_SYMBOL, 0x2: AUTO_TEXT, 0x3: NON_AUTO_SYMBOL, 0x4: AUTO_SYMBOL_2ND, 0x5: AUTO_TEXT_2ND, 0x6: AUTO_NOT_P, 0x7: NON_AUTO_TEXT, 0x8: MAX
+    - SFC.MFSW.Constant.LightSwitchPopupType.Stat:
+      description: "DCN: IMG_LightSwitchPopupType_stat</br>
+                    Light Switch Popup Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AUTO_SYMBOL: 0x1
+        AUTO_TEXT: 0x2
+        NON_AUTO_SYMBOL: 0x3
+        AUTO_SYMBOL_2ND: 0x4
+        AUTO_TEXT_2ND: 0x5
+        AUTO_NOT_P: 0x6
+        NON_AUTO_TEXT: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: AUTO_UP, 0x2: AUTO_UP_TEXT, 0x3: AUTO_DOWN, 0x4: NON_AUTO_UP, 0x5: NON_AUTO_UP_TEXT, 0x6: NON_AUTO_DOWN, 0x7: AUTO_UP_2ND, 0x8: AUTO_UP_TEXT_2ND, 0x9: NON_AUTO_UP_2ND, 0xA: NON_AUTO_UP_TEXT_2ND, 0xB: MAX
+    - SFC.MFSW.Constant.WiperFrSwitchPopupType.Stat:
+      description: "DCN: IMG_WiperFrSwitchPopupType_stat</br>
+                    Wiper Front Switch Popup Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AUTO_UP: 0x1
+        AUTO_UP_TEXT: 0x2
+        AUTO_DOWN: 0x3
+        NON_AUTO_UP: 0x4
+        NON_AUTO_UP_TEXT: 0x5
+        NON_AUTO_DOWN: 0x6
+        AUTO_UP_2ND: 0x7
+        AUTO_UP_TEXT_2ND: 0x8
+        NON_AUTO_UP_2ND: 0x9
+        NON_AUTO_UP_TEXT_2ND: 0xA
+        MAX: 0xB
+      # 0x0: NONE, 0x1: SYMBOL, 0x2: TEXT, 0x3: SYMBOL_2ND, 0x4: TEXT_2ND, 0x5: MAX
+    - SFC.MFSW.Constant.WiperRrSwitchPopupType.Stat:
+      description: "DCN: IMG_WiperRrSwitchPopupType_stat</br>
+                    Wiper Rear Switch Popup Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SYMBOL: 0x1
+        TEXT: 0x2
+        SYMBOL_2ND: 0x3
+        TEXT_2ND: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: TAIL_ON, 0x3: HEAD_LOW_ON, 0x4: AUTO_ON, 0x5: MAX
+    - SFC.MFSW.Constant.LightSwitchSelect.Stat:
+      description: "DCN: IMG_LightSwitchSelect_stat</br>
+                    Light Switch Select Status"
+      dataType: HUInt64
+      group: Group1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        TAIL_ON: 0x2
+        HEAD_LOW_ON: 0x3
+        AUTO_ON: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: INT_OR_AUTO, 0x3: LOW_ON, 0x4: HIGH_ON, 0x5: MAX
+    - SFC.MFSW.Constant.WiperFrontSwitchSelect.Stat:
+      description: "DCN: IMG_WiperFrontSwitchSelect_stat</br>
+                    Wiper Front Switch Select Status"
+      dataType: HUInt64
+      group: Group2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        INT_OR_AUTO: 0x2
+        LOW_ON: 0x3
+        HIGH_ON: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: LOW_ON, 0x3: HIGH_ON, 0x4: MAX
+    - SFC.MFSW.Constant.WiperRearSwitchSelect.Stat:
+      description: "DCN: IMG_WiperRearSwitchSelect_stat</br>
+                    Wiper Rear Switch Select Status"
+      dataType: HUInt64
+      group: Group3
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LOW_ON: 0x2
+        HIGH_ON: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: STEP1, 0x2: STEP2, 0x3: STEP3, 0x4: STEP4, 0x5: STEP5, 0x6: DISPLAY_OFF, 0x7: MAX
+    - SFC.MFSW.Constant.WiperIntSwitchSelect.Stat:
+      description: "DCN: IMG_WiperIntSwitchSelect_stat</br>
+                    Wiper Front Int Switch Select Stat"
+      dataType: HUInt64
+      group: Group2
+      valueEnum:
+        NONE: 0x0
+        STEP1: 0x1
+        STEP2: 0x2
+        STEP3: 0x3
+        STEP4: 0x4
+        STEP5: 0x5
+        DISPLAY_OFF: 0x6
+        MAX: 0x7
+      # Style is E00000
+    - SFC.MFSW.Event.LightSwitch.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LightSwitch):E60901"
+      dataType: HString
+      group: Group1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MFSW.Event.LightSwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Group1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.MFSW.Event.FrontWiperSwitch.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FrontWiperSwitch):E60902"
+      dataType: HString
+      group: Group2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MFSW.Event.FrontWiperSwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Group2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.MFSW.Event.RearWiperSwitch.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(RearWiperSwitch):E60903"
+      dataType: HString
+      group: Group3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MFSW.Event.RearWiperSwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Group3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.MFSW.Event.HeadLampOffAlarm.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(HeadLampOffAlarm):E60904,E60905"
+      dataType: HString
+      group: Group4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.MFSW.Event.HeadLampOffAlarm.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Group4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.MFSW.Event.HeadLampOffAlarm.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Group4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.MFSW.Event.HeadLampOffAlarm.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Group4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.MFSW.Event.HeadLampOffAlarm.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Group4

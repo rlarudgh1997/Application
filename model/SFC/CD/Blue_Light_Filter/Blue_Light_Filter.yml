@@ -1,0 +1,74 @@
+#
+# @file Blue_Light_Filter.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Blue_Light_Filter:
+  sfcVersion: "0.0.0"
+  description: "Reference: [CD210] Contains: Inter Recommend: VALUE_CHANGED"
+  subscriptions:
+    - headUnitBlueLightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Blue_Light_Filter.Input_HeadUnitBlueLightOnOffStatus: mInput_HeadUnitBlueLightOnOffStatus
+        - Vehicle.CD.Blue_Light_Filter.Input_HeadUnitBlueLightLevelStatus: mInput_HeadUnitBlueLightLevelStatus
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - paramChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue1: mPar_BlueLightFilterBlueColorValue1
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue2: mPar_BlueLightFilterBlueColorValue2
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue3: mPar_BlueLightFilterBlueColorValue3
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue4: mPar_BlueLightFilterBlueColorValue4
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue5: mPar_BlueLightFilterBlueColorValue5
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue6: mPar_BlueLightFilterBlueColorValue6
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue7: mPar_BlueLightFilterBlueColorValue7
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue8: mPar_BlueLightFilterBlueColorValue8
+        - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue9: mPar_BlueLightFilterBlueColorValue9
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue1: mPar_BlueLightFilterGreenColorValue1
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue2: mPar_BlueLightFilterGreenColorValue2
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue3: mPar_BlueLightFilterGreenColorValue3
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue4: mPar_BlueLightFilterGreenColorValue4
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue5: mPar_BlueLightFilterGreenColorValue5
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue6: mPar_BlueLightFilterGreenColorValue6
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue7: mPar_BlueLightFilterGreenColorValue7
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue8: mPar_BlueLightFilterGreenColorValue8
+        - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue9: mPar_BlueLightFilterGreenColorValue9
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue1: mPar_BlueLightFilterRedColorValue1
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue2: mPar_BlueLightFilterRedColorValue2
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue3: mPar_BlueLightFilterRedColorValue3
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue4: mPar_BlueLightFilterRedColorValue4
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue5: mPar_BlueLightFilterRedColorValue5
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue6: mPar_BlueLightFilterRedColorValue6
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue7: mPar_BlueLightFilterRedColorValue7
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue8: mPar_BlueLightFilterRedColorValue8
+        - SFC.Extension.Param.Par_BlueLightFilterRedColorValue9: mPar_BlueLightFilterRedColorValue9
+  outputs:
+      # None
+    - Dummy:
+      description: "Dummy Node for generate"
+      dataType: HUInt64

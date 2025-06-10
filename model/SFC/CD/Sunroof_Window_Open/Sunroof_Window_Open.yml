@@ -1,0 +1,165 @@
+#
+# @file Sunroof_Window_Open.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Sunroof_Window_Open:
+  sfcVersion: "10.0.0"
+  description: "Reference : [CD170] Sunroof_Window_Open. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configSunroofTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSunroofType: mInter_ConfigSunroofType
+    - sunroofFrontOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open.Input_SunroofFrontOpenStatus: mInput_SunroofFrontOpenStatus
+        - Vehicle.CD.Sunroof_Window_Open.Input_SunroofFrontOpenStatusFromRCM: mInput_SunroofFrontOpenStatusFromRCM
+        - Vehicle.CD.Sunroof_Window_Open.Input_SunroofFrontOpenStatusFromPDCex: mInput_SunroofFrontOpenStatusFromPDCex
+    - sunroofRearOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open.Input_SunroofRearOpenStatusFromRCM: mInput_SunroofRearOpenStatusFromRCM
+        - Vehicle.CD.Sunroof_Window_Open.Input_SunroofRearOpenStatusFromPDCex: mInput_SunroofRearOpenStatusFromPDCex
+    - windowRearOpenChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open.Input_WindowOpenRearLeftSideStatus: mInput_WindowOpenRearLeftSideStatus
+        - Vehicle.CD.Sunroof_Window_Open.Input_WindowOpenRearRightSideStatus: mInput_WindowOpenRearRightSideStatus
+    - posAndWindowFrontChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open.Input_DriverPositionTypeStatus: mInput_DriverPositionTypeStatus
+        - Vehicle.CD.Sunroof_Window_Open.Input_WindowOpenDriverSideStatus: mInput_WindowOpenDriverSideStatus
+        - Vehicle.CD.Sunroof_Window_Open.Input_WindowOpenAssistSideStatus: mInput_WindowOpenAssistSideStatus
+  outputs:
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.WindowOpenFrontLeft.Stat:
+      description: "DCN: IMG_WindowOpenFrontLeft_stat</BR>Window Open Front Left"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.WindowOpenFrontRight.Stat:
+      description: "DCN: IMG_WindowOpenFrontRight_stat</BR>Window Open Front Right"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.WindowOpenRearLeft.Stat:
+      description: "DCN: IMG_WindowOpenRearLeft_stat</BR>Window Open Rear Left"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.WindowOpenRearRight.Stat:
+      description: "DCN: IMG_WindowOpenRearRight_stat</BR>Window Open Rear Right"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.SunroofFrontOpen.Stat:
+      description: "DCN: IMG_SunroofFrontOpen_stat</BR>Sunroof Front Open"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.SunroofRearOpen.Stat:
+      description: "DCN: IMG_SunroofRearOpen_stat</BR>Sunroof Rear Open"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DUAL, 0x2: SINGLE, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Constant.SunroofType.Stat:
+      description: "DCN: IMG_SunroofType_stat</BR>SunroofType"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DUAL: 0x1
+        SINGLE: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(OpenWarning):E00201"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event1
+      # Sound output maximum duration
+    - SFC.Sunroof_Window_Open.Event.OpenWarning.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event1

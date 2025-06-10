@@ -1,0 +1,625 @@
+#
+# @file Memory.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Memory:
+  sfcVersion: "8.4.0"
+  description: "Reference : [CD] virtual SFC to support Memory variables"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourValue:
+      description: "Isg Able Time Hour Value<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeHour<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinValue:
+      description: "Isg Able Time Min Value<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeMin<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecValue:
+      description: "Isg Able Time Sec Value<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeSec<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourCurrentTrip:
+      description: "Isg Able Time Hour Current Trip<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeHour_CurrentTrip<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinCurrentTrip:
+      description: "Isg Able Time Min Current Trip<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeMin_CurrentTrip<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecCurrentTrip:
+      description: "Isg Able Time Sec Current Trip<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeSec_CurrentTrip<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourSinceReset:
+      description: "Isg Able Time Hour Since Reset<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeHour_SinceReset<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinSinceReset:
+      description: "Isg Able Time Min Since Reset<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeMin_SinceReset<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecSinceReset:
+      description: "Isg Able Time Sec Since Reset<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeSec_SinceReset<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeHourSinceRefueling:
+      description: "Isg Able Time Hour Since Refueling<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeHour_SinceRefueling<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeMinSinceRefueling:
+      description: "Isg Able Time Min Since Refueling<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeMin_SinceRefueling<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_IsgAbleTimeSecSinceRefueling:
+      description: "Isg Able Time Sec Since Refueling<br>
+                    Spec:ISG[PT300]-Memory_IsgAbleTimeSec_SinceRefueling<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RheostatLevelStatus:
+      description: "Status of Rheostat Level<br>
+                    Spec:Illumination[CD050]-Memory_RheostatLevelStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Illumination[CD050]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_MfswPopupSet:
+      description: "Mfsw Popup Set<br>
+                    Spec:Settings[CD140]-Memory_MfswPopupSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_AdasWarnVolumeSet:
+      description: "Set of Adas Warn Volume<br>
+                    Spec:Settings[CD140]-Memory_AdasWarnVolumeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ClusterThemeSet:
+      description: "Set of Cluster Theme<br>
+                    Spec:Settings[CD140]-Memory_ClusterThemeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DisplayLanguage:
+      description: "Display Language<br>
+                    Spec:Settings[CD140]-Memory_DisplayLanguage<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DisWarnSet:
+      description: "Set of Dis Warn<br>
+                    Spec:Settings[CD140]-Memory_DisWarnSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeComfortSet:
+      description: "RpmGauge Comfort Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeComfortSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeEcoSet:
+      description: "RpmGauge Eco Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeEcoSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeMudSet:
+      description: "RpmGauge Mud Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeMudSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeNormalSet:
+      description: "RpmGauge Normal Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeNormalSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSandSet:
+      description: "RpmGauge Sand Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSandSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSmartSet:
+      description: "RpmGauge Smart Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSmartSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSnowSet:
+      description: "RpmGauge Snow Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSnowSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSportSet:
+      description: "RpmGauge Sport Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSportSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSprtPlusSet:
+      description: "RpmGauge Sprt Plus Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSprtPlusSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeTerrainAutoSet:
+      description: "RpmGauge Terrain Auto Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeTerrainAutoSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeMyDriveSet:
+      description: "RpmGauge MyDrive Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeMyDriveSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightBeepSoundSet:
+      description: "Shift Light Beep Sound Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightBeepSoundSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ClusterThemeDetailSet:
+      description: "Set of Cluster Theme Detail<br>
+                    Spec:Settings[CD140]-Memory_ClusterThemeDetailSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightCustomModeSet:
+      description: "Shift Light Custom Mode Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightCustomModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightEcoModeSet:
+      description: "Shift Light Eco Mode Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightEcoModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightNModeSet:
+      description: "Shift Light N Mode Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightNModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightNormalModeSet:
+      description: "Shift Light Normal Mode Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightNormalModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ShiftLightSportModeSet:
+      description: "Shift Light Sport Mode Set<br>
+                    Spec:Settings[CD140]-Memory_ShiftLightSportModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemainDistanceKm:
+      description: "Srv Remain Distance Km<br>
+                    Spec:Settings[CD140]-Memory_SrvRemainDistanceKm<br>
+                    Published in Memory[CD]"
+      dataType: HInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemainPeriod:
+      description: "Srv Remain Period<br>
+                    Spec:Settings[CD140]-Memory_SrvRemainPeriod<br>
+                    Published in Memory[CD]"
+      dataType: HInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindDistKmSet:
+      description: "Srv Remind Dist Km Set<br>
+                    Spec:Settings[CD140]-Memory_SrvRemindDistKmSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindDistMiSet:
+      description: "Srv Remind Dist Mi Set<br>
+                    Spec:Settings[CD140]-Memory_SrvRemindDistMiSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindModeSet:
+      description: "Srv Remind Mode Set<br>
+                    Spec:Settings[CD140]-Memory_SrvRemindModeSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindPeriodSet:
+      description: "Srv Remind Period Set<br>
+                    Spec:Settings[CD140]-Memory_SrvRemindPeriodSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindSet:
+      description: "Srv Remind Set<br>
+                    Spec:Settings[CD140]-Memory_SrvRemindSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_TripDistanceUnit:
+      description: "TripDistanceUnit<br>
+                    Spec:Settings[CD140]-Memory_TripDistanceUnit<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_WelcomeSoundSet:
+      description: "WelcomeSoundSet<br>
+                    Spec:Settings[CD140]-Memory_WelcomeSoundSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_TorqueUnitSet:
+      description: "TorqueUnitSet<br>
+                    Spec:Settings[CD140]-Memory_TorqueUnitSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_TurboPressureUnitSet:
+      description: "TurboPressureUnitSet<br>
+                    Spec:Settings[CD140]-Memory_TurboPressureUnitSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_AutoStopTimerSetStatus:
+      description: "Status of Auto Stop Timer Set<br>
+                    Spec:Settings[CD140]-Memory_AutoStopTimerSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_RpmGaugeSmartPlusSet:
+      description: "RpmGauge Smart Plus Set<br>
+                    Spec:Settings[CD140]-Memory_RpmGaugeSmartPlusSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelEcoUnitKm:
+      description: "Fuel Eco Unit Km<br>
+                    Spec:Settings[CD140]-Memory_FuelEcoUnitKm<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelEcoUnitMi:
+      description: "Fuel Eco Unit Km<br>
+                    Spec:Settings[CD140]-Memory_FuelEcoUnitKm<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DrivingTimeValue:
+      description: "Value of Driving Time<br>
+                    Spec:Trip_Info[CD180]-Memory_DrivingTimeValue<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelConsumptValue:
+      description: "Value of Fuel Consumpt<br>
+                    Spec:Trip_Info[CD180]-Memory_FuelConsumptValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_ElecFuelConsumptValue:
+      description: "Value of Elec Fuel Consumpt<br>
+                    Spec:Trip_Info[CD180]-Memory_ElecFuelConsumptValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_HydrogenFuelConsumption:
+      description: "Hydrogen Fuel Consumption<br>
+                    Spec:Trip_Info[CD180]-Memory_HydrogenFuelConsumption<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_OdometerValue:
+      description: "Odometer Value<br>
+                    Spec:Trip_Info[CD180]-Memory_OdometerValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartDistanceValue:
+      description: "Value of Accum Start Elec Fuel Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_AccumStartElecFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartElecFuelConsValue:
+      description: "Value of Accum Start Elec Fuel Cons<br>
+                    Spec:Trip Info[CD180] - 4.7 계산값 저장 및 불러오기<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartHydrogenConsValue:
+      description: "Value of Accum Start Hydrogen Cons<br>
+                    Spec:Trip Info[CD180] - 4.7 계산값 저장 및 불러오기<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartFuelConsValue:
+      description: "Value of Accum Start FuelCons<br>
+                    Spec:Trip_Info[CD180]-Memory_AccumStartFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartTimeValue:
+      description: "Value of Accum Start Time<br>
+                    Spec:Trip_Info[CD180]-Memory_AccumStartTimeValue<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartDistanceValue:
+      description: "Value of After Refuel Start Distance<br>
+                    Spec:Trip_Info[CD180]-Memory_AfterRefuelStartDistanceValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartElecFuelConsValue:
+      description: "Value of After Refuel Start Elec Fuel Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_AfterRefuelStartElecFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartHydrogenConsValue:
+      description: "Value of After Refuel Start Hydrogen Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_AfterRefuelStartHydrogenConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartFuelConsValue:
+      description: "Value of After Refuel Start Fuel Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_AfterRefuelStartFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartTimeValue:
+      description: "Value of After Refuel Start Time<br>
+                    Spec:Trip_Info[CD180]-Memory_AfterRefuelStartTimeValue<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartDistanceValue:
+      description: "Value of Drive Start Distance<br>
+                    Spec:Trip_Info[CD180]-Memory_DriveStartDistanceValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartElecFuelConsValue:
+      description: "Value of Drive Start Elec Fuel Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_DriveStartElecFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartHydrogenConsValue:
+      description: "Value of Drive Start Hydrogen Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_DriveStartHydrogenConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartFuelConsValue:
+      description: "Value of Drive Start Fuel Cons<br>
+                    Spec:Trip_Info[CD180]-Memory_DriveStartFuelConsValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartTimeValue:
+      description: "Value of Drive Start Time<br>
+                    Spec:Trip_Info[CD180]-Memory_DriveStartTimeValue<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudBrightLevelStatus:
+      description: "Status of Hud Bright Level<br>
+                    Spec:Illumination_Control[HD030]-Memory_HudBrightLevelStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudHeightLevelStatus:
+      description: "Status of Hud Height Level<br>
+                    Spec:Height_Control[HD040]-Memory_HudHeightLevelStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudHeightLevelStatusIMS1:
+      description: "Hud Height Level Status IMS1<br>
+                    Spec:Height_Control[HD040]-Memory_HudHeightLevelStatusIMS1<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudHeightLevelStatusIMS2:
+      description: "Hud Height Level Status IMS2<br>
+                    Spec:Height_Control[HD040]-Memory_HudHeightLevelStatusIMS2<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudHeightLevelStatusIMS3:
+      description: "Hud Height Level Status IMS3<br>
+                    Spec:Height_Control[HD040]-Memory_HudHeightLevelStatusIMS3<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_HudRotationStatus:
+      description: "Status of Hud Rotation<br>
+                    Spec:Rotation_Control[HD050]-Memory_HudRotationStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudAvInfoOnOffStatus:
+      description: "Status of Hud Av Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudAvInfoOnOffStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudBcwInfoOnOffStatus:
+      description: "Status of Hud Bcw Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudBcwInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_ADAS_NEW[HD170]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudBcwUnderAdasInfoOnOffStatus:
+      description: "Status of Hud Bcw Under Adas Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudBcwUnderAdasInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_ADAS_NEW[HD170]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudDISInfoOnOffStatus:
+      description: "Status of Hud DIS Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudDISInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_ISLA_DIS_NEW[HD180]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudOnOffStatus:
+      description: "Status of Hud On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudOnOffStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudSCCInfoOnOffStatus:
+      description: "Status of Hud SCC Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudSCCInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_ADAS_NEW[HD170]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudAdasInfoOnOffStatus:
+      description: "Status of Hud Adas Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudAdasInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_ADAS_NEW[HD170]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # 0x0: DISABLE, 0x1: ENABLE, 0x2: INVALID
+    - SFC.Extension.Memory.Inter_HudTBTInfoOnOffStatus:
+      description: "Status of Hud TBT Info On Off<br>
+                    Spec:Display_Settings[HD060]-Memory_HudTBTInfoOnOffStatus<br>
+                    Published in Memory[CD]<br>
+                    Subscribed in Detail_Contents_TBT[HD130]"
+      dataType: HUInt64
+      valueEnum:
+        DISABLE: 0x0
+        ENABLE: 0x1
+        INVALID: 0x2
+      # None
+    - SFC.Extension.Memory.Inter_TargetFuelEcoValue:
+      description: "Target Fuel Eco Value<br>
+                    Spec:Input_Output_Processing[CD060]-Memory_TargetFuelEcoValue<br>
+                    Published in Memory[CD]"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: ON, 0x2: OFF
+    - SFC.Extension.Memory.Inter_ADMStatus:
+      description: "Status of ADM<br>
+                    Spec:Trip_Info[CD180]-Private_ADMStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+      # None
+    - SFC.Extension.Memory.Inter_DriveModeSelectStatus:
+      description: "Status of Drive Mode Select<br>
+                    Spec:Drive_Mode[CD020]-Memory_DriveModeSelectStatus and Drive_Mode_2_0[CD021]-Memory_DriveModeSelectStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Extension.Memory.Inter_IceWarnSet:
+      description: "Ice Warn Set<br>
+                    Spec:Settings[CD140]-Memory_IceWarnSet<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Disable_Enable_EnumValue
+      # 0x0: NONE, 0x1: SIMPLE, 0x2: ADAS, 0x3: MAP, 0x4: ADASMAP, 0x5: OFFROAD, 0x6: MAX
+    - SFC.Extension.Memory.Inter_HudThemeSetStatus:
+      description: "Hud Theme Set<br>
+                    Spec:Detail_Contents_Theme_2_0[HD211]-Memory_HudThemeSetStatus<br>
+                    Published in Memory[CD]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SIMPLE: 0x1
+        ADAS: 0x2
+        MAP: 0x3
+        ADASMAP: 0x4
+        OFFROAD: 0x5
+        MAX: 0x6

@@ -1,0 +1,75 @@
+- Event:
+  sfcVersion: "1.0.0"
+  specVersion: "r001"
+  description: "virtual SFC to support unified event subscription"
+  subscriptions:
+  outputs:
+    - SFC.Event.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Event.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # Style is SND_NAME
+    - SFC.Event.LinkedSound.ID:
+      description: "Linkend Sound ID"
+      dataType: HString
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: INFINITE, 0x5: MAX
+    - SFC.Event.LinkedSound.Type:
+      description: "Linkend Sound Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        REPEAT_COUNT: 0x1
+        REPEAT_MINMAX: 0x2
+        DURATION: 0x3
+        DURATION_MINMAX: 0x4
+        INFINITE: 0x5
+        BLINK: 0x6
+        MAX: 0x7
+      # Sound output by count
+    - SFC.Event.LinkedSound.RepeatCount:
+      description: "Linkend Sound Repeat Count"
+      dataType: HUInt64
+      # Repeat Max Count
+    - SFC.Event.LinkedSound.RepeatMax:
+      description: "Linkend Sound Max Repeat Count"
+      dataType: HUInt64
+      # Repeat Min Count
+    - SFC.Event.LinkedSound.RepeatMin:
+      description: "Linkend Sound Min Repeat Count"
+      dataType: HUInt64
+      # Blink On Duration Value
+    - SFC.Event.LinkedSound.BlinkOnDuration:
+      description: "Linked Sound Blink On Duration"
+      dataType: HUInt64
+      # Blink Off Duration Value
+    - SFC.Event.LinkedSound.BlinkOffDuration:
+      description: "Linked Sound Blink Off Duration"
+      dataType: HUInt64
+      # Duration Value
+    - SFC.Event.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      # Linked Sound Duration Min
+    - SFC.Event.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      # Linked Sound Duration Max
+    - SFC.Event.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      # false / true
+    - SFC.Event.MasterWarning:
+      description: "Saves info tab"
+      dataType: HBool
+      # Style is VOICE_NAME
+    - SFC.Event.LinkedVoice.ID:
+      description: "Linked Voice ID"
+      dataType: HString

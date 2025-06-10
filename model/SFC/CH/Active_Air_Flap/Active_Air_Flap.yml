@@ -1,0 +1,73 @@
+#
+# @file Active_Air_Flap.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Active_Air_Flap:
+  sfcVersion: "1.0.1"
+  description: "Reference : [CH020] ACTIVE AIR FLAP. Contains : Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - eventChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CH.Active_Air_Flap.Input_AafWarnStatus: mInput_AafWarnStatus
+        - Vehicle.CH.Active_Air_Flap.Input_AafWarnStatusFromMCU1: mInput_AafWarnStatusFromMCU1
+        - Vehicle.CH.Active_Air_Flap.Input_AafWarnStatusFromMCU2: mInput_AafWarnStatusFromMCU2
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+  outputs:
+      # Style is E00000
+    - SFC.Active_Air_Flap.Event.Active_Air_Flap.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Active_Air_Flap):E30101"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Active_Air_Flap.Event.Active_Air_Flap.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Active_Air_Flap.Event.Active_Air_Flap.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Active_Air_Flap.Event.Active_Air_Flap.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Active_Air_Flap.Event.Active_Air_Flap.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1

@@ -1,0 +1,289 @@
+#
+# @file AUX_Battery_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- AUX_Battery_Warning:
+  sfcVersion: "8.0.0"
+  description: "Reference : [PT020] AUX_Battery_Warning. Contains : Telltale, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - isgActiveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ISGActiveStatus: mInter_ISGActiveStatus
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+        - Vehicle.System.Config.Inter_Config48V: mInter_Config48V
+        - Vehicle.System.Config.Inter_ConfigISG: mInter_ConfigISG
+    - auxBatteryWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromEMS: mInput_AuxBatteryWarnReqFromEMS
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC: mInput_AuxBatteryWarnReqFromLDC
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromLDC48V: mInput_AuxBatteryWarnReqFromLDC48V
+        - Vehicle.System.HardWire.Input_AlternatorInput: mInput_AlternatorInput
+    - auxBatteryResetOnReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryResetOnReqStatus: mInput_AuxBatteryResetOnReqStatus
+    - auxBatteryRelayOnOffWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryRelayOffWarnStatus: mInput_AuxBatteryRelayOffWarnStatus
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryRelayOnWarnStatus: mInput_AuxBatteryRelayOnWarnStatus
+    - auxBatteryWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnStatus: mInput_AuxBatteryWarnStatus
+    - evAuxBatteryWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_EvAuxBatteryWarnStatus: mInput_EvAuxBatteryWarnStatus
+    - configALDCAuxBatteryWarnReqFromALDCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_AuxBatteryWarnReqFromALDC: mInput_AuxBatteryWarnReqFromALDC
+        - Vehicle.System.Config.Inter_ConfigALDC: mInter_ConfigALDC
+    - evAuxBatteryWarnStatusFromALDCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_EvAuxBatteryWarnStatusFromALDC: mInput_EvAuxBatteryWarnStatusFromALDC
+    - mainLithumBatteryWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_MainLithumBatteryWarnStatus: mInput_MainLithumBatteryWarnStatus
+    - mainLBMRelayOnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Aux_Battery_Warning.Input_MainLBMRelayOnStatus: mInput_MainLBMRelayOnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.AUX_Battery_Warning.Telltale.AUX_Battery_Warning.Stat:
+      description: "DCN: IMG_TelltaleBatChg_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryResetOnReq.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(AuxBatteryResetOnReq):E20001"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryResetOnReq.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryResetOnReq.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryResetOnReq.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryResetOnReq.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryRelayOnOffWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(AuxBatteryRelayOnOffWarn):E20002"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryRelayOnOffWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryRelayOnOffWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryRelayOnOffWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryRelayOnOffWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(AuxBatteryWarnStatus):E20003,E20004"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Sound output by duration
+    - SFC.AUX_Battery_Warning.Event.AuxBatteryWarnStatus.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.EvAuxBatteryWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvAuxBatteryWarn):E20005"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.EvAuxBatteryWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.EvAuxBatteryWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.EvAuxBatteryWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by duration
+    - SFC.AUX_Battery_Warning.Event.EvAuxBatteryWarn.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(MainLithumBatteryWarn):E20006,E20007"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Sound output by duration
+    - SFC.AUX_Battery_Warning.Event.MainLithumBatteryWarn.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.AUX_Battery_Warning.Event.MainLBMRelayOn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(MainLBMRelayOn):E20008"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.AUX_Battery_Warning.Event.MainLBMRelayOn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.AUX_Battery_Warning.Event.MainLBMRelayOn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.AUX_Battery_Warning.Event.MainLBMRelayOn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.AUX_Battery_Warning.Event.MainLBMRelayOn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6

@@ -1,0 +1,658 @@
+#
+# @file Convenience_Device_Control_Screen.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Convenience_Device_Control_Screen:
+  sfcVersion: "5.0.0"
+  description: "Reference : [CD220] Convenience_Device_Control_Screen. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - configBdcPlatformChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigBdcPlatform: mInter_ConfigBdcPlatform
+    - configSBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSBCM: mInter_ConfigSBCM
+    - configTrunkTailgateMenuChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigTrunkTailgateMenu: mInter_ConfigTrunkTailgateMenu
+    - configFrunkMenuChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigFrunkMenu: mInter_ConfigFrunkMenu
+    - configChargingPortOpenMenuChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigChargingPortOpenMenu: mInter_ConfigChargingPortOpenMenu
+    - configSideMirrorMenuChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSideMirrorMenu: mInter_ConfigSideMirrorMenu
+    - configSunroofSmartGlassOptionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSunroofSmartGlassOption: mInter_ConfigSunroofSmartGlassOption
+    - trunkTailgateMotorOpenStatusFromBdc2ndChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_TrunkTailgateMotorOpenStatusFromBdc2nd: mInput_TrunkTailgateMotorOpenStatusFromBdc2nd
+    - trunkTailgateMotorStatusFromBdc3rdChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_TrunkTailgateMotorStatusFromBdc3rd: mInput_TrunkTailgateMotorStatusFromBdc3rd
+    - trunkTailgateOpenStatusFromBdc3rdChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_TrunkTailgateOpenStatusFromBdc3rd: mInput_TrunkTailgateOpenStatusFromBdc3rd
+    - doorLockDriverSideStatusFromSBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockDriverSideStatusFromSBCM: mInput_DoorLockDriverSideStatusFromSBCM
+    - doorLockAssistSideStatusFromSBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockAssistSideStatusFromSBCM: mInput_DoorLockAssistSideStatusFromSBCM
+    - doorLockRearLeftSideStatusFromSBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockRearLeftSideStatusFromSBCM: mInput_DoorLockRearLeftSideStatusFromSBCM
+    - doorLockRearRightSideStatusFromSBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockRearRightSideStatusFromSBCM: mInput_DoorLockRearRightSideStatusFromSBCM
+    - doorLockDriverSideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockDriverSideStatus: mInput_DoorLockDriverSideStatus
+    - doorLockAssistSideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockAssistSideStatus: mInput_DoorLockAssistSideStatus
+    - doorLockRearLeftSideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockRearLeftSideStatus: mInput_DoorLockRearLeftSideStatus
+    - doorLockRearRightSideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_DoorLockRearRightSideStatus: mInput_DoorLockRearRightSideStatus
+    - ptgmOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_PtgmOnOffStatus: mInput_PtgmOnOffStatus
+    - ptgmFromBdcOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_PtgmFromBdcOnOffStatus: mInput_PtgmFromBdcOnOffStatus
+    - evChargeDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_EvChargeDoorOpenStatus: mInput_EvChargeDoorOpenStatus
+    - evChargeSecondDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_EvChargeSecondDoorOpenStatus: mInput_EvChargeSecondDoorOpenStatus
+    - outMirrorFoldStatusFromBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_OutMirrorFoldStatusFromBCM: mInput_OutMirrorFoldStatusFromBCM
+    - outMirrorUnfoldStatusFromBCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_OutMirrorUnfoldStatusFromBCM: mInput_OutMirrorUnfoldStatusFromBCM
+    - brakeLampControlCommand_StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_BrakeLampControlCommand_Status: mInput_BrakeLampControlCommand_Status
+    - evFastChargeFailWarnStatusFromVCMSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_EvFastChargeFailWarnStatusFromVCMS: mInput_EvFastChargeFailWarnStatusFromVCMS
+    - telltaleEvChgCableStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.EV_Charging_System.Telltale.EvChgCable.Stat: mEvChgCableStat
+    - ptgmOptionInfoStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_PtgmOptionInfoStatus: mInput_PtgmOptionInfoStatus
+    - powerTrunkOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_PowerTrunkOpenPositionValue: mInput_PowerTrunkOpenPositionValue
+    - trunkOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_TrunkOpenStatus: mInput_TrunkOpenStatus
+    - smartRoofGlassZoneOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone1OnOffStatus: mInput_SmartRoofGlassZone1OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone2OnOffStatus: mInput_SmartRoofGlassZone2OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone3OnOffStatus: mInput_SmartRoofGlassZone3OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone4OnOffStatus: mInput_SmartRoofGlassZone4OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone5OnOffStatus: mInput_SmartRoofGlassZone5OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone6OnOffStatus: mInput_SmartRoofGlassZone6OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone7OnOffStatus: mInput_SmartRoofGlassZone7OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone8OnOffStatus: mInput_SmartRoofGlassZone8OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone9OnOffStatus: mInput_SmartRoofGlassZone9OnOffStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone10OnOffStatus: mInput_SmartRoofGlassZone10OnOffStatus
+    - smartRoofGlassZoneFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone1FaultStatus: mInput_SmartRoofGlassZone1FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone2FaultStatus: mInput_SmartRoofGlassZone2FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone3FaultStatus: mInput_SmartRoofGlassZone3FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone4FaultStatus: mInput_SmartRoofGlassZone4FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone5FaultStatus: mInput_SmartRoofGlassZone5FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone6FaultStatus: mInput_SmartRoofGlassZone6FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone7FaultStatus: mInput_SmartRoofGlassZone7FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone8FaultStatus: mInput_SmartRoofGlassZone8FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone9FaultStatus: mInput_SmartRoofGlassZone9FaultStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SmartRoofGlassZone10FaultStatus: mInput_SmartRoofGlassZone10FaultStatus
+    - sunroofFrontGlassOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofFrontGlassOpenPositionValue: mInput_SunroofFrontGlassOpenPositionValue
+    - sunroofFrontBlindOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofFrontBlindOpenPositionValue: mInput_SunroofFrontBlindOpenPositionValue
+    - sunroofRearGlassOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofRearGlassOpenPositionValue: mInput_SunroofRearGlassOpenPositionValue
+    - sunroofRearBlindOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofRearBlindOpenPositionValue: mInput_SunroofRearBlindOpenPositionValue
+    - sunroofFrontGlassStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofFrontGlassStatus: mInput_SunroofFrontGlassStatus
+    - sunroofRearGlassStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_SunroofRearGlassStatus: mInput_SunroofRearGlassStatus
+    - frunkOpenControlDisableStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_FrunkOpenControlDisableStatus1: mInput_FrunkOpenControlDisableStatus1
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_FrunkOpenControlDisableStatus2: mInput_FrunkOpenControlDisableStatus2
+    - hoodOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_ElecHoodOptionStatus: mInput_ElecHoodOptionStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_HoodOpenStatus: mInput_HoodOpenStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_ElecHoodOpenStatus: mInput_ElecHoodOpenStatus
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_FrunkOpenStatus: mInput_FrunkOpenStatus
+    - windowDriverOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowDriverOpenPositionValue: mInput_WindowDriverOpenPositionValue
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowDriverErrorStatus: mInput_WindowDriverErrorStatus
+    - windowAssistOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowAssistOpenPositionValue: mInput_WindowAssistOpenPositionValue
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowAssistErrorStatus: mInput_WindowAssistErrorStatus
+    - windowRearLeftOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowRearLeftOpenPositionValue: mInput_WindowRearLeftOpenPositionValue
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowRearLeftErrorStatus: mInput_WindowRearLeftErrorStatus
+    - windowRearRightOpenPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowRearRightOpenPositionValue: mInput_WindowRearRightOpenPositionValue
+        - Vehicle.CD.Convenience_Device_Control_Screen.Input_WindowRearRightErrorStatus: mInput_WindowRearRightErrorStatus
+    - configWindowOpenDisplayOptionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigWindowOpenDisplayOption: mInter_ConfigWindowOpenDisplayOption
+  outputs:
+      # 0x0: NONE, 0x1: UNLOCK, 0x2: LOCK, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.DoorLockControl.Stat:
+      description: "DCN: IMG_DoorLockControl_stat</br>
+                    State of DoorLockControl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UNLOCK: 0x1
+        LOCK: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DEACTIVATE, 0x2: CLOSING, 0x3: OPENING, 0x4: CLOSE, 0x5: OPEN, 0x6: NOT_APPLIED, 0x7: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.TrunkTailgateControl.Stat:
+      description: "DCN: IMG_TrunkTailgateControl_stat</br>
+                    State of TrunkTailgateControl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEACTIVATE: 0x1
+        CLOSING: 0x2
+        OPENING: 0x3
+        CLOSE: 0x4
+        OPEN: 0x5
+        NOT_APPLIED: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DEACTIVATE, 0x2: ACTIVATE, 0x3: NOT_APPLIED, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.FrunkOpenButton.Stat:
+      description: "DCN: IMG_FrunkOpenButton_stat</br>
+                    State of FrunkOpenButton"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEACTIVATE: 0x1
+        ACTIVATE: 0x2
+        NOT_APPLIED: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: NOT_APPLIED, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.ChargingFirstPortOpenControl.Stat:
+      description: "DCN: IMG_ChargingFirstPortOpenControl_stat</br>
+                    State of ChargingFirstPortOpenControl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        NOT_APPLIED: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: NOT_APPLIED, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.ChargingSecondPortOpenControl.Stat:
+      description: "DCN: IMG_ChargingSecondPortOpenControl_stat</br>
+                    State of ChargingSecondPortOpenControl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        NOT_APPLIED: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: NOT_APPLIED, 0x2: APPLIED, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.SideMirrorFoldingControl.Stat:
+      description: "DCN: IMG_SideMirrorFoldingControl_stat</br>
+                    State of SideMirrorFoldingControl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NOT_APPLIED: 0x1
+        APPLIED: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewChargingFirstPortOpen.Stat:
+      description: "DCN: IMG_VehicleViewChargingFirstPortOpen_stat</br>
+                    State of VehicleViewChargingFirstPortOpen"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: UNFOLD, 0x2: FOLD, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSideMirrorOpen.Stat:
+      description: "DCN: IMG_VehicleViewSideMirrorOpen_stat</br>
+                    State of VehicleViewSideMirrorOpen"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UNFOLD: 0x1
+        FOLD: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: FOLDING, 0x2: FOLD, 0x3: OFF, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSideMirrorFoldAction.Stat:
+      description: "DCN: IMG_VehicleViewSideMirrorFoldAction_stat</br>
+                    State of VehicleViewSideMirrorFoldAction"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        FOLDING: 0x1
+        FOLD: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: UNFOLDING, 0x2: UNFOLD, 0x3: OFF, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSideMirrorUnfoldAction.Stat:
+      description: "DCN: IMG_VehicleViewSideMirrorUnfoldAction_stat</br>
+                    State of VehicleViewSideMirrorUnfoldAction"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UNFOLDING: 0x1
+        UNFOLD: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewBrakeLight.Stat:
+      description: "DCN: IMG_VehicleViewBrakeLight_stat</br>
+                    State of VehicleViewBrakeLight"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewChargingCableConnect.Stat:
+      description: "DCN: IMG_VehicleViewChargingCableConnect_stat</br>
+                    State of VehicleViewChargingCableConnect"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewTrunkOpen.Stat:
+      description: "DCN: IMG_VehicleViewTrunkOpen_stat</br>
+                    State of VehicleViewTrunkOpen"
+      dataType: HUInt64
+      group: VehicleViewTrunkOpen
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewTrunkOpen.Value:
+      description: "DCN: IMG_VehicleViewTrunkOpen_stat</br>
+                    Value of PowerTrunkOpenPosition"
+      dataType: HUInt64
+      group: VehicleViewTrunkOpen
+      # 0x0: NONE, 0x1: SEG1, 0x2: SEG2, 0x3: SEG3, 0x4: SEG4, 0x5: SEG5, 0x6: SEG6, 0x7: SEG7, 0x8: SEG8, 0x9: SEG9, 0xA: SEG10, 0xB: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassType.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassType_stat</br>
+                    State of VehicleViewSunroofSmartGlassType"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEG1: 0x1
+        SEG2: 0x2
+        SEG3: 0x3
+        SEG4: 0x4
+        SEG5: 0x5
+        SEG6: 0x6
+        SEG7: 0x7
+        SEG8: 0x8
+        SEG9: 0x9
+        SEG10: 0xA
+        MAX: 0xB
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone1.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone1_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone1"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone2.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone2_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone2"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone3.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone3_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone3"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone4.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone4_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone4"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone5.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone5_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone5"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone6.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone6_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone6"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone7.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone7_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone7"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone8.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone8_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone8"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone9.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone9_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone9"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone10.Stat:
+      description: "DCN: IMG_VehicleViewSunroofSmartGlassZone10_stat</br>
+                    State of VehicleViewSunroofSmartGlassZone10"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_Clear_Error_EnumValue
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofFrontGlassOpen.Stat:
+      description: "DCN: IMG_VehicleViewSunroofFrontGlassOpen_stat</br>
+                    State of VehicleViewSunroofFrontGlassOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofFrontGlassOpen
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofFrontGlassOpen.Value:
+      description: "DCN: IMG_VehicleViewSunroofFrontGlassOpen_stat</br>
+                    Value of VehicleViewSunroofFrontGlassOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofFrontGlassOpen
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofFrontBlindOpen.Stat:
+      description: "DCN: IMG_VehicleViewSunroofFrontBlindOpen_stat</br>
+                    State of VehicleViewSunroofFrontBlindOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofFrontBlindOpen
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofFrontBlindOpen.Value:
+      description: "DCN: IMG_VehicleViewSunroofFrontBlindOpen_stat</br>
+                    Value of VehicleViewSunroofFrontBlindOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofFrontBlindOpen
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofRearGlassOpen.Stat:
+      description: "DCN: IMG_VehicleViewSunroofRearGlassOpen_stat</br>
+                    State of VehicleViewSunroofRearGlassOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofRearGlassOpen
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofRearGlassOpen.Value:
+      description: "DCN: IMG_VehicleViewSunroofRearGlassOpen_stat</br>
+                    Value of VehicleViewSunroofRearGlassOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofRearGlassOpen
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: ERROR, 0x4: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofRearBlindOpen.Stat:
+      description: "DCN: IMG_VehicleViewSunroofRearBlindOpen_stat</br>
+                    State of VehicleViewSunroofRearBlindOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofRearBlindOpen
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofRearBlindOpen.Value:
+      description: "DCN: IMG_VehicleViewSunroofRearBlindOpen_stat</br>
+                    Value of VehicleViewSunroofRearBlindOpen"
+      dataType: HUInt64
+      group: VehicleViewSunroofRearBlindOpen
+      # 0x0: NONE, 0x1: OPEN_FULL, 0x2: OPEN_HALF, 0x3: ERROR, 0x4: CLOSE, 0x5: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewHoodOpen.Stat:
+      description: "DCN: IMG_VehicleViewHoodOpen_stat</br>
+                    State of VehicleViewHoodOpen"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN_FULL: 0x1
+        OPEN_HALF: 0x2
+        ERROR: 0x3
+        CLOSE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowDriverOpen.Stat:
+      description: "DCN: IMG_VehicleViewWindowDriverOpen_stat</br>
+                    State of VehicleViewWindowDriverOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowDriverOpen
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowDriverOpen.Value:
+      description: "DCN: IMG_VehicleViewWindowDriverOpen_stat</br>
+                    Value of VehicleViewWindowDriverOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowDriverOpen
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowAssistOpen.Stat:
+      description: "DCN: IMG_VehicleViewWindowAssistOpen_stat</br>
+                    State of VehicleViewWindowAssistOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowAssistOpen
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowAssistOpen.Value:
+      description: "DCN: IMG_VehicleViewWindowAssistOpen_stat</br>
+                    Value of VehicleViewWindowAssistOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowAssistOpen
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowRearLeftOpen.Stat:
+      description: "DCN: IMG_VehicleViewWindowRearLeftOpen_stat</br>
+                    State of VehicleViewWindowRearLeftOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowRearLeftOpen
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowRearLeftOpen.Value:
+      description: "DCN: IMG_VehicleViewWindowRearLeftOpen_stat</br>
+                    Value of VehicleViewWindowRearLeftOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowRearLeftOpen
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowRearRightOpen.Stat:
+      description: "DCN: IMG_VehicleViewWindowRearRightOpen_stat</br>
+                    State of VehicleViewWindowRearRightOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowRearRightOpen
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowRearRightOpen.Value:
+      description: "DCN: IMG_VehicleViewWindowRearRightOpen_stat</br>
+                    Value of VehicleViewWindowRearRightOpen"
+      dataType: HUInt64
+      group: VehicleViewWindowRearRightOpen
+      # 0x0: NONE, 0x1: ENABLE, 0x2: DISABLE, 0x3: MAX
+    - SFC.Convenience_Device_Control_Screen.Constant.VehicleViewWindowOpenDispEnable.Stat:
+      description: "DCN: IMG_VehicleViewWindowOpenDispEnable_stat</br>
+                    State of VehicleViewWindowOpenDispEnable"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ENABLE: 0x1
+        DISABLE: 0x2
+        MAX: 0x3

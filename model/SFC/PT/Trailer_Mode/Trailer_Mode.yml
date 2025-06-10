@@ -1,0 +1,639 @@
+#
+# @file Trailer_Mode.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Trailer_Mode:
+  sfcVersion: "10.0.2"
+  description: "Reference : [PT410] Trailer Mode. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - trailerModeWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_TrailerModeWarnStatus: mInput_TrailerModeWarnStatus
+    - activeWarnReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_TrailerModeActiveWarnReqStatus: mInput_TrailerModeActiveWarnReqStatus
+    - towModeOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_TowModeOnOffStatus: mInput_TowModeOnOffStatus
+        - Vehicle.PT.Trailer_Mode.Input_TowModeOnOffStatusFromTcu: mInput_TowModeOnOffStatusFromTcu
+    - trailerModeOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_TrailerModeOnOffStatus: mInput_TrailerModeOnOffStatus
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - flatTowModeOnOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_FlatTowModeOnOffStatus: mInput_FlatTowModeOnOffStatus
+    - itbcTrailerbrakeGainValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerbrakeGainValue: mInput_ItbcTrailerbrakeGainValue
+    - itbcTrailerbrakeGaugeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerbrakeGaugeValue: mInput_ItbcTrailerbrakeGaugeValue
+    - itbcTbcSwitchSqueezeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTbcSwitchSqueezeValue: mInput_ItbcTbcSwitchSqueezeValue
+    - itbcTurnLampWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTurnLampWarnStatus: mInput_ItbcTurnLampWarnStatus
+    - itbcStopLampWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcStopLampWarnStatus: mInput_ItbcStopLampWarnStatus
+    - towModeUnavailabeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_TowModeUnavailabeStatus: mInput_TowModeUnavailabeStatus
+    - itbcTrailerbrakeFaultWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerbrakeFaultWarnStatus: mInput_ItbcTrailerbrakeFaultWarnStatus
+    - itbcTrailerbrakeOperationWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerbrakeOperationWarnStatus: mInput_ItbcTrailerbrakeOperationWarnStatus
+    - itbcTrailerConnectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerConnectStatus: mInput_ItbcTrailerConnectStatus
+    - itbcTrailerLampWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Trailer_Mode.Input_ItbcTrailerLampWarnStatus: mInput_ItbcTrailerLampWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Trailer_Mode.Telltale.TowMode.Stat:
+      description: "DCN: IMG_TelltaleTowMode_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Trailer_Mode.Telltale.TrailerMode.Stat:
+      description: "DCN: IMG_TelltaleTrailerMode_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Trailer_Mode.Telltale.FlatTowMode.Stat:
+      description: "DCN: IMG_TelltaleFlatTowMode_stat</br>
+                    State of Telltale</br>
+                    <i>When displaying the same location as the [EV READY], Priority : (IMG_TelltaleTowMode_stat, IMG_TelltaleFlatTowMode_stat) > IMG_TelltaleXevRdy_stat</i>"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: ON_NONCHARGE, 0x2: ON_CHARGE, 0x3: OFF, 0x4: MAX
+    - SFC.Trailer_Mode.Telltale.FlatTowMode.StatOptional:
+      description: "DCN: IMG_TelltaleFlatTowMode_stat</br>
+                    Optional State</br>
+                    <i>When displaying the same location as the [EV READY], Priority : (IMG_TelltaleTowMode_stat, IMG_TelltaleFlatTowMode_stat) > IMG_TelltaleXevRdy_stat</i>"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        ON_NONCHARGE: 0x1
+        ON_CHARGE: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # Value of 0.0~10.0
+    - SFC.Trailer_Mode.Constant.TbcGain.Value:
+      description: "DCN: IMG_TbcGain_value<br>
+                    Value of TbcGain"
+      dataType: HDouble
+      # Value of 0~100
+    - SFC.Trailer_Mode.Constant.TbcGauge.Value:
+      description: "DCN: IMG_TbcGauge_value<br>
+                    Value of TbcGauge"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.Trailer_Mode.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Trailer_Mode):E23601"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.Trailer_Mode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.Trailer_Mode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.Trailer_Mode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.Trailer_Mode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.ActiveWarnReq.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23602"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.ActiveWarnReq.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.ActiveWarnReq.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.ActiveWarnReq.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.ActiveWarnReq.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TowMode.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TowMode):E23603,E23604"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TowMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcGainAndGauge.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TbcGainAndGauge):E23605"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcGainAndGauge.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TowModeUnavailabe.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TowMode):E23612"
+      dataType: HString
+      group: Event18
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TowModeUnavailabe.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event18
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TowModeUnavailabe.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event18
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TowModeUnavailabe.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event18
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TowModeUnavailabe.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event18
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23613"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23614"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection3.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23615"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection3.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection3.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection3.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSystemInspection3.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23616"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23607"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection3.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23606"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection3.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection3.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection3.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeSwitchInspection3.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event10
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeDisconnection.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23617"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeDisconnection.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeDisconnection.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeDisconnection.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeDisconnection.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event11
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeConnectionCheck.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23608"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeConnectionCheck.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeConnectionCheck.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeConnectionCheck.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerBrakeConnectionCheck.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event12
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection1.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23618,E23619,E23620"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection1.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection1.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection1.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection1.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event13
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23610"
+      dataType: HString
+      group: Event14
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event14
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event14
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event14
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event14
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection3.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23611"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection3.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection3.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection3.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection3.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event15
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection4.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23621"
+      dataType: HString
+      group: Event16
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection4.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event16
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection4.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event16
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection4.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event16
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection4.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event16
+      # Style is E00000
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection5.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(ActiveWarnReq):E23622"
+      dataType: HString
+      group: Event17
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection5.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event17
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection5.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event17
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection5.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event17
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Trailer_Mode.Event.TbcTrailerLampInspection5.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event17

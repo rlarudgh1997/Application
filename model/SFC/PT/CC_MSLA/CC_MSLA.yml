@@ -1,0 +1,450 @@
+#
+# @file CC_MSLA.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CC_MSLA:
+  sfcVersion: "23.0.1"
+  description: "Reference : [PT050] CC_MSLA. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - ccOnOffStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasSCC: mInter_ConfigAdasSCC
+        - Vehicle.PT.CC_MSLA.Input_CruiseMainIndReqStatus: mInput_CruiseMainIndReqStatus
+    - ccSldMaxSpeedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - ccDisplayChagned:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_CruiseSetIndReqStatus: mInput_CruiseSetIndReqStatus
+    - nccDisplayChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_NccCameraOperStatus: mInput_NccCameraOperStatus
+    - speedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+        - SFC.Speed_Gauge.Constant.SpeedDigital.Value: mSpeedDigitalValue
+        - Vehicle.PT.CC_MSLA.Input_CcSldSetSpeedValue: mInput_CcSldSetSpeedValue
+        - Vehicle.PT.CC_MSLA.Input_CcOnlySetSpeedValue: mInput_CcOnlySetSpeedValue
+        - Vehicle.PT.CC_MSLA.Input_CruiseOverrideReqStatus: mInput_CruiseOverrideReqStatus
+        - Vehicle.PT.CC_MSLA.Input_SpeedLimitActiveStatus: mInput_SpeedLimitActiveStatus
+        - Vehicle.PT.CC_MSLA.Input_SpeedLimitReadyStatus: mInput_SpeedLimitReadyStatus
+        - Vehicle.PT.CC_MSLA.Input_SmvSetSpeedStatus: mInput_SmvSetSpeedStatus
+    - SpeedLimitInfoDisplayReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_SpeedLimitInfoDisplayReqStatus: mInput_SpeedLimitInfoDisplayReqStatus
+    - NccDisplayReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_NccDisplayReqStatus: mInput_NccDisplayReqStatus
+    - CruiseInfoDisplayReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_CruiseInfoDisplayReqStatus: mInput_CruiseInfoDisplayReqStatus
+    - islaManualSetSpeedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.ADAS_Driving_New.Constant.ISLAManualSetSpeed.Stat: mISLAManualSetSpeedStat
+    - crawlActiveChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_CrawlActiveStatus: mInput_CrawlActiveStatus
+        - Vehicle.PT.CC_MSLA.Input_CrawlActiveStepStatus: mInput_CrawlActiveStepStatus
+    - crawlWarnStatus:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.CC_MSLA.Input_CrawlWarnStatus: mInput_CrawlWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Inter_CcOnOffStat:
+      description: "Determining whether to CC On/Off Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Inter_MslaOnOffStat:
+      description: "Determining whether to MSLA On/Off Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Inter_Mslaoverride:
+      description: "Determining whether to override MSLA"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Inter_CcActiveStat:
+      description: "Determining whether to CC Active Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Inter_MslaActiveStat:
+      description: "Determining whether to MSLA Active Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # ICV, EV: 510, Others: 254
+    - SFC.CC_MSLA.Inter_CcSldMaxSpeedValue:
+      description: "Displayable maximum speed by vehicle type"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_PAUSE, 0x3: CRUISE_ACTIVE, 0x4: MAX
+    - SFC.CC_MSLA.Constant.CcColor.Stat:
+      description: "DCN: IMG_CcColor_stat</br>
+                    Symbol & Color State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_PAUSE: 0x2
+        CRUISE_ACTIVE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MSLA_PAUSE, 0x3: MSLA_ACTIVE, 0x4: MSLA_ISLA_ON, 0x5: MAX
+    - SFC.CC_MSLA.Constant.MslaColor.Stat:
+      description: "DCN: IMG_MslaColor_stat</br>
+                    Symbol & Color State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MSLA_PAUSE: 0x2
+        MSLA_ACTIVE: 0x3
+        MSLA_ISLA_ON: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: READY, 0x3: ACTIVE, 0x4: MAX
+    - SFC.CC_MSLA.Constant.NaviCruise.Stat:
+      description: "DCN: IMG_NaviCruise_stat</br>
+                    Navi Cruise State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        READY: 0x2
+        ACTIVE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: NO_DATA, 0x3: ON, 0x4: BLINK2, 0x5: MAX
+    - SFC.CC_MSLA.Constant.CcMslaSpeed.Stat:
+      description: "DCN: IMG_CcMslaSpeed_stat</br>
+                    CC & MSLA Speed State"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        NO_DATA: 0x2
+        ON: 0x3
+        BLINK2: 0x4
+        MAX: 0x5
+      # 1~510
+    - SFC.CC_MSLA.Constant.CcMslaSpeed.Value:
+      description: "DCN: IMG_CcMslaSpeed_value</br>
+                    CC & MSLA Speed Value"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: NO_DATA, 0x3: VALUE, 0x4: MAX
+    - SFC.CC_MSLA.Constant.CcMslaSpeed.BlinkValueA:
+      description: "DCN: IMG_CcMslaSpeed_stat</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        NO_DATA: 0x2
+        VALUE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: NO_DATA, 0x3: VALUE, 0x4: MAX
+    - SFC.CC_MSLA.Constant.CcMslaSpeed.BlinkValueB:
+      description: "DCN: IMG_CcMslaSpeed_stat</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        NO_DATA: 0x2
+        VALUE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: KPH, 0x3: MPH, 0x4: MAX
+    - SFC.CC_MSLA.Constant.CcMslaSpeedUnit.Stat:
+      description: "DCN: IMG_CcMslaSpeedunit_stat</br>
+                    CC & MSLA Speed Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        KPH: 0x2
+        MPH: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: PLUS_WHITE, 0x3: MINUS_WHITE, 0x4: PLUS_GREEN, 0x5: MINUS_GREEN, 0x6: MAX
+    - SFC.CC_MSLA.Constant.ISLAManualSetSpeed.Stat:
+      description: "DCN: IMG_ISLAManualSetSpeed_Stat</br>
+                    ISLA Manual Speed Status For CC/MSLA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PLUS_WHITE: 0x2
+        MINUS_WHITE: 0x3
+        PLUS_GREEN: 0x4
+        MINUS_GREEN: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: ACTIVE, 0x4: BLINK2, 0x5: MAX
+    - SFC.CC_MSLA.Constant.CrawlOperation.Stat:
+      description: "DCN: IMG_CrawlOperationStatus_stat</br>
+                    CrawlOperation Status"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        ACTIVE: 0x3
+        BLINK2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: STEP1, 0x3: STEP2, 0x4: STEP3, 0x5: STEP4, 0x6: STEP5, 0x7: MAX
+    - SFC.CC_MSLA.Constant.CrawlOperationStep.Stat:
+      description: "DCN: IMG_CrawlOperationStep_stat</br>
+                    CrawlOperation Step"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STEP1: 0x2
+        STEP2: 0x3
+        STEP3: 0x4
+        STEP4: 0x5
+        STEP5: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: ACTIVE, 0x4: YELLOW, 0x5: MAX
+    - SFC.CC_MSLA.Constant.CrawlOperation.BlinkValueA:
+      description: "DCN: IMG_CrawlOperation_stat</br>
+                    BlinkValueA"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE: 0x2
+        ACTIVE: 0x3
+        YELLOW: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: ACTIVE, 0x4: YELLOW, 0x5: MAX
+    - SFC.CC_MSLA.Constant.CrawlOperation.BlinkValueB:
+      description: "DCN: IMG_CrawlOperation_stat</br>
+                    BlinkValueB"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE: 0x2
+        ACTIVE: 0x3
+        YELLOW: 0x4
+        MAX: 0x5
+      # Style is E00000
+    - SFC.CC_MSLA.Event.CcMslaSummary.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CcMslaSummary):E20207"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.CcMslaSummary.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.CC_MSLA.Event.CcCruiseInfoDisplay.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CcCruiseInfoDisplay):E20201,E20202"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.CcCruiseInfoDisplay.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.CC_MSLA.Event.CcCruiseInfoDisplay.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.CC_MSLA.Event.CcCruiseInfoDisplay.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.CC_MSLA.Event.CcCruiseInfoDisplay.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.CC_MSLA.Event.CcNccDisplay.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CcNccDisplay):E20203,E20204"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.CcNccDisplay.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.CC_MSLA.Event.CcNccDisplay.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.CC_MSLA.Event.CcNccDisplay.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.CC_MSLA.Event.CcNccDisplay.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.CC_MSLA.Event.Msla.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Msla):E20205,E20206"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.Msla.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.CC_MSLA.Event.Msla.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.CC_MSLA.Event.Msla.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.CC_MSLA.Event.Msla.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.CC_MSLA.Event.CrawlActive.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CrawlActive):E20211"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.CrawlActive.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.CC_MSLA.Event.CrawlWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(CrawlWarn):E20212,E20213,E20214,E20215,E20216,E20217,E20218,E20219,E20220,E20221,E20222,E20223,E20224,E20225,E20226,E20227,E20228,E20229,E20230,E20231,E20232,E20233"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Event.CrawlWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.CC_MSLA.Event.CrawlWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.CC_MSLA.Event.CrawlWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.CC_MSLA.Event.CrawlWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is SND_NAME
+    - SFC.CC_MSLA.Sound.Msla.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Msla):SND_MSLA"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CC_MSLA.Sound.Msla.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.CC_MSLA.Sound.Msla.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output minimum count
+    - SFC.CC_MSLA.Sound.Msla.RepeatMin:
+      description: "Sound Repeat Min"
+      dataType: HUInt64
+      group: Sound1
+      # Sound output maximum count
+    - SFC.CC_MSLA.Sound.Msla.RepeatMax:
+      description: "Sound Repeat Max"
+      dataType: HUInt64
+      group: Sound1

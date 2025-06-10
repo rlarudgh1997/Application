@@ -1,0 +1,182 @@
+#
+# @file Predictive_Shift.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Predictive_Shift:
+  sfcVersion: "3.0.0"
+  description: "Reference : [PT470] Predictive_Shift. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - configPredictShiftChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigPredictShift: mInter_ConfigPredictShift
+    - preShiftSystemStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftSystemStatus: mInput_PreShiftSystemStatus
+    - preShiftVariableDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftVariableDisplayStatus: mInput_PreShiftVariableDisplayStatus
+    - preShiftCurveDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftCurveDisplayStatus: mInput_PreShiftCurveDisplayStatus
+    - preShiftMergeDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftMergeDisplayStatus: mInput_PreShiftMergeDisplayStatus
+    - preShiftSpeedLimitDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftSpeedLimitDisplayStatus: mInput_PreShiftSpeedLimitDisplayStatus
+    - preShiftStopSignDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftStopSignDisplayStatus: mInput_PreShiftStopSignDisplayStatus
+    - preShiftRoundaboutDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftRoundaboutDisplayStatus: mInput_PreShiftRoundaboutDisplayStatus
+    - preShiftFrontCarDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftFrontCarDisplayStatus: mInput_PreShiftFrontCarDisplayStatus
+    - preShiftDownhillDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftDownhillDisplayStatus: mInput_PreShiftDownhillDisplayStatus
+    - preShiftOtherDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftOtherDisplayStatus: mInput_PreShiftOtherDisplayStatus
+    - preShiftTextDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Predictive_Shift.Input_PreShiftTextDisplayStatus: mInput_PreShiftTextDisplayStatus
+  outputs:
+      # 0x0: NONE, 0x1: NOT_READY_MODE, 0x2: NOT_READY_ETC, 0x3: READY, 0x4: OFF, 0x5: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftPage.Stat:
+      description: "DCN: IMG_PreShiftPage_Stat</br>
+                    State of PreShiftPage"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NOT_READY_MODE: 0x1
+        NOT_READY_ETC: 0x2
+        READY: 0x3
+        OFF: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: CURVE_OFF, 0x2: CURVE_ON, 0x3: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign1.Stat:
+      description: "DCN: IMG_PreShiftRoadSign1_Stat</br>
+                    State of PreShiftRoadSign1"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CURVE_OFF: 0x1
+        CURVE_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: MERGE_OFF, 0x2: MERGE_ON, 0x3: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign2.Stat:
+      description: "DCN: IMG_PreShiftRoadSign2_Stat</br>
+                    State of PreShiftRoadSign2"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        MERGE_OFF: 0x1
+        MERGE_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: SPEEDLIMIT_OFF, 0x2: SPEEDLIMIT_ON, 0x3: STOPSIGN_OFF, 0x4: STOPSIGN_ON, 0x5: ROUNDABOUT_OFF, 0x6: ROUNDABOUT_ON, 0x7: DISPLAY_OFF, 0x8: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign3.Stat:
+      description: "DCN: IMG_PreShiftRoadSign3_Stat</br>
+                    State of PreShiftRoadSign3"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SPEEDLIMIT_OFF: 0x1
+        SPEEDLIMIT_ON: 0x2
+        STOPSIGN_OFF: 0x3
+        STOPSIGN_ON: 0x4
+        ROUNDABOUT_OFF: 0x5
+        ROUNDABOUT_ON: 0x6
+        DISPLAY_OFF: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: FRONTCAR_OFF, 0x2: FRONTCAR_ON, 0x3: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign4.Stat:
+      description: "DCN: IMG_PreShiftRoadSign4_Stat</br>
+                    State of PreShiftRoadSign4"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        FRONTCAR_OFF: 0x1
+        FRONTCAR_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DOWNHILL_OFF, 0x2: DOWNHILL_ON, 0x3: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign5.Stat:
+      description: "DCN: IMG_PreShiftRoadSign5_Stat</br>
+                    State of PreShiftRoadSign5"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DOWNHILL_OFF: 0x1
+        DOWNHILL_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: ETC_OFF, 0x2: ETC_ON, 0x3: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftRoadSign6.Stat:
+      description: "DCN: IMG_PreShiftRoadSign6_Stat</br>
+                    State of PreShiftRoadSign6"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ETC_OFF: 0x1
+        ETC_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CURVE, 0x2: MERGE, 0x3: SPEEDLIMIT, 0x4: FRONTCAR, 0x5: DOWNHILL, 0x6: STOPSIGN, 0x7: ROUNDABOUT, 0x8: ETC, 0x9: OFF, 0xA: MAX
+    - SFC.Predictive_Shift.Constant.PreShiftTextSign.Stat:
+      description: "DCN: IMG_PreShiftTextSign_Stat</br>
+                    State of PreShiftTextSign"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CURVE: 0x1
+        MERGE: 0x2
+        SPEEDLIMIT: 0x3
+        FRONTCAR: 0x4
+        DOWNHILL: 0x5
+        STOPSIGN: 0x6
+        ROUNDABOUT: 0x7
+        ETC: 0x8
+        OFF: 0x9
+        MAX: 0xA

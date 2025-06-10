@@ -1,0 +1,222 @@
+#
+# @file Illumination.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Illumination:
+  sfcVersion: "27.0.1"
+  description: "Reference : [CD050] Illumination. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configAutolightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAutolight: mInter_ConfigAutolight
+    - rheostatSwitchChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_RheostatSwitchStatus: mInter_RheostatSwitchStatus
+    - rheostatLevelSetReqStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Illumination.Input_RheostatLevelSetReqStatus: mInput_RheostatLevelSetReqStatus
+    - dayAndNightModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Illumination.Input_ExtLowBeamOnReqStatus: mInput_ExtLowBeamOnReqStatus
+        - Vehicle.CD.Illumination.Input_AvTailLampStatus: mInput_AvTailLampStatus
+        - Vehicle.CD.Illumination.Input_AutolightSensorNightStatus: mInput_AutolightSensorNightStatus
+    - eventInfoDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Event_Control_Logic.Inter_EventInfoDisplayStatus: mInter_EventInfoDisplayStatus
+    - igOffDisplayOnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Illumination.Inter_IgOffDisplayOnStatus: mInter_IgOffDisplayOnStatus
+    - rheostatLevelStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Memory.Inter_RheostatLevelStatus: mInter_RheostatLevelStatus
+    - aEMInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - naviMapDayNightStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Illumination.Input_NaviMapDayNightStatus: mInput_NaviMapDayNightStatus
+    - avnAutoBrightValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Illumination.Input_AvnAutoBrightValue: mInput_AvnAutoBrightValue
+    - configAvnBrightLinkChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAvnBrightLink: mInter_ConfigAvnBrightLink
+    - minLightModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Illumination.Input_CampModeOnOffStatus: mInput_CampModeOnOffStatus
+        - Vehicle.CD.Illumination.Input_UtilityModeOnOffStatus: mInput_UtilityModeOnOffStatus
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - paramIllumDialPointerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_IllumDayDial: mPar_IllumDayDial
+        - SFC.Extension.Param.Par_IllumNightDial: mPar_IllumNightDial
+        - SFC.Extension.Param.Par_IllumDayPointer: mPar_IllumDayPointer
+        - SFC.Extension.Param.Par_IllumNightPointer: mPar_IllumNightPointer
+    - paramIllumLCDChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_IllumDayLCD: mPar_IllumDayLCD
+        - SFC.Extension.Param.Par_IllumNightLCD: mPar_IllumNightLCD
+    - paramIllumSymbolGreenWhiteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_IllumDaySymbolGreen: mPar_IllumDaySymbolGreen
+        - SFC.Extension.Param.Par_IllumNightSymbolGreen: mPar_IllumNightSymbolGreen
+        - SFC.Extension.Param.Par_IllumDaySymbolWhite: mPar_IllumDaySymbolWhite
+        - SFC.Extension.Param.Par_IllumNightSymbolWhite: mPar_IllumNightSymbolWhite
+  outputs:
+      # STEP1 to STEP21
+    - SFC.Illumination.Constant.RheostatLevel.Stat:
+      description: "DCN: IMG_RheostatLevel_stat</br>
+                    Level status value of Rheostat"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Illumination.Inter_IllumLcdDuty:
+      description: "Inter_IllumLcdDuty"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Illumination.Inter_IllumDialDuty:
+      description: "Inter_IllumDialDuty"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Illumination.Inter_IllumPointerDuty:
+      description: "Inter_IllumPointerDuty"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Illumination.Inter_IllumSymbolGreenDuty:
+      description: "Inter_IllumSymbolGreenDuty"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Illumination.Inter_IllumSymbolWhiteDuty:
+      description: "Inter_IllumSymbolWhiteDuty"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DAY, 0x2: DUSK, 0x3: NIGHT, 0x4: MIDNIGHT, 0x5: MAX
+    - SFC.Illumination.Inter_IllCluster:
+      description: "Inter_IllCluster"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DAY: 0x1
+        DUSK: 0x2
+        NIGHT: 0x3
+        MIDNIGHT: 0x4
+        MAX: 0x5
+      # Numeric value
+    - SFC.Illumination.Inter_ClusterLightingLevel:
+      description: "Inter_ClusterLightingLevel"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Illumination.Inter_MinLightMode:
+      description: "Inter_MinLightMode"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Numeric value
+    - SFC.Illumination.Constant.ClusterLightingLevelStat.value:
+      description: "DCN: IMG_ClusterLightingLevel_stat</br>
+                    Brightness of cluster light"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DAY, 0x2: NIGHT, 0x3: MAX
+    - SFC.Illumination.Constant.DayNight.Stat:
+      description: "DCN: IMG_DayNightForBG_stat</br>
+                    Status of DayNight"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DAY: 0x1
+        NIGHT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Illumination.Constant.LcdLighting.Stat:
+      description: "DCN: IMG_LcdLighting_Stat</br>
+                    Status of Private_LcdLightingStatus"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Illumination.Event.RheostatFeedbackNoAVN.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(RheostatFeedbackNoAVN):E00501"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Illumination.Event.RheostatFeedbackNoAVN.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Illumination.Event.RheostatFeedbackAvnLink.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(RheostatFeedbackAvnLink):E00502"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Illumination.Event.RheostatFeedbackAvnLink.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.Illumination.Inter_IgOffDisplayOnStatus:
+      description: "VARIABLE: Private_IgOffDisplayOnStatus<br>
+                    Status of Ig Off Display On<br>
+                    Published in Illumination[CD050]<br>
+                    Subscribed in Illumination[CD050]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue

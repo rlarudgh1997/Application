@@ -1,0 +1,351 @@
+#
+# @file Regen_System.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Regen_System:
+  sfcVersion: "23.0.0"
+  description: "Reference : [PT340] Regen_System. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configIPedalTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigIPedalType: mInter_ConfigIPedalType
+    - smartRegenSystemChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_RegenSmartLevelValue: mInput_RegenSmartLevelValue
+        - Vehicle.PT.Regen_System.Input_RegenVehicleStopStatus: mInput_RegenVehicleStopStatus
+        - Vehicle.PT.Regen_System.Input_RegenSmartVehicleStatus1: mInput_RegenSmartVehicleStatus1
+        - Vehicle.PT.Regen_System.Input_RegenSmartVehicleStatus2: mInput_RegenSmartVehicleStatus2
+        - Vehicle.PT.Regen_System.Input_RegenSmartOnReqStatus: mInput_RegenSmartOnReqStatus
+    - brakeFunctionWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_EvRegenBrakeFunctionWarnStatus: mInput_EvRegenBrakeFunctionWarnStatus
+    - brakeChcWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_EvRegenBrakeChcWarnStatus: mInput_EvRegenBrakeChcWarnStatus
+    - brakePaddleNotActiveWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_EvRegenBrakePaddleNotActiveWarnStatus: mInput_EvRegenBrakePaddleNotActiveWarnStatus
+    - failWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_EvSmartRegenFailWarnStatus: mInput_EvSmartRegenFailWarnStatus
+    - iPedalIndiReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_IPedalIndiReqStatus: mInput_IPedalIndiReqStatus
+    - iPedalWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_IPedalWarnStatus: mInput_IPedalWarnStatus
+    - nPedalLvlStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_RegenNpedalLvlStatus: mInput_RegenNpedalLvlStatus
+    - paddleStopAssistControlWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Regen_System.Input_PaddleStopAssistControlWarnStatus: mInput_PaddleStopAssistControlWarnStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Regen_System.Telltale.Ipedal.Stat:
+      description: "DCN:IMG_TelltaleiPedal_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: INACTIVE, 0x2: MAX
+    - SFC.Regen_System.Telltale.Ipedal.StatOptional:
+      description: "DCN:IMG_TelltaleiPedal_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        INACTIVE: 0x1
+        MAX: 0x2
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STOP, 0x3: MANUAL_LV0, 0x4: MANUAL_LV1, 0x5: MANUAL_LV2, 0x6: MANUAL_LV3, 0x7: AUTO, 0x8: MAX
+    - SFC.Regen_System.Constant.RegenStatus.Stat:
+      description: "DCN: IMG_RegenStatus_stat</br>
+                    State of Regen Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STOP: 0x2
+        MANUAL_LV0: 0x3
+        MANUAL_LV1: 0x4
+        MANUAL_LV2: 0x5
+        MANUAL_LV3: 0x6
+        AUTO: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: RECOGNIZED, 0x3: UNRECOGNIZED, 0x4: INACTIVE, 0x5: MAX
+    - SFC.Regen_System.Constant.RegenFrontRecognized.Stat:
+      description: "DCN: IMG_RegenFrontRecognized_stat</br>
+                    State of Regen Frnot Recognized"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        RECOGNIZED: 0x2
+        UNRECOGNIZED: 0x3
+        INACTIVE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MANUAL_LV0, 0x3: MANUAL_LV1, 0x4: MANUAL_LV2, 0x5: MANUAL_LV3, 0x6: MANUAL_MAX, 0x7: VALUE, 0x8: MAX
+    - SFC.Regen_System.Constant.RegenStep.Stat:
+      description: "DCN: IMG_RegenStep_value</br>
+                    State of Regen Step"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MANUAL_LV0: 0x2
+        MANUAL_LV1: 0x3
+        MANUAL_LV2: 0x4
+        MANUAL_LV3: 0x5
+        MANUAL_MAX: 0x6
+        VALUE: 0x7
+        MAX: 0x8
+      # VALUE of 0.0~4.0
+    - SFC.Regen_System.Constant.RegenStep.Value:
+      description: "DCN: IMG_RegenStep_value</br>
+                    Value of Regen Step"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: NPEDAL_LV1, 0x3: NPEDAL_LV2, 0x4: NPEDAL_LV3, 0x5: MAX
+    - SFC.Regen_System.Constant.NpedalLvl.Stat:
+      description: "DCN: IMG_RegenNpedalLvl_stat</br>
+                    State of RegenNpedalLvl"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        NPEDAL_LV1: 0x2
+        NPEDAL_LV2: 0x3
+        NPEDAL_LV3: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: APPLIED_STEP3, 0x2: APPLIED_STEP4, 0x3: MAX
+    - SFC.Regen_System.Constant.RegenSystemStep.Stat:
+      description: "DCN: IMG_RegenSystemStep_stat</br>
+                    State of RegenSystemStep"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        APPLIED_STEP3: 0x1
+        APPLIED_STEP4: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.Regen_System.Event.EvRegenBrakeFunctionWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvRegenBrakeFunctionWarn):E22401,E22410,E22411"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.EvRegenBrakeFunctionWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.EvRegenBrakeFunctionWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.EvRegenBrakeFunctionWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.EvRegenBrakeFunctionWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Regen_System.Event.EvRegenBrakeChcWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvRegenBrakeChcWarn):E22414,E22415,E22416,E22417"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.EvRegenBrakeChcWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.EvRegenBrakeChcWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.EvRegenBrakeChcWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.EvRegenBrakeChcWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.Regen_System.Event.EvRegenBrakePaddleNotActiveWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvRegenBrakePaddleNotActiveWarn):E22402,E22408"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.EvRegenBrakePaddleNotActiveWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.EvRegenBrakePaddleNotActiveWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.EvRegenBrakePaddleNotActiveWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.EvRegenBrakePaddleNotActiveWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Regen_System.Event.EvSmartRegenFailWarn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(EvSmartRegenFailWarn):E22404"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.EvSmartRegenFailWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.EvSmartRegenFailWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.EvSmartRegenFailWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.EvSmartRegenFailWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Regen_System.Event.IpedalWarnStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(IpedalWarnStatus):E22405,E22407,E22412,E22413"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.IpedalWarnStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.IpedalWarnStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.IpedalWarnStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.IpedalWarnStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Regen_System.Event.PaddleStopAssistControlWarnStatus.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PaddleStopAssistControlWarnStatus):E22409"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regen_System.Event.PaddleStopAssistControlWarnStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regen_System.Event.PaddleStopAssistControlWarnStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regen_System.Event.PaddleStopAssistControlWarnStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regen_System.Event.PaddleStopAssistControlWarnStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6

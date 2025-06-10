@@ -1,0 +1,77 @@
+#
+# @file CLU_VEHICLE_STATE_MANAGER.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CLU_VEHICLE_STATE_MANAGER:
+  sfcVersion: "2.0.0"
+  description: "Reference : [AV181] CLU_VEHICLE_STATE_MANAGER. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: MANUAL, 0x2: AUTO_ONEWAY, 0x3: AUTO_TWOWAY, 0x4: MAX
+    - SFC.Extension.CLU_VEHICLE_STATE_MANAGER.Inter_AutoBrightnessControl:
+      description: "Determined by the SOME/IP interface of Info.VehicleState.Manager<br>
+                    Spec:CLU_VEHICLE_STATE_MANAGER[AV181]-Inter_AutoBrightnessControl<br>
+                    Published in CLU_VEHICLE_STATE_MANAGER[AV181]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        MANUAL: 0x1
+        AUTO_ONEWAY: 0x2
+        AUTO_TWOWAY: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DAY, 0x2: NIGHT, 0x3: EARLY_EVENING, 0x4: MAX
+    - SFC.Extension.CLU_VEHICLE_STATE_MANAGER.Inter_DayNightState:
+      description: "Determined by the SOME/IP interface of Info.VehicleState.Manager<br>
+                    Spec:CLU_VEHICLE_STATE_MANAGER[AV181]-Inter_DayNightState<br>
+                    Published in CLU_VEHICLE_STATE_MANAGER[AV181]<br>
+                    Subscribed in Illumination_2_0[CD051]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DAY: 0x1
+        NIGHT: 0x2
+        EARLY_EVENING: 0x3
+        MAX: 0x4
+      # Numeric value
+    - SFC.Extension.CLU_VEHICLE_STATE_MANAGER.Inter_AutoBrightLevel:
+      description: "Determined by the SOME/IP interface of Info.VehicleState.Manager<br>
+                    Spec:CLU_VEHICLE_STATE_MANAGER[AV181]-Inter_AutoBrightLevel<br>
+                    Published in CLU_VEHICLE_STATE_MANAGER[AV181]<br>
+                    Subscribed in Illumination_2_0[CD051]"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DAY_WHITE, 0x2: NIGHT_DARK, 0x3: SIGNATURE_NULL, 0x4: MAX
+    - SFC.Extension.CLU_VEHICLE_STATE_MANAGER.Inter_GeneralSettingsScreenMode:
+      description: "Determined by the SOME/IP interface of Info.VehicleState.Manager<br>
+                    Spec:CLU_VEHICLE_STATE_MANAGER[AV181]-Inter_GeneralSettingsScreenMode<br>
+                    Published in CLU_VEHICLE_STATE_MANAGER[AV181]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DAY_WHITE: 0x1
+        NIGHT_DARK: 0x2
+        SIGNATURE_NULL: 0x3
+        MAX: 0x4

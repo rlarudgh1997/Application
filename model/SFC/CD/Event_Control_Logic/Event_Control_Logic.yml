@@ -1,0 +1,100 @@
+#
+# @file Event_Control_Logic.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Event_Control_Logic:
+  sfcVersion: "31.0.0"
+  description: "Reference : [CD030] Event Control Logic - Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_SystemCheckDisplayStatus:
+      description: "Status of System Check Display<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Master_Warning[CD080], Service_Required_Warning[CD130], OAT[CD090]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_EventCheckDisplayStatus:
+      description: "Status of EventCheckDisplay<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Screen_Control_Logic[CD120], Master_Warning[CD080]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_EventInfoDisplayStatus:
+      description: "Status of EventInfoDisplay<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Illumination[CD050]"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: RESPONDING, 0x3: ADMIN, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_NCustom1AdminStatus:
+      description: "Status of NCustom1Admin<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Drive_Mode[CD020]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RESPONDING: 0x2
+        ADMIN: 0x3
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RESPONDING, 0x3: ADMIN, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_NCustom2AdminStatus:
+      description: "Status of NCustom2Admin<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Drive_Mode[CD020]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RESPONDING: 0x2
+        ADMIN: 0x3
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: ON_REQUEST, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_NModeOnReq:
+      description: "N Mode On Req<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Drive_Mode[CD020]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        ON_REQUEST: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ADMIN, 0x3: MAX
+    - SFC.Extension.Event_Control_Logic.Inter_GtMyAdminStatus:
+      description: "Status of GtMyAdmin<br>
+                    Published in Event_Control_Logic[CD030]<br>
+                    Subscribed in Drive_Mode[CD020]"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ADMIN: 0x2
+        MAX: 0x3

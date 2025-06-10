@@ -1,0 +1,377 @@
+#
+# @file Door_Trunk_Hood_Open.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Door_Trunk_Hood_Open:
+  sfcVersion: "11.0.0"
+  description: "Reference : [CD010] Door_Trunk_Hood_Open. Contains : Constant, Event, Telltale. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigSBCM: mInter_ConfigSBCM
+    - doorOpenChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenDriverSideStatus: mInput_DoorOpenDriverSideStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenAssistSideStatus: mInput_DoorOpenAssistSideStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenRearLeftSideStatus: mInput_DoorOpenRearLeftSideStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenRearRightSideStatus: mInput_DoorOpenRearRightSideStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_TrunkOpenStatus: mInput_TrunkOpenStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_HoodOpenStatus: mInput_HoodOpenStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenAssistSideStatusFromSBCM: mInput_DoorOpenAssistSideStatusFromSBCM
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenDriverSideStatusFromSBCM: mInput_DoorOpenDriverSideStatusFromSBCM
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenRearLeftSideStatusFromSBCM: mInput_DoorOpenRearLeftSideStatusFromSBCM
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DoorOpenRearRightSideStatusFromSBCM: mInput_DoorOpenRearRightSideStatusFromSBCM
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_ElecHoodOpenStatus: mInput_ElecHoodOpenStatus
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_ElecHoodOptionStatus: mInput_ElecHoodOptionStatus
+    - rgwDoorOpenChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_RGWDoorOpenStatus: mInput_RGWDoorOpenStatus
+    - rgwDoorOpenChangedFromSAC:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_RGWDoorOpenStatusFromSAC: mInput_RGWDoorOpenStatusFromSAC
+    - storageBoxDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_StorageBoxDoorOpenStatus: mInput_StorageBoxDoorOpenStatus
+    - driverPositionChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_DriverPositionTypeStatus: mInput_DriverPositionTypeStatus
+    - displaySpeedValueKPHRangeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.Speed_Gauge.DisplaySpeedValueKPHRange.Stat: mDisplaySpeedValueKPHRangeStat
+    - elecHoodLatchErrorStatus:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_ElecHoodLatchErrorStatus: mInput_ElecHoodLatchErrorStatus
+    - elecHoodOpenGuideReqStatus:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Door_Trunk_Hood_Open.Input_ElecHoodOpenGuideReqStatus: mInput_ElecHoodOpenGuideReqStatus
+    - odoMeterChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Trip_Info.Constant.Odometer.Value: mOdometerValue
+    - factoryDiagnosisModeReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Micom.Input_FactoryDiagnosisModeReq: mInput_FactoryDiagnosisModeReq
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Door_Trunk_Hood_Open.Telltale.DoorTrunkOpen.Stat:
+      description: "DCN: IMG_TelltaleDoorTrunkOpen_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Telltale.DoorTrunkOpen.StatOptional:
+      description: "DCN: IMG_TelltaleDoorTrunkOpen_stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: CLOSE, 0x4: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.DoorOpenFrontLeft.Stat:
+      description: "DCN: IMG_DoorOpenFrontLeft_stat</br>
+                    State of Front Left"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: CLOSE, 0x4: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.DoorOpenFrontRight.Stat:
+      description: "DCN: IMG_DoorOpenFrontRight_stat</br>
+                    State of Front Right"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: CLOSE, 0x4: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.DoorOpenRearLeft.Stat:
+      description: "DCN: IMG_DoorOpenRearLeft_stat</br>
+                    State of Rear Left"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: CLOSE, 0x4: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.DoorOpenRearRight.Stat:
+      description: "DCN: IMG_DoorOpenRearRight_stat</br>
+                    State of Rear Right"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: ERROR, 0x3: CLOSE, 0x4: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.TrunkOpen.Stat:
+      description: "DCN: IMG_TrunkOpen_stat</br>
+                    State of Trunk Open"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        ERROR: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: CLOSE, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Constant.OpenStatus.HoodOpen.Stat:
+      description: "DCN: IMG_HoodOpen_stat</br>
+                    State of Hood Open"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        CLOSE: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.OpenStatusDisplay.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(OpenStatusDisplay):E00101"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.OpenStatusDisplay.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(OpenWarning):E00102"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Sound output by duration
+    - SFC.Door_Trunk_Hood_Open.Event.OpenWarning.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Door.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailureWarning_Door):E00103,E00105"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Door.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Door.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Door.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Door.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Trunk.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailureWarning_Trunk):E00104,E00106"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Trunk.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Trunk.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Trunk.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Trunk.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Hood.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(FailureWarning_Hood):E00107"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Hood.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Hood.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Hood.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.FailureWarning_Hood.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.GuideReq.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(GuideReq):E00108"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.GuideReq.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.GuideReq.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.GuideReq.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.GuideReq.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(StorageBoxDoorOpen):E00109,E00110"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Sound output by duration
+    - SFC.Door_Trunk_Hood_Open.Event.StorageBoxDoorOpen.LinkedSound.Duration:
+      description: "Linked Sound Duration"
+      dataType: HUInt64
+      group: Event7

@@ -1,0 +1,187 @@
+#
+# @file Detail_Contents_xEV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Detail_Contents_xEV:
+  sfcVersion: "7.0.1"
+  description: "Reference : [HD200] Detail Contents_xEV. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHUD: mInter_ConfigHUD
+        - Vehicle.System.Config.Inter_ConfigNewHUD: mInter_ConfigNewHUD
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configBoostModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigBoostMode: mInter_ConfigBoostMode
+    - evBoostGaugeValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Eco_Power_Charge_Gauge.Constant.EvBoostGauge.Value: mEvBoostGaugeValue
+    - evEcoPwrChgGaugeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.Value: mEvEcoPwrChgGaugeValue
+        - SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.Stat: mEvEcoPwrChgGaugeStat
+        - SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.BlinkValueA: mEvEcoPwrChgGaugeBlinkValueA
+        - SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.BlinkValueB: mEvEcoPwrChgGaugeBlinkValueB
+    - regenFrontRecognizedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Regen_System.Constant.RegenFrontRecognized.Stat: mRegenFrontRecognizedStat
+    - regenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Regen_System.Constant.RegenStatus.Stat: mRegenStatusStat
+    - regenStepChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Regen_System.Constant.RegenStep.Stat: mRegenStepStat
+        - SFC.Regen_System.Constant.RegenStep.Value: mRegenStepValue
+    - regenSystemStepChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Regen_System.Constant.RegenSystemStep.Stat: mRegenSystemStepStat
+  outputs:
+      # Numberic value (-100~100%)
+    - SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.Value:
+      description: "DCN: HUD_IMG_EvEcoPwrChgGauge_value</br>
+                    Value of EV Eco Power Charge Gauge"
+      dataType: HInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: VALUE_BOOST_MODE_ON, 0x2: VALUE_BOOST_MODE_OFF, 0x3: BLINK1, 0x4: MAX
+    - SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.Stat:
+      description: "DCN: HUD_IMG_EvEcoPwrChgGauge_value</br>
+                    State of EV Eco Power Charge Gauge"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        VALUE_BOOST_MODE_ON: 0x1
+        VALUE_BOOST_MODE_OFF: 0x2
+        BLINK1: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.BlinkValueA:
+      description: "DCN: HUD_IMG_EvEcoPwrChgGauge_value</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.BlinkValueB:
+      description: "DCN: HUD_IMG_EvEcoPwrChgGauge_value</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: READY, 0x3: ON, 0x4: MAX
+    - SFC.Detail_Contents_xEV.Constant.EvBoostGauge.Value:
+      description: "DCN: HUD_IMG_EvBoostGauge_value</br>
+                    Value of EV Boost Gauge"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        READY: 0x2
+        ON: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STOP, 0x3: MANUAL_LV0, 0x4: MANUAL_LV1, 0x5: MANUAL_LV2, 0x6: MANUAL_LV3, 0x7: AUTO, 0x8: MAX
+    - SFC.Detail_Contents_xEV.Constant.RegenStatus.Stat:
+      description: "DCN: HUD_IMG_RegenStatus_stat</br>
+                    State of Regen Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STOP: 0x2
+        MANUAL_LV0: 0x3
+        MANUAL_LV1: 0x4
+        MANUAL_LV2: 0x5
+        MANUAL_LV3: 0x6
+        AUTO: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: RECOGNIZED, 0x3: UNRECOGNIZED, 0x4: INACTIVE, 0x5: MAX
+    - SFC.Detail_Contents_xEV.Constant.RegenFrontRecognized.Stat:
+      description: "DCN: HUD_IMG_RegenFrontRecognized_stat</br>
+                    State of Regen Front Recognized"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        RECOGNIZED: 0x2
+        UNRECOGNIZED: 0x3
+        INACTIVE: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MANUAL_LV0, 0x3: MANUAL_LV1, 0x4: MANUAL_LV2, 0x5: MANUAL_LV3, 0x6: MANUAL_MAX, 0x7: VALUE, 0x8: MAX
+    - SFC.Detail_Contents_xEV.Constant.RegenStep.Stat:
+      description: "DCN: HUD_IMG_RegenStep_value</br>
+                    State of Regen Step"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MANUAL_LV0: 0x2
+        MANUAL_LV1: 0x3
+        MANUAL_LV2: 0x4
+        MANUAL_LV3: 0x5
+        MANUAL_MAX: 0x6
+        VALUE: 0x7
+        MAX: 0x8
+      # VALUE of 0.0~4.0
+    - SFC.Detail_Contents_xEV.Constant.RegenStep.Value:
+      description: "DCN: HUD_IMG_RegenStep_value</br>
+                    Value of Regen Step"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: APPLIED_STEP1, 0x2: APPLIED_STEP2, 0x3: APPLIED_STEP3, 0x4: APPLIED_STEP4, 0x5: MAX
+    - SFC.Detail_Contents_xEV.Constant.RegenSystemStep.Stat:
+      description: "DCN: HUD_IMG_RegenSystemStep_stat</br>
+                    State of Regen System Step<br>
+                    Only return APPLIED_STEP3 and APPLIED_STEP4"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        APPLIED_STEP1: 0x1
+        APPLIED_STEP2: 0x2
+        APPLIED_STEP3: 0x3
+        APPLIED_STEP4: 0x4
+        MAX: 0x5

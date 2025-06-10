@@ -1,0 +1,480 @@
+#
+# @file Transmission_Indicator.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Transmission_Indicator:
+  sfcVersion: "32.0.0"
+  description: "Reference : [PT420] Transmission_Indicator. Contains : Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigHighPerformance: mInter_ConfigHighPerformance
+        - Vehicle.System.Config.Inter_ConfigTransmissionType: mInter_ConfigTransmissionType
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+        - Vehicle.System.Config.Inter_ConfigTransmissionDetailType: mInter_ConfigTransmissionDetailType
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+        - Vehicle.System.Config.Inter_ConfigSBW: mInter_ConfigSBW
+        - Vehicle.System.Config.Inter_PTLogicControlType: mInter_PTLogicControlType
+    - privateGearAndGearSelectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearDisplayStatusFromVCU: mInput_GearDisplayStatusFromVCU
+        - Vehicle.PT.Transmission_Indicator.Input_GearStepType: mInput_GearStepType
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualSignalConfig: mInput_GearIndManualSignalConfig
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatus2FromTCU: mInput_GearIndManualReqStatus2FromTCU
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatus1FromTCU: mInput_GearIndManualReqStatus1FromTCU
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatusFromHDCT: mInput_GearIndManualReqStatusFromHDCT
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatusOnEV: mInput_GearIndManualReqStatusOnEV
+        - Vehicle.PT.Transmission_Indicator.Input_GearSelectStatusFromTCU: mInput_GearSelectStatusFromTCU
+        - Vehicle.PT.Transmission_Indicator.Input_GearSelectStatusFromHDCT: mInput_GearSelectStatusFromHDCT
+        - Vehicle.PT.Transmission_Indicator.Input_GearSelectStatusFromSCU: mInput_GearSelectStatusFromSCU
+    - privateTarGearUpChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiUpStatusFromEmsHcu: mInput_GearShiftIndiUpStatusFromEmsHcu
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiUpStatusFromHTCU: mInput_GearShiftIndiUpStatusFromHTCU
+    - privateTarGearDownChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiDownStatusFromEmsHcu: mInput_GearShiftIndiDownStatusFromEmsHcu
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiDownStatusFromHTCU: mInput_GearShiftIndiDownStatusFromHTCU
+    - privateTarGearStepChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiStepStatusFromEmsHcu: mInput_GearShiftIndiStepStatusFromEmsHcu
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiStepStatusFromHTCU: mInput_GearShiftIndiStepStatusFromHTCU
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiStepNewStatus: mInput_GearShiftIndiStepNewStatus
+    - gearShiftIndiUpDownNewStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearShiftIndiUpDownNewStatus: mInput_GearShiftIndiUpDownNewStatus
+    - transmissionDisplayValueATChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_SbwParkNeutralStatus: mInput_SbwParkNeutralStatus
+        - Vehicle.PT.Transmission_Indicator.Input_DoorPassiveLockReqStatus: mInput_DoorPassiveLockReqStatus
+        - Vehicle.PT.Transmission_Indicator.Input_DoorRKELockUnlockReqStatus: mInput_DoorRKELockUnlockReqStatus
+    - transmissionDisplayValueNotMTNChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_TransmissionEolErrorWarnStatusFromIMT: mInput_TransmissionEolErrorWarnStatusFromIMT
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatusOnIMT: mInput_GearIndManualReqStatusOnIMT
+    - gearIndiDisplayReqStatusFromIMTChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndiDisplayReqStatusFromIMT: mInput_GearIndiDisplayReqStatusFromIMT
+    - gearPositionRStatusFromICUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearPositionRStatusFromICU: mInput_GearPositionRStatusFromICU
+    - transmissionDisplayValueMTNChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearPositionRStatusFromEMS: mInput_GearPositionRStatusFromEMS
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndManualReqStatusOnMT: mInput_GearIndManualReqStatusOnMT
+    - transmissionBlinkingStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndiBlinkReqStatusFromDCT: mInput_GearIndiBlinkReqStatusFromDCT
+        - Vehicle.PT.Transmission_Indicator.Input_GearIndiBlinkReqStatusFromTCU: mInput_GearIndiBlinkReqStatusFromTCU
+    - transmissionEolErrorWarnStatusFromTCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_TransmissionEolErrorWarnStatusFromTCU: mInput_TransmissionEolErrorWarnStatusFromTCU
+    - gearMaxStepInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_GearMaxStepInfoFromEmsHcu: mInput_GearMaxStepInfoFromEmsHcu
+        - Vehicle.PT.Transmission_Indicator.Input_GearMaxStepInfoFromHDCT: mInput_GearMaxStepInfoFromHDCT
+    - sbwTypeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_SbwTypeStatus: mInput_SbwTypeStatus
+    - transmissionAgiStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.PT.Transmission_Indicator.Input_TransmissionAgiUpStatus: mInput_TransmissionAgiUpStatus
+        - Vehicle.PT.Transmission_Indicator.Input_TransmissionAgiDownStatus: mInput_TransmissionAgiDownStatus
+  outputs:
+      # 0x0: NONE, 0x1: GSI_DISPLAY_OFF, 0x2: GSI_UP, 0x3: GSI_DOWN, 0x4: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionGSI.Stat:
+      description: "DCN: IMG_TransmissionGSI_stat</br>
+                    State of Transmission GSI"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        GSI_DISPLAY_OFF: 0x1
+        GSI_UP: 0x2
+        GSI_DOWN: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: GSI_TARGET_1, 0x3: GSI_TARGET_2, 0x4: GSI_TARGET_3, 0x5: GSI_TARGET_4, 0x6: GSI_TARGET_5, 0x7: GSI_TARGET_6, 0x8: GSI_TARGET_7, 0x9: GSI_TARGET_8, 0xA: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionGSITarget.Value:
+      description: "DCN: IMG_TransmissionGSITarget_value</br>
+                    Value of Transmission GSI Target"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        GSI_TARGET_1: 0x2
+        GSI_TARGET_2: 0x3
+        GSI_TARGET_3: 0x4
+        GSI_TARGET_4: 0x5
+        GSI_TARGET_5: 0x6
+        GSI_TARGET_6: 0x7
+        GSI_TARGET_7: 0x8
+        GSI_TARGET_8: 0x9
+        MAX: 0xA
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: SPEED1, 0x09: SPEED2, 0x0A: SPEED3, 0x0B: SPEED4, 0x0C: SPEED5, 0x0D: SPEED6, 0x0E: SPEED7, 0x0F: SPEED8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: DISP_M, 0x21: DISP_M1, 0x22: DISP_M2, 0x23: DISP_M3, 0x24: DISP_M4, 0x25: DISP_M5, 0x26: DISP_M6, 0x27: DISP_M7, 0x28: DISP_M8, 0x29: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionDisplay.Value:
+      description: "DCN: IMG_TransmissionDisplay_value</br>
+                    Value of Transmission Display"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        SPEED1: 0x08
+        SPEED2: 0x09
+        SPEED3: 0x0A
+        SPEED4: 0x0B
+        SPEED5: 0x0C
+        SPEED6: 0x0D
+        SPEED7: 0x0E
+        SPEED8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        DISP_M: 0x20
+        DISP_M1: 0x21
+        DISP_M2: 0x22
+        DISP_M3: 0x23
+        DISP_M4: 0x24
+        DISP_M5: 0x25
+        DISP_M6: 0x26
+        DISP_M7: 0x27
+        DISP_M8: 0x28
+        MAX: 0x29
+      # 0x0: NONE, 0x1: BLINK2, 0x2: VALUE, 0x3: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionBlinking.Stat:
+      description: "DCN: IMG_TransmissionDisplay_value</br>
+                    State of Transmission Blink"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        BLINK2: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: SPEED1, 0x09: SPEED2, 0x0A: SPEED3, 0x0B: SPEED4, 0x0C: SPEED5, 0x0D: SPEED6, 0x0E: SPEED7, 0x0F: SPEED8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: DISP_M, 0x21: DISP_M1, 0x22: DISP_M2, 0x23: DISP_M3, 0x24: DISP_M4, 0x25: DISP_M5, 0x26: DISP_M6, 0x27: DISP_M7, 0x28: DISP_M8, 0x29: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionBlinking.BlinkValueA:
+      description: "DCN: IMG_TransmissionDisplay_value</br>
+                    Blink ValueA"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        SPEED1: 0x08
+        SPEED2: 0x09
+        SPEED3: 0x0A
+        SPEED4: 0x0B
+        SPEED5: 0x0C
+        SPEED6: 0x0D
+        SPEED7: 0x0E
+        SPEED8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        DISP_M: 0x20
+        DISP_M1: 0x21
+        DISP_M2: 0x22
+        DISP_M3: 0x23
+        DISP_M4: 0x24
+        DISP_M5: 0x25
+        DISP_M6: 0x26
+        DISP_M7: 0x27
+        DISP_M8: 0x28
+        MAX: 0x29
+      # 0x00: NONE, 0x01: DISPLAY_OFF, 0x02: DISP_P, 0x03: DISP_N, 0x04: DISP_R, 0x05: DISP_D, 0x06: DISP_S, 0x07: DISP_E, 0x08: SPEED1, 0x09: SPEED2, 0x0A: SPEED3, 0x0B: SPEED4, 0x0C: SPEED5, 0x0D: SPEED6, 0x0E: SPEED7, 0x0F: SPEED8, 0x10: DISP_S1, 0x11: DISP_S2, 0x12: DISP_S3, 0x13: DISP_S4, 0x14: DISP_S5, 0x15: DISP_S6, 0x16: DISP_S7, 0x17: DISP_S8, 0x18: DISP_D1, 0x19: DISP_D2, 0x1A: DISP_D3, 0x1B: DISP_D4, 0x1C: DISP_D5, 0x1D: DISP_D6, 0x1E: DISP_D7, 0x1F: DISP_D8, 0x20: DISP_M, 0x21: DISP_M1, 0x22: DISP_M2, 0x23: DISP_M3, 0x24: DISP_M4, 0x25: DISP_M5, 0x26: DISP_M6, 0x27: DISP_M7, 0x28: DISP_M8, 0x29: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionBlinking.BlinkValueB:
+      description: "DCN: IMG_TransmissionDisplay_value</br>
+                    Blink ValueB"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x00
+        DISPLAY_OFF: 0x01
+        DISP_P: 0x02
+        DISP_N: 0x03
+        DISP_R: 0x04
+        DISP_D: 0x05
+        DISP_S: 0x06
+        DISP_E: 0x07
+        SPEED1: 0x08
+        SPEED2: 0x09
+        SPEED3: 0x0A
+        SPEED4: 0x0B
+        SPEED5: 0x0C
+        SPEED6: 0x0D
+        SPEED7: 0x0E
+        SPEED8: 0x0F
+        DISP_S1: 0x10
+        DISP_S2: 0x11
+        DISP_S3: 0x12
+        DISP_S4: 0x13
+        DISP_S5: 0x14
+        DISP_S6: 0x15
+        DISP_S7: 0x16
+        DISP_S8: 0x17
+        DISP_D1: 0x18
+        DISP_D2: 0x19
+        DISP_D3: 0x1A
+        DISP_D4: 0x1B
+        DISP_D5: 0x1C
+        DISP_D6: 0x1D
+        DISP_D7: 0x1E
+        DISP_D8: 0x1F
+        DISP_M: 0x20
+        DISP_M1: 0x21
+        DISP_M2: 0x22
+        DISP_M3: 0x23
+        DISP_M4: 0x24
+        DISP_M5: 0x25
+        DISP_M6: 0x26
+        DISP_M7: 0x27
+        DISP_M8: 0x28
+        MAX: 0x29
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: MAX_THREE, 0x3: MAX_FOUR, 0x4: MAX_FIVE, 0x5: MAX_SIX, 0x6: MAX_SEVEN, 0x7: MAX_EIGHT, 0x8: MAX
+    - SFC.Transmission_Indicator.Constant.MaxStepTransmission.Stat:
+      description: "DCN: IMG_MaxStepTransmission_Stat</br>
+                    State of MaxStepTransmission"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        MAX_THREE: 0x2
+        MAX_FOUR: 0x3
+        MAX_FIVE: 0x4
+        MAX_SIX: 0x5
+        MAX_SEVEN: 0x6
+        MAX_EIGHT: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: TOGETHER, 0x2: ONLYONE, 0x3: WITHAGI, 0x4: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionLayout.Stat:
+      description: "DCN: IMG_TransmissionLayout_stat</br>
+                    State of TransmissionLayout"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        TOGETHER: 0x1
+        ONLYONE: 0x2
+        WITHAGI: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: FOCUS_NONE, 0x2: FOCUS_P, 0x3: FOCUS_N, 0x4: FOCUS_R, 0x5: FOCUS_D, 0x6: FOCUS_M, 0x7: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionPRNDfocus.Stat:
+      description: "DCN: IMG_TransmissionPRNDfocus_stat</br>
+                    State of TransmissionPRNDfocus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        FOCUS_NONE: 0x1
+        FOCUS_P: 0x2
+        FOCUS_N: 0x3
+        FOCUS_R: 0x4
+        FOCUS_D: 0x5
+        FOCUS_M: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: AVAILABLE_1, 0x3: AVAILABLE_2, 0x4: AVAILABLE_3, 0x5: AVAILABLE_4, 0x6: AVAILABLE_5, 0x7: AVAILABLE_6, 0x8: AVAILABLE_7, 0x9: AVAILABLE_8, 0xA: UNAVAILABLE_1, 0xB: UNAVAILABLE_2, 0xC: UNAVAILABLE_3, 0xD: UNAVAILABLE_4, 0xE: UNAVAILABLE_5, 0xF: UNAVAILABLE_6, 0x10: UNAVAILABLE_7, 0x11: UNAVAILABLE_8, 0x12: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionAgiUp.Stat:
+      description: "DCN: IMG_TransmissionAgiUp_stat</br>
+                    State of TransmissionAgiUp"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        AVAILABLE_1: 0x2
+        AVAILABLE_2: 0x3
+        AVAILABLE_3: 0x4
+        AVAILABLE_4: 0x5
+        AVAILABLE_5: 0x6
+        AVAILABLE_6: 0x7
+        AVAILABLE_7: 0x8
+        AVAILABLE_8: 0x9
+        UNAVAILABLE_1: 0xA
+        UNAVAILABLE_2: 0xB
+        UNAVAILABLE_3: 0xC
+        UNAVAILABLE_4: 0xD
+        UNAVAILABLE_5: 0xE
+        UNAVAILABLE_6: 0xF
+        UNAVAILABLE_7: 0x10
+        UNAVAILABLE_8: 0x11
+        MAX: 0x12
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: AVAILABLE_1, 0x3: AVAILABLE_2, 0x4: AVAILABLE_3, 0x5: AVAILABLE_4, 0x6: AVAILABLE_5, 0x7: AVAILABLE_6, 0x8: AVAILABLE_7, 0x9: AVAILABLE_8, 0xA: UNAVAILABLE_1, 0xB: UNAVAILABLE_2, 0xC: UNAVAILABLE_3, 0xD: UNAVAILABLE_4, 0xE: UNAVAILABLE_5, 0xF: UNAVAILABLE_6, 0x10: UNAVAILABLE_7, 0x11: UNAVAILABLE_8, 0x12: MAX
+    - SFC.Transmission_Indicator.Constant.TransmissionAgiDown.Stat:
+      description: "DCN: IMG_TransmissionAgiDown_stat</br>
+                    State of TransmissionAgiDown"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        AVAILABLE_1: 0x2
+        AVAILABLE_2: 0x3
+        AVAILABLE_3: 0x4
+        AVAILABLE_4: 0x5
+        AVAILABLE_5: 0x6
+        AVAILABLE_6: 0x7
+        AVAILABLE_7: 0x8
+        AVAILABLE_8: 0x9
+        UNAVAILABLE_1: 0xA
+        UNAVAILABLE_2: 0xB
+        UNAVAILABLE_3: 0xC
+        UNAVAILABLE_4: 0xD
+        UNAVAILABLE_5: 0xE
+        UNAVAILABLE_6: 0xF
+        UNAVAILABLE_7: 0x10
+        UNAVAILABLE_8: 0x11
+        MAX: 0x12
+      # Style is E00000
+    - SFC.Transmission_Indicator.Event.Transmission_Indicator.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Transmission_Indicator):E24601,E24602"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator.Event.Transmission_Indicator.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator.Event.Transmission_PaddleShift.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Transmission_PaddleShift):E24603"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator.Event.Transmission_PaddleShift.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator.Event.Transmission_SBW.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Transmission_SBW):E24604,E24605,E24606"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator.Event.Transmission_SBW.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Indicator.Sound.Transmission_Indicator.ID:
+      description: "Sound ID<br>
+                    Sound ID List(Transmission_Indicator):SND_SBWPPosition,SND_SBWBtnNPosition,SND_SBWBtnDPosition,SND_Rposition"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator.Sound.Transmission_Indicator.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Transmission_Indicator.Sound.Transmission_Indicator.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Transmission_Indicator.Sound.Transmission_Indicator.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1

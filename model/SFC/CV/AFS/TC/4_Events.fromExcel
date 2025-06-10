@@ -1,0 +1,14 @@
+0	1	2	3	4	5	6	7	8	9	10	11
+TCName	VehicleType	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value	Config_Signal	Data	Negative Test
+[MergeStart]E76401	[MergeStart]	[MergeStart]ON	[MergeStart]Inter_ConfigIFSCV == ON && Input_IFSIndLampStatus == BLOCKAGE	SFC.Private.IGNElapsed.ElapsedOn0ms	D'	SFC.AFS.Event.IFSIndLamp.ID	O	E76401			
+[Merge]E76401	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSIndLampStatus == BLOCKAGE	Vehicle.System.Undefined.Inter_ConfigIFSCV	ON	SFC.AFS.Event.IFSIndLamp.Stat	O	0x2			
+[Merge]E76401	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSIndLampStatus == BLOCKAGE	Vehicle.CV.AFS.Input_IFSIndLampStatus	BLOCKAGE	SFC.AFS.Event.IFSIndLamp.LinkedSound.ID		SND_PopUpWarn1			
+[Merge]E76401	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSIndLampStatus == BLOCKAGE			SFC.AFS.Event.IFSIndLamp.LinkedSound.Type		0x1			
+[Merge]E76401	[Merge]	[MergeEnd]ON	[MergeEnd]Inter_ConfigIFSCV == ON && Input_IFSIndLampStatus == BLOCKAGE			SFC.AFS.Event.IFSIndLamp.LinkedSound.RepeatCount		1			
+[MergeEnd]E76401	[MergeEnd]	OFF	Others			SFC.AFS.Event.IFSIndLamp.Stat	O	0x1			
+[MergeStart]E76402	[MergeStart]	[MergeStart]ON	[MergeStart]Inter_ConfigIFSCV == ON && Input_IFSAfsWarnStatus == ON	SFC.Private.IGNElapsed.ElapsedOn0ms	D'	SFC.AFS.Event.IFSSystem.ID	O	E76402			
+[Merge]E76402	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSAfsWarnStatus == ON	Vehicle.System.Undefined.Inter_ConfigIFSCV	ON	SFC.AFS.Event.IFSSystem.Stat	O	0x2			
+[Merge]E76402	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSAfsWarnStatus == ON	Vehicle.CV.AFS.Input_IFSAfsWarnStatus	ON	SFC.AFS.Event.IFSSystem.LinkedSound.ID		SND_PopUpWarn1			
+[Merge]E76402	[Merge]	[Merge]ON	[Merge]Inter_ConfigIFSCV == ON && Input_IFSAfsWarnStatus == ON			SFC.AFS.Event.IFSSystem.LinkedSound.Type		0x1			
+[Merge]E76402	[Merge]	[MergeEnd]ON	[MergeEnd]Inter_ConfigIFSCV == ON && Input_IFSAfsWarnStatus == ON			SFC.AFS.Event.IFSSystem.LinkedSound.RepeatCount		1			
+[MergeEnd]E76402	[MergeEnd]	OFF	Others			SFC.AFS.Event.IFSSystem.Stat	O	0x1			

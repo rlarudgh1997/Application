@@ -1,0 +1,491 @@
+#
+# @file SFC_Common_Enum.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- SFC_Common_Enum:
+  description: "Define commonly used outuput enum"
+  outputs:
+    # Telltale
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.Stat:
+      description: "State of Telltale"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA:
+      description: "Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB:
+      description: "Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        BLINK1: 0xA1
+        BLINK2: 0xA2
+        BLINK3: 0xA3
+        BLINK4: 0xA4
+        BLINK5: 0xA5
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA.SubValueA:
+      description: "Sub Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueA.SubValueB:
+      description: "Sub Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB.SubValueA:
+      description: "Sub Blink ValueA"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.BlinkValueB.SubValueB:
+      description: "Sub Blink ValueB"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - Telltale.StatAfterBlink:
+      description: "State of Telltale after Blink"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        ACTIVE: 0x3
+        INACTIVE: 0x4
+        TICK: 0x5
+        TOCK: 0x6
+        ENABLE: 0x7
+        DISABLE: 0x8
+        RED: 0xC1
+        GREEN: 0xC2
+        BLUE: 0xC3
+        YELLOW: 0xC4
+        AMBER: 0xC5
+        GRAY: 0xC6
+        WHITE: 0xC7
+        OPTIONAL: 0xC8
+        CYAN: 0xC9
+        MAX: 0xCA
+    # Event
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - Event.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - Event.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        REPEAT_COUNT: 0x1
+        REPEAT_MINMAX: 0x2
+        DURATION: 0x3
+        DURATION_MINMAX: 0x4
+        INFINITE: 0x5
+        BLINK: 0x6
+        MAX: 0x7
+    # Sound
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - Sound.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - Sound.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        INFINITE: 0x1
+        DURATION_MINMAX: 0x2
+        REPEAT_COUNT: 0x3
+        INTERVAL: 0x4
+        INTERVAL_SKIP_FIRST: 0x5
+        REPEAT_MINMAX: 0x6
+        MAX: 0x7
+    # Additionally Same Enum Value
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: MAX
+      # Signal List(13):[SFC.Drive_Mode.Constant.IMG_DriveModePopupListChauffeur_stat, SFC.Drive_Mode.Constant.IMG_DriveModePopupListSmart_stat, SFC.Drive_Mode.Constant.IMG_DriveModePopupListSnow_stat, SFC.Drive_Mode.Constant.IMG_DriveModeTowLongkeyQue_stat, SFC.Drive_Mode.Constant.IMG_GtModePopupListGt_stat, SFC.Drive_Mode.Constant.IMG_GtModePopupListMy_stat, SFC.Drive_Mode.Constant.IMG_N1ModePopupListCustom1_stat, SFC.Drive_Mode.Constant.IMG_N1ModePopupListCustom2_stat, SFC.Drive_Mode.Constant.IMG_N1ModePopupListN_stat, SFC.Drive_Mode.Constant.IMG_N2ModePopupListCustom1_stat, SFC.Drive_Mode.Constant.IMG_N2ModePopupListCustom2_stat, SFC.Drive_Mode.Constant.IMG_N2ModePopupListN_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListDeepSnow_stat]
+    - Available_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AVAILABLE: 0x1
+        MAX: 0x2
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: MAX
+      # Signal List(10):[SFC.Drive_Mode.Constant.IMG_DriveModePopupListEco_stat, SFC.Drive_Mode.Constant.IMG_DriveModePopupListMyDrive_stat, SFC.Drive_Mode.Constant.IMG_DriveModePopupListNormal_stat, SFC.Drive_Mode.Constant.IMG_DriveModePopupListSport_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListAuto_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListDesert_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListMud_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListRock_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListSand_stat, SFC.Drive_Mode.Constant.IMG_TerrainModePopupListSnow_stat]
+    - Available_Unavailable_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AVAILABLE: 0x1
+        UNAVAILABLE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+      # Signal List(11):[SFC.Extension.Screen_Control_Logic.Inter_AccumInfoManualResetReq, SFC.Extension.Screen_Control_Logic.Inter_AfterRefuelInfoManualResetReq, SFC.Extension.Screen_Control_Logic.Inter_AutoStopTimeManualResetReq, SFC.Extension.Screen_Control_Logic.Inter_DriveInfoManualResetReq, SFC.Extension.Screen_Control_Logic_2_0.Inter_AccumInfoManualResetReq, SFC.Extension.Screen_Control_Logic_2_0.Inter_AfterRefuelInfoManualResetReq, SFC.Extension.Screen_Control_Logic_2_0.Inter_AutoStopTimeManualResetReq, SFC.Extension.Screen_Control_Logic_2_0.Inter_DriveInfoManualResetReq, SFC.Trip_Info.Inter_AccumInfoResetReq, SFC.Trip_Info.Inter_AfterRefuelInfoResetReq, SFC.Trip_Info.Inter_DriveInfoResetReq]
+    - Default_ResetReq_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        RESET_REQ: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+      # Signal List(55):[SFC.Extension.Memory.Inter_IceWarnSet, SFC.Extension.Settings.Inter_ClusterThemeAutoModeSetStatus, SFC.Extension.Settings.Inter_DisWarnSetStatus, SFC.Extension.Settings.Inter_IceWarnSetStatus, SFC.Extension.Settings.Inter_RpmGaugeComfortModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeComfortRearModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeEcoModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeMudModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeMyDriveModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeNormalModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeSandModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeSmartModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeSnowModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeSportModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeSprtPlusModeSetStatus, SFC.Extension.Settings.Inter_RpmGaugeTerrainAutoModeSetStatus, SFC.Extension.Settings.Inter_ShiftLightBeepSoundSetStatus, SFC.Extension.Settings.Inter_ShiftLightCustomModeSetStatus, SFC.Extension.Settings.Inter_ShiftLightEcoModeSetStatus, SFC.Extension.Settings.Inter_ShiftLightNModeSetStatus, SFC.Extension.Settings.Inter_ShiftLightNormalModeSetStatus, SFC.Extension.Settings.Inter_ShiftLightSportModeSetStatus, SFC.Extension.Settings.Inter_SrvRemindSetStatus, SFC.Extension.Settings.Inter_WelcomeSoundSetStatus, SFC.Screen_Control_Logic.Constant.AccumulScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.AfterRefuelScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.CoolantTempScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.DragTimerScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.DriveInfoScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.DriverAssistScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.DteGuideScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.DteTotalScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.EVForceDistributeScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.ForceDistributeScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.GforceScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.HighPerformanceScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.ISGDetailScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.LapTimerScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.OffRoadContentsForEngScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.PredictShiftScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.RPMGaugeDisplayEnable.Stat, SFC.Screen_Control_Logic.Constant.RefSpeedometerScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.TBTDestinationScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.TBTGuideScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.TPMSPressureMonitorScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.TPMSPressureSaveScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.TrailerBrakeControllerEnable.Stat, SFC.Screen_Control_Logic.Constant.UreaLevelScreenEnable.Stat, SFC.Screen_Control_Logic.Constant.WarningScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.AccumulScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.AfterRefuelScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.DriveInfoScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.ISGDetailScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.TPMSPressureMonitorScreenEnable.Stat, SFC.Screen_Control_Logic_2_0.Constant.UreaLevelScreenEnable.Stat]
+    - Disable_Enable_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLE: 0x1
+        ENABLE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+      # Signal List(12):[SFC.AWD.Constant.TireAngDisplay.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.CcMslaSpeed.BlinkValueA, SFC.Detail_Contents_ADAS_2_0.Constant.CcMslaSpeed.BlinkValueB, SFC.EV_Charging_System.Constant.ChargingEightyPercentDte.Stat, SFC.EV_Charging_System.Constant.ChargingWaitInfo.Stat, SFC.EV_Charging_System.Constant.V2LCChargingPwr.Stat, SFC.EV_Charging_System.Constant.V2LCMinimumSoc.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingEightyPercentDte.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingWaitInfo.Stat, SFC.EV_Charging_System_2_0.Constant.V2LCChargingPwr.Stat, SFC.Utility_Mode.Constant.StayModePower.Stat, SFC.Utility_Mode_2_0.Constant.StayModePower.Stat]
+    - DisplayOff_On_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+      # Signal List(25):[SFC.EV_Charging_System.Constant.ChargingMaxDte.Stat, SFC.EV_Charging_System.Constant.ChargingSchedHour.Stat, SFC.EV_Charging_System.Constant.ChargingSchedMin.Stat, SFC.EV_Charging_System.Constant.V2LMinimumSoc.Stat, SFC.EV_Charging_System.Constant.V2LRemainDteAfterUse.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingMaxDte.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingSchedHour.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingSchedMin.Stat, SFC.EV_Charging_System_2_0.Constant.V2LMinimumSoc.Stat, SFC.EV_Charging_System_2_0.Constant.V2LRemainDteAfterUse.Stat, SFC.HD_Detail_Contents_Speed.Constant.Speed.Stat, SFC.High_Performance_For_N_Brand.Constant.NgsErrTimer.Stat, SFC.Key_System.Constant.FpsTimeLimit.ValueStat, SFC.Key_System_2_0.Constant.FpsTimeLimit.ValueStat, SFC.Service_Required_Warning.Constant.ServiceRemindDay.Stat, SFC.Service_Required_Warning.Constant.ServiceRemindDistKm.Stat, SFC.Service_Required_Warning.Constant.ServiceRemindDistMi.Stat, SFC.Speed_Gauge.Constant.SpeedAnalog.Stat, SFC.Speed_Gauge.Constant.SpeedDigital.Stat, SFC.Speed_Gauge.Constant.SpeedSubDigital.Stat, SFC.TPMS.Constant.Pressure.FL.Stat, SFC.TPMS.Constant.Pressure.FR.Stat, SFC.TPMS.Constant.Pressure.RL.Stat, SFC.TPMS.Constant.Pressure.RR.Stat, SFC.Trip_Info.Constant.ElecDTE.Stat]
+    - DisplayOff_Value_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: CLEAR, 0x3: ERROR, 0x4: MAX
+      # Signal List(10):[SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone1.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone10.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone2.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone3.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone4.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone5.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone6.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone7.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone8.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewSunroofSmartGlassZone9.Stat]
+    - Off_Clear_Error_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CLEAR: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: DARK, 0x3: BRIGHT, 0x4: FADE_IN, 0x5: FADE_OUT, 0x6: MAX
+      # Signal List(29):[SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor02.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor03.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor04.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor05.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor06.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor07.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor08.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor09.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor10.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor11.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor12.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor13.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectColor14.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectColor01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor02.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor03.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor04.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor05.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor06.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor07.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor08.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor09.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor10.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor11.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor12.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor13.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectColor14.Stat]
+    - ADAS_View_Object_Color_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DARK: 0x2
+        BRIGHT: 0x3
+        FADE_IN: 0x4
+        FADE_OUT: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: LEFT, 0x3: RIGHT, 0x4: MAX
+      # Signal List(62):[SFC.ADAS_DRIVING_2_0.Constant.ADASViewEmergencySteering.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat01.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat02.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat03.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat04.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat05.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat06.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat07.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat08.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat09.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat10.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat11.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat12.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat13.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat14.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLat15.Stat, SFC.ADAS_Driving_New.Constant.ADASViewFrontObjectLat01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat02.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat03.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat04.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat05.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat06.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat07.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat08.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat09.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat10.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat11.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat12.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat13.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLat14.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewEmergencySteering.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat01.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat02.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat03.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat04.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat05.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat06.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat07.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat08.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat09.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat10.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat11.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat12.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat13.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat14.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLat15.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLat01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat02.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat03.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat04.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat05.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat06.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat07.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat08.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat09.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat10.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat11.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat12.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat13.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLat14.Stat]
+    - Off_Left_Right_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEFT: 0x2
+        RIGHT: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+      # Signal List(32):[SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel01.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel02.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel03.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel04.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel05.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel06.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel07.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel08.Stat, SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel09.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel01.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel02.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel03.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel04.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel05.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel06.Stat, SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel07.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel01.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel02.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel03.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel04.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel05.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel06.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel07.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel08.Stat, SFC.ADAS_PARKING_2_0.Constant.RearContourLevel09.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel01.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel02.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel03.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel04.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel05.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel06.Stat, SFC.ADAS_PARKING_2_0.Constant.RightContourLevel07.Stat]
+    - OIPContourLevel_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LEVEL_4: 0x2
+        LEVEL_5: 0x3
+        LEVEL_6: 0x4
+        LEVEL_7: 0x5
+        LEVEL_8: 0x6
+        LEVEL_9: 0x7
+        LEVEL_10: 0x8
+        LEVEL_11: 0x9
+        LEVEL_12: 0xA
+        LEVEL_13: 0xB
+        MAX: 0xC
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+      # Signal List(99):[SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainBrakeLightActive.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorHighBeamActive.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorLowBeamActive.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorTurnLeftLampActive.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewMainExteriorTurnRightLampActive.Stat, SFC.ADAS_Driving_New.Constant.ExteriorHighBeamActive.Stat, SFC.ADAS_Driving_New.Constant.ExteriorLowBeamActive.Stat, SFC.ADAS_Driving_New.Constant.ExteriorTurnLeftLampActive.Stat, SFC.ADAS_Driving_New.Constant.ExteriorTurnRightLampActive.Stat, SFC.ADAS_Driving_New.Constant.MainBrakeLightActive.Stat, SFC.ADAS_Driving_New.Inter_AdasOnStatus, SFC.ADAS_Driving_New.Inter_HDPMasterWarningStatus, SFC.ADAS_PARKING_2_0.Constant.BirdViewDisplay.Stat, SFC.ADAS_PARKING_2_0.Constant.ParkCarBodyDisplay.Stat, SFC.ADAS_PARKING_2_0.Constant.RSPAOperationInformation.Stat, SFC.ADAS_PARKING_2_0.Constant.RspaToggleInformation.Stat, SFC.ADAS_PARKING_2_0.Inter_RspaOperationInformationStatus, SFC.ADAS_PARKING_2_0.Inter_RspaToggleInformationStatus, SFC.ADAS_PARKING_NEW.Constant.ParkCarBodyDisplay.Stat, SFC.ADAS_Parking_BVM_NEW.Constant.BVMLeftOutMirrorFold.Stat, SFC.ADAS_Parking_BVM_NEW.Constant.BVMRightOutMirrorFold.Stat, SFC.ADM_Mode_Information.Constant.Adm3Animation.Stat, SFC.AWD.Constant.OffRoadPitch.Stat, SFC.AWD.Constant.OffRoadRoll.Stat, SFC.AWD.Constant.PitchRollDoNotDisplay.Stat, SFC.CC_MSLA.Inter_CcActiveStat, SFC.CC_MSLA.Inter_CcOnOffStat, SFC.CC_MSLA.Inter_MslaActiveStat, SFC.CC_MSLA.Inter_MslaOnOffStat, SFC.CC_MSLA.Inter_Mslaoverride, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewBrakeLight.Stat, SFC.Convenience_Device_Control_Screen.Constant.VehicleViewChargingCableConnect.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewMainBrakeLightActive.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewMainExteriorHighBeamActive.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewMainExteriorLowBeamActive.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewMainExteriorTurnLeftLampActive.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewMainExteriorTurnRightLampActive.Stat, SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.BlinkValueA, SFC.Detail_Contents_xEV.Constant.EvEcoPwrChgGauge.BlinkValueB, SFC.EV_Charging_System.Constant.ChargingOnOff.Stat, SFC.EV_Charging_System_2_0.Constant.ChargingOnOff.Stat, SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.BlinkValueA, SFC.Eco_Power_Charge_Gauge.Constant.EvEcoPwrChgGauge.BlinkValueB, SFC.Extension.Event_Control_Logic.Inter_EventCheckDisplayStatus, SFC.Extension.Event_Control_Logic.Inter_EventInfoDisplayStatus, SFC.Extension.Event_Control_Logic.Inter_SystemCheckDisplayStatus, SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsAVOnOffReqStatus, SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsCallPopUpOnOffReqStatus, SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsDISOnOffReqStatus, SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsSCCOnOffReqStatus, SFC.Extension.HUD_USER_SETTING_INFO.Inter_HudContentsTBTOnOffReqStatus, SFC.Extension.Illumination.Inter_IgOffDisplayOnStatus, SFC.Extension.Settings.Inter_ConfigCustomComfortRear, SFC.Extension.Settings.Inter_MfswPopupSetStatus, SFC.High_Performance_For_N_Brand.Constant.LapTimeDiff.Stat, SFC.High_Performance_For_N_Brand.Constant.NTrackSense.Stat, SFC.ICC.Inter_TelltaleIccDrow, SFC.Illumination.Constant.LcdLighting.Stat, SFC.Illumination.Inter_MinLightMode, SFC.Illumination_2_0.Inter_MinLightMode, SFC.Key_System_2_0.Constant.EvStartTemporaryStandby.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailBiLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailBiRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailCornerLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailCornerRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailDrlLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailDrlRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailFrontFogLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailFrontFogRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailFrontTurnLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailFrontTurnRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailHighLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailHighRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailLowLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailLowRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailRearTurnLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailRearTurnRh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailStopLh.Stat, SFC.Lamp_Fail_Warning.Constant.LampFailStopRh.Stat, SFC.Screen_Control_Logic.Constant.AVNDisplayOnOff.Stat, SFC.Screen_Control_Logic.Constant.DrivingAssistSystemOnOff.Stat, SFC.Screen_Control_Logic.Constant.HDPSystemOnOff.Stat, SFC.Speed_Gauge.Constant.SpeedSubDisplay.Stat, SFC.TPMS.Constant.LowPressure.FL.Stat, SFC.TPMS.Constant.LowPressure.FR.Stat, SFC.TPMS.Constant.LowPressure.RL.Stat, SFC.TPMS.Constant.LowPressure.RR.Stat, SFC.TPMS.Constant.Pressure.BeforeDriving.Stat, SFC.Tachometer.Constant.RedZoneExceptNbrand.Stat, SFC.Trip_Info.Constant.DTEAvnCal.Stat, SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueA, SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueB, SFC.Trip_Info.Constant.DTEDashBlinkDisplayForEv.Stat, SFC.Trip_Info.Constant.DTEDashDisplayForEv.Stat, SFC.Trip_Info.Constant.DTEGuideCoachValueAvailable.Stat, SFC.Utility_Mode.Constant.StayModeForConnect.Stat, SFC.Utility_Mode.Constant.UtilityModeForConnect.Stat, SFC.Utility_Mode_2_0.Constant.StayModeForConnect.Stat, SFC.Utility_Mode_2_0.Constant.UtilityModeForConnect.Stat]
+    - Off_On_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: ANIMAL, 0xC: TUBULAR_MARKER, 0xD: PE_BARREL, 0xE: MAX
+      # Signal List(15):[SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass01.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass02.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass03.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass04.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass05.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass06.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass07.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass08.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass09.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass10.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass11.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass12.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass13.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass14.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectClass15.Stat]
+    - Detail_Contents_ADAS_NEW_2_0.ADAS_View_Surrounding_Object_Class_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        UNKNOWN: 0x2
+        PASSENGER_VEHICLE: 0x3
+        COMMERCIAL_VEHICLE: 0x4
+        COMMERCIAL_VEHICLE_2: 0x5
+        PEDESTRIAN: 0x6
+        CYCLIST: 0x7
+        MOTOR_CYCLIST_OR_PTW: 0x8
+        RUBBER_CONE: 0x9
+        EMERGENCY_VEHICLE_PASSENGER: 0xA
+        ANIMAL: 0xB
+        TUBULAR_MARKER: 0xC
+        PE_BARREL: 0xD
+        MAX: 0xE
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: COMMERCIAL_VEHICLE_2, 0x6: PEDESTRIAN, 0x7: CYCLIST, 0x8: MOTOR_CYCLIST_OR_PTW, 0x9: RUBBER_CONE, 0xA: EMERGENCY_VEHICLE_PASSENGER, 0xB: EMERGENCY_VEHICLE_COMMERCIAL, 0xC: ANIMAL, 0xD: TUBULAR_MARKER, 0xE: PE_BARREL, 0xF: MAX
+      # Signal List(15):[SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass01.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass02.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass03.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass04.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass05.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass06.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass07.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass08.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass09.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass10.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass11.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass12.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass13.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass14.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectClass15.Stat]
+    - ADAS_View_Surrounding_Object_Class_CONN_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        UNKNOWN: 0x2
+        PASSENGER_VEHICLE: 0x3
+        COMMERCIAL_VEHICLE: 0x4
+        COMMERCIAL_VEHICLE_2: 0x5
+        PEDESTRIAN: 0x6
+        CYCLIST: 0x7
+        MOTOR_CYCLIST_OR_PTW: 0x8
+        RUBBER_CONE: 0x9
+        EMERGENCY_VEHICLE_PASSENGER: 0xA
+        EMERGENCY_VEHICLE_COMMERCIAL: 0xB
+        ANIMAL: 0xC
+        TUBULAR_MARKER: 0xD
+        PE_BARREL: 0xE
+        MAX: 0xF
+      # 0x0: NONE, 0x1: OFF, 0x2: UNKNOWN, 0x3: PASSENGER_VEHICLE, 0x4: COMMERCIAL_VEHICLE, 0x5: PEDESTRIAN, 0x6: CYCLIST, 0x7: MOTOR_CYCLIST_OR_PTW, 0x8: RUBBER_CONE, 0x9: EMERGENCY_VEHICLE, 0xA: ANIMAL, 0xB: TUBULAR_MARKER, 0xC: PE_BARREL, 0xD: MAX
+      # Signal List(30):[SFC.ADAS_Driving_New.Constant.ADASViewFrontObjectClass01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass02.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass03.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass04.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass05.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass06.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass07.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass08.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass09.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass10.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass11.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass12.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass13.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectClass14.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectClass01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass02.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass03.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass04.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass05.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass06.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass07.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass08.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass09.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass10.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass11.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass12.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass13.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectClass14.Stat]
+    - Adas_View_Object_Class_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        UNKNOWN: 0x2
+        PASSENGER_VEHICLE: 0x3
+        COMMERCIAL_VEHICLE: 0x4
+        PEDESTRIAN: 0x5
+        CYCLIST: 0x6
+        MOTOR_CYCLIST_OR_PTW: 0x7
+        RUBBER_CONE: 0x8
+        EMERGENCY_VEHICLE: 0x9
+        ANIMAL: 0xA
+        TUBULAR_MARKER: 0xB
+        PE_BARREL: 0xC
+        MAX: 0xD
+      # 0x0: NONE, 0x1: OFF, 0x2: VALUE, 0x3: MAX
+      # Signal List(167):[SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadLeftLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASCenterRoadRightLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASHeadwayDist.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLeftLineLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASLeftLineLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASRightLineLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASRightRightLineLatPos.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASSetSpeed.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong01.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong02.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong03.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong04.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong05.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong06.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong07.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong08.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong09.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong10.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong11.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong12.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong13.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong14.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectLong15.Stat, SFC.ADAS_DRIVING_2_0.Constant.ISLANextSupportTrafficSign.Stat, SFC.ADAS_Driving_New.Constant.ADASViewFrontObjectHeadingAngle01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewFrontObjectLong01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle02.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle03.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle04.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle05.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle06.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle07.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle08.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle09.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle10.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle11.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle12.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle13.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectHeadingAngle14.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong01.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong02.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong03.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong04.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong05.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong06.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong07.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong08.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong09.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong10.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong11.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong12.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong13.Stat, SFC.ADAS_Driving_New.Constant.ADASViewSurroundingObjectLong14.Stat, SFC.ADAS_Driving_New.Constant.CenterRoadLeftLatPos.Stat, SFC.ADAS_Driving_New.Constant.CenterRoadRightLatPos.Stat, SFC.ADAS_Driving_New.Constant.DDTResidualDistance.Stat, SFC.ADAS_Driving_New.Constant.LeftRoadLatPos.Stat, SFC.ADAS_Driving_New.Constant.RightRoadLatPos.Stat, SFC.ADAS_Driving_New.Constant.SetSpeed.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LatPos.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontLeftVehicle.LongPos.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontObstacle.LongPos.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LatPos.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontRightVehicle.LongPos.Stat, SFC.ADAS_Driving_New.Constant.ViewFrontVehicle.LongPos.Stat, SFC.ADAS_Driving_New.Constant.ViewLeftVehicle.LatPos.Stat, SFC.ADAS_Driving_New.Constant.ViewLeftVehicle.LongPos.Stat, SFC.ADAS_Driving_New.Constant.ViewRightVehicle.LatPos.Stat, SFC.ADAS_Driving_New.Constant.ViewRightVehicle.LongPos.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASCenterRoadLeftLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASCenterRoadRightLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASHeadwayDist.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASLeftLeftLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASLeftLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASRightLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASRightRightLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASSetSpeed.ValueStat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong01.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong02.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong03.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong04.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong05.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong06.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong07.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong08.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong09.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong10.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong11.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong12.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong13.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong14.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectLong15.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLeftLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASCenterRoadRightLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASHeadwayDist.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASLeftRoadLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightLineLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASRightRoadLatPos.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASSetSpeed.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLat.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontLeftVehicleLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectHeadingAngle01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObjectLong01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontObstacle.LongPos.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLat.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontRightVehicleLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewFrontVehicleLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLat.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewLeftVehicleLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLat.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewRightVehicleLong.ValueStat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle02.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle03.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle04.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle05.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle06.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle07.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle08.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle09.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle10.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle11.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle12.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle13.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectHeadingAngle14.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong01.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong02.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong03.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong04.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong05.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong06.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong07.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong08.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong09.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong10.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong11.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong12.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong13.Stat, SFC.Detail_Contents_ADAS_NEW.Constant.ADASViewSurroundingObjectLong14.Stat, SFC.Detail_Contents_ISLA_DIS_NEW.Constant.HudNaviWarnDist.Stat, SFC.Detail_Contents_ISLA_DIS_NEW.Constant.NaviRangeCamAvgSpd.Stat, SFC.Detail_Contents_TBT.Constant.NaviDistToTurn1.Stat, SFC.Detail_Contents_TBT.Constant.NaviDistToTurn2.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbt1.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbt2.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtBg.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane1.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane2.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane3.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane4.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane5.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane6.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane7.Stat, SFC.Detail_Contents_TBT.Constant.NaviPatternTbtLane8.Stat, SFC.Detail_Contents_TBT.Constant.NaviRoadEventDistToDest.Stat, SFC.Navigation_TBT.Constant.DirectionType1.Stat, SFC.Navigation_TBT.Constant.DirectionType2.Stat, SFC.Navigation_TBT.Constant.NaviDistToDest.Stat, SFC.Navigation_TBT.Constant.NaviDistToTurn1.Stat, SFC.Navigation_TBT.Constant.NaviDistToTurn2.Stat, SFC.Navigation_TBT.Constant.NaviLaneRemainDist.Stat, SFC.Navigation_TBT.Constant.NaviPopupDistToDest.Stat, SFC.Navigation_TBT.Constant.TbtBarGraphLevel.Stat, SFC.Navigation_TBT.Constant.TbtDistToTurnPoint.Stat]
+    - Off_Value_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+      # Signal List(15):[SFC.ADAS_PARKING_NEW.Constant.ParkFrontCenterWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkFrontLeftWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkFrontRightWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkLeftSideFrontWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkLeftSideRearWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkLeftSideWarning1Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRearCenterWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRearLeftWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRearLeftWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRearRightWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRearRightWarning3Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRightSideFrontWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRightSideRearWarning2Part.Stat, SFC.ADAS_PARKING_NEW.Constant.ParkRightSideWarning1Part.Stat, SFC.ADAS_PARKING_NEW.Constant.RearWarningLevel.Stat]
+    - Park_Warning_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WHITE, 0x3: BLACK, 0x4: BLACK_UNDER_BAR, 0x5: RED, 0x6: FADE_IN, 0x7: FADE_OUT, 0x8: MAX
+      # Signal List(30):[SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor01.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor02.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor03.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor04.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor05.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor06.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor07.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor08.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor09.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor10.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor11.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor12.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor13.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor14.Stat, SFC.ADAS_DRIVING_2_0.Constant.ADASViewSurroundingObjectColor15.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor01.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor02.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor03.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor04.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor05.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor06.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor07.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor08.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor09.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor10.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor11.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor12.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor13.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor14.Stat, SFC.Detail_Contents_ADAS_2_0.Constant.ADASViewSurroundingObjectColor15.Stat]
+    - ADAS_View_Surrounding_Object_Color_CONN_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WHITE: 0x2
+        BLACK: 0x3
+        BLACK_UNDER_BAR: 0x4
+        RED: 0x5
+        FADE_IN: 0x6
+        FADE_OUT: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: TYPE_A, 0x2: TYPE_B, 0x3: MAX
+      # Signal List(47):[SFC.ADAS_Driving_New.Constant.HDP_E52070.Value, SFC.ADAS_Driving_New.Constant.HDP_E52074.Value, SFC.ADAS_Driving_New.Constant.HDP_E52076.Value, SFC.ADAS_Driving_New.Constant.HDP_E52077.Value, SFC.ADAS_Driving_New.Constant.HDP_E52082.Value, SFC.ADAS_Driving_New.Constant.HDP_E52083.Value, SFC.ADAS_Driving_New.Constant.HDP_E52084.Value, SFC.ADAS_Driving_New.Constant.HDP_E52085.Value, SFC.ADAS_Driving_New.Constant.HDP_E52086.Value, SFC.ADAS_Driving_New.Constant.HDP_E52087.Value, SFC.ADAS_Driving_New.Constant.HDP_E52095.Value, SFC.ADAS_Driving_New.Constant.HDP_E52096.Value, SFC.ADAS_Driving_New.Constant.HDP_E52100.Value, SFC.ADAS_Driving_New.Constant.HDP_E52101.Value, SFC.ADAS_Driving_New.Constant.HDP_E52108.Value, SFC.ADAS_Driving_New.Constant.HDP_E52523.Value, SFC.ADAS_Driving_New.Constant.HDP_E52524.Value, SFC.ADAS_Driving_New.Constant.HDP_E52527.Value, SFC.ADAS_Driving_New.Constant.HDP_E52528.Value, SFC.ADAS_Driving_New.Constant.HDP_E52547.Value, SFC.ADAS_Driving_New.Constant.HDP_E52559.Value, SFC.ADAS_Driving_New.Constant.HDP_E52560.Value, SFC.ADAS_Driving_New.Constant.HDP_E52561.Value, SFC.ADAS_Driving_New.Constant.HDP_E52562.Value, SFC.ADAS_Driving_New.Constant.HDP_E52591.Value, SFC.ADAS_Driving_New.Constant.HDP_E52598.Value, SFC.ADAS_Driving_New.Constant.HDP_E52608.Value, SFC.ADAS_Driving_New.Constant.HDP_E52616.Value, SFC.ADAS_Driving_New.Constant.HDP_E52625.Value, SFC.ADAS_Driving_New.Constant.HDP_E52626.Value, SFC.ADAS_Driving_New.Constant.HDP_E52637.Value, SFC.ADAS_Driving_New.Constant.HDP_E52643.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71739.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71740.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71741.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71742.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71747.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71770.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71774.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71776.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71800.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E71801.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72523.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72524.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72527.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72534.Value, SFC.Detail_Contents_ADAS_NEW.Constant.HDP_E72616.Value]
+    - TypeA_TypeB_EnumValue:
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        TYPE_A: 0x1
+        TYPE_B: 0x2
+        MAX: 0x3

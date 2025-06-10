@@ -1,0 +1,87 @@
+#
+# @file Sunroof_Window_Open_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2025  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Sunroof_Window_Open_2_0:
+  sfcVersion: "0.0.0"
+  description: "Reference : [CD171] Sunroof_Window_Open_2_0. Contains : Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - windoewOpenSideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_WindowOpenDriverSideStatus: mInput_WindowOpenDriverSideStatus
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_WindowOpenAssistSideStatus: mInput_WindowOpenAssistSideStatus
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_WindowOpenRearLeftSideStatus: mInput_WindowOpenRearLeftSideStatus
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_WindowOpenRearRightSideStatus: mInput_WindowOpenRearRightSideStatus
+    - sunroofOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_SunroofFrontOpenStatusFromRCM: mInput_SunroofFrontOpenStatusFromRCM
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_SunroofFrontOpenStatusFromPDCex: mInput_SunroofFrontOpenStatusFromPDCex
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_SunroofRearOpenStatusFromRCM: mInput_SunroofRearOpenStatusFromRCM
+        - Vehicle.CD.Sunroof_Window_Open_2_0.Input_SunroofRearOpenStatusFromPDCex: mInput_SunroofRearOpenStatusFromPDCex
+  outputs:
+      # Style is E00000
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(OpenWarning):E00202,E00203,E00204"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event1
+      # Sound output maximum duration
+    - SFC.Sunroof_Window_Open_2_0.Event.OpenWarning.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event1

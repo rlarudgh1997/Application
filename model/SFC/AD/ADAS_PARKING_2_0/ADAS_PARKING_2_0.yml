@@ -1,0 +1,1384 @@
+#
+# @file ADAS_PARKING_2_0.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ADAS_PARKING_2_0:
+  sfcVersion: "19.0.0"
+  description: "Reference : [AD091] ADAS_PARKING_2_0. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - carBodyDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCTopviewControlStatus: mInput_VCTopviewControlStatus
+    - pdwSoundMuteStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwWarningSoundMuteStatus: mInput_AdasPdwWarningSoundMuteStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwWarningSoundMuteStatus: mInput_IbuPdwWarningSoundMuteStatus
+    - parkFrontMasterWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasFrontMasterWarningDisplayStatus: mInput_AdasFrontMasterWarningDisplayStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuFrontMasterWarningDisplayStatus: mInput_IbuFrontMasterWarningDisplayStatus
+    - parkRearMasterWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasRearMasterWarningDisplayStatus: mInput_AdasRearMasterWarningDisplayStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuRearMasterWarningDisplayStatus: mInput_IbuRearMasterWarningDisplayStatus
+    - parkLeftMasterWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasLeftMasterWarningDisplayStatus: mInput_AdasLeftMasterWarningDisplayStatus
+    - parkRightMasterWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasRightMasterWarningDisplayStatus: mInput_AdasRightMasterWarningDisplayStatus
+    - adasPdwFrontContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel01Value: mInput_AdasPdwFrontContourLineLevel01Value
+    - adasPdwFrontContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel02Value: mInput_AdasPdwFrontContourLineLevel02Value
+    - adasPdwFrontContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel03Value: mInput_AdasPdwFrontContourLineLevel03Value
+    - adasPdwFrontContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel04Value: mInput_AdasPdwFrontContourLineLevel04Value
+    - adasPdwFrontContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel05Value: mInput_AdasPdwFrontContourLineLevel05Value
+    - adasPdwFrontContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel06Value: mInput_AdasPdwFrontContourLineLevel06Value
+    - adasPdwFrontContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel07Value: mInput_AdasPdwFrontContourLineLevel07Value
+    - adasPdwFrontContourLineLevel08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel08Value: mInput_AdasPdwFrontContourLineLevel08Value
+    - adasPdwFrontContourLineLevel09ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwFrontContourLineLevel09Value: mInput_AdasPdwFrontContourLineLevel09Value
+    - ibuPdwFrontContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel01Value: mInput_IbuPdwFrontContourLineLevel01Value
+    - ibuPdwFrontContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel02Value: mInput_IbuPdwFrontContourLineLevel02Value
+    - ibuPdwFrontContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel03Value: mInput_IbuPdwFrontContourLineLevel03Value
+    - ibuPdwFrontContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel04Value: mInput_IbuPdwFrontContourLineLevel04Value
+    - ibuPdwFrontContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel05Value: mInput_IbuPdwFrontContourLineLevel05Value
+    - ibuPdwFrontContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel06Value: mInput_IbuPdwFrontContourLineLevel06Value
+    - ibuPdwFrontContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel07Value: mInput_IbuPdwFrontContourLineLevel07Value
+    - ibuPdwFrontContourLineLevel08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel08Value: mInput_IbuPdwFrontContourLineLevel08Value
+    - ibuPdwFrontContourLineLevel09ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwFrontContourLineLevel09Value: mInput_IbuPdwFrontContourLineLevel09Value
+    - adasPdwRearContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel01Value: mInput_AdasPdwRearContourLineLevel01Value
+    - adasPdwRearContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel02Value: mInput_AdasPdwRearContourLineLevel02Value
+    - adasPdwRearContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel03Value: mInput_AdasPdwRearContourLineLevel03Value
+    - adasPdwRearContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel04Value: mInput_AdasPdwRearContourLineLevel04Value
+    - adasPdwRearContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel05Value: mInput_AdasPdwRearContourLineLevel05Value
+    - adasPdwRearContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel06Value: mInput_AdasPdwRearContourLineLevel06Value
+    - adasPdwRearContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel07Value: mInput_AdasPdwRearContourLineLevel07Value
+    - adasPdwRearContourLineLevel08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel08Value: mInput_AdasPdwRearContourLineLevel08Value
+    - adasPdwRearContourLineLevel09ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRearContourLineLevel09Value: mInput_AdasPdwRearContourLineLevel09Value
+    - ibuPdwRearContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel01Value: mInput_IbuPdwRearContourLineLevel01Value
+    - ibuPdwRearContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel02Value: mInput_IbuPdwRearContourLineLevel02Value
+    - ibuPdwRearContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel03Value: mInput_IbuPdwRearContourLineLevel03Value
+    - ibuPdwRearContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel04Value: mInput_IbuPdwRearContourLineLevel04Value
+    - ibuPdwRearContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel05Value: mInput_IbuPdwRearContourLineLevel05Value
+    - ibuPdwRearContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel06Value: mInput_IbuPdwRearContourLineLevel06Value
+    - ibuPdwRearContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel07Value: mInput_IbuPdwRearContourLineLevel07Value
+    - ibuPdwRearContourLineLevel08ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel08Value: mInput_IbuPdwRearContourLineLevel08Value
+    - ibuPdwRearContourLineLevel09ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwRearContourLineLevel09Value: mInput_IbuPdwRearContourLineLevel09Value
+    - adasPdwLeftContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel01Value: mInput_AdasPdwLeftContourLineLevel01Value
+    - adasPdwLeftContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel02Value: mInput_AdasPdwLeftContourLineLevel02Value
+    - adasPdwLeftContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel03Value: mInput_AdasPdwLeftContourLineLevel03Value
+    - adasPdwLeftContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel04Value: mInput_AdasPdwLeftContourLineLevel04Value
+    - adasPdwLeftContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel05Value: mInput_AdasPdwLeftContourLineLevel05Value
+    - adasPdwLeftContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel06Value: mInput_AdasPdwLeftContourLineLevel06Value
+    - adasPdwLeftContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwLeftContourLineLevel07Value: mInput_AdasPdwLeftContourLineLevel07Value
+    - adasPdwRightContourLineLevel01ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel01Value: mInput_AdasPdwRightContourLineLevel01Value
+    - adasPdwRightContourLineLevel02ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel02Value: mInput_AdasPdwRightContourLineLevel02Value
+    - adasPdwRightContourLineLevel03ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel03Value: mInput_AdasPdwRightContourLineLevel03Value
+    - adasPdwRightContourLineLevel04ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel04Value: mInput_AdasPdwRightContourLineLevel04Value
+    - adasPdwRightContourLineLevel05ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel05Value: mInput_AdasPdwRightContourLineLevel05Value
+    - adasPdwRightContourLineLevel06ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel06Value: mInput_AdasPdwRightContourLineLevel06Value
+    - adasPdwRightContourLineLevel07ValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwRightContourLineLevel07Value: mInput_AdasPdwRightContourLineLevel07Value
+    - adasPdwSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPdwSystemFailureStatus: mInput_AdasPdwSystemFailureStatus
+    - ibuPdwSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_IbuPdwSystemFailureStatus: mInput_IbuPdwSystemFailureStatus
+    - adasPcaSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPcaSystemFailureStatus: mInput_AdasPcaSystemFailureStatus
+    - rccaFailure2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_NTFGroup7RccaFailure2Status: mInput_NTFGroup7RccaFailure2Status
+    - exitSafetyFailure2StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_NTFGroup7ExitSafetyFailure2Status: mInput_NTFGroup7ExitSafetyFailure2Status
+    - vcTopviewScaleStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCTopviewScaleStatus: mInput_VCTopviewScaleStatus
+    - mraButtunDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_MraButtunDisplayStatus: mInput_MraButtunDisplayStatus
+    - rspaButtunDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_RspaButtunDisplayStatus: mInput_RspaButtunDisplayStatus
+    - vcRspaFunctionDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCRspaFunctionDisplayStatus: mInput_VCRspaFunctionDisplayStatus
+    - pcaFrontLeftWarningDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PcaFrontLeftWarningDisplayStatus: mInput_PcaFrontLeftWarningDisplayStatus
+    - pcaFrontRightWarningDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PcaFrontRightWarningDisplayStatus: mInput_PcaFrontRightWarningDisplayStatus
+    - pcaRearLeftWarningDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PcaRearLeftWarningDisplayStatus: mInput_PcaRearLeftWarningDisplayStatus
+    - pcaRearRightWarningDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PcaRearRightWarningDisplayStatus: mInput_PcaRearRightWarningDisplayStatus
+    - adasParkingControlTelltaleStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_INDAdasParkingControlSymbolStatus: mInput_INDAdasParkingControlSymbolStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_INDAdasParkingProgressBarValue: mInput_INDAdasParkingProgressBarValue
+    - event7GroupFailure10StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PuFGroup7DriverAssistFailure10Status: mInput_PuFGroup7DriverAssistFailure10Status
+    - event7GroupFailure11StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PuFGroup7DriverAssistFailure11Status: mInput_PuFGroup7DriverAssistFailure11Status
+    - event7GroupCCWFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_CCWFailureStatus: mInput_CCWFailureStatus
+    - event2GroupChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PcaModeDisplayStatus: mInput_PcaModeDisplayStatus
+    - clusterHMIDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_ClusterHMIDisplayStatus: mInput_ClusterHMIDisplayStatus
+    - rspaEntryAvnHmiDisplayChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_RspaEntryAvnHmiDisplay: mInput_RspaEntryAvnHmiDisplay
+    - warningSoundChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PaFrontCenterWarnSoundStatus: mInput_PaFrontCenterWarnSoundStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PdwFrontCenterWarnSoundStatus: mInput_PdwFrontCenterWarnSoundStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_CCWWarnSoundStatus: mInput_CCWWarnSoundStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_CCWWarnSoundStatusFromSAC: mInput_CCWWarnSoundStatusFromSAC
+    - sysWarnSoundChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PaWarnSoundStatus: mInput_PaWarnSoundStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PdwCheckSoundStatus: mInput_PdwCheckSoundStatus
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigAdasPDW: mInter_ConfigAdasPDW
+        - Vehicle.System.Config.Inter_ConfigNewRCCW: mInter_ConfigNewRCCW
+        - Vehicle.System.Config.Inter_ConfigAdasPrkPDW: mInter_ConfigAdasPrkPDW
+        - Vehicle.System.Config.Inter_ConfigBdcPDW: mInter_ConfigBdcPDW
+    - vcRspaUnparkingLeftDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCRspaUnparkingLeftDirectionStatus: mInput_VCRspaUnparkingLeftDirectionStatus
+    - vcRspaUnparkingRightDirectionStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCRspaUnparkingRightDirectionStatus: mInput_VCRspaUnparkingRightDirectionStatus
+    - rspaParkingSlotValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_RspaParkingSlotValue: mInput_RspaParkingSlotValue
+    - vcRspaAvailableStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCRspaAvailableStatus: mInput_VCRspaAvailableStatus
+    - vcAdasParkingPathDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_VCAdasParkingPathDisplayStatus: mInput_VCAdasParkingPathDisplayStatus
+    - mpaButtunDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_MpaButtunDisplayStatus: mInput_MpaButtunDisplayStatus
+    - mpaRecordButtunDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_MpaRecordButtunDisplayStatus: mInput_MpaRecordButtunDisplayStatus
+    - indAdasParkingRemainedDistanceValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_INDAdasParkingRemainedDistanceValue: mInput_INDAdasParkingRemainedDistanceValue
+    - birdViewInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_NTFGroup1AdasWarning1_1Status: mInput_NTFGroup1AdasWarning1_1Status
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_NTFGroup4AdasWarning1_1Status: mInput_NTFGroup4AdasWarning1_1Status
+    - eventPcaRccwWarningPopupChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_AdasPcaWarningPhraseStatus: mInput_AdasPcaWarningPhraseStatus
+        - Vehicle.AD.ADAS_PARKING_2_0.Input_PuPvLabelStatus: mInput_PuPvLabelStatus
+  outputs:
+      # 0x0: NONE, 0x1: SLOT_01, 0x2: SLOT_02, 0x3: SLOT_03, 0x4: SLOT_04, 0x5: SLOT_05, 0x6: SLOT_06, 0x7: SLOT_07, 0x8: SLOT_08, 0x9: SLOT_09, 0xA: SLOT_10, 0xB: SLOT_11, 0xC: SLOT_12, 0xD: SLOT_13, 0xE: SLOT_14, 0xF: OFF, 0x10: MAX
+    - SFC.ADAS_PARKING_2_0.Inter_RspaParkingSlotIdentificationStatus:
+      description: "DCN: Inter_RspaParkingSlotIdentificationStatus</br>
+                    Inter_RspaParkingSlotIdentificationStatus Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SLOT_01: 0x1
+        SLOT_02: 0x2
+        SLOT_03: 0x3
+        SLOT_04: 0x4
+        SLOT_05: 0x5
+        SLOT_06: 0x6
+        SLOT_07: 0x7
+        SLOT_08: 0x8
+        SLOT_09: 0x9
+        SLOT_10: 0xA
+        SLOT_11: 0xB
+        SLOT_12: 0xC
+        SLOT_13: 0xD
+        SLOT_14: 0xE
+        OFF: 0xF
+        MAX: 0x10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Inter_RspaToggleInformationStatus:
+      description: "DCN: Inter_RspaToggleInformationStatus</br>
+                    Inter_RspaToggleInformationStatus Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: BACKWARD, 0x2: FORWARD, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Inter_RspaParkingDirectionInformationStatus:
+      description: "DCN: Inter_RspaParkingDirectionInformationStatus</br>
+                    Inter_RspaParkingDirectionInformationStatus Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        BACKWARD: 0x1
+        FORWARD: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: LEFT, 0x2: RIGHT, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Inter_RspaParkingSlotLocationStatus:
+      description: "DCN: Inter_RspaParkingSlotLocationStatus</br>
+                    Inter_RspaParkingSlotLocationStatus Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        LEFT: 0x1
+        RIGHT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Inter_RspaOperationInformationStatus:
+      description: "DCN: Inter_RspaOperationInformationStatus</br>
+                    Inter_RspaOperationInformationStatus Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkCarBodyDisplay.Stat:
+      description: "DCN: IMG_CONN_ParkCarBodyDisplay_Stat</br>
+                    ParkCarBodyDisplay Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.BirdViewDisplay.Stat:
+      description: "DCN: IMG_CONN_BirdViewDisplay_Stat</br>
+                    BirdViewDisplay Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: DISABLE, 0x3: MUTE_OFF, 0x4: MUTE_ON, 0x5: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.PDWSoundMute.Stat:
+      description: "DCN: IMG_CONN_PDWSoundMute_Stat</br>
+                    PDWSoundMute Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        DISABLE: 0x2
+        MUTE_OFF: 0x3
+        MUTE_ON: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: YELLOW, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkFrontMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkFrontMasterWarning_Stat</br>
+                    ParkFrontMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        YELLOW: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: YELLOW, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkRearMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkRearMasterWarning_Stat</br>
+                    ParkRearMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        YELLOW: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: YELLOW, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkLeftSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkLeftSideMasterWarning_Stat</br>
+                    ParkLeftSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        YELLOW: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: YELLOW, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkRightSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkRightSideMasterWarning_Stat</br>
+                    ParkRightSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        YELLOW: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel01.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(01)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel02.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(02)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel03.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(03)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel04.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(04)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel05.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(05)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel06.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(06)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel07.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(07)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel08.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(08)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.FrontContourLevel09.Stat:
+      description: "DCN: IMG_CONN_FrontContourLevel_Stat(09)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel01.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(01)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel02.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(02)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel03.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(03)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel04.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(04)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel05.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(05)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel06.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(06)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel07.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(07)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel08.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(08)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RearContourLevel09.Stat:
+      description: "DCN: IMG_CONN_RearContourLevel_Stat(09)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel01.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(01)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel02.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(02)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel03.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(03)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel04.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(04)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel05.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(05)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel06.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(06)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.LeftContourLevel07.Stat:
+      description: "DCN: IMG_CONN_LeftContourLevel_Stat(07)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel01.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(01)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel02.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(02)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel03.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(03)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel04.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(04)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel05.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(05)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel06.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(06)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: LEVEL_4, 0x3: LEVEL_5, 0x4: LEVEL_6, 0x5: LEVEL_7, 0x6: LEVEL_8, 0x7: LEVEL_9, 0x8: LEVEL_10, 0x9: LEVEL_11, 0xA: LEVEL_12, 0xB: LEVEL_13, 0xC: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RightContourLevel07.Stat:
+      description: "DCN: IMG_CONN_RightContourLevel_Stat(07)"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.OIPContourLevel_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: PERCENT_50, 0x3: PERCENT_100, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.TopViewScale.Stat:
+      description: "DCN: IMG_CONN_TopViewScale_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PERCENT_50: 0x2
+        PERCENT_100: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: MRA_PATH, 0x3: MRA_START, 0x4: MRA_CANCEL, 0x5: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.MRAButton.Stat:
+      description: "DCN: IMG_CONN_MRAButton_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        MRA_PATH: 0x2
+        MRA_START: 0x3
+        MRA_CANCEL: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: REMOTE_ON, 0x3: RSPA_E_CANCEL, 0x4: PARKING, 0x5: UNPARKING, 0x6: RESUME, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RSPAEntryButton.Stat:
+      description: "DCN: IMG_CONN_RSPAEntryButton_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        REMOTE_ON: 0x2
+        RSPA_E_CANCEL: 0x3
+        PARKING: 0x4
+        UNPARKING: 0x5
+        RESUME: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: FORWARD, 0x4: BACKWARD, 0x5: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RSPAEntryDirection.Stat:
+      description: "DCN: IMG_CONN_RSPAEntryDirection_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        FORWARD: 0x3
+        BACKWARD: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkFrontLeftSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkFrontLeftSideMasterWarning_Stat</br>
+                    ParkFrontLeftSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkFrontRightSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkFrontRightSideMasterWarning_Stat</br>
+                    ParkFrontRightSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkRearLeftSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkRearLeftSideMasterWarning_Stat</br>
+                    ParkRearLeftSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: RED, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.ParkRearRightSideMasterWarning.Stat:
+      description: "DCN: IMG_CONN_ParkRearRightSideMasterWarning_Stat</br>
+                    ParkRearRightSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        RED: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: UNPARKING_LEFT, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RspaUnparkingLeftDirection.Stat:
+      description: "DCN: IMG_CONN_RspaUnparkingLeftDirection_Stat</br>
+                    RspaUnparkingLeftDirection Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        UNPARKING_LEFT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: UNPARKING_RIGHT, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RspaUnparkingRightDirection.Stat:
+      description: "DCN: IMG_CONN_RspaUnparkingRightDirection_Stat</br>
+                    RspaUnparkingRightDirection Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        UNPARKING_RIGHT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RspaToggleInformation.Stat:
+      description: "DCN: IMG_CONN_RspaToggleInformation_Stat</br>
+                    RspaToggleInformation Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: AVAILABLE, 0x2: UNAVAILABLE, 0x3: OFF, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingAvailable.Stat:
+      description: "DCN: IMG_CONN_AdasParkingAvailable_Stat</br>
+                    AdasParkingAvailable Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AVAILABLE: 0x1
+        UNAVAILABLE: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SLOT_01, 0x2: SLOT_02, 0x3: SLOT_03, 0x4: SLOT_04, 0x5: SLOT_05, 0x6: SLOT_06, 0x7: SLOT_07, 0x8: SLOT_08, 0x9: SLOT_09, 0xA: SLOT_10, 0xB: SLOT_11, 0xC: SLOT_12, 0xD: SLOT_13, 0xE: SLOT_14, 0xF: OFF, 0x10: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RSPAParkingSlotIdentification.Stat:
+      description: "DCN: IMG_CONN_RSPAParkingSlotIdentification_Stat</br>
+                    RSPAParkingSlotIdentification Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SLOT_01: 0x1
+        SLOT_02: 0x2
+        SLOT_03: 0x3
+        SLOT_04: 0x4
+        SLOT_05: 0x5
+        SLOT_06: 0x6
+        SLOT_07: 0x7
+        SLOT_08: 0x8
+        SLOT_09: 0x9
+        SLOT_10: 0xA
+        SLOT_11: 0xB
+        SLOT_12: 0xC
+        SLOT_13: 0xD
+        SLOT_14: 0xE
+        OFF: 0xF
+        MAX: 0x10
+      # 0x0: NONE, 0x1: BACKWARD_LEFT, 0x2: BACKWARD_RIGHT, 0x3: FORWARD_LEFT, 0x4: FORWARD_RIGHT, 0x5: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RSPAParkingDirection.Stat:
+      description: "DCN: IMG_CONN_RSPAParkingDirection_Stat</br>
+                    RSPAParkingDirection Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        BACKWARD_LEFT: 0x1
+        BACKWARD_RIGHT: 0x2
+        FORWARD_LEFT: 0x3
+        FORWARD_RIGHT: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.RSPAOperationInformation.Stat:
+      description: "DCN: IMG_CONN_RSPAOperationInformation_Stat</br>
+                    RSPAOperationInformation Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: DISABLED, 0x2: ENABLED, 0x3: OFF, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingPath.Stat:
+      description: "DCN: IMG_CONN_AdasParkingPath_Stat</br>
+                    AdasParkingPath Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLED: 0x1
+        ENABLED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: MPA_PATH, 0x2: MPA_START, 0x3: MPA_CANCEL, 0x4: OFF, 0x5: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.MPAButton.Stat:
+      description: "DCN: IMG_CONN_MPAButton_Stat</br>
+                    MPAButton Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        MPA_PATH: 0x1
+        MPA_START: 0x2
+        MPA_CANCEL: 0x3
+        OFF: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISABLED, 0x2: ENABLED, 0x3: OFF, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.MPARecordButton.Stat:
+      description: "DCN: IMG_CONN_MPARecordButton_Stat</br>
+                    MPARecordButton Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLED: 0x1
+        ENABLED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISABLED, 0x2: ENABLED, 0x3: OFF, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingMappingPath.Stat:
+      description: "DCN: IMG_CONN_AdasParkingMappingPath_Stat</br>
+                    AdasParkingMappingPath Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLED: 0x1
+        ENABLED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: DISABLED, 0x2: ENABLED, 0x3: OFF, 0x4: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingEntirePath.Stat:
+      description: "DCN: IMG_CONN_AdasParkingEntirePath_Stat</br>
+                    AdasParkingEntirePath Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISABLED: 0x1
+        ENABLED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: VALUE, 0x2: OFF, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingRemainedDistance.Stat:
+      description: "DCN: IMG_CONN_AdasParkingRemainedDistance_Val</br>
+                    AdasParkingRemainedDistance Stat"
+      dataType: HUInt64
+      group: AdasParkingRemainedDistance
+      valueEnum:
+        NONE: 0x0
+        VALUE: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # None
+    - SFC.ADAS_PARKING_2_0.Constant.AdasParkingRemainedDistance.Value:
+      description: "DCN: IMG_CONN_AdasParkingRemainedDistance_Val</br>
+                    AdasParkingRemainedDistance Value"
+      dataType: HUInt64
+      group: AdasParkingRemainedDistance
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ADAS_PARKING_2_0.Telltale.AdasParkingControlTelltale.Stat:
+      description: "DCN: IMG_CONN_AdasParkingControlTelltale_Stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN_PROGRESS, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Telltale.AdasParkingControlTelltale.StatOptional:
+      description: "DCN: IMG_CONN_AdasParkingControlTelltale_Stat</br>
+                    Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN_PROGRESS: 0x2
+        MAX: 0x3
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure_PRK.ID:
+      description: "Notification ID<br>
+                    Notification ID List(PdwSystemFailure_PRK):NT51001,NT51002"
+      dataType: HString
+      group: PdwSystemFailure_PRK
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure_PRK.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: PdwSystemFailure_PRK
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure_IBU.ID:
+      description: "Notification ID<br>
+                    Notification ID List(PdwSystemFailure_IBU):NT51003,NT51004"
+      dataType: HString
+      group: PdwSystemFailure_IBU
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure_IBU.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: PdwSystemFailure_IBU
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.PcaSystemFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(PcaSystemFailure):NT51005,NT51006,NT51007,NT51008"
+      dataType: HString
+      group: PcaSystemFailure
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.PcaSystemFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: PcaSystemFailure
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.RccaFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(RccaFailure):NT51009,NT51010"
+      dataType: HString
+      group: RccaFailure
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.RccaFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: RccaFailure
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.ExitSafetyFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(ExitSafetyFailure):NT51011,NT51012"
+      dataType: HString
+      group: ExitSafetyFailure
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.ExitSafetyFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: ExitSafetyFailure
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is NT00000
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure.ID:
+      description: "Notification ID<br>
+                    Notification ID List(PdwSystemFailure):NT51013"
+      dataType: HString
+      group: PdwSystemFailure
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.PdwSystemFailure.Stat:
+      description: "State of Notification"
+      dataType: HUInt64
+      group: PdwSystemFailure
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure10.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event7GroupFailure10):E53016,E53017,E53018,E53021"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure10.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure10.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure10.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure10.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure11.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event7GroupFailure11):E53019,E53020"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure11.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure11.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure11.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group7Failure11.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group7CCWFailure.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event7GroupCCWFailure):E53022,E53023"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7CCWFailure.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group7CCWFailure.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7CCWFailure.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group7CCWFailure.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group2.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event2Group):E53007,E53008"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group7Timeout.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event7GroupTimeout):E53016"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Timeout.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group7Timeout.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group7Timeout.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group7Timeout.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group4MRA.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event4GroupMRA):E53024,E53025,E53026,E53027,E53028,E53029,E53030,E53031,E53032,E53033,E53034,E53035,E53036,E53037,E53038,E53039,E53040,E53041,E53042,E53043,E53044,E53045,E53046"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group4MRA.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group4MRA.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group4MRA.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group4MRA.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.Group4RSPA.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(Event4GroupRSPA):E53047,E53048,E53049,E53050,E53051,E53052,E53053,E53054,E53055,E53056,E53057,E53058,E53059,E53060,E53061,E53062,E53063,E53064,E53065,E53066,E53067,E53068,E53069,E53070,E53071,E53072,E53073,E53074,E53075,E53076,E53077,E53078,E53079,E53080,E53081,E53082,E53083,E53084,E53085,E53086,E53087,E53088,E53089,E53090,E53091,E53092,E53093,E53094,E53095,E53096,E53097,E53098,E53099"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group4RSPA.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Event.Group4RSPA.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Event.Group4RSPA.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_2_0.Event.Group4RSPA.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.ADAS_PARKING_2_0.Event.PcaRccwWarningPopup.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(PcaRccwWarningPopup):E53100,E53101,E53102,E53103"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Event.PcaRccwWarningPopup.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Sound.WarningLevel.ID:
+      description: "Sound ID<br>
+                    Sound ID List(WarningLevel):SND_ADAS_PDWLevel1_Auto,SND_ADAS_PDWLevel2_Auto,SND_ADAS_PDWLevel3_Auto"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningLevel.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningLevel.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Sound.PASysWarnSound.ID:
+      description: "Sound ID<br>
+                    Sound ID List(PASysWarnSound):SND_ADAS_PAParkComplete_Fixed,SND_ADAS_PAScanComplete_Fixed"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.PASysWarnSound.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.PASysWarnSound.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ADAS_PARKING_2_0.Sound.PASysWarnSound.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound2
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Sound.WarningSensorFail.ID:
+      description: "Sound ID<br>
+                    Sound ID List(WarningSensorFail):SND_ADAS_PDWSensorFail_Fixed"
+      dataType: HString
+      group: Sound3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningSensorFail.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningSensorFail.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.ADAS_PARKING_2_0.Sound.WarningSensorFail.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound3
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_2_0.Sound.WarningTailgateOpened.ID:
+      description: "Sound ID<br>
+                    Sound ID List(WarningTailgateOpened):SND_ADAS_PDWTailgate_Opened"
+      dataType: HString
+      group: Sound4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningTailgateOpened.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_PARKING_2_0.Sound.WarningTailgateOpened.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Millisecond, keep playing
+    - SFC.ADAS_PARKING_2_0.Sound.WarningTailgateOpened.Interval:
+      description: "Sound Interval"
+      dataType: HUInt64
+      group: Sound4

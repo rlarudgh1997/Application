@@ -1,0 +1,243 @@
+#
+# @file Seatbelt_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Seatbelt_Warning:
+  sfcVersion: "3.0.4"
+  description: "Reference : [EC160] Seatbelt_Warning. Contains : Constant, Telltale, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - seatbeltDriverChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiDriverStatus: mInput_SeatBeltIndiDriverStatus
+    - seatbeltWarnChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltWarnSoundStatus: mInput_SeatBeltWarnSoundStatus
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltWarnStepSoundStatus: mInput_SeatBeltWarnStepSoundStatus
+    - 3rdStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndi3rdCenterStatus: mInput_SeatBeltIndi3rdCenterStatus
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndi3rdLeftStatus: mInput_SeatBeltIndi3rdLeftStatus
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndi3rdRightStatus: mInput_SeatBeltIndi3rdRightStatus
+    - 2rdStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearCenterStatus: mInput_SeatBeltIndiRearCenterStatus
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearLeftStatus: mInput_SeatBeltIndiRearLeftStatus
+        - Vehicle.EC.Seatbelt_Warning.Input_SeatBeltIndiRearRightStatus: mInput_SeatBeltIndiRearRightStatus
+    - configRSBRChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigRSBR: mInter_ConfigRSBR
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Seatbelt_Warning.Telltale.Seatbelt.Stat:
+      description: "DCN: IMG_TelltaleSeatbelt_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
+      # Style is SND_NAME
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarning.ID:
+      description: "Sound ID<br>
+                    Sound ID List(SeatbeltWarning):SND_SeatBelt"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarning.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarning.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarning.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1
+      # Style is SND_NAME
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep1.ID:
+      description: "Sound ID<br>
+                    Sound ID List(SeatbeltWarningStep1):SND_SeatBeltStep1"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep1.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep1.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep1.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound2
+      # Style is SND_NAME
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep2.ID:
+      description: "Sound ID<br>
+                    Sound ID List(SeatbeltWarningStep2):SND_SeatBeltStep2"
+      dataType: HString
+      group: Sound3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep2.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep2.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum.Sound.Type
+      # Sound output count
+    - SFC.Seatbelt_Warning.Sound.SeatbeltWarningStep2.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound3
+      # 0x0: NONE, 0x1: ROW2_COL2, 0x2: ROW2_COL3, 0x3: ROW2_COL2_ROW3_COL2, 0x4: ROW2_COL3_ROW3_COL2, 0x5: ROW2_COL2_ROW3_COL3, 0x6: ROW2_COL3_ROW3_COL3, 0x7: MAX
+    - SFC.Seatbelt_Warning.Constant.RearSeatbeltLayout.Stat:
+      description: "DCN: IMG_RearSeatbeltLayout_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ROW2_COL2: 0x1
+        ROW2_COL3: 0x2
+        ROW2_COL2_ROW3_COL2: 0x3
+        ROW2_COL3_ROW3_COL2: 0x4
+        ROW2_COL2_ROW3_COL3: 0x5
+        ROW2_COL3_ROW3_COL3: 0x6
+        MAX: 0x7
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Seatbelt_Warning.Constant.RearSeatbeltRow2.Stat:
+      description: "DCN: IMG_RearSeatbeltRow2_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Seatbelt_Warning.Constant.RearSeatbeltRow3.Stat:
+      description: "DCN: IMG_RearSeatbeltRow3_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat2ndRearLeft.Stat:
+      description: "DCN: IMG_Seat2ndRearLeft_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat2ndRearCenter.Stat:
+      description: "DCN: IMG_Seat2ndRearCenter_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat2ndRearRight.Stat:
+      description: "DCN: IMG_Seat2ndRearRight_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat3rdRearLeft.Stat:
+      description: "DCN: IMG_Seat3rdRearLeft_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat3rdRearCenter.Stat:
+      description: "DCN: IMG_Seat3rdRearCenter_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: SEATED, 0x2: BELTED, 0x3: OFF, 0x4: MAX
+    - SFC.Seatbelt_Warning.Constant.Seat3rdRearRight.Stat:
+      description: "DCN: IMG_Seat3rdRearRight_stat</br>
+                    State of Seatbelt_Warning"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        SEATED: 0x1
+        BELTED: 0x2
+        OFF: 0x3
+        MAX: 0x4

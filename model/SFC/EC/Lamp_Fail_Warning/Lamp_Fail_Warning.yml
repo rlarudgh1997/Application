@@ -1,0 +1,687 @@
+#
+# @file Lamp_Fail_Warning.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Lamp_Fail_Warning:
+  sfcVersion: "3.0.0"
+  description: "Reference : [EC090] Lamp_Fail_Warning. Contains : Telltale, Event, Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - variantChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigILCU: mInter_ConfigILCU
+    - HeadBiFuncStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadBiFuncLeftStatus: mInput_LampFailHeadBiFuncLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadBiFuncRightStatus: mInput_LampFailHeadBiFuncRightStatus
+    - DrlStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailDrlLeftStatus: mInput_LampFailDrlLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailDrlRightStatus: mInput_LampFailDrlRightStatus
+    - FogStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailFrontFogLeftStatus: mInput_LampFailFrontFogLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailFrontFogRightStatus: mInput_LampFailFrontFogRightStatus
+    - HeadHighStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadHighLeftStatus: mInput_LampFailHeadHighLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadHighRightStatus: mInput_LampFailHeadHighRightStatus
+    - HeadMountStopStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadMountStopLampStatus: mInput_LampFailHeadMountStopLampStatus
+    - HeadLowStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadLowLeftStatus: mInput_LampFailHeadLowLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailHeadLowRightStatus: mInput_LampFailHeadLowRightStatus
+    - StaticBendingStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailStaticBendingLeftStatus: mInput_LampFailStaticBendingLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailStaticBendingRightStatus: mInput_LampFailStaticBendingRightStatus
+    - StopLampStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailStopLampLeftStatus: mInput_LampFailStopLampLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailStopLampRightStatus: mInput_LampFailStopLampRightStatus
+    - TurnSignalStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailFrontTurnSignalLeftStatus: mInput_LampFailFrontTurnSignalLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailFrontTurnSignalRightStatus: mInput_LampFailFrontTurnSignalRightStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailRearTurnSignalLeftStatus: mInput_LampFailRearTurnSignalLeftStatus
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailRearTurnSignalRightStatus: mInput_LampFailRearTurnSignalRightStatus
+    - TrailerStopStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailTrailerStopLampStatus: mInput_LampFailTrailerStopLampStatus
+    - TrailerTurnLeftStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailTrailerTurnSignalLeftStatus: mInput_LampFailTrailerTurnSignalLeftStatus
+    - TrailerTurnRightStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailTrailerTurnSignalRightStatus: mInput_LampFailTrailerTurnSignalRightStatus
+    - TrailerTailLeftStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailTrailerTailLeftStatus: mInput_LampFailTrailerTailLeftStatus
+    - TrailerTailRightStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LampFailTrailerTailRightStatus: mInput_LampFailTrailerTailRightStatus
+    - LedLampFailStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LedLampFailStatusFromIcu: mInput_LedLampFailStatusFromIcu
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LedLampLhFailStatusFromIlcu: mInput_LedLampLhFailStatusFromIlcu
+        - Vehicle.EC.Lamp_Fail_Warning.Input_LedLampRhFailStatusFromIlcu: mInput_LedLampRhFailStatusFromIlcu
+  outputs:
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailBi.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailBi):E60801"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailBi.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailBi.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailBi.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailBi.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailBiLh.Stat:
+      description: "DCN: IMG_LampFailBiLh_stat</br>
+                    state of LampFail BiLh"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailBiRh.Stat:
+      description: "DCN: IMG_LampFailBiRh_stat</br>
+                    state of LampFail BiRh"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailDrl.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailDrl):E60802"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailDrl.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailDrl.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailDrl.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailDrl.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailDrlLh.Stat:
+      description: "DCN: IMG_LampFailDrlLh_stat</br>
+                    state of LampFail DrlLh"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailDrlRh.Stat:
+      description: "DCN: IMG_LampFailDrlRh_stat</br>
+                    state of LampFail DrlRh"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailFog.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailFog):E60803"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailFog.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailFog.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailFog.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailFog.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailFrontFogLh.Stat:
+      description: "DCN: IMG_LampFailFrontFogLh_stat</br>
+                    state of LampFail FogLh"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailFrontFogRh.Stat:
+      description: "DCN: IMG_LampFailFrontFogRh_stat</br>
+                    state of LampFail FogRh"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailHigh.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailHigh):E60805"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailHigh.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailHigh.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailHigh.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailHigh.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailHighLh.Stat:
+      description: "DCN: IMG_LampFailHighLh_stat</br>
+                    state of LampFail HighLh"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailHighRh.Stat:
+      description: "DCN: IMG_LampFailHighRh_stat</br>
+                    state of LampFail HighRh"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailMount.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailMount):E60806"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailMount.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailMount.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailMount.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailMount.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailLow.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailLow):E60807"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailLow.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailLow.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailLow.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailLow.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailLowLh.Stat:
+      description: "DCN: IMG_LampFailLowLh_stat</br>
+                    state of LampFail LowLh"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailLowRh.Stat:
+      description: "DCN: IMG_LampFailLowRh_stat</br>
+                    state of LampFail LowRh"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailCorner.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailCorner):E60809"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailCorner.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailCorner.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailCorner.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailCorner.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailCornerLh.Stat:
+      description: "DCN: IMG_LampFailCornerLh_stat</br>
+                    state of LampFail CornerLh"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailCornerRh.Stat:
+      description: "DCN: IMG_LampFailCornerRh_stat</br>
+                    state of LampFail CornerRh"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailStop.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailStop):E60810"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailStop.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailStop.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailStop.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailStop.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailStopLh.Stat:
+      description: "DCN: IMG_LampFailStopLh_stat</br>
+                    state of LampFail StopLh"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailStopRh.Stat:
+      description: "DCN: IMG_LampFailStopRh_stat</br>
+                    state of LampFail StopRh"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LampFailTurn.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LampFailTurn):E60811"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailTurn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LampFailTurn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LampFailTurn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LampFailTurn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailFrontTurnLh.Stat:
+      description: "DCN: IMG_LampFailFrontTurnLh_stat</br>
+                    state of LampFail FrontTurnLh"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailFrontTurnRh.Stat:
+      description: "DCN: IMG_LampFailFrontTurnRh_stat</br>
+                    state of LampFail FrontTurnRh"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailRearTurnLh.Stat:
+      description: "DCN: IMG_LampFailRearTurnLh_stat</br>
+                    state of LampFail RearTurnLh"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Constant.LampFailRearTurnRh.Stat:
+      description: "DCN: IMG_LampFailRearTurnRh_stat</br>
+                    state of LampFail RearTurnRh"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum.Off_On_EnumValue
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.TrailerStop.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TrailerStop):E60813"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerStop.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.TrailerStop.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerStop.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.TrailerStop.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event10
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnLeft.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TrailerTurnLeft):E60814"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnLeft.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnLeft.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnLeft.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnLeft.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event11
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnRight.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TrailerTurnRight):E60815"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnRight.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnRight.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnRight.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.TrailerTurnRight.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event12
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailLeft.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TrailerTailLeft):E60816"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailLeft.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailLeft.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailLeft.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailLeft.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event13
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailRight.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(TrailerTailRight):E60817"
+      dataType: HString
+      group: Event14
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailRight.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event14
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailRight.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event14
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailRight.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event14
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.TrailerTailRight.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event14
+      # Style is E00000
+    - SFC.Lamp_Fail_Warning.Event.LedLampFail.ID:
+      description: "Event Scene ID<br>
+                    Event ID List(LedLampFail):E60818"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Fail_Warning.Event.LedLampFail.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum.Event.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Fail_Warning.Event.LedLampFail.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Lamp_Fail_Warning.Event.LedLampFail.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Lamp_Fail_Warning.Event.LedLampFail.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event15
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Fail_Warning.Telltale.LedLampFail.Stat:
+      description: "DCN: IMG_TelltaleLedLamp_stat</br>
+                    State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum.Telltale.Stat
