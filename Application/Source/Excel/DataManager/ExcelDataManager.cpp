@@ -496,6 +496,45 @@ QStringList ExcelDataManager::isResultDataList(const int& sheetIndex, const QStr
         isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result), true);
     const QPair<int, int> rowInfo = isRowIndexInfo(sheetIndex, tcName, QString(), QString(), true);
 
+#if 0
+    QList<QPair<int, int>> rowInfoList;
+    int startIndex = (-1);
+    int index = 0;
+
+    const auto tcNameData = isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName), true);
+
+    for (const auto& name : tcNameData) {
+        // qDebug() << "TCName :" << index << (tcName == name) << startIndex<< name << tcName;
+        int endIndex = (-1);
+        if (name == tcName) {
+            if (startIndex == (-1)) {
+                startIndex = index;
+            } else if (index == (tcNameData.size() - 1)) {
+                endIndex = index;
+            }
+        } else {
+            if (startIndex >= 0) {
+                endIndex = (index - 1);
+            }
+        }
+
+        if (endIndex >= 0) {
+            rowInfoList.append(qMakePair(startIndex, endIndex));
+            startIndex = (-1);
+        }
+        index++;
+    }
+
+    QStringList list;
+    for (const auto& row : rowInfoList) {
+        qDebug() << "\t Row :" << row << tcName;
+        for (int rowIndex = row.first; rowIndex <= row.second; ++rowIndex) {
+            QString text = currentData.at(rowIndex);
+            list.append(text);
+        }
+    }
+    QStringList resultList = isParsingDataList(list, true);
+#else
     QStringList list;
     for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
         QString text = currentData.at(rowIndex);
@@ -503,6 +542,7 @@ QStringList ExcelDataManager::isResultDataList(const int& sheetIndex, const QStr
         // qDebug() << "\t Result[" << rowIndex << "] :" << text;
     }
     QStringList resultList = isParsingDataList(list, true);
+#endif
 
     // totalElapsed += checkTimer.check("isResultDataList");
     // qDebug() << "\t Total - isResultDataList :" << totalElapsed << "\n";
@@ -820,7 +860,8 @@ QPair<QStringList, QStringList> ExcelDataManager::isDependentDataList(const QStr
     }
 
     if (foundSheetIndex == 0) {
-        qDebug() << "Fail to found tcName :" << tcName << ", result :" << resultName << "\n";
+        qDebug() << "Fail to found tcName :" << tcName << ", result :" << resultName;
+        qDebug() << "\t Gen TC execution must be completed.\n";
         return QPair<QStringList, QStringList>();
     }
 

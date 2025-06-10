@@ -131,12 +131,16 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             draw = updateAutoCompleteNormal(info);
             break;
         }
+        case DialogTypeSelectValue: {
+            draw = updateSelectValue(info);
+            break;
+        }
         default: {
             qDebug() << "\t Fail to dialog type :" << dialogType;
             break;
         }
     }
-    // qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
+    qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
 }
 
 void Dialog::controlConnet(const int& displayType) {
@@ -187,8 +191,8 @@ void Dialog::controlConnet(const int& displayType) {
             connectAutoCompleteNormal(true);
             break;
         }
-        case DisplayTypeSelectRadio2: {
-            connectSelectRadio2(true);
+        case DisplayTypeSelectValue: {
+            connectSelectValue(true);
             break;
         }
         default: {
@@ -203,7 +207,7 @@ void Dialog::controlConnet(const int& displayType) {
             connectViewLog(false);
             connectAutoComplete(false);
             connectAutoCompleteNormal(false);
-            connectSelectRadio2(false);
+            connectSelectValue(true);
             break;
         }
     }
@@ -271,49 +275,6 @@ void Dialog::connectSelectRadio(const bool& state) {
         }
         disconnect(mGui->SelectRadioOK, nullptr, nullptr, nullptr);
     }
-}
-
-void Dialog::connectSelectRadio2(const bool& state) {
-    // static QList<QRadioButton*> selectRadioList = QList<QRadioButton*>({
-    //     mGui->SelectRadioButton_01,
-    //     mGui->SelectRadioButton_02,
-    //     mGui->SelectRadioButton_03,
-    //     mGui->SelectRadioButton_04,
-    //     mGui->SelectRadioButton_05,
-    //     mGui->SelectRadioButton_06,
-    //     mGui->SelectRadioButton_07,
-    // });
-
-    // if (state) {
-    //     for (const auto& btn : selectRadioList) {
-    //         connect(btn, &QPushButton::clicked, [=]() {
-    //             for (const auto& btnInit : selectRadioList) {
-    //                 btnInit->setChecked(false);
-    //             }
-    //             btn->setChecked(true);
-    //         });
-    //     }
-    //     connect(mGui->SelectRadioOK2, &QPushButton::clicked, [=]() {
-    //         int selectIndex = 0;
-    //         QString text;
-    //         for (const auto& btn : selectRadioList) {
-    //             if (btn->isChecked()) {
-    //                 text = btn->text();
-    //                 break;
-    //             }
-    //             selectIndex++;
-    //         }
-    //         emit signalSelectRadio(selectIndex);
-    //         emit signalSelectRadioValue(text);
-    //         QDialog::accept();
-    //         // QMetaObject::invokeMethod(this, "accept", Qt::QueuedConnection);  // 다이얼로그 종료시 App crash 발생하여 변경
-    //     });
-    // } else {
-    //     for (const auto& btn : selectRadioList) {
-    //         disconnect(btn, nullptr, nullptr, nullptr);
-    //     }
-    //     disconnect(mGui->SelectRadioOK2, nullptr, nullptr, nullptr);
-    // }
 }
 
 void Dialog::connectSelectList(const bool& state) {
@@ -606,6 +567,21 @@ void Dialog::connectAutoCompleteNormal(const bool& state) {
     }
 }
 
+void Dialog::connectSelectValue(const bool& state) {
+    if (state) {
+        connect(mGui->SelectValueOK, &QPushButton::clicked, [=]() {
+            int value = mGui->SelectValueSpinBox->value();
+            emit signalSelectValue(value);
+            QDialog::accept();
+        });
+
+
+    } else {
+        disconnect(mGui->SelectValueOK, nullptr, nullptr, nullptr);
+        // disconnect(mGui->SelectValueSpinBox, nullptr, nullptr, nullptr);
+    }
+}
+
 QRect Dialog::updateMainRect() {
     QRect rect = QRect();
     int dialogType = getProperty(DataTypeDialogType).toInt();
@@ -694,6 +670,10 @@ QRect Dialog::updateMainRect() {
         case DialogTypeAutoCompleteNormal: {
             mGui->AutoCompleteNormalWidget->setGeometry(QRect(0, 0, 500, 300));
             rect = mGui->AutoCompleteNormalWidget->geometry();
+            break;
+        }
+        case DialogTypeSelectValue: {
+            rect = mGui->SelectValueWidget->geometry();
             break;
         }
         default: {
@@ -937,38 +917,6 @@ bool Dialog::updateSelectRadio(const QVariantList& info) {
         index++;
     }
 
-    return true;
-}
-
-bool Dialog::updateSelectRadio2(const QVariantList& info) {
-    if (info.size() != 3) {
-        return false;
-    }
-    updateDisplay(DisplayTypeSelectRadio2, info.at(0).toString());
-
-    int currentIndex = info.at(1).toInt();
-    QStringList currentList = info.at(2).toStringList();
-
-    setProperty(DataTypeSelectRadioList, currentList);
-
-    int dialogType = getProperty(DataTypeDialogType).toInt();
-    if (dialogType == DialogTypeCycleMode) {
-        mGui->SelectRadioTitle->setText("Mode");
-    } else {
-        mGui->SelectRadioTitle->setText("Vehicle");
-    }
-
-    int index = 0;
-    for (const auto& widget : isRadioWidget()) {
-        widget.first->setVisible(index < currentList.size());
-        widget.second->setChecked(currentIndex == index);
-        if (widget.first->isVisible()) {
-            widget.second->setText(currentList.at(index));
-        }
-        index++;
-    }
-
-    mGui->SelectRadioButton_07->setVisible(false);
     return true;
 }
 
@@ -1268,6 +1216,19 @@ bool Dialog::updateAutoCompleteNormal(const QVariantList& info) {
     mGui->AutoCompleteNormalInput->setText(inputStr);
 
     updateAutoCompleteSuggestionsList(true, false, false, false, false);
+
+    return true;
+}
+
+bool Dialog::updateSelectValue(const QVariantList& info) {
+    if (info.size() != 2) {
+        return false;
+    }
+    updateDisplay(DisplayTypeSelectValue, info.at(0).toString());
+
+    int inputValue = info.at(1).toInt();
+
+    mGui->SelectValueSpinBox->setValue(inputValue);
 
     return true;
 }

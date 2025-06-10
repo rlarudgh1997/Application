@@ -1,0 +1,31 @@
+@startuml
+
+actor User order 10
+
+participant GenerateCaseData order 20
+participant ExcelDataManager order 30
+participant "data()" as ExcelData order 35
+participant "CaseJson" as QJsonObject order 40
+
+== Config Signal Detection and Setup ==
+
+User -> GenerateCaseData : excuteGenerateCaseData()
+
+loop for each TCName / Result / Case
+    GenerateCaseData -> GenerateCaseData : setConfigTag(tcName, ..., configName, ...)
+
+    activate GenerateCaseData
+    GenerateCaseData -> ExcelDataManager : instance()
+    ExcelDataManager -> ExcelData : data()
+    GenerateCaseData -> ExcelData : isValidConfigCheck(tcName, configName)
+    ExcelData --> GenerateCaseData : true / false
+
+    alt return == true
+        GenerateCaseData -> QJsonObject : caseJson["Config"] = true
+    else
+        GenerateCaseData -> QJsonObject : caseJson["Config"] = false
+    end
+    deactivate GenerateCaseData
+end
+
+@enduml

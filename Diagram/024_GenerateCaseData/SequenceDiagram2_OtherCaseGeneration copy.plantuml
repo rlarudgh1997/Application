@@ -1,0 +1,48 @@
+@startuml
+
+actor User order 10
+
+participant ControlManager order 20
+participant GenerateCaseData order 30
+participant ExcelDataManager order 40
+participant SignalDataManager order 50
+participant ExcelUtil order 60
+participant ConfigSetting order 70
+participant Python order 80
+
+== Other Case Generation ==
+
+User -> ControlManager : 요청 - Generate TestCase
+
+activate ControlManager
+ControlManager -> GenerateCaseData : excuteGenerateCaseData()
+deactivate ControlManager
+
+activate GenerateCaseData
+GenerateCaseData -> ExcelDataManager : isManualDataList()
+GenerateCaseData -> ExcelDataManager : isTCNameDataList()
+GenerateCaseData -> ExcelDataManager : isGenTypeData()
+GenerateCaseData -> ExcelDataManager : isInputDataList(..., isOther=true)
+
+loop For each TCName with empty input
+    GenerateCaseData -> SignalDataManager : isOtherInputSignalDataInfo()
+    GenerateCaseData -> GenerateCaseData : getSignalInfoString(isOther=true)
+
+    GenerateCaseData -> Python : callPython() with OtherInput string
+    activate Python
+    Python -> Python : run.py
+    Python -> Python : create Other JSON
+    Python --> GenerateCaseData : return OtherCase JSON
+    deactivate Python
+
+    GenerateCaseData -> GenerateCaseData : removeMatchingKeys()
+    GenerateCaseData -> GenerateCaseData : appendCaseJson(mIntermediateDefaultJson)
+    GenerateCaseData -> GenerateCaseData : getCaseInfoJson(isOther=true)
+    GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson)
+end
+
+GenerateCaseData -> GenerateCaseData : continue next TC/Result/Case loop
+
+deactivate GenerateCaseData
+
+@enduml

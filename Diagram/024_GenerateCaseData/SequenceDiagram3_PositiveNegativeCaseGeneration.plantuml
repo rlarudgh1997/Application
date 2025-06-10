@@ -1,0 +1,45 @@
+@startuml
+
+actor User order 10
+
+participant GenerateCaseData order 20
+participant ExcelDataManager order 30
+participant SignalDataManager order 40
+participant Python order 50
+participant QJsonObject order 60
+
+== Positive/Negative 분기 생성 ==
+
+User -> GenerateCaseData : excuteGenerateCaseData()
+
+loop for each Case with genType == "Negative/Positive"
+    GenerateCaseData -> ExcelDataManager : isInputDataList()
+
+    GenerateCaseData -> SignalDataManager : isTestCaseInputSignalDataInfo()
+    GenerateCaseData -> GenerateCaseData : getSignalInfoString()
+
+    GenerateCaseData -> Python : callPython() with input
+    activate Python
+    Python -> Python : generate case JSON
+    Python --> GenerateCaseData : return JSON
+    deactivate Python
+
+    == Positive/Negative 분기 ==
+    GenerateCaseData -> GenerateCaseData : getCaseInfoJson() - Positive
+    GenerateCaseData -> GenerateCaseData : getCaseInfoJson() - Negative
+
+    GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson, genType=Positive)
+    GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson, genType=Negative)
+
+end
+
+== Negative 제거 조건 검사 ==
+
+loop for each Negative Case
+    GenerateCaseData -> GenerateCaseData : checkNegativeAndPositive()
+    alt 동일한 Positive가 존재할 경우
+        GenerateCaseData -> GenerateCaseData : removeMatchingKeysNegative()
+    end
+end
+
+@enduml

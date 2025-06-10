@@ -93,6 +93,7 @@ public:
         ConfigTypeSelectModule,
         ConfigTypeNewModule,
         ConfigTypeGenerateStart,
+        ConfigTypeRunningInDocker,
 
         ConfigTypeMax,
     } ConfigType;
@@ -220,6 +221,7 @@ private:
         mConfigInfoData[ConfigTypeWindowTitle] = QPair<QString, QVariant>("ConfigTypeWindowTitle", QVariant(""));
         mConfigInfoData[ConfigTypeNewModule] = QPair<QString, QVariant>("ConfigTypeNewModule", QVariant("New_Module"));
         mConfigInfoData[ConfigTypeGenerateStart] = QPair<QString, QVariant>("ConfigTypeGenerateStart", QVariant(false));
+        mConfigInfoData[ConfigTypeRunningInDocker] = QPair<QString, QVariant>("ConfigTypeRunningInDocker", QVariant(false));
     }
 
 private:

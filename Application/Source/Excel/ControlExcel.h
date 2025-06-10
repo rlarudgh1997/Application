@@ -17,7 +17,7 @@ private:
     explicit ControlExcel();
 
     void updateSheetData(const int& propertyType, const QVariantList& sheetData, const bool& edit);
-    void updateSheetDataToExcelData(const int& propertyType = 0, const QVariantList& sheetData = QVariantList());
+    void updateSheetDataToExcelData(const bool edit, const int& propertyType, const QVariantList& sheetData);
     void updateExcelSheet(const QList<QVariantList>& openSheetData = QList<QVariantList>());
     bool writeExcelFile(const QVariant& filePath);
     bool openExcelFile(const QVariant& filePath);

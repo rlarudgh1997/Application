@@ -21,6 +21,7 @@ MainWindow::MainWindow(const QStringList& arguments) {
 
     ConfigSetting::instance().data();
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGraphicsMode, graphicsMode);
+    ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeRunningInDocker, isRunningInDocker());
     checkTimer.check("ConfigSetting");
 
     mCheckLib.data()->setLibInfo(QStringList({"openpyxl", "pandas"}));
@@ -128,6 +129,10 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
                     } else {
                     }
 
+                    if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeRunningInDocker).toBool()) {
+                        text.append("(Running in Docker)");
+                    }
+
                     if (title.size() > 0) {
                         text.append(" : ");
                         text.append(title);
@@ -136,6 +141,21 @@ void MainWindow::controlConnect(const bool& graphicsMode) {
                 });
     }
 }
+
+bool MainWindow::isRunningInDocker() {
+    QFile file("/proc/1/cgroup");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if (line.contains("docker") || line.contains("kubepods") || line.contains("containerd")) {
+                return true;
+            }
+        }
+    }
+    return QFile::exists("/.dockerenv");
+}
+
 void MainWindow::mousePressEvent(QMouseEvent* mouseEvent) {
     Q_UNUSED(mouseEvent)
     // ControlManager::instance().data()->mouseEvent(0, mouseEvent);

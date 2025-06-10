@@ -15,6 +15,18 @@
 		repo init --submodule -u https://kkh1997@bitbucket.org/ivc-suite/sfc.manifests.git
 		repo sync
 
+	- Docker 이미지
+		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/SFC-Docker.git
+
+	- .git-credentials 파일 내용 수정
+		./git-credentials
+
+	- Docker 설치
+
+		cd ~/900_Code/SFC-Docker
+
+		./docker_build.sh
+
 ----------------------------------------------------------------------------------------------
 [환경 설정]
 	- 권한 설정

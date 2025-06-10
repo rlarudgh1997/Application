@@ -1,0 +1,71 @@
+@startuml
+
+actor User order 10
+
+participant ControlGui order 20
+participant ControlManager order 30
+participant GenerateCaseData order 40
+participant ExcelDataManager order 50
+participant SignalDataManager order 60
+participant ExcelUtil order 70
+participant CaseDataWriter order 80
+participant Python order 90
+
+== Case Generation ==
+
+User -> ControlGui : click "Generate TC" button
+
+activate ControlGui
+ControlGui -> ControlManager : emit generateTestCaseRequested()
+deactivate ControlGui
+
+activate ControlManager
+ControlManager -> GenerateCaseData : excuteGenerateCaseData()
+deactivate ControlManager
+
+activate GenerateCaseData
+GenerateCaseData -> GenerateCaseData : reset internal state
+GenerateCaseData -> ExcelDataManager : reloadExcelData()
+activate ExcelDataManager
+ExcelDataManager -> ExcelDataManager : readExcel()
+deactivate ExcelDataManager
+
+loop for each sheet
+    GenerateCaseData -> ExcelDataManager : isTCNameDataList()
+    GenerateCaseData -> ExcelDataManager : isGenTypeData()
+    GenerateCaseData -> ExcelDataManager : isVehicleTypeData()
+
+    loop for each TCName
+        GenerateCaseData -> ExcelDataManager : isResultDataList()
+
+        loop for each Result
+            GenerateCaseData -> ExcelDataManager : isCaseDataList()
+
+            loop for each Case
+                GenerateCaseData -> ExcelDataManager : isInputDataList()
+                GenerateCaseData -> SignalDataManager : isTestCaseInputSignalDataInfo()
+                GenerateCaseData -> ExcelUtil : isKeywordString("Delay")
+
+                GenerateCaseData -> GenerateCaseData : getSignalInfoString()
+                GenerateCaseData -> Python : callPython()
+                activate Python
+                Python -> Python : run.py + signal string
+                Python -> Python : generate JSON
+                Python --> GenerateCaseData : return case JSON
+                deactivate Python
+
+                GenerateCaseData -> GenerateCaseData : appendCase()
+            end
+        end
+    end
+end
+
+GenerateCaseData -> CaseDataWriter : genTestCaseFile(mAllCaseJson, count)
+activate CaseDataWriter
+CaseDataWriter -> CaseDataWriter : write JSON to file
+deactivate CaseDataWriter
+
+GenerateCaseData -> GenerateCaseData : saveHistory()
+deactivate GenerateCaseData
+
+@enduml

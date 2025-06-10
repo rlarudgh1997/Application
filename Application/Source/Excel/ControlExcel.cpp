@@ -291,7 +291,7 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     }
 
     updateDataHandler(propertyType, originSheetData);
-    updateSheetDataToExcelData(propertyType, originSheetData);
+    updateSheetDataToExcelData(false, propertyType, originSheetData);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeDoFileSave, true);
 
     int originSize = ExcelData::instance().data()->getSheetData(propertyType).toList().size();
@@ -308,17 +308,42 @@ void ControlExcel::updateSheetData(const int& propertyType, const QVariantList& 
     qDebug() << "\033[0m";
 }
 
-void ControlExcel::updateSheetDataToExcelData(const int& propertyType, const QVariantList& sheetData) {
-    bool updateAll = ((propertyType == 0) && (sheetData.toList().size() == 0));
+void ControlExcel::updateSheetDataToExcelData(const bool edit, const int& propertyType, const QVariantList& sheetData) {
+    const bool updateAll = ((propertyType == 0) && (sheetData.toList().size() == 0));
+#if 1
+    int startIndex = propertyType;
+    int endIndex = (propertyType + 1);
+    if (updateAll) {
+        startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+        endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+    }
+    for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+        QVariantList currSheetData = ((updateAll) ? (getData(sheetIndex).toList()) : (sheetData));
+        if (edit) {
+            ExcelData::instance().data()->setEditingSheetData(sheetIndex, currSheetData);
+        } else {
+            ExcelData::instance().data()->setSheetData(sheetIndex, currSheetData);
+        }
+    }
+#else
     if (updateAll) {
         const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
         const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
         for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-            ExcelData::instance().data()->setSheetData(sheetIndex, getData(sheetIndex).toList());
+            if (edit) {
+                ExcelData::instance().data()->setEditingSheetData(sheetIndex, getData(sheetIndex).toList());
+            } else {
+                ExcelData::instance().data()->setSheetData(sheetIndex, getData(sheetIndex).toList());
+            }
         }
     } else {
-        ExcelData::instance().data()->setSheetData(propertyType, sheetData);
+        if (edit) {
+            ExcelData::instance().data()->setEditingSheetData(propertyType, sheetData);
+        } else {
+            ExcelData::instance().data()->setSheetData(propertyType, sheetData);
+        }
     }
+#endif
 }
 
 void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
@@ -406,9 +431,11 @@ void ControlExcel::updateExcelSheet(const QList<QVariantList>& openSheetData) {
 }
 
 bool ControlExcel::writeExcelFile(const QVariant& filePath) {
+#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
     if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
         return false;
     }
+#endif
     // ivis::common::CheckTimer checkTimer;
     ExcelUtil::instance().data()->writeExcelSheet(filePath.toString(), false);
     // qDebug() << "writeExcelFile :" << filePath;
@@ -417,9 +444,11 @@ bool ControlExcel::writeExcelFile(const QVariant& filePath) {
 }
 
 bool ControlExcel::openExcelFile(const QVariant& filePath) {
+#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
     if (ExcelUtil::instance().data()->isCheckPythonLibrary() == false) {
         return false;
     }
+#endif
     // ivis::common::CheckTimer checkTimer;
     QList<QVariantList> sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath.toString());
     // qDebug() << "openExcelFile :" << filePath;
@@ -1026,74 +1055,82 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
         return;
     }
 
+    bool isSelectModuleState = (selectModule.size() > 0);  // Alt+G 동작(GenTC-SelectModule)인 경우
     int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
     int excelView = getData(ivis::common::PropertyTypeEnum::PropertyTypeExcelView).toInt();
-    QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
-    QString directory = QFileInfo(fileInfo.path()).fileName();
     QString editingModule;
     QStringList optionInfo;
-    QString moduleName;
 
     switch (excelView) {
         case ivis::common::ViewTypeEnum::ExcelTypeOpen: {
-            if (selectModule.size() == 0) {
-                auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
-                for (const auto& module : moduleInfo.keys()) {
-                    if (module == directory) {
-                        moduleName = directory;
-                        break;
-                    }
-                }
-                if (moduleName.size() == 0) {
-                    // moduleName = QString("/%1/%2").arg(directory).arg(fileInfo.baseName());
-                    moduleName = fileInfo.filePath();
-                }
+            bool editState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+            auto moduleInfo = ExcelUtil::instance().data()->isModuleListFromJson(appMode, false);
+            QFileInfo openFileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
+            QString filePath = openFileInfo.filePath();
 
-                // 현재 엑셀 파일이 편집중인 상태 전달
-                if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool()) {
-                    editingModule = moduleName;
+            if (isSelectModuleState) {
+                for (const auto& select : selectModule) {
+                    if (filePath == select) {
+                        // ModelPath 가 아닌곳에서 파일을 오픈 하여 편집한 경우
+                        // qDebug() << "1. Select Module :" << editState << select;
+                        editingModule = (editState) ? (select) : (QString());  // 파일 Open 편집중 상태
+                    } else if (filePath == moduleInfo[select].first) {
+                        // ModelPath 내부 파일을 오픈 하여 편집한 경우
+                        // qDebug() << "2. Select Module :" << editState << select;
+                        editingModule = (editState) ? (select) : (QString());  // 파일 Open 편집중 상태
+                    } else {
+                    }
+                    optionInfo.append(select);
                 }
-                optionInfo.append(moduleName);
             } else {
-                for (const auto& module : selectModule) {
-                    if (module == directory) {
-                        editingModule = directory;
+                QString current;
+                for (const auto& module : moduleInfo.keys()) {
+                    if (filePath == moduleInfo[module].first) {
+                        // ModelPath 내부 파일을 오픈 하여 편집한 경우
+                        current = module;
+                        // qDebug() << "4. Current Module :" << editState << current;
                         break;
                     }
                 }
-                optionInfo.append(selectModule);
+                if (current.size() == 0) {
+                    // ModelPath 가 아닌곳에서 파일을 오픈 하여 편집한 경우
+                    current = filePath;
+                    // qDebug() << "3. Current Module :" << editState << current;
+                }
+                editingModule = (editState) ? (current) : (QString());  // 파일 Open 편집중 상태
+                optionInfo.append(current);
             }
-            fileInfo = QFileInfo();
             break;
         }
         case ivis::common::ViewTypeEnum::ExcelTypeNew: {
-            if (selectModule.size() == 0) {
-                moduleName = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
-                optionInfo.append(moduleName);
-            } else {
+            if (isSelectModuleState) {
                 optionInfo.append(selectModule);
+            } else {
+                QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
+                optionInfo.append(newModule);
             }
-            fileInfo = QFileInfo();
             break;
         }
         default: {
-            optionInfo.append(selectModule);
-            fileInfo = QFileInfo();
+            if (isSelectModuleState) {
+                optionInfo.append(selectModule);
+            }
             break;
         }
     }
 
 #if 0
-    qDebug() << (QString(120, '='));
-    qDebug() << "updateStartTestCase :" << excelView << selectModule.size();
-    qDebug() << "\t selectModule   :" << selectModule;
-    qDebug() << "\t EditingModule  :" << editingModule;
-    qDebug() << "\t Option         :" << optionInfo;
-    // qDebug() << "\t FilePath       :" << fileInfo.filePath();
-    qDebug() << "\t FilePath       :" << fileInfo.path();
-    qDebug() << "\t                :" << fileInfo.fileName();
-    qDebug() << "\t                :" << directory;
     qDebug() << "\n\n";
+    qDebug() << (QString(120, '=').toLatin1().data());
+    for (const auto& module : selectModule) {
+        qDebug() << "SelectModule :" << module;
+    }
+    qDebug() << "\n";
+    qDebug() << "EditModule :" << editingModule;
+    for (const auto& option : optionInfo) {
+        qDebug() << "\t Option :" << option;
+    }
+    // return;
 #endif
 
     if (optionInfo.size() > 0) {
@@ -1102,17 +1139,13 @@ void ControlExcel::updateStartTestCase(const QStringList& selectModule) {
             // 사용 불가(파일 오픈시 ExcelData::setSheetData() 으로 데이터 저장)로 인해
             // 편집중인 데이터는 ExcelData::setEditingSheetData() 에 저장 후
             // TestCase::readSheetData() 함수에서 예외 처리 하여 사용함.
-            const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
-            const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
-            for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-                ExcelData::instance().data()->setEditingSheetData(sheetIndex, getData(sheetIndex));
-            }
+            updateSheetDataToExcelData(true, 0, QVariantList());
             TestCase::instance().data()->setEditingModule(editingModule);
         }
 
         QString appModeInfo = (appMode == ivis::common::AppModeEnum::AppModeTypeCV) ? ("CV") : ("PV");
         optionInfo.append(appModeInfo);
-        TestCase::instance().data()->start(optionInfo, fileInfo);
+        TestCase::instance().data()->start(optionInfo);
     }
 }
 
@@ -1133,22 +1166,24 @@ void ControlExcel::updateSelectModuleList() {
 
     switch (excelView) {
         case ivis::common::ViewTypeEnum::ExcelTypeOpen: {
-            QFileInfo fileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
-            QString directory = QFileInfo(fileInfo.path()).fileName();
-            bool existsModule = false;
+            QFileInfo openFileInfo(getData(ivis::common::PropertyTypeEnum::PropertyTypeLastSavedFile).toString());
+            QString filePath = openFileInfo.filePath();
+            QString currentModule;  // 오픈 파일과 동일한 모듈이 존재하면 모듈 정보 저장
             for (const auto& module : moduleInfo.keys()) {
-                if (module == directory) {
-                    existsModule = true;
+                if (filePath == moduleInfo[module].first) {
+                    currentModule = module;
+                    // qDebug() << "\t Exists Module - From Json :" << module << filePath;
                     break;
                 }
             }
-            if (existsModule == false) {
-                // moduleList.prepend(directory);
-                QString filePath = fileInfo.filePath();
-                moduleList.prepend(filePath);
-                selectModuleList.append(filePath);
+            if (currentModule.size() == 0) {
+                currentModule = filePath;
+                moduleList.prepend(currentModule);
             }
-            selectModuleList.append(directory);
+            selectModuleList.append(currentModule);
+            // bool editState = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeDoFileSave).toBool();
+            // qDebug() << "FileInfo   :" << editState << filePath;
+            // qDebug() << "ModuelInfo :" << currentModule;
             break;
         }
         case ivis::common::ViewTypeEnum::ExcelTypeNew: {
@@ -1205,7 +1240,7 @@ void ControlExcel::slotTestCaseCompleted(const int& type, const bool& sheetReloa
         // 이후 AMS - Event 시트에서 데이터 자동완성 화면 클릭시 Air_Bag_CV 의 자동완성이 표시됨
         // ExcelUtil::isCurrentCellText() 함수 내부에서 ExcelData::instance().data()->getSheetData() 사용하여서 문제 발생
         // 수정 : GenTC 완료후 ControlExcel 내부에 저장되어 있는 Property 로 ExcelData::instance().data()->setSheetData() 업데이트
-        updateSheetDataToExcelData();
+        updateSheetDataToExcelData(false, 0, QVariantList());
     }
 }
 
@@ -1360,7 +1395,7 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTest: {
-#if 1
+#if 0
             SignalDataManager::instance().data()->testCode();
 #endif
 #if 0
@@ -1382,6 +1417,25 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Fail");
             ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Error");
             ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "TEST");
+#endif
+#if 1
+            int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
+            int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
+
+            startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConstants;
+            endIndex = startIndex + 1;
+
+            ExcelDataManager::instance().data()->reloadExcelData();
+            int index = 0;
+            for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
+                QStringList tcNameList = ExcelDataManager::instance().data()->isTCNameDataList(sheetIndex, false);
+                for (const auto& tcName : tcNameList) {
+                    QStringList resultList = ExcelDataManager::instance().data()->isResultDataList(sheetIndex, tcName);
+                    for (const auto& resultName : resultList) {
+                        // qDebug() << index++ << ". Info :" << tcName << resultName;
+                    }
+                }
+            }
 #endif
             break;
         }

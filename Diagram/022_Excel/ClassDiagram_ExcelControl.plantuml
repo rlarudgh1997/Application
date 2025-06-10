@@ -60,7 +60,6 @@ class ControlExcel {
     -bool writeExcelFile(const QVariant& filePath)
     -bool writeSheetInfo(const QVariant& filePath)
     -QString pythonCall(const bool& readFile, const QVariant& filePath)
-    -bool isCheckPythonLibrary()
     -bool openExcelFile(const QVariant& filePath)
     -void loadExcelFile(const int& eventType)
     -void saveExcelFile(const bool& saveAs)
@@ -82,5 +81,7 @@ HandlerExcel <-- ControlExcel : create, init, connect
 ControlExcel <--> ConfigSetting : read, write
 ControlExcel <.. ControlManager : create, init
 ControlExcel <--> Popup : draw popup
-
+ControlExcel -|> ExcelData : create, setData
+ControlExcel -|> TestCase : create, start, sstop
+ControlExcel <.. TestCase : emit signal
 @enduml

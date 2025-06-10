@@ -1399,73 +1399,78 @@ p, li { white-space: pre-wrap; }
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="SelectRadio2">
-    <widget class="QWidget" name="verticalWidget" native="true">
+   <widget class="QWidget" name="SelectValue">
+    <widget class="QWidget" name="SelectValueWidget" native="true">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>500</width>
-       <height>230</height>
+       <width>300</width>
+       <height>100</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="SelectValueWidget_">
       <item>
-       <widget class="QPushButton" name="SelectRadioOK2">
-        <property name="text">
-         <string>OK</string>
+       <widget class="QSpinBox" name="SelectValueSpinBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_01">
-        <property name="text">
-         <string>RadioButton</string>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_02">
-        <property name="text">
-         <string>RadioButton</string>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_03">
-        <property name="text">
-         <string>RadioButton</string>
+        <property name="wrapping">
+         <bool>false</bool>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_04">
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_05">
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_06">
-        <property name="text">
-         <string>RadioButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="SelectRadioButton_07">
-        <property name="enabled">
+        <property name="frame">
          <bool>true</bool>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::UpDownArrows</enum>
+        </property>
+        <property name="correctionMode">
+         <enum>QAbstractSpinBox::CorrectToPreviousValue</enum>
+        </property>
+        <property name="keyboardTracking">
+         <bool>true</bool>
+        </property>
+        <property name="showGroupSeparator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="suffix">
+         <string/>
+        </property>
+        <property name="prefix">
+         <string>Docker Count : </string>
+        </property>
+        <property name="maximum">
+         <number>30</number>
+        </property>
+        <property name="stepType">
+         <enum>QAbstractSpinBox::DefaultStepType</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="SelectValueOK">
         <property name="text">
-         <string>RadioButton</string>
+         <string>OK</string>
         </property>
        </widget>
       </item>

@@ -50,13 +50,12 @@ TestCase::~TestCase() {
 #endif
 }
 
-bool TestCase::start(const QStringList& arguments, const QFileInfo& fileInfo) {
+bool TestCase::start(const QStringList& arguments) {
     if (parsingOptions(arguments)) {
         system("clear");
         drawTerminalMenu(ExcuteTypeHelpMode, QStringList());
         return false;
     }
-    setOpenFile(fileInfo);
     ConfigSetting::instance().data()->writeConfig(ConfigInfo::ConfigTypeGenerateStart, true);
 
 #if defined (USE_TEST_CASE_THREAD)
@@ -218,6 +217,7 @@ int TestCase::excuteTestCase(const int& excuteType) {
             } else {
                 nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeExit);
                 // nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeParsingModule);
+                text = QString("Parsing failed.");
             }
             break;
         }
@@ -227,6 +227,7 @@ int TestCase::excuteTestCase(const int& excuteType) {
             } else {
                 nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeExit);
                 // nextType = (graphicsMode) ? (ExcuteTypeFailed) : (ExcuteTypeParsingModule);
+                text = QString("Excel open failed.");
             }
             break;
         }
@@ -752,7 +753,7 @@ void TestCase::writeSheetData(const QList<QVariantList>& sheetDataList) {
 
 bool TestCase::openExcelFile() {
     QStringList remainingModules = getRemainingModules();
-    QString currentModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : ("");
+    QString currentModule = (remainingModules.size() > 0) ? (remainingModules.at(0)) : (QString());
 
     if (currentModule.size() == 0) {
         qDebug() << "Fail to select module size 0 :" << remainingModules;
@@ -760,41 +761,37 @@ bool TestCase::openExcelFile() {
     }
 
     QString newModule = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeNewModule).toString();
+    QString editingModule = getEditingModule();
+    auto moduleList = readModuleList();  // QMap<QString, QString> Module : QMap<ModuleName, ModulePath>
     QList<QVariantList> sheetDataList;
     QString filePath;
     bool openState = false;
-    QFileInfo openFileInfo = getOpenFile();
 
     if (currentModule == newModule) {
-        filePath = ivis::common::APP_PWD() + "/" + currentModule + ".xlsx";    // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
-        sheetDataList = readSheetData();
+        // 파일 저장 하지 않은 경우 임시 엑셀 파일 지정
+        filePath = QString("%1/%2.xlsx").arg(ivis::common::APP_PWD()).arg(currentModule);
+        sheetDataList = readSheetData(false);
+    } else if (currentModule == editingModule) {
+        // 파일 Open - 편집중인 상태
+        filePath = moduleList[editingModule];
+        if (filePath.size() == 0) {
+            filePath = editingModule;
+        }
+        sheetDataList = readSheetData(true);
+        setEditingModule(QString());
     } else {
-        auto moduleList = readModuleList();
         for (const auto& module : moduleList.keys()) {
             if (currentModule == module) {
-                filePath = getModuleList(module);
+                filePath = moduleList[module];  // Module - Excel Path
                 break;
             }
         }
         if (filePath.size() == 0) {
-            filePath = currentModule;    // ./Temp/test.xlsx 인 경우 TestCast Start 시 파일 경로 넘겨주는거 그대로 사용
+            // 파일 Open 인 경우 파일 경로 그래도 사용함
+            filePath = currentModule;
         }
-
-        QString openFilePath = openFileInfo.filePath();
-        if ((openFilePath.size() > 0) && (filePath != openFilePath)) {
-            // 엑셀 파일 오픈한 경로와 cv.json 파일에서 모듈정보, 파일경로 정보로 구성한 파일경로가 다른경우
-            // -> 해당 조건인 경우 파일 오픈한 경로를 사용하도록
-            filePath = openFilePath;
-            setOpenFile(QFileInfo());
-        }
-
-        if (currentModule == getEditingModule()) {    // 엑셀 파일 열어서 편집중인 상태에서 GenTC 실행시
-            setEditingModule("");
-            sheetDataList = readSheetData(true);
-        } else {
-            openState = true;
-            sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
-        }
+        sheetDataList = ExcelUtil::instance().data()->openExcelFile(filePath);
+        openState = true;
     }
 
     bool result = (sheetDataList.size() > 0);
@@ -806,14 +803,7 @@ bool TestCase::openExcelFile() {
     qDebug() << "\t Selected Modules   :" << getSelectModules();
     qDebug() << "\t Remaining Modules  :" << getRemainingModules();
     qDebug() << "\t Gen TC Module      :" << currentModule.toLatin1().data();
-    if (openState) {
-        qDebug() << "\t File Open          :" << filePath.toLatin1().data();
-        qDebug() << "\t                    :" << openFileInfo.filePath().toLatin1().data();
-        qDebug() << "\t                    :" << openFileInfo.path().toLatin1().data();
-        qDebug() << "\t                    :" << openFileInfo.fileName().toLatin1().data();
-    } else {
-        qDebug() << "\t Read Sheet         :" << currentModule;
-    }
+    qDebug() << "\t File Open          :" << openState << filePath.toLatin1().data();
     qDebug() << "\t Result             :" << result;
     qDebug() << "\t Save TC File       :" << filePath.toLatin1().data();
     qDebug() << (QString(120, '<').toLatin1().data());

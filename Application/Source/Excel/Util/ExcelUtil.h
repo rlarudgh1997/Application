@@ -100,7 +100,9 @@ public:
     QString isValidMaxValue(const QString& signalName, const int& dataType, const int& keywordType, const QStringList& inputData,
                        const QStringList& valueEnum);
     // bool isExistsExcelSheet();
+#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
     bool isCheckPythonLibrary();
+#endif
     QString pythonCall(const bool& readFile, const QString& filePath);
     void writeExcelSheet(const QString& filePath, const bool& convert);
     QList<QVariantList> openExcelFile(const QString& filePath);

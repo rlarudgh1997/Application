@@ -132,6 +132,7 @@ public:
         PropertyTypeTerminalPathInfo,
         PropertyTypeTerminalBufferSize,
         PropertyTypeManualCycleMode,
+        PropertyTypeMultiDockerCount,
 
         PropertyTypeTestReport,
         PropertyTypeKey,
@@ -277,6 +278,7 @@ public:
         EventTypeGenerateCancel,
         EventTypeTerminalCommand,
         EventTypeTerminalSetPath,
+        EventTypeSelectDockerCount,
 
         EventTypeTest = 3000,
 

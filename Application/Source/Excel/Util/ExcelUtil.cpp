@@ -89,7 +89,11 @@ QString ExcelUtil::isModuleFilePath(const QString& path, const QString& module, 
 QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int& appMode, const bool& yml, const bool& toUpper) {
     const bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
     const QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+#if defined(USE_MOULE_FROM_JSON)
     const QString jsonFile = QString("%1/SFC/config/%2.json").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("platform"));
+#else
+    const QString jsonFile = QString("%1/SFC/config/%2.buildconfig").arg(sfcModelPath).arg((appModeCV) ? ("CV") : ("PV"));
+#endif
     const QByteArray jsonData = ivis::common::FileInfo::readFileByteArray(jsonFile);
     QMap<QString, QPair<QString, QString>> moduleInfo;
 
@@ -108,23 +112,33 @@ QMap<QString, QPair<QString, QString>> ExcelUtil::isModuleListFromJson(const int
     // Read : Json Data
     QJsonObject jsonObj = jsonDoc.object();
     QMap<QString, QString> modulePahtList;
+    QJsonArray fromJsonModule;
+
+#if defined(USE_MOULE_FROM_JSON)
     if (jsonObj.contains("SFCConfiguration") && jsonObj["SFCConfiguration"].isObject()) {  // Read : SFCConfiguration
         QJsonObject sfcConfig = jsonObj["SFCConfiguration"].toObject();
         if (sfcConfig.contains("SFCs") && sfcConfig["SFCs"].isArray()) {  // Read : SFCs
-            for (const QJsonValue& module : sfcConfig["SFCs"].toArray()) {
-                if (module.isString()) {
-                    QString moduleName = (toUpper) ? (module.toString().toUpper()) : (module.toString());
-                    QString modulePath;
-                    if (appModeCV) {
-                        modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
-                    } else {
-                        // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(""));  // 폴더
-                        // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".yml"));  // *.yml
-                        modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".xlsx"));  // *.xlsx
-                    }
-                    modulePahtList[moduleName] = modulePath;
-                }
+            fromJsonModule = sfcConfig["SFCs"].toArray();
+        }
+    }
+#else
+    if (jsonObj.contains("BuildConfig") && jsonObj["BuildConfig"].isArray()) {  // Read : BuildConfig
+        fromJsonModule = jsonObj["BuildConfig"].toArray();
+    }
+#endif
+
+    for (const auto& module : fromJsonModule) {
+        if (module.isString()) {
+            QString moduleName = (toUpper) ? (module.toString().toUpper()) : (module.toString());
+            QString modulePath;
+            if (appModeCV) {
+                modulePath = QString("%1/SFC/CV/%2").arg(sfcModelPath).arg(module.toString());
+            } else {
+                // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(""));  // 폴더
+                // modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".yml"));  // *.yml
+                modulePath = isModuleFilePath(sfcModelPath + "/SFC/", module.toString(), QString(".xlsx"));  // *.xlsx
             }
+            modulePahtList[moduleName] = modulePath;
         }
     }
 
@@ -880,8 +894,8 @@ QString ExcelUtil::isValidMaxValue(const QString& signalName, const int& dataTyp
 //     return false;
 // }
 
-bool ExcelUtil::isCheckPythonLibrary() {
 #if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
+bool ExcelUtil::isCheckPythonLibrary() {
     bool openpyxl = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibOpenpyxl).toBool();
     bool pandas = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeCheckLibPandas).toBool();
     bool checkLib = ((openpyxl) && (pandas));
@@ -907,10 +921,8 @@ bool ExcelUtil::isCheckPythonLibrary() {
     }
     qDebug() << "Check lib - openpyxl :" << openpyxl << ", pandas :" << pandas;
     return checkLib;
-#else
-    return true;
-#endif
 }
+#endif
 
 QString ExcelUtil::pythonCall(const bool& readFile, const QString& filePath) {
     ivis::common::CheckTimer checkTimer;
@@ -1065,9 +1077,11 @@ void ExcelUtil::writeExcelSheet(const QString& filePath, const bool& convert) {
 }
 
 QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
+#if defined(USE_PYTHON_LIB_CHECK_READ_WRITE)
     if (isCheckPythonLibrary() == false) {
         return QList<QVariantList>();
     }
+#endif
 
     QString dirPath = pythonCall(true, filePath);
     if (dirPath.size() == 0) {

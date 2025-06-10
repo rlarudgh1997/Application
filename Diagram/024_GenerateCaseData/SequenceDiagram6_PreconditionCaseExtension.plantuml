@@ -1,0 +1,41 @@
+@startuml
+
+actor User order 10
+
+participant ControlManager order 20
+participant GenerateCaseData order 30
+participant ExcelDataManager order 40
+participant ExcelUtil order 50
+participant QJsonObject order 60
+
+== Precondition Case Extension ==
+
+User -> ControlManager : 요청 - Generate TestCase
+
+activate ControlManager
+ControlManager -> GenerateCaseData : excuteGenerateCaseData()
+deactivate ControlManager
+
+activate GenerateCaseData
+
+loop for each TCName/Result/Case
+    GenerateCaseData -> ExcelDataManager : isInputDataList()
+
+    alt InputData에 [Empty] 포함
+        GenerateCaseData -> ExcelUtil : isDescriptionPreconditionCount()
+        GenerateCaseData -> GenerateCaseData : setPreconditionValues()
+
+        activate GenerateCaseData
+        GenerateCaseData -> GenerateCaseData : getCaseInfoJson()
+        GenerateCaseData -> GenerateCaseData : getPreconditionStr()
+        GenerateCaseData -> GenerateCaseData : getTcLine()
+        GenerateCaseData -> GenerateCaseData : insert into Cases JSON
+        deactivate GenerateCaseData
+    else
+        GenerateCaseData -> GenerateCaseData : skip precondition handling
+    end
+end
+
+deactivate GenerateCaseData
+
+@enduml

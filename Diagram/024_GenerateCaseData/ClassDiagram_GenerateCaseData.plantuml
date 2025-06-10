@@ -1,0 +1,67 @@
+@startuml
+
+class QObject
+
+class GenerateCaseData {
+    - mCaseSizeMap : QMap<QString, int>
+    - mIntermediateDefaultJson : QJsonObject
+    - mAllCaseJson : QJsonObject
+    - mTotalTestCaseCount : int
+
+    + instance() : QSharedPointer<GenerateCaseData>&
+    + excuteGenerateCaseData() : QString
+
+    + setGenerateCaseDataState(QString)
+    + getGenerateCaseDataState() : QString
+    + setCheckedTestCaseCount(int)
+    + getCheckedTestCaseCount() : int
+    + setCompletedCaseCount(int)
+    + getCompletedCaseCount() : int
+
+    - genCase() : bool
+    - isGenerateStop(QString) : bool
+    - saveHistory() : void
+    - eraseMergeTag(QString&) : void
+    - appendCase(...) : void
+    - appendOtherCaseJson(...) : void
+    - getSignalInfoString(...) : QString
+    - callPython(QString) : void
+    - readJson(QString) : QJsonObject
+    - printJson(QJsonObject) : void
+    - appendCaseJson(...) : void
+    - toJsonArray<T>(QList<T>) : QJsonArray
+    - getGenType() : QString
+    - getConfigSig(...) : QJsonObject
+    - getOutputSig(...) : QJsonObject
+    - saveJsonToFile(QJsonObject, QString) : void
+    - removeMatchingKeys(QJsonObject&, QJsonObject) : void
+    - getCaseInfoJson(...) : QJsonObject
+    - getFlowKeywordIdxMap(QJsonObject) : QMap<QString, int>
+    - getConfigIdxMap(QJsonObject) : QMap<QString, int>
+    - getConfigSigHexEnumMap(QJsonObject) : QMap<QString, QMap<QString, QString>>
+    - qJsonArrayToQStringList(QJsonArray) : QStringList
+    - getReplaceValueAtList(QStringList, int, QString) : QStringList
+    - getPreconditionStr(...) : QString
+    - getFinalStateStr(...) : QString
+    - getInputStr(QString, QString) : QString
+    - getTcLine(QString, QString, QString) : QString
+    - getFinalStateLine(unsigned long long, QString) : QString
+    - getInitStr(QJsonObject) : QString
+    - checkNegativeAndPositive(...) : void
+    - eraseNotUsefulTC(...) : void
+    - removeTcByCnt(QJsonObject&, QString, int) : void
+    - copyQJsonArrayUpToIndex(QJsonArray, int) : QJsonArray
+    - setPreconditionValues(...) : void
+    - applyPrecondition(QJsonObject&, int) : void
+    - setConfigTag(...) : void
+    - applyConfig(QString, QString, QJsonObject&, bool) : void
+    - getConfigTagStr(...) : QString
+    - cleanIntermediateDataFromJson(...) : void
+    - appendManualTcToJson() : void
+    - setTotalTcCnt() : void
+    - printCaseSize(QString) : void
+}
+
+GenerateCaseData -|> QObject
+
+@enduml

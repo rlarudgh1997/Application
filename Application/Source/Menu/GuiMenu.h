@@ -58,6 +58,7 @@ private:
     void updateDialogViewFileList(const int& type);
     void updateDialogViewLogInfo(const bool& show);
     void updateDialogViewFileInfo();
+    void updateDialogSelectValue();
 
     void updateMenuFile();
     void updateMenuEdit();

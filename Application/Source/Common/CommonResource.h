@@ -80,8 +80,6 @@
 #define STRING_TEST_RESULT_COVERAGE QString("Test Coverage")
 #define STRING_TEST_RESULT_COVERAGE_TIP QString("<b>Edit --></b> Test Coverage Tip")
 #define STRING_DOCKER QString("Docker")
-#define STRING_MULTI_DOCKER QString("Multi Docker")
-#define STRING_MULTI_DOCKER_TIP QString("Multi docker start")
 #define STRING_HELP QString("Help")
 #define STRING_ABOUT QString("About")
 #define STRING_ABOUT_TIP QString("Show the application's About box")
@@ -152,6 +150,10 @@
 
 #define STRING_POPUP_TEST_CASE_RUNNING QString("Gen TC")
 #define STRING_POPUP_TEST_CASE_RUNNING_TIP QString("Gen TC is running.")
+
+#define STRING_POPUP_RUNNING_IN_DOCKER QString("Running in docker")
+#define STRING_POPUP_RUNNING_IN_DOCKER_TIP QString("Cannot run multi docker because it is running in docker.")
+#define STRING_POPUP_RUNNING_IN_DOCKER_TIP_PV QString("Multi-Docker is not supported in PV Mode.")
 
 
 // =============================================================================================================

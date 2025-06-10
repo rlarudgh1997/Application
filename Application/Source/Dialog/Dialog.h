@@ -122,6 +122,7 @@ public:
         DialogTypeAutoComplete,
         DialogTypeGenType,
         DialogTypeAutoCompleteNormal,
+        DialogTypeSelectValue,
     };
 
 private:
@@ -137,7 +138,7 @@ private:
         DisplayTypeViewLog,
         DisplayTypeAutoCompleteNormal,
         DisplayTypeAutoComplete,
-        DisplayTypeSelectRadio2,
+        DisplayTypeSelectValue,
         DisplayTypeMax,
     };
     enum {
@@ -170,6 +171,7 @@ private:
     void connectViewLog(const bool& state);
     void connectAutoComplete(const bool& state);
     void connectAutoCompleteNormal(const bool& state);
+    void connectSelectValue(const bool& state);
 
     QRect updateMainRect();
     void updateDisplay(const int& displayType, const QString& title);
@@ -192,6 +194,7 @@ private:
     bool updateViewLog(const QVariantList& info);
     bool updateAutoComplete(const QVariantList& info);
     bool updateAutoCompleteNormal(const QVariantList& info);
+    bool updateSelectValue(const QVariantList& info);
 
 #if defined(USE_DIALOG_KEY_EVENT)
 protected:
@@ -209,7 +212,7 @@ signals:
     void signalLogDisplayClicked(const bool& hide, const bool& detail);
     void signalViewLogClicked(const bool& close);
     void signalAutoCompleteSelected(const QString& text);
-
+    void signalSelectValue(const int& value);
     void signalUpdateThread(const QStringList& detailLog);
 
 private:

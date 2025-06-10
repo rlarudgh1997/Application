@@ -454,44 +454,6 @@ void ControlMenu::updateGenTCInfo(const QVariantList& infoList) {
     updateTestResultInfo(resultType, totalCount, infoData, false);
 }
 
-bool ControlMenu::isRunningInDocker() {
-    QFile file("/proc/1/cgroup");
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            QString line = in.readLine();
-            if (line.contains("docker") || line.contains("kubepods") || line.contains("containerd")) {
-                return true;
-            }
-        }
-    }
-    return QFile::exists("/.dockerenv");
-}
-
-void ControlMenu::startMultiDockerRunTC() {
-    bool runningInDocker = isRunningInDocker();
-
-    qDebug() << "startMultiDockerRunTC :" << runningInDocker;
-
-#if 0
-    if (runningInDocker) {
-        int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
-        bool appModeCV = (appMode == ivis::common::AppModeEnum::AppModeTypeCV);
-        QString option = QString(() ? (" -d") : (""));
-        QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
-        QString script =
-            QString("%1/../validator/multi-docker-test/multi-docker-test.sh -t %2%3")
-                    .arg(sfcModelPath)
-                    .arg((appModeCV) ? ("CV") : ("PV"));
-                    .arg((appModeCV) ? ("-d") : (""));
-
-        // ./multi-docker-test.sh -t CV -d 1~max
-    } else {
-    }
-#endif
-}
-
 void ControlMenu::startWatcherFile(const int& type, const QString& watcherFile, const int& totalCount) {
     if (QFile::exists(watcherFile)) {
         bool deleteResult = QFile::remove(watcherFile);
@@ -865,6 +827,43 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
     return count;
 }
 
+void ControlMenu::startRunTCMultiDocker(const int& dockerCount) {
+    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, dockerCount);
+
+    QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QString workingDir = QString("%1/../validator/multi-docker-test").arg(sfcModelPath);
+    workingDir = QDir(workingDir).absolutePath();    // 심볼릭 링크, /../ 등의 폴더를 리얼 폴더로 변경
+    if ((workingDir.isEmpty()) || (QDir::setCurrent(workingDir) == false)) {
+        qDebug() << "Fail to change directory :" << workingDir;
+        return;
+    }
+
+    QString option = (dockerCount == 0) ? (QString()) : (QString(" -d %1").arg(dockerCount));
+    QString command = QString("./multi-docker-test.sh -t CV%1").arg(option);
+    bool result = system(command.toLatin1());
+
+    qDebug() << "startRunTCMultiDocker :" << result << workingDir << command;
+}
+
+void ControlMenu::updateMultiDockerCount() {
+    bool runningInDocker = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeRunningInDocker).toBool();
+    int appMode = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeAppMode).toInt();
+    bool appModePV = (appMode == ivis::common::AppModeEnum::AppModeTypePV);
+
+    if ((runningInDocker) || (appModePV)) {
+        QVariant popupData;
+        QVariantList textInfo = QVariantList({STRING_POPUP_RUNNING_IN_DOCKER, STRING_POPUP_RUNNING_IN_DOCKER_TIP});
+        if (appModePV) {
+            textInfo = QVariantList({STRING_POPUP_RUNNING_IN_DOCKER, STRING_POPUP_RUNNING_IN_DOCKER_TIP_PV});
+        }
+        ivis::common::Popup::drawPopup(ivis::common::PopupType::RunningInDockerError, isHandler(), popupData, textInfo);
+        return;
+    }
+
+    int dockerCount = getData(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount).toInt();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, dockerCount, true);
+}
+
 void ControlMenu::slotControlUpdate(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::ControlUpdateTypeEnum::ControlUpdateTypeScriptRunnigCompleted: {
@@ -1010,8 +1009,12 @@ void ControlMenu::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
+        case ivis::common::EventTypeEnum::EventTypeSelectDockerCount: {
+            startRunTCMultiDocker(value.toInt());
+            break;
+        }
         case ivis::common::EventTypeEnum::EventTypeRunMultiDocker: {
-            startMultiDockerRunTC();
+            updateMultiDockerCount();
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeRunSelectModule: {

@@ -21,6 +21,7 @@ public:
 
 private:
     void controlConnect(const bool& graphicsMode = true);
+    bool isRunningInDocker();
 
 protected:
     void mousePressEvent(QMouseEvent* mouseEvent) override;

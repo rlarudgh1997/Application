@@ -81,8 +81,8 @@ public:
     QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
     // QMap<int, QPair<QString, SignalData>> isDependSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list);
     bool isExcelDataValidation();
-    QStringList isSignalListInfo(const bool& sfcSignal);
     void testCode(const QVariantList& arg = QVariantList());
+    // QStringList isSignalListInfo(const bool& sfcSignal);
 
 private:
     explicit SignalDataManager();
@@ -117,7 +117,7 @@ private:
                                          const QStringList& inputData);
     QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo,
                                                                    const QStringList& signalList);
-    QStringList extractMatchingSignal(const bool& sfcSignal, const QString& filePath, const QString& prefix);
+    // QStringList extractMatchingSignal(const bool& sfcSignal, const QString& filePath, const QString& prefix);
 };
 
 #endif  // SIGNAL_DATA_MANAGER_H

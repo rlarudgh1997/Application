@@ -1,0 +1,42 @@
+@startuml
+
+skinparam defaultFontName "Noto Sans CJK KR"
+actor User order 10
+
+participant ControlGui order 20
+participant ControlManager order 30
+participant GenerateCaseData order 40
+participant ExcelDataManager order 50
+participant SignalDataManager order 60
+participant PythonScript order 70
+participant CaseDataWriter order 80
+
+== 시작: TC 생성 요청 ==
+
+User -> ControlGui : 클릭 "TC 생성"
+ControlGui -> ControlManager : emit generateTestCaseRequested()
+ControlManager -> GenerateCaseData : excuteGenerateCaseData()
+
+== TC 생성 로직 ==
+
+GenerateCaseData -> ExcelDataManager : 시트/TC 정 보 조 회
+GenerateCaseData -> SignalDataManager : Signal 정 보 조 회
+
+loop 각 Sheet / TCName / Result / Case
+    GenerateCaseData -> PythonScript : callPython() - 조합 생성
+    PythonScript --> GenerateCaseData : JSON 반환
+
+    GenerateCaseData -> GenerateCaseData : AppendCase 처리
+    GenerateCaseData -> GenerateCaseData : OtherCase 처리
+    GenerateCaseData -> GenerateCaseData : Positive/Negative 분기 처리
+    GenerateCaseData -> GenerateCaseData : 유효 조합 수 기반 TC 제거
+    GenerateCaseData -> GenerateCaseData : Precondition 필터링
+    GenerateCaseData -> GenerateCaseData : Config 여부 판단 및 설정
+end
+
+== JSON File Save ==
+
+GenerateCaseData -> CaseDataWriter : Send Generated TC Data - genTestCaseFile(mAllCaseJson, count)
+GenerateCaseData -> FileSystem : Save JSON
+
+@enduml

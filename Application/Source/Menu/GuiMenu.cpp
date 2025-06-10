@@ -177,6 +177,9 @@ void GuiMenu::updateDrawDialog(const int& dialogType, const QVariantList& info) 
             } else {
             }
         });
+        connect(mDialog.data(), &Dialog::signalSelectValue, [=](const int& value) {
+            createSignal(ivis::common::EventTypeEnum::EventTypeSelectDockerCount, value);
+        });
     }
 
     if (dialogType != Dialog::DialogTypeInvalid) {
@@ -382,6 +385,15 @@ void GuiMenu::updateDialogViewFileInfo() {
     updateDrawDialog(Dialog::DialogTypeViewLogFileInfo, info);
 }
 
+void GuiMenu::updateDialogSelectValue() {
+    int value = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount).toInt();
+    QVariantList info = QVariantList({
+        QString("Multi Docker Count"),
+        value,
+    });
+    updateDrawDialog(Dialog::DialogTypeSelectValue, info);
+}
+
 void GuiMenu::updateMenuFile() {
     connect(mGui->actionNew, &QAction::triggered,
             [=]() { createSignal(ivis::common::EventTypeEnum::EventTypeFileNew, QVariant()); });
@@ -555,6 +567,10 @@ void GuiMenu::slotPropertyChanged(const int& type, const QVariant& value) {
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeTestResultInfo: {
             updateDialogTestResultInfo();
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount: {
+            updateDialogSelectValue();
             break;
         }
         case ivis::common::PropertyTypeEnum::PropertyTypeEnterScriptText: {

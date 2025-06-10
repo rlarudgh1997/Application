@@ -1,0 +1,32 @@
+@startuml
+
+actor User order 10
+
+participant GenerateCaseData order 20
+participant ExcelUtil order 30
+participant "AllCaseJson" as QJsonObject order 40
+
+== 유효 조합 수 기반 TC 제거 ==
+
+User -> GenerateCaseData : excuteGenerateCaseData()
+
+GenerateCaseData -> ExcelUtil : isDescriptionValueCount()
+ExcelUtil --> GenerateCaseData : maxTriggerCnt
+
+loop for each Case (Positive/Negative)
+    GenerateCaseData -> QJsonObject : getCaseJson()
+
+    GenerateCaseData -> QJsonObject : get "cases" object
+    GenerateCaseData -> QJsonObject : get "InputSignalList" object
+    GenerateCaseData -> QJsonObject : count = InputSignalList.Signal.AllValues.size()
+
+    alt count < maxTriggerCnt
+        GenerateCaseData -> GenerateCaseData : skip (유지)
+    else count >= maxTriggerCnt
+        GenerateCaseData -> GenerateCaseData : copyQJsonArrayUpToIndex(cases, maxTriggerCnt)
+        GenerateCaseData -> QJsonObject : replace "cases" with trimmed version
+        GenerateCaseData -> QJsonObject : update CaseSize = maxTriggerCnt
+    end
+end
+
+@enduml

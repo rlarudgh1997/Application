@@ -36,6 +36,7 @@ enum class PopupType {
     CellSelectionError,
     TestCaseComplete,
     TestCaseRunning,
+    RunningInDockerError,
 
     Exit,
     New,
@@ -98,6 +99,7 @@ public:
             case PopupType::RunPathError:
             case PopupType::ModuleSelectError:
             case PopupType::TestCaseRunning:
+            case PopupType::RunningInDockerError:
             case PopupType::CellSelectionError: {
                 QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
