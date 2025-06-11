@@ -1,17 +1,20 @@
 @startuml
 
 actor User order 10
-
+participant TestCase order 15
 participant GenerateCaseData order 20
 participant ExcelUtil order 30
-participant "AllCaseJson" as QJsonObject order 40
+participant "mAllCaseJson" as QJsonObject order 40
 
-== 유효 조합 수 기반 TC 제거 ==
+== 유효 조합 수 이외 TC 제거 ==
+User -> TestCase : 요청 - Generate TestCase
 
-User -> GenerateCaseData : excuteGenerateCaseData()
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
 
 GenerateCaseData -> ExcelUtil : isDescriptionValueCount()
-ExcelUtil --> GenerateCaseData : maxTriggerCnt
+ExcelUtil --> GenerateCaseData : return maxTriggerCnt
 
 loop for each Case (Positive/Negative)
     GenerateCaseData -> QJsonObject : getCaseJson()

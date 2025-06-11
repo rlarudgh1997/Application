@@ -1,29 +1,43 @@
 @startuml
 
 actor User order 10
-
+participant TestCase order 15
 participant GenerateCaseData order 20
 participant ExcelDataManager order 30
-participant "data()" as ExcelData order 35
-participant "CaseJson" as QJsonObject order 40
+participant "mAllCaseJson" as QJsonObject order 60
 
-== Config Signal Detection and Setup ==
+== Config Signal Detection and Check Config True ==
+User -> TestCase : 요청 - Generate TestCase
 
-User -> GenerateCaseData : excuteGenerateCaseData()
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
 
 loop for each TCName / Result / Case
     GenerateCaseData -> GenerateCaseData : setConfigTag(tcName, ..., configName, ...)
+    GenerateCaseData -> QJsonObject : get list of TC combinations for Case
+    QJsonObject --> GenerateCaseData : return list of TC combinations
+    GenerateCaseData -> QJsonObject : get names and values of input signals for Case
+    QJsonObject --> GenerateCaseData : return list of input siganls
 
-    activate GenerateCaseData
-    GenerateCaseData -> ExcelDataManager : instance()
-    ExcelDataManager -> ExcelData : data()
-    GenerateCaseData -> ExcelData : isValidConfigCheck(tcName, configName)
-    ExcelData --> GenerateCaseData : true / false
-
-    alt return == true
-        GenerateCaseData -> QJsonObject : caseJson["Config"] = true
-    else
-        GenerateCaseData -> QJsonObject : caseJson["Config"] = false
+    GenerateCaseData -> GenerateCaseData : setConfigTag()
+    alt config signal 이 list of input siganls 에 존재하는 경우
+        loop for each list of TC combinations
+        activate GenerateCaseData
+        GenerateCaseData -> GenerateCaseData : applyConfig()
+        GenerateCaseData -> GenerateCaseData : getConfigTagStr()
+        GenerateCaseData -> ExcelDataManager : isValidConfigCheck()
+        ExcelDataManager --> GenerateCaseData : return config state(true / false)
+        alt config state == true
+            GenerateCaseData -> QJsonObject : attach "config: true"
+        else config state == false
+            GenerateCaseData -> QJsonObject : attach "config: false"
+        end
+        GenerateCaseData -> GenerateCaseData : Replace original Cases JSON with new extended Cases JSON
+        deactivate GenerateCaseData
+        end
+    else config signal 이 list of input siganls 에 존재하지 않는 경우
+        GenerateCaseData -> GenerateCaseData : skip config handling
     end
     deactivate GenerateCaseData
 end

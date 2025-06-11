@@ -1,14 +1,23 @@
 @startuml
 
-participant GenerateCaseData
-participant "AllCaseJson" as QJsonObject
-participant PositiveFinalStates
-participant NegativeCaseJson
+actor User order 10
+participant TestCase order 15
+participant GenerateCaseData order 20
+participant "mAllCaseJson" as QJsonObject order 30
+participant PositiveCaseJson order 40
+participant NegativeCaseJson order 50
 
 == Positive&Negative Case Filtering Logic ==
+User -> TestCase : 요청 - Generate TestCase
 
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
+activate GenerateCaseData
 GenerateCaseData -> QJsonObject : get Positive Case (genType=Positive)
-GenerateCaseData -> QJsonObject : extract FinalStateCases
+QJsonObject --> GenerateCaseData : return Positive Case Json
+GenerateCaseData -> PositiveCaseJson : extract FinalStateCases
+PositiveCaseJson --> GenerateCaseData : return Positive FinalStateCases
 note right of QJsonObject
   FinalStateCases = {
     "Idx[0], 0x1, 0x2, 0x3" : "TCLine1",
@@ -17,12 +26,15 @@ note right of QJsonObject
 end note
 
 GenerateCaseData -> QJsonObject : get Negative Case (genType=Negative)
+QJsonObject --> GenerateCaseData : return Negative Case Json
 GenerateCaseData -> QJsonObject : extract Cases + InputEmptyList
+NegativeCaseJson --> GenerateCaseData : return Cases + InputEmptyList
 
 == Negative Case 정제 ==
-GenerateCaseData -> GenerateCaseData : removeMatchingKeysNegative()
+GenerateCaseData -> GenerateCaseData : positive/negative비교 진행\nremoveMatchingKeysNegative()
+activate GenerateCaseData
 
-alt 동일한 FinalState가 Positive에 존재
+alt Negative Cases와 동일한 FinalState가 Positive에 존재
     GenerateCaseData -> NegativeCaseJson : remove TCLine
     note right of NegativeCaseJson
       동일 FinalState로 인해 Negative TC 제거됨
@@ -30,5 +42,7 @@ alt 동일한 FinalState가 Positive에 존재
 else Not Exist
     note over GenerateCaseData, NegativeCaseJson : No Operation
 end
+deactivate GenerateCaseData
+deactivate GenerateCaseData
 
 @enduml

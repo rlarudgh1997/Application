@@ -24,6 +24,24 @@ setPermissions() {
     chmod -R 755 "$BASE_DIR"
 }
 
+# Check IP address (true : 0, false : 1)
+getIPAddress() {
+    local ip_address="$1"
+
+    # 정규 표현식: IPv4 주소 확인
+    if [[ $ip_address =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+        # 각 옥텟 값이 0~255 범위인지 확인
+        IFS='.' read -r o1 o2 o3 o4 <<< "$ip_address"
+        if (( o1 >= 0 && o1 <= 255 && o2 >= 0 && o2 <= 255 && o3 >= 0 && o3 <= 255 && o4 >= 0 && o4 <= 255 )); then
+        	# echo "유효한 IP 주소입니다: $ip_address"
+            return 0  # true
+        fi
+    fi
+
+	# echo "유효하지 않은 IP 주소입니다: $ip_address"
+    return 1  # false
+}
+
 # Set environment variables based on platform
 setEnvironments() {
     local env=$1
@@ -35,11 +53,10 @@ setEnvironments() {
             ;;
         xserver|xs)
             local ip_address=$2
-            echo "[Environment : Host XServer]"
-            if [ -z "$ip_address" ]; then
-                export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0.0
-            else
+            if getIPAddress "$ip_address"; then
                 export DISPLAY="$ip_address:0"
+            else
+                export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0.0
             fi
             APP_PATH="$APP_PATH/deploy_x86"
             ;;
@@ -74,13 +91,21 @@ setEnvironments() {
 runProcess() {
     local service=$1
     local app_path=$2
-    local background=$3
+    local arguments=$3
     local full_path="$app_path/$service"
 
+    local xserver=false
+    local ip_address=$arguments
+    if getIPAddress "$ip_address"; then
+        xserver=true
+    fi
+
     echo "[Process : Run]"
+    echo "    INPUT_ARG = $1, $2, $3"
     echo "    SERVICE   = $service"
     echo "    FULL_PATH = $full_path"
-    echo "    ARGUMENTS = ${ARGUMENTS[*]}"
+    echo "    ARGUMENTS = $arguments"
+    # echo "    ARGUMENTS = ${ARGUMENTS[*]}"
 
     if pgrep -x "$service" > /dev/null; then
         echo "$service is already running. Terminating it..."
@@ -90,9 +115,11 @@ runProcess() {
     echo
 
     if [ -f "$full_path" ]; then
-        if [ "$background" == "true" ]; then
-            # nohup "$full_path" > /dev/null 2>&1 &
-            nohup "$full_path" "${ARGUMENTS[@]}" > /dev/null 2>&1 &
+        if [ "$xserver" == "true" ]; then
+            nohup "$full_path" > /dev/null 2>&1 &
+        # elif [ "$background" == "true" ]; then
+        #     # nohup "$full_path" > /dev/null 2>&1 &
+        #     nohup "$full_path" s"${ARGUMENTS[@]}" > /dev/null 2>&1 &
         else
             # "$full_path" &
             "$full_path" "${ARGUMENTS[@]}" &
@@ -147,22 +174,24 @@ case "$PLATFORM" in
         setEnvironments target "$1"
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
-        runProcess "$BIN_NAME" "$APP_PATH"
+        runProcess "$BIN_NAME" "$APP_PATH" "$1"
         ;;
     xserver|xs)
         setEnvironments xserver "$1"
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
-        runProcess "$BIN_NAME" "$APP_PATH"
+        runProcess "$BIN_NAME" "$APP_PATH" "$1"
         ;;
     host|h)
         setEnvironments host "$1"
         ARGUMENTS=("$@")
         killProcess "$BIN_NAME"
-        runProcess "$BIN_NAME" "$APP_PATH"
+        runProcess "$BIN_NAME" "$APP_PATH" "$1"
         ;;
     *)
-        echo "Usage: $0 {host|h|target|t|xserver|xs} [optional arguments]"
+        echo "Usage X-Server : $0 [xserver|xs] [10.45.143.15]"
+        echo "Usage Target   : $0 [target|t]"
+        echo "Usage Host     : $0 [host|h]"
         exit 1
         ;;
 esac

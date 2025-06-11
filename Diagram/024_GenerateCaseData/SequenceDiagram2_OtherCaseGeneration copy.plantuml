@@ -2,33 +2,31 @@
 
 actor User order 10
 
-participant ControlManager order 20
+participant TestCase order 20
 participant GenerateCaseData order 30
 participant ExcelDataManager order 40
 participant SignalDataManager order 50
-participant ExcelUtil order 60
-participant ConfigSetting order 70
-participant Python order 80
+participant Python order 60
 
 == Other Case Generation ==
 
-User -> ControlManager : 요청 - Generate TestCase
+User -> TestCase : 요청 - Generate TestCase
 
-activate ControlManager
-ControlManager -> GenerateCaseData : excuteGenerateCaseData()
-deactivate ControlManager
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
 
 activate GenerateCaseData
-GenerateCaseData -> ExcelDataManager : isManualDataList()
-GenerateCaseData -> ExcelDataManager : isTCNameDataList()
-GenerateCaseData -> ExcelDataManager : isGenTypeData()
-GenerateCaseData -> ExcelDataManager : isInputDataList(..., isOther=true)
 
-loop For each TCName with empty input
+GenerateCaseData -> ExcelDataManager : isInputDataList()
+ExcelDataManager --> GenerateCaseData : return all case signal info for TC name
+
+loop For each TC name where isInputDataList() returns empty list
     GenerateCaseData -> SignalDataManager : isOtherInputSignalDataInfo()
+    SignalDataManager --> GenerateCaseData : return signal names and values for Other Case
     GenerateCaseData -> GenerateCaseData : getSignalInfoString(isOther=true)
 
-    GenerateCaseData -> Python : callPython() with OtherInput string
+    GenerateCaseData -> Python : callPython() with SignalInfoString
     activate Python
     Python -> Python : run.py
     Python -> Python : create Other JSON
@@ -36,6 +34,15 @@ loop For each TCName with empty input
     deactivate Python
 
     GenerateCaseData -> GenerateCaseData : removeMatchingKeys()
+    activate GenerateCaseData
+    alt 동일 TCName 내, 기존 생성 Cases 와 동일한 tc 가 Other 생성 Cases 에 존재
+        note right of GenerateCaseData
+            동일 tc 를 Other 생성 Cases 에서 제거
+        end note
+    else Not Exist
+        note right of GenerateCaseData : No Operation
+    end
+    deactivate GenerateCaseData
     GenerateCaseData -> GenerateCaseData : appendCaseJson(mIntermediateDefaultJson)
     GenerateCaseData -> GenerateCaseData : getCaseInfoJson(isOther=true)
     GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson)

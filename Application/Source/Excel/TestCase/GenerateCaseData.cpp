@@ -1746,9 +1746,6 @@ void GenerateCaseData::applyPrecondition(QJsonObject& caseJson, const int& preco
             break;
         }
 
-        // 현재는 1개만 돌리기 위해서 itr == notTriggerPreconditionArray.begin() 가 추가됨.
-        // 만일 모든 precondition을 다 적용하고 싶다면 itr != notTriggerPreconditionArray.end() 를 추가하고
-        // itr == notTriggerPreconditionArray.begin() 을 삭제하면 됨.
         int localPreconditionLimitCnt = 0;
         if (preconditionLimitCnt > 0) {
             localPreconditionLimitCnt = preconditionLimitCnt;

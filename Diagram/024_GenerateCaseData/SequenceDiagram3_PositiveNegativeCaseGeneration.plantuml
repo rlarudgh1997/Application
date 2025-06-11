@@ -1,45 +1,77 @@
 @startuml
 
 actor User order 10
-
+participant TestCase order 15
 participant GenerateCaseData order 20
 participant ExcelDataManager order 30
 participant SignalDataManager order 40
 participant Python order 50
-participant QJsonObject order 60
+participant "mAllCaseJson" as QJsonObject order 60
 
 == Positive/Negative 분기 생성 ==
+User -> TestCase : 요청 - Generate TestCase
 
-User -> GenerateCaseData : excuteGenerateCaseData()
-
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
+activate GenerateCaseData
 loop for each Case with genType == "Negative/Positive"
     GenerateCaseData -> ExcelDataManager : isInputDataList()
-
+    ExcelDataManager --> GenerateCaseData : return all case signal info for TC name
     GenerateCaseData -> SignalDataManager : isTestCaseInputSignalDataInfo()
+    SignalDataManager --> GenerateCaseData : return signal names and values for Case
     GenerateCaseData -> GenerateCaseData : getSignalInfoString()
 
-    GenerateCaseData -> Python : callPython() with input
+    GenerateCaseData -> Python : callPython() with SignalInfoString
     activate Python
+    Python -> Python : run.py
+    activate Python
+    alt
+        note left of Python
+            Combinations of valid data from SignalInfoString signals are generated.
+            Cases = {
+                "0x1, 0x1, 0x1",
+                ...
+            }
+        end note
+    end
+    deactivate Python
     Python -> Python : generate case JSON
     Python --> GenerateCaseData : return JSON
     deactivate Python
 
     == Positive/Negative 분기 ==
-    GenerateCaseData -> GenerateCaseData : getCaseInfoJson() - Positive
-    GenerateCaseData -> GenerateCaseData : getCaseInfoJson() - Negative
+    GenerateCaseData -> GenerateCaseData : getCaseInfoJson(genType)
+    activate GenerateCaseData
+    GenerateCaseData -> QJsonObject : get names and values of input signals for Case
+    QJsonObject --> GenerateCaseData : return list of input siganls
+    alt genType == Positive
+        note right of GenerateCaseData
+            list of input siganls 에서 valid, invalid data 추출 후,
+            invalid data(precondition) 에서 valid data(input) 로 trigger 하는 tc 생성(Default 생성과 동일하게 생성)
+            Cases = {
+                "0x0, 0x1, 0x1, => Input_A: 0x1": "1",
+                "0x2, 0x1, 0x1, => Input_A: 0x1": "1",
+                ...
+            }
+        end note
+    else genType == Negative
+        note right of GenerateCaseData
+            list of input siganls 에서 valid, invalid data 추출 후,
+            valid data(precondition) 에서 invalid data(input) 로 trigger 하는 tc 생성
+            Cases = {
+                "0x1, 0x1, 0x1, => Input_A: 0x0": "1",
+                "0x1, 0x1, 0x1, => Input_A: 0x2": "1",
+                ...
+            }
+        end note
+    end
+    deactivate GenerateCaseData
 
     GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson, genType=Positive)
     GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson, genType=Negative)
 
 end
-
-== Negative 제거 조건 검사 ==
-
-loop for each Negative Case
-    GenerateCaseData -> GenerateCaseData : checkNegativeAndPositive()
-    alt 동일한 Positive가 존재할 경우
-        GenerateCaseData -> GenerateCaseData : removeMatchingKeysNegative()
-    end
-end
+deactivate GenerateCaseData
 
 @enduml

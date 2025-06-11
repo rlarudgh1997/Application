@@ -2,36 +2,40 @@
 
 actor User order 10
 
-participant ControlManager order 20
+participant TestCase order 20
 participant GenerateCaseData order 30
-participant ExcelDataManager order 40
 participant ExcelUtil order 50
-participant QJsonObject order 60
+participant "mAllCaseJson" as QJsonObject order 60
+
 
 == Precondition Case Extension ==
 
-User -> ControlManager : 요청 - Generate TestCase
+User -> TestCase : 요청 - Generate TestCase
 
-activate ControlManager
-ControlManager -> GenerateCaseData : excuteGenerateCaseData()
-deactivate ControlManager
+activate TestCase
+TestCase -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TestCase
 
 activate GenerateCaseData
 
+GenerateCaseData -> ExcelUtil : isDescriptionPreconditionCount()
+ExcelUtil --> GenerateCaseData : return maxPreconditionCnt
 loop for each TCName/Result/Case
-    GenerateCaseData -> ExcelDataManager : isInputDataList()
+    GenerateCaseData -> QJsonObject : get list of TC combinations for Case
+    QJsonObject --> GenerateCaseData : return list of TC combinations
+    GenerateCaseData -> QJsonObject : get not-trigger precondition list for Case
+    QJsonObject --> GenerateCaseData : return not-trigger precondition list
 
-    alt InputData에 [Empty] 포함
-        GenerateCaseData -> ExcelUtil : isDescriptionPreconditionCount()
+    alt not-trigger precondition list 크기 > 0
         GenerateCaseData -> GenerateCaseData : setPreconditionValues()
-
         activate GenerateCaseData
-        GenerateCaseData -> GenerateCaseData : getCaseInfoJson()
-        GenerateCaseData -> GenerateCaseData : getPreconditionStr()
-        GenerateCaseData -> GenerateCaseData : getTcLine()
-        GenerateCaseData -> GenerateCaseData : insert into Cases JSON
+        GenerateCaseData -> GenerateCaseData : applyPrecondition()
+        note right of GenerateCaseData
+            not-trigger precondition list 크기만큼 list of TC combinations 의 각 case를 확장
+        end note
+        GenerateCaseData -> GenerateCaseData : Replace original Cases JSON with new extended Cases JSON
         deactivate GenerateCaseData
-    else
+    else not-trigger precondition list 크기 <= 0
         GenerateCaseData -> GenerateCaseData : skip precondition handling
     end
 end
