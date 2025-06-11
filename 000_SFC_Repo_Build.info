@@ -1,7 +1,7 @@
 
 ====================================================================================================
 [현대 GitLab 사용]
-	[Date : 20241217]
+	[Date : 20250611]
 ====================================================================================================
 [gitlab 계정 업데이트]
 	- 기본 정리 문서 참조 : /900_Code/100_Document/610_SFC/gitLab 계정 업데이트/UpdateUserInfo.zip
@@ -22,10 +22,26 @@
 		./git-credentials
 
 	- Docker 설치
-
+		cp -f ~/.git-credentials ~/900_Code/SFC-Docker/git-credentials
 		cd ~/900_Code/SFC-Docker
-
 		./docker_build.sh
+
+
+----------------------------------------------------------------------------------------------
+[현대 개발 담당자 환경 구성]
+	- sfc 저장소 사용
+	- docker 실행 상태
+	- sfc git 으로 코드 사용
+		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git --recursive
+	- sfc 빌드
+		cd ccos.core.sfc
+		mkdir build
+		cd buiild
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DBUILD_COVERAGE=ON -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE="coverage"; sudo cmake --build . --target install -j8
+	- sfc 빌드 결과및 환경 변수 설정하여 사용
+		: host ~/.bashrc 에 환경변수 설정
+		: docker 실행시 host 환경 변수 적용됨
+
 
 ----------------------------------------------------------------------------------------------
 [환경 설정]
