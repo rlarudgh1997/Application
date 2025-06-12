@@ -33,14 +33,14 @@
 		계정 PW 로 사용함
 
 =====================================================================
-# [Repo 정보]
+# [TC_Creator 정보]
 	git clone https://bitbucket.org/ivc-suite/sfc.tc_creator.git
 	git clone git@github.com.rlarudgh1997:rlarudgh1997/Application.git
 
 # [SFC 정보]
-	# git clone https://repo.ccos.dev/scm/clu_ivis_private/ccos.core.sfc.git --recursive
-	# git clone ssh://gitlab.hmc.co.kr/kkh1997/ccos-core-sfc-kkh.git --recursive
+	git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git --recursive
 	git clone https://gitlab.hmc.co.kr/kkh1997/ccos-core-sfc-kkh.git --recursive
+
 
 # [Docker 정보]
 	git clone https://repo.ccos.dev/scm/clu_ivis_private/sfc-docker.git

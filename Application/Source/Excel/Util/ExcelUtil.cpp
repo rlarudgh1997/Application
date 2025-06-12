@@ -561,6 +561,88 @@ QList<KeywordInfo> ExcelUtil::isKeywordTypeInfo(const QVariantList& sheetData, c
 }
 #endif
 
+int ExcelUtil::isComlumnIndex(const int& sheetIndex, const int& type) {
+    int columnIndex = (-1);
+
+    switch (sheetIndex) {
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription: {
+            if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Description::Max);
+            }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs: {
+            if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::TCName)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::ConfigName);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputSignal);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::InputData);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Config::Max);
+            } else {
+            }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
+            if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::TCName)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::TCName);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Result)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Result);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputSignal);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Max);
+            } else {
+            }
+            break;
+        }
+        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC:
+        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC: {
+            if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::TCName)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputSignal);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::InputValue);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Max);
+            } else {
+            }
+            break;
+        }
+        default: {
+            if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::TCName)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Result)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Case)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData);
+            } else if (type == static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max)) {
+                columnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max);
+            } else {
+            }
+            break;
+        }
+    }
+
+    if (columnIndex == (-1)) {
+        // qDebug() << "Finding column index is not supported :" << sheetIndex << type;
+        columnIndex = 0;
+    }
+
+    return columnIndex;
+}
+
 int ExcelUtil::isDataType(const QString& dataTypeStr) {
     int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
 

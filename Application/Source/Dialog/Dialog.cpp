@@ -73,16 +73,14 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
     setProperty(DataTypeDialogType, dialogType);
     setProperty(DataTypeDialogInfo, info);
 
-    bool draw = false;
     switch (dialogType) {
         case DialogTypeAppModeCheck: {
-            draw = updateAppMode(info);
+             updateAppMode(info);
             break;
         }
         case DialogTypeAppModeRadio:
         case DialogTypeCycleMode: {
-            draw = updateSelectRadio(info);
-            // draw = updateSelectRadio2(info);
+            updateSelectRadio(info);
             break;
         }
         case DialogTypeSelectMoudleInfo:
@@ -93,46 +91,46 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
         case DialogTypeSelectValueResult:
         case DialogTypeSelectMatchingTableCV:
         case DialogTypeSelectMatchingTablePV: {
-            draw = updateSelectList(info);
+            updateSelectList(info);
             break;
         }
         case DialogTypeSelectNegative:
         case DialogTypeSelectVehiclePV:
         case DialogTypeSelectVehicleCV:
         case DialogTypeSelectVehicleType: {
-            draw = updateSelectOption(info);
+            updateSelectOption(info);
             break;
         }
         case DialogTypeEnterText: {
-            draw = updateInputText(info);
+            updateInputText(info);
             break;
         }
         case DialogTypeTestReportTC:
         case DialogTypeTestReportGCOV: {
-            draw = updateTestReport(info);
+            updateTestReport(info);
             break;
         }
         case DialogTypeLogDisplay: {
-            draw = updateLogDisplay(info);
+            updateLogDisplay(info);
             break;
         }
         case DialogTypeViewLogInfo:
         case DialogTypeViewLogFileInfo: {
-            draw = updateViewLog(info);
+            updateViewLog(info);
             break;
         }
         case DialogTypeAutoComplete: {
-            draw = updateAutoComplete(info);
+            updateAutoComplete(info);
             break;
         }
         case DialogTypeNodeView:
         case DialogTypeGenType:
         case DialogTypeAutoCompleteNormal: {
-            draw = updateAutoCompleteNormal(info);
+            updateAutoCompleteNormal(info);
             break;
         }
         case DialogTypeSelectValue: {
-            draw = updateSelectValue(info);
+            updateSelectValue(info);
             break;
         }
         default: {
@@ -140,13 +138,13 @@ void Dialog::drawDialog(const int& dialogType, const QVariantList& info) {
             break;
         }
     }
-    qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size() << ((draw) ? ("-> Success") : ("-> Fail"));
+    qDebug() << "[Dialog] drawDialog :" << dialogType << ", Size :" << info.size();
 }
 
 void Dialog::controlConnet(const int& displayType) {
     int preDisplayType = getProperty(DataTypePrevDisplayType).toInt();
     if (preDisplayType == displayType) {
-        qDebug() << "[Dialog] Skip to request for same screen as previous screen :" << displayType;
+        // qDebug() << "[Dialog] Skip to request for same screen as previous screen :" << displayType;
         return;
     }
 
@@ -998,18 +996,21 @@ bool Dialog::updateSelectList(const QVariantList& info) {
 }
 
 bool Dialog::updateSelectOption(const QVariantList& info) {
-    if (info.size() != 3) {
+    if (info.size() != 4) {
         return false;
     }
     updateDisplay(DisplayTypeSelectOption, info.at(0).toString());
 
     QString option1 = info.at(1).toString();
-    QStringList option2 = info.at(2).toStringList();
+    bool option1Check = info.at(2).toBool();
+    QStringList option2 = info.at(3).toStringList();
     int dialogType = getProperty(DataTypeDialogType).toInt();
 
     mGui->SelectOption1->setVisible(dialogType != DialogTypeSelectVehicleType);
-    mGui->SelectOption1Check->setText(option1);
-    mGui->SelectOption1Check->setChecked((dialogType != DialogTypeSelectNegative));
+    if (mGui->SelectOption1->isVisible()) {
+        mGui->SelectOption1Check->setText(option1);
+        mGui->SelectOption1Check->setChecked(option1Check);
+    }
 
     int index = 0;
     mGui->SelectOption2->setVisible(option2.size() > 0);

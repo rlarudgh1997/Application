@@ -70,6 +70,9 @@ void ControlMenu::initNormalData() {
     updateTestResultInfo(ivis::common::TestResultTypeEnum::TestResultTypeStart, 30);
 #endif
 
+    bool runningInDocker = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeRunningInDocker).toBool();
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeRunningInDocker, runningInDocker);
+
     bool testVisible = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTestButtonVisible).toBool();
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, testVisible);
 }

@@ -21,7 +21,6 @@ class GenerateCaseData {
     - genCase() : bool
     - isGenerateStop(QString) : bool
     - saveHistory() : void
-    - eraseMergeTag(QString&) : void
     - appendCase(...) : void
     - appendOtherCaseJson(...) : void
     - getSignalInfoString(...) : QString
@@ -30,8 +29,6 @@ class GenerateCaseData {
     - printJson(QJsonObject) : void
     - appendCaseJson(...) : void
     - toJsonArray<T>(QList<T>) : QJsonArray
-    - getGenType() : QString
-    - getConfigSig(...) : QJsonObject
     - getOutputSig(...) : QJsonObject
     - saveJsonToFile(QJsonObject, QString) : void
     - removeMatchingKeys(QJsonObject&, QJsonObject) : void

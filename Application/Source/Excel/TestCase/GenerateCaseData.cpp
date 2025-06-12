@@ -507,14 +507,6 @@ void GenerateCaseData::saveHistory() {
     }
 }
 
-void GenerateCaseData::eraseMergeTag(QString& str) {
-    const auto excelMergeStart = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeStart).toString();
-    const auto excelMergeEnd = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMergeEnd).toString();
-    const auto excelMerge = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeExcelMerge).toString();
-    QStringList eraseTaglist = {excelMergeStart, excelMergeEnd, excelMerge};
-    str = ivis::common::getRemoved(str, eraseTaglist);
-}
-
 void GenerateCaseData::appendCase(const QString& genType, const QString& caseName, const int& caseNumber,
                                   const QString& resultName, const int& resultNumber, const QString& vehicleType,
                                   const QString& tcName, const int& tcNameNumber, const int& sheetNumber) {
@@ -742,11 +734,6 @@ void GenerateCaseData::appendCaseJson(QJsonObject& fileJson, QJsonObject& caseJs
     if (!tcNameJson.contains(titleTcName)) {
         tcNameJson[titleTcName] = tcName;
         tcNameJson[titleVehicleType] = vehicleType;
-#if 0
-        if (!tcNameJson.contains(titleConfigSig)) {
-            tcNameJson[titleConfigSig] = getConfigSig(sheetNumber, QStringList({tcName, "", ""}));
-        }
-#endif
     }
 
     // 3. Result 확인
@@ -790,39 +777,6 @@ QJsonArray GenerateCaseData::toJsonArray(const QList<T>& list) {
         jsonArray.append(QJsonValue::fromVariant(QVariant(item)));
     }
     return jsonArray;
-}
-
-QString GenerateCaseData::getGenType() {
-    // API가 만들어지면 나중에 구현 필요
-    QString ret = GEN_TYPE_DEFAULT;
-    // QString ret = GEN_TYPE_NEGATIVE_AND_POSITIVE;
-    // QString ret = GEN_TYPE_NEGATIVE;
-    return ret;
-}
-
-QJsonObject GenerateCaseData::getConfigSig(const int& sheetIdx, const QStringList& strList) {
-    QJsonObject ret;
-    QStringList columnTitleList = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeOtherTitle).toStringList();
-#if defined(USE_SHEET_COLUMN_OLD)
-    QString titleConfigSigData = columnTitleList.at(static_cast<int>(ivis::common::ExcelSheetTitle::Other::Data));
-#else
-    QString titleConfigSigData;
-#endif
-    QMap<QString, SignalData> configSigMap;  // = SignalDataManager::instance().data()->isConfigSignalDataInfo(sheetIdx, strList);
-
-    for (const auto& configSigKey : configSigMap.keys()) {
-        auto tmpSignalDataInfo = configSigMap[configSigKey];
-        auto tmpInputDataList = tmpSignalDataInfo.getConvertData();
-        // 1. ret에서 QJsonObject를 가져오기
-        QJsonObject configObj = ret[configSigKey].toObject();
-        // 2. 가져온 객체에 데이터 추가
-        if (!configObj.contains(titleConfigSigData)) {
-            configObj[titleConfigSigData] = toJsonArray(tmpInputDataList);
-        }
-        // 3. 수정된 객체를 다시 ret에 설정
-        ret[configSigKey] = configObj;
-    }
-    return ret;
 }
 
 QJsonObject GenerateCaseData::getOutputSig(const int& sheetIdx, const QString& tcName, const QString& resultName) {

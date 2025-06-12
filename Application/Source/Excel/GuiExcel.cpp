@@ -214,6 +214,7 @@ void GuiExcel::updateDialogAutoCompleteVehicle() {
     QVariantList info = QVariantList({
         QString("Select Vehicle"),
         QString(),
+        false,
         isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList(),
     });
     updateDrawDialog(Dialog::DialogTypeSelectVehicleType, info);

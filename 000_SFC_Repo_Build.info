@@ -24,20 +24,59 @@
 	- Docker 설치
 		cp -f ~/.git-credentials ~/900_Code/SFC-Docker/git-credentials
 		cd ~/900_Code/SFC-Docker
+		cat git-credentials
 		./docker_build.sh
 
+	- Docker 설치 중 lib 다운로드 안되서 진행 못하는 경우 아래 파일에 내용 기록
+		sudo vi /etc/docker/daemon.json
+			{
+			"dns": ["8.8.8.8", "1.1.1.1"]
+			}
+		sudo systemctl restart docker
+
+	- Docker 설치중 중단된 이미지 캐쉬 삭제
+		docker builder prune
+
+	- Docker 이미지 백업
+		docker images
+			REPOSITORY                                 TAG                       IMAGE ID       CREATED        SIZE
+			artifacts.ccos.dev/sfc-docker/sfc-docker   1.199.0_ubuntu22.04_Qt6   2f06951667ef   19 hours ago   4.98GB
+			artifacts.ccos.dev/sfc-docker/sfc-docker   latest                    2f06951667ef   19 hours ago   4.98GB
+
+		docker save -o 1.199.0_ubuntu22.04_Qt6.tar artifacts.ccos.dev/sfc-docker/sfc-docker:1.199.0_ubuntu22.04_Qt6
+
+	- Docker 이미지 복원
+		docker load -i 1.199.0_ubuntu22.04_Qt6.tar
 
 ----------------------------------------------------------------------------------------------
 [현대 개발 담당자 환경 구성]
-	- sfc 저장소 사용
-	- docker 실행 상태
+	- sfc 저장소 사용, docker 실행 상태
+
 	- sfc git 으로 코드 사용
 		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git --recursive
+		git sumbmodule update
+			동작 안하면 별도로 아래 명령어 다운로드
+
+		cd ccos.core.sfc/model
+		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.vsm.git
+		mv ccos.core.vsm/ VSM
+
 	- sfc 빌드
 		cd ccos.core.sfc
 		mkdir build
 		cd buiild
 		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DBUILD_COVERAGE=ON -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE="coverage"; sudo cmake --build . --target install -j8
+		#cmake .. -DCCOS_LIB_VERSION=2.1.0 -DBUILD_COVERAGE=ON -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE="coverage"
+		#make -j8
+
+
+	- validator 빌드
+		cd ccos.core.sfc/validator
+		mkdir build
+		cd buiild
+		cmake ..
+		make -j8
+
 	- sfc 빌드 결과및 환경 변수 설정하여 사용
 		: host ~/.bashrc 에 환경변수 설정
 		: docker 실행시 host 환경 변수 적용됨

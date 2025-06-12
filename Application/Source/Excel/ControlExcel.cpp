@@ -1408,17 +1408,11 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
 #endif
 #if 0
             ExcelDataManager::instance().data()->reloadExcelData();
-            ExcelDataManager::instance().data()->isDependentDataList("IMG_TelltaleABSAmberLamp_stat", "ON_ABS_Spec");
+            ExcelDataManager::instance().data()->isDependentDataList("[Dependent_On]IMG_TelltaleRetarderLamp_stat", "OFF");
 
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_01", "On");
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_01", "Off");
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Ok");
-
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Fail");
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "Error");
-            ExcelDataManager::instance().data()->isDependentDataList("Dependt_02", "TEST");
+            ExcelDataManager::instance().data()->isDependentDataList("[Dependent_On]Test_Dependent_On", "CHECK");
 #endif
-#if 1
+#if 0
             int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription;
             int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetMax;
 

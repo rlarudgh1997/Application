@@ -463,13 +463,13 @@ private:
                     tcFileName = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0));
                 } else {
                     if (splitTcFileCount == 2) {
-                        QFile::remove(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(001).tc");
+                        QFile::remove(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "_001.tc");
                         QFile::rename(QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0)),
-                                      QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
-                                                           QString::number(1).rightJustified(3, '0') + ")"));
+                                      QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "_" +
+                                                           QString::number(1).rightJustified(3, '0')));
                     }
-                    tcFileName = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "(" +
-                                                      QString::number(splitTcFileCount).rightJustified(3, '0') + ")");
+                    tcFileName = QString("%1.tc").arg(mTCFileDirPath + "/" + mSfcDescription[0] + match.captured(0) + "_" +
+                                                      QString::number(splitTcFileCount).rightJustified(3, '0'));
                 }
             } else {
                 qWarning() << "SFC Description Error.";

@@ -44,8 +44,8 @@ void HandlerMenu::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewLogFileList, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeViewFileInfo, QVariant(""));
-    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, QVariant(""));
-
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunningInDocker, QVariant(false));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTestButtonVisible, QVariant(false));
 }
 

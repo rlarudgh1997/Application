@@ -133,6 +133,7 @@ public:
         PropertyTypeTerminalBufferSize,
         PropertyTypeManualCycleMode,
         PropertyTypeMultiDockerCount,
+        PropertyTypeRunningInDocker,
 
         PropertyTypeTestReport,
         PropertyTypeKey,
@@ -143,7 +144,6 @@ public:
         PropertyTypeViewFileInfo,
         PropertyTypeKeywordTypeInfo,
         // PropertyTypeUseOnlyKeywordInfo,
-
         PropertyTypeTestButtonVisible,
 
         PropertyTypeList = PROPETRY_START_LIST,
@@ -427,6 +427,14 @@ public:
         OutputSignal,
         IsInitialize,
         OutputValue,
+        Max,
+    };
+    enum class ColumnType {
+        TCName = 0,
+        Result,
+        Case,
+        InputSignal,
+        InputData,
         Max,
     };
 };

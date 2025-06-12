@@ -215,6 +215,8 @@ void GuiMenu::updateDialogSelectModule() {
 
 void GuiMenu::updateDialogSelectOption() {
     int runType = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeSelectModuleOfRun).toInt();
+    bool option1Check = false;
+
     int dialogType = Dialog::DialogTypeSelectNegative;
     QString title = QString("Select Negative");
     QString option1 = QString("Negative");
@@ -225,11 +227,13 @@ void GuiMenu::updateDialogSelectOption() {
                                                                            : (Dialog::DialogTypeSelectVehicleCV);
         title = QString("Select PT");
         option1 = QString("Docker");
+        option1Check = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeRunningInDocker).toBool();
         option2 = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeVehicleType).toStringList();
     }
     QVariantList info = QVariantList({
         title,
         option1,
+        option1Check,
         option2,
     });
     updateDrawDialog(dialogType, info);

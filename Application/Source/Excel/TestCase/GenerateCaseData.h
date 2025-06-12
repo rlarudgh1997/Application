@@ -29,7 +29,6 @@ private:
     bool genCase();
     bool isGenerateStop(const QString& info = QString());
     void saveHistory();
-    void eraseMergeTag(QString& str);
     void appendCase(const QString& genType, const QString& caseName, const int& caseNumber, const QString& resultName,
                     const int& resultNumber, const QString& vehicleType, const QString& tcName, const int& tcNameNumber,
                     const int& sheetNumber);
@@ -43,8 +42,6 @@ private:
                         const int& tcNameNumber, const int& sheetNumber, const QString& genType);
     template <typename T>
     QJsonArray toJsonArray(const QList<T>& list);
-    QString getGenType();
-    QJsonObject getConfigSig(const int& sheetIdx, const QStringList& strList);
     QJsonObject getOutputSig(const int& sheetIdx, const QString& tcName, const QString& resultName);
     void saveJsonToFile(const QJsonObject& json, const QString& filePath);
     void appendOtherCaseJson(QJsonObject& fileJson, const QString& caseName, const int& caseNumber, const QString& resultName,

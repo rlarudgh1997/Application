@@ -1,16 +1,19 @@
 [현대 개발 담당자 환경 구성]
-	- sfc 저장소 사용
-	- docker 실행 상태
+	- sfc 저장소 사용, docker 실행 상태
+
 	- sfc git 으로 코드 사용
 		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.sfc.git --recursive
+
+		cd ccos.core.sfc/model/VSM
+		git clone https://gitlab.hmc.co.kr/CLU_IVIS_PRIVATE/ccos.core.vsm.git
+
 	- sfc 빌드
 		cd ccos.core.sfc
 		mkdir build
 		cd buiild
-		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DBUILD_COVERAGE=ON -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE="coverage"; sudo cmake --build . --target install -j8
-	- sfc 빌드 결과및 환경 변수 설정하여 사용
-		: host ~/.bashrc 에 환경변수 설정
-		: docker 실행시 host 환경 변수 적용됨
+		cmake .. -DCCOS_LIB_VERSION=2.1.0 -DBUILD_COVERAGE=ON -DVEHICLE_CATEGORY=CV -DSFC_BUILD_TYPE="coverage"
+		make -j8
+		sudo cmake --build . --target install -j8
 
 	- validator 빌드
 		cd ccos.core.sfc/validator
@@ -18,6 +21,11 @@
 		cd buiild
 		cmake ..
 		make -j8
+
+	- sfc 빌드 결과및 환경 변수 설정하여 사용
+		: host ~/.bashrc 에 환경변수 설정
+		: docker 실행시 host 환경 변수 적용됨
+
 
 
 [아이비스 개발 담당자 환경 구성]
@@ -27,6 +35,7 @@
 		: /opt/sfc/CV
 	- SDK 환경 변수 설정
 		source /opt/sfc/CV/environment-setup-sfc
+
 
 
 

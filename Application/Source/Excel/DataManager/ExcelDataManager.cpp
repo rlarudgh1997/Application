@@ -284,27 +284,14 @@ QStringList ExcelDataManager::isParsingDataList(const QStringList& data, const b
 
 QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName,
                                                  const QString& caseName, const bool& origin, const bool& log) {
-    const int columnIndex = ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC)
-                                 ? (static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::TCName))
-                                 : (static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName)));
-    const QStringList tcNameData = isExcelSheetData(sheetIndex, columnIndex, origin);
-    const QStringList resultData =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result), origin);
-    const QStringList caseData =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::Case), origin);
-
-    if (log) {
-        qDebug() << "isRowIndexInfo :" << sheetIndex << tcName << resultName << caseName << origin;
-        qDebug() << "\t TCName :" << tcNameData;
-        qDebug() << "\t Result :" << resultData;
-        qDebug() << "\t Case   :" << caseData;
-    }
-
     QPair<int, int> rowInfo(1, 0);
     QPair<int, int> foundIndex(1, 0);
     QString logInfo("Default");
 
     // TCName Index
+    const int tcNameIndex =
+        ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::TCName));
+    const QStringList tcNameData = isExcelSheetData(sheetIndex, tcNameIndex, origin);
     if (tcName.size() > 0) {
         foundIndex = isIndexOf(tcNameData, tcName);
         if (foundIndex == qMakePair(1, 0)) {
@@ -316,6 +303,9 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QS
     }
 
     // Reusult List & Index
+    const int resultIndex =
+        ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Result));
+    const QStringList resultData = isExcelSheetData(sheetIndex, resultIndex, origin);
     if (resultName.size() > 0) {
         QStringList resultList;
         for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
@@ -332,6 +322,9 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QS
     }
 
     // Case List & Index
+    const int caseIndex =
+        ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Case));
+    const QStringList caseData = isExcelSheetData(sheetIndex, caseIndex, origin);
     if (caseName.size() > 0) {
         QStringList caseList;
         for (int rowIndex = rowInfo.first; rowIndex <= rowInfo.second; ++rowIndex) {
@@ -347,11 +340,15 @@ QPair<int, int> ExcelDataManager::isRowIndexInfo(const int& sheetIndex, const QS
         logInfo = QString("Case");
     }
 
-    // qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-    // qDebug() << "\t isRowIndexInfo :" << sheetIndex << tcName << resultName << caseName << origin;
-    // qDebug() << "\t\t RowInfo :" << rowInfo.first << rowInfo.second << ", Type :" << logInfo;
-    // qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
-
+    if (log) {
+        qDebug() << "\t >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        qDebug() << "\t isRowIndexInfo :" << sheetIndex << tcName << resultName << caseName << origin;
+        qDebug() << "\t TCName :" << tcNameData;
+        qDebug() << "\t\t Result :" << resultData;
+        qDebug() << "\t\t Case   :" << caseData;
+        qDebug() << "\t\t RowInfo :" << rowInfo.first << rowInfo.second << ", Type :" << logInfo;
+        qDebug() << "\t <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    }
     return rowInfo;
 }
 
@@ -590,11 +587,13 @@ QPair<QStringList, QStringList> ExcelDataManager::isInputDataList(const int& she
                                                                   const bool& removeWhitespace, const bool& checkOthers) {
     // ivis::common::CheckTimer checkTimer;
     // static int totalElapsed = 0;
+    const int inputSignalIndex = ExcelUtil::instance()->isComlumnIndex(sheetIndex,
+                                    static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal));
+    const int inputDataIndex =
+        ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData));
 
-    const QStringList inputSignal =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal), true);
-    const QStringList inputData =
-        isExcelSheetData(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData), true);
+    const QStringList inputSignal = isExcelSheetData(sheetIndex, inputSignalIndex, true);
+    const QStringList inputData = isExcelSheetData(sheetIndex, inputDataIndex, true);
     const QPair<int, int> rowInfo = isRowIndexInfo(sheetIndex, tcName, resultName, caseName, true);
 
     QStringList signalInfo;
@@ -817,54 +816,43 @@ QList<QStringList> ExcelDataManager::isConfigDataList(const QString& configName,
 QPair<QStringList, QStringList> ExcelDataManager::isDependentDataList(const QString& tcName, const QString& resultName) {
     const int startIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription;
     const int endIndex = ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetMax;
+    const QString dependentOnKeyword =
+        ExcelUtil::instance().data()->isKeywordString(static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::DependentOn));
 
     QPair<int, int> tcNameIndex;
     QPair<int, int> resultIndex;
     int foundSheetIndex = 0;
-    int signalColumnIndex = 0;
-    int dataColumnIndex = 0;
+
+    QString tcNameRemove = tcName;
+    tcNameRemove.remove(dependentOnKeyword);
 
     for (int sheetIndex = startIndex; sheetIndex < endIndex; ++sheetIndex) {
-        int tcNameColumnIndex = 0;
-        int resultColumnIndex = 0;
         if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription) ||
             (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs) ||
             (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC)) {
             continue;
-        } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn) {
-            tcNameColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::TCName);
-            resultColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Result);
-            signalColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputSignal);
-            dataColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::InputData);
-        } else {
-            tcNameColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::TCName);
-            resultColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Result);
-            signalColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputSignal);
-            dataColumnIndex = static_cast<int>(ivis::common::ExcelSheetTitle::Other::InputData);
         }
-
-        QStringList tcNameList = isExcelSheetData(sheetIndex, tcNameColumnIndex, true);
-        QStringList resultList = isExcelSheetData(sheetIndex, resultColumnIndex, true);
-        if ((tcNameList.size() == 0) || (resultList.size() == 0)) {
-            continue;
-        }
-
-        tcNameIndex = isIndexOf(tcNameList, tcName);
-        resultIndex = isIndexOf(resultList, resultName);
+        tcNameIndex = isRowIndexInfo(sheetIndex, tcNameRemove, QString(), QString(), true);
+        resultIndex = isRowIndexInfo(sheetIndex, tcNameRemove, resultName, QString(), true);
 
         if ((resultIndex.first >= tcNameIndex.first) && (resultIndex.second <= tcNameIndex.second) &&
             (resultIndex.first <= resultIndex.second)) {
             foundSheetIndex = sheetIndex;
+            // qDebug() << "Searching - SheetIndex[" << sheetIndex << "] :" << tcNameIndex << resultIndex;
             break;
         }
     }
 
     if (foundSheetIndex == 0) {
-        qDebug() << "Fail to found tcName :" << tcName << ", result :" << resultName;
+        qDebug() << "Fail to found tcName :" << tcName << "->" << tcNameRemove << ", result :" << resultName;
         qDebug() << "\t Gen TC execution must be completed.\n";
         return QPair<QStringList, QStringList>();
     }
 
+    const int signalColumnIndex = ExcelUtil::instance()->isComlumnIndex(foundSheetIndex,
+                                      static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputSignal));
+    const int dataColumnIndex = ExcelUtil::instance()->isComlumnIndex(foundSheetIndex,
+                                    static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::InputData));
     const QStringList inputSignalList = isExcelSheetData(foundSheetIndex, signalColumnIndex, true);
     const QStringList inputDataList = isExcelSheetData(foundSheetIndex, dataColumnIndex, true);
 
@@ -876,11 +864,17 @@ QPair<QStringList, QStringList> ExcelDataManager::isDependentDataList(const QStr
         signalList.append(signal);
         dataList.append(data);
     }
-    QPair<QStringList, QStringList> dataInfo = qMakePair(signalList, dataList);
+
+    QPair<QStringList, QStringList> dataInfo;
+    if (signalList.size() == dataList.size()) {
+        signalList.removeAll("");
+        dataList.removeAll("");
+        dataInfo = qMakePair(signalList, dataList);
+    }
 
 #if 0
     qDebug() << "==========================================================================================================";
-    qDebug() << "isDependentDataList :"  << foundSheetIndex << tcName << resultName;
+    qDebug() << "isDependentDataList :"  << foundSheetIndex << tcName << "->" << tcNameRemove << resultName;
     qDebug() << "\t Index :" << tcNameIndex << resultIndex;
     for (int index = 0; index < dataInfo.first.size(); ++index) {
         auto signal = dataInfo.first.at(index);
@@ -1195,38 +1189,12 @@ void ExcelDataManager::writeExcelSheetData(const int& sheetIndex) {
 }
 
 QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData) {
-    int columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Other::Max);
-    bool removeMergeState = true;
-    switch (sheetIndex) {
-        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDescription:
-        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDescription: {
-            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Description::Max);
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs:
-        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs: {
-            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::Config::Max);
-            removeMergeState = false;
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn:
-        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetDependentOn: {
-            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::DependentOn::Max);
-            // removeMergeState = false;
-            break;
-        }
-        case ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC:
-        case ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetManualTC: {
-            columnMax = static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Max);
-            // removeMergeState = false;
-            break;
-        }
-        default: {
-            break;
-        }
-    }
+    const int columnMax =
+        ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max));
 
+    bool removeMergeState = true;
     QMapIntStrList excelSheetData;
+
     for (const auto& rowDataList : sheetData.toList()) {
         QStringList rowData = rowDataList.toStringList();
         if (rowData.size() != columnMax) {
