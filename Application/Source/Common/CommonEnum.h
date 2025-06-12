@@ -131,6 +131,7 @@ public:
         PropertyTypeTerminalInfo,
         PropertyTypeTerminalPathInfo,
         PropertyTypeTerminalBufferSize,
+        PropertyTypeTerminalType,
         PropertyTypeManualCycleMode,
         PropertyTypeMultiDockerCount,
         PropertyTypeRunningInDocker,
@@ -254,6 +255,7 @@ public:
         EventTypeGenSelectModule,
         EventTypeGenCurrentModule,
         EventTypeRunMultiDocker,
+        EventTypeStartMultiDocker,
         EventTypeRunSelectModule,
         EventTypeTestReportResult,
         EventTypeTestReportCoverage,
@@ -277,7 +279,7 @@ public:
         EventTypeUpdateGenTCInfo,
         EventTypeGenerateCancel,
         EventTypeTerminalCommand,
-        EventTypeTerminalSetPath,
+        EventTypeTerminalInfo,
         EventTypeSelectDockerCount,
 
         EventTypeTest = 3000,
@@ -701,6 +703,7 @@ public:
         Input,
         Clear,
         Stop,
+        Exit,
     };
 };
 

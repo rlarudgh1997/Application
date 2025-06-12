@@ -155,6 +155,9 @@
 #define STRING_POPUP_RUNNING_IN_DOCKER_TIP QString("Cannot run multi docker because it is running in docker.")
 #define STRING_POPUP_RUNNING_IN_DOCKER_TIP_PV QString("Multi-Docker is not supported in PV Mode.")
 
+#define STRING_POPUP_STOP_MULTI_DCKER QString("Stop multi-docker")
+#define STRING_POPUP_STOP_MULTI_DCKER_TIP QString("Are you sure you want to stop the multi-docker execution?")
+#define STRING_POPUP_STOP_MULTI_DCKER_TIP2 QString("Multi-docker is terminated.")
 
 // =============================================================================================================
 // Image Define

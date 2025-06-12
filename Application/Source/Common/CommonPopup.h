@@ -37,6 +37,7 @@ enum class PopupType {
     TestCaseComplete,
     TestCaseRunning,
     RunningInDockerError,
+    StopMutliDockerCompleted,
 
     Exit,
     New,
@@ -44,7 +45,8 @@ enum class PopupType {
     AnotherFileOpen,
     NoInstallLib,
     FileNotExist,
-    RestConfigValue,
+    ResetConfigValue,
+    StopMutliDocker,
 
     AboutQt,
     Open,
@@ -100,12 +102,13 @@ public:
             case PopupType::ModuleSelectError:
             case PopupType::TestCaseRunning:
             case PopupType::RunningInDockerError:
+            case PopupType::StopMutliDockerCompleted:
             case PopupType::CellSelectionError: {
                 QVariantList infoData = popupInfo.toList();
                 if (infoData.size() == 2) {
                     bool warning = ((popupType != PopupType::About) && (popupType != PopupType::ScriptRunnigCompleted));
 #if defined(USE_CLEAR_POPUP)
-                    int timer = 0;    // (popupType == PopupType::TestCaseRunning) ? (3) : (0);
+                    int timer = (popupType == PopupType::StopMutliDockerCompleted) ? (3) : (0);
                     button = drawPopupNormal(handler, warning, infoData.at(0).toString(), infoData.at(1).toString(), timer);
 #else
                     button = drawPopupNormal(handler, warning, infoData.at(0).toString(), infoData.at(1).toString());
@@ -119,7 +122,8 @@ public:
             case PopupType::NoInstallLib:
             case PopupType::FileNotExist:
             case PopupType::TestCaseComplete:
-            case PopupType::RestConfigValue: {
+            case PopupType::StopMutliDocker:
+            case PopupType::ResetConfigValue: {
                 button = drawPopupSelect(popupType, handler, popupInfo);
                 break;
             }
@@ -274,7 +278,8 @@ private:
             }
             case PopupType::New:
             case PopupType::FileNotExist:
-            case PopupType::RestConfigValue:
+            case PopupType::ResetConfigValue:
+            case PopupType::StopMutliDocker:
             case PopupType::TestCaseComplete:
             case PopupType::AnotherFileOpen: {
                 if (list.size() == 4) {

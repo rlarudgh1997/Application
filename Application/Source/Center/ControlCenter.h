@@ -27,7 +27,8 @@ private:
     void updateSelectModuleList(const bool& show);
     void updateSelectModueNodeAddress(const bool& update, const QVariantList& selectModule);
     void controlProcess(const int& type, const QString& command);
-    void updateTerminalMode();
+    void updateTerminalMode(const int& dockerCount);
+    void updateTerminalModeInfo(const bool& multiDocker);
 
 protected:
     virtual AbstractHandler* isHandler();

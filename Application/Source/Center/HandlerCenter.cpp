@@ -40,6 +40,7 @@ void HandlerCenter::initPropertyInfo() {
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, QVariant(""));
     registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalBufferSize, QVariant(0));
+    registerProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType, QVariant(false));
 }
 
 void HandlerCenter::controlConnect(const bool& state) {

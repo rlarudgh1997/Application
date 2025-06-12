@@ -831,8 +831,7 @@ int ControlMenu::saveTestReportInfo(const int& reportType, const QList<bool>& va
 }
 
 void ControlMenu::startRunTCMultiDocker(const int& dockerCount) {
-    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, dockerCount);
-
+#if 0
     QString sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
     QString workingDir = QString("%1/../validator/multi-docker-test").arg(sfcModelPath);
     workingDir = QDir(workingDir).absolutePath();    // 심볼릭 링크, /../ 등의 폴더를 리얼 폴더로 변경
@@ -843,9 +842,15 @@ void ControlMenu::startRunTCMultiDocker(const int& dockerCount) {
 
     QString option = (dockerCount == 0) ? (QString()) : (QString(" -d %1").arg(dockerCount));
     QString command = QString("./multi-docker-test.sh -t CV%1").arg(option);
-    bool result = system(command.toLatin1());
 
-    qDebug() << "startRunTCMultiDocker :" << result << workingDir << command;
+    bool result = system(command.toLatin1());
+    qDebug() << "startRunTCMultiDocker :" << workingDir << command;
+#else
+    sendEventInfo(ivis::common::ScreenEnum::DisplayTypeCenter, ivis::common::EventTypeEnum::EventTypeStartMultiDocker,
+                  dockerCount);
+#endif
+
+    updateDataControl(ivis::common::PropertyTypeEnum::PropertyTypeMultiDockerCount, dockerCount);
 }
 
 void ControlMenu::updateMultiDockerCount() {

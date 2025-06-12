@@ -1470,7 +1470,7 @@ p, li { white-space: pre-wrap; }
       <item>
        <widget class="QPushButton" name="SelectValueOK">
         <property name="text">
-         <string>OK</string>
+         <string>Start</string>
         </property>
        </widget>
       </item>

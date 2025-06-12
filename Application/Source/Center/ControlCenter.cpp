@@ -9,6 +9,7 @@
 #include "ExcelUtil.h"
 
 #include <QRegularExpression>
+#include <signal.h>
 
 QSharedPointer<ControlCenter>& ControlCenter::instance() {
     static QSharedPointer<ControlCenter> gControl;
@@ -23,7 +24,7 @@ ControlCenter::ControlCenter() {
 }
 
 ControlCenter::~ControlCenter() {
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop), QString());
+    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Exit), QString());
 }
 
 AbstractHandler* ControlCenter::isHandler() {
@@ -346,6 +347,7 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
                 mProcess.data()->setProcessChannelMode(QProcess::MergedChannels);
                 mProcess.data()->start("/bin/bash", QStringList() << "-i" << "-l");
                 mProcess.data()->write("export PS1=\"\\u@\\h:\\w$ \"\n");   // 경로 정보에서 git 정보 표시 하지 않도록 설정
+                updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
             }
             mProcess.data()->write((command + "\n").toUtf8());
 
@@ -382,19 +384,26 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
             break;
         }
-        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop): {
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop):
+        case static_cast<int>(ivis::common::ProcessEnum::CommonadType::Exit): {
             if (mProcess.isNull() == false) {
-                // qDebug() << "Terminal is running -> stop";
-                disconnect(mProcess.data());
-                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("exit"));
-                if (mProcess->state() != QProcess::NotRunning) {
-                    mProcess->terminate();
-                    if (mProcess->waitForFinished(3000) == false) {
-                        mProcess->kill();
-                        mProcess->waitForFinished();
+                if (type == static_cast<int>(ivis::common::ProcessEnum::CommonadType::Exit)) {
+                    disconnect(mProcess.data());
+                    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), QString("exit"));
+                    if (mProcess->state() != QProcess::NotRunning) {
+                        mProcess->terminate();
+                        if (mProcess->waitForFinished(3000) == false) {
+                            mProcess->kill();
+                            mProcess->waitForFinished();
+                        }
                     }
+                    mProcess.reset();
+                } else {
+                    // if (mProcess->state() != QProcess::NotRunning) {
+                    //     mProcess->kill();
+                    //     // mProcess->terminate();
+                    // }
                 }
-                mProcess.reset();
             }
             break;
         }
@@ -404,24 +413,81 @@ void ControlCenter::controlProcess(const int& type, const QString& command) {
     }
 }
 
-void ControlCenter::updateTerminalMode() {
+void ControlCenter::updateTerminalMode(const int& dockerCount) {
     int viewType = getData(ivis::common::PropertyTypeEnum::PropertyTypeViewType).toInt();
-    if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) {
+    bool terminalType = getData(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType).toBool();
+    bool multiDocker = (dockerCount >= 0);
+
+    if ((viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) && (multiDocker == terminalType)) {
+        // qDebug() << "\t Skip - updateTerminalMode :" << multiDocker << terminalType;
         return;
     }
 
-    QVariant bufferSize = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTerminalBufferSize);
+    QString defaultPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath).toString();
+    QString workingDir = QDir(QString("%1/../validator/multi-docker-test").arg(defaultPath)).absolutePath();
+    QString command;
 
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalBufferSize, bufferSize);
+    if (multiDocker) {
+        if (terminalType == false) {
+            command = QString("cd %1").arg(workingDir);
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), command);
+
+            QString option = (dockerCount == 0) ? (QString()) : (QString(" -d %1").arg(dockerCount));
+            command = QString("./multi-docker-test.sh -t CV%1").arg(option);
+
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
+        }
+    } else {
+        if (terminalType) {
+            multiDocker = true;
+        } else {
+            workingDir = ivis::common::APP_PWD();
+            command = QString("cd %1").arg(workingDir);
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), command);
+        }
+    }
+
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, QString());
-    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalInfo, QString());
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType, multiDocker);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalBufferSize,
+                      ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeTerminalBufferSize));
     updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, true);
+    updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal,
+                      true);
 
-    updateDataHandler(
-        ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeTerminal, true);
+    if (workingDir.size() > 0) {
+        updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo, workingDir, true);
+    }
+}
 
-    QString command = QString("cd %1").arg(ivis::common::APP_PWD());
-    controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Start), command);
+void ControlCenter::updateTerminalModeInfo(const bool& multiDocker) {
+    QVariant popupData;
+    QVariantList textInfo;
+
+    if (multiDocker) {
+        textInfo = QVariantList({STRING_POPUP_STOP_MULTI_DCKER, STRING_POPUP_STOP_MULTI_DCKER_TIP, STRING_POPUP_CONFIRM,
+                                 STRING_POPUP_CANCEL});
+        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::StopMutliDocker, isHandler(), popupData, textInfo)
+                                           == ivis::common::PopupButton::Confirm) {
+            QString command("./remove-docker-containers.sh");
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Exit), QString());
+
+            slotHandlerEvent(ivis::common::EventTypeEnum::EventTypeViewInfoClose, QVariant());
+
+            textInfo = QVariantList({STRING_POPUP_STOP_MULTI_DCKER, STRING_POPUP_STOP_MULTI_DCKER_TIP2});
+            ivis::common::Popup::drawPopup(ivis::common::PopupType::StopMutliDockerCompleted, isHandler(), popupData, textInfo);
+        }
+
+    } else {
+        QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo);
+        textInfo = QVariantList({STRING_TERMINAL_PATH, path});
+        if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData, textInfo)
+                                           == ivis::common::PopupButton::OK) {
+            QString command = QString("cd %1").arg(popupData.toString());
+            controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
+        }
+    }
 }
 
 void ControlCenter::slotControlUpdate(const int& type, const QVariant& value) {
@@ -460,11 +526,12 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
     switch (type) {
         case ivis::common::EventTypeEnum::EventTypeViewInfoClose: {
             sendEventInfo(ivis::common::ScreenEnum::DisplayTypeExcel, ivis::common::EventTypeEnum::EventTypeViewInfoClose, "");
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType, false);
             updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeVisible, false);
-            updateDataHandler(
-                ivis::common::PropertyTypeEnum::PropertyTypeViewType, ivis::common::ViewTypeEnum::CenterViewTypeInvalid);
+            updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeViewType,
+                              ivis::common::ViewTypeEnum::CenterViewTypeInvalid);
             if (viewType == ivis::common::ViewTypeEnum::CenterViewTypeTerminal) {
-                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Stop), QString());
+                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Exit), QString());
             }
             break;
         }
@@ -483,7 +550,7 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
                 QVariantList text = QVariantList(
                     {STRING_POPUP_CONFIG_RESET, STRING_POPUP_CONFIG_RESET_TIP, STRING_POPUP_CONFIRM, STRING_POPUP_CANCEL});
                 QVariant popupData = QVariant();
-                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::RestConfigValue, isHandler(), popupData,
+                if (ivis::common::Popup::drawPopup(ivis::common::PopupType::ResetConfigValue, isHandler(), popupData,
                                                    QVariant(text)) == ivis::common::PopupButton::Confirm) {
                     ConfigSetting::instance().data()->resetConfig(ConfigSetting::ConfigResetTypeNormal);
                 }
@@ -507,16 +574,9 @@ void ControlCenter::slotHandlerEvent(const int& type, const QVariant& value) {
             }
             break;
         }
-        case ivis::common::EventTypeEnum::EventTypeTerminalSetPath: {
-            QVariant popupData = QVariant();
-            QVariant path = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalPathInfo);
-            ivis::common::PopupButton button = ivis::common::PopupButton::Invalid;
-            if (ivis::common::Popup::drawPopup(ivis::common::PopupType::SettingPath, isHandler(), popupData,
-                                               QVariantList({STRING_TERMINAL_PATH, path})) == ivis::common::PopupButton::OK) {
-                QString command = QString("cd %1").arg(popupData.toString());
-                qDebug() << "Terminal Path :" << command;
-                controlProcess(static_cast<int>(ivis::common::ProcessEnum::CommonadType::Input), command);
-            }
+        case ivis::common::EventTypeEnum::EventTypeTerminalInfo: {
+            const bool multiDocker = getData(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType).toBool();
+            updateTerminalModeInfo(multiDocker);
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeSelectModuleError: {
@@ -556,7 +616,11 @@ void ControlCenter::slotEventInfoChanged(const int& displayType, const int& even
             break;
         }
         case ivis::common::EventTypeEnum::EventTypeTerminalMode: {
-            updateTerminalMode();
+            updateTerminalMode(-1);
+            break;
+        }
+        case ivis::common::EventTypeEnum::EventTypeStartMultiDocker: {
+            updateTerminalMode(eventValue.toInt());
             break;
         }
         default: {

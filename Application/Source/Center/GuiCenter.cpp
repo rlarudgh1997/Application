@@ -73,7 +73,7 @@ void GuiCenter::drawDisplayDepth0() {
         setCommandHistory(commandHistory);
     });
     connect(mGui->TerminalViewPathTitle, &QPushButton::clicked, [=]() {
-        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalSetPath, QString());
+        createSignal(ivis::common::EventTypeEnum::EventTypeTerminalInfo);
         mGui->TerminalViewInputText->setFocus();
     });
 }
@@ -364,6 +364,10 @@ void GuiCenter::updateDisplayTerminal(const bool& first, const bool& updatPath) 
 
         mGui->TerminalViewInputText->installEventFilter(this);
         setHistoryIndex(-1);
+
+        bool multiDocker = isHandler()->getProperty(ivis::common::PropertyTypeEnum::PropertyTypeTerminalType).toBool();
+        mGui->TerminalViewPathTitle->setText((multiDocker) ? (QString("Stop MultiDocker")) : (QString("Current Path")));
+        mGui->TerminalViewSelectValue->setVisible(false);
     }
 
     if (updatPath) {
