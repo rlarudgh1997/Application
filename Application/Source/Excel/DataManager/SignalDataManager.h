@@ -99,8 +99,9 @@ private:
     QList<QStringList> parsingKeywordBlocks(const QStringList& originData);
     QMap<int, QStringList> parsingKeywordData(const QStringList& originData);
     QMap<int, QStringList> isCustomValueInfo(const QStringList& originData, const bool& normal);
+    QList<qint64> isNumber(const QStringList& numberStrList, const QMap<QString, qint64>& exception = QMap<QString, qint64>());
     QPair<qint64, qint64> isMinMaxValue(const QStringList& inputList, const bool& maxSkip = false);
-    QPair<QStringList, QStringList> isValidValueList(const int& notTriggerType, const QStringList& allData,
+    QPair<QStringList, QStringList> isValidValueList(const int& dataType, const int& notTriggerType, const QStringList& allData,
                                                      const QMap<int, QStringList>& dataInfo);
     QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);
     QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo);

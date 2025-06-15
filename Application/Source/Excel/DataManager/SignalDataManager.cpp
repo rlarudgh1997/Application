@@ -1067,40 +1067,51 @@ QMap<int, QStringList> SignalDataManager::isCustomValueInfo(const QStringList& o
     return dataInfo;
 }
 
-QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputList, const bool& maxSkip) {
+QList<qint64> SignalDataManager::isNumber(const QStringList& numberStrList, const QMap<QString, qint64>& exception) {
     QList<qint64> numberList;
-    QStringList removeMaxValue({
-        ExcelUtil::instance().data()->isMaxValue(false),
-        ExcelUtil::instance().data()->isMaxValue(true),
-    });
+    for (const auto& val : numberStrList) {
+        bool ok = false;
+        qint64 number = val.toLongLong(&ok);
+        // qint64 number = val.toLongLong(&ok, 0);
 
-    qint64 minValue = 0;
-    qint64 maxValue = 0;
-
-    for (auto input : inputList) {
-        if (maxSkip) {
-            bool skip = false;
-            for (auto removeValue : removeMaxValue) {
-                if (input.compare(removeValue) == 0) {
-                    skip = true;
-                    break;
-                }
-            }
-            if (skip) {
-                continue;
+        if (ok == false) {
+            double temp = val.toDouble(&ok);  // Double 형인 경우 false
+            if (ok) {
+                number = static_cast<qint64>(temp);  // 소수점 이하 버림
+                // qDebug() << "Converted from double :" << val << temp << "->" << number;
             }
         }
-        bool ok = false;
-        qint64 value = input.toLongLong(&ok);
-        // qint64 value = input.toLongLong(&ok, 0);    // 0을 주면 0x 접두사 자동 인식
+
         if (ok) {
-            numberList.append(value);
+            numberList.append(number);
+        } else if (exception.contains(val)) {
+            number = exception[val];
+            numberList.append(number);
+            // qDebug() << "Used exception for :" << val << "->" << number;
         } else {
-            if (input.trimmed().startsWith("0x")) {
-                qDebug() << "Fail to not conveted hex to int :" << input;
-            }
+            qDebug() << "Failed to convert to number :" << val << "->" << number;
         }
     }
+    return numberList;
+}
+
+QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputList, const bool& maxSkip) {
+    const QSet<QString> removeSet = {
+        ExcelUtil::instance().data()->isMaxValue(false),
+        ExcelUtil::instance().data()->isMaxValue(true)
+    };
+    QStringList inputListTemp;
+
+    for (const auto& input : inputList) {
+        if ((maxSkip) && (removeSet.contains(input))) {
+            continue;
+        }
+        inputListTemp.append(input);
+    }
+
+    QList<qint64> numberList = isNumber(inputListTemp);
+    qint64 minValue = 0;
+    qint64 maxValue = 0;
 
     if (numberList.isEmpty() == false) {
         if (numberList.size() == 1) {
@@ -1108,8 +1119,6 @@ QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputL
             minValue = (value < 0) ? (value) : (0);
             maxValue = (value < 0) ? (0) : (value);
         } else {
-            // minValue = *std::min_element(numberList.begin(), numberList.end());
-            // maxValue = *std::max_element(numberList.begin(), numberList.end());
             minValue = numberList.first();
             maxValue = numberList.first();
             for (const qint64& value : numberList) {
@@ -1120,12 +1129,11 @@ QPair<qint64, qint64> SignalDataManager::isMinMaxValue(const QStringList& inputL
     }
 
     // qDebug() << "isMinMaxValue :" << minValue << maxValue;
-
     return qMakePair(minValue, maxValue);
 }
 
-QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& notTriggerType, const QStringList& allData,
-                                                                    const QMap<int, QStringList>& dataInfo) {
+QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& dataType, const int& notTriggerType,
+                                                            const QStringList& allData, const QMap<int, QStringList>& dataInfo) {
     if (dataInfo.size() != 1) {
         return QPair<QStringList, QStringList>();
     }
@@ -1150,22 +1158,37 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         return exception;
     };
     auto toNumber = [&](const QStringList& numberStrList) {
-        QList<qint64> numberList;
-        for (const auto& val : numberStrList) {
-            bool ok = false;
-            qint64 number = val.toLongLong(&ok);
-            // qint64 number = val.toLongLong(&ok, 0);
-            if (ok) {
-                numberList.append(number);
-            } else {
-                if (exceptionInfo.contains(val)) {
-                    number = exceptionInfo[val];
-                    numberList.append(number);
+        return isNumber(numberStrList, exceptionInfo);
+    };
+    auto underDecimalPoint = [&](const QStringList& inputList, const QStringList& numberStrList) {
+#if 0
+        QStringList convertNumberList;
+        int index = 0;
+        for (const auto& d : numberStrList) {
+            QString decimalPart;
+            if (index < inputList.size()) {
+                const QString& str = inputList.at(index);
+                int dotPos = str.indexOf('.');
+                if ((dotPos >= 0) && (dotPos < (str.size() - 1))) {
+                    decimalPart = str.mid(dotPos);
                 }
-                // qDebug() << "Fail to - change number :" << val << "->" << number;
+            }
+            if (decimalPart.size() == 0) {
+                decimalPart = QString(".0");
+            }
+            convertNumberList.append(QString("%1%2").arg(d).arg(decimalPart));
+            ++index;
+        }
+        return convertNumberList;
+#else
+        QStringList convertNumberList;
+        if (inputList != numberStrList) {
+            for (const auto& d : numberStrList) {
+                convertNumberList.append(QString("%1.0").arg(d));
             }
         }
-        return numberList;
+        return convertNumberList;
+#endif
     };
     auto sortNumber = [&](QList<qint64> numberList) {
         std::sort(numberList.begin(), numberList.end());  // 오름차순
@@ -1178,7 +1201,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
         }
         return sortList;
     };
-    auto isNormalValue = [&](const bool& toValid, const QStringList& allList, const QStringList& inputList) {
+    auto isNormalValue = [&](const bool& toValid, const QStringList& allList, const QStringList& inputList, const int& dataType) {
         QList<qint64> numberList = toNumber(inputList);
         if (toValid == false) {
             QList<qint64> tempList;
@@ -1189,7 +1212,13 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
             }
             numberList = tempList;
         }
-        return sortNumber(numberList);
+        auto numberStrList = sortNumber(numberList);
+#if 0
+        if (dataType == static_cast<int>(ivis::common::DataTypeEnum::DataType::HDouble)) {
+            numberStrList = underDecimalPoint(inputList, numberStrList);
+        }
+#endif
+        return numberStrList;
     };
     auto isRangeValue = [&](const bool& toValid, const QStringList& allList, const qint64& min, const qint64& max) {
         QList<qint64> numberList;
@@ -1277,8 +1306,8 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
     // -> CustomFlow, CustomDontCare 만 별도 처리
     switch (keywordType) {
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::Invalid): {
-            validData = isNormalValue(true, allData, inputData);
-            invalidData = isNormalValue(false, allData, inputData);
+            validData = isNormalValue(true, allData, inputData, dataType);
+            invalidData = isNormalValue(false, allData, inputData, dataType);
             break;
         }
         case static_cast<int>(ivis::common::KeywordTypeEnum::KeywordType::CustomOver): {
@@ -1340,7 +1369,7 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
             // 유효값 : 0~MAX
             // ConvertData  : clear                   (NotTrigger : other case 리스트 전체)
             // Precondition : other case 리스트 전체   (NotTrigger : clear)
-            validData = isNormalValue(true, QStringList(), allData);
+            validData = isNormalValue(true, QStringList(), allData, dataType);
             invalidData.clear();
             exceptionData = foundException(validData);
             break;
@@ -1351,25 +1380,25 @@ QPair<QStringList, QStringList> SignalDataManager::isValidValueList(const int& n
     }
 
     QPair<QStringList, QStringList> valueInfo = isValueInfo(notTriggerType, exceptionData, validData, invalidData);
-
     if (allData.size() == 0) {
         qDebug() << "Fail to - all data size : 0";
     }
 
-#if 0
+#if 1
     bool log = true;
     if (log) {
         qDebug() << "\n";
-        qDebug() << "\t isValidValueList :" << notTriggerType << ExcelUtil::instance().data()->isKeywordString(notTriggerType);
-        qDebug() << "\t\t Keyword   :" << keywordType << ExcelUtil::instance().data()->isKeywordString(keywordType);
-        qDebug() << "\t\t MinMax    :" << minValue << maxValue;
-        qDebug() << "\t\t AllData   :" << allData;
-        qDebug() << "\t\t InputData :" << inputData;
-        qDebug() << "\t\t Exception :" << exceptionData;
-        qDebug() << "\t\t Valid     :" << validData;
-        qDebug() << "\t\t Invalid   :" << invalidData;
-        qDebug() << "\t\t Value     :" << valueInfo.first;
-        qDebug() << "\t\t           :" << valueInfo.second;
+        qDebug() << "\t isValidValueList :" << dataType;
+        qDebug() << "\t\t Keyword    :" << keywordType << ExcelUtil::instance().data()->isKeywordString(keywordType);
+        qDebug() << "\t\t NotTrigger :" << notTriggerType << ExcelUtil::instance().data()->isKeywordString(notTriggerType);
+        qDebug() << "\t\t MinMax     :" << minValue << maxValue;
+        qDebug() << "\t\t AllData    :" << allData;
+        qDebug() << "\t\t InputData  :" << inputData;
+        qDebug() << "\t\t Exception  :" << exceptionData;
+        qDebug() << "\t\t Valid      :" << validData;
+        qDebug() << "\t\t Invalid    :" << invalidData;
+        qDebug() << "\t\t Value      :" << valueInfo.first;
+        qDebug() << "\t\t            :" << valueInfo.second;
         qDebug() << "\n";
     }
 #endif
@@ -1773,7 +1802,7 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
     QMap<int, QStringList> dataInfo = isCustomValueInfo(currOriginData, normal);
     QPair<QStringList, QStringList> valueInfo;
 
-#if 0
+#if 1
     bool log = false;
     // log = ((normal == false) && (signalName == "Vehicle.CV.Down_Hill_Cruise.Input_DHCToleranceValue"));
     log = true;
@@ -1797,10 +1826,10 @@ QPair<QStringList, QStringList> SignalDataManager::isConvertedValueData(const QS
             valueInfo = qMakePair(isValidUniqueValue(dataType, dataInfo), QStringList());
         }
     } else {
-        valueInfo = isValidValueList(notTriggerType, otherAllData, dataInfo);
+        valueInfo = isValidValueList(dataType, notTriggerType, otherAllData, dataInfo);
     }
 
-#if 0
+#if 1
     if (log) {
         qDebug() << "\n";
         qDebug() << "\t ValueInfo    :" << valueInfo.first;  // ConvertData

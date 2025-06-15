@@ -478,9 +478,9 @@ QString ExcelDataManager::isConfigData(const int& sheetIndex, const QString& tcN
     QStringList configList = isParsingDataList(list, true);
     QString config = (configList.size() > 0) ? (configList.at(0)) : (QString());
 
-    // qDebug() << "isConfigData :" << sheetIndex << tcName;
-    // qDebug() << "\t Info :" << config.size() << config;
-    // qDebug() << "\n";
+    qDebug() << "isConfigData :" << sheetIndex << tcName;
+    qDebug() << "\t Info :" << config.size() << config;
+    qDebug() << "\n";
 
     return config;
 }
@@ -1403,13 +1403,13 @@ bool ExcelDataManager::isValidConfigCheck(const QString& configName, const QMap<
         }
     }
 
-    // qDebug() << "isValidConfigCheck :" << result;
-    // qDebug() << "\t inputMap  :" << inputMap;
-    // qDebug() << "\t inputList :" << inputList;
-    // for (const auto& resultKey : resultMap.keys()) {
-    //     qDebug() << "\t ResultMap :" << resultKey << resultMap[resultKey];
-    // }
-    // qDebug() << "\n";
+    qDebug() << "isValidConfigCheck :" << result;
+    qDebug() << "\t inputMap  :" << inputMap;
+    qDebug() << "\t inputList :" << inputList;
+    for (const auto& resultKey : resultMap.keys()) {
+        qDebug() << "\t ResultMap :" << resultKey << resultMap[resultKey];
+    }
+    qDebug() << "\n";
 
     return result;
 }
