@@ -1,0 +1,67 @@
+@startuml
+
+class CaseDataWriter {
+  - mTCFileDirPath: QString
+  - mFile: QFile
+  - mStream: QTextStream
+  - mSfcDescription: QStringList
+  - mSplitSize: int
+  - mSplitTcFileCount: int
+  - mPrevSplitTcFileCount: int
+  - mMaxFileSize: int
+  - mAvailableSpace: qint64
+  - mFileSize: qint64
+  - mOpenFilePath: QString
+
+  + CaseDataWriter(const QString& basePath = QString())
+  + ~CaseDataWriter()
+  + genTestCaseFile(const QJsonObject& json, const int& totalTestCaseCount): QString
+
+  - printProgressBar(double progress): void
+  - write(const QString& testCase = ""): void
+  - getUserName(): QString
+  - writeHeader(): void
+  - openNewFile(const int& splitTcFileCount): void
+}
+
+class ExcelUtil <<singleton>> {
+  + instance(): ExcelUtil
+  + data(): ExcelUtilData*
+}
+
+class JSEngineManager <<singleton>> {
+  + instance(): JSEngineManager
+  + getEngine(): QJSEngine&
+}
+
+class ConfigSetting <<singleton>> {
+  + instance(): ConfigSetting
+  + data(): ConfigSettingData*
+}
+
+note right of CaseDataWriter::CaseDataWriter
+  Uses `ExcelUtil` and `ConfigSetting` singletons.
+  Uses `QStorageInfo`.
+end note
+
+note right of CaseDataWriter::genTestCaseFile
+  Uses `JSEngineManager` singleton.
+  Processes `QJsonObject`.
+end note
+
+note right of CaseDataWriter::writeHeader
+  Uses `QDateTime`, `QProcess`, and `QSysInfo`.
+end note
+
+note right of CaseDataWriter::openNewFile
+  Uses `QDir`, `QFile`, `QTextStream`, `QRegularExpression`.
+end note
+
+
+CaseDataWriter o-- QFile
+CaseDataWriter o-- QTextStream
+CaseDataWriter ..> ExcelUtil : uses
+CaseDataWriter ..> JSEngineManager : uses
+CaseDataWriter ..> ConfigSetting : uses
+
+@enduml

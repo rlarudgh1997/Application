@@ -1,0 +1,155 @@
+#
+# @file Lamp_Indicator_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Lamp_Indicator_CV:
+  sfcVersion: "1.0.0"
+  specVersion: "v0.11"
+  description: "Reference : [CV840] Lamp_Indicator_CV. Contains : Telltale. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - frontFogChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Lamp_Indicator_CV.Input_FrFogLmpReqStatus: mInput_FrFogLmpReqStatus
+    - rearFogChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Lamp_Indicator_CV.Input_RrFogLmpReqStatus: mInput_RrFogLmpReqStatus
+    - highLowBeamChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Lamp_Indicator_CV.Input_HdLmpHiReqStatus: mInput_HdLmpHiReqStatus
+        - Vehicle.CV.Lamp_Indicator_CV.Input_HdLmpLoReqStatus: mInput_HdLmpLoReqStatus
+    - tailLampChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Lamp_Indicator_CV.Input_ExtrnlTailLmpReqStatus: mInput_ExtrnlTailLmpReqStatus
+    - turnSignalLampChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Lamp_Indicator_CV.Input_LeftTurnSignalLampStatus: mInput_LeftTurnSignalLampStatus
+        - Vehicle.CV.Lamp_Indicator_CV.Input_RightTurnSignalLampStatus: mInput_RightTurnSignalLampStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.FrontFog.Stat:
+      description: "DCN: IMG_TelltaleFrontFog_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.RearFog.Stat:
+      description: "DCN: IMG_TelltaleRearFog_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.HighBeam.Stat:
+      description: "DCN: IMG_TelltaleHighBeam_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.LowBeam.Stat:
+      description: "DCN: IMG_TelltaleLowBeam_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.TailLamp.Stat:
+      description: "DCN: IMG_TelltaleTailLamp_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.TurnLeft.Stat:
+      description: "DCN: IMG_TelltaleTurnLeft_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.TurnRight.Stat:
+      description: "DCN: IMG_TelltaleTurnRight_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.TrailerTurnLeft.Stat:
+      description: "DCN: IMG_TelltaleTrailerTurnLeft_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Lamp_Indicator_CV.Telltale.TrailerTurnRight.Stat:
+      description: "DCN: IMG_TelltaleTrailerTurnRight_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # Style is SND_NAME
+    - SFC.Lamp_Indicator_CV.Sound.Tick.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Indicator_CV.Sound.Tick.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Lamp_Indicator_CV.Sound.Tick.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Sound output count
+    - SFC.Lamp_Indicator_CV.Sound.Tick.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1
+      # Style is SND_NAME
+    - SFC.Lamp_Indicator_CV.Sound.Tock.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Lamp_Indicator_CV.Sound.Tock.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Lamp_Indicator_CV.Sound.Tock.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Sound output count
+    - SFC.Lamp_Indicator_CV.Sound.Tock.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound2

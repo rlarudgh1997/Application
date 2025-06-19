@@ -1,0 +1,281 @@
+#
+# @file Parking_Brake_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Parking_Brake_CV:
+  sfcVersion: "14.0.0"
+  specVersion: "v0.28"
+  description: "Reference : [CV360] Parking_Brake_CV. Contains : Telltale, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configEPBChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigEPB: mInter_ConfigEPB
+    - parkingSwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_ParkingSwitchStatus: mInput_ParkingSwitchStatus
+    - epbWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBWarningStatus: mInput_EPBWarningStatus
+    - epbReleaseInhibitReasonStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBReleaseInhibitReasonStatus: mInput_EPBReleaseInhibitReasonStatus
+    - epbCheckStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBCheckStatus: mInput_EPBCheckStatus
+    - epbAutoLockInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_StateOfEPBStatus: mInput_StateOfEPBStatus
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBExtnAppRqStatus: mInput_EPBExtnAppRqStatus
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBExtnAppRqStatusFromVCU: mInput_EPBExtnAppRqStatusFromVCU
+    - epbNotReleasedStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBNotReleasedStatus: mInput_EPBNotReleasedStatus
+    - epbRedStopStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBRedStopStatus: mInput_EPBRedStopStatus
+    - epbWorkingModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBWorkingModeStatus: mInput_EPBWorkingModeStatus
+    - epbTrailerTestStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Parking_Brake_CV.Input_EPBTrailerTestStatus: mInput_EPBTrailerTestStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Parking_Brake_CV.Telltale.Parking_Brake_CV.Stat:
+      description: "DCN: IMG_TelltaleParkingLamp_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Parking_Brake_CV.Telltale.Parking_Brake_CV.BlinkValueA:
+      description: "DCN: IMG_TelltaleParkingLamp_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Parking_Brake_CV.Telltale.Parking_Brake_CV.BlinkValueB:
+      description: "DCN: IMG_TelltaleParkingLamp_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBReleaseInhibitInfo.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBReleaseInhibitInfo.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBReleaseInhibitInfo.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBReleaseInhibitInfo.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBReleaseInhibitInfo.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBSystemCheckWarning.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBSystemCheckWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBSystemCheckWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBSystemCheckWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBSystemCheckWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBAutoLockInfo.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBAutoLockInfo.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBAutoLockInfo.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBAutoLockInfo.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBAutoLockInfo.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBNotReleased.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBNotReleased.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBNotReleased.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBNotReleased.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBNotReleased.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBWorkshopMode.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBWorkshopMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBWorkshopMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBWorkshopMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBWorkshopMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Parking_Brake_CV.Event.EPBTrailerWorkshopMode.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Parking_Brake_CV.Event.EPBTrailerWorkshopMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Parking_Brake_CV.Event.EPBTrailerWorkshopMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Parking_Brake_CV.Event.EPBTrailerWorkshopMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Parking_Brake_CV.Event.EPBTrailerWorkshopMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6

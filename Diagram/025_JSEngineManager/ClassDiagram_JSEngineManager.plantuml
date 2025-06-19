@@ -1,0 +1,19 @@
+@startuml
+
+class QJSEngine
+
+class JSEngineManager {
+    - QJSEngine engine
+    --
+    + static JSEngineManager& instance()
+    + QJSEngine& getEngine()
+    --
+    - JSEngineManager()
+    - ~JSEngineManager()
+    - JSEngineManager(const JSEngineManager&) = delete
+    - JSEngineManager& operator=(const JSEngineManager&) = delete
+}
+
+JSEngineManager --> QJSEngine : uses
+
+@enduml

@@ -51,277 +51,297 @@ public:
         };
         for (const QString& sheet : json.keys()) {
             QJsonObject sectionObj = json[sheet].toObject();
-            for (auto tcIt = sectionObj.begin(); tcIt != sectionObj.end(); ++tcIt) {
-                QJsonObject tcObj = tcIt.value().toObject();
-                QString tcName = tcObj["TCName"].toString();
-                QString vehicleType = tcObj["VehicleType"].toString();
-                if (!tcName.isEmpty()) {
-                    QString othersResultName;
-                    QStringList othersInputSignalList;
-                    QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> othersSignalListInfo;
-                    QStringList othersOutputSignal;
-                    QStringList othersOutputValue;
-                    QVector<bool> othersIsInitialize;
-                    for (const QString& key : tcObj.keys()) {
-                        if (key.startsWith("_Result[")) {
-                            QJsonObject resultObj = tcObj[key].toObject();
-                            QString resultName = resultObj["Result"].toString();
-                            QStringList outputSignal;
-                            QStringList outputValue;
-                            QStringList outputEnum;
-                            QVector<bool> isInitialize;
-                            QJsonObject outputSignalList = resultObj["Output_Signal"].toObject();
-                            QJsonObject signalObj;
-                            for (auto sigIt = outputSignalList.begin(); sigIt != outputSignalList.end(); ++sigIt) {
-                                signalObj = sigIt.value().toObject();
-                                outputSignal << sigIt.key();
-                                outputValue << signalObj["Output_Value"].toString();
-                                outputEnum.clear();
-                                isInitialize << signalObj["isInitialize"].toBool();
-                                for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
-                                    QString tempOutputEnum;
-                                    tempOutputEnum = SignalDataManager::instance().data()->isSignalValueEnum(
-                                        outputSignal[outputCnt], outputValue[outputCnt]);
-                                    if (tempOutputEnum.isEmpty() == false) {
-                                        outputEnum << " # " + tempOutputEnum;
-                                    } else {
-                                        outputEnum << tempOutputEnum;
+            if (sheet == "_Sheet[010]") {
+                for (auto tcIt = sectionObj.begin(); tcIt != sectionObj.end(); ++tcIt) {
+                    QJsonObject tcObj = tcIt.value().toObject();
+                    QString tcFormat = tcObj["TCFormat"].toString();
+                    write(tcFormat);
+                }
+            } else {
+                for (auto tcIt = sectionObj.begin(); tcIt != sectionObj.end(); ++tcIt) {
+                    QJsonObject tcObj = tcIt.value().toObject();
+                    QString tcName = tcObj["TCName"].toString();
+                    QString vehicleType = tcObj["VehicleType"].toString();
+                    if (!tcName.isEmpty()) {
+                        QString othersResultName;
+                        QStringList othersInputSignalList;
+                        QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> othersSignalListInfo;
+                        QStringList othersOutputSignal;
+                        QStringList othersOutputValue;
+                        QVector<bool> othersIsInitialize;
+                        for (const QString& key : tcObj.keys()) {
+                            if (key.startsWith("_Result[")) {
+                                QJsonObject resultObj = tcObj[key].toObject();
+                                QString resultName = resultObj["Result"].toString();
+                                QStringList outputSignal;
+                                QStringList outputValue;
+                                QStringList outputEnum;
+                                QVector<bool> isInitialize;
+                                QJsonObject outputSignalList = resultObj["Output_Signal"].toObject();
+                                QJsonObject signalObj;
+                                for (auto sigIt = outputSignalList.begin(); sigIt != outputSignalList.end(); ++sigIt) {
+                                    signalObj = sigIt.value().toObject();
+                                    outputSignal << sigIt.key();
+                                    outputValue << signalObj["Output_Value"].toString();
+                                    outputEnum.clear();
+                                    isInitialize << signalObj["isInitialize"].toBool();
+                                    for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
+                                        QString tempOutputEnum;
+                                        tempOutputEnum = SignalDataManager::instance().data()->isSignalValueEnum(
+                                            outputSignal[outputCnt], outputValue[outputCnt]);
+                                        if (tempOutputEnum.isEmpty() == false) {
+                                            outputEnum << " # " + tempOutputEnum;
+                                        } else {
+                                            outputEnum << tempOutputEnum;
+                                        }
                                     }
                                 }
-                            }
 
-                            for (const QString& caseKey : resultObj.keys()) {
-                                if (caseKey.startsWith("_Case[")) {
-                                    QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
-                                    QJsonObject caseObj = resultObj[caseKey].toObject();
-                                    QString caseName = caseObj["Case"].toString();
-                                    qulonglong delay = caseObj["Delay"].toVariant().toULongLong();
-                                    QString genType = caseObj["GenType"].toString();
-                                    QStringList inputSignalList =
-                                        resultObj[caseKey][QString("InputSignalList")].toObject().keys();
-                                    QVector<int> preconditionOrder;
-                                    for (const QJsonValue& value : resultObj[caseKey][QString("PreconditionOrder")].toArray()) {
-                                        if (value.isDouble()) {
-                                            preconditionOrder.append(value.toInt());
-                                        }
-                                    }
-                                    for (const QString& inputSignal : inputSignalList) {
-                                        signalList.emplace_back(std::make_tuple(
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("SignalName")]
-                                                .toString(),
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("DataType")]
-                                                .toInt(),
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("KeywordType")]
-                                                .toInt(),
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("Precondition")]
-                                                .toArray(),
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("ValueEnum")]
-                                                .toObject(),
-                                            resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("InputData")]
-                                                .toArray()));
-                                    }
-                                    QJsonObject casesMap = caseObj["cases"].toObject();
-                                    QJsonObject initMap = caseObj["InitCase"].toObject();
-                                    QStringList parts;
-                                    QStringList inputDataInfo;
-                                    QStringList signalValueList;
-                                    int signalOrder = 0;
-                                    QString signalName;
-                                    QString signalValue;
-                                    QString enumString;
-                                    QString triggerEnumString;
-                                    QString triggerSignal;
-                                    QString triggerValue;
-                                    QString testCase;
-                                    for (auto it = casesMap.begin(); it != casesMap.end(); ++it) {
-                                        testCase.clear();
-                                        parts = it.key().split("=>");
-                                        signalValueList = parts[0].split(",", Qt::SkipEmptyParts);
-                                        inputDataInfo = parts[1].split(":");
-                                        signalOrder = 0;
-                                        testCase += "  - name: " + tcName + ", " + resultName + ", " + caseName + " " + "(" +
-                                                    QString::number(testCaseCount++) + ")" + "\n";
-                                        if (vehicleType.isEmpty() == false) {
-                                            testCase += "    tag: " + vehicleType + "\n";
-                                        }
-                                        if (signalValueList[0].contains("config") == true) {
-                                            signalValueList[0].remove("[");
-                                            signalValueList[0].remove("]");
-                                            testCase += "    " + signalValueList[0] + "\n";
-                                            signalValueList.removeAt(0);
-                                        }
-                                        if (genType.contains("Negative", Qt::CaseInsensitive) == true) {
-                                            testCase += "    state: negative\n";
-                                        } else if (genType.contains("Positive", Qt::CaseInsensitive) == true) {
-                                            testCase += "    state: positive\n";
-                                        }
-                                        testCase += "    precondition:\n";
-                                        QMap<QString, QString> sigValueMap;
-                                        QVector<QString> preconditionString;
-                                        for (QString& number : signalValueList) {
-                                            number = number.trimmed();
-                                            if (number.isEmpty() == false) {
-                                                enumString = std::get<4>(signalList[signalOrder])[number].toString();
-                                                if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
-                                                    triggerEnumString =
-                                                        std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
-                                                            .toString();
-                                                    sigValueMap.insert(inputDataInfo[0], inputDataInfo[1].trimmed());
-                                                } else {
-                                                    sigValueMap.insert(std::get<0>(signalList[signalOrder]), number);
-                                                }
-                                                if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
-                                                    signalName = ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
-                                                    signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
-                                                } else {
-                                                    signalName = std::get<0>(signalList[signalOrder]);
-                                                    signalValue = number;
-                                                }
-
-                                                enumString = enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
-                                                preconditionString << "      - " + signalName + ": " +
-                                                                          quoteIfNotNumeric(signalValue) + enumString + "\n";
-                                                signalOrder++;
+                                for (const QString& caseKey : resultObj.keys()) {
+                                    if (caseKey.startsWith("_Case[")) {
+                                        QVector<std::tuple<QString, int, int, QJsonArray, QJsonObject, QJsonArray>> signalList;
+                                        QJsonObject caseObj = resultObj[caseKey].toObject();
+                                        QString caseName = caseObj["Case"].toString();
+                                        qulonglong delay = caseObj["Delay"].toVariant().toULongLong();
+                                        QString genType = caseObj["GenType"].toString();
+                                        QStringList inputSignalList =
+                                            resultObj[caseKey][QString("InputSignalList")].toObject().keys();
+                                        QVector<int> preconditionOrder;
+                                        for (const QJsonValue& value :
+                                             resultObj[caseKey][QString("PreconditionOrder")].toArray()) {
+                                            if (value.isDouble()) {
+                                                preconditionOrder.append(value.toInt());
                                             }
                                         }
-
-                                        if (preconditionString.size() != preconditionOrder.size()) {
-                                            qWarning() << "The number of signals in the precondition and the number of "
-                                                          "precondition orders are different.\nA review of the generated "
-                                                          "TcGenHistory.json file is required.";
-                                        } else {
-                                            QVector<QString> reordered(preconditionString.size());
-                                            for (int i = 0; i < preconditionString.size(); ++i) {
-                                                reordered[preconditionOrder[i]] = preconditionString[i];
-                                            }
-                                            for (const QString& str : reordered) {
-                                                if (str.contains("[Empty]") == false) {
-                                                    testCase += str;
-                                                }
-                                            }
+                                        for (const QString& inputSignal : inputSignalList) {
+                                            signalList.emplace_back(std::make_tuple(
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("SignalName")]
+                                                    .toString(),
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("DataType")]
+                                                    .toInt(),
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal]
+                                                         [QString("KeywordType")]
+                                                             .toInt(),
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal]
+                                                         [QString("Precondition")]
+                                                             .toArray(),
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("ValueEnum")]
+                                                    .toObject(),
+                                                resultObj[caseKey][QString("InputSignalList")][inputSignal][QString("InputData")]
+                                                    .toArray()));
                                         }
-
-                                        if (isInitialize.contains(true)) {
-                                            testCase += "    init:\n";
-                                            for (int initCnt = 0; initCnt < isInitialize.size(); initCnt++) {
-                                                if (isInitialize[initCnt] == true) {
-                                                    if (outputValue[initCnt][0].isDigit() == true ||
-                                                        outputValue[initCnt].contains("-")) {
-                                                        if (outputValue[initCnt].contains("0x")) {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": 0x0 # NONE\n";
-                                                        } else {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": 0\n";
-                                                        }
-                                                    } else {
-                                                        if (outputValue[initCnt].contains("E")) {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": " +
-                                                                        quoteIfNotNumeric(outputValue[initCnt]) + "\n";
-                                                        } else if (outputValue[initCnt].contains("SND")) {
-                                                            testCase += "      - " + outputSignal[initCnt] + ": " +
-                                                                        quoteIfNotNumeric(outputValue[initCnt]) + "\n";
-                                                        }
-                                                    }
-                                                }
+                                        QJsonObject casesMap = caseObj["cases"].toObject();
+                                        QJsonObject initMap = caseObj["InitCase"].toObject();
+                                        QStringList parts;
+                                        QStringList inputDataInfo;
+                                        QStringList signalValueList;
+                                        int signalOrder = 0;
+                                        QString signalName;
+                                        QString signalValue;
+                                        QString enumString;
+                                        QString triggerEnumString;
+                                        QString triggerSignal;
+                                        QString triggerValue;
+                                        QString testCase;
+                                        for (auto it = casesMap.begin(); it != casesMap.end(); ++it) {
+                                            testCase.clear();
+                                            parts = it.key().split("=>");
+                                            signalValueList = parts[0].split(",", Qt::SkipEmptyParts);
+                                            inputDataInfo = parts[1].split(":");
+                                            signalOrder = 0;
+                                            testCase += "  - name: " + tcName + ", " + resultName + ", " + caseName + " " + "(" +
+                                                        QString::number(testCaseCount++) + ")" + "\n";
+                                            if (vehicleType.isEmpty() == false) {
+                                                testCase += "    tag: " + vehicleType + "\n";
                                             }
-                                        }
-                                        if (parts[1].split(":").size() == 2) {
-                                            testCase += "    input:\n";
-                                            if (delay > 0) {
-                                                testCase += "      - delay: " + QString::number(delay) + "\n";
+                                            if (signalValueList[0].contains("config") == true) {
+                                                signalValueList[0].remove("[");
+                                                signalValueList[0].remove("]");
+                                                testCase += "    " + signalValueList[0] + "\n";
+                                                signalValueList.removeAt(0);
                                             }
-                                            if (inputDataInfo[0].contains("SFC.Private.IGNElapsed")) {
-                                                triggerSignal =
-                                                    ExcelUtil::instance().data()->isIGNElapsedName(inputDataInfo[1].toInt());
-                                                triggerValue = "0x" + QString::number(++ignCount, 16).toUpper();
-                                            } else {
-                                                triggerSignal = inputDataInfo[0];
-                                                triggerValue = inputDataInfo[1];
+                                            if (genType.contains("Negative", Qt::CaseInsensitive) == true) {
+                                                testCase += "    state: negative\n";
+                                            } else if (genType.contains("Positive", Qt::CaseInsensitive) == true) {
+                                                testCase += "    state: positive\n";
                                             }
-                                            triggerEnumString =
-                                                triggerEnumString.isEmpty() ? QString() : QString(" # %1").arg(triggerEnumString);
-                                            testCase += "      - " + triggerSignal + ": " +
-                                                        quoteIfNotNumeric(triggerValue.trimmed()) + triggerEnumString + "\n";
-                                        }
-                                        testCase += "    output:\n";
-                                        for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
-                                            QString tempOutputSignal = outputSignal[outputCnt];
-                                            if (tempOutputSignal.contains("Collect")) {
-                                                tempOutputSignal = "collect";
-                                            } else if (tempOutputSignal.contains("Delay")) {
-                                                tempOutputSignal = "delay";
-                                            } else {
-                                                // no operation
-                                            }
-                                            // Cal logic 구현 (단, Sheet 는 먼저 풀려있어야 함)
-                                            QString tempOutputValue = outputValue[outputCnt];
-                                            if (tempOutputValue.contains("[Cal]")) {
-                                                if (tempOutputValue.contains("math.")) {
-                                                    tempOutputValue.replace("math.", "Math.");
-                                                }
-                                                tempOutputValue.remove("[Cal]");
-                                                for (const auto& sigNameKey : sigValueMap.keys()) {
-                                                    if (tempOutputValue.contains(sigNameKey)) {
-                                                        tempOutputValue.replace(sigNameKey, sigValueMap[sigNameKey]);
-                                                    }
-                                                }
-                                                tempOutputValue =
-                                                    JSEngineManager::instance().getEngine().evaluate(tempOutputValue).toString();
-                                            }
-                                            (outputCnt == outputSignal.size() - 1)
-                                                ? testCase += "      - " + tempOutputSignal + ": " +
-                                                              quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] + "\n\n"
-                                                : testCase += "      - " + tempOutputSignal + ": " +
-                                                              quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] + "\n";
-                                        }
-                                        write(testCase);
-                                    }
-
-                                    if (!initMap.isEmpty()) {
-                                        QStringList initParts;
-                                        QString initEnumString;
-                                        QString initSignalName;
-                                        QString initSignalValue;
-                                        QString initCase;
-                                        int initSignalOrder = 0;
-                                        initCase.clear();
-                                        initCase += "  - name: " + tcName + ", " + resultName + ", " + caseName +
-                                                    " Input Signal Initialization." + "\n";
-                                        if (vehicleType.isEmpty() == false) {
-                                            initCase += "    tag: " + vehicleType + "\n";
-                                        }
-                                        initCase += "    input:\n";
-                                        for (auto it = initMap.begin(); it != initMap.end(); ++it) {
-                                            initParts = it.key().split("=>");
-                                            for (QString& number : initParts[0].split(",", Qt::SkipEmptyParts)) {
+                                            testCase += "    precondition:\n";
+                                            QMap<QString, QString> sigValueMap;
+                                            QVector<QString> preconditionString;
+                                            for (QString& number : signalValueList) {
                                                 number = number.trimmed();
                                                 if (number.isEmpty() == false) {
-                                                    if (number.contains("[Empty]") == false) {
-                                                        initEnumString =
-                                                            std::get<4>(signalList[initSignalOrder])[number].toString();
-                                                        if (std::get<0>(signalList[initSignalOrder])
-                                                                .contains("SFC.Private.IGNElapsed")) {
-                                                            initSignalName =
-                                                                ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
-                                                            initSignalValue = "0x" + QString::number(++ignCount, 16).toUpper();
-                                                        } else {
-                                                            initSignalName = std::get<0>(signalList[initSignalOrder]);
-                                                            initSignalValue = number;
-                                                        }
-                                                        initEnumString = initEnumString.isEmpty()
-                                                                             ? QString()
-                                                                             : QString(" # %1").arg(initEnumString);
-                                                        initCase += "      - " + initSignalName + ": " +
-                                                                    quoteIfNotNumeric(initSignalValue) + initEnumString + "\n";
+                                                    enumString = std::get<4>(signalList[signalOrder])[number].toString();
+                                                    if (inputDataInfo[0] == std::get<0>(signalList[signalOrder])) {
+                                                        triggerEnumString =
+                                                            std::get<4>(signalList[signalOrder])[inputDataInfo[1].trimmed()]
+                                                                .toString();
+                                                        sigValueMap.insert(inputDataInfo[0], inputDataInfo[1].trimmed());
+                                                    } else {
+                                                        sigValueMap.insert(std::get<0>(signalList[signalOrder]), number);
                                                     }
-                                                    initSignalOrder++;
+                                                    if (std::get<0>(signalList[signalOrder]).contains("SFC.Private.IGNElapsed")) {
+                                                        signalName =
+                                                            ExcelUtil::instance().data()->isIGNElapsedName(number.toInt());
+                                                        signalValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                                    } else {
+                                                        signalName = std::get<0>(signalList[signalOrder]);
+                                                        signalValue = number;
+                                                    }
+
+                                                    enumString =
+                                                        enumString.isEmpty() ? QString() : QString(" # %1").arg(enumString);
+                                                    preconditionString << "      - " + signalName + ": " +
+                                                                              quoteIfNotNumeric(signalValue) + enumString + "\n";
+                                                    signalOrder++;
                                                 }
                                             }
+
+                                            if (preconditionString.size() != preconditionOrder.size()) {
+                                                qWarning() << "The number of signals in the precondition and the number of "
+                                                              "precondition orders are different.\nA review of the generated "
+                                                              "TcGenHistory.json file is required.";
+                                            } else {
+                                                QVector<QString> reordered(preconditionString.size());
+                                                for (int i = 0; i < preconditionString.size(); ++i) {
+                                                    reordered[preconditionOrder[i]] = preconditionString[i];
+                                                }
+                                                for (const QString& str : reordered) {
+                                                    if (str.contains("[Empty]") == false) {
+                                                        testCase += str;
+                                                    }
+                                                }
+                                            }
+
+                                            if (isInitialize.contains(true)) {
+                                                testCase += "    init:\n";
+                                                for (int initCnt = 0; initCnt < isInitialize.size(); initCnt++) {
+                                                    if (isInitialize[initCnt] == true) {
+                                                        if (outputValue[initCnt][0].isDigit() == true ||
+                                                            outputValue[initCnt].contains("-")) {
+                                                            if (outputValue[initCnt].contains("0x")) {
+                                                                testCase += "      - " + outputSignal[initCnt] + ": 0x0 # NONE\n";
+                                                            } else {
+                                                                testCase += "      - " + outputSignal[initCnt] + ": 0\n";
+                                                            }
+                                                        } else {
+                                                            if (outputValue[initCnt].contains("E")) {
+                                                                testCase += "      - " + outputSignal[initCnt] + ": " +
+                                                                            quoteIfNotNumeric(outputValue[initCnt]) + "\n";
+                                                            } else if (outputValue[initCnt].contains("SND")) {
+                                                                testCase += "      - " + outputSignal[initCnt] + ": " +
+                                                                            quoteIfNotNumeric(outputValue[initCnt]) + "\n";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (parts[1].split(":").size() == 2) {
+                                                testCase += "    input:\n";
+                                                if (delay > 0) {
+                                                    testCase += "      - delay: " + QString::number(delay) + "\n";
+                                                }
+                                                if (inputDataInfo[0].contains("SFC.Private.IGNElapsed")) {
+                                                    triggerSignal =
+                                                        ExcelUtil::instance().data()->isIGNElapsedName(inputDataInfo[1].toInt());
+                                                    triggerValue = "0x" + QString::number(++ignCount, 16).toUpper();
+                                                } else {
+                                                    triggerSignal = inputDataInfo[0];
+                                                    triggerValue = inputDataInfo[1];
+                                                }
+                                                triggerEnumString = triggerEnumString.isEmpty()
+                                                                        ? QString()
+                                                                        : QString(" # %1").arg(triggerEnumString);
+                                                testCase += "      - " + triggerSignal + ": " +
+                                                            quoteIfNotNumeric(triggerValue.trimmed()) + triggerEnumString + "\n";
+                                            }
+                                            testCase += "    output:\n";
+                                            for (int outputCnt = 0; outputCnt < outputSignal.size(); outputCnt++) {
+                                                QString tempOutputSignal = outputSignal[outputCnt];
+                                                if (tempOutputSignal.contains("Collect")) {
+                                                    tempOutputSignal = "collect";
+                                                } else if (tempOutputSignal.contains("Delay")) {
+                                                    tempOutputSignal = "delay";
+                                                } else {
+                                                    // no operation
+                                                }
+                                                // Cal logic 구현 (단, Sheet 는 먼저 풀려있어야 함)
+                                                QString tempOutputValue = outputValue[outputCnt];
+                                                if (tempOutputValue.contains("[Cal]")) {
+                                                    if (tempOutputValue.contains("math.")) {
+                                                        tempOutputValue.replace("math.", "Math.");
+                                                    }
+                                                    tempOutputValue.remove("[Cal]");
+                                                    for (const auto& sigNameKey : sigValueMap.keys()) {
+                                                        if (tempOutputValue.contains(sigNameKey)) {
+                                                            tempOutputValue.replace(sigNameKey, sigValueMap[sigNameKey]);
+                                                        }
+                                                    }
+                                                    tempOutputValue = JSEngineManager::instance()
+                                                                          .getEngine()
+                                                                          .evaluate(tempOutputValue)
+                                                                          .toString();
+                                                }
+                                                (outputCnt == outputSignal.size() - 1)
+                                                    ? testCase += "      - " + tempOutputSignal + ": " +
+                                                                  quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] +
+                                                                  "\n\n"
+                                                    : testCase += "      - " + tempOutputSignal + ": " +
+                                                                  quoteIfNotNumeric(tempOutputValue) + outputEnum[outputCnt] +
+                                                                  "\n";
+                                            }
+                                            write(testCase);
                                         }
-                                        initCase += "\n";
-                                        write(initCase);
+
+                                        if (!initMap.isEmpty()) {
+                                            QStringList initParts;
+                                            QString initEnumString;
+                                            QString initSignalName;
+                                            QString initSignalValue;
+                                            QString initCase;
+                                            int initSignalOrder = 0;
+                                            initCase.clear();
+                                            initCase += "  - name: " + tcName + ", " + resultName + ", " + caseName +
+                                                        " Input Signal Initialization." + "\n";
+                                            if (vehicleType.isEmpty() == false) {
+                                                initCase += "    tag: " + vehicleType + "\n";
+                                            }
+                                            initCase += "    input:\n";
+                                            for (auto it = initMap.begin(); it != initMap.end(); ++it) {
+                                                initParts = it.key().split("=>");
+                                                for (QString& number : initParts[0].split(",", Qt::SkipEmptyParts)) {
+                                                    number = number.trimmed();
+                                                    if (number.isEmpty() == false) {
+                                                        if (number.contains("[Empty]") == false) {
+                                                            initEnumString =
+                                                                std::get<4>(signalList[initSignalOrder])[number].toString();
+                                                            if (std::get<0>(signalList[initSignalOrder])
+                                                                    .contains("SFC.Private.IGNElapsed")) {
+                                                                initSignalName = ExcelUtil::instance().data()->isIGNElapsedName(
+                                                                    number.toInt());
+                                                                initSignalValue =
+                                                                    "0x" + QString::number(++ignCount, 16).toUpper();
+                                                            } else {
+                                                                initSignalName = std::get<0>(signalList[initSignalOrder]);
+                                                                initSignalValue = number;
+                                                            }
+                                                            initEnumString = initEnumString.isEmpty()
+                                                                                 ? QString()
+                                                                                 : QString(" # %1").arg(initEnumString);
+                                                            initCase += "      - " + initSignalName + ": " +
+                                                                        quoteIfNotNumeric(initSignalValue) + initEnumString +
+                                                                        "\n";
+                                                        }
+                                                        initSignalOrder++;
+                                                    }
+                                                }
+                                            }
+                                            initCase += "\n";
+                                            write(initCase);
+                                        }
+                                        printProgressBar(static_cast<double>(testCaseCount) /
+                                                         static_cast<double>(totalTestCaseCount));
                                     }
-                                    printProgressBar(static_cast<double>(testCaseCount) /
-                                                     static_cast<double>(totalTestCaseCount));
                                 }
                             }
                         }

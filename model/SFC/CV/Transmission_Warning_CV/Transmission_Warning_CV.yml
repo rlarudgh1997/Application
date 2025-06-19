@@ -1,0 +1,291 @@
+#
+# @file Transmission_Warning_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Transmission_Warning_CV:
+  sfcVersion: "15.0.0"
+  specVersion: "v0.36"
+  description: "Reference : [CV410] Transmission_Warning_CV. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configTMTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigTMType: mInter_ConfigTMType
+    - configVehicleTypeCVChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV: mInter_ConfigVehicleTypeCV
+    - checkATMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_ATMWarningLampStatus: mInput_ATMWarningLampStatus
+        - Vehicle.CV.Transmission_Warning_CV.Input_TCUPGNumberStatus_Allison: mInput_TCUPGNumberStatus_Allison
+    - signalATMOverHeatLampStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_ATMOverHeatLampStatus: mInput_ATMOverHeatLampStatus
+    - atmRangeInhibitStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_ATMRangeInhibitStatus: mInput_ATMRangeInhibitStatus
+    - tmAirlessStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMAirlessStatus: mInput_TMAirlessStatus
+    - tmCheckPhaseStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMCheckPhaseStatus: mInput_TMCheckPhaseStatus
+    - tmClutchLoadStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMClutchLoadStatus: mInput_TMClutchLoadStatus
+    - tmClutchWearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMClutchWearStatus: mInput_TMClutchWearStatus
+    - tmFailureModeSpannerStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMFailureModeSpannerStatus: mInput_TMFailureModeSpannerStatus
+    - tmFailureModeStopStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMFailureModeStopStatus: mInput_TMFailureModeStopStatus
+    - tmHighTemperatureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMHighTemperatureStatus: mInput_TMHighTemperatureStatus
+    - tmReleaseAccPedalStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMReleaseAccPedalStatus: mInput_TMReleaseAccPedalStatus
+    - tmWarningBuzzerStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_TMWarningBuzzerStatus: mInput_TMWarningBuzzerStatus
+    - leverPosUnsuitStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_LeverPosUnsuitStatus: mInput_LeverPosUnsuitStatus
+    - pressBrakePedalStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_PressBrakePedalStatus: mInput_PressBrakePedalStatus
+    - ShiftInhibitReasonStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Warning_CV.Input_ShiftInhibitReasonStatus: mInput_ShiftInhibitReasonStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Warning_CV.Telltale.CheckATM.Stat:
+      description: "DCN: IMG_TelltaleCheckATM_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Warning_CV.Telltale.ATMOverHeat.Stat:
+      description: "DCN: IMG_TelltaleATMOverHeat_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Warning_CV.Telltale.ATMOverHeat.BlinkValueA:
+      description: "DCN: IMG_TelltaleATMOverHeat_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Warning_CV.Telltale.ATMOverHeat.BlinkValueB:
+      description: "DCN: IMG_TelltaleATMOverHeat_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMAirless.Stat:
+      description: "DCN: IMG_TMAirless_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMCheckPhase.Stat:
+      description: "DCN: IMG_TMCheckPhase_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMClutchLoad.Stat:
+      description: "DCN: IMG_TMClutchLoad_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMClutchWear.Stat:
+      description: "DCN: IMG_TMClutchWear_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMFailureModeSpanner.Stat:
+      description: "DCN: IMG_TMFailureModeSpanner_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: BLINK2, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMFailureModeStop.Stat:
+      description: "DCN: IMG_TMFailureModeStop_stat</br>State of Constant"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        BLINK2: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMFailureModeStop.BlinkValueA:
+      description: "DCN: IMG_TMFailureModeStop_stat</br>Blink Value A"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMFailureModeStop.BlinkValueB:
+      description: "DCN: IMG_TMFailureModeStop_stat</br>Blink Value B"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMHighTemperature.Stat:
+      description: "DCN: IMG_TMHighTemperature_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMPTO1OnOff.Stat:
+      description: "DCN: IMG_TMPTO1OnOff_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMReleaseAccPedal.Stat:
+      description: "DCN: IMG_TMReleaseAccPedal_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Constant.TMRangeInhibit.Stat:
+      description: "DCN: IMG_TMRangeInhibit_stat</br>State of Constant"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Style is E00000
+    - SFC.Transmission_Warning_CV.Event.ShiftLeverPositionMismatch.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Event.ShiftLeverPositionMismatch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Warning_CV.Event.ShiftLeverPositionMismatch.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Transmission_Warning_CV.Event.ShiftLeverPositionMismatch.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Transmission_Warning_CV.Event.ShiftLeverPositionMismatch.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Transmission_Warning_CV.Event.GearRatioStatusWarning.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Event.GearRatioStatusWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Warning_CV.Event.GearRatioStatusWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Transmission_Warning_CV.Event.GearRatioStatusWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Style is E00000
+    - SFC.Transmission_Warning_CV.Event.NoBrakeShifting.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Warning_CV.Event.NoBrakeShifting.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Warning_CV.Event.NoBrakeShifting.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Transmission_Warning_CV.Event.NoBrakeShifting.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Transmission_Warning_CV.Event.NoBrakeShifting.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3

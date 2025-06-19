@@ -1,0 +1,279 @@
+#
+# @file Regenerative_Braking_System.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Regenerative_Braking_System:
+  sfcVersion: "6.0.0"
+  specVersion: "v0.30"
+  description: "Reference : [CV960] Regenerative_Braking_System. Contains : Telltale, Contant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - configSRSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigSRS: mInter_ConfigSRS
+    - regenBrakeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_RegenBrakeStatus: mInput_RegenBrakeStatus
+    - regenLimitStatus_LeverChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_RegenLimitStatus_Lever: mInput_RegenLimitStatus_Lever
+    - regenLimitStatus_SOCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_RegenLimitStatus_SOC: mInput_RegenLimitStatus_SOC
+    - vcu_SmartRegen_WarnMsgStaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_SmartRegen_WarnMsgSta: mInput_VCU_SmartRegen_WarnMsgSta
+    - vcu_PdlWarnMsgStaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_PdlWarnMsgSta: mInput_VCU_PdlWarnMsgSta
+    - vcu_SmartRegen_OnStaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_SmartRegen_OnSta: mInput_VCU_SmartRegen_OnSta
+    - vcu_RegenLvlValChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_RegenLvlVal: mInput_VCU_RegenLvlVal
+    - vcu_SmartRegen_RdrCstActStaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_SmartRegen_RdrCstActSta: mInput_VCU_SmartRegen_RdrCstActSta
+    - vcu_SmartRegen_MapCstActStaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_VCU_SmartRegen_MapCstActSta: mInput_VCU_SmartRegen_MapCstActSta
+    - retarderSwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Regenerative_Braking_System.Input_RetarderSwitchStatus: mInput_RetarderSwitchStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Regenerative_Braking_System.Telltale.RegenBrake.Stat:
+      description: "DCN: IMG_TelltaleRegenBrake_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: STEP1, 0x4: STEP2, 0x5: MAX
+    - SFC.Regenerative_Braking_System.Telltale.RegenBrake.StatOptional:
+      description: "DCN: IMG_TelltaleRegenBrake_stat</br>Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        STEP1: 0x3
+        STEP2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Regenerative_Braking_System.Telltale.RegenBrakeNA.Stat:
+      description: "DCN: IMG_TelltaleRegenBrakeNA_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: READY, 0x3: AUTO, 0x4: STEP1, 0x5: STEP2, 0x6: STEP3, 0x7: MAX
+    - SFC.Regenerative_Braking_System.Telltale.RegenBrakeNA.StatOptional:
+      description: "DCN: IMG_TelltaleRegenBrakeNA_stat</br>Optional State"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        READY: 0x2
+        AUTO: 0x3
+        STEP1: 0x4
+        STEP2: 0x5
+        STEP3: 0x6
+        MAX: 0x7
+      # Style is E00000
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_Lever.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_Lever.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_Lever.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_Lever.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_Lever.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_SOC.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_SOC.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_SOC.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_SOC.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regenerative_Braking_System.Event.RegenLimitStatus_SOC.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Regenerative_Braking_System.Event.VCU_SmartRegen_WarnMsgSta.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regenerative_Braking_System.Event.VCU_SmartRegen_WarnMsgSta.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regenerative_Braking_System.Event.VCU_SmartRegen_WarnMsgSta.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regenerative_Braking_System.Event.VCU_SmartRegen_WarnMsgSta.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regenerative_Braking_System.Event.VCU_SmartRegen_WarnMsgSta.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Regenerative_Braking_System.Event.VCU_PdlWarnMsgSta.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Regenerative_Braking_System.Event.VCU_PdlWarnMsgSta.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Regenerative_Braking_System.Event.VCU_PdlWarnMsgSta.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Regenerative_Braking_System.Event.VCU_PdlWarnMsgSta.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Regenerative_Braking_System.Event.VCU_PdlWarnMsgSta.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: AUTO_ACT, 0x3: AUTO_INACT, 0x4: LV0, 0x5: LV1, 0x6: LV2, 0x7: LV3, 0x8: LV4, 0x9: MAX
+    - SFC.Regenerative_Braking_System.Contant.SmartRegenBrake.Stat:
+      description: "DCN: IMG_SmartRegenBrake_Stat</br>Status of Smart Regen Brake"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AUTO_ACT: 0x2
+        AUTO_INACT: 0x3
+        LV0: 0x4
+        LV1: 0x5
+        LV2: 0x6
+        LV3: 0x7
+        LV4: 0x8
+        MAX: 0x9
+      # 0x0: NONE, 0x1: OFF, 0x2: STEP, 0x3: LINEAR, 0x4: MAX
+    - SFC.Regenerative_Braking_System.Contant.SmartRegenBrakeGaugeType.Stat:
+      description: "DCN: IMG_SmartRegenBrakeGaugeType_Stat</br>Status of Smart Regen Brake Gague Type"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        STEP: 0x2
+        LINEAR: 0x3
+        MAX: 0x4
+      # Double value
+    - SFC.Regenerative_Braking_System.Contant.SmartRegenBrakeGague.Value:
+      description: "DCN: IMG_SmartRegenBrakeGague_Value</br>Value of Smart Regen Brake Gague"
+      dataType: HDouble

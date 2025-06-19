@@ -1,0 +1,77 @@
+#
+# @file Digital_Clock.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Digital_Clock:
+  sfcVersion: "1.0.0"
+  specVersion: "v0.16"
+  description: "Reference : [CV680] Digital_Clock. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - huHoursValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Digital_Clock.Input_HUHoursValue: mInput_HUHoursValue
+    - huMinutesChagned:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Digital_Clock.Input_HUMinutesValue: mInput_HUMinutesValue
+    - huSecondsChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Digital_Clock.Input_HUSecondsValue: mInput_HUSecondsValue
+    - huTimeFormatStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Digital_Clock.Input_HUTimeFormatStatus: mInput_HUTimeFormatStatus
+  outputs:
+      # Numeric Value
+    - SFC.Digital_Clock.Constant.Hours.Value:
+      description: "DCN : IMG_Hours_Value</br>Hours Value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Digital_Clock.Constant.Minutes.Value:
+      description: "DCN : IMG_Minutes_Value</br>Hours Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: AM, 0x3: PM, 0x4: MAX
+    - SFC.Digital_Clock.Constant.TimeFormat.Stat:
+      description: "DCN: IMG_TimeFormat_Status</br>Time Format Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AM: 0x2
+        PM: 0x3
+        MAX: 0x4

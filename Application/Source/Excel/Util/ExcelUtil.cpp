@@ -643,21 +643,6 @@ int ExcelUtil::isComlumnIndex(const int& sheetIndex, const int& type) {
     return columnIndex;
 }
 
-int ExcelUtil::isDataType(const QString& dataTypeStr) {
-    int dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::Invalid);
-
-    if (dataTypeStr.compare("HUInt64") == 0) {
-        dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HUInt64);
-    } else if (dataTypeStr.compare("HInt64") == 0) {
-        dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HInt64);
-    } else if (dataTypeStr.compare("HString") == 0) {
-        dataType = static_cast<int>(ivis::common::DataTypeEnum::DataType::HString);
-    } else {
-        // qDebug() << "isDataType -> DataType is incorrect :" << dataTypeStr;
-    }
-    return dataType;
-}
-
 QPair<int, int> ExcelUtil::isIGNElapsedType(const QString& signalName) {
     QPair<int, int> ignInfo;
     if (signalName.compare("SFC.Private.IGNElapsed.ElapsedOn0ms") == 0) {

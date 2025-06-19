@@ -1,0 +1,77 @@
+@startuml
+
+actor User order 10
+
+participant TestCase order 10
+participant ConvertDataManager order 20
+participant SignalDataManager order 30 #LightBlue
+participant ExcelDataManager order 40
+
+participant ExcelData order 100
+participant ExcelUtil order 110
+
+== Update Final Sheet Data Info ==
+
+User --> TestCase : TC Gen Start
+
+activate TestCase
+TestCase -> ConvertDataManager : excuteConvertDataManager()
+deactivate TestCase
+activate ConvertDataManager
+
+ConvertDataManager -> ConvertDataManager : appendConvertAllTCSignalSet()
+activate ConvertDataManager
+
+ConvertDataManager -> ExcelDataManager : reloadExcelData()
+activate ExcelDataManager
+ExcelDataManager -> ExcelData : getSheetData()
+activate ExcelData
+ExcelData --> ExcelDataManager : resutl : sheet data
+deactivate ExcelData
+
+
+loop each sheet index in list
+    ConvertDataManager -> ExcelDataManager : isTCNameDataList()
+    ExcelDataManager --> ConvertDataManager : result : tcName List
+
+    loop each tcName in list
+        ConvertDataManager -> ExcelDataManager : isResultDataList()
+        ExcelDataManager --> ConvertDataManager : result : result List
+
+        loop each result in list
+            ConvertDataManager -> ExcelDataManager : isCaseDataList()
+            ExcelDataManager --> ConvertDataManager : result : case List
+
+            loop each case in list
+                ConvertDataManager -> ExcelDataManager : isInputDataWithoutCaseList()
+                ExcelDataManager --> ConvertDataManager : result : inputWithoutCase List
+                ConvertDataManager -> SignalDataManager : isNormalInputSignalDataInfo()
+                activate SignalDataManager
+                SignalDataManager --> ConvertDataManager : result : normal input List
+                deactivate SignalDataManager
+
+                ConvertDataManager -> ConvertDataManager : construct custom keyword
+                ConvertDataManager -> ConvertDataManager : updateInputDataInfo()
+            end
+        end
+    end
+end
+
+ConvertDataManager -> ExcelDataManager : writeExcelSheetData()
+ExcelDataManager -> ExcelData : setSheetData()
+activate ExcelData
+deactivate ExcelDataManager
+deactivate ExcelData
+
+alt success
+    ConvertDataManager --> ConvertDataManager : result
+    deactivate ConvertDataManager
+
+    ConvertDataManager -> ExcelUtil : writeExcelSheet()
+    activate ExcelUtil
+end
+
+deactivate ExcelUtil
+deactivate ConvertDataManager
+
+@enduml

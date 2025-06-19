@@ -1,0 +1,496 @@
+#
+# @file ADAS_PARKING_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ADAS_PARKING_CV:
+  sfcVersion: "4.0.1"
+  specVersion: "v0.21"
+  description: "Reference : [CV710] ADAS_PARKING_CV. Contains : Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configPDWChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigPDW: mInter_ConfigPDW
+    - configSEWNEARChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigSEWNEAR: mInter_ConfigSEWNEAR
+    - configADASParkingEcuTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigADASParkingEcuType: mInter_ConfigADASParkingEcuType
+    - carBodyDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasCarBodyDisplayStatus: mInput_AdasCarBodyDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuCarBodyDisplayStatus: mInput_IbuCarBodyDisplayStatus
+    - parkingDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuFrontLeftWarning3PartDisplayStatus: mInput_IbuFrontLeftWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuFrontCenterWarning3PartDisplayStatus: mInput_IbuFrontCenterWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuFrontRightWarning3PartDisplayStatus: mInput_IbuFrontRightWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasRearLeftWarning3PartDisplayStatus: mInput_AdasRearLeftWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasRearCenterWarning3PartDisplayStatus: mInput_AdasRearCenterWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasRearRightWarning3PartDisplayStatus: mInput_AdasRearRightWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuRearLeftWarning3PartDisplayStatus: mInput_IbuRearLeftWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuRearCenterWarning3PartDisplayStatus: mInput_IbuRearCenterWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuRearRightWarning3PartDisplayStatus: mInput_IbuRearRightWarning3PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearFrontRightWarning2PartDisplayStatus: mInput_AdasSewNearFrontRightWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearFrontDoorWarning2PartDisplayStatus: mInput_AdasSewNearFrontDoorWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearMidDoorWarning2PartDisplayStatus: mInput_AdasSewNearMidDoorWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearRearDoorWarning2PartDisplayStatus: mInput_AdasSewNearRearDoorWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearFrontLeftWarning2PartDisplayStatus: mInput_AdasSewNearFrontLeftWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearFrontDoorRHDWarning2PartDisplayStatus: mInput_AdasSewNearFrontDoorRHDWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearMidDoorRHDWarning2PartDisplayStatus: mInput_AdasSewNearMidDoorRHDWarning2PartDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearRearDoorRHDWarning2PartDisplayStatus: mInput_AdasSewNearRearDoorRHDWarning2PartDisplayStatus
+    - masterWarningDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasRearMasterWarningDisplayStatus: mInput_AdasRearMasterWarningDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasRightMasterWarningDisplayStatus: mInput_AdasRightMasterWarningDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuFrontMasterWarningDisplayStatus: mInput_IbuFrontMasterWarningDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuRearMasterWarningDisplayStatus: mInput_IbuRearMasterWarningDisplayStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasLeftMasterWarningDisplayStatus: mInput_AdasLeftMasterWarningDisplayStatus
+    - adasPdwSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasPdwSystemFailureStatus: mInput_AdasPdwSystemFailureStatus
+    - adasSewNearSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasSewNearSystemFailureStatus: mInput_AdasSewNearSystemFailureStatus
+    - ibuPdwSystemFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuPdwSystemFailureStatus: mInput_IbuPdwSystemFailureStatus
+    - failure10StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_PuFGroup7DriverAssistFailure10Status: mInput_PuFGroup7DriverAssistFailure10Status
+    - failure11StatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_PuFGroup7DriverAssistFailure11Status: mInput_PuFGroup7DriverAssistFailure11Status
+    - transmissionCurrentGearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_TransmissionCurrentGearStatus: mInput_TransmissionCurrentGearStatus
+    - event4GroupChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_AdasPopupBoundaryLaneColorStatus: mInput_AdasPopupBoundaryLaneColorStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_IbuPopupBoundaryLaneColorStatus: mInput_IbuPopupBoundaryLaneColorStatus
+    - warnSoundChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ADAS_PARKING_CV.Input_PaFrontCenterWarnSoundStatus: mInput_PaFrontCenterWarnSoundStatus
+        - Vehicle.CV.ADAS_PARKING_CV.Input_PdwFrontCenterWarnSoundStatus: mInput_PdwFrontCenterWarnSoundStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkCarBodyDisplay.Stat:
+      description: "DCN: IMG_ParkCarBodyDisplay_Stat</br>ParkCarBodyDisplay Stat"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontLeftWarning3Part.Stat:
+      description: "DCN: IMG_ParkFrontLeftWarning3Part_Stat</br>ParkFrontLeftWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontCenterWarning3Part.Stat:
+      description: "DCN: IMG_ParkFrontCenterWarning3Part_Stat</br>ParkFrontCenterWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontRightWarning3Part.Stat:
+      description: "DCN: IMG_ParkFrontRightWarning3Part_Stat</br>ParkFrontRightWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearLeftWarning3Part.Stat:
+      description: "DCN: IMG_ParkRearLeftWarning3Part_Stat</br>ParkRearLeftWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearCenterWarning3Part.Stat:
+      description: "DCN: IMG_ParkRearCenterWarning3Part_Stat</br>ParkRearCenterWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: WARN_3RD, 0x5: GRAY, 0x6: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearRightWarning3Part.Stat:
+      description: "DCN: IMG_ParkRearRightWarning3Part_Stat</br>ParkRearRightWarning3Part Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        WARN_3RD: 0x4
+        GRAY: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontRightWarning2Part.Stat:
+      description: "DCN: IMG_ParkFrontRightWarning2Part_Stat</br>ParkFrontRightWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontDoorWarning2Part.Stat:
+      description: "DCN: IMG_ParkFrontDoorWarning2Part_Stat</br>ParkFrontDoorWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkMidDoorWarning2Part.Stat:
+      description: "DCN: IMG_ParkMidDoorWarning2Part_Stat</br>ParkMidDoorWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearDoorWarning2Part.Stat:
+      description: "DCN: IMG_ParkRearDoorWarning2Part_Stat</br>ParkRearDoorWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontLeftWarning2Part.Stat:
+      description: "DCN: IMG_ParkFrontLeftWarning2Part_Stat</br>ParkFrontLeftWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontDoorRHDWarning2Part.Stat:
+      description: "DCN: IMG_ParkFrontDoorRHDWarning2Part_Stat</br>ParkFrontDoorRHDWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkMidDoorRHDWarning2Part.Stat:
+      description: "DCN: IMG_ParkMidDoorRHDWarning2Part_Stat</br>ParkMidDoorRHDWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_1ST, 0x3: WARN_2ND, 0x4: GRAY, 0x5: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearDoorRHDWarning2Part.Stat:
+      description: "DCN: IMG_ParkRearDoorRHDWarning2Part_Stat</br>ParkRearDoorRHDWarning2Part_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_1ST: 0x2
+        WARN_2ND: 0x3
+        GRAY: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: YELLOW, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkFrontMasterWarning.Stat:
+      description: "DCN: IMG_ParkFrontMasterWarning_Stat</br>ParkFrontMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        YELLOW: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: YELLOW, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRearMasterWarning.Stat:
+      description: "DCN: IMG_ParkRearMasterWarning_Stat</br>ParkRearMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        YELLOW: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: YELLOW, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkRightSideMasterWarning.Stat:
+      description: "DCN: IMG_ParkRightSideMasterWarning_Stat</br>ParkRightSideMasterWarning Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        YELLOW: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: YELLOW, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.ParkLeftSideMasterWarning.Stat:
+      description: "DCN: IMG_ParkLeftSideMasterWarning_Stat</br>ParkLeftSideMasterWarning_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        YELLOW: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: PDW_FAILURE, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.PdwSystemFailurePRK.Stat:
+      description: "DCN: IMG_PdwSystemFailure_PRK_Stat</br>PdwSystemFailure_PRK stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PDW_FAILURE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: SEW_NEAR_FAILURE, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.SewNearSystemFailure_PRK.Stat:
+      description: "DCN: IMG_SewNearSystemFailure_PRK_Stat</br>SewNearSystemFailure_PRK_Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        SEW_NEAR_FAILURE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: PDW_FAILURE, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Constant.PdwSystemFailureIBU.Stat:
+      description: "DCN: IMG_PdwSystemFailure_IBU_Stat</br>PdwSystemFailure_IBU stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PDW_FAILURE: 0x2
+        MAX: 0x3
+      # Style is E00000
+    - SFC.ADAS_PARKING_CV.Event.Event4Group.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event4Group.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10Timeout.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10Timeout.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10Timeout.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10Timeout.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure10Timeout.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11Timeout.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11Timeout.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11Timeout.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11Timeout.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.ADAS_PARKING_CV.Event.Event7GroupFailure11Timeout.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is SND_NAME
+    - SFC.ADAS_PARKING_CV.Sound.WarningLevel.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.ADAS_PARKING_CV.Sound.WarningLevel.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.ADAS_PARKING_CV.Sound.WarningLevel.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type

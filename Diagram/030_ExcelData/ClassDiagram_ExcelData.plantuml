@@ -1,0 +1,26 @@
+@startuml
+
+class ExcelData {
+    + static QSharedPointer<ExcelData>& instance()
+    + QVariant getSheetData(const int& key)
+    + QMap<int, QVariant> readSheetData()
+    + QVariant getEditingSheetData(const int& key)
+    + QMap<int, QVariant> readEditingSheetData()
+    + void setSheetData(const int& key, const QVariant& value)
+    + void writeSheetData(const QMap<int, QVariant>& value)
+    + void setEditingSheetData(const int& key, const QVariant& value)
+    + void writeEditingSheetData(const QMap<int, QVariant>& value)
+
+    - ExcelData()
+
+    - QMap<int, QVariant> mSheetData
+    - QMap<int, QVariant> mEditingSheetData
+}
+
+ExcelData <-- ExcelUtil : uses
+ExcelData <-- ControlExcel : uses
+ExcelData <-- ExcelDataManager : uses
+ExcelData <-- ConvertDataManager : uses
+ExcelData <-- TestCase : uses
+
+@enduml

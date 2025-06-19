@@ -1,0 +1,91 @@
+@startuml
+
+actor User order 10
+
+' participant GuiExcel order 20
+participant GuiMenu order 30
+participant ControlMenu order 40
+participant ControlExcel order 50
+
+participant ExcelUtil order 100 #LightBlue
+participant ExcelData order 110
+participant Python order 120
+participant FileSystem order 130
+
+== Excel - Open File ==
+
+User -> GuiMenu: Open
+
+activate GuiMenu
+GuiMenu --> ControlMenu: creatSignal()
+deactivate GuiMenu
+
+activate ControlMenu
+ControlMenu --> ControlExcel: sendEvent()
+deactivate ControlMenu
+
+activate ControlExcel
+ControlExcel -> ExcelUtil : openExcelFile()
+
+activate ExcelUtil
+ExcelUtil -> ExcelUtil : pythonCall()
+activate ExcelUtil
+
+ExcelUtil -> Python : open : excel file
+activate Python
+
+Python -> FileSystem : save : *.fromExcel
+activate FileSystem
+
+alt success
+    ExcelUtil <-- Python : result
+    deactivate Python
+    deactivate ExcelUtil
+
+    ExcelUtil -> FileSystem : open: *.fromExcel
+    ExcelUtil <-- FileSystem : result
+    deactivate FileSystem
+end
+
+ControlExcel <-- ExcelUtil : result : sheet data
+
+deactivate ExcelUtil
+deactivate ControlExcel
+
+== Excel - Write File ==
+
+User -> GuiMenu: Save
+
+activate GuiMenu
+GuiMenu --> ControlMenu: creatSignal()
+deactivate GuiMenu
+
+activate ControlMenu
+ControlMenu --> ControlExcel: sendEvent()
+deactivate ControlMenu
+
+activate ControlExcel
+ControlExcel -> ExcelUtil : writeExcelSheet()
+deactivate ControlExcel
+
+activate ExcelUtil
+ExcelUtil -> ExcelData : getSheetData()
+activate ExcelData
+ExcelData --> ExcelUtil : result : sheet data
+deactivate ExcelData
+
+ExcelUtil -> FileSystem : save : *.toExcel
+activate FileSystem
+
+ExcelUtil -> Python : write : excel file
+deactivate ExcelUtil
+activate Python
+
+Python -> FileSystem : open : *.toExcel
+Python -> FileSystem : save : *.xlsx
+deactivate Python
+deactivate FileSystem
+
+
+
+@enduml

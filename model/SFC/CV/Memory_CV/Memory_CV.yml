@@ -1,0 +1,225 @@
+#
+# @file Memory_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Memory_CV:
+  sfcVersion: "2.0.0"
+  specVersion: "v0.34"
+  description: "Reference : [CV] virtual SFC to support Memory_CV variables"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # None
+    - SFC.Extension.Memory.Inter_RheostatLevelStatus:
+      description: "Illumination_CV[CV070]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_TripDistanceUnit:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelEcoUnitKm:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelEcoUnitMi:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_MfswPopupSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DisWarnSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_ClusterThemeSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindModeSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindPeriodSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindDistKmSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemindDistMiSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemainPeriod:
+      description: "Settings_CV[CV060]"
+      dataType: HInt64
+      # None
+    - SFC.Extension.Memory.Inter_SrvRemainDistanceKm:
+      description: "Settings_CV[CV060]"
+      dataType: HInt64
+      # None
+    - SFC.Extension.Memory.Inter_WelcomeSoundSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_AdasWarnVolumeSet:
+      description: "Settings_CV[CV060]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DrivingTimeValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_FuelConsumptValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_ElecFuelConsumptValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_HydrogenConsumptionValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_OdometerValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartDistanceValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartElecFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartHydrogenValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AccumStartTimeValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartDistanceValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartElecFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartHydrogenValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_AfterRefuelStartTimeValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartDistanceValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartElecFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartFuelConsValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartHydrogenValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_DriveStartTimeValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Memory.Inter_TargetFuelEcoValue:
+      description: "Input_Output_Processing_CV[CV100]"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Memory.Inter_OdometerDisplayValue:
+      description: "Trip_Info_CV[CV380]"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: CHANGE, 0x2: DEFAULT, 0x3: MAX
+    - SFC.Extension.Memory.Inter_PressureUnitChangeDetect_stat:
+      description: "Setting_CV[CV060] - Private_PressureUnitChangeDetect_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CHANGE: 0x1
+        DEFAULT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: PSI, 0x2: KPA, 0x3: BAR, 0x4: USM_OFF, 0x5: MAX
+    - SFC.Extension.Memory.Inter_PressureUnit_stat:
+      description: "Setting_CV[CV060] - Inter_PressureUnit_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        PSI: 0x1
+        KPA: 0x2
+        BAR: 0x3
+        USM_OFF: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: CHANGE, 0x2: DEFAULT, 0x3: MAX
+    - SFC.Extension.Memory.Inter_WeightUnitChangeDetect_stat:
+      description: "Setting_CV[CV060] - Private_WeightUnitChangeDetect_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CHANGE: 0x1
+        DEFAULT: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KG, 0x2: POUND, 0x3: USM_OFF, 0x4: MAX
+    - SFC.Extension.Memory.Inter_WeightUnit_stat:
+      description: "Setting_CV[CV060] - Inter_WeightUnit_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KG: 0x1
+        POUND: 0x2
+        USM_OFF: 0x3
+        MAX: 0x4

@@ -1,0 +1,84 @@
+@startuml
+
+actor User order 10
+
+participant TestCase order 10
+participant ConvertDataManager order 20
+participant ExcelDataManager order 30 #LightBlue
+
+participant ExcelData order 100
+participant ExcelUtil order 110
+
+== Sheet Data Info(TCName, Reulst, Case, InputSignal, InputData, OutputSignal, Init, OutputData) - Read ==
+
+User --> TestCase : TC Gen Start
+
+activate TestCase
+TestCase -> ConvertDataManager : excuteConvertDataManager()
+deactivate TestCase
+activate ConvertDataManager
+
+ConvertDataManager -> ConvertDataManager : convertNonSheetInputSignalKeyword()
+activate ConvertDataManager
+
+ConvertDataManager -> ExcelDataManager : reloadExcelData()
+activate ExcelDataManager
+ExcelDataManager -> ExcelData : getSheetData()
+activate ExcelData
+ExcelData --> ExcelDataManager : resutl : sheet data
+deactivate ExcelData
+
+
+loop each sheet index in list
+    ConvertDataManager -> ExcelDataManager : isTCNameDataList()
+    ExcelDataManager --> ConvertDataManager : result : tcName List
+
+    loop each tcName in list
+        ConvertDataManager -> ExcelDataManager : isResultDataList()
+        ExcelDataManager --> ConvertDataManager : result : result List
+
+        loop each result in list
+            ConvertDataManager -> ExcelDataManager : isCaseDataList()
+            ExcelDataManager --> ConvertDataManager : result : case List
+            ConvertDataManager -> ExcelDataManager : isOutputDataList()
+            ExcelDataManager --> ConvertDataManager : result : output List
+
+            loop each case in list
+                ConvertDataManager -> ExcelDataManager : isInputDataList()
+                ExcelDataManager --> ConvertDataManager : result : input List
+            end
+
+== Sheet Data Info(TCName, Reulst, Case, InputSignal, InputData, OutputSignal, Init, OutputData) - Write ==
+
+            ConvertDataManager -> ConvertDataManager : updateResultDataInfo()
+            activate ConvertDataManager
+            loop each case in list
+                ConvertDataManager -> ExcelDataManager : updateInputDataInfo()
+            end
+
+            ConvertDataManager -> ExcelDataManager : updateOutputDataInfo()
+            deactivate ConvertDataManager
+        end
+
+
+    end
+end
+
+ConvertDataManager -> ExcelDataManager : writeExcelSheetData()
+ExcelDataManager -> ExcelData : setSheetData()
+activate ExcelData
+deactivate ExcelDataManager
+deactivate ExcelData
+
+alt success
+    ConvertDataManager --> ConvertDataManager : result
+    deactivate ConvertDataManager
+
+    ConvertDataManager -> ExcelUtil : writeExcelSheet()
+    activate ExcelUtil
+end
+
+deactivate ExcelUtil
+deactivate ConvertDataManager
+
+@enduml

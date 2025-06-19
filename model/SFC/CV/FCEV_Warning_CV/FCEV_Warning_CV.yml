@@ -1,0 +1,201 @@
+#
+# @file FCEV_Warning_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- FCEV_Warning_CV:
+  sfcVersion: "7.0.1"
+  specVersion: "v0.34"
+  description: "Reference : [CV450] FCEV_Warning_CV. Contains : Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - h2SensorFaultStatusFromFCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultStatusFromFCU: mInput_H2SensorFaultStatusFromFCU
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultStatusFromFCU2: mInput_H2SensorFaultStatusFromFCU2
+    - h2LeakWarnStatusFromFCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnStatusFromFCU: mInput_H2LeakWarnStatusFromFCU
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnStatusFromFCU2: mInput_H2LeakWarnStatusFromFCU2
+    - h2SensorFaultStatusFromHMUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultStatusFromHMU: mInput_H2SensorFaultStatusFromHMU
+    - h2LeakWarnStatusFromHMUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnStatusFromHMU: mInput_H2LeakWarnStatusFromHMU
+    - h2LeakIndiReqStatusFromHMUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakIndiReqStatusFromHMU: mInput_H2LeakIndiReqStatusFromHMU
+    - fcevWaterReleaseWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_FcevWaterReleaseWarnStatus_FCU1: mInput_FcevWaterReleaseWarnStatus_FCU1
+        - Vehicle.CV.FCEV_Warning_CV.Input_FcevWaterReleaseWarnStatus_FCU2: mInput_FcevWaterReleaseWarnStatus_FCU2
+    - h2LeakWarnLv1StatusFromVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnLv1StatusFromVCU: mInput_H2LeakWarnLv1StatusFromVCU
+    - h2LeakWarnLv2StatusFromVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2LeakWarnLv2StatusFromVCU: mInput_H2LeakWarnLv2StatusFromVCU
+    - h2SensorFaultStatusFromVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Warning_CV.Input_H2SensorFaultStatusFromVCU: mInput_H2SensorFaultStatusFromVCU
+  outputs:
+      # Style is E00000
+    - SFC.FCEV_Warning_CV.Event.H2SensorFault.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Warning_CV.Event.H2SensorFault.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Warning_CV.Event.H2SensorFault.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Warning_CV.Event.H2SensorFault.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Warning_CV.Event.H2SensorFault.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.FCEV_Warning_CV.Event.H2LeakOff.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakOff.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Warning_CV.Event.H2LeakOff.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakOff.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Warning_CV.Event.H2LeakOff.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.FCEV_Warning_CV.Event.H2LeakSD_REQ.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakSD_REQ.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Warning_CV.Event.H2LeakSD_REQ.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakSD_REQ.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Style is E00000
+    - SFC.FCEV_Warning_CV.Event.H2LeakPERoom.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakPERoom.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Warning_CV.Event.H2LeakPERoom.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Warning_CV.Event.H2LeakPERoom.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Style is E00000
+    - SFC.FCEV_Warning_CV.Event.WaterReleaseWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Warning_CV.Event.WaterReleaseWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat

@@ -1,0 +1,107 @@
+#
+# @file WPC_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- WPC_CV:
+  sfcVersion: "4.0.0"
+  specVersion: "v0.15"
+  description: "Reference : [CV670] WPC_CV. Contains : Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configWPCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigWPC: mInter_ConfigWPC
+    - drvAstDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.WPC_CV.Input_IMUDrvDoorOpenStatus: mInput_IMUDrvDoorOpenStatus
+        - Vehicle.CV.WPC_CV.Input_IMUAstDoorOpenStatus: mInput_IMUAstDoorOpenStatus
+    - busDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.WPC_CV.Input_IMUFrDoorOpenStatus: mInput_IMUFrDoorOpenStatus
+        - Vehicle.CV.WPC_CV.Input_IMUMidDoorOpenStatus: mInput_IMUMidDoorOpenStatus
+        - Vehicle.CV.WPC_CV.Input_IMURrDoorOpenStatus: mInput_IMURrDoorOpenStatus
+    - wpcPopUpStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.WPC_CV.Input_WPCPopUpStatus: mInput_WPCPopUpStatus
+  outputs:
+      # Style is E00000
+    - SFC.WPC_CV.Event.WPCPopup.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.WPC_CV.Event.WPCPopup.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.WPC_CV.Event.WPCPopup.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.WPC_CV.Event.WPCPopup.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.WPC_CV.Event.WPCPopup.LinkedSoundRepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Private.WPC_CV.DrvAstDoorOpen.Stat:
+      description: "Private_DrvAstDoorOpenStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: CLOSE, 0x2: OPEN, 0x3: MAX
+    - SFC.Private.WPC_CV.BusDoorOpen.Stat:
+      description: "Private_BusDoorOpenStatus"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CLOSE: 0x1
+        OPEN: 0x2
+        MAX: 0x3

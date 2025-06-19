@@ -1,0 +1,191 @@
+#
+# @file Input_Output_Processing_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Input_Output_Processing_CV:
+  sfcVersion: "1.0.0"
+  specVersion: "v0.18"
+  description: "Reference : [CV100] Input_Output_Processing_CV. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+        - SFC.Extension.Param.Par_FuelSender1: mPar_FuelSender1
+        - SFC.Extension.Param.Par_FuelSender2: mPar_FuelSender2
+        - SFC.Extension.Param.Par_FuelSender3: mPar_FuelSender3
+        - SFC.Extension.Param.Par_FuelSender4: mPar_FuelSender4
+        - SFC.Extension.Param.Par_FuelSender5: mPar_FuelSender5
+        - SFC.Extension.Param.Par_FuelSender6: mPar_FuelSender6
+        - SFC.Extension.Param.Par_FuelSender7: mPar_FuelSender7
+        - SFC.Extension.Param.Par_FuelSender8: mPar_FuelSender8
+        - SFC.Extension.Param.Par_FuelSender9: mPar_FuelSender9
+        - SFC.Extension.Param.Par_FuelSender10: mPar_FuelSender10
+        - SFC.Extension.Param.Par_FuelSender11: mPar_FuelSender11
+        - SFC.Extension.Param.Par_FuelSenderVolume1: mPar_FuelSenderVolume1
+        - SFC.Extension.Param.Par_FuelSenderVolume2: mPar_FuelSenderVolume2
+        - SFC.Extension.Param.Par_FuelSenderVolume3: mPar_FuelSenderVolume3
+        - SFC.Extension.Param.Par_FuelSenderVolume4: mPar_FuelSenderVolume4
+        - SFC.Extension.Param.Par_FuelSenderVolume5: mPar_FuelSenderVolume5
+        - SFC.Extension.Param.Par_FuelSenderVolume6: mPar_FuelSenderVolume6
+        - SFC.Extension.Param.Par_FuelSenderVolume7: mPar_FuelSenderVolume7
+        - SFC.Extension.Param.Par_FuelSenderVolume8: mPar_FuelSenderVolume8
+        - SFC.Extension.Param.Par_FuelSenderVolume9: mPar_FuelSenderVolume9
+        - SFC.Extension.Param.Par_FuelSenderVolume10: mPar_FuelSenderVolume10
+        - SFC.Extension.Param.Par_FuelSenderVolume11: mPar_FuelSenderVolume11
+        - SFC.Extension.Param.Par_FuelSenderShort: mPar_FuelSenderShort
+        - SFC.Extension.Param.Par_FuelSenderOpen: mPar_FuelSenderOpen
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - fuelSenderChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.HardWire.Input_FuelSenderValue: mInput_FuelSenderValue
+    - rheostatSwitchChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.HardWire.Input_RheostatSwUpStatus: mInput_RheostatSwUpStatus
+        - Vehicle.System.HardWire.Input_RheostatSwDownStatus: mInput_RheostatSwDownStatus
+    - wheelSpeedValueChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Input_Output_Processing_CV.Input_WheelBasedVehicleSpeedValue: mInput_WheelBasedVehicleSpeedValue
+    - engineOnStatusDataChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Input_Output_Processing_CV.Input_VehicleReadyStatus: mInput_VehicleReadyStatus
+    - isgActiveStatusDataChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Input_Output_Processing_CV.Input_EngineISGStatus1: mInput_EngineISGStatus1
+        - Vehicle.CV.Input_Output_Processing_CV.Input_EngineISGStatus2: mInput_EngineISGStatus2
+    - telematicsActiveStatusDataChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Input_Output_Processing_CV.Input_TelematicsActiveStatus: mInput_TelematicsActiveStatus
+    - targetFuelEconomyValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Input_Output_Processing_CV.Input_TargetFuelEconomyValue: mInput_TargetFuelEconomyValue
+  outputs:
+      # Numeric Types
+    - SFC.Input_Output_Processing.Inter_FuelInputLevelValue:
+      description: "Input level for Fuel"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HOLD, 0x3: ERROR, 0x4: MAX
+    - SFC.Input_Output_Processing.Inter_FuelErrorDetectionStatus:
+      description: "Fuel Error Detection Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        HOLD: 0x2
+        ERROR: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: UP, 0x2: DOWN, 0x3: DEFAULT, 0x4: MAX
+    - SFC.Input_Output_Processing.Inter_RheostatSwitchStatus:
+      description: "Switch status for rheostat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UP: 0x1
+        DOWN: 0x2
+        DEFAULT: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: VALID, 0x2: INVALID, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_ActualVehicleSpeedValidity:
+      description: "Make sure that at least one wheel has a normal speed value"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VALID: 0x1
+        INVALID: 0x2
+        MAX: 0x3
+      # Numeric Types
+    - SFC.Input_Output_Processing.Inter_ActualVehicleSpeed:
+      description: "It represents the calculated value of the actual vehicle speed"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_DrivingOnStatus:
+      description: "It indicates the status value for whether you are actually driving."
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_EngineOnStatus:
+      description: "Determine whether the engine has started or not"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_ISGActiveStatus:
+      description: "Determine whether ISG is active"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: ACTIVE, 0x2: INACTIVE, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_TelematicsActiveStatus:
+      description: "Determine whether CCS is open"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ACTIVE: 0x1
+        INACTIVE: 0x2
+        MAX: 0x3
+      # Numeric Types
+    - SFC.Input_Output_Processing.Inter_FuelEcoTargetValue:
+      description: "Input Fuel Eco TargetValue"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: UNDER, 0x2: OVER, 0x3: MAX
+    - SFC.Input_Output_Processing.Inter_ActualVehicleSpeedCompareValueTo10:
+      description: "Compare whether Inter_ActualVehicleSpeed Value is greater than or less than 10.0"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        UNDER: 0x1
+        OVER: 0x2
+        MAX: 0x3

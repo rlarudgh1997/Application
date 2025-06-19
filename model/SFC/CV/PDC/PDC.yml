@@ -1,0 +1,158 @@
+#
+# @file PDC.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- PDC:
+  sfcVersion: "3.0.0"
+  specVersion: "v0.22"
+  description: "Reference : [CV900] PDC. Contains : Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - pdc24VSocValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDC24VSocValue: mInput_PDC24VSocValue
+    - pdc12VSocValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDC12VSocValue: mInput_PDC12VSocValue
+    - pdcPowerAutoCutModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDCPowerAutoCutModeStatus: mInput_PDCPowerAutoCutModeStatus
+    - pdcBatteryDischargeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDCBatteryDischargeStatus: mInput_PDCBatteryDischargeStatus
+    - waterPumpStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_WaterPumpStatus: mInput_WaterPumpStatus
+    - pdc24VVoltageValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDC24VVoltageValue: mInput_PDC24VVoltageValue
+    - pdc12VVoltageValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.PDC.Input_PDC12VVoltageValue: mInput_PDC12VVoltageValue
+  outputs:
+      # 24V Battery Soc Value(0~100, 254)
+    - SFC.PDC.Constant.PDC24VBatterySoc.Value:
+      description: "DCN: IMG_24VBatterySoc_value</br>Value of 24VBatterySoc"
+      dataType: HUInt64
+      # 12V Battery Soc Value(0~100, 254, 255)
+    - SFC.PDC.Constant.PDC12VBatterySoc.Value:
+      description: "DCN: IMG_12VBatterySoc_value</br>Value of 12VBatterySoc"
+      dataType: HUInt64
+      # Private 24V Battery Voltage Value
+    - SFC.Private.PDC.PDC24VBatteryVoltage.Value:
+      description: "Private_24VBatteryVoltageValue"
+      dataType: HDouble
+      # Private 12V Battery Voltage Value
+    - SFC.Private.PDC.PDC12VBatteryVoltage.Value:
+      description: "Private_12VBatteryVoltageValue"
+      dataType: HDouble
+      # 24V Battery Voltage Value(0, 16.0~32.0)
+    - SFC.PDC.Constant.PDC24VBatteryVoltage.Value:
+      description: "DCN: IMG_24VBatteryVoltage_value</br>Value of 24VBatteryVoltage"
+      dataType: HDouble
+      # 12V Battery Voltage Value(0, 8.0~16.0)
+    - SFC.PDC.Constant.PDC12VBatteryVoltage.Value:
+      description: "DCN: IMG_12VBatteryVoltage_value</br>Value of 12VBatteryVoltage"
+      dataType: HDouble
+      # Style is E00000
+    - SFC.PDC.Event.PDCPowerAutoCutMode.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PDC.Event.PDCPowerAutoCutMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.PDC.Event.PDCBatteryDischarge.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PDC.Event.PDCBatteryDischarge.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.PDC.Event.PDCBatteryDischarge.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.PDC.Event.PDCBatteryDischarge.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.PDC.Event.PDCBatteryDischarge.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is SND_NAME
+    - SFC.PDC.Sound.WaterPump.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.PDC.Sound.WaterPump.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.PDC.Sound.WaterPump.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type

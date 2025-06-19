@@ -1,0 +1,304 @@
+#
+# @file Transmission_Indicator_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Transmission_Indicator_CV:
+  sfcVersion: "17.0.0"
+  specVersion: "v0.36"
+  description: "Reference : [CV400] Transmission_Indicator_CV. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configTMTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigTMType: mInter_ConfigTMType
+    - tmAutomaticManualStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_TMAutomaticManualStatus: mInput_TMAutomaticManualStatus
+    - configSpeedLimit70MPHChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigSpeedLimit70MPH: mInter_ConfigSpeedLimit70MPH
+    - configCVPRJTNameChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigCVPRJTName: mInter_ConfigCVPRJTName
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - configVehicleTypeCVChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV: mInter_ConfigVehicleTypeCV
+    - manualModeIndcatorStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_ManualModeIndcatorStatus: mInput_ManualModeIndcatorStatus
+    - transmissionCurrentGearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_TransmissionCurrentGearStatus: mInput_TransmissionCurrentGearStatus
+    - transmissionRequestedRangeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_TransmissionRequestedRangeStatus: mInput_TransmissionRequestedRangeStatus
+    - offRoadStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_OffRoadStatus: mInput_OffRoadStatus
+    - rockingFreeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_RockingFreeStatus: mInput_RockingFreeStatus
+    - busEcoRollStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_BusEcoRollStatus: mInput_BusEcoRollStatus
+    - truckEcoRollStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_TruckEcoRollStatus: mInput_TruckEcoRollStatus
+    - manoueveringStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_ManoueveringStatus: mInput_ManoueveringStatus
+    - switchRequestedGearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_SwitchRequestedGearStatus: mInput_SwitchRequestedGearStatus
+    - transmissionZfPowerModeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_ZFPowerMode: mInput_ZFPowerMode
+    - transmissionSelectedGearStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_TransmissionSelectedGearStatus: mInput_TransmissionSelectedGearStatus
+    - zfSelectModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_ZFSelectModeStatus: mInput_ZFSelectModeStatus
+    - allisonSelectModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Transmission_Indicator_CV.Input_AllisonSelectModeStatus: mInput_AllisonSelectModeStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Indicator_CV.Telltale.TelltaleOffRoad.Stat:
+      description: "DCN: IMG_TelltaleOffRoad_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Transmission_Indicator_CV.Telltale.TelltaleRockingFree.Stat:
+      description: "DCN: IMG_TelltaleRockingFree_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x18: NONE, 0x0: IND_1, 0x1: IND_2, 0x2: IND_3, 0x3: IND_4, 0x4: IND_5, 0x5: IND_6, 0x6: IND_7, 0x7: IND_8, 0x8: IND_9, 0x9: IND_10, 0xA: IND_11, 0xB: IND_12, 0xC: IND_N, 0xD: IND_R1, 0xE: IND_R2, 0xF: IND_R3, 0x10: IND_R4, 0x11: OFF, 0x12: IND_R, 0x13: IND_RM, 0x14: IND_D, 0x15: IND_DM, 0x16: IND_E, 0x17: IND_P, 0x19: MAX
+    - SFC.Transmission_Indicator_CV.Constant.CurrentGear.Stat:
+      description: "DCN: IMG_TransmissionCurrentGear_stat</br>State of Transmission Current Gear"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x18
+        IND_1: 0x0
+        IND_2: 0x1
+        IND_3: 0x2
+        IND_4: 0x3
+        IND_5: 0x4
+        IND_6: 0x5
+        IND_7: 0x6
+        IND_8: 0x7
+        IND_9: 0x8
+        IND_10: 0x9
+        IND_11: 0xA
+        IND_12: 0xB
+        IND_N: 0xC
+        IND_R1: 0xD
+        IND_R2: 0xE
+        IND_R3: 0xF
+        IND_R4: 0x10
+        OFF: 0x11
+        IND_R: 0x12
+        IND_RM: 0x13
+        IND_D: 0x14
+        IND_DM: 0x15
+        IND_E: 0x16
+        IND_P: 0x17
+        MAX: 0x19
+      # 0x6: NONE, 0x0: IND_1, 0x1: IND_2, 0x2: IND_3, 0x3: IND_4, 0x4: IND_5, 0x5: OFF, 0x7: MAX
+    - SFC.Transmission_Indicator_CV.Constant.TransmissionTopGear.Stat:
+      description: "DCN: IMG_TransmissionTopGear_stat</br>State of Transmission Top Gear Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x6
+        IND_1: 0x0
+        IND_2: 0x1
+        IND_3: 0x2
+        IND_4: 0x3
+        IND_5: 0x4
+        OFF: 0x5
+        MAX: 0x7
+      # 0x0: NONE, 0x1: OFF, 0x2: MODE_P, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Constant.TransmissionPowerMode.Stat:
+      description: "DCN: IMG_TransmissionPowerMode_stat</br>State of Transmission Power Mode Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        MODE_P: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: MANUAL, 0x3: AUTOMATIC, 0x4: MAX
+    - SFC.Transmission_Indicator_CV.Constant.TransmissionAutomaticManual.Stat:
+      description: "DCN: IMG_TransmissionAutomaticManual_stat</br>State of Transmission Automation Manual Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        MANUAL: 0x2
+        AUTOMATIC: 0x3
+        MAX: 0x4
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageDMotor.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageDMotor.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageNMotor.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageNMotor.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageRMotor.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageRMotor.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageDAllisonATM.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageDAllisonATM.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageNAllisonATM.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageNAllisonATM.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageRAllisonATM.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Event.ShiftingToStageRAllisonATM.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Transmission_Indicator_CV.Sound.CurrentGearPosition.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Transmission_Indicator_CV.Sound.CurrentGearPosition.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Transmission_Indicator_CV.Sound.CurrentGearPosition.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Sound output count
+    - SFC.Transmission_Indicator_CV.Sound.CurrentGearPosition.RepeatCount:
+      description: "Sound Repeat Count"
+      dataType: HUInt64
+      group: Sound1
+      # 0x0: NONE, 0x1: AUTOMATIC, 0x2: MANUAL, 0x3: MAX
+    - SFC.Private.Transmission_Indicator_CV.AllisonTransmissionMode.Stat:
+      description: "Private_AllisonTransmissionMode_Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        AUTOMATIC: 0x1
+        MANUAL: 0x2
+        MAX: 0x3

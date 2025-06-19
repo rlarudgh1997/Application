@@ -1,0 +1,90 @@
+@startuml
+left to right direction
+
+ConvertDataManager --|> QObject
+
+class ConvertKeywordInfo <<struct>> {
+    + KeywordTypeEnum::KeywordType keywordType
+    + QString inputSignal
+    + QString inputValue
+    + QString validInputData
+}
+
+class CaseDataInfo <<struct>> {
+    + QString caseName
+    + QList<ConvertKeywordInfo> convertInputDataInfo
+    + bool operator==(const CaseDataInfo& other) const
+}
+
+class OutputDataInfo <<struct>> {
+    + QString outputSignal
+    + QString initialize
+    + QString outputValue
+}
+
+class ResultInfo <<struct>> {
+    + QString resultName
+    + QList<CaseDataInfo> caseDataInfoList
+    + QList<OutputDataInfo> outputDataInfoList
+}
+
+class ConvertDataManager {
+    - QString MergeStart
+    - QString Merge
+    - QString MergeEnd
+    - QStringList MergeInfos
+
+    + static QSharedPointer<ConvertDataManager>& instance()
+    + QString excuteConvertDataManager()
+    + static bool isSFCTalltaleSignal(QString)
+
+    -- Main Logic --
+    - bool isConvertStop(QString)
+    - bool convertSheetKeywordData()
+    - int appendConvertConfigSignalSet()
+    - bool appendConvertAllTCSignalSet()
+    - bool interpretDependentOnKeyword()
+    - int convertInputSignalSheetKeyword()
+    - bool convertNonSheetInputSignalKeyword()
+    - bool convertOutputDataKeyword()
+
+    -- Helpers --
+    - QList<OutputDataInfo> convertOutputStructData(QList<QStringList>)
+    - void updateResultDataInfo(int, QString, QList<ResultInfo>)
+    - void displayResultDataInfo(ResultInfo)
+    - ConvertKeywordInfo interpretInputValueKeyword(QString, QString)
+    - QString findVehicleSignalElseTimeoutCrcValue(QString, QString)
+    - QList<QPair<QString, QPair<QStringList, QStringList>>> convertSheetKeyword(...)
+    - QList<QPair<QString, QPair<QStringList, QStringList>>> getSheetSignalDataInfo(QString, QString)
+    - QString convertCustomKeywordType(int)
+    - void appendCurSheetData(...)
+    - void updateCurSheetData(...)
+
+    -- Case Generation --
+    - QString constructConvertKeywordDataInfo(int, QString)
+    - QList<QList<QStringList>> constructConvertConfigSignalSet(QString)
+    - QMap<int, QStringList> isTCNameDataInfo(...)
+    - QPair<int, int> isContainsRowInfo(...)
+    - QPair<QStringList, QList<CaseDataInfo>> generateCombinations(...)
+    - QList<ResultInfo> interpretCalKeywordAndRedefineResultInfo(ResultInfo)
+    - bool decideSameCaseList(QList<CaseDataInfo>, QList<CaseDataInfo>)
+    - QList<ResultInfo> mergeAndCleanResultList(QList<ResultInfo>)
+
+    -- Merge & Utility --
+    - int getMergeKeywordType(QString)
+    - QString constructMergeKeywords(QString, QString)
+    - QPair<QStringList, QStringList> getMergedInputDataInfo(QString, QPair<QStringList, QStringList>, QPair<QStringList, QStringList>)
+    - QString mergeCaseName(QString, QString)
+    - QString getIgnPrefixString(QString)
+    - QStringList getSheetHasMultiResult(QString, QString)
+    - QStringList getSheetResultListFromTCName(QString)
+    - QString deleteEasterEggKeyword(QString)
+    - QStringList filterUsedTelltaleEnumValues(QStringList)
+}
+
+ConvertDataManager --> ConvertKeywordInfo
+ConvertDataManager --> CaseDataInfo
+ConvertDataManager --> OutputDataInfo
+ConvertDataManager --> ResultInfo
+
+@enduml

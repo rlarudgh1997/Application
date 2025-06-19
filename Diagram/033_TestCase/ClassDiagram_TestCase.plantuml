@@ -1,0 +1,93 @@
+@startuml
+
+' Main class
+class TestCase {
+    + static QSharedPointer<TestCase>& instance()
+    + bool start(const QStringList& arguments)
+    + void stop(const bool& appExit)
+    + ~TestCase()
+
+    ' .. Property Function ..
+    + int getExcuteType()
+    + QStringList getArguments()
+    + bool getArgumentsAllModuleSelect()
+    + int getSelectAppMode()
+    + QStringList getSelectModules()
+    + QStringList getRemainingModules()
+    + QString getEditingModule()
+    + QString getModuleList(const QString& key)
+    + QMap<QString, QString> readModuleList()
+    + QStringList getGenTCInfo()
+    + bool getGenTCResult()
+    + bool getThreadRunState()
+    + QPairString getGenTCResultInfo(const int& key)
+    + QMap<int, QPairString> readGenTCResultInfo()
+    + void setExcuteType(const int& ExcuteType)
+    + void setArguments(const QStringList& Arguments)
+    + void setArgumentsAllModuleSelect(const bool& AllModuleSelect)
+    + void setSelectAppMode(const int& SelectAppMode)
+    + void setSelectModules(const QStringList& SelectModules)
+    + void setRemainingModules(const QStringList& RemainingModules)
+    + void setEditingModule(const QString& EditingModule)
+    + void setModuleList(const QString& key, const QString& value)
+    + void writeModuleList(const QMap<QString, QString>& value)
+    + void setGenTCInfo(const QStringList& GenTCInfo)
+    + void setGenTCResult(const bool& GenTCResult)
+    + void setThreadRunState(const bool& ThreadRunState)
+    + void setGenTCResultInfo(const int& key, const QPairString& value)
+    + void writeGenTCResultInfo(const QMap<int, QPairString>& value)
+
+    - TestCase()
+
+    - int excuteTestCase(const int& excuteType)
+    - void updateTestCaseExcuteInfo(const int& excuteType, const QString& text)
+    - bool parsingOptions(const QStringList& arguments)
+    - QStringList parsingAppMode(const QStringList& arguments)
+    - QStringList parsingModules(const QStringList& arguments)
+    - bool parsingInputArguments(const int& excuteType)
+    - void terminateApplicaton()
+    - void drawTerminalMenu(const int& excuteType, const QStringList& itemList)
+    - QStringList selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& options)
+    - QStringList isModuleList()
+    - QList<QVariantList> readSheetData(const bool& editingModule)
+    - void writeSheetData(const QList<QVariantList>& sheetDataList)
+    - bool openExcelFile()
+    - void runThread()
+    - void controlThread(QThread* thread, QWaitCondition& waitCondition, QMutex& mutex, int type)
+
+    - void signalTestCaseCompleted(const int& type, const bool& sheetReload) <<signal>>
+    - void signalGenTCInfo(const int& resultType, const int& current, const int& total, const QStringList& info) <<signal>>
+
+	- QString mStrExit
+    - int mNumExit
+    - int mNumSelectAll
+    - int mNumManualInput
+    - QSharedPointer<QThread> mThread
+    - QWaitCondition mWaitCondition
+    - QMutex mMutex
+
+    - int mExcuteType
+    - QStringList mArguments
+    - bool mAllModuleSelect
+    - int mSelectAppMode
+    - QStringList mSelectModules
+    - QStringList mRemainingModules
+    - QString mEditingModule
+    - QMap mQString mQString
+    - QStringList mGenTCInfo
+    - bool mGenTCResult
+    - bool mThreadRunState
+    - QMap mint mQPairString
+}
+
+TestCase <.. ControlExcel : create, connect
+TestCase .|> ConvertDataManger : excute, stop
+TestCase .|> GenerateCaseData : excute, stop
+ExcelDataManger <.. TestCase
+ExcelData <.. TestCase
+ExcelUtil <.. TestCase
+
+
+
+
+@enduml

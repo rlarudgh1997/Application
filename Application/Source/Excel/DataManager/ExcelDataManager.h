@@ -120,7 +120,6 @@ class ExcelDataManager : public QObject {
     REGISTER_WRITABLE_VALUE(QString, Merge, QString())
     REGISTER_WRITABLE_VALUE(QString, MergeEnd, QString())
     REGISTER_WRITABLE_VALUE(QStringList, MergeInfos, QStringList())
-    REGISTER_WRITABLE_VALUE(bool, ReadStateNewData, true)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QMapIntStrList, ExcelSheetData)
     REGISTER_WRITABLE_CONTAINER(QMap, int, QList<InsertData>, InsertSheetData)
 

@@ -1,0 +1,1008 @@
+#
+# @file VCU.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- VCU:
+  sfcVersion: "10.0.0"
+  specVersion: "v0.30"
+  description: "Reference : [CV950] VCU. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - vehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - readyStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EvModeStatus: mInput_EvModeStatus
+        - Vehicle.CV.VCU.Input_FCReadyStatus: mInput_FCReadyStatus
+    - vcuToAuxInvCommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToAuxInvCommFaultStatus: mInput_VCUToAuxInvCommFaultStatus
+    - vcuToBMSCommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToBMSCommFaultStatus: mInput_VCUToBMSCommFaultStatus
+    - vcuToFCU1CommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToFCU1CommFaultStatus: mInput_VCUToFCU1CommFaultStatus
+    - vcuToFCU2CommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToFCU2CommFaultStatus: mInput_VCUToFCU2CommFaultStatus
+    - vcuToHMU1CommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToHMU1CommFaultStatus: mInput_VCUToHMU1CommFaultStatus
+    - vcuToLDCCommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToLDCCommFaultStatus: mInput_VCUToLDCCommFaultStatus
+    - vcuToMCUCommFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_VCUToMCUCommFaultStatus: mInput_VCUToMCUCommFaultStatus
+    - vcuFaultStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_ServiceIndiReqStatusFromVCU: mInput_ServiceIndiReqStatusFromVCU
+        - Vehicle.CV.VCU.Input_VCUFaultECStatus: mInput_VCUFaultECStatus
+    - busOffECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_BusOffECStatus: mInput_BusOffECStatus
+    - ebsCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EBSCtoECStatus: mInput_EBSCtoECStatus
+    - tcuCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_TCUCtoECStatus: mInput_TCUCtoECStatus
+    - emsCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EMSCtoECStatus: mInput_EMSCtoECStatus
+    - ibuCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_IBUCtoECStatus: mInput_IBUCtoECStatus
+    - imuCtoECStatusChange:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_IMUCtoECStatus: mInput_IMUCtoECStatus
+    - iobxCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_IOBXCtoECStatus: mInput_IOBXCtoECStatus
+    - ipsmCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_IPSMCtoECStatus: mInput_IPSMCtoECStatus
+    - mfsmCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_MFSMCtoECStatus: mInput_MFSMCtoECStatus
+    - pdcCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_PDCCtoECStatus: mInput_PDCCtoECStatus
+    - spaCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_SPACtoECStatus: mInput_SPACtoECStatus
+    - adasDRVCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_ADAS_DRVCtoECStatus: mInput_ADAS_DRVCtoECStatus
+    - dtgCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_DTGCtoECStatus: mInput_DTGCtoECStatus
+    - eapuCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EAPUCtoECStatus: mInput_EAPUCtoECStatus
+    - epbCtoECStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EPBCtoECStatus: mInput_EPBCtoECStatus
+    - mainRelayOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_MainRelayOpenStatus: mInput_MainRelayOpenStatus
+    - startInterLockStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_StartInterLockStatus: mInput_StartInterLockStatus
+    - doorOpenAccelStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_DoorOpenAccelStatus: mInput_DoorOpenAccelStatus
+    - startBrakeOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_StartBrakeOffStatus: mInput_StartBrakeOffStatus
+    - brakePedalOverrideStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_BrakePedalOverrideStatus: mInput_BrakePedalOverrideStatus
+    - powerDownStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_PowerDownStatus: mInput_PowerDownStatus
+    - accelPedalInfoStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_AccelPedalInfoStatus: mInput_AccelPedalInfoStatus
+    - safetySwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_SafetySwitchStatus: mInput_SafetySwitchStatus
+    - chargeSafetySwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_ChargeSafetySwitchStatus: mInput_ChargeSafetySwitchStatus
+    - chargeFlapDoorSwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_ChargeFlapDoorSwitchStatus: mInput_ChargeFlapDoorSwitchStatus
+    - auxBatteryChargeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_AuxBatteryChargeStatus: mInput_AuxBatteryChargeStatus
+    - startPreChargeInfoStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_StartPreChargeInfoStatus: mInput_StartPreChargeInfoStatus
+    - emergencyEvWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_EmergencyEvWarnStatus: mInput_EmergencyEvWarnStatus
+    - plugConnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_PlugConnStatus: mInput_PlugConnStatus
+    - utilityModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_UtilityModeStatus: mInput_UtilityModeStatus
+    - transCurrentRangeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_TransCurrentRangeStatus: mInput_TransCurrentRangeStatus
+    - maxSpeedStatusVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_MaxSpeedStatus_VCU: mInput_MaxSpeedStatus_VCU
+    - changeParkingOffStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_ChangeParkingOffStatus: mInput_ChangeParkingOffStatus
+    - sbwWarningStatusVCUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_SbwWarningStatus_VCU: mInput_SbwWarningStatus_VCU
+    - mccDisplayStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.VCU.Input_MCCDisplayStatus: mInput_MCCDisplayStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.VCU.Telltale.Ready.Stat:
+      description: "DCN: IMG_TelltaleReady_Stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.VCU.Telltale.Ready.BlinkValueA:
+      description: "DCN: IMG_TelltaleReady_Stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.VCU.Telltale.Ready.BlinkValueB:
+      description: "DCN: IMG_TelltaleReady_Stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.AuxInvCommFault.Stat:
+      description: "DCN: IMG_VCUToAuxInvCommFault_Stat</br>State of VCU To AuxInvCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.BMSCommFault.Stat:
+      description: "DCN: IMG_VCUToBMSCommFault_Stat</br>State of VCU To BMSCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.FCU1CommFault.Stat:
+      description: "DCN: IMG_VCUToFCU1CommFault_Stat</br>State of VCU To FCU1CommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.FCU2CommFault.Stat:
+      description: "DCN: IMG_VCUToFCU2CommFault_Stat</br>State of VCU To FCU2CommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.HMU1CommFault.Stat:
+      description: "DCN: IMG_VCUToHMU1CommFault_Stat</br>State of VCU To HMU1CommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.LDCCommFault.Stat:
+      description: "DCN: IMG_VCUToLDCCommFault_Stat</br>State of VCU To LDCCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.MCUCommFault.Stat:
+      description: "DCN: IMG_VCUToMCUCommFault_Stat</br>State of VCU To MCUCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.VCUFault.Stat:
+      description: "DCN: IMG_VCUFault_Stat</br>State of VCUFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.VCUCANBusOff.Stat:
+      description: "DCN: IMG_VCUCANBusOff_Stat</br>State of VCU CAN Bus Off"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.EBSCommFault.Stat:
+      description: "DCN: IMG_VCUToEBSCommFault_Stat</br>State of VCU To EBSCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.TCUCommFault.Stat:
+      description: "DCN: IMG_VCUToTCUCommFault_Stat</br>State of VCU To TCUCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.EMSCommFault.Stat:
+      description: "DCN: IMG_VCUToEMSCommFault_Stat</br>State of VCU To EMSCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.IBUCommFault.Stat:
+      description: "DCN: IMG_VCUToIBUCommFault_Stat</br>State of VCU To IBUCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.IMUCommFault.Stat:
+      description: "DCN: IMG_VCUToIMUCommFault_Stat</br>State of VCU To IMUCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.IOBXCommFault.Stat:
+      description: "DCN: IMG_VCUToIOBXCommFault_Stat</br>State of VCU To IOBXCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.IPSMCommFault.Stat:
+      description: "DCN: IMG_VCUToIPSMCommFault_Stat</br>State of VCU To IPSMCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.MFSMCommFault.Stat:
+      description: "DCN: IMG_VCUToMFSMCommFault_Stat</br>State of VCU To MFSMCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.PDCCommFault.Stat:
+      description: "DCN: IMG_VCUToPDCCommFault_Stat</br>State of VCU To PDCCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.SPACommFault.Stat:
+      description: "DCN: IMG_VCUToSPACommFault_Stat</br>State of VCU To SPACommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.ADASDRVCommFault.Stat:
+      description: "DCN: IMG_VCUToADAS_DRVCommFault_Stat</br>State of VCU To ADAS DRVCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.DTGCommFault.Stat:
+      description: "DCN: IMG_VCUToDTGCommFault_Stat</br>State of VCU To DTGCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.EAPUCommFault.Stat:
+      description: "DCN: IMG_VCUToEAPUCommFault_Stat</br>State of VCU To EAPUCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.EPBCommFault.Stat:
+      description: "DCN: IMG_VCUToEPBCommFault_Stat</br>State of VCU To EPBCommFault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Constant.PTOFault.Stat:
+      description: "DCN: IMG_PTOFault_Stat</br>State of PTO Fault"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: MCC1_ACTIVE, 0x3: MCC2_ACTIVE, 0x4: MCC1_OVERRIDE, 0x5: MCC2_OVERRIDE, 0x6: MCC1_STANDBY, 0x7: MCC2_STANDBY, 0x8: MCCCFAIL, 0x9: MAX
+    - SFC.VCU.Constant.MCCDisplay.Stat:
+      description: "DCN: IMG_MCCDisplay_Stat</br>State of MCC Display"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        MCC1_ACTIVE: 0x2
+        MCC2_ACTIVE: 0x3
+        MCC1_OVERRIDE: 0x4
+        MCC2_OVERRIDE: 0x5
+        MCC1_STANDBY: 0x6
+        MCC2_STANDBY: 0x7
+        MCCCFAIL: 0x8
+        MAX: 0x9
+      # Style is E00000
+    - SFC.VCU.Event.VCUFault.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.VCUFault.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.VCUFault.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.VCUFault.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.VCUFault.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.VCU.Event.MainRelayOpen.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.MainRelayOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.MainRelayOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.MainRelayOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.MainRelayOpen.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.VCU.Event.StartInterLock.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.StartInterLock.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.StartInterLock.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.StartInterLock.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.StartInterLock.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.VCU.Event.DoorOpenAccel.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.DoorOpenAccel.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.DoorOpenAccel.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.DoorOpenAccel.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.DoorOpenAccel.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.VCU.Event.StartBrakeOff.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.StartBrakeOff.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.StartBrakeOff.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.StartBrakeOff.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.StartBrakeOff.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.VCU.Event.BrakePedalOverride.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.BrakePedalOverride.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.BrakePedalOverride.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.BrakePedalOverride.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.BrakePedalOverride.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.VCU.Event.PowerDown.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.PowerDown.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.PowerDown.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.PowerDown.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.PowerDown.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.VCU.Event.AccelPedalInfo.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.AccelPedalInfo.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.AccelPedalInfo.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.AccelPedalInfo.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.AccelPedalInfo.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.VCU.Event.SafetySwitch.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.SafetySwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.SafetySwitch.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.SafetySwitch.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.SafetySwitch.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9
+      # Style is E00000
+    - SFC.VCU.Event.ChargeSafetySwitch.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.ChargeSafetySwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.ChargeSafetySwitch.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.ChargeSafetySwitch.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.ChargeSafetySwitch.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event10
+      # Style is E00000
+    - SFC.VCU.Event.ChargeFlapDoorSwitch.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.ChargeFlapDoorSwitch.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.ChargeFlapDoorSwitch.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event11
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.ChargeFlapDoorSwitch.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event11
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.ChargeFlapDoorSwitch.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event11
+      # Style is E00000
+    - SFC.VCU.Event.AuxBatteryCharge.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.AuxBatteryCharge.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.AuxBatteryCharge.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event12
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.AuxBatteryCharge.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event12
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.AuxBatteryCharge.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event12
+      # Style is E00000
+    - SFC.VCU.Event.StartPreChargeInfo.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.StartPreChargeInfo.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.StartPreChargeInfo.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event13
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.StartPreChargeInfo.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event13
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.StartPreChargeInfo.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event13
+      # Style is E00000
+    - SFC.VCU.Event.EmergencyEvWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.EmergencyEvWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.EmergencyEvWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event15
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.EmergencyEvWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event15
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Style is E00000
+    - SFC.VCU.Event.PlugConn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event16
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.PlugConn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event16
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.PlugConn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event16
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.PlugConn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event16
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.PlugConn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event16
+      # Style is E00000
+    - SFC.VCU.Event.UtilityMode.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event17
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.UtilityMode.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event17
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.UtilityMode.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event17
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.UtilityMode.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event17
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.UtilityMode.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event17
+      # Style is E00000
+    - SFC.VCU.Event.TransCurrentRange.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event18
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.TransCurrentRange.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event18
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.TransCurrentRange.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event18
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.TransCurrentRange.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event18
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.TransCurrentRange.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event18
+      # Style is E00000
+    - SFC.VCU.Event.ChangeParkingOff.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event19
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.ChangeParkingOff.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event19
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.ChangeParkingOff.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event19
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.ChangeParkingOff.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event19
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.ChangeParkingOff.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event19
+      # Style is E00000
+    - SFC.VCU.Event.ChargeFlapDoorSwitchEV.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event20
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.ChargeFlapDoorSwitchEV.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event20
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.ChargeFlapDoorSwitchEV.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event20
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.ChargeFlapDoorSwitchEV.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event20
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.ChargeFlapDoorSwitchEV.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event20
+      # Style is E00000
+    - SFC.VCU.Event.Ready.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event21
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.Ready.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event21
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.Ready.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event21
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.Ready.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event21
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.Ready.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event21
+      # Style is E00000
+    - SFC.VCU.Event.SellectedGear.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event22
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.SellectedGear.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event22
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.SellectedGear.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event22
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.SellectedGear.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event22
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.SellectedGear.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event22
+      # Style is E00000
+    - SFC.VCU.Event.MaxSpeedVariable.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event23
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.VCU.Event.MaxSpeedVariable.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event23
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.VCU.Event.MaxSpeedVariable.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event23
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.VCU.Event.MaxSpeedVariable.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event23
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.VCU.Event.MaxSpeedVariable.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event23

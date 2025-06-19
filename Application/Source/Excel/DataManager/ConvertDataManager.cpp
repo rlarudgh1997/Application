@@ -65,10 +65,10 @@ QString ConvertDataManager::excuteConvertDataManager() {
     if (convertSheetKeywordData() == true) {
         // [Sheet] 키워드 존재 시 + 002 Excel 파일 생성
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QString filePath = ivis::common::APP_PWD() + "/002.Convert.excel2_Sheet_Keyword";
+            QString filePath = ivis::common::APP_PWD() + "/002.Convert.excel_Sheet_Keyword";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
-        checkTimer.check("excuteConvertDataManager : 002.Convert.excel2_Sheet_Keyword");
+        checkTimer.check("excuteConvertDataManager : 002.Convert.excel_Sheet_Keyword");
     } else {
         qDebug() << "[Error][convertSheetKeywordData] Failed to convert Sheet InputSignalKeyword";
         return QString("Failed to convert Sheet InputSignalKeyword");
@@ -79,10 +79,10 @@ QString ConvertDataManager::excuteConvertDataManager() {
     if (appendConfigResult == 1) {
         // config 관련 처리 조건이 있는 경우 -> 003 Config Excel 파일 생성
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QString filePath = ivis::common::APP_PWD() + "/003.Convert.excel3_Config";
+            QString filePath = ivis::common::APP_PWD() + "/003.Convert.excel_Config";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
-        checkTimer.check("excuteConvertDataManager : 003.Convert.excel3_Config");
+        checkTimer.check("excuteConvertDataManager : 003.Convert.excel_Config");
     } else if (appendConfigResult == 0) {
         // config 관련 처리 조건이 없는 경우 -> Config Excel 생성할 필요 없음
         qDebug() << "[Info][appendConvertConfigSignalSet] No config condition is defined for this module.";
@@ -95,10 +95,10 @@ QString ConvertDataManager::excuteConvertDataManager() {
     // NOTE(csh): 최종 signal 조합 set 구성(Data 추가) + 004 Excel 파일 생성
     if (appendConvertAllTCSignalSet() == true) {
         if (ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSaveConvertExcel).toBool()) {
-            QString filePath = ivis::common::APP_PWD() + "/004.Convert.excel4_All_TC_Signal_Set";
+            QString filePath = ivis::common::APP_PWD() + "/004.Convert.excel_All_TC_Signal_Set";
             ExcelUtil::instance().data()->writeExcelSheet(filePath, true);
         }
-        checkTimer.check("excuteConvertDataManager : 004.Convert.excel4_All_TC_Signal_Set");
+        checkTimer.check("excuteConvertDataManager : 004.Convert.excel_All_TC_Signal_Set");
     } else {
         qDebug() << "[Error][appendConvertAllTCSignalSet] Failed to convert All TC Signal Set";
         return QString("Failed to convert All TC Signal Set");

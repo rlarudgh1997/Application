@@ -1,0 +1,69 @@
+@startuml class_diagram_full
+
+class SignalData {
+    - InputSignalName
+    - InputDataType
+    - InputKeywordType
+    - InputData
+    - InputPrecondition
+    - InputValueEnum
+    - InputDataHex
+    - InputPreconditionHex
+    - InputValueEnumHex
+    - InputValueEnumDict
+    - PreconditionIdx
+    --
+    + __init__(...)
+    + extract_hex_values(value_enum)
+    + is_valid_value_by_type(value, data_type)
+    + convert_data_to_hex(data, value_enum)
+    + getValueEnumHexKeyDict(value_enum)
+}
+
+class SignalCollection {
+    - signals
+    - gen_type
+    - delay
+    - all_case
+    - satisfy_case
+    - not_trigger_case
+    - satisfy_case_size
+    - not_trigger_case_size
+    --
+    + __init__(signal_objects={})
+    + parse_input_string(input_str)
+    + display_signals()
+    + generate_combinations()
+    + generate_not_trigger_combinations()
+    + get_signals()
+    + get_all_case()
+    + get_satisfy_case()
+    + get_not_trigger_case()
+}
+
+class TextWriter {
+    - instance
+    - output_file_path
+    - string_buffer
+    - json_data
+    - config_path
+    - config_info
+    - column_title_list
+    --
+    + __init__(signal_collection_instance, file_path, config_path="Application.ini")
+    + _read_config_setting()
+    + check_instance_type()
+    + get_string_buffer()
+    + make_string_buffer()
+    + get_signal_info()
+    + get_all_case_str()
+    + get_satisfy_case_str()
+    + get_other_case_str()
+    + make_Json_buffer()
+    + write_json()
+}
+
+SignalCollection --> SignalData : uses
+TextWriter --> SignalCollection : uses
+
+@enduml

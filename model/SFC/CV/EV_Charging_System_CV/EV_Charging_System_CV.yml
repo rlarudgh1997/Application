@@ -1,0 +1,195 @@
+#
+# @file EV_Charging_System_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- EV_Charging_System_CV:
+  sfcVersion: "8.0.0"
+  specVersion: "v0.27"
+  description: "Reference : [CV720] EV_Charging_System_CV. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - vcmsPDStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_VCMSPDStatus: mInput_VCMSPDStatus
+    - vcmsPlugConnectStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_VCMSPlugConnectStatus: mInput_VCMSPlugConnectStatus
+    - bmsChgRemainedTimeMinChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsChgRemainedTimeMin: mInput_BmsChgRemainedTimeMin
+    - bmsDisplaySocValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsDisplaySocValue: mInput_BmsDisplaySocValue
+    - bmsChgStatusPhrasesChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsStdChgStatus: mInput_BmsStdChgStatus
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsFstChgStatus: mInput_BmsFstChgStatus
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsFulChgStatus: mInput_BmsFulChgStatus
+        - Vehicle.CV.EV_Charging_System_CV.Input_BmsChgFinStatus: mInput_BmsChgFinStatus
+    - vcmsChgAlarmStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_VCMSChgAlarmStatus: mInput_VCMSChgAlarmStatus
+        - Vehicle.CV.EV_Charging_System_CV.Input_VCMSChgAlarmSubStatus: mInput_VCMSChgAlarmSubStatus
+    - v2xMinimumOperatingValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_V2XMsgAppliedStatus: mInput_V2XMsgAppliedStatus
+        - Vehicle.CV.EV_Charging_System_CV.Input_V2XMinimumSocFromVcmsValue: mInput_V2XMinimumSocFromVcmsValue
+    - evsePwrDisValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_EvsePwrDisValue: mInput_EvsePwrDisValue
+    - v2xDisplayOnFromVCMSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.EV_Charging_System_CV.Input_V2XDisplayOnFromVCMS: mInput_V2XDisplayOnFromVCMS
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.EV_Charging_System_CV.Telltale.EvChgCable.Stat:
+      description: "DCN: IMG_TelltaleEvChgCable_stat </br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: UNMEASURABLE, 0x2: MINIMUM, 0x3: VALUE, 0x4: MAXIMUM, 0x5: MAX
+    - SFC.EV_Charging_System_CV.Constant.BmsChgRemainedTimeMin.Stat:
+      description: "DCN: IMG_ChargingRemainTime_value</br>Status of BmsChgRemainedTimeMin"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        UNMEASURABLE: 0x1
+        MINIMUM: 0x2
+        VALUE: 0x3
+        MAXIMUM: 0x4
+        MAX: 0x5
+      # Numeric Value
+    - SFC.EV_Charging_System_CV.Constant.BmsChgRemainedTimeMin.Value:
+      description: "DCN: IMG_ChargingRemainTime_value</br>Value of BmsChgRemainedTimeMin"
+      dataType: HUInt64
+      group: Constant1
+      # 0x0: NONE, 0x1: UNMEASURABLE, 0x2: VALUE, 0x3: MAX
+    - SFC.EV_Charging_System_CV.Constant.BmsDisplaySoc.Stat:
+      description: "DCN: IMG_ChargingCurrentSoc_value</br>Status of BmsDisplaySoc"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        UNMEASURABLE: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # Numeric Value
+    - SFC.EV_Charging_System_CV.Constant.BmsDisplaySoc.Value:
+      description: "DCN: IMG_ChargingCurrentSoc_value</br>Value of BmsDisplaySoc"
+      dataType: HUInt64
+      group: Constant2
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: STD_CHARGING, 0x3: FST_CHARGING, 0x4: FULL_CHARGING, 0x5: FIN_CHARGING, 0x6: MAX
+    - SFC.EV_Charging_System_CV.Constant.BmsChgStatusPhrases.Stat:
+      description: "DCN: IMG_ChargingStatus_Stat</br>State of BmsChgStatusPhrases"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        STD_CHARGING: 0x2
+        FST_CHARGING: 0x3
+        FULL_CHARGING: 0x4
+        FIN_CHARGING: 0x5
+        MAX: 0x6
+      # Numeric Value
+    - SFC.EV_Charging_System_CV.Constant.ChargingPwr.Value:
+      description: "DCN: IMG_ChargingPwr_value</br>Value of Charging power"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.EV_Charging_System_CV.Constant.V2XMinimumSoc.Value:
+      description: "DCN: IMG_V2XMinimumSoc_value</br>Value of V2X Minimum Soc"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.EV_Charging_System_CV.Event.ChargingFail.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_CV.Event.ChargingFail.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_CV.Event.ChargingFail.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_CV.Event.ChargingFail.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_CV.Event.ChargingFail.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.EV_Charging_System_CV.Event.Charging.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.EV_Charging_System_CV.Event.Charging.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.EV_Charging_System_CV.Event.Charging.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.EV_Charging_System_CV.Event.Charging.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.EV_Charging_System_CV.Event.Charging.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2

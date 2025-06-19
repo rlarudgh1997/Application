@@ -1,0 +1,149 @@
+#
+# @file Set_Speed.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Set_Speed:
+  sfcVersion: "3.0.0"
+  specVersion: "v0.34"
+  description: "Reference : [CV600] Set_Speed. Contains : Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - engineCcSmvStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Set_Speed.Input_EngineCcActive: mInput_EngineCcActive
+        - Vehicle.CV.Set_Speed.Input_SmvSetSpeedStatus: mInput_SmvSetSpeedStatus
+    - srsRetarderStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Set_Speed.Input_SRSActiveStatus: mInput_SRSActiveStatus
+        - Vehicle.CV.Set_Speed.Input_RetarderSwitchStatus: mInput_RetarderSwitchStatus
+    - engineCcSmvSetSpeedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Set_Speed.Input_EngineCcSetSpeed: mInput_EngineCcSetSpeed
+        - Vehicle.CV.Set_Speed.Input_SmvSetSpeedValue: mInput_SmvSetSpeedValue
+    - srsBremsomatSetSpeedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Set_Speed.Input_SRSSetSpeedValue: mInput_SRSSetSpeedValue
+        - Vehicle.CV.Set_Speed.Input_BremsomatSetSpeedValue: mInput_BremsomatSetSpeedValue
+    - mccDhcChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Set_Speed.Input_MCCStatus: mInput_MCCStatus
+        - Vehicle.CV.Set_Speed.Input_DHCState: mInput_DHCState
+        - Vehicle.CV.Set_Speed.Input_MCCMinSpeedValue: mInput_MCCMinSpeedValue
+        - Vehicle.CV.Set_Speed.Input_DHCToleranceValue: mInput_DHCToleranceValue
+    - tripDistanceUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - paramChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Param.Par_CCSetSpeedKmTolerance: mPar_CCSetSpeedKmTolerance
+        - SFC.Extension.Param.Par_CCSetSpeedMileTolerance: mPar_CCSetSpeedMileTolerance
+        - SFC.Extension.Param.Par_SRSSetSpeedKmTolerance: mPar_SRSSetSpeedKmTolerance
+        - SFC.Extension.Param.Par_SRSSetSpeedMileTolerance: mPar_SRSSetSpeedMileTolerance
+        - SFC.Extension.Param.Par_BremsomatSetSpeedKmTolerance: mPar_BremsomatSetSpeedKmTolerance
+        - SFC.Extension.Param.Par_BremsomatSetSpeedMileTolerance: mPar_BremsomatSetSpeedMileTolerance
+  outputs:
+      # Set Speed Position Value
+    - SFC.Set_Speed.Constant.SetSpeedPosition.Value:
+      description: "DCN: IMG_SetSpeedPosition_value</br>Value of Position"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: GREEN, 0x3: RED, 0x4: MAX
+    - SFC.Set_Speed.Constant.SetSpeedColor.Stat:
+      description: "DCN: IMG_SetSpeedColor_stat</br>Stat of Color"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        GREEN: 0x2
+        RED: 0x3
+        MAX: 0x4
+      # Set Speed MinToleranceSpeed Value
+    - SFC.Set_Speed.Constant.MinToleranceSpeed.Value:
+      description: "DCN: IMG_MinToleranceSpeed_Value</br>Value of MinToleranceSpeed"
+      dataType: HUInt64
+      # Set Speed MaxToleranceSpeed Value
+    - SFC.Set_Speed.Constant.MaxToleranceSpeed.Value:
+      description: "DCN: IMG_MaxToleranceSpeed_Value</br>Value of MaxToleranceSpeed"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: CC_SET, 0x3: SCC_SET, 0x4: SRS_SET, 0x5: BREMSOMAT_SET, 0x6: MAX
+    - SFC.Private.Set_Speed.SetSpeedPosition.Stat:
+      description: "Private_SetSpeedPosition_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CC_SET: 0x2
+        SCC_SET: 0x3
+        SRS_SET: 0x4
+        BREMSOMAT_SET: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: CC_MCC_ACTIVE, 0x3: CC_DHC_ACTIVE, 0x4: SCC_MCC_ACTIVE, 0x5: SCC_DHC_ACTIVE, 0x6: MAX
+    - SFC.Private.Set_Speed.MinToleranceSpeed.Stat:
+      description: "Private_MinToleranceSpeed_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CC_MCC_ACTIVE: 0x2
+        CC_DHC_ACTIVE: 0x3
+        SCC_MCC_ACTIVE: 0x4
+        SCC_DHC_ACTIVE: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: CC_MCC_ACTIVE, 0x3: CC_DHC_ACTIVE, 0x4: SCC_MCC_ACTIVE, 0x5: SCC_DHC_ACTIVE, 0x6: MAX
+    - SFC.Private.Set_Speed.MaxToleranceSpeed.Stat:
+      description: "Private_MaxToleranceSpeed_stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CC_MCC_ACTIVE: 0x2
+        CC_DHC_ACTIVE: 0x3
+        SCC_MCC_ACTIVE: 0x4
+        SCC_DHC_ACTIVE: 0x5
+        MAX: 0x6

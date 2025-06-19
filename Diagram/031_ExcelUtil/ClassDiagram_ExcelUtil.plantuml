@@ -1,0 +1,97 @@
+@startuml
+
+class KeywordInfo {
+    + KeywordInfo(row, column, text, keyword, data)
+    + KeywordInfo()
+    + operator=(other)
+    + operator==(other)
+    + operator!=(other)
+
+    + int isRow()
+    + int isColumn()
+    + QString isText()
+    + int isKeyword()
+    + QString isData()
+    + QList<QStringList> isRowData()
+    + void updateRowData(data)
+    + QList<QStringList> isConvertData()
+    + void updateConvertData(data)
+
+    - int mRow
+    - int mColumn
+    - QString mText
+    - int mKeyword
+    - QString mData
+    - QList<QStringList> mConvertData
+    - QList<QStringList> mRowData
+}
+
+class ExcelUtil {
+    + static QSharedPointer<ExcelUtil>& instance()
+    + QString isModuleFilePath(const QString& path, const QString& module, const QString& fileExtension)
+    + QMap<QString, QPair<QString, QString>> isModuleListFromJson(const int& appMode, const bool& yml, const bool& toUpper)
+    + QStringList isDescriptionDataInfo()
+    + int isDescriptionValueCount()
+    + int isDescriptionPreconditionCount()
+    + QString isCurrentCellText(const int& sheetIndex, const int& rowIndex, const int& columnIndex)
+    + QList<QPair<QString, int>> isKeywordPatternInfo(const int& columnIndex)
+    + QString isKeywordString(const int keywordType)
+    + int isKeywordType(const int& columnIndex, QString& inputData)
+    + int isComlumnIndex(const int& sheetIndex, const int& type)
+    + QPair<int, int> isIGNElapsedType(const QString& singalName)
+    + QString isIGNElapsedName(const int& ignType)
+    + QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData)
+    + int isConvertedKeywordType(const bool& toCustom, const int& keywordType)
+    + QString isMaxValue(const bool& doubleType)
+    + QString isValidMaxValue(const QString& signalName, const int& dataType, const int& keywordType, const QStringList& inputData, const QStringList& valueEnum)
+    + QString pythonCall(const bool& readFile, const QString& filePath)
+    + void writeExcelSheet(const QString& filePath, const bool& convert)
+    + QList<QVariantList> openExcelFile(const QString& filePath)
+    + QString readPreset(const QString& key)
+
+    - ExcelUtil()
+    - void initPresetInfo()
+
+    + QString getMergeStart(const QString& MergeStart)
+    + QString getMerge(const QString& Merge)
+    + QString getMergeEnd(const QString& MergeEnd)
+    + QStringList getMergeInfos(const QStringList& MergeInfos)
+    + bool getInitPreset(const bool& InitPreset)
+    + QJsonObject getJsonRoot(const QJsonObject& JsonRoot)
+    + QStringList getJsonSectionInfo(const QStringList& JsonSectionInfo)
+    + QMapStrStr getPresetInfo(const QString& key)
+    + QMap<QString, QMapStrStr> readPresetInfo(const QString& key)
+    + void setMergeStart(const QString& MergeStart)
+    + void setMerge(const QString& Merge)
+    + void setMergeEnd(const QString& MergeEnd)
+    + void setMergeInfos(const QStringList& MergeInfos)
+    + void setInitPreset(const bool& InitPreset)
+    + void setJsonRoot(const QJsonObject& JsonRoot)
+    + void setJsonSectionInfo(const QStringList& JsonSectionInfo)
+    + void setPresetInfo(const QString& key, const QMapStrStr& value)
+    + void writePresetInfo(const QMap<QString, QMapStrStr>& value)
+
+    - QString mMergeStart
+    - QString mMerge
+    - QString mMergeEnd
+    - QStringList mMergeInfos
+    - bool mInitPreset
+    - QJsonObject mJsonRoot
+    - QStringList mJsonSectionInfo
+    - QMap<QString, QMapStrStr> mPresetInfo
+}
+
+KeywordInfo <.. ExcelUtil : uses
+
+ExcelUtil <-- ControlExcel : uses
+ExcelUtil <-- ControlMenu : uses
+ExcelUtil <-- ControlCenter : uses
+
+ExcelUtil <-- ExcelDataManager : uses
+ExcelUtil <-- SignalDataManager : uses
+ExcelUtil <-- ConvertDataManager : uses
+ExcelUtil <-- GenerateCaseData : uses
+ExcelUtil <-- CaseDataWriter : uses
+ExcelUtil <-- TestCase : uses
+
+@enduml

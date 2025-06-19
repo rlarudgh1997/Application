@@ -2000,7 +2000,6 @@ void GenerateCaseData::appendManualTcToJson() {
         sheetJson[titleSheet] = sheetName;
     }
 
-    ExcelDataManager::instance().data()->isManualDataList();
     int cnt = 0;
     for (const auto& manualTC : ExcelDataManager::instance().data()->isManualDataList()) {
         QString tcNameKey = QString("_%1[%2]").arg(titleTcName).arg(cnt, 3, 10, QChar('0'));
@@ -2141,7 +2140,7 @@ void GenerateCaseData::appendManualTcToJson() {
             }
         }
 
-        QString tcFormat = tcFormatList.join("\n");
+        QString tcFormat = tcFormatList.join("\n") + "\n\n";
         tcNameJson["TCFormat"] = tcFormat;
         // qDebug().noquote().nospace() << "tc format:\n" << tcFormat;
         sheetJson[tcNameKey] = tcNameJson;

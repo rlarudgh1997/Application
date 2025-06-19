@@ -1,0 +1,125 @@
+#
+# @file OAT_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2024  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- OAT_CV:
+  sfcVersion: "1.0.0"
+  specVersion: "v0.35"
+  description: "Reference : [CV610] OAT_CV. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - oatCelsiusValueFATCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.OAT_CV.Input_OATCelsiusValue_FATC: mInput_OATCelsiusValue_FATC
+    - oatFahrenheitValueFATCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.OAT_CV.Input_OATFahrenheitValue_FATC: mInput_OATFahrenheitValue_FATC
+    - oatUnitStatusFATCChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.OAT_CV.Input_OATUnitStatus_FATC: mInput_OATUnitStatus_FATC
+    - oatCelsiusValueCCMChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.OAT_CV.Input_OATCelsiusValue_CCM: mInput_OATCelsiusValue_CCM
+    - oatCelsiusValueACPChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.OAT_CV.Input_OATCelsiusValue_ACP: mInput_OATCelsiusValue_ACP
+  outputs:
+      # Numeric value
+    - SFC.OAT_CV.Constant.OAT.Value:
+      description: "DCN: IMG_OAT_value</br>Value of OAT"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.OAT_CV.Constant.OAT.Stat:
+      description: "DCN: IMG_OAT_stat</br>Status of OAT"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: CELSIUS, 0x3: FAHRENHEIT, 0x4: MAX
+    - SFC.OAT_CV.Constant.OATUnit.Stat:
+      description: "DCN: IMG_OATUnit_stat</br>Status of OAT Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CELSIUS: 0x2
+        FAHRENHEIT: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.OAT_CV.Constant.ICEWarn.Stat:
+      description: "DCN: IMG_ICEWarn_stat</br>Status of ICE Warn"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Style is E00000
+    - SFC.OAT_CV.Event.IceWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.OAT_CV.Event.IceWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.OAT_CV.Event.IceWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.OAT_CV.Event.IceWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.OAT_CV.Event.IceWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: KEEP_CUR_STAT, 0x4: MAX
+    - SFC.Private.OAT_CV.ICEWarn.Stat:
+      description: "State of Private"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        KEEP_CUR_STAT: 0x3
+        MAX: 0x4

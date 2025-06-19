@@ -1,0 +1,338 @@
+#
+# @file Key_System_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Key_System_CV:
+  sfcVersion: "6.0.0"
+  specVersion: "v0.21"
+  description: "Reference : [CV660] Key_System_CV. Contains : Telltale, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configIMMOChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigIMMO: mInter_ConfigIMMO
+    - configSMKCVChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigSMKCV: mInter_ConfigSMKCV
+    - immoIndStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_ImmoIndStatus: mInput_ImmoIndStatus
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - smkPicWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_SMKPicWarnStatus: mInput_SMKPicWarnStatus
+    - esclFailSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_EsclFailSoundStatus: mInput_EsclFailSoundStatus
+    - esclNotLockedSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_EsclNotLockedSoundStatus: mInput_EsclNotLockedSoundStatus
+    - esclNotUnlockedSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_EsclNotUnlockedSoundStatus: mInput_EsclNotUnlockedSoundStatus
+    - ssbFailSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_SsbFailSoundStatus: mInput_SsbFailSoundStatus
+    - idOutWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_IdOutWarnSoundStatus: mInput_IdOutWarnSoundStatus
+    - keyBatDischargeSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_KeyBatDischargeSoundStatus: mInput_KeyBatDischargeSoundStatus
+    - deactivationWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_DeactivationWarnSoundStatus: mInput_DeactivationWarnSoundStatus
+    - engRestartWarnSoundStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_EngRestartWarnSoundStatus: mInput_EngRestartWarnSoundStatus
+    - accIndStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_AccIndStatus: mInput_AccIndStatus
+    - cvServiceModeIndiReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Key_System_CV.Input_CVServiceModeIndiReqStatus: mInput_CVServiceModeIndiReqStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Key_System_CV.Telltale.Immobilizer.Stat:
+      description: "DCN: IMG_TelltaleImmobilizer_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Key_System_CV.Telltale.Immobilizer.BlinkValueA:
+      description: "DCN: IMG_TelltaleImmobilizer_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Key_System_CV.Telltale.Immobilizer.BlinkValueB:
+      description: "DCN: IMG_TelltaleImmobilizer_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # Style is E00000
+    - SFC.Key_System_CV.Event.SMKPicWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Event.SMKPicWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_CV.Event.AccInd.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Event.AccInd.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_CV.Event.CVServiceModeIndi.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Event.CVServiceModeIndi.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Key_System_CV.Event.CVServiceModeCondi.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Event.CVServiceModeCondi.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Event.CVServiceModeCondi.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Key_System_CV.Event.CVServiceModeCondi.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Key_System_CV.Event.CVServiceModeCondi.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.IDOut.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.IDOut.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.IDOut.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.EsclFail.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.EsclFail.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.EsclFail.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound2
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.DeactIDWarnSMK.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.DeactIDWarnSMK.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.DeactIDWarnSMK.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound3
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.EsclNotUnlocked.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.EsclNotUnlocked.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.EsclNotUnlocked.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound4
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.LowKeyBattery.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.LowKeyBattery.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound5
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.LowKeyBattery.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound5
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.ESCLNotLockWarn.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.ESCLNotLockWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound6
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.ESCLNotLockWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound6
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.SsbFail.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.SsbFail.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound7
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.SsbFail.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound7
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Style is SND_NAME
+    - SFC.Key_System_CV.Sound.EngRestartWarn.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Key_System_CV.Sound.EngRestartWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound9
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Key_System_CV.Sound.EngRestartWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound9
+      valueEnum: SFC_Common_Enum_CV.Sound.Type

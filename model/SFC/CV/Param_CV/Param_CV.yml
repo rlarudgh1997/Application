@@ -1,0 +1,882 @@
+#
+# @file Param_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Param_CV:
+  sfcVersion: "2.0.0"
+  specVersion: "v0.25"
+  description: "Reference : [CV] virtual SFC to support Param_CV variables (4.3.8 Input_Output Processing_CV)"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # None
+    - SFC.Extension.Param.Par_IllumDayLCD:
+      description: "The duty rate of daytime mode for LCD (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumDayDial:
+      description: "The duty rate of daytime mode for Dial (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumDayPointer:
+      description: "The duty rate of daytime mode for Pointer (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumDaySymbolGreen:
+      description: "The duty rate of daytime mode for Symbol Green (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumDaySymbolWhite:
+      description: "The duty rate of daytime mode for Symbol White (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumNightLCD:
+      description: "The duty rate of Nighttime mode for LCD (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumNightDial:
+      description: "The duty rate of Nighttime mode for Dial (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumNightPointer:
+      description: "The duty rate of Nighttime mode for Pointer (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumNightSymbolGreen:
+      description: "The duty rate of Nighttime mode for Symbol Green (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumNightSymbolWhite:
+      description: "The duty rate of Nighttime mode for Symbol White (Minimum value, Minimum value in the early evening, Minimum value during daytime, Maximum value)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_IllumIllOut:
+      description: "The duty rate for ILL OUT (step 1~200)"
+      dataType: HString
+      # None
+    - SFC.Extension.Param.Par_DimmingRateValue:
+      description: "Opacity of dimming layer(0% : Not apply dimming layer)"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_FuelSender1:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender2:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender3:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender4:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender5:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender6:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender7:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender8:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender9:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender10:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSender11:
+      description: "Resistance value of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderShort:
+      description: "Resistance value of Fuel Sender on short detection"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderOpen:
+      description: "Resistance value of Fuel Sender on open detection"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderLowFuelWarn:
+      description: "Resistance value of Fuel Sender on Low Fuel Warnnig section"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume1:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume2:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume3:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume4:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume5:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume6:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume7:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume8:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume9:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume10:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderVolume11:
+      description: "Volume of Fuel Sender (S/F, G/F, 7/8, 6/8, ..., 1/8, G/E, S/E)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderLowFuelWarnVolume:
+      description: "Volume of Fuel Sender on Low Fuel Warning section"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelNominalCapacity:
+      description: "Fuel nominal capacity"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelEconomyReference:
+      description: "reference fuel economy for Distance To Empty logic"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSenderLPIRedZoneWarn:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelStabletime:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FuelSlopetStabletime:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_RefuelSlopeValue:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FlatRefuelConfirm1Value:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FlatRefuelConfirm2Value:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_FlatRefuelConfirm3Value:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SlopeRefuelConfirmUpValue:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SlopeRefuelConfirmDownValue:
+      description: "Planned to be used when R005 specification is updated, added to work first in AEM when R005 is applied"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_OdoCorrectionFactor:
+      description: "Correction factor for odometer"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph1:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph2:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph3:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph4:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph5:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph6:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph7:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph8:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph9:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph10:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph11:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph12:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph13:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph14:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceKph15:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 280, 300). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph1:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph2:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph3:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph4:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph5:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph6:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph7:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph8:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph9:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SpeedToleranceMph10:
+      description: "display tolerance of vehicle speed (20, 40, 60, ..., 180, 200). Average of upper and lower limit"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_MaxDisplaySpeedKph:
+      description: "Maximum display vehicle speed"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_MaxDisplaySpeedMph:
+      description: "Maximum display vehicle speed"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_VehicleProject:
+      description: "Project name of vehicle (ex. GL3, ...)"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed1Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed2Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed3Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed4Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed5Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed6Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed7Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed8Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed1Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed2Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed3Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed4Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed5Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed6Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed7Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed8Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed1Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed2Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed3Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed4Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed5Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed6Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed7Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundBcwSpeed8Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep1Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep1Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep1Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep2Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep2Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep2Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep3Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep3Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundFPdwStep3Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep1Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep1Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep1Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep2Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep2Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep2Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep3Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep3Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundRPdwStep3Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundPdwFail:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundGoodbye:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundIdOut:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundInform1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundInform2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundKeyOperated:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed1Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed2Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed3Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed4Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed5Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed6Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed7Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed8Vol1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed1Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed2Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed3Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed4Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed5Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed6Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed7Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed8Vol2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed1Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed2Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed3Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed4Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed5Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed6Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed7Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundLdwSpeed8Vol3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundOverSpeed:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundPaComplete:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundPaScan:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundPdwRPosition:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundReady:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltFixed:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed4:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed5:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed6:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed7:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SeatBeltSpeed8:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundShiftP:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed4:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed5:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed6:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed7:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundTurnSignalSpeed8:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundWarn1:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundWarn2:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundWarn3:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SoundWelcome:
+      description: "Sound volume data"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue1:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue2:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue3:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue4:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue5:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue6:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue7:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue8:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterBlueColorValue9:
+      description: "Blue light filter blue color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue1:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue2:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue3:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue4:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue5:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue6:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue7:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue8:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterGreenColorValue9:
+      description: "Blue light filter green color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue1:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue2:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue3:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue4:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue5:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue6:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue7:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue8:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_BlueLightFilterRedColorValue9:
+      description: "Blue light filter red color value for LCD"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_ConvMonthToDay:
+      description: "Conversion formula between Month and Day. (day) = (month)*Par_ConvMonthToDay (ex. 365/12)"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_TPMSBlinkTimeValue:
+      description: "TPMS Telltale flashing time"
+      dataType: HUInt64
+      # None
+    - SFC.Extension.Param.Par_CCSetSpeedKmTolerance:
+      description: "Set_Speed Par_CCSetSpeedKmTolerance"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_CCSetSpeedMileTolerance:
+      description: "Set_Speed Par_CCSetSpeedMileTolerance"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SRSSetSpeedKmTolerance:
+      description: "Set_Speed Par_SRSSetSpeedKmTolerance"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_SRSSetSpeedMileTolerance:
+      description: "Set_Speed Par_SRSSetSpeedMileTolerance"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_BremsomatSetSpeedKmTolerance:
+      description: "Set_Speed Par_BremsomatSetSpeedKmTolerance"
+      dataType: HDouble
+      # None
+    - SFC.Extension.Param.Par_BremsomatSetSpeedMileTolerance:
+      description: "Set_Speed Par_BremsomatSetSpeedMileTolerance"
+      dataType: HDouble

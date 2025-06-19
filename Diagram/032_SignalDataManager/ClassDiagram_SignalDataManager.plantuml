@@ -1,0 +1,103 @@
+@startuml
+
+class SignalData {
+    + SignalData(const QString& signalName, const int& dataType, ..., const QStringList& allConvertData)
+    + SignalData()
+    + operator=(other)
+    + operator==(other)
+    + operator!=(other)
+
+    + int getDataType()
+    + bool getInitialize()
+    + int getKeywordType()
+    + QStringList getOriginData()
+    + QStringList getConvertData()
+    + QStringList getValueEnum()
+    + QStringList getNotUsedEnum()
+    + QStringList getPrecondition()
+    + QStringList getAllConvertData()
+    + void setDataType(const int& DataType)
+    + void setInitialize(const bool& Initialize)
+    + void setKeywordType(const int& KeywordType)
+    + void setOriginData(const QStringList& OriginData)
+    + void setConvertData(const QStringList& ConvertData)
+    + void setValueEnum(const QStringList& valueEnum)
+    + void setNotUsedEnum(const QStringList& NotUsedEnum)
+    + void setPrecondition(const QStringList& Precondition)
+    + void setAllConvertData(const QStringList& AllConvertData)
+
+    - int mDataType
+    - bool mInitialize
+    - int mKeywordType
+    - QStringList mOriginData
+    - QStringList mConvertData
+    - QStringList mValueEnum
+    - QStringList mNotUsedEnum
+    - QStringList mPrecondition
+    - QStringList mAllConvertData
+}
+
+class SignalDataManager {
+    + static QSharedPointer<SignalDataManager>& instance()
+    + int isDataType(const QString& dataTypeStr)
+    + int isSignalType(const QString& signalName)
+    + QMap<int, QStringList> isSignalDataList(const QString& signalName, const QStringList& inputData, const QString& vehicleType, int& dataType)
+    + QString isSignalValueEnum(const QString& signalName, const QString& value)
+    + QStringList isSignalValueEnum(const bool& toEnum, const QString& signalName)
+    + QStringList isConvertedSignalDataValueEnum(const bool& toEnum, const QString& signalName, const QStringList& valueEnum, QString& matchingValue)
+    + QMap<int, QPair<QString, SignalData>> isNormalInputSignalDataInfo(const int& sheetIndex, const QPair<QStringList, QStringList>& list)
+    + QMap<int, QPair<QString, SignalData>> isTestCaseInputSignalDataInfo(const int& sheetIndex, ..., QMap<QString, SignalData>& newSignalDataInfo);
+    + QMap<int, QPair<QString, SignalData>> isOtherInputSignalDataInfo(const int& sheetIndex, ..., QMap<QString, SignalData>& newSignalDataInfo);
+    + QMap<int, QPair<QString, SignalData>> isOutputSignalDataInfo(const int& sheetIndex, const QList<QStringList>& list)
+    + bool isExcelDataValidation()
+    + void testCode(const QVariantList& arg)
+    + QString getMergeStart(const QString& MergeStart)
+    + QString getMerge(const QString& Merge)
+    + QString getMergeEnd(const QString& MergeEnd)
+    + QStringList getMergeInfos(const QStringList& MergeInfos)
+    + void setMergeStart(const QString& MergeStart)
+    + void setMerge(const QString& Merge)
+    + void setMergeEnd(const QString& MergeEnd)
+    + void setMergeInfos(const QStringList& MergeInfos)
+
+    - SignalDataManager()
+    - QString isSfcFileInfo(const QString& signalName)
+    - QStringList isVsmFileInfo(const QString& vehicleName, const QStringList& specType)
+    - QMap<int, QStringList> isSignalFileList(const QString& signalName, const QString& vehicleType)
+    - QString isSFCCommonEnum(const QString& info, const QString& prefix)
+    - QMap<int, QStringList> isParsingFileDataInfo(const QString& signalName, const QStringList& inputData, const QMap<int, QStringList>& fileList, int& dataType)
+    - QStringList isValidValueEnum(const QString& signalName, const QMap<int, QStringList>& dataInfo)
+    - QStringList isConvertedSignalDataMatchingTable(const bool& toHex, const QString& signalName, const QMap<int, QStringList>& dataInfo)
+    - QList<QStringList> parsingKeywordBlocks(const QStringList& originData)
+    - QMap<int, QStringList> parsingKeywordData(const QStringList& originData)
+    - QMap<int, QStringList> isCustomValueInfo(const QStringList& originData, const bool& normal)
+    - QList<qint64> isNumber(const QStringList& numberStrList, const QMap<QString, qint64>& exception)
+    - QPair<qint64, qint64> isMinMaxValue(const QStringList& inputList, const bool& maxSkip)
+    - QPair<QStringList, QStringList> isValidValueList(const int& dataType, const int& notTriggerType, const QStringList& allData, const QMap<int, QStringList>& dataInfo)
+    - QStringList isValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo)
+    - QStringList isMultiValidUniqueValue(const int& dataType, const QMap<int, QStringList>& dataInfo)
+    - bool isExceptionSignal(const QString& signalName)
+    - int isContainConfigSignal(const QString& signalName, const int& keywordType, const QPair<QStringList, QStringList>& allList)
+    - int isSignalDataType(const QString& signalName, const SignalData& signalData, QString& maxValue)
+    - QMap<QString, SignalData> isSignalDataInfo(const QStringList& signalList, const QStringList& dataList, QMap<QString, QMap<int, QStringList>>& dataInfo)
+    - QPair<QStringList, QStringList> isConvertedValueData(const QString& signalName, const int& dataType, const bool& normal, const QStringList& originData, const QStringList& otherAllData)
+    - QMap<int, QPair<QStringList, QStringList>> isConvertedEnumData(const QString& signalName, const SignalData& signalData, const bool& configState)
+    - QStringList isConvertedExceptionData(const QString& signalName, const QMap<int, QStringList>& dataInfo, const QStringList& inputData)
+    - QMap<int, QPair<QString, SignalData>> isSortingInputSignalList(const QMap<QString, SignalData>& dataInfo, const QStringList& signalList)
+
+    - QString mMergeStart
+    - QString mMerge
+    - QString mMergeEnd
+    - QStringList mMergeInfos
+}
+
+SignalData <.. SignalDataManager : uses
+
+SignalDataManager <-- ControlExcel : uses
+SignalDataManager <-- ConvertDataManager : uses
+SignalDataManager <-- ExcelDataManager : uses
+SignalDataManager <-- CaseDataWriter : uses
+SignalDataManager <-- GenerateCaseData : uses
+
+
+@enduml

@@ -1,0 +1,289 @@
+#
+# @file Steering_Warning_Lamp.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Steering_Warning_Lamp:
+  sfcVersion: "10.0.0"
+  specVersion: "v0.36"
+  description: "Reference : [CV350] Steering_Warning_Lamp. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configMAHSChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigMAHS: mInter_ConfigMAHS
+    - configEHPS1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigEHPS1: mInter_ConfigEHPS1
+    - configEHPS2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigEHPS2: mInter_ConfigEHPS2
+    - configRASChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigRAS: mInter_ConfigRAS
+    - ehps1WarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning1Status_EHPS1: mInput_SteeringWarning1Status_EHPS1
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning2Status_EHPS1: mInput_SteeringWarning2Status_EHPS1
+    - ehps2WarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning1Status_EHPS2: mInput_SteeringWarning1Status_EHPS2
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning2Status_EHPS2: mInput_SteeringWarning2Status_EHPS2
+    - mahsWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning1Status_MAHS: mInput_SteeringWarning1Status_MAHS
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning2Status_MAHS: mInput_SteeringWarning2Status_MAHS
+    - rasWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning1Status_RAS: mInput_SteeringWarning1Status_RAS
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringWarning2Status_RAS: mInput_SteeringWarning2Status_RAS
+    - mahsCheckStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck1Status_MAHS: mInput_SteeringCheck1Status_MAHS
+    - ehpsCheckStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck1Status_EHPS1: mInput_SteeringCheck1Status_EHPS1
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck1Status_EHPS2: mInput_SteeringCheck1Status_EHPS2
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck2Status_EHPS1: mInput_SteeringCheck2Status_EHPS1
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck2Status_EHPS2: mInput_SteeringCheck2Status_EHPS2
+    - rasCheckStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringCheck1Status_RAS: mInput_SteeringCheck1Status_RAS
+    - steeringModeChangeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_SteeringModeChangeStatus: mInput_SteeringModeChangeStatus
+    - pstrOilReserverSwitchStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Steering_Warning_Lamp.Input_PSTROilReserverSwitchStatus: mInput_PSTROilReserverSwitchStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.EHPSRedEvent.Stat:
+      description: "DCN: IMG_EHPSRedEvent_Status</br>State of EHPS Red Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.MAHSRedEvent.Stat:
+      description: "DCN: IMG_MAHSRedEvent_Status</br>State of MAHS Red Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.RASRedEvent.Stat:
+      description: "DCN: IMG_RASRedEvent_Status</br>State of RAS Red Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.EHPSAmberEvent.Stat:
+      description: "DCN: IMG_EHPSAmberEvent_Status</br>State of EHPS Amber Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.MAHSAmberEvent.Stat:
+      description: "DCN: IMG_MAHSAmberEvent_Status</br>State of MAHS Amber Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Constant.RASAmberEvent.Stat:
+      description: "DCN: IMG_RASAmberEvent_Status</br>State of RAS Amber Event"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Style is E00000
+    - SFC.Steering_Warning_Lamp.Event.Amber.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Event.Amber.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Steering_Warning_Lamp.Event.Amber.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Steering_Warning_Lamp.Event.Amber.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Steering_Warning_Lamp.Event.Amber.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Steering_Warning_Lamp.Event.Red.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Event.Red.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Steering_Warning_Lamp.Event.Red.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Steering_Warning_Lamp.Event.Red.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Steering_Warning_Lamp.Event.Red.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Steering_Warning_Lamp.Event.SteeringModeChangeStatus.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Event.SteeringModeChangeStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Steering_Warning_Lamp.Event.SteeringModeChangeStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Steering_Warning_Lamp.Event.SteeringModeChangeStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Steering_Warning_Lamp.Event.SteeringModeChangeStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: BLINK2, 0x4: MAX
+    - SFC.Private.Steering_Warning_Lamp.TelltaleEHPS1.Stat:
+      description: "Private_TelltaleEHPS1"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK2: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: BLINK2, 0x4: MAX
+    - SFC.Private.Steering_Warning_Lamp.TelltaleEHPS2.Stat:
+      description: "Private_TelltaleEHPS2"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK2: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: BLINK2, 0x4: MAX
+    - SFC.Private.Steering_Warning_Lamp.TelltaleMAHS.Stat:
+      description: "Private_TelltaleMAHS"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK2: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: BLINK2, 0x4: MAX
+    - SFC.Private.Steering_Warning_Lamp.TelltaleRAS.Stat:
+      description: "Private_TelltaleRAS"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        ON: 0x2
+        BLINK2: 0x3
+        MAX: 0x4
+      # Style is E00000
+    - SFC.Steering_Warning_Lamp.Event.PSTROilReserverSwitchStatus.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Steering_Warning_Lamp.Event.PSTROilReserverSwitchStatus.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Steering_Warning_Lamp.Event.PSTROilReserverSwitchStatus.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Steering_Warning_Lamp.Event.PSTROilReserverSwitchStatus.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Steering_Warning_Lamp.Event.PSTROilReserverSwitchStatus.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4

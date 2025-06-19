@@ -60,8 +60,6 @@ QVariantList ExcelDataManager::isSheetDataInfo(const int& sheetIndex, const bool
 }
 
 QMap<int, QStringList> ExcelDataManager::isConvertedExcelData(const int& sheetIndex, const bool& appendMergeInfo) {
-    // Read Type
-    setReadStateNewData(true);
     // InsertData to ExcelData
     QMap<int, QStringList> excelSheetData;
     QMap<QPair<QString, QString>, QList<QStringList>> outputListInfo;
@@ -478,9 +476,9 @@ QString ExcelDataManager::isConfigData(const int& sheetIndex, const QString& tcN
     QStringList configList = isParsingDataList(list, true);
     QString config = (configList.size() > 0) ? (configList.at(0)) : (QString());
 
-    qDebug() << "isConfigData :" << sheetIndex << tcName;
-    qDebug() << "\t Info :" << config.size() << config;
-    qDebug() << "\n";
+    // qDebug() << "isConfigData :" << sheetIndex << tcName;
+    // qDebug() << "\t Info :" << config.size() << config;
+    // qDebug() << "\n";
 
     return config;
 }
@@ -952,8 +950,10 @@ QList<ManualData> ExcelDataManager::isManualDataList() {
                 v.remove(getMerge());
                 v.remove(getMergeEnd());
             }
+#if 0  // Jira : https://ivis.atlassian.net/browse/SFC-2332
             value.removeAll("");
             value.removeDuplicates();
+#endif
 
             QString toString = (value.size() > 0) ? (value.at(0)) : (QString());
             bool toBool = (value.size() > 0) ? (value.at(0).size() > 0) : (false);
@@ -1040,7 +1040,7 @@ QList<ManualData> ExcelDataManager::isManualDataList() {
         manualDataList.append(manualData);
     }
 
-#if 0
+#if 1
     qDebug() << "isManualDataList :" << manualDataList.size();
     for (const auto& manualData : manualDataList) {
         qDebug() << "\t TCName        :" << manualData.getTCName();
@@ -1193,6 +1193,10 @@ QMapIntStrList ExcelDataManager::updateParsingExcelData(const int& sheetIndex, c
         ExcelUtil::instance()->isComlumnIndex(sheetIndex, static_cast<int>(ivis::common::ExcelSheetTitle::ColumnType::Max));
 
     bool removeMergeState = true;
+    if ((sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetConfigs) ||
+        (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeConvertSheetConfigs)) {
+        removeMergeState = false;
+    }
     QMapIntStrList excelSheetData;
 
     for (const auto& rowDataList : sheetData.toList()) {
@@ -1403,13 +1407,13 @@ bool ExcelDataManager::isValidConfigCheck(const QString& configName, const QMap<
         }
     }
 
-    qDebug() << "isValidConfigCheck :" << result;
-    qDebug() << "\t inputMap  :" << inputMap;
-    qDebug() << "\t inputList :" << inputList;
-    for (const auto& resultKey : resultMap.keys()) {
-        qDebug() << "\t ResultMap :" << resultKey << resultMap[resultKey];
-    }
-    qDebug() << "\n";
+    // qDebug() << "isValidConfigCheck :" << result;
+    // qDebug() << "\t inputMap  :" << inputMap;
+    // qDebug() << "\t inputList :" << inputList;
+    // for (const auto& resultKey : resultMap.keys()) {
+    //     qDebug() << "\t ResultMap :" << resultKey << resultMap[resultKey];
+    // }
+    // qDebug() << "\n";
 
     return result;
 }

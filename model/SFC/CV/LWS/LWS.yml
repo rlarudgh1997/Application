@@ -1,0 +1,237 @@
+#
+# @file LWS.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- LWS:
+  sfcVersion: "13.0.0"
+  specVersion: "v0.24"
+  description: "Reference : [CV140] LWS. Contains : Telltale, Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - lwsAxleValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.LWS.Input_LWS1AxleLeftValue: mInput_LWS1AxleLeftValue
+        - Vehicle.CV.LWS.Input_LWS1AxleRightValue: mInput_LWS1AxleRightValue
+        - Vehicle.CV.LWS.Input_LWS2AxleLeftValue: mInput_LWS2AxleLeftValue
+        - Vehicle.CV.LWS.Input_LWS2AxleRightValue: mInput_LWS2AxleRightValue
+        - Vehicle.CV.LWS.Input_LWS3AxleLeftValue: mInput_LWS3AxleLeftValue
+        - Vehicle.CV.LWS.Input_LWS3AxleRightValue: mInput_LWS3AxleRightValue
+        - Vehicle.CV.LWS.Input_LWS4AxleLeftValue: mInput_LWS4AxleLeftValue
+        - Vehicle.CV.LWS.Input_LWS4AxleRightValue: mInput_LWS4AxleRightValue
+        - Vehicle.CV.LWS.Input_LWS5AxleLeftValue: mInput_LWS5AxleLeftValue
+        - Vehicle.CV.LWS.Input_LWS5AxleRightValue: mInput_LWS5AxleRightValue
+    - lwsWarningSignalStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.LWS.Input_LWSWarningSignalStatus: mInput_LWSWarningSignalStatus
+    - configAxleInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigAxleInfo: mInter_ConfigAxleInfo
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - pageStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.LWS.Input_LWSPageStatus: mInput_LWSPageStatus
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.LWS.Telltale.LWS.Stat:
+      description: "DCN: IMG_TelltaleLWS_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.LWS.Telltale.LWS.BlinkValueA:
+      description: "DCN: IMG_TelltaleLWS_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.LWS.Telltale.LWS.BlinkValueB:
+      description: "DCN: IMG_TelltaleLWS_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.LWS.Constant.Page.Stat:
+      description: "DCN: IMG_LWSPage_Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle1Left.Stat:
+      description: "DCN: IMG_LWS1AxleLeft_Status"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle1Left.Value:
+      description: "DCN: IMG_LWS1AxleLeft_Value"
+      dataType: HDouble
+      group: Constant1
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle1Right.Stat:
+      description: "DCN: IMG_LWS1AxleRight_Status"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle1Right.Value:
+      description: "DCN: IMG_LWS1AxleRight_Value"
+      dataType: HDouble
+      group: Constant2
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle2Left.Stat:
+      description: "DCN: IMG_LWS2AxleLeft_Status"
+      dataType: HUInt64
+      group: Constant3
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle2Left.Value:
+      description: "DCN: IMG_LWS2AxleLeft_Value"
+      dataType: HDouble
+      group: Constant3
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle2Right.Stat:
+      description: "DCN: IMG_LWS2AxleRight_Status"
+      dataType: HUInt64
+      group: Constant4
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle2Right.Value:
+      description: "DCN: IMG_LWS2AxleRight_Value"
+      dataType: HDouble
+      group: Constant4
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle3Left.Stat:
+      description: "DCN: IMG_LWS3AxleLeft_Status"
+      dataType: HUInt64
+      group: Constant5
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle3Left.Value:
+      description: "DCN: IMG_LWS3AxleLeft_Value"
+      dataType: HDouble
+      group: Constant5
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle3Right.Stat:
+      description: "DCN: IMG_LWS3AxleRight_Status"
+      dataType: HUInt64
+      group: Constant6
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle3Right.Value:
+      description: "DCN: IMG_LWS3AxleRight_Value"
+      dataType: HDouble
+      group: Constant6
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle4Left.Stat:
+      description: "DCN: IMG_LWS4AxleLeft_Status"
+      dataType: HUInt64
+      group: Constant7
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle4Left.Value:
+      description: "DCN: IMG_LWS4AxleLeft_Value"
+      dataType: HDouble
+      group: Constant7
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle4Right.Stat:
+      description: "DCN: IMG_LWS4AxleRight_Status"
+      dataType: HUInt64
+      group: Constant8
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle4Right.Value:
+      description: "DCN: IMG_LWS4AxleRight_Value"
+      dataType: HDouble
+      group: Constant8
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle5Left.Stat:
+      description: "DCN: IMG_LWS5AxleLeft_Status"
+      dataType: HUInt64
+      group: Constant9
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle5Left.Value:
+      description: "DCN: IMG_LWS5AxleLeft_Value"
+      dataType: HDouble
+      group: Constant9
+      # 0x0: NONE, 0x1: OFF, 0x2: NORMAL, 0x3: WARN, 0x4: MAX
+    - SFC.LWS.Constant.Axle5Right.Stat:
+      description: "DCN: IMG_LWS5AxleRight_Status"
+      dataType: HUInt64
+      group: Constant10
+      valueEnum: SFC_Common_Enum_CV.EnumValue5
+      # Numeric Value
+    - SFC.LWS.Constant.Axle5Right.Value:
+      description: "DCN: IMG_LWS5AxleRight_Value"
+      dataType: HDouble
+      group: Constant10
+      # 0x0: NONE, 0x1: T4X2, 0x2: T6X2, 0x3: T6X2_TAG, 0x4: T6X2_TAG_DOUBLE, 0x5: T6X4, 0x6: T8X4, 0x7: T8X4_PUSHER, 0x8: T10X4_PUSHER, 0x9: T10X4_TAG, 0xA: MAX
+    - SFC.LWS.Constant.AxleInfo.Stat:
+      description: "DCN: IMG_VehicleAxle_Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        T4X2: 0x1
+        T6X2: 0x2
+        T6X2_TAG: 0x3
+        T6X2_TAG_DOUBLE: 0x4
+        T6X4: 0x5
+        T8X4: 0x6
+        T8X4_PUSHER: 0x7
+        T10X4_PUSHER: 0x8
+        T10X4_TAG: 0x9
+        MAX: 0xA
+      # 0x0: NONE, 0x1: OFF, 0x2: WARN_TEXT1, 0x3: WARN_TEXT2, 0x4: MAX
+    - SFC.LWS.Constant.LWSWaringText.Stat:
+      description: "DCN: IMG_LWSWaringText_status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        WARN_TEXT1: 0x2
+        WARN_TEXT2: 0x3
+        MAX: 0x4

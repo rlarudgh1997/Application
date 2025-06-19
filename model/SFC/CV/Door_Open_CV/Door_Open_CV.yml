@@ -1,0 +1,448 @@
+#
+# @file Door_Open_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Door_Open_CV:
+  sfcVersion: "9.0.0"
+  specVersion: "v0.20"
+  description: "Reference : [CV290] Door_Open_CV. Contains : Telltale, Constant, Event, Sound. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV: mInter_ConfigVehicleTypeCV
+    - configDoorOptTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigDoorOptType: mInter_ConfigDoorOptType
+    - doorOpenFrontStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUDrvDoorOpenStatus: mInput_IMUDrvDoorOpenStatus
+        - Vehicle.CV.Door_Open_CV.Input_IMUAstDoorOpenStatus: mInput_IMUAstDoorOpenStatus
+    - doorOpenBusStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUFrDoorOpenStatus: mInput_IMUFrDoorOpenStatus
+        - Vehicle.CV.Door_Open_CV.Input_IMUMidDoorOpenStatus: mInput_IMUMidDoorOpenStatus
+        - Vehicle.CV.Door_Open_CV.Input_IMURrDoorOpenStatus: mInput_IMURrDoorOpenStatus
+    - imuRrFlapDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMURrFlapDoorOpenStatus: mInput_IMURrFlapDoorOpenStatus
+    - imuFrPnlOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUFrPnlOpenStatus: mInput_IMUFrPnlOpenStatus
+    - imuSideLidOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUSideLidOpenStatus: mInput_IMUSideLidOpenStatus
+    - imuWarningAlarmStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUWarningAlarmStatus: mInput_IMUWarningAlarmStatus
+    - imuChargeLidOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUChargeLidOpenStatus: mInput_IMUChargeLidOpenStatus
+    - emerDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_EmerDoorOpenStatus: mInput_EmerDoorOpenStatus
+    - luggageFlapOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_LuggageFlapOpenStatus: mInput_LuggageFlapOpenStatus
+    - imuDoorLockStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Door_Open_CV.Input_IMUFrDoorLockStatus: mInput_IMUFrDoorLockStatus
+        - Vehicle.CV.Door_Open_CV.Input_IMUMidDoorLockStatus: mInput_IMUMidDoorLockStatus
+    - speedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Speed_Gauge.Inter_DisplaySpeedValueKPH: mInter_DisplaySpeedValueKPH
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Door_Open_CV.Telltale.DoorOpen.Stat:
+      description: "DCN: IMG_TelltaleDoorOpen_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.Door_Open_CV.Telltale.RearFlapDoorOpen.Stat:
+      description: "DCN: IMG_TelltaleRearFlapDoorOpen_stat</br>State of Telltale"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.DoorFailureWarning.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.DoorFailureWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.DoorFailureWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.DoorFailureWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.DoorFailureWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.FrontPanelOpenWarning.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.FrontPanelOpenWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.FrontPanelOpenWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.FrontPanelOpenWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.FrontPanelOpenWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.SideLidOpenWarning.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.SideLidOpenWarning.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.SideLidOpenWarning.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.SideLidOpenWarning.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.SideLidOpenWarning.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.DoorEmergencyValveOperation.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.DoorEmergencyValveOperation.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.DoorEmergencyValveOperation.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.DoorEmergencyValveOperation.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.DoorEmergencyValveOperation.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.UnlockTheDoor.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.UnlockTheDoor.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.UnlockTheDoor.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.UnlockTheDoor.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.UnlockTheDoor.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.ChargeLidOpen.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.ChargeLidOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.ChargeLidOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.ChargeLidOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.ChargeLidOpen.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.IMUWarningAlarm.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.IMUWarningAlarm.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.IMUWarningAlarm.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.IMUWarningAlarm.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.Door_Open_CV.Event.IMUWarningAlarm.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.IMUDoorOpen.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.IMUDoorOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.DoorOpen.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.DoorOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.DoorOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.DoorOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.Door_Open_CV.Event.DoorOpen.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event9
+      # Sound output maximum duration
+    - SFC.Door_Open_CV.Event.DoorOpen.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event9
+      # Style is E00000
+    - SFC.Door_Open_CV.Event.LuggageOpen.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Event.LuggageOpen.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Event.LuggageOpen.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.Door_Open_CV.Event.LuggageOpen.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output minimum duration
+    - SFC.Door_Open_CV.Event.LuggageOpen.LinkedSound.DurationMin:
+      description: "Linked Sound Duration Min"
+      dataType: HUInt64
+      group: Event10
+      # Sound output maximum duration
+    - SFC.Door_Open_CV.Event.LuggageOpen.LinkedSound.DurationMax:
+      description: "Linked Sound Duration Max"
+      dataType: HUInt64
+      group: Event10
+      # Style is SND_NAME
+    - SFC.Door_Open_CV.Sound.DoorOpenWarn.ID:
+      description: "Sound ID"
+      dataType: HString
+      group: Sound1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Sound.DoorOpenWarn.Stat:
+      description: "State of Sound"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Stat
+      # 0x0: NONE, 0x1: INFINITE, 0x2: DURATION_MINMAX, 0x3: REPEAT_COUNT, 0x4: INTERVAL, 0x5: INTERVAL_SKIP_FIRST, 0x6: REPEAT_MINMAX, 0x7: MAX
+    - SFC.Door_Open_CV.Sound.DoorOpenWarn.Type:
+      description: "Sound Type"
+      dataType: HUInt64
+      group: Sound1
+      valueEnum: SFC_Common_Enum_CV.Sound.Type
+      # Sound output duration minimum
+    - SFC.Door_Open_CV.Sound.DoorOpenWarn.DurationMin:
+      description: "Sound Duration Min"
+      dataType: HUInt64
+      group: Sound1
+      # Sound output duration maximum
+    - SFC.Door_Open_CV.Sound.DoorOpenWarn.DurationMax:
+      description: "Sound Duration Max"
+      dataType: HUInt64
+      group: Sound1
+      # 0x0: NONE, 0x1: OPEN, 0x2: MESSAGE_TIMEOUT, 0x3: CLOSE, 0x4: MAX
+    - SFC.Private.Door_Open_CV.DoorOpenFront.Stat:
+      description: "State of Private"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        MESSAGE_TIMEOUT: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OPEN, 0x2: MESSAGE_TIMEOUT, 0x3: CLOSE, 0x4: MAX
+    - SFC.Private.Door_Open_CV.DoorOpenBus.Stat:
+      description: "State of Private"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OPEN: 0x1
+        MESSAGE_TIMEOUT: 0x2
+        CLOSE: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: ON, 0x2: OFF, 0x3: MAX
+    - SFC.Private.Door_Open_CV.DispalySpeedOverStatus.Stat:
+      description: "State of Private"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        OFF: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Constant.BusFrontDoorOpen.Stat:
+      description: "DCN: IMG_BusFrontDoorOpen_stat</br>Bus Front Door Open Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Door_Open_CV.Constant.BusMidDoorOpen.Stat:
+      description: "DCN: IMG_BusMidDoorOpen_stat</br>Bus Mid Door Open Status"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6

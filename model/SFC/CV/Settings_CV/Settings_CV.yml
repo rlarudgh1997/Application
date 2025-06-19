@@ -1,0 +1,238 @@
+#
+# @file Settings_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Settings_CV:
+  sfcVersion: "3.0.0"
+  specVersion: "v0.28"
+  description: "Reference : [CV060] Settings_CV. Recommend: VALUE_CHANGED. Application Write, SFC Read"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+  outputs:
+      # 0x0: NONE, 0x1: GUEST, 0x2: USER1, 0x3: USER2, 0x4: MAX
+    - SFC.Extension.Settings.Inter_UserProfileStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        GUEST: 0x1
+        USER1: 0x2
+        USER2: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: KOREA, 0x2: ENGLISH_US, 0x3: ENGLISH_UK, 0x4: SIMPLIFIED_CHINESE, 0x5: TRADITIONAL_CHINESE, 0x6: FRENCH_EU, 0x7: SPANISH_EU, 0x8: ARABIC, 0x9: CZECH, 0xA: DANISH, 0xB: GERMAN, 0xC: ITALIAN, 0xD: DUTCH, 0xE: POLISH, 0xF: PORTUGUESE, 0x10: RUSSIAN, 0x11: SLOVAK, 0x12: SWEDISH, 0x13: TURKISH, 0x14: FRENCH_US, 0x15: SPANISH_US, 0x16: ENGLISH_INDIA, 0x17: NORWEGIAN, 0x18: FINNISH, 0x19: INDONESIAN, 0x1A: BRAZILIAN_PORTUGUESE, 0x1B: MALAY, 0x1C: HUNGARIAN, 0x1D: ENGLISH_AUSTRALIA, 0x1E: JAPANESE, 0x1F: HINDI, 0x20: HEBREW, 0x21: GREEK, 0x22: UKRAINIAN, 0x23: SLOVENIAN, 0x24: BULGARIAN, 0x25: CROATIAN, 0x26: ROMANIAN, 0x27: BENGALI, 0x28: MARATHI, 0x29: TELUGU, 0x2A: TAMIL, 0x2B: GUJARATI, 0x2C: KANNADA, 0x2D: ODIA, 0x2E: MALAYALAM, 0x2F: PUNJABI, 0x30: INVALID, 0x31: MAX
+    - SFC.Extension.Settings.Inter_DisplayLanguageStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KOREA: 0x1
+        ENGLISH_US: 0x2
+        ENGLISH_UK: 0x3
+        SIMPLIFIED_CHINESE: 0x4
+        TRADITIONAL_CHINESE: 0x5
+        FRENCH_EU: 0x6
+        SPANISH_EU: 0x7
+        ARABIC: 0x8
+        CZECH: 0x9
+        DANISH: 0xA
+        GERMAN: 0xB
+        ITALIAN: 0xC
+        DUTCH: 0xD
+        POLISH: 0xE
+        PORTUGUESE: 0xF
+        RUSSIAN: 0x10
+        SLOVAK: 0x11
+        SWEDISH: 0x12
+        TURKISH: 0x13
+        FRENCH_US: 0x14
+        SPANISH_US: 0x15
+        ENGLISH_INDIA: 0x16
+        NORWEGIAN: 0x17
+        FINNISH: 0x18
+        INDONESIAN: 0x19
+        BRAZILIAN_PORTUGUESE: 0x1A
+        MALAY: 0x1B
+        HUNGARIAN: 0x1C
+        ENGLISH_AUSTRALIA: 0x1D
+        JAPANESE: 0x1E
+        HINDI: 0x1F
+        HEBREW: 0x20
+        GREEK: 0x21
+        UKRAINIAN: 0x22
+        SLOVENIAN: 0x23
+        BULGARIAN: 0x24
+        CROATIAN: 0x25
+        ROMANIAN: 0x26
+        BENGALI: 0x27
+        MARATHI: 0x28
+        TELUGU: 0x29
+        TAMIL: 0x2A
+        GUJARATI: 0x2B
+        KANNADA: 0x2C
+        ODIA: 0x2D
+        MALAYALAM: 0x2E
+        PUNJABI: 0x2F
+        INVALID: 0x30
+        MAX: 0x31
+      # 0x0: NONE, 0x1: KM, 0x2: MILE, 0x3: MAX
+    - SFC.Extension.Settings.Inter_TripDistanceUnit:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM: 0x1
+        MILE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KM_PER_LITTER, 0x2: LITTER_PER_KM, 0x3: MAX
+    - SFC.Extension.Settings.Inter_FuelEcoUnitKmSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_LITTER: 0x1
+        LITTER_PER_KM: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: US_GALLON, 0x2: UK_GALLON, 0x3: MAX
+    - SFC.Extension.Settings.Inter_FuelEcoUnitMiSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        US_GALLON: 0x1
+        UK_GALLON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: REFUEL, 0x2: MAX
+    - SFC.Extension.Settings.Inter_FuelEcoResetModeSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        REFUEL: 0x1
+        MAX: 0x2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Extension.Settings.Inter_MfswPopupSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Extension.Settings.Inter_DisWarnSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue0
+      # 0x0: NONE, 0x1: THEME_A, 0x2: THEME_B, 0x3: THEME_C, 0x4: THEME_D, 0x5: MAX
+    - SFC.Extension.Settings.Inter_ClusterThemeSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        THEME_A: 0x1
+        THEME_B: 0x2
+        THEME_C: 0x3
+        THEME_D: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: CUSTOMER, 0x2: WORKSHOP, 0x3: MAX
+    - SFC.Extension.Settings.Inter_SrvRemindSetModeStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        CUSTOMER: 0x1
+        WORKSHOP: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Extension.Settings.Inter_SrvRemindSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue0
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemindPeriodSetValue:
+      description: "None"
+      dataType: HUInt64
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemindDistKmSetValue:
+      description: "None"
+      dataType: HUInt64
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemindDistMiSetValue:
+      description: "None"
+      dataType: HUInt64
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemainPeriod:
+      description: "None"
+      dataType: HInt64
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemainDistanceKm:
+      description: "None"
+      dataType: HInt64
+      # Numberic value
+    - SFC.Extension.Settings.Inter_SrvRemainDistanceMi:
+      description: "None"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: DISABLE, 0x2: ENABLE, 0x3: MAX
+    - SFC.Extension.Settings.Inter_WelcomeSoundSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue0
+      # 0x0: NONE, 0x1: VOL_OFF, 0x2: LEVEL1, 0x3: LEVEL2, 0x4: LEVEL3, 0x5: MAX
+    - SFC.Extension.Settings.Inter_AdasWarnVolSetStatus:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        VOL_OFF: 0x1
+        LEVEL1: 0x2
+        LEVEL2: 0x3
+        LEVEL3: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: ON_REQUEST, 0x2: MAX
+    - SFC.Extension.Settings.Inter_AdasWarnVolAutoOnReq:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON_REQUEST: 0x1
+        MAX: 0x2
+      # 0x0: NONE, 0x1: PSI, 0x2: KPA, 0x3: BAR, 0x4: USM_OFF, 0x5: MAX
+    - SFC.Extension.Settings.Inter_PressureUnit_stat:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        PSI: 0x1
+        KPA: 0x2
+        BAR: 0x3
+        USM_OFF: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: KG, 0x2: POUND, 0x3: USM_OFF, 0x4: MAX
+    - SFC.Extension.Settings.Inter_WeightUnit_stat:
+      description: "None"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KG: 0x1
+        POUND: 0x2
+        USM_OFF: 0x3
+        MAX: 0x4

@@ -1,0 +1,91 @@
+@startuml
+
+actor User
+participant "caseDataWriter: CaseDataWriter" as writer
+participant "json: QJsonObject" as json
+participant "excelUtil: ExcelUtil" as excel
+participant "jsEngine: JSEngineManager" as js
+participant "file: QFile" as file
+participant "stream: QTextStream" as stream
+
+autonumber
+
+User -> writer: **genTestCaseFile**(json: const QJsonObject&, totalCount: const int&): QString
+activate writer
+
+writer -> writer: // Lambda function defined
+loop for each sheet in json
+    writer -> json: **operator[]**(sheet: const QString&): QJsonValueRef
+    activate json
+    return sectionObj
+    deactivate json
+
+    loop for each test case in sectionObj
+        writer -> writer: // Parse TCName, VehicleType, etc.
+        writer -> excel: **isSignalValueEnum**(outputSignal: const QString&, outputValue: const QString&): QString
+        activate excel
+        return enumString
+        deactivate excel
+
+        loop for each case in casesMap
+            writer -> writer: // Build "testCase" string
+            writer -> writer: // Create and reorder precondition string
+
+            alt if init required
+                writer -> writer: // Build "init" section
+            end
+
+            writer -> writer: // Build "input" section
+            alt if input contains "[Cal]"
+                writer -> js: **evaluate**(program: const QString&): QJSValue
+                activate js
+                return calculatedValue
+                deactivate js
+            end
+            writer -> writer: // Build "output" section
+
+            writer -> writer: **write**(testCase: const QString&): void
+            activate writer
+            alt if file not open or split needed
+                writer -> writer: **openNewFile**(splitTcFileCount: const int&): void
+                activate writer
+                writer -> file: **setFileName**(name: const QString&): void
+                activate file
+                return
+                deactivate file
+                writer -> file: **open**(mode: QIODevice::OpenMode): bool
+                activate file
+                return true
+                deactivate file
+                writer -> stream: **setDevice**(device: QIODevice*): void
+                activate stream
+                return
+                deactivate stream
+                writer -> writer: **writeHeader**(): void
+                activate writer
+                writer -> stream: **operator<<**(header: const QString&): QTextStream&
+                activate stream
+                return
+                deactivate stream
+                return
+                deactivate writer
+                return
+                deactivate writer
+            end
+
+            writer -> stream: **operator<<**(testCase: const QString&): QTextStream&
+            activate stream
+            return
+            deactivate stream
+            return
+            deactivate writer
+        end
+    end
+end
+
+writer -> writer: **printProgressBar**(progress: double): void
+
+writer -> User: return fileName: QString
+deactivate writer
+
+@enduml

@@ -1,0 +1,720 @@
+#
+# @file TPMS_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- TPMS_CV:
+  sfcVersion: "23.0.0"
+  specVersion: "v0.35"
+  description: "Reference : [CV270] TPMS_CV. Contains : Telltale, Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOn500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn500ms: mElapsedOn500ms
+    - ignElapseOn3500msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn3500ms: mElapsedOn3500ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configTPMSCVChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigTPMSCV: mInter_ConfigTPMSCV
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - tpmsVehicleTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TPMSVehicleType: mInput_TPMSVehicleType
+    - tpmsWarningStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TPMSWarningStatus: mInput_TPMSWarningStatus
+    - tpmsLowPressWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TPMSLowPressWarnStatus: mInput_TPMSLowPressWarnStatus
+    - tpmsHighTempWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TPMSHighTempWarnStatus: mInput_TPMSHighTempWarnStatus
+    - tireInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TPMSWheelLocation: mInput_TPMSWheelLocation
+        - Vehicle.CV.TPMS_CV.Input_LowTirePressureStatus: mInput_LowTirePressureStatus
+        - Vehicle.CV.TPMS_CV.Input_HighTireTemperatureStatus: mInput_HighTireTemperatureStatus
+        - Vehicle.CV.TPMS_CV.Input_TirePressureValue: mInput_TirePressureValue
+        - Vehicle.CV.TPMS_CV.Input_TireTemperatureValue: mInput_TireTemperatureValue
+        - Vehicle.CV.TPMS_CV.Input_TPMSSensorBatterySOCValue: mInput_TPMSSensorBatterySOCValue
+        - Vehicle.CV.TPMS_CV.Input_TPMSLearnStatus: mInput_TPMSLearnStatus
+    - trailerTPMSAndCANFailureStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_TrailerTPMSStatus1: mInput_TrailerTPMSStatus1
+        - Vehicle.CV.TPMS_CV.Input_TrailerTPMSStatus2: mInput_TrailerTPMSStatus2
+        - Vehicle.CV.TPMS_CV.Input_TrailerTPMSStatus3: mInput_TrailerTPMSStatus3
+        - Vehicle.CV.TPMS_CV.Input_TrailerTPMSStatus4: mInput_TrailerTPMSStatus4
+        - Vehicle.CV.TPMS_CV.Input_TrailerTPMSStatus5: mInput_TrailerTPMSStatus5
+        - Vehicle.CV.TPMS_CV.Input_TrailerCANFailure: mInput_TrailerCANFailure
+    - interPressureUnitStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_PressureUnit_stat: mInter_PressureUnit_stat
+    - oatUnitStatusFatcChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.TPMS_CV.Input_OATUnitStatus_FATC: mInput_OATUnitStatus_FATC
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS_CV.Telltale.TPMS.Stat:
+      description: "DCN: IMG_TelltaleTPMS_status</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS_CV.Telltale.TPMS.BlinkValueA:
+      description: "DCN: IMG_TelltaleTPMS_status</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.TPMS_CV.Telltale.TPMS.BlinkValueB:
+      description: "DCN: IMG_TelltaleTPMS_status</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: PSI_ON, 0x3: KPA_ON, 0x4: BAR_ON, 0x5: MAX
+    - SFC.TPMS_CV.Constant.PressPage.Stat:
+      description: "DCN: IMG_TPMSPressPage_Status</br>Status of Press Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PSI_ON: 0x2
+        KPA_ON: 0x3
+        BAR_ON: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: CELSIUS_ON, 0x3: FAHRENHEIT_ON, 0x4: MAX
+    - SFC.TPMS_CV.Constant.TempPage.Stat:
+      description: "DCN: IMG_TPMSTempPage_Status</br>Status of Temperature Unit"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        CELSIUS_ON: 0x2
+        FAHRENHEIT_ON: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: PERCENT_ON, 0x3: MAX
+    - SFC.TPMS_CV.Constant.BatPage.Stat:
+      description: "DCN: IMG_TPMSBatteryPage_Status</br>Status of Battery Page"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        PERCENT_ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: T4X2, 0x2: T6X2, 0x3: T6X4, 0x4: T8X4, 0x5: T8X4_PUSHER, 0x6: T10X4_PUSHER, 0x7: T10X4_TAG, 0x8: T6X2_TAG, 0x9: T6X2_TAG_DOUBLE, 0xA: OFF, 0xB: MAX
+    - SFC.TPMS_CV.Constant.VehicleAxle.Stat:
+      description: "DCN: IMG_VehicleAxle_Status</br>Status of Vehicle Axle"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        T4X2: 0x1
+        T6X2: 0x2
+        T6X4: 0x3
+        T8X4: 0x4
+        T8X4_PUSHER: 0x5
+        T10X4_PUSHER: 0x6
+        T10X4_TAG: 0x7
+        T6X2_TAG: 0x8
+        T6X2_TAG_DOUBLE: 0x9
+        OFF: 0xA
+        MAX: 0xB
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure1_IL.Stat:
+      description: "DCN: IMG_TPMSPressAxle1_IL_Status</br>Status of 1_IL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure1_IL.Value:
+      description: "DCN: IMG_TPMSPressAxle1_IL_value</br>Value of 1_IL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure1_IR.Stat:
+      description: "DCN: IMG_TPMSPressAxle1_IR_Status</br>Status of 1_IR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure1_IR.Value:
+      description: "DCN: IMG_TPMSPressAxle1_IR_value</br>Value of 1_IR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure2_IL.Stat:
+      description: "DCN: IMG_TPMSPressAxle2_IL_Status</br>Status of 2_IL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure2_IL.Value:
+      description: "DCN: IMG_TPMSPressAxle2_IL_value</br>Value of 2_IL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure2_IR.Stat:
+      description: "DCN: IMG_TPMSPressAxle2_IR_Status</br>Status of 2_IR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure2_IR.Value:
+      description: "DCN: IMG_TPMSPressAxle2_IR_value</br>Value of 2_IR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure2_OL.Stat:
+      description: "DCN: IMG_TPMSPressAxle2_OL_Status</br>Status of 2_OL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure2_OL.Value:
+      description: "DCN: IMG_TPMSPressAxle2_OL_value</br>Value of 2_OL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure2_OR.Stat:
+      description: "DCN: IMG_TPMSPressAxle2_OR_Status</br>Status of 2_OR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure2_OR.Value:
+      description: "DCN: IMG_TPMSPressAxle2_OR_value</br>Value of 2_OR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure3_IL.Stat:
+      description: "DCN: IMG_TPMSPressAxle3_IL_Status</br>Status of 3_IL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure3_IL.Value:
+      description: "DCN: IMG_TPMSPressAxle3_IL_value</br>Value of 3_IL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure3_IR.Stat:
+      description: "DCN: IMG_TPMSPressAxle3_IR_Status</br>Status of 3_IR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure3_IR.Value:
+      description: "DCN: IMG_TPMSPressAxle3_IR_value</br>Value of 3_IR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure3_OL.Stat:
+      description: "DCN: IMG_TPMSPressAxle3_OL_Status</br>Status of 3_OL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure3_OL.Value:
+      description: "DCN: IMG_TPMSPressAxle3_OL_value</br>Value of 3_OL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure3_OR.Stat:
+      description: "DCN: IMG_TPMSPressAxle3_OR_Status</br>Status of 3_OR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure3_OR.Value:
+      description: "DCN: IMG_TPMSPressAxle3_OR_value</br>Value of 3_OR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure4_IL.Stat:
+      description: "DCN: IMG_TPMSPressAxle4_IL_Status</br>Status of 4_IL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure4_IL.Value:
+      description: "DCN: IMG_TPMSPressAxle4_IL_value</br>Value of 4_IL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure4_IR.Stat:
+      description: "DCN: IMG_TPMSPressAxle4_IR_Status</br>Status of 4_IR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure4_IR.Value:
+      description: "DCN: IMG_TPMSPressAxle4_IR_value</br>Value of 4_IR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure4_OL.Stat:
+      description: "DCN: IMG_TPMSPressAxle4_OL_Status</br>Status of 4_OL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure4_OL.Value:
+      description: "DCN: IMG_TPMSPressAxle4_OL_value</br>Value of 4_OL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure4_OR.Stat:
+      description: "DCN: IMG_TPMSPressAxle4_OR_Status</br>Status of 4_OR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure4_OR.Value:
+      description: "DCN: IMG_TPMSPressAxle4_OR_value</br>Value of 4_OR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure5_IL.Stat:
+      description: "DCN: IMG_TPMSPressAxle5_IL_Status</br>Status of 5_IL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure5_IL.Value:
+      description: "DCN: IMG_TPMSPressAxle5_IL_value</br>Value of 5_IL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure5_IR.Stat:
+      description: "DCN: IMG_TPMSPressAxle5_IR_Status</br>Status of 5_IR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure5_IR.Value:
+      description: "DCN: IMG_TPMSPressAxle5_IR_value</br>Value of 5_IR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure5_OL.Stat:
+      description: "DCN: IMG_TPMSPressAxle5_OL_Status</br>Status of 5_OL Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure5_OL.Value:
+      description: "DCN: IMG_TPMSPressAxle5_OL_value</br>Value of 5_OL Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_PRESS_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TirePressure5_OR.Stat:
+      description: "DCN: IMG_TPMSPressAxle5_OR_Status</br>Status of 5_OR Tire Pressure"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue4
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TirePressure5_OR.Value:
+      description: "DCN: IMG_TPMSPressAxle5_OR_value</br>Value of 5_OR Tire Pressure"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature1_IL.Stat:
+      description: "DCN: IMG_TPMSTempAxle1_IL_Status</br>Status of 1_IL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature1_IL.Value:
+      description: "DCN: IMG_TPMSTempAxle1_IL_value</br>Value of 1_IL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature1_IR.Stat:
+      description: "DCN: IMG_TPMSTempAxle1_IR_Status</br>Status of 1_IR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature1_IR.Value:
+      description: "DCN: IMG_TPMSTempAxle1_IR_value</br>Value of 1_IR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature2_IL.Stat:
+      description: "DCN: IMG_TPMSTempAxle2_IL_Status</br>Status of 2_IL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature2_IL.Value:
+      description: "DCN: IMG_TPMSTempAxle2_IL_value</br>Value of 2_IL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature2_IR.Stat:
+      description: "DCN: IMG_TPMSTempAxle2_IR_Status</br>Status of 2_IR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature2_IR.Value:
+      description: "DCN: IMG_TPMSTempAxle2_IR_value</br>Value of 2_IR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature2_OL.Stat:
+      description: "DCN: IMG_TPMSTempAxle2_OL_Status</br>Status of 2_OL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature2_OL.Value:
+      description: "DCN: IMG_TPMSTempAxle2_OL_value</br>Value of 2_OL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature2_OR.Stat:
+      description: "DCN: IMG_TPMSTempAxle2_OR_Status</br>Status of 2_OR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature2_OR.Value:
+      description: "DCN: IMG_TPMSTempAxle2_OR_value</br>Value of 2_OR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature3_IL.Stat:
+      description: "DCN: IMG_TPMSTempAxle3_IL_Status</br>Status of 3_IL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature3_IL.Value:
+      description: "DCN: IMG_TPMSTempAxle3_IL_value</br>Value of 3_IL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature3_IR.Stat:
+      description: "DCN: IMG_TPMSTempAxle3_IR_Status</br>Status of 3_IR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature3_IR.Value:
+      description: "DCN: IMG_TPMSTempAxle3_IR_value</br>Value of 3_IR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature3_OL.Stat:
+      description: "DCN: IMG_TPMSTempAxle3_OL_Status</br>Status of 3_OL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature3_OL.Value:
+      description: "DCN: IMG_TPMSTempAxle3_OL_value</br>Value of 3_OL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature3_OR.Stat:
+      description: "DCN: IMG_TPMSTempAxle3_OR_Status</br>Status of 3_OR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature3_OR.Value:
+      description: "DCN: IMG_TPMSTempAxle3_OR_value</br>Value of 3_OR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature4_IL.Stat:
+      description: "DCN: IMG_TPMSTempAxle4_IL_Status</br>Status of 4_IL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature4_IL.Value:
+      description: "DCN: IMG_TPMSTempAxle4_IL_value</br>Value of 4_IL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature4_IR.Stat:
+      description: "DCN: IMG_TPMSTempAxle4_IR_Status</br>Status of 4_IR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature4_IR.Value:
+      description: "DCN: IMG_TPMSTempAxle4_IR_value</br>Value of 4_IR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature4_OL.Stat:
+      description: "DCN: IMG_TPMSTempAxle4_OL_Status</br>Status of 4_OL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature4_OL.Value:
+      description: "DCN: IMG_TPMSTempAxle4_OL_value</br>Value of 4_OL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature4_OR.Stat:
+      description: "DCN: IMG_TPMSTempAxle4_OR_Status</br>Status of 4_OR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature4_OR.Value:
+      description: "DCN: IMG_TPMSTempAxle4_OR_value</br>Value of 4_OR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature5_IL.Stat:
+      description: "DCN: IMG_TPMSTempAxle5_IL_Status</br>Status of 5_IL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature5_IL.Value:
+      description: "DCN: IMG_TPMSTempAxle5_IL_value</br>Value of 5_IL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature5_IR.Stat:
+      description: "DCN: IMG_TPMSTempAxle5_IR_Status</br>Status of 5_IR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature5_IR.Value:
+      description: "DCN: IMG_TPMSTempAxle5_IR_value</br>Value of 5_IR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature5_OL.Stat:
+      description: "DCN: IMG_TPMSTempAxle5_OL_Status</br>Status of 5_OL Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature5_OL.Value:
+      description: "DCN: IMG_TPMSTempAxle5_OL_value</br>Value of 5_OL Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: HIGH_TEMP_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TireTemperature5_OR.Stat:
+      description: "DCN: IMG_TPMSTempAxle5_OR_Status</br>Status of 5_OR Tire Temperature"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue2
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TireTemperature5_OR.Value:
+      description: "DCN: IMG_TPMSTempAxle5_OR_value</br>Value of 5_OR Tire Temperature"
+      dataType: HInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery1_IL.Stat:
+      description: "DCN: IMG_TPMSBatAxle1_IL_Status</br>Status of 1_IL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery1_IL.Value:
+      description: "DCN: IMG_TPMSBatAxle1_IL_value</br>Value of 1_IL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery1_IR.Stat:
+      description: "DCN: IMG_TPMSBatAxle1_IR_Status</br>Status of 1_IR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery1_IR.Value:
+      description: "DCN: IMG_TPMSBatAxle1_IR_value</br>Value of 1_IR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery2_IL.Stat:
+      description: "DCN: IMG_TPMSBatAxle2_IL_Status</br>Status of 2_IL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery2_IL.Value:
+      description: "DCN: IMG_TPMSBatAxle2_IL_value</br>Value of 2_IL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery2_IR.Stat:
+      description: "DCN: IMG_TPMSBatAxle2_IR_Status</br>Status of 2_IR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery2_IR.Value:
+      description: "DCN: IMG_TPMSBatAxle2_IR_value</br>Value of 2_IR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery2_OL.Stat:
+      description: "DCN: IMG_TPMSBatAxle2_OL_Status</br>Status of 2_OL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery2_OL.Value:
+      description: "DCN: IMG_TPMSBatAxle2_OL_value</br>Value of 2_OL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery2_OR.Stat:
+      description: "DCN: IMG_TPMSBatAxle2_OR_Status</br>Status of 2_OR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery2_OR.Value:
+      description: "DCN: IMG_TPMSBatAxle2_OR_value</br>Value of 2_OR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery3_IL.Stat:
+      description: "DCN: IMG_TPMSBatAxle3_IL_Status</br>Status of 3_IL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery3_IL.Value:
+      description: "DCN: IMG_TPMSBatAxle3_IL_value</br>Value of 3_IL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery3_IR.Stat:
+      description: "DCN: IMG_TPMSBatAxle3_IR_Status</br>Status of 3_IR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery3_IR.Value:
+      description: "DCN: IMG_TPMSBatAxle3_IR_value</br>Value of 3_IR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery3_OL.Stat:
+      description: "DCN: IMG_TPMSBatAxle3_OL_Status</br>Status of 3_OL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery3_OL.Value:
+      description: "DCN: IMG_TPMSBatAxle3_OL_value</br>Value of 3_OL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery3_OR.Stat:
+      description: "DCN: IMG_TPMSBatAxle3_OR_Status</br>Status of 3_OR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery3_OR.Value:
+      description: "DCN: IMG_TPMSBatAxle3_OR_value</br>Value of 3_OR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery4_IL.Stat:
+      description: "DCN: IMG_TPMSBatAxle4_IL_Status</br>Status of 4_IL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery4_IL.Value:
+      description: "DCN: IMG_TPMSBatAxle4_IL_value</br>Value of 4_IL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery4_IR.Stat:
+      description: "DCN: IMG_TPMSBatAxle4_IR_Status</br>Status of 4_IR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery4_IR.Value:
+      description: "DCN: IMG_TPMSBatAxle4_IR_value</br>Value of 4_IR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery4_OL.Stat:
+      description: "DCN: IMG_TPMSBatAxle4_OL_Status</br>Status of 4_OL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery4_OL.Value:
+      description: "DCN: IMG_TPMSBatAxle4_OL_value</br>Value of 4_OL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery4_OR.Stat:
+      description: "DCN: IMG_TPMSBatAxle4_OR_Status</br>Status of 4_OR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery4_OR.Value:
+      description: "DCN: IMG_TPMSBatAxle4_OR_value</br>Value of 4_OR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery5_IL.Stat:
+      description: "DCN: IMG_TPMSBatAxle5_IL_Status</br>Status of 5_IL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery5_IL.Value:
+      description: "DCN: IMG_TPMSBatAxle5_IL_value</br>Value of 5_IL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery5_IR.Stat:
+      description: "DCN: IMG_TPMSBatAxle5_IR_Status</br>Status of 5_IR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery5_IR.Value:
+      description: "DCN: IMG_TPMSBatAxle5_IR_value</br>Value of 5_IR TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery5_OL.Stat:
+      description: "DCN: IMG_TPMSBatAxle5_OL_Status</br>Status of 5_OL TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery5_OL.Value:
+      description: "DCN: IMG_TPMSBatAxle5_OL_value</br>Value of 5_OL TPMS Battery"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: LOW_BAT_WARN, 0x3: MAX
+    - SFC.TPMS_CV.Constant.TPMSBattery5_OR.Stat:
+      description: "DCN: IMG_TPMSBatAxle5_OR_Status</br>Status of 5_OR TPMS Battery"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue3
+      # Numeric Value
+    - SFC.TPMS_CV.Constant.TPMSBattery5_OR.Value:
+      description: "DCN: IMG_TPMSBatAxle5_OR_value</br>Value of 5_OR TPMS Battery"
+      dataType: HUInt64
+      # Style is E00000
+    - SFC.TPMS_CV.Event.TireLowPressureWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS_CV.Event.TireLowPressureWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.TPMS_CV.Event.TireLowPressureWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.TPMS_CV.Event.TireLowPressureWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.TPMS_CV.Event.TireLowPressureWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.TPMS_CV.Event.TPMSMalfunctionWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.TPMS_CV.Event.TPMSMalfunctionWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.TPMS_CV.Event.TPMSMalfunctionWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.TPMS_CV.Event.TPMSMalfunctionWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.TPMS_CV.Event.TPMSMalfunctionWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2

@@ -1,0 +1,25 @@
+@startuml
+participant ConvertDataManager
+participant "JSEngineManager" as JSEngineMgr
+participant "QJSEngine" as Engine
+participant "QJSValue" as Result
+
+ConvertDataManager -> JSEngineMgr : instance()
+activate JSEngineMgr
+note right of ConvertDataManager : Static singleton access
+JSEngineMgr --> ConvertDataManager : JSEngineManager&
+deactivate JSEngineMgr
+
+ConvertDataManager -> JSEngineMgr : getEngine()
+activate JSEngineMgr
+JSEngineMgr --> ConvertDataManager : QJSEngine&
+deactivate JSEngineMgr
+
+ConvertDataManager -> Engine : evaluate(modifiedExpr)
+activate Engine
+Engine --> Result : QJSValue
+deactivate Engine
+
+ConvertDataManager <-- Result : result
+
+@enduml

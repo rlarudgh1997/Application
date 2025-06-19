@@ -1,0 +1,158 @@
+@startuml
+
+class InsertData {
+    + InsertData(const int& sheetIndex, const int& rowIndex, ..., const QList<QStringList>& outputList)
+    + InsertData()
+    + operator=(other)
+    + operator==(other)
+    + operator!=(other)
+
+    + QString getTCName()
+    + QString getCheck()
+    + QString getGenType()
+    + QString getVehicleType()
+    + QString getConfig()
+    + QString getResultName()
+    + QString getCaseName()
+    + QPairStrList getInputList()
+    + QList<QStringList> getOutputList()
+    + void setTCName(const QString& TCName)
+    + void setCheck(const QString& Check)
+    + void setGenType(const QString& GenType)
+    + void setVehicleType(const QString& VehicleType)
+    + void setConfig(const QString& Config)
+    + void setResultName(const QString& ResultName)
+    + void setCaseName(const QString& CaseName)
+    + void setInputList(const QPairStrList& InputList)
+    + void setOutputList(const QList<QStringList>& OutputList)
+
+    - void mTCName
+    - void mCheck
+    - void mGenType
+    - void mVehicleType
+    - void mConfig
+    - void mResultName
+    - void mCaseName
+    - QPairStrList mInputList
+    - QList<QStringList> mOutputList
+}
+
+class ManualData {
+    + ManualData(const QString& tcName, const QString& vehicleType, ..., const QPairStrList& outputList)
+    + ManualData()
+    + operator=(other)
+    + operator==(other)
+    + operator!=(other)
+
+    + void setTCName(const QString& TCName)
+    + void setVehicleType(const QString& VehicleType)
+    + void setRunnableOpt(const bool& RunnableOpt)
+    + void setConfigOpt(const bool& ConfigOpt)
+    + void setCycleOption(const bool& CycleOption)
+    + void setCyclePeriod(const int& CyclePeriod)
+    + void setCycleDelt(const int& CycleDelta)
+    + void setCycleDuration(const int& CycleDuration)
+    + void setCycleMode(const QString& CycleMode)
+    + void setPreconditionList(const QPairStrList& PreconditionList)
+    + void setInputList(const QPairStrList& InputList)
+    + void setInitList(const QPairStrList& InitList)
+    + void setOutputList(const QPairStrList& OutputList)
+    + QString getTCName()
+    + QString getVehicleType()
+    + bool getRunnableOpt()
+    + bool getConfigOpt()
+    + bool getCycleOption()
+    + int getCyclePeriod()
+    + int getCycleDelt()
+    + int getCycleDuration()
+    + QString getCycleMode()
+    + QPairStrList getPreconditionList()
+    + QPairStrList getInputList()
+    + QPairStrList getInitList()
+    + QPairStrList getOutputList()
+
+    - QString mTCName
+    - QString mVehicleType
+    - bool mRunnableOpt
+    - bool mConfigOpt
+    - bool mCycleOption
+    - int mCyclePeriod
+    - int mCycleDelt
+    - int mCycleDuration
+    - QString mCycleMode
+    - QPairStrList mPreconditionList
+    - QPairStrList mInputList
+    - QPairStrList mInitList
+    - QPairStrList mOutputList
+}
+
+class ExcelDataManager {
+    + static QSharedPointer<ExcelDataManager>& instance()
+    + QStringList isTCNameDataList(const int& sheetIndex, const bool& all)
+    + bool isCheckData(const int& sheetIndex, const QString& tcName)
+    + int isGenTypeData(const int& sheetIndex, const QString& tcName, QString& genTypeStr)
+    + QString isVehicleTypeData(const int& sheetIndex, const QString& tcName)
+    + QString isConfigData(const int& sheetIndex, const QString& tcName)
+    + QStringList isResultDataList(const int& sheetIndex, const QString& tcName)
+    + QStringList isCaseDataList(const int& sheetIndex, const QString& tcName, const QString& resultName)
+    + QPair<QStringList, QStringList> isInputDataList(const int& sheetIndex, const QString& tcName, ..., const bool& checkOthers)
+    + QPair<QStringList, QStringList> isInputDataWithoutCaseList(const int& sheetIndex, const QString& tcName, ..., const QString& caseName)
+    + QList<QStringList> isOutputDataList(const int& sheetIndex, const QString& tcName, const QString& resultName)
+    + QList<QStringList> isConfigDataList(const QString& configName, const bool& allData, const bool& removeMerge )
+    + QPair<QStringList, QStringList> isDependentDataList(const QString& tcName, const QString& resultName)
+    + QList<ManualData> isManualDataList()
+    + void reloadExcelData(const int& sheetIndex)
+    + void writeExcelSheetData(const int& sheetIndex)
+    + void updateInputDataInfo(const int& sheetIndex, const QString& tcName, ..., const bool& insertBefore)
+    + void updateOutputDataInfo(const int& sheetIndex, const QString& tcName, ..., const QList<QStringList>& outputList)
+    + bool isValidConfigCheck(const QString& configName, const QMap<QString, QString>& inputList)
+
+    + QString getMergeStart()
+    + QString getMerge()
+    + QString getMergeEnd()
+    + QStringList getMergeInfos()
+    + QList<QMapIntStrList> getExcelSheetData(const int& key)
+    + QMap<int, QList<QMapIntStrList>> readExcelSheetData()
+    + QList<InsertData> getInsertSheetData(const int& key)
+    + QMap<int, QList<InsertData>> readInsertSheetData()
+    + void setMergeStart(const QString& MergeStart)
+    + void setMerge(const QString& Merge)
+    + void setMergeEnd(const QString& MergeEnd)
+    + void setMergeInfos(const QStringListaa& MergeInfos)
+    + void setExcelSheetData(const int& key, const int& value)
+    + void writeExcelSheetData(const QList<QMapIntStrList>& value)
+    + void setInsertSheetData(const int& key, const int& value)
+    + void writeInsertSheetData(const QMap<int, QList<InsertData>>& value)
+
+    - ExcelDataManager()
+    - QVariantList isSheetDataInfo(const int& sheetIndex, const bool& appendMergeInfo)
+    - QMap<int, QStringList> isConvertedExcelData(const int& sheetIndex, const bool& appendMergeInfo)
+    - QStringList isOriginSheetData(const int& sheetIndex, const int& columnIndex)
+    - QStringList isInsertSheetData(const int& sheetIndex, const int& columnIndex)
+    - QStringList isExcelSheetData(const int& sheetIndex, const int& columnIndex, const bool& origin, const bool& log)
+    - QPair<int, int> isIndexOf(const QStringList& dataList, const QString& foundStr)
+    - QStringList isParsingDataList(const QStringList& data, const bool& removeWhitespace)
+    - QPair<int, int> isRowIndexInfo(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName, const bool& origin, const bool& log)
+    - QPair<QStringList, QStringList> isConvertedToEnum(const QStringList& signalList, const QStringList& dataList)
+    - int isCaseIndex(const int& sheetIndex, const QString& tcName, const QString& resultName, const QString& caseName)
+    - QMapIntStrList updateParsingExcelData(const int& sheetIndex, const QVariantList& sheetData)
+    - QPair<QStringList, QStringList> reconstructInputData(const QPair<QStringList, QStringList>& inputList, const QList<QStringList>& outputList)
+
+    - QString mMergeStart
+    - QString mMerge
+    - QString mMergeEnd
+    - QStringList mMergeInfos
+    - bool mReadStateNewData
+    - QMap<int, QList<QMapIntStrList>> mExcelSheetData
+    - QMap<int, QList<InsertData>> mInsertSheetData
+}
+
+InsertData <.. ExcelDataManager : uses
+ManualData <.. ExcelDataManager : uses
+
+ExcelDataManager <-- ControlExcel : uses
+ExcelDataManager <-- ConvertDataManager : uses
+ExcelDataManager <-- GenerateCaseData : uses
+
+
+@enduml

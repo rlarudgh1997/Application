@@ -1,0 +1,92 @@
+@startuml
+actor User
+participant "TestCase" as TC
+participant "ConvertDataManager" as CDM
+participant "ConfigSetting" as Config
+participant "ExcelUtil" as Excel
+participant "FileSystem" as FS
+participant "CheckTimer" as Timer
+
+User -> TC : click Generate Button
+TC -> CDM : excuteConvertDataManager() : QString
+
+activate CDM
+CDM -> Timer : start CheckTimer
+
+' --- Step 1: Non-Sheet Keyword ---
+CDM -> CDM : convertNonSheetInputSignalKeyword() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("001.Convert.excel_Non_Sheet_Keyword")
+        Excel -> FS : Save Excel File\n[001.Convert.excel_Non_Sheet_Keyword.xlsx]
+    else return false
+        note right of CDM
+            Excel 저장 생략됨
+        end note
+    end
+    CDM -> Timer : check("001.Convert.excel_Non_Sheet_Keyword")
+else return false
+    CDM -> TC : return "Failed to convert Non-Sheet InputSignalKeyword"
+end
+
+' --- Step 2: Sheet Keyword ---
+CDM -> CDM : convertSheetKeywordData() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("002.Convert.excel_Sheet_Keyword")
+        Excel -> FS : Save Excel File\n[002.Convert.excel_Sheet_Keyword.xlsx]
+    else return false
+        note right of CDM
+            Excel 저장 생략됨
+        end note
+    end
+    CDM -> Timer : check("002.Convert.excel_Sheet_Keyword")
+else return false
+    CDM -> TC : return "Failed to convert Sheet InputSignalKeyword"
+end
+
+' --- Step 3: Config Signal ---
+CDM -> CDM : appendConvertConfigSignalSet() : int
+alt return == 1
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("003.Convert.excel_Config")
+        Excel -> FS : Save Excel File\n[003.Convert.excel_Config.xlsx]
+    else return false
+        note right of CDM
+            Excel 저장 생략됨
+        end note
+    end
+    CDM -> Timer : check("003.Convert.excel_Config")
+else return == 0
+    note right of CDM : No config condition is defined\n(no file generated)
+else return == -1
+    CDM -> TC : return "Failed to convert Config Signal"
+end
+
+' --- Step 4: All TC Signal Set ---
+CDM -> CDM : appendConvertAllTCSignalSet() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("004.Convert.excel_All_TC_Signal_Set")
+        Excel -> FS : Save Excel File\n[004.Convert.excel_All_TC_Signal_Set.xlsx]
+    else return false
+        note right of CDM
+            Excel 저장 생략됨
+        end note
+    end
+    CDM -> Timer : check("004.Convert.excel_All_TC_Signal_Set")
+else return false
+    CDM -> TC : return "Failed to convert All TC Signal Set"
+end
+
+CDM -> TC : return QString()
+deactivate CDM
+@enduml

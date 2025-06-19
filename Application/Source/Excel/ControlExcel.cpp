@@ -750,6 +750,11 @@ void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QSt
         updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum + index), suggestionsDataInfo);
     }
 
+    qDebug() << "updateAutoCompleteSignal :" << signalName << vehicleType << columnIndex << update;
+    for (const auto& key : dataInfo.keys()) {
+        qDebug() << "Data[" << key << "] :" << dataInfo[key].size() << dataInfo[key];
+    }
+
     if (update) {
         updateDataHandler(ivis::common::PropertyTypeEnum::PropertyTypeValueEnum, QVariantList({signalName, columnIndex}), true);
     }
@@ -876,7 +881,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
         int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
         int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
-        // qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
+        qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
         if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
             updateAutoCompleteTCName(signalName, vehicleType, keywordType);
         } else {
@@ -1399,7 +1404,6 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
             SignalDataManager::instance().data()->testCode();
 #endif
 #if 0
-            ExcelDataManager::instance().data()->isManualDataList();
             ExcelUtil::instance().data()->readPreset("Preset_003");
             ExcelUtil::instance().data()->readPreset("SFC.Extension.Param.Par_SpeedToleranceMph3");
             ExcelUtil::instance().data()->readPreset("SFC.Extension.Memory.TEST_02");
@@ -1430,6 +1434,9 @@ void ControlExcel::slotEventInfoChanged(const int& displayType, const int& event
                     }
                 }
             }
+#endif
+#if 1
+            ExcelDataManager::instance().data()->isManualDataList();
 #endif
             break;
         }

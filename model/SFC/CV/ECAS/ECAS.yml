@@ -1,0 +1,319 @@
+#
+# @file ECAS.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2021  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- ECAS:
+  sfcVersion: "18.0.2"
+  specVersion: "v0.30"
+  description: "Reference : [CV150] ECAS. Contains : Telltale, Constant. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configVehicleTypeCVChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigVehicleTypeCV: mInter_ConfigVehicleTypeCV
+    - configAreaChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - configAxleWeightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigAxleWeight: mInter_ConfigAxleWeight
+    - configAxleInfoChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigAxleInfo: mInter_ConfigAxleInfo
+    - configSuspTypeChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigSuspType: mInter_ConfigSuspType
+    - weightUnitStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_WeightUnit_stat: mInter_WeightUnit_stat
+    - vehicleSpeedValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_WheelBasedVehicleSpeedValue: mInput_WheelBasedVehicleSpeedValue
+    - axleWeightChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_AxleWeight: mInput_AxleWeight
+        - Vehicle.CV.ECAS.Input_AxleLocation: mInput_AxleLocation
+    - telltaleStatus1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_ECASTelltaleStatus1: mInput_ECASTelltaleStatus1
+    - telltaleStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_ECASTelltaleStatus2: mInput_ECASTelltaleStatus2
+    - busEcasStatChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_ECASTelltaleStatus3: mInput_ECASTelltaleStatus3
+        - Vehicle.CV.ECAS.Input_KneelingStatus: mInput_KneelingStatus
+    - alasTelltaleStatus1Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_ALASTelltaleStatus1: mInput_ALASTelltaleStatus1
+    - alasTelltaleStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.ECAS.Input_ALASTelltaleStatus2: mInput_ALASTelltaleStatus2
+  outputs:
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.ECAS.Stat:
+      description: "DCN: IMG_TelltaleECAS_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: FR_UP_ON, 0x3: FR_LOW_ON, 0x4: RR_UP_ON, 0x5: RR_LOW_ON, 0x6: ALL_UP_ON, 0x7: ALL_LOW_ON, 0x8: FR_UP_RR_LOW_ON, 0xA1: FR_LOW_RR_UP_ON, 0xA2: TO_NORMAL_ON, 0xA3: ABOVE_SPEED_LIMIT, 0xA4: AXLE_LOAD_LIMIT, 0xA5: EXCEED_TAG_AXLE_LOAD, 0xC1: CHECK_ON, 0xC2: MAX
+    - SFC.ECAS.Telltale.ECAS.StatOptional:
+      description: "DCN: IMG_TelltaleECAS_stat</br>Optional State"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        FR_UP_ON: 0x2
+        FR_LOW_ON: 0x3
+        RR_UP_ON: 0x4
+        RR_LOW_ON: 0x5
+        ALL_UP_ON: 0x6
+        ALL_LOW_ON: 0x7
+        FR_UP_RR_LOW_ON: 0x8
+        FR_LOW_RR_UP_ON: 0xA1
+        TO_NORMAL_ON: 0xA2
+        ABOVE_SPEED_LIMIT: 0xA3
+        AXLE_LOAD_LIMIT: 0xA4
+        EXCEED_TAG_AXLE_LOAD: 0xA5
+        CHECK_ON: 0xC1
+        MAX: 0xC2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.ECAS.BlinkValueA:
+      description: "DCN: IMG_TelltaleECAS_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: FR_UP_ON, 0x2: FR_LOW_ON, 0x3: RR_UP_ON, 0x4: RR_LOW_ON, 0x5: ALL_UP_ON, 0x6: ALL_LOW_ON, 0x7: TO_NORMAL_ON, 0x8: MAX
+    - SFC.ECAS.Telltale.ECAS.BlinkValueAOptional:
+      description: "DCN: IMG_TelltaleECAS_stat</br>Blink ValueA Optional"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum:
+        NONE: 0x0
+        FR_UP_ON: 0x1
+        FR_LOW_ON: 0x2
+        RR_UP_ON: 0x3
+        RR_LOW_ON: 0x4
+        ALL_UP_ON: 0x5
+        ALL_LOW_ON: 0x6
+        TO_NORMAL_ON: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.ECAS.BlinkValueB:
+      description: "DCN: IMG_TelltaleECAS_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale1
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.AxleMotion.Stat:
+      description: "DCN: IMG_TelltaleAxleMotion_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: OFF, 0x2: AXLE_UP_ON, 0x3: LOAD_TRANSFER_ON, 0x4: MAX
+    - SFC.ECAS.Telltale.AxleMotion.StatOptional:
+      description: "DCN: IMG_TelltaleAxleMotion_stat</br>Optional State"
+      dataType: HUInt64
+      group: Telltale2
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        AXLE_UP_ON: 0x2
+        LOAD_TRANSFER_ON: 0x3
+        MAX: 0x4
+      # 0x0: NONE, 0x1: OFF, 0x2: LBS_ON, 0x3: TON_ON, 0x4: MAX
+    - SFC.ECAS.Constant.AxleWeightPage.Stat:
+      description: "DCN: IMG_AxleWeightPage_Status</br>Status of AxleWeightPage"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        OFF: 0x1
+        LBS_ON: 0x2
+        TON_ON: 0x3
+        MAX: 0x4
+      # Numeric Value
+    - SFC.ECAS.Constant.Axle1Weight.Value:
+      description: "DCN: IMG_AxleWeightAxle1_value</br>Weight Value of Axle 1"
+      dataType: HDouble
+      # Numeric Value
+    - SFC.ECAS.Constant.Axle2Weight.Value:
+      description: "DCN: IMG_AxleWeightAxle2_value</br>Weight Value of Axle 2"
+      dataType: HDouble
+      # Numeric Value
+    - SFC.ECAS.Constant.Axle3Weight.Value:
+      description: "DCN: IMG_AxleWeightAxle3_value</br>Weight Value of Axle 3"
+      dataType: HDouble
+      # Numeric Value
+    - SFC.ECAS.Constant.Axle4Weight.Value:
+      description: "DCN: IMG_AxleWeightAxle4_value</br>Weight Value of Axle 4"
+      dataType: HDouble
+      # Numeric Value
+    - SFC.ECAS.Constant.Axle5Weight.Value:
+      description: "DCN: IMG_AxleWeightAxle5_value</br>Weight Value of Axle 5"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: T4X2, 0x2: T6X2, 0x3: T6X2_TAG, 0x4: T6X2_TAG_DOUBLE, 0x5: T6X4, 0x6: T8X4, 0x7: T8X4_PUSHER, 0x8: T10X4_PUSHER, 0x9: T10X4_TAG, 0xA: MAX
+    - SFC.ECAS.Constant.Axle.Stat:
+      description: "DCN: IMG_VehicleAxle_Status</br>Status of Vehilcle Axle"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        T4X2: 0x1
+        T6X2: 0x2
+        T6X2_TAG: 0x3
+        T6X2_TAG_DOUBLE: 0x4
+        T6X4: 0x5
+        T8X4: 0x6
+        T8X4_PUSHER: 0x7
+        T10X4_PUSHER: 0x8
+        T10X4_TAG: 0x9
+        MAX: 0xA
+      # Numeric Value
+    - SFC.Private.ECAS.AxleWeight_Factor:
+      description: "Test Node for Private Value: Private_AxleWeight_Factor"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: INVALID, 0x2: VALID, 0x3: MAX
+    - SFC.Private.ECAS.AxleWeightValid_Status:
+      description: "Test Node for Private Value: Private_AxleWeightValid_Status"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        INVALID: 0x1
+        VALID: 0x2
+        MAX: 0x3
+      # Numeric Value
+    - SFC.Private.ECAS.AxleFront1WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightLocationFRONT1_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.AxleRear1WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightLocationREAR1_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.AxleRear2WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightLocationREAR2_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.AxleRear3WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightLocationREAR3_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.Axle1WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightAxle1_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.Axle2WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightAxle2_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.Axle3WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightAxle3_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.Axle4WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightAxle4_value"
+      dataType: HUInt64
+      # Numeric Value
+    - SFC.Private.ECAS.Axle5WeightValue:
+      description: "Test Node for Private Value: Private_AxleWeightAxle5_value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.BUS.Stat:
+      description: "DCN: IMG_TelltaleBUSECAS_stat</br>State of Telltale"
+      dataType: HUInt64
+      group: Telltale3
+      valueEnum: SFC_Common_Enum_CV.Telltale.Stat
+      # 0x0: NONE, 0x1: UP_ON, 0x2: LOW_ON, 0x3: TO_NORMAL_ON, 0x4: KNEELING_LOW_ON, 0x5: BLINK2, 0x6: BLINK4, 0x7: CHECK_ON, 0x8: MAX
+    - SFC.ECAS.Telltale.BUS.StatOptional:
+      description: "DCN: IMG_TelltaleBUSECAS_stat</br>Optional State"
+      dataType: HUInt64
+      group: Telltale3
+      valueEnum:
+        NONE: 0x0
+        UP_ON: 0x1
+        LOW_ON: 0x2
+        TO_NORMAL_ON: 0x3
+        KNEELING_LOW_ON: 0x4
+        BLINK2: 0x5
+        BLINK4: 0x6
+        CHECK_ON: 0x7
+        MAX: 0x8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.BUS.BlinkValueA:
+      description: "DCN: IMG_TelltaleBUSECAS_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Telltale3
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueA
+      # 0x0: NONE, 0x1: UP_ON, 0x2: LOW_ON, 0x3: TO_NORMAL_ON, 0x4: KNEELING_LOW_ON, 0x5: KNEELING_UP_ON, 0x6: MAX
+    - SFC.ECAS.Telltale.BUS.BlinkValueAOptional:
+      description: "DCN: IMG_TelltaleBUSECAS_stat</br>Blink ValueA Optional"
+      dataType: HUInt64
+      group: Telltale3
+      valueEnum:
+        NONE: 0x0
+        UP_ON: 0x1
+        LOW_ON: 0x2
+        TO_NORMAL_ON: 0x3
+        KNEELING_LOW_ON: 0x4
+        KNEELING_UP_ON: 0x5
+        MAX: 0x6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: ACTIVE, 0x4: INACTIVE, 0x5: TICK, 0x6: TOCK, 0x7: ENABLE, 0x8: DISABLE, 0xA1: BLINK1, 0xA2: BLINK2, 0xA3: BLINK3, 0xA4: BLINK4, 0xA5: BLINK5, 0xC1: RED, 0xC2: GREEN, 0xC3: BLUE, 0xC4: YELLOW, 0xC5: AMBER, 0xC6: GRAY, 0xC7: WHITE, 0xC8: OPTIONAL, 0xC9: CYAN, 0xCA: MAX
+    - SFC.ECAS.Telltale.BUS.BlinkValueB:
+      description: "DCN: IMG_TelltaleBUSECAS_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Telltale3
+      valueEnum: SFC_Common_Enum_CV.Telltale.BlinkValueB

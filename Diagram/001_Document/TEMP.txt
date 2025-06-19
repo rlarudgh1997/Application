@@ -1,0 +1,43 @@
+			
+			
+			
+			
+			
+QStringList	isConvertedSignalDataValueEnum	const bool& toEnum, const QString& signalName, const QStringList& valueEnum, QString& matchingValue	입력 시그널명, ValueEnum 데이터를 확인하여 Enum, Hex 로 변환하여 확인하는 함수
+QMap<int, QPair<QString, SignalData>>	isNormalInputSignalDataInfo	const int& sheetIndex, const QPair<QStringList, QStringList>& list	입력된 시트, 시그널/데이터 리스트를 특정 데이터로 변환하는 함수
+QMap<int, QPair<QString, SignalData>>	isTestCaseInputSignalDataInfo	const int& sheetIndex, ..., QMap<QString, SignalData>& newSignalDataInfo;	입력된 시트, 시그널 정보 리스트를 특정 데이터로 변환하는 함수
+QMap<int, QPair<QString, SignalData>>	isOtherInputSignalDataInfo	const int& sheetIndex, ..., QMap<QString, SignalData>& newSignalDataInfo;	입력된 시트, 시그널 정보 리스트를 특정 데이터로 변환하는 함수
+QMap<int, QPair<QString, SignalData>>	isOutputSignalDataInfo	const int& sheetIndex, const QList<QStringList>& list	입력된 시트, 시그널/데이터 리스트를 특정 데이터로 변환하는 함수
+bool	isExcelDataValidation	N/A	전체 시트에 입려된 시그널, 데이터의 유효성을 검사하는 함수
+void	testCode	const QVariantList& arg	테스트 함수
+QString	getMergeStart	const QString& MergeStart	머지 시작 정보 확인 함수
+QString	getMerge	const QString& Merge	머지 중간 정보 확인 함수
+QString	getMergeEnd	const QString& MergeEnd	머지 마지막 정보 확인 함수
+QStringList	getMergeInfos	const QStringList& MergeInfos	전체 머치 리스트(MergeStart, Merge, MergeEnd) 정보 확인 함수
+void	setMergeStart	const QString& MergeStart	머지 시작 정보 저장 함수
+void	setMerge	const QString& Merge	머지 중간 정보 저장 함수
+void	setMergeEnd	const QString& MergeEnd	머지 마지막 정보 저장 함수
+void	setMergeInfos	const QStringList& MergeInfos	전체 머치 리스트(MergeStart, Merge, MergeEnd) 정보 저장 함수
+QString	isSfcFileInfo	const QString& signalName	입력 시그널명 기준으로 yml 파일 경로를 확인 하는 함수
+QStringList	isVsmFileInfo	const QString& vehicleName, const QStringList& specType	입력 시그널명, 스펙 타입 기준으로 vsm 파일 경로를 확인 하는 함수
+QMap<int, QStringList>	isSignalFileList	const QString& signalName, const QString& vehicleType	입력 정보 기준으로 yml, vsm 파일 경로를 확인 하는 함수
+QString	isSFCCommonEnum	const QString& info, const QString& prefix	입력 yml 파일 기준으로 CommonEnum 파일 경로 확인 하는 함수
+QMap<int, QStringList>	isParsingFileDataInfo	const QString& signalName, const QStringList& inputData, const QMap<int, QStringList>& fileList, int& dataType	입력 정보 기준으로 시그널의 데이터를 파일(yml, vsm)에서 파싱하는 함수
+QStringList	isValidValueEnum	const QString& signalName, const QMap<int, QStringList>& dataInfo	입력 정보 기준으로 ValueEnum 유효성 검사하여 데이터 확인 함수
+QStringList	isConvertedSignalDataMatchingTable	const bool& toHex, const QString& signalName, const QMap<int, QStringList>& dataInfo	입력 정보 기준으로 MatchingTable 의 데이터를 변환(Hex, Enum)하는 함수
+QList<QStringList>	parsingKeywordBlocks	const QStringList& originData	입력 데이터리스트에서 키워드 포함 여부 확인 함수
+QMap<int, QStringList>	parsingKeywordData	const QStringList& originData	입력 데이터리스트에서 키워드 정보를 찾아서 키워드, 데이터 컨테이너 데이터로 파싱하는 함수
+QMap<int, QStringList>	isCustomValueInfo	const QStringList& originData, const bool& normal	입력 정보 기준으로 커스텀 키워드를 확인하여 유효한 데이터로 파싱 및 구성 하는 함수
+QList<qint64>	isNumber	const QStringList& numberStrList, const QMap<QString, qint64>& exception	입력 숫자 문자열을 숫자로 변환하는 함수
+QPair<qint64, qint64>	isMinMaxValue	const QStringList& inputList, const bool& maxSkip	입력 숫자 문자열에서 최소, 최대값을 변환하는 함수
+QPair<QStringList, QStringList>	isValidValueList	const int& dataType, const int& notTriggerType, const QStringList& allData, const QMap<int, QStringList>& dataInfo	입력 값 데이터를 유효한 하나의 값으로 변환하는 함수
+QStringList	isValidUniqueValue	const int& dataType, const QMap<int, QStringList>& dataInfo	입력 단일 키워드 데이터를 유효하지 않은 하나의 값으로 변환하는 함수
+QStringList	isMultiValidUniqueValue	const int& dataType, const QMap<int, QStringList>& dataInfo	입력 멀티 키워드 데이터를 유효하지 않은 하나의 값으로 변환하는 함수
+bool	isExceptionSignal	const QString& signalName	예외 처리(collect, delay) 시그널인지 확인하는 함수
+int	isContainConfigSignal	const QString& signalName, const int& keywordType, const QPair<QStringList, QStringList>& allList	입력 정보 기준으로 [CustomConfig] 키워드 확인하여 키워드 타입 변환 함수
+int	isSignalDataType	const QString& signalName, const SignalData& signalData, QString& maxValue	입력 정보 기준으로 시그널 데이터 타입 확인 함수
+QMap<QString, SignalData>	isSignalDataInfo	const QStringList& signalList, const QStringList& dataList, QMap<QString, QMap<int, QStringList>>& dataInfo	입력 정보 기준으로 시그널 데이터 확인 함수
+QPair<QStringList, QStringList>	isConvertedValueData	const QString& signalName, const int& dataType, const bool& normal, const QStringList& originData, const QStringList& otherAllData	입력 정보 기준으로 입력 값이 value 타입이면 특정 데이터로 변환하는 함수
+QMap<int, QPair<QStringList, QStringList>>	isConvertedEnumData	const QString& signalName, const SignalData& signalData, const bool& configState	입력 정보 기준으로 입력 값이 enum 타입이면 특정 데이터로 변환하는 함수
+QStringList	isConvertedExceptionData	const QString& signalName, const QMap<int, QStringList>& dataInfo, const QStringList& inputData	입력 정보 기준으로 입력 값이 특정 예외처리(timeout, crc) 값인 경우 유효한 데이터로 변환하는 함수
+QMap<int, QPair<QString, SignalData>>	isSortingInputSignalList	const QMap<QString, SignalData>& dataInfo, const QStringList& signalList	입력 정보 기준 시그널, 데이터를 시그널명으로 정렬하는 함수

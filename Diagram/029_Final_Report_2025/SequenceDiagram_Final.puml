@@ -1,0 +1,213 @@
+@startuml
+
+actor User order 10
+participant "FileSystem" as FS order 15
+participant ControlExcel order 20
+participant "TestCase" as TC order 30
+participant "ConvertDataManager" as CDM order 35
+participant "ConfigSetting" as Config order 36
+participant "ExcelUtil" as Excel order 37
+participant GenerateCaseData order 40
+participant ExcelDataManager order 50
+participant SignalDataManager order 60
+participant "mAllCaseJson" as QJsonObject order 70
+participant CaseDataWriter order 80
+participant CaseGen order 90
+participant ExcelParser order 100
+
+box "Python" #F0F8FF
+    participant ExcelParser
+    participant CaseGen
+end box
+
+box "C++" #E0FFFF
+    participant ControlExcel
+    participant TC
+    participant GenerateCaseData
+    participant ExcelDataManager
+    participant SignalDataManager
+    participant QJsonObject
+    participant CaseDataWriter
+    participant CDM
+    participant Config
+    participant Excel
+end box
+
+== Convert Excel Data ==
+
+User -> TC : click Generate Button
+activate TC
+TC -> CDM : excuteConvertDataManager() : QString
+deactivate TC
+
+activate CDM
+
+' --- Step 1: Non-Sheet Keyword ---
+CDM -> CDM : convertNonSheetInputSignalKeyword() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("001.Convert.excel_Non_Sheet_Keyword")
+        Excel -> FS : Save Excel File\n[001.Convert.excel_Non_Sheet_Keyword.xlsx]
+    else return false
+        note right of CDM
+            Excel save skipped
+        end note
+    end
+else return false
+    CDM --> TC : return "Failed to convert Non-Sheet InputSignalKeyword"
+end
+
+' --- Step 2: Sheet Keyword ---
+CDM -> CDM : convertSheetKeywordData() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("002.Convert.excel_Sheet_Keyword")
+        Excel -> FS : Save Excel File\n[002.Convert.excel_Sheet_Keyword.xlsx]
+    else return false
+        note right of CDM
+            Excel save skipped
+        end note
+    end
+else return false
+    CDM --> TC : return "Failed to convert Sheet InputSignalKeyword"
+end
+
+' --- Step 3: Config Signal ---
+CDM -> CDM : appendConvertConfigSignalSet() : int
+alt return == 1
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("003.Convert.excel_Config")
+        Excel -> FS : Save Excel File\n[003.Convert.excel_Config.xlsx]
+    else return false
+        note right of CDM
+            Excel save skipped
+        end note
+    end
+else return == 0
+    note right of CDM : No config condition is defined\n(no file generated)
+else return == -1
+    CDM --> TC : return "Failed to convert Config Signal"
+end
+
+' --- Step 4: All TC Signal Set ---
+CDM -> CDM : appendConvertAllTCSignalSet() : bool
+alt return true
+    CDM -> Config : readConfig(SaveConvertExcel) : bool
+    Config --> CDM : return true / false
+    alt return true
+        CDM -> Excel : writeExcelSheet("004.Convert.excel_All_TC_Signal_Set")
+        Excel -> FS : Save Excel File\n[004.Convert.excel_All_TC_Signal_Set.xlsx]
+    else return false
+        note right of CDM
+            Excel save skipped
+        end note
+    end
+else return false
+    CDM --> TC : return "Failed to convert All TC Signal Set"
+end
+
+CDM -> TC : return QString()
+deactivate CDM
+activate TC
+
+== Case Generation ==
+TC -> GenerateCaseData : excuteGenerateCaseData()
+deactivate TC
+
+activate GenerateCaseData
+GenerateCaseData -> GenerateCaseData : reset internal state
+GenerateCaseData -> ExcelDataManager : reloadExcelData()
+
+loop for each sheet
+    GenerateCaseData -> ExcelDataManager : isTCNameDataList()
+    ExcelDataManager --> GenerateCaseData : return QStringList<TCName>
+    GenerateCaseData -> ExcelDataManager : isGenTypeData()
+    ExcelDataManager --> GenerateCaseData : return genType
+    GenerateCaseData -> ExcelDataManager : isVehicleTypeData()
+    ExcelDataManager --> GenerateCaseData : return vehicleType
+
+    loop for each TCName
+        GenerateCaseData -> ExcelDataManager : isResultDataList()
+        ExcelDataManager --> GenerateCaseData : return QStringList<Result>
+
+        loop for each Result
+            GenerateCaseData -> ExcelDataManager : isCaseDataList()
+            ExcelDataManager --> GenerateCaseData : return QStringList<Case>
+
+            loop for each Case
+                GenerateCaseData -> ExcelDataManager : isInputDataList()
+                ExcelDataManager --> GenerateCaseData : return all case signal info for TC name
+                GenerateCaseData -> SignalDataManager : isTCInputSignalDataInfo()
+                SignalDataManager --> GenerateCaseData : return signal names and values for Case
+
+                GenerateCaseData -> GenerateCaseData : getSignalInfoString()
+                GenerateCaseData -> CaseGen : callPython() with SignalInfoString
+                activate CaseGen
+                CaseGen -> CaseGen : run.py + signal string
+                activate CaseGen
+                alt
+                    note left of CaseGen
+                        Combinations of valid data from SignalInfoString signals are generated.
+                        Cases = {
+                            "0x1, 0x1, 0x1",
+                            ...
+                        }
+                    end note
+                end
+                deactivate CaseGen
+                CaseGen -> CaseGen : generate JSON
+                CaseGen --> GenerateCaseData : return case JSON
+                deactivate CaseGen
+
+                GenerateCaseData -> GenerateCaseData : appendCase()
+                activate GenerateCaseData
+                GenerateCaseData -> GenerateCaseData : getCaseInfoJson(genType)
+                activate GenerateCaseData
+                GenerateCaseData -> QJsonObject : get names and values of input signals for Case
+                QJsonObject --> GenerateCaseData : return list of input siganls
+                alt genType == Default
+                    note right of GenerateCaseData
+                        list of input siganls 에서 valid, invalid data 추출 후,
+                        invalid data(precondition) 에서 valid data(input) 로 trigger 하는 tc 생성
+                        Cases = {
+                            "0x0, 0x1, 0x1, => Input_A: 0x1": "1",
+                            "0x2, 0x1, 0x1, => Input_A: 0x1": "1",
+                            ...
+                        }
+                    end note
+                end
+                deactivate GenerateCaseData
+                GenerateCaseData -> GenerateCaseData : appendCaseJson(mAllCaseJson)
+                GenerateCaseData -> GenerateCaseData : appendCaseJson(mIntermediateDefaultJson)
+                deactivate GenerateCaseData
+            end
+        end
+    end
+end
+
+GenerateCaseData -> ExcelDataManager : isManualDataList()
+ExcelDataManager --> GenerateCaseData : return QList<ManualData>
+GenerateCaseData -> FS : saveHistory() : write JSON to file
+note right of FS
+  History saved in JSON format
+  name: TcGenHistory.json
+end note
+
+GenerateCaseData -> CaseDataWriter : genTestCaseFile(mAllCaseJson, count)
+activate CaseDataWriter
+CaseDataWriter -> FS: WriteTcFile()
+alt 인상 선임님 부분
+note right of FS
+  TC file created
+end note
+end
+deactivate CaseDataWriter
+deactivate GenerateCaseData
+
+@enduml

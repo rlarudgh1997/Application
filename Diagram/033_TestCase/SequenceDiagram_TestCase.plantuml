@@ -1,0 +1,115 @@
+@startuml
+
+actor User order 10
+
+participant GuiMenu order 30
+participant ControlMenu order 40
+participant ControlExcel order 50
+
+participant TestCase order 110 #LightBlue
+participant ConvertDataManager order 120
+participant GenerateCaseData order 130
+' participant ExcelDataManager order 140
+
+' participant ExcelData order 200
+participant ExcelUtil order 210
+
+
+== TestCase - Start ==
+
+User -> GuiMenu: TC Gen
+
+activate GuiMenu
+GuiMenu --> ControlMenu: creatSignal()
+deactivate GuiMenu
+
+activate ControlMenu
+ControlMenu --> ControlExcel: sendEvent()
+deactivate ControlMenu
+
+activate ControlExcel
+ControlExcel -> ControlExcel : updateStartTestCase()
+activate ControlExcel
+
+ControlExcel -> TestCase : start()
+deactivate ControlExcel
+deactivate ControlExcel
+activate TestCase
+
+TestCase -> TestCase : parsingOptions()
+TestCase --> TestCase : thread start
+
+...
+
+TestCase --> TestCase : runThread()
+
+TestCase -> TestCase : excuteTestCase()
+
+activate TestCase
+
+TestCase -> TestCase : parsingInputArguments() : AppMode
+activate TestCase
+deactivate TestCase
+
+...
+
+TestCase -> TestCase : parsingInputArguments() : Argument
+activate TestCase
+deactivate TestCase
+
+...
+
+TestCase -> TestCase : openExcelFile()
+activate TestCase
+
+TestCase ->ExcelUtil : openExcelFile()
+activate ExcelUtil
+ExcelUtil --> TestCase : result : sheet data
+deactivate ExcelUtil
+TestCase -> TestCase : writeSheetData()
+deactivate TestCase
+
+...
+
+group Convert : Excel Data
+TestCase -> ConvertDataManager : excuteConvertDataManager()
+activate ConvertDataManager
+ConvertDataManager --> TestCase : result
+deactivate ConvertDataManager
+end group
+
+...
+
+group Generate : TC Data
+    TestCase -> GenerateCaseData : excuteGenerateCaseData()
+    activate GenerateCaseData
+    GenerateCaseData --> TestCase : result
+    deactivate GenerateCaseData
+end group
+
+TestCase --> ControlExcel : emit signalGenTCInfo()
+activate ControlExcel
+deactivate TestCase
+deactivate TestCase
+
+ControlExcel --> ControlMenu : sendEvent()
+deactivate ControlExcel
+activate ControlMenu
+ControlMenu -> ControlMenu : updateGenTCInfo()
+activate ControlMenu
+ControlMenu -> ControlMenu : updateTestResultInfo()
+activate ControlMenu
+
+ControlMenu --> GuiMenu : updateDataHandler()
+deactivate ControlMenu
+deactivate ControlMenu
+deactivate ControlMenu
+activate GuiMenu
+
+GuiMenu -> GuiMenu : updateDialogTestResultInfo()
+activate GuiMenu
+deactivate GuiMenu
+
+
+
+@enduml

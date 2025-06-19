@@ -1,0 +1,66 @@
+@startuml sequence_diagram_with_itertools
+
+participant CppApp as "GenerateCaseData (C++)"
+participant run_py as "run.py"
+participant caseGen as "RunSfcCaseGen.case_gen"
+participant sc as "SignalCollection"
+participant sd as "SignalData"
+participant tw as "TextWriter"
+participant fs as "CaseResult.json"
+participant itertools as "itertools\n(Python stdlib)"
+
+CppApp -> run_py : call with input_str\n(subprocess or system call)
+activate run_py
+
+run_py -> caseGen : case_gen(input_str)
+activate caseGen
+
+caseGen -> sc : new SignalCollection()
+activate sc
+sc --> caseGen : SignalCollection instance
+
+caseGen -> sc : parse_input_string(input_str)
+activate sc
+
+loop for each signal definition
+    sc -> sd : new SignalData(name, type, ...)
+    activate sd
+    sd -> sd : convert_data_to_hex()
+    sd -> sd : extract_hex_values()
+    sd -> sd : getValueEnumHexKeyDict()
+    deactivate sd
+    sd --> sc : SignalData instance
+end
+
+deactivate sc
+
+caseGen -> sc : generate_combinations()
+activate sc
+sc -> itertools : product(*InputDataHex)
+itertools --> sc : list of combinations
+deactivate sc
+
+caseGen -> sc : generate_not_trigger_combinations()
+activate sc
+sc -> itertools : product(*InputPreconditionHex)
+itertools --> sc : list of not-trigger combinations
+deactivate sc
+
+caseGen -> tw : new TextWriter(SignalCollection, file_path)
+activate tw
+tw --> caseGen : TextWriter instance
+
+tw -> tw : make_Json_buffer()
+tw --> caseGen : True / False
+
+alt make_Json_buffer == True
+    tw -> fs : write_json()
+    fs --> tw : file written
+end
+
+deactivate tw
+deactivate caseGen
+run_py --> CppApp : Done (CaseResult.json created)
+deactivate run_py
+
+@enduml

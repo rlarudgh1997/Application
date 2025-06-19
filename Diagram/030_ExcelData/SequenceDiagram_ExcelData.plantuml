@@ -1,0 +1,50 @@
+@startuml
+
+actor User order 10
+
+participant GuiExcel order 20
+participant GuiMenu order 30
+participant ControlExcel order 40
+participant ControlMenu order 50
+
+participant ExcelData order 100 #LightBlue
+
+== Excel Data - Write ==
+
+User -> GuiExcel: Edit sheet data
+
+activate GuiExcel
+GuiExcel --> ControlExcel: creatSignal()
+deactivate GuiExcel
+
+activate ControlExcel
+ControlExcel -> ControlExcel : updateSheetData()
+ControlExcel -> ControlExcel : updateSheetDataToExcelData()
+ControlExcel -> ExcelData : setSheetData()
+activate ExcelData
+deactivate ControlExcel
+deactivate ExcelData
+
+
+== Excel Data - Read ==
+
+User -> GuiMenu: TC Gen
+
+activate GuiMenu
+GuiMenu --> ControlMenu: creatSignal()
+deactivate GuiMenu
+
+activate ControlMenu
+ControlMenu --> ControlExcel: sendEvent()
+deactivate ControlMenu
+
+activate ControlExcel
+ControlExcel -> ControlExcel : updateStartTestCase()
+activate ControlExcel
+ControlExcel -> ExcelData : getSheetData()
+activate ExcelData
+ControlExcel <-- ExcelData : result
+deactivate ControlExcel
+deactivate ExcelData
+
+@enduml

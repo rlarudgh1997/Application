@@ -92,7 +92,6 @@ public:
     int isKeywordType(const int& columnIndex, QString& inputData);
     // QList<KeywordInfo> isKeywordTypeInfo(const QVariantList& sheetData, const QList<int>& inputColumnList);
     int isComlumnIndex(const int& sheetIndex, const int& type);
-    int isDataType(const QString& dataTypeStr);
     QPair<int, int> isIGNElapsedType(const QString& singalName);
     QString isIGNElapsedName(const int& ignType);
     QPair<QStringList, QStringList> isConvertedIGNElapsedInfo(const QStringList& ignOriginData);

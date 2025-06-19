@@ -1,0 +1,541 @@
+#
+# @file Trip_Info_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- Trip_Info_CV:
+  sfcVersion: "8.0.2"
+  specVersion: "v0.34"
+  description: "Reference : [CV380] Trip_Info_CV. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - aemInitializeCompleteChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.AEM.Inter_AEMInitializeComplete: mInter_AEMInitializeComplete
+        - SFC.Extension.Param.Par_OdoCorrectionFactor: mPar_OdoCorrectionFactor
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+        - Vehicle.System.Undefined.Inter_ConfigFuelTypeCV: mInter_ConfigFuelTypeCV
+        - Vehicle.System.Config.Inter_ConfigArea: mInter_ConfigArea
+    - actuatorVehicleSpeedChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ActualVehicleSpeed: mInter_ActualVehicleSpeed
+    - fuelConsumptionValueChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_FuelConsumptionValue: mInput_FuelConsumptionValue
+    - fuelConsumptionFcu1Changed:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_FuelConsumption_FCU1: mInput_FuelConsumption_FCU1
+    - fuelConsumptionFcu2Changed:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_FuelConsumption_FCU2: mInput_FuelConsumption_FCU2
+    - electricityConsumptionChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvBatteryCurrentValue: mInput_EvBatteryCurrentValue
+        - Vehicle.CV.Trip_Info_CV.Input_EvBatteryVoltageValue: mInput_EvBatteryVoltageValue
+    - evInstFuelEcoValuePerKwhChanged:
+      inputType: PERIODIC_DB_CYCLETIME
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvInstFuelEcoValuePerKWh: mInput_EvInstFuelEcoValuePerKWh
+    - evDteLowBoundValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDteLowBoundValue: mInput_EvDteLowBoundValue
+    - evDteUpperBoundValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDteUpperBoundValue: mInput_EvDteUpperBoundValue
+    - evDteGuideDtePositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDteGuideDtePositionValue: mInput_EvDteGuideDtePositionValue
+    - evDteGuideCoachPositionValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDteGuideCoachPositionValue: mInput_EvDteGuideCoachPositionValue
+    - tripDistanceUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+    - fuelEcoUnitKmSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_FuelEcoUnitKmSetStatus: mInter_FuelEcoUnitKmSetStatus
+    - fuelEcoUnitMiSetStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_FuelEcoUnitMiSetStatus: mInter_FuelEcoUnitMiSetStatus
+    - displayLanguageStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_DisplayLanguageStatus: mInter_DisplayLanguageStatus
+    - engineOnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_EngineOnStatus: mInter_EngineOnStatus
+    - isgActiveStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Input_Output_Processing.Inter_ISGActiveStatus: mInter_ISGActiveStatus
+    - fuelDetectRealtimeModeStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFCFuel.Fuel_System.Inter_FuelDetectRealtimeModeStatus: mInter_FuelDetectRealtimeModeStatus
+    - imuDrvDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_IMUDrvDoorOpenStatus: mInput_IMUDrvDoorOpenStatus
+    - imuFrDoorOpenStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_IMUFrDoorOpenStatus: mInput_IMUFrDoorOpenStatus
+    - vehicleReadyStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_VehicleReadyStatus: mInput_VehicleReadyStatus
+    - accumInfoManualResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Screen_Control_Logic_CV.Inter_AccumInfoManualResetReq: mInter_AccumInfoManualResetReq
+    - driveInfoManualResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Screen_Control_Logic_CV.Inter_DriveInfoManualResetReq: mInter_DriveInfoManualResetReq
+    - afterRefuelInfoManualResetReqChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Screen_Control_Logic_CV.Inter_AfterRefuelInfoManualResetReq: mInter_AfterRefuelInfoManualResetReq
+    - evDteValuePerKmChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDTEValuePerKm: mInput_EvDTEValuePerKm
+    - bmsChargeStatusAndEvSocDisplayValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_BmsChgStatus: mInput_BmsChgStatus
+        - Vehicle.CV.Trip_Info_CV.Input_BmsDisplaySocValue: mInput_BmsDisplaySocValue
+    - evDteAvnCalcStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDTEAvnCalcStatus: mInput_EvDTEAvnCalcStatus
+    - evDteDisplayOffReqStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDTEDisplayOffReqStatus: mInput_EvDTEDisplayOffReqStatus
+    - evDteGuidePageInfoStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_EvDteGuidePageInfoStatus: mInput_EvDteGuidePageInfoStatus
+    - dtgOdometerChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_DTGOdometer: mInput_DTGOdometer
+    - fcevSofDisplayValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.Trip_Info_CV.Input_FcevSofDisplayValue: mInput_FcevSofDisplayValue
+  outputs:
+      # Numeric value
+    - SFC.Trip_Info.Constant.InstFuelEconomy.Value:
+      description: "DCN: IMG_InstFuelEconomy_value</br>Instantaneous Fuel Economy Value"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Constant.InstFuelEconomyInputType.Value:
+      description: "DCN: IMG_InstFuelEconomyInputType_value</br>Instantaneous Fuel Economy Input Type Value"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Constant.AccumulDistance.Value:
+      description: "DCN: IMG_AccumulDistance_value</br>Accumulated Info Distance Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AccumulDistance.Stat:
+      description: "DCN: IMG_AccumulDistance_value</br>Accumulated Info Distance State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AccumulTime.Value:
+      description: "DCN: IMG_AccumulTime_value</br>Accumulated Info Time Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AccumulTime.Stat:
+      description: "DCN: IMG_AccumulTime_value</br>Accumulated Info Time State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AccumulSpeed.Value:
+      description: "DCN: IMG_AccumulSpeed_value</br>Accumulated Info Speed Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AccumulSpeed.Stat:
+      description: "DCN: IMG_AccumulSpeed_value</br>Accumulated Info Speed State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AccumulFuelEconomy.Value:
+      description: "DCN: IMG_AccumulFuelEconomy_value</br>Accumulated Info Fuel Economy Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AccumulFuelEconomy.Stat:
+      description: "DCN: IMG_AccumulFuelEconomy_value</br>Accumulated Info Fuel Economy State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.DriveDistance.Value:
+      description: "DCN: IMG_DriveDistance_value</br>Driving Info Distance Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.DriveDistance.Stat:
+      description: "DCN: IMG_DriveDistance_value</br>Driving Info Distance State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.DriveTime.Value:
+      description: "DCN: IMG_DriveTime_value</br>Driving Info Time Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.DriveTime.Stat:
+      description: "DCN: IMG_DriveTime_value</br>Driving Info Time State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.DriveSpeed.Value:
+      description: "DCN: IMG_DriveSpeed_value</br>Driving Info Speed Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.DriveSpeed.Stat:
+      description: "DCN: IMG_DriveSpeed_value</br>Driving Info Speed State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.DriveFuelEconomy.Value:
+      description: "DCN: IMG_DriveFuelEconomy_value</br>Driving Info Fuel Economy Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.DriveFuelEconomy.Stat:
+      description: "DCN: IMG_DriveFuelEconomy_value</br>Driving Info Fuel Economy State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AfterRefuelDistance.Value:
+      description: "DCN: IMG_AfterRefuelDistance_value</br>After Refueling Info Distance Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AfterRefuelDistance.Stat:
+      description: "DCN: IMG_AfterRefuelDistance_value</br>After Refueling Info Distance State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AfterRefuelTime.Value:
+      description: "DCN: IMG_AfterRefuelTime_value</br>After Refueling Info Time Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AfterRefuelTime.Stat:
+      description: "DCN: IMG_AfterRefuelTime_value</br>After Refueling Info Time State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AfterRefuelSpeed.Value:
+      description: "DCN: IMG_AfterRefuelSpeed_value</br>After Refueling Info Speed Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AfterRefuelSpeed.Stat:
+      description: "DCN: IMG_AfterRefuelSpeed_value</br>After Refueling Info Speed State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.AfterRefuelFuelEconomy.Value:
+      description: "DCN: IMG_AfterRefuelFuelEconomy_value</br>After Refueling Info Fuel Economy Value"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: DISPLAY, 0x3: MAX
+    - SFC.Trip_Info.Constant.AfterRefuelFuelEconomy.Stat:
+      description: "DCN: IMG_AfterRefuelFuelEconomy_value</br>After Refueling Info Fuel Economy State"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue1
+      # Numeric value
+    - SFC.Trip_Info.Constant.Odometer.Value:
+      description: "DCN: IMG_Odometer_value</br>Odometer Value"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: ON, 0x2: BLINK4, 0x3: MAX
+    - SFC.Trip_Info.Constant.Odometer.Stat:
+      description: "DCN: IMG_Odometer_Stat</br>Odometer Stat"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        ON: 0x1
+        BLINK4: 0x2
+        MAX: 0x3
+      # Numeric value
+    - SFC.Trip_Info.Constant.ElecDTE.Value:
+      description: "DCN: IMG_ElecDTE_value</br>Elec DTE Value"
+      dataType: HInt64
+      group: ElecDTE
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: VALUE, 0x3: MAX
+    - SFC.Trip_Info.Constant.ElecDTE.Stat:
+      description: "DCN: IMG_ElecDTE_value</br>Elec DTE State"
+      dataType: HUInt64
+      group: ElecDTE
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        VALUE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KM_PER_LITTER, 0x2: KM_PER_M3, 0x3: LITTER_PER_KM, 0x4: M3_PER_KM, 0x5: US_MPG, 0x6: UK_MPG, 0x7: KM_PER_KWH, 0x8: KWH_PER_KM, 0x9: MILE_PER_KWH, 0xA: KM_PER_KG, 0xB: KG_PER_KM, 0xC: MPGE, 0xD: MAX
+    - SFC.Trip_Info.Constant.FuelEcoUnit.Stat:
+      description: "DCN: IMG_FuelEcoUnit_stat</br>Trip Fuel Eco Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_LITTER: 0x1
+        KM_PER_M3: 0x2
+        LITTER_PER_KM: 0x3
+        M3_PER_KM: 0x4
+        US_MPG: 0x5
+        UK_MPG: 0x6
+        KM_PER_KWH: 0x7
+        KWH_PER_KM: 0x8
+        MILE_PER_KWH: 0x9
+        KM_PER_KG: 0xA
+        KG_PER_KM: 0xB
+        MPGE: 0xC
+        MAX: 0xD
+      # 0x0: NONE, 0x1: KM, 0x2: MILE, 0x3: MAX
+    - SFC.Trip_Info.Constant.TripDistanceUnit.Stat:
+      description: "DCN: IMG_TripDistanceUnit_stat</br>Trip Distance Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM: 0x1
+        MILE: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: KM_PER_HOUR, 0x2: MILE_PER_HOUR, 0x3: MAX
+    - SFC.Trip_Info.Constant.TripVehicleSpeedUnit.Stat:
+      description: "DCN: IMG_TripVehicleSpeedUnit_stat</br>Trip Speed Unit State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        KM_PER_HOUR: 0x1
+        MILE_PER_HOUR: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: TEXT, 0x2: SYMBOL, 0x3: MAX
+    - SFC.Trip_Info.Constant.TripInfoSubTitleType.Stat:
+      description: "DCN: IMG_TripInfoSubTitleType_stat</br>Trip Info Sub Title Type State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        TEXT: 0x1
+        SYMBOL: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: GAS_STATION, 0x2: GAS_STATION_PLUG, 0x3: PLUG, 0x4: H2, 0x5: MAX
+    - SFC.Trip_Info.Constant.DTESymbol.Stat:
+      description: "DCN: IMG_DTESymbol_stat</br>Trip DTE Symbol State"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        GAS_STATION: 0x1
+        GAS_STATION_PLUG: 0x2
+        PLUG: 0x3
+        H2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueA:
+      description: "DCN: IMG_DTEDashBlink_stat</br>Blink ValueA"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Constant.DTEDashBlink.BlinkValueB:
+      description: "DCN: IMG_DTEDashBlink_stat</br>Blink ValueB"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Constant.DTEAvnCal.Stat:
+      description: "DCN: IMG_DTEAvnCal_stat</br>DTEAvnCal"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Constant.DTEDashDisplayForEv.Stat:
+      description: "DCN: IMG_DTEDashDisplayForEv_stat</br>DTEDashDisplayForEv"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Style is E00000
+    - SFC.Trip_Info.Event.DistanceToEmptyDisplay.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Event.DistanceToEmptyDisplay.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoDistanceKm:
+      description: "Inter_DriveInfoDistanceKm"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoDistanceMi:
+      description: "Inter_DriveInfoDistanceMi"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoTime:
+      description: "Inter_DriveInfoTime"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoVehicleSpeedKph:
+      description: "Inter_DriveInfoVehicleSpeedKph"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoVehicleSpeedMph:
+      description: "Inter_DriveInfoVehicleSpeedMph"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Trip_Info.Inter_DriveInfoFuelEcoValue:
+      description: "Inter_DriveInfoFuelEcoValue"
+      dataType: HDouble
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.Trip_Info.Constant.DTEDashBlinkDisplayForEv.Stat:
+      description: "DCN: IMG_DTEDashBlinkDisplayForEv_stat</br>DTEDashBlinkDisplayForEv"
+      dataType: HUInt64
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Numeric value
+    - SFC.Trip_Info.Gcov.Private_OdometerTotal:
+      description: "Test Node for Periodic TC: Private_OdometerTotal"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Gcov.Private_FuelConsumptionTotal:
+      description: "Test Node for Periodic TC: Private_FuelConsumptionTotal"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Gcov.Private_ElecFuelConsumptionTotal:
+      description: "Test Node for Periodic TC: Private_ElecFuelConsumptionTotal"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Gcov.Private_HydrogenConsumptionTotal:
+      description: "Test Node for Periodic TC: Private_HydrogenConsumptionTotal"
+      dataType: HDouble
+      # Numeric value
+    - SFC.Trip_Info.Gcov.Private_DrivingTimeTotal:
+      description: "Test Node for Periodic TC: Private_DrivingTimeTotal"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Trip_Info.Inter_AccumInfoResetReq:
+      description: "Inter_AccumInfoResetReq for ISG time reset"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        RESET_REQ: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Trip_Info.Inter_DriveInfoResetReq:
+      description: "Inter_DriveInfoResetReq for ISG time reset"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        RESET_REQ: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DEFAULT, 0x2: RESET_REQ, 0x3: MAX
+    - SFC.Trip_Info.Inter_AfterRefuelInfoResetReq:
+      description: "Inter_AfterRefuelInfoResetReq for ISG time reset"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        DEFAULT: 0x1
+        RESET_REQ: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: NORMAL, 0x2: RECALCULATE, 0x3: LOW_DTE, 0x4: ERROR, 0x5: MAX
+    - SFC.Trip_Info.Constant.DTEGuideFunctionStatus.Stat:
+      description: "DCN: IMG_DTEGuideFunctionStatus_stat</br>Ev DTE Guide Function state"
+      dataType: HUInt64
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        RECALCULATE: 0x2
+        LOW_DTE: 0x3
+        ERROR: 0x4
+        MAX: 0x5
+      # Numeric value
+    - SFC.Trip_Info.Constant.DTEGuideLowBound.Value:
+      description: "DCN: IMG_DTEGuideLowBound_value</br>Ev DTE Low Bound Value"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Trip_Info.Constant.DTEGuideUpperBound.Value:
+      description: "DCN: IMG_DTEGuideUpperBound_value</br>Ev DTE Upper Bound Value"
+      dataType: HUInt64
+      # Numeric value
+    - SFC.Trip_Info.Constant.DTEGuideMainDtePosition.Value:
+      description: "DCN: IMG_DTEGuideMainDtePosition_value</br>Ev DTE Main DTE Position Value"
+      dataType: HInt64
+      # Numeric value
+    - SFC.Trip_Info.Constant.DTEGuideCoachPosition.Value:
+      description: "DCN: IMG_DTEGuideCoachPosition_value</br>Ev DTE Coach Position Value"
+      dataType: HInt64

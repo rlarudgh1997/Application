@@ -1,0 +1,406 @@
+#
+# @file FCEV_Fuel_System.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2022  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- FCEV_Fuel_System:
+  sfcVersion: "8.0.0"
+  specVersion: "v0.30"
+  description: "Reference : [CV690] FCEV_Fuel_System. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+    - lowFuelWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevLowFuelWarnStatus: mInput_FcevLowFuelWarnStatus
+    - sofDisplayValueChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevSofDisplayValue: mInput_FcevSofDisplayValue
+    - emptyStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevFuelEmptyStatus: mInput_FcevFuelEmptyStatus
+    - tankSystemWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_H2TankSystemWarnStatus: mInput_H2TankSystemWarnStatus
+    - tankFillCountOverWarnStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_H2TankFillCountOverWarnStatus: mInput_H2TankFillCountOverWarnStatus
+    - fuelDoorStatusFromHMUChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FuelDoorStatusFromHMU: mInput_FuelDoorStatusFromHMU
+    - doorSensorFaultStatusChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevFuelDoorSensorFaultWarnStatus: mInput_FcevFuelDoorSensorFaultWarnStatus
+    - tankFillCountOverWarnStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_H2TankFillCountOverWarnStatus2: mInput_H2TankFillCountOverWarnStatus2
+    - tankSystemWarnStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_H2TankSystemWarnStatus2: mInput_H2TankSystemWarnStatus2
+    - fuelDoorStatusFromHMU2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FuelDoorStatusFromHMU2: mInput_FuelDoorStatusFromHMU2
+    - doorSensorFaultStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevFuelDoorSensorFaultWarnStatus2: mInput_FcevFuelDoorSensorFaultWarnStatus2
+    - emptyStatus2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevFuelEmptyStatus2: mInput_FcevFuelEmptyStatus2
+        - Vehicle.CV.FCEV_Fuel_System.Input_FcevLowFuelWarnStatus2: mInput_FcevLowFuelWarnStatus2
+    - configHMU2Changed:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Undefined.Inter_ConfigHMU2: mInter_ConfigHMU2
+  outputs:
+      # Numeric value (0~100%)
+    - SFC.FCEV_Fuel_System.Constant.FCGauge.Value:
+      description: "DCN: IMG_FC_Gauge_value</br>Value of FC Gauge"
+      dataType: HUInt64
+      # 0x0: NONE, 0x1: NORMAL, 0x2: BLINK2, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Constant.FCGauge.Stat:
+      description: "DCN: IMG_FC_Gauge_Stat</br>Stat of FC Gauge"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        NORMAL: 0x1
+        BLINK2: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Constant.FCGauge.BlinkValueA:
+      description: "DCN: IMG_FC_Gauge_Stat</br>Blink Value A"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Constant.FCGauge.BlinkValueB:
+      description: "DCN: IMG_FC_Gauge_Stat</br>Blink Value B"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum: SFC_Common_Enum_CV.EnumValue6
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.LowFuel.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.LowFuel.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.LowFuel.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.LowFuel.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.LowFuel.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event1
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event2
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event2
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event2
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event3
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event3
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event3
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event4
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event4
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event4
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event5
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event5
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event5
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.LowFuel2.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.LowFuel2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.LowFuel2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event6
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.LowFuel2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event6
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.LowFuel2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event6
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn2.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event7
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event7
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.TankSystemWarn2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event7
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn2.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event8
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event8
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.TankFillCountOverWarn2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event8
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU2.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event9
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event9
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.FuelDoorStatusFromHMU2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event9
+      # Style is E00000
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn2.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn2.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
+      # Style is SND_NAME
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn2.LinkedSound.ID:
+      description: "Linked Sound ID"
+      dataType: HString
+      group: Event10
+      # 0x0: NONE, 0x1: REPEAT_COUNT, 0x2: REPEAT_MINMAX, 0x3: DURATION, 0x4: DURATION_MINMAX, 0x5: INFINITE, 0x6: BLINK, 0x7: MAX
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn2.LinkedSound.Type:
+      description: "Linked Sound Type"
+      dataType: HUInt64
+      group: Event10
+      valueEnum: SFC_Common_Enum_CV.Event.LinkedSound.Type
+      # Sound output by count
+    - SFC.FCEV_Fuel_System.Event.FuelDoorSensorFaultWarn2.LinkedSound.RepeatCount:
+      description: "Linked Sound Repeat Count"
+      dataType: HUInt64
+      group: Event10

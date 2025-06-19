@@ -1,0 +1,157 @@
+#
+# @file CruiseControl_CV.yml
+# @author Infotainment Software Development Team
+#
+# Copyright (c) 2023  Hyundai Motor Company,
+# All Rights Reserved.
+#
+# Use and copying of this software and preparation of derivative works
+# based upon this software are permitted. Any copy of this software or
+# of any derivative work must include the above copyright notice, this
+# paragraph and the one after it. Any distribution of this software or
+# derivative works must comply with all applicable laws.
+#
+# This software is made available AS IS, and COPYRIGHT OWNERS DISCLAIMS
+# ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE, AND NOTWITHSTANDING ANY OTHER PROVISION CONTAINED HEREIN, ANY
+# LIABILITY FOR DAMAGES RESULTING FROM THE SOFTWARE OR ITS USE IS
+# EXPRESSLY DISCLAIMED, WHETHER ARISING IN CONTRACT, TORT (INCLUDING
+# NEGLIGENCE) OR STRICT LIABILITY, EVEN IF COPYRIGHT OWNERS ARE ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGES.
+#
+
+- CruiseControl_CV:
+  sfcVersion: "2.0.0"
+  specVersion: "v0.36"
+  description: "Reference : [CV820] CruiseControl_CV. Contains : Constant, Event. Recommend: VALUE_CHANGED"
+  subscriptions:
+    - ignElapseOn0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOn0ms: mElapsedOn0ms
+    - ignElapseOff0msChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Private.IGNElapsed.ElapsedOff0ms: mElapsedOff0ms
+    - configChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.System.Config.Inter_ConfigVehicleType: mInter_ConfigVehicleType
+        - Vehicle.System.Undefined.Inter_ConfigFuelTypeCV: mInter_ConfigFuelTypeCV
+        - Vehicle.System.Config.Inter_ConfigAdasSCC: mInter_ConfigAdasSCC
+    - engineCcActiveChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.CruiseControl_CV.Input_EngineCcActive: mInput_EngineCcActive
+    - engineCcSetSpeedChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.CruiseControl_CV.Input_EngineCcSetSpeed: mInput_EngineCcSetSpeed
+    - engineCcStateChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - Vehicle.CV.CruiseControl_CV.Input_EngineCcState: mInput_EngineCcState
+    - tripDistanceUnitChanged:
+      inputType: VALUE_CHANGED
+      duration:
+      values:
+        - SFC.Extension.Settings.Inter_TripDistanceUnit: mInter_TripDistanceUnit
+  outputs:
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: CRUISE_PAUSE, 0x3: CRUISE_ACTIVE, 0x4: BLINK2, 0x5: MAX
+    - SFC.CruiseControl_CV.Constant.CcColor.Stat:
+      description: "DCN: IMG_CcColor_stat</br>Stat of CcColor"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        CRUISE_PAUSE: 0x2
+        CRUISE_ACTIVE: 0x3
+        BLINK2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+    - SFC.CruiseControl_CV.Constant.CcColor.BlinkValueA:
+      description: "DCN: IMG_CcColor_stat</br>BlinkValueA of CcColor"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: ON, 0x3: MAX
+    - SFC.CruiseControl_CV.Constant.CcColor.BlinkValueB:
+      description: "DCN: IMG_CcColor_stat</br>BlinkValueB of CcColor"
+      dataType: HUInt64
+      group: Constant1
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: SPEED_OFF, 0x2: SPEED_PAUSE, 0x3: SPEED_ACTIVE, 0x4: BLINK2, 0x5: MAX
+    - SFC.CruiseControl_CV.Constant.CcSpeed.Stat:
+      description: "DCN: IMG_CcSpeed_stat</br>Stat of CcSpeed"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        SPEED_OFF: 0x1
+        SPEED_PAUSE: 0x2
+        SPEED_ACTIVE: 0x3
+        BLINK2: 0x4
+        MAX: 0x5
+      # 0x0: NONE, 0x1: SPEED_OFF, 0x2: ON, 0x3: MAX
+    - SFC.CruiseControl_CV.Constant.CcSpeed.BlinkValueA:
+      description: "DCN: IMG_CcSpeed_stat</br>BlinkValueA of CcSpeed"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        SPEED_OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # 0x0: NONE, 0x1: SPEED_OFF, 0x2: ON, 0x3: MAX
+    - SFC.CruiseControl_CV.Constant.CcSpeed.BlinkValueB:
+      description: "DCN: IMG_CcSpeed_stat</br>BlinkValueB of CcSpeed"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        SPEED_OFF: 0x1
+        ON: 0x2
+        MAX: 0x3
+      # IMG_CcSpeed_Stat이 SPEED_OFF이면 0, 그 외 Input_EngineCcSetSpeed + 2
+    - SFC.CruiseControl_CV.Constant.CcSpeed.Value:
+      description: "DCN: IMG_CcSpeed_value</br>Value of CcSpeed"
+      dataType: HUInt64
+      group: Constant2
+      # 0x0: NONE, 0x1: DISPLAY_OFF, 0x2: KMH, 0x3: MPH, 0x4: MAX
+    - SFC.CruiseControl_CV.Constant.CcSpeedUnit.Stat:
+      description: "DCN: IMG_CcSpeedUnit_stat</br>Stat of CcSpeedUnit"
+      dataType: HUInt64
+      group: Constant2
+      valueEnum:
+        NONE: 0x0
+        DISPLAY_OFF: 0x1
+        KMH: 0x2
+        MPH: 0x3
+        MAX: 0x4
+      # Style is E00000
+    - SFC.CruiseControl_CV.Event.CcSummary.ID:
+      description: "Event Scene ID"
+      dataType: HString
+      group: Event1
+      # 0x0: NONE, 0x1: OFF, 0x2: ON, 0x3: MAX
+    - SFC.CruiseControl_CV.Event.CcSummary.Stat:
+      description: "State of Event"
+      dataType: HUInt64
+      group: Event1
+      valueEnum: SFC_Common_Enum_CV.Event.Stat
