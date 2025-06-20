@@ -1186,7 +1186,6 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
             checkTitle = false;
         } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
             titleList = manualTCTitle.toStringList();
-            checkTitle = false;
         } else {
             titleList = otherTitle.toStringList();
         }
@@ -1235,6 +1234,22 @@ QList<QVariantList> ExcelUtil::openExcelFile(const QString& filePath) {
                         temp.insert(insertIndex, appendText);
                     } else if (properytType == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
                         // do nothing
+                        if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
+                            insertIndex = 0;             // Befor Index   : TCName
+                            appendText = "";  // Default Value : TCName
+                            qDebug() << "Append Data Null";
+                        }
+
+                        if (appendText.contains(mergeStart)) {
+                            appendText = mergeStart;
+                        } else if (appendText.contains(mergeEnd)) {
+                            appendText = mergeEnd;
+                        } else if (appendText.contains(merge)) {
+                            appendText = merge;
+                        } else {
+                            appendText.clear();
+                        }
+                        temp.insert(insertIndex, appendText);
                     } else {
                         if (index == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check)) {
                             insertIndex = 0;             // Befor Index   : TCName

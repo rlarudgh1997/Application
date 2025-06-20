@@ -301,8 +301,15 @@ void Dialog::connectSelectList(const bool& state) {
         });
         connect(mGui->SelectListItemList, &QAbstractItemView::clicked, [=](const QModelIndex &index) {
             int currentIndex = index.row();
+            if (mModel.item(currentIndex, 0) == nullptr) {
+                return;
+            }
+            QString currentText = mModel.item(currentIndex, 0)->text();
+            if (currentText.size() == 0) {
+                return;
+            }
             bool currentCheck = (mModel.item(currentIndex, 0)->checkState() == Qt::Checked);
-            // qDebug() << "SelectListItemList :" << previuousIndex << "->" << currentIndex << ", Check :" << currentCheck;
+            // qDebug() << "SelectListItemList :" << currentIndex << ", Check :" << currentCheck;
             if (getProperty(DataTypeMultiCheck).toBool()) {
                 if (currentCheck) {
                     mModel.item(currentIndex, 0)->setCheckState(Qt::Unchecked);
@@ -740,10 +747,13 @@ void Dialog::updateSelectListCheckState(const bool& allCheck, const QStringList&
         if (mModel.item(rowIndex, 0) == nullptr) {
             continue;
         }
+        QString selectName = mModel.item(rowIndex, 0)->text();
+        if (selectName.size() == 0) {
+            return;
+        }
         if (selectList.size() == 0) {
             mModel.item(rowIndex, 0)->setCheckState((allCheck) ? (Qt::Checked) : (Qt::Unchecked));
         } else {
-            QString selectName = mModel.item(rowIndex, 0)->text();
             bool select = selectList.contains(selectName);
             mModel.item(rowIndex, 0)->setCheckState((select) ? (Qt::Checked) : (Qt::Unchecked));
         }
@@ -949,7 +959,8 @@ bool Dialog::updateSelectList(const QVariantList& info) {
     for (const auto& rowValue : rowList) {
         delete mModel.item(rowIndex, columnIndex);
         mModel.setItem(rowIndex, columnIndex, new QStandardItem(rowValue));
-        mModel.item(rowIndex, columnIndex)->setCheckable(true);
+        // Jira : https://ivis.atlassian.net/browse/SFC-2333
+        mModel.item(rowIndex, columnIndex)->setCheckable(rowValue.size() > 0);
         mModel.item(rowIndex, columnIndex)->setFlags(
             mModel.item(rowIndex, columnIndex)->flags() & ~(Qt::ItemIsEditable | Qt::ItemIsUserCheckable));
         rowIndex++;

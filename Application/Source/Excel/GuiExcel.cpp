@@ -421,10 +421,11 @@ int GuiExcel::isCheckState(const int& sheetIndex, const int& rowIndex, const int
         (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
         checkVisible = false;
     } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
-        checkVisible = ((columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) ||
-                      (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt)) ||
-                      // (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) ||
-                      (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption)));
+        checkVisible = ((columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Check)) ||
+                        (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) ||
+                        (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt)) ||
+                        // (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) ||
+                        (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption)));
     } else {
         checkVisible = (columnIndex == static_cast<int>(ivis::common::ExcelSheetTitle::Other::Check));
     }
@@ -1376,6 +1377,7 @@ void GuiExcel::updateSheetHeaderAdjust(const int& sheetIndex, const bool& resize
 }
 
 void GuiExcel::updateSheetHorizontalHeaderFixed(const int& sheetIndex, const int& columnIndex, const int& width) {
+#if 0
     if (checkExcelSheet(sheetIndex) == false) {
         return;
     }
@@ -1397,14 +1399,17 @@ void GuiExcel::updateSheetHorizontalHeaderFixed(const int& sheetIndex, const int
             defaultWidth = std::max(defaultWidth, itemContentWidth) + 1;
         }
     }
+
     // int columnWidth = currentSheet->columnWidth(columnIndex);
     // int sectionSize = currentSheet->horizontalHeader()->sectionSizeHint(columnIndex);
+    // qDebug() << "updateSheetHorizontalHeaderFixed :" << defaultWidth << columnWidth << sectionSize;
 
     if (width < defaultWidth) {
         setColumnHeaderResize(true);
         currentSheet->horizontalHeader()->resizeSection(columnIndex, defaultWidth);
         setColumnHeaderResize(false);
     }
+#endif
 }
 
 void GuiExcel::updateSheetDefaultFocus(const int& sheetIndex, const int& row, const int& column) {
@@ -1513,7 +1518,8 @@ void GuiExcel::updateCheckState(const int& sheetIndex, const int& columnIndex, c
         (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetDependentOn)) {
         return;
     } else if (sheetIndex == ivis::common::PropertyTypeEnum::PropertyTypeOriginSheetManualTC) {
-        if ((columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) &&
+        if ((columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::Check)) &&
+            (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::RunnableOpt)) &&
             (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::ConfigOpt)) &&
             // (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleMode)) &&
             (columnIndex != static_cast<int>(ivis::common::ExcelSheetTitle::ManualTC::CycleOption))) {
@@ -1855,7 +1861,7 @@ void GuiExcel::updateDisplayAutoComplete(const int& sheetIndex, const int& row, 
 
     // qDebug() << "updateDisplayAutoComplete";
     // qDebug() << "\t Info :" << sheetIndex << row << column;
-    // qDebug() << "\t Type :" << autoCompleteType;
+    // qDebug() << "\t Type :" << static_cast<int>(autoCompleteType);
 
     switch (autoCompleteType) {
         case ivis::common::AutoCompleteEnum::AutoComplete::GenType: {

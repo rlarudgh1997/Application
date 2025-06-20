@@ -145,10 +145,9 @@ QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
         }
     }
 
-    qDebug() << "========================================================================================================";
-    qDebug() << "isSfcFileInfo";
-    qDebug() << "\t Info :" << signalName << signalType << moduleName;
-    qDebug() << "\t File :" << fileList;
+    // qDebug() << "========================================================================================================";
+    // qDebug() << "isSfcFileInfo";
+    // qDebug() << "\t Info :" << signalName << signalType << moduleName;
 
     QString ymlFile;
     for (const auto& file : fileList) {
@@ -165,7 +164,7 @@ QString SignalDataManager::isSfcFileInfo(const QString& signalName) {
             break;  // CV : fileList.at(0 ~ max) 파일중 "_CV" 가 있는 파일 사용
         }
     }
-    qDebug() << "\t Yml :" << (ymlFile.size() > 0) << ymlFile;
+    // qDebug() << "\t Yml :" << (ymlFile.size() > 0) << ymlFile;
 
     return ymlFile;
 }
@@ -232,7 +231,7 @@ QMap<int, QStringList> SignalDataManager::isSignalFileList(const QString& signal
         fileList[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum].append(isSfcFileInfo(signalName));
     }
 
-#if 1
+#if 0
     qDebug() << "isSignalFileList :" << signalName << vehicleType;
     for (const auto& key : fileList.keys()) {
         qDebug() << "\t File[" << key << "] :" << fileList[key];
@@ -415,14 +414,14 @@ QMap<int, QStringList> SignalDataManager::isParsingFileDataInfo(const QString& s
 
         if (inputDataType == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
             sfcDataInfo[inputDataType] = valueEunm;
-            // qDebug() << "\t Value    Size :" << valueEunm.size() << valueEunm;
+            // qDebug() << "\t Value    Size :" << valueEunm.size();
         } else {
             sfcDataInfo[inputDataType] = matchingTable;
-            // qDebug() << "\t Matching Size :" << matchingTable.size() << matchingTable;
+            // qDebug() << "\t Matching Size :" << matchingTable.size();
             if ((signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::VehicleSystem)) &&
                 (valueEunm.size() > 0)) {
                 sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = valueEunm;
-                // qDebug() << "\t Value    Size :" << valueEunm.size() << valueEunm;
+                // qDebug() << "\t Value    Size :" << valueEunm.size();
             }
         }
     }
@@ -461,6 +460,7 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
         QMap<int, QStringList> sfcCommonDataInfo = isParsingFileDataInfo(sfcCommonSignal, inputData, fileList, dataType);
         QStringList sfcCommonValueEnum = sfcCommonDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum];
         sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = sfcCommonValueEnum;
+        sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = isValidValueEnum(signalName, sfcDataInfo);
 #if 0
         qDebug() << "=================================================================================================";
         qDebug() << "isSignalDataList";
@@ -472,7 +472,6 @@ QMap<int, QStringList> SignalDataManager::isSignalDataList(const QString& signal
         qDebug() << "=================================================================================================\n\n";
 #endif
     }
-    sfcDataInfo[ivis::common::InputDataTypeEnum::InputDataTypeValueEnum] = isValidValueEnum(signalName, sfcDataInfo);
 
     return sfcDataInfo;
 }

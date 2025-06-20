@@ -88,7 +88,7 @@ private:
     const QString mStrExit = QString("Exit");
     const int mNumExit = 0;
     const int mNumSelectAll = 800;
-    const int mNumManualInput = 900;
+    // const int mNumManualInput = 900;
 
 #if defined (USE_TEST_CASE_THREAD)
     QSharedPointer<QThread> mThread;

@@ -1040,7 +1040,7 @@ QList<ManualData> ExcelDataManager::isManualDataList() {
         manualDataList.append(manualData);
     }
 
-#if 1
+#if 0
     qDebug() << "isManualDataList :" << manualDataList.size();
     for (const auto& manualData : manualDataList) {
         qDebug() << "\t TCName        :" << manualData.getTCName();

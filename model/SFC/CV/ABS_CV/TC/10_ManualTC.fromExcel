@@ -1,4 +1,4 @@
 0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16
 TCName	VehicleType	RunnableOpt	ConfigOpt	CycleOption	CyclePeriod(ms)	CycleDelta(%)	CycleDuration(ms)	CycleMode	PreconditionSignal	PreconditionValue	InputSignal	InputValue	InitSignal	InitValue	OutputSignal	OutputValue
-[MergeStart]aasd	[MergeStart]EV	[MergeStart]O	[MergeStart]O	[MergeStart]O	[MergeStart]12	[MergeStart]100	[MergeStart]234	[MergeStart]2	Vehicle.CV.Cooling_System.Input_LowATMCoolantWarningStatus	ON	Vehicle.CV.Cooling_System.Input_LowATMCoolantWarningStatus	OFF				
-[MergeEnd]aasd	[MergeEnd]EV	[MergeEnd]O	[MergeEnd]O	[MergeEnd]O	[MergeEnd]12	[MergeEnd]100	[MergeEnd]234	[MergeEnd]2	Vehicle.CV.xEV_Battery_Warning.Input_BmsCluAlarm3rdStatus	ON	Vehicle.CV.xEV_Battery_Warning.Input_BmsCluAlarm3rdStatus	OFF				
+[MergeStart]Test	[MergeStart]EV	[MergeStart]O	[MergeStart]O	[MergeStart]O	[MergeStart]O	[MergeStart]100	[MergeStart]234	[MergeStart]2	Vehicle.CV.Cooling_System.Input_LowATMCoolantWarningStatus	ON	Vehicle.CV.Cooling_System.Input_LowATMCoolantWarningStatus	OFF				
+[MergeEnd]Test	[MergeEnd]EV	[MergeEnd]O	[MergeEnd]O	[MergeEnd]O	[MergeEnd]O	[MergeEnd]100	[MergeEnd]234	[MergeEnd]2	Vehicle.CV.xEV_Battery_Warning.Input_BmsCluAlarm3rdStatus	ON	Vehicle.CV.xEV_Battery_Warning.Input_BmsCluAlarm3rdStatus	OFF				

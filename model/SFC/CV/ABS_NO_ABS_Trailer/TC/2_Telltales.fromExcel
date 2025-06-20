@@ -1,0 +1,8 @@
+0	1	2	3	4	5	6	7	8	9	10	11
+Check	TCName	GenType	VehicleType	Config	Result	Case	Input_Signal	Input_Data	Output_Signal	isInitialize	Output_Value
+[MergeStart]O	[MergeStart]IMG_TelltaleABSTrailerLamp_stat	[MergeStart]	[MergeStart]	[MergeStart]	[MergeStart]ON	[MergeStart]Input_ABSTrailerLampStatus == ON	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.ABS_NO_ABS_Trailer.Telltale.ABSTrailerLamp.Stat	O	0x2
+[Merge]O	[Merge]IMG_TelltaleABSTrailerLamp_stat	[Merge]	[Merge]	[Merge]	[MergeEnd]ON	[MergeEnd]Input_ABSTrailerLampStatus == ON	Vehicle.CV.ABS_NO_ABS_Trailer.Input_ABSTrailerLampStatus	ON			
+[MergeEnd]O	[MergeEnd]IMG_TelltaleABSTrailerLamp_stat	[MergeEnd]	[MergeEnd]	[MergeEnd]	OFF	Others			SFC.ABS_NO_ABS_Trailer.Telltale.ABSTrailerLamp.Stat	O	0x1
+[MergeStart]O	[MergeStart]IMG_TelltaleNoABSTrailerLamp_stat	[MergeStart]	[MergeStart]	[MergeStart]	[MergeStart]ON	[MergeStart]Input_NoABSTrailerLampStatus == ON	SFC.Private.IGNElapsed.ElapsedOn0ms	D’	SFC.ABS_NO_ABS_Trailer.Telltale.NoABSTrailerLamp.Stat	O	0x2
+[Merge]O	[Merge]IMG_TelltaleNoABSTrailerLamp_stat	[Merge]	[Merge]	[Merge]	[MergeEnd]ON	[MergeEnd]Input_NoABSTrailerLampStatus == ON	Vehicle.CV.ABS_NO_ABS_Trailer.Input_NoABSTrailerLampStatus	ON			
+[MergeEnd]O	[MergeEnd]IMG_TelltaleNoABSTrailerLamp_stat	[MergeEnd]	[MergeEnd]	[MergeEnd]	OFF	Others			SFC.ABS_NO_ABS_Trailer.Telltale.NoABSTrailerLamp.Stat	O	0x1

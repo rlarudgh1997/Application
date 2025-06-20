@@ -500,8 +500,8 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
             }
         }
 
-        if (selectedItems.size() == 0) {
 #if 0
+        if (selectedItems.size() == 0) {
             QStringList tempSelItems;
             selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
             for (const auto& item : selectedItems) {
@@ -510,27 +510,42 @@ QStringList TestCase::parsingModules(const QStringList& arguments) {
                 }
             }
             selectedItems = tempSelItems;
-#else
-            QStringList tempSelItems;
-            selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
-            for (const auto& item : selectedItems) {
-                if (itemList.indexOf(item) >= 0) {
-                    tempSelItems.append(item);
-                } else {
-                    auto sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath);
-                    auto defaultPath = QString("%1/SFC/").arg(sfcModelPath.toString());
-                    for (const auto& item : selectedItems) {
-                        QString filePath = ExcelUtil::instance().data()->isModuleFilePath(defaultPath, item, QString(".xlsx"));
-                        if (filePath.size() == 0) {
-                            continue;
-                        }
-                        tempSelItems.append(filePath);
-                    }
-                }
-            }
-            selectedItems = tempSelItems;
-#endif
         }
+#else
+        QStringList tempSelItems;
+        QStringList itemListLower;
+        for (const auto& item : itemList) {
+            itemListLower.append(item.toLower());
+        }
+        while (tempSelItems.size() == 0) {
+            selectedItems = selectMultipleOptionsWithNumbers(ExcuteTypeParsingModule, itemList);
+            for (const auto& item : selectedItems) {
+                int index = itemListLower.indexOf(item.toLower());
+                if (index >= 0) {
+                    tempSelItems.append(itemList.at(index));
+                }
+            }
+
+            if (tempSelItems.size() == 0) {  // Manual Input or Module Name Input 인 경우 폴더에 파일 존재 확인함
+                auto sfcModelPath = ConfigSetting::instance().data()->readConfig(ConfigInfo::ConfigTypeSfcModelPath);
+                auto defaultPath = QString("%1/SFC/").arg(sfcModelPath.toString());
+                for (const auto& item : selectedItems) {
+                    QString filePath = ExcelUtil::instance().data()->isModuleFilePath(defaultPath, item, QString(".xlsx"));
+                    if (filePath.size() == 0) {
+                        continue;
+                    }
+                    tempSelItems.append(filePath);
+                }
+            }
+            selectedItems = tempSelItems;
+
+            if (selectedItems.size() == 0) {
+                QString displayText(QString("\nThe module name you entered does not exist.\n\n\n"));
+                QTextStream output(stdout);
+                output << displayText << Qt::flush;
+            }
+        }
+#endif
     }
     // qDebug() << "parsingModules :" << selectedItems;
 
@@ -613,13 +628,14 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
         if (excuteType == ExcuteTypeParsingModule) {
             displayText.append(
                 QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(mNumSelectAll, 3).arg("Select All", -fixedWidth));
-            displayText.append(
-                QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(mNumManualInput, 3).arg("Manual Input", -fixedWidth));
+            // displayText.append(
+            //     QString("\033[33m%1\033[0m. \033[33m%2\033[0m\n").arg(mNumManualInput, 3).arg("Manual Input", -fixedWidth));
         }
         displayText.append(QString("\033[31m%1\033[0m. \033[31m%2\033[0m\n").arg(mNumExit, 3).arg(itemList.at(0), -fixedWidth));
 
         displayText.append(QString(lineCount, '*') + QString("\n\n\n"));
-        displayText.append(QString("Enter the numbers of your choices %1: ").arg((subTips) ? ("separated by spaces ") : ("")));
+        displayText.append(QString("Enter the numbers or module names of your choices %1: ")
+                                   .arg((subTips) ? ("separated by spaces ") : ("")));
     }
 
     QTextStream output(stdout);
@@ -629,9 +645,11 @@ void TestCase::drawTerminalMenu(const int& excuteType, const QStringList& itemLi
 QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, const QStringList& itemList) {
     QTextStream input(stdin);
 
-    int currExcuteType = excuteType;
     QStringList selecteItems;
     drawTerminalMenu(excuteType, itemList);
+
+#if 0
+    int currExcuteType = excuteType;
 
     while (true) {
         QString inputLine = input.readLine().trimmed();
@@ -645,7 +663,8 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
 
         for (const QString& input : inputList) {
             if (currExcuteType == ExcuteTypeManualInput) {
-                selecteItems.append(input.toUpper());
+                // selecteItems.append(input.toUpper());
+                selecteItems.append(input);  // Manual Input 인 경우 추가한 모듈의 대소문자 구분하여함
             } else {
                 bool valid = false;
                 int selectIndex = input.toInt(&valid);
@@ -663,6 +682,8 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
                         selecteItems.append(itemList[selectIndex]);
                     } else {
                     }
+                } else {
+                    selecteItems.append(input);
                 }
             }
         }
@@ -672,10 +693,38 @@ QStringList TestCase::selectMultipleOptionsWithNumbers(const int& excuteType, co
         } else {
             selecteItems.sort();
             selecteItems.removeDuplicates();
-            // qDebug() << "Selected Items :" << selecteItems;
             break;
         }
     }
+#else
+    QString inputLine = input.readLine().trimmed();
+    QStringList inputList = inputLine.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+
+    for (const QString& input : inputList) {
+        bool valid = false;
+        int selectIndex = input.toInt(&valid);
+
+        if (valid) {
+            if (selectIndex == mNumExit) {
+                selecteItems.append(mStrExit);
+            } else if (selectIndex == mNumSelectAll) {
+                for (int index = 1; index < itemList.size(); ++index) {
+                    selecteItems.append(itemList[index]);
+                }
+            } else if ((selectIndex > 0) && (selectIndex < itemList.size())) {
+                selecteItems.append(itemList[selectIndex]);
+            } else {
+                valid = false;
+            }
+        }
+
+        if (valid == false) {
+            selecteItems.append(input);
+        }
+    }
+    selecteItems.sort();
+    selecteItems.removeDuplicates();
+#endif
 
     return selecteItems;
 }

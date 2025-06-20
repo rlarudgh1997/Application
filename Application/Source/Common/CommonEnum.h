@@ -397,7 +397,8 @@ public:
         Max,
     };
     enum class ManualTC {
-        TCName = 0,
+        Check = 0,
+        TCName,
         VehicleType,
         RunnableOpt,
         ConfigOpt,

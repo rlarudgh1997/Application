@@ -741,18 +741,20 @@ void ControlExcel::updateAutoCompleteSignal(const QString& signalName, const QSt
     QMap<int, QStringList> dataInfo =
         SignalDataManager::instance().data()->isSignalDataList(signalName, signalData, vehicleType, dataType);
     bool update = false;
+    int maxCount = 0;
+    for (const auto& key : dataInfo.keys()) {
+        maxCount = qMax(maxCount, dataInfo[key].size());
+    }
 
     for (int index = 0; index < ivis::common::InputDataTypeEnum::InputDataTypeMax; ++index) {
         QStringList suggestionsDataInfo = dataInfo[index];
+        if (suggestionsDataInfo.size() < maxCount) {
+            suggestionsDataInfo.resize(maxCount);  // Jira : https://ivis.atlassian.net/browse/SFC-2333
+        }
         if (index == ivis::common::InputDataTypeEnum::InputDataTypeValueEnum) {
             update = (suggestionsDataInfo.size() > 0);
         }
         updateDataHandler((ivis::common::PropertyTypeEnum::PropertyTypeInputDataValueEnum + index), suggestionsDataInfo);
-    }
-
-    qDebug() << "updateAutoCompleteSignal :" << signalName << vehicleType << columnIndex << update;
-    for (const auto& key : dataInfo.keys()) {
-        qDebug() << "Data[" << key << "] :" << dataInfo[key].size() << dataInfo[key];
     }
 
     if (update) {
@@ -881,7 +883,7 @@ void ControlExcel::updateAutoCompleteSuggestions(const QVariantList& inputData) 
         int keywordType = ExcelUtil::instance().data()->isKeywordType(signalIndex, signalName);
         int signalType = SignalDataManager::instance().data()->isSignalType(signalName);
 
-        qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
+        // qDebug() << "updateAutoCompleteSuggestions :" << keywordType << signalType << columnIndex << signalName;
         if (signalType == static_cast<int>(ivis::common::SignalTypeEnum::SignalType::Invalid)) {
             updateAutoCompleteTCName(signalName, vehicleType, keywordType);
         } else {

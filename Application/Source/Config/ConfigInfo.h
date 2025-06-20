@@ -48,11 +48,6 @@ public:
         ConfigTypeGenTCParsingCycle,
         ConfigTypeWindowTitle,
 
-        // Preset
-        ConfigTypePreset001,
-        ConfigTypePreset002,
-        ConfigTypePreset003,
-
         // Vehicle
         ConfigTypeVsmFileNameBaseCV,
         ConfigTypeVehicleTypeCV,
@@ -142,7 +137,7 @@ private:
         mConfigInfoData[ConfigTypeDependentOnTitle] = QPair<QString, QVariant>(
             "ConfigTypeDependentOnTitle", QVariant(QVariantList({"TCName", "Result", "InputSignal", "InputData"})));
         mConfigInfoData[ConfigTypeManualTCTitle] = QPair<QString, QVariant>("ConfigTypeManualTCTitle",
-            QVariant(QVariantList({"TCName", "VehicleType", "RunnableOpt", "ConfigOpt", "CycleOption", "CyclePeriod(ms)",
+            QVariant(QVariantList({"Check", "TCName", "VehicleType", "RunnableOpt", "ConfigOpt", "CycleOption", "CyclePeriod(ms)",
                                    "CycleDelta(%)", "CycleDuration(ms)", "CycleMode", "PreconditionSignal", "PreconditionValue",
                                    "InputSignal", "InputValue", "InitSignal", "InitValue", "OutputSignal", "OutputValue"})));
         mConfigInfoData[ConfigTypeDescConfigVisible] = QPair<QString, QVariant>("ConfigTypeDescConfigVisible", QVariant(false));
@@ -183,11 +178,6 @@ private:
         mConfigInfoData[ConfigTypeSystemTypePV] = QPair<QString, QVariant>(
             "ConfigTypeSystemTypePV",
             QVariant(QVariantList({"Config", "Engineering", "Extra", "Gateway", "HardWire", "Micom", "TP", "Undefined"})));
-
-        // Preset
-        mConfigInfoData[ConfigTypePreset001] = QPair<QString, QVariant>("ConfigTypePreset001", QVariant("d@'"));
-        mConfigInfoData[ConfigTypePreset002] = QPair<QString, QVariant>("ConfigTypePreset002", QVariant("\0\n\0\0Z\0"));
-        mConfigInfoData[ConfigTypePreset003] = QPair<QString, QVariant>("ConfigTypePreset003", QVariant("\0\0(\0F\0"));
 
         // ==========================================================================
         // Do not save config file : The setting information is not saved as a file.
